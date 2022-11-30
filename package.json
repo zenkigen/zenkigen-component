@@ -1,0 +1,30 @@
+{
+  "private": true,
+  "scripts": {
+    "lint:eslint": "eslint './**/*.ts{,x}'",
+    "lint:tsc": "tsc --noEmit",
+    "build": "tsc -p tsconfig.build.json",
+    "generate-component": "hygen generator components"
+  },
+  "devDependencies": {
+    "@types/node": "18.11.9",
+    "@types/react-dom": "18.0.9",
+    "@typescript-eslint/eslint-plugin": "5.45.0",
+    "@typescript-eslint/parser": "5.45.0",
+    "eslint": "8.28.0",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-plugin-import": "2.26.0",
+    "eslint-plugin-react": "7.31.11",
+    "eslint-plugin-react-hooks": "4.6.0",
+    "hygen": "6.2.11",
+    "prettier": "2.8.0",
+    "style-dictionary": "3.7.1",
+    "token-transformer": "0.0.27",
+    "typescript": "4.9.3",
+    "typescript-plugin-css-modules": "3.4.0"
+  },
+  "dependencies": {
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  }
+}
