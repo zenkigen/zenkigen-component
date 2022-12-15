@@ -9,6 +9,7 @@
     "types": ["node", "react"],
     "jsx": "react-jsx",
     "strict": true,
+    "baseUrl": ".",
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
