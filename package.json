@@ -5,7 +5,7 @@
   "author": "ZENKIGEN, Inc.",
   "main": "lib/index.js",
   "module": "esm/index.js",
-  "types": "dist/index.d.ts",
+  "types": "lib/index.d.ts",
   "publishConfig": {
     "access": "restricted",
     "registry": "https://npm.pkg.github.com/"
