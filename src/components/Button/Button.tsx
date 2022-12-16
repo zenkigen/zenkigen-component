@@ -1,8 +1,9 @@
 import { ReactNode } from 'react';
 
-import { space } from 'src/helpers/space';
-import * as theme from 'src/tokens/tokens';
 import styled, { css } from 'styled-components';
+
+import { space } from '../../helpers/space';
+import * as theme from '../../tokens/tokens';
 
 type Props = {
   disabled?: boolean;
