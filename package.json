@@ -1,5 +1,21 @@
 {
-  "private": true,
+  "name": "@zenkigen/zenkigen-component",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "publishConfig": {
+    "access": "restricted",
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zenkigen/zenkigen-component.git"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "author": "ZENKIGEN, Inc.",
   "scripts": {
     "lint:eslint": "eslint './**/*.ts{,x}'",
     "lint:tsc": "tsc --noEmit",
