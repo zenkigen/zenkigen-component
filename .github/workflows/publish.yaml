@@ -20,6 +20,9 @@ jobs:
           node-version: 18.12.1
           registry-url: https://npm.pkg.github.com
 
+      - name: Build npm package
+        run: yarn build
+
       - name: Publish npm package
         run: yarn publish
         env:
