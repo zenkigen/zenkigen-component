@@ -2,7 +2,9 @@
   "name": "@zenkigen/zenkigen-component",
   "version": "0.1.3",
   "license": "UNLICENSED",
-  "main": "dist/index.js",
+  "author": "ZENKIGEN, Inc.",
+  "main": "lib/index.js",
+  "module": "esm/index.js",
   "types": "dist/index.d.ts",
   "publishConfig": {
     "access": "restricted",
@@ -13,14 +15,16 @@
     "url": "https://github.com/zenkigen/zenkigen-component.git"
   },
   "files": [
-    "dist"
+    "esm",
+    "lib"
   ],
-  "author": "ZENKIGEN, Inc.",
   "scripts": {
     "lint:eslint": "eslint './**/*.ts{,x}'",
     "lint:tsc": "tsc --noEmit",
-    "build": "tsc -p tsconfig.build.json",
+    "build": "run-p build:*",
     "build:token": "token-transformer style-dictionary/tokens.json style-dictionary/transformed-token.json zen && style-dictionary build -c style-dictionary.json",
+    "build:lib": "tsc -p tsconfig.build.json",
+    "build:esm": "tsc -p tsconfig.esm.build.json",
     "generate-component": "hygen generator components",
     "storybook": "NODE_OPTIONS=--openssl-legacy-provider start-storybook -p 6006",
     "build-storybook": "build-storybook"
@@ -55,6 +59,7 @@
     "vitest": "0.25.8"
   },
   "dependencies": {
+    "npm-run-all": "^4.1.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "styled-components": "5.3.6"

@@ -1,6 +1,6 @@
 /**
  * Do not edit directly
- * Generated on Fri, 16 Dec 2022 01:11:41 GMT
+ * Generated on Fri, 16 Dec 2022 19:31:51 GMT
  */
 
 export const UserRed = "#f88282";
