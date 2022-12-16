@@ -24,6 +24,7 @@ jobs:
       - name: Install dependencies
         run: yarn install
       - name: Publish to Chromatic
+        id: chromatic
         uses: chromaui/action@v1
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
@@ -42,5 +43,5 @@ jobs:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            #### [Storybook Preview](${{ steps.storybook.outputs.storybookUrl }}) 🤹‍♀️ [Comparing tool](${{ steps.storybook.outputs.buildUrl }})
+            #### [Storybook Preview](${{ steps.chromatic.outputs.storybookUrl }}) 🤹‍♀️ [Comparing tool](${{ steps.chromatic.outputs.buildUrl }})
           edit-mode: replace
