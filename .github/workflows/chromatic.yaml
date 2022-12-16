@@ -43,5 +43,14 @@ jobs:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            #### [Storybook Preview](${{ steps.chromatic.outputs.storybookUrl }}) 🤹‍♀️ [Comparing tool](${{ steps.chromatic.outputs.buildUrl }})
+            ## chromatic
+            [Storybook Preview](${{ steps.chromatic.outputs.storybookUrl }})
+            [Comparing tool](${{ steps.chromatic.outputs.buildUrl }})
+
+            ### Outputs
+            | Name | Value |
+            |---|---|
+            {{- range $key, $value := steps.chromatic.outputs }}
+            | ${{ $key }} | ${{ $value }} |
+            {{- end }}
           edit-mode: replace
