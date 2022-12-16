@@ -50,7 +50,9 @@ jobs:
             ### Outputs
             | Name | Value |
             |---|---|
-            {{- range $key, $value := steps.chromatic.outputs }}
-            | ${{ $key }} | ${{ $value }} |
-            {{- end }}
+            | storybookUrl | ${{ steps.chromatic.outputs.storybookUrl }} |
+            | buildUrl | ${{ steps.chromatic.outputs.buildUrl }} |
+            | actualCaptureCount | ${{ steps.chromatic.outputs.actualCaptureCount }} |
+            | changeCount | ${{ steps.chromatic.outputs.changeCount }} |
+            | errorCount | ${{ steps.chromatic.outputs.errorCount }} |
           edit-mode: replace
