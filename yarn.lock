@@ -1748,7 +1748,7 @@
     polished "^4.2.2"
     ts-dedent "^2.2.0"
 
-"@storybook/addon-links@6.5.14":
+"@storybook/addon-links@^6.5.14":
   version "6.5.14"
   resolved "https://registry.yarnpkg.com/@storybook/addon-links/-/addon-links-6.5.14.tgz#cf2fd95394d1c344391470d9937db7e127b6d754"
   integrity sha512-Q4gNVFi3PqJH/YYmYJ6xX7a2VPZYs8QV97fMIjdg7/k4FLelSRj7QfsHc7jO2RGG2qQpenapO569jFoVNAW4/Q==
@@ -1866,7 +1866,7 @@
     ts-dedent "^2.0.0"
     util-deprecate "^1.0.2"
 
-"@storybook/builder-vite@0.2.5":
+"@storybook/builder-vite@^0.2.5":
   version "0.2.5"
   resolved "https://registry.yarnpkg.com/@storybook/builder-vite/-/builder-vite-0.2.5.tgz#b3996a5f28ffd1ce2ca18aff98cf3ed9d4551927"
   integrity sha512-0PktEaYsbR6gGE/YDkW/tI1VxVnaPNZpHGpiWfDU7c5hjCajWYzdFTgHOwcXT8tiTs+WN/rvoCPT2iAhSCcHIw==
@@ -2356,7 +2356,7 @@
     react-docgen-typescript "^2.1.1"
     tslib "^2.0.0"
 
-"@storybook/react@6.5.14":
+"@storybook/react@^6.5.14":
   version "6.5.14"
   resolved "https://registry.yarnpkg.com/@storybook/react/-/react-6.5.14.tgz#9e5a93958c410c3f9d21374e30f68ac2960a9c91"
   integrity sha512-SL0P5czN3g/IZAYw8ur9I/O8MPZI7Lyd46Pw+B1f7+Ou8eLmhqa8Uc8+3fU6v7ohtUDwsBiTsg3TAfTVEPog4A==
@@ -2471,7 +2471,7 @@
     read-pkg-up "^7.0.1"
     regenerator-runtime "^0.13.7"
 
-"@storybook/testing-library@0.0.13":
+"@storybook/testing-library@^0.0.13":
   version "0.0.13"
   resolved "https://registry.yarnpkg.com/@storybook/testing-library/-/testing-library-0.0.13.tgz#417c87d4ea62895092ec5fdf67027ae201254f45"
   integrity sha512-vRMeIGer4EjJkTgI8sQyK9W431ekPWYCWL//OmSDJ64IT3h7FnW7Xg6p+eqM3oII98/O5pcya5049GxnjaPtxw==
@@ -2776,7 +2776,7 @@
   resolved "https://registry.yarnpkg.com/@types/source-list-map/-/source-list-map-0.1.2.tgz#0078836063ffaf17412349bba364087e0ac02ec9"
   integrity sha512-K5K+yml8LTo9bWJI/rECfIPrGgxdpeNbj+d53lwN4QjW1MCwlkhUms+gtdzigTeUyBr09+u8BwOIY3MXvHdcsA==
 
-"@types/styled-components@5.1.26":
+"@types/styled-components@^5.1.26":
   version "5.1.26"
   resolved "https://registry.yarnpkg.com/@types/styled-components/-/styled-components-5.1.26.tgz#5627e6812ee96d755028a98dae61d28e57c233af"
   integrity sha512-KuKJ9Z6xb93uJiIyxo/+ksS7yLjS1KzG6iv5i78dhVg/X3u5t1H7juRWqVmodIdz6wGVaIApo1u01kmFRdJHVw==
@@ -3652,14 +3652,6 @@ available-typed-arrays@^1.0.5:
   resolved "https://registry.yarnpkg.com/available-typed-arrays/-/available-typed-arrays-1.0.5.tgz#92f95616501069d07d10edb2fc37d3e1c65123b7"
   integrity sha512-DMD0KiN46eipeziST1LPP/STfDU0sufISXmjSgvVsoU2tqxctQeASejWcfNtxYKqETM1UxQ8sp2OrSBWpHY6sw==
 
-babel-loader@9.0.0:
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/babel-loader/-/babel-loader-9.0.0.tgz#b90f48b49f5360e4678733755d1413e16cfee48e"
-  integrity sha512-qVGQb0PNw/B1sGhPf0/KKsHZAPfa2Bk+JbjkW7yGjAHZyvjAULXYq0et0+/+7DL/rGYU+y8UoGPzA32NP29pVQ==
-  dependencies:
-    find-cache-dir "^3.3.2"
-    schema-utils "^4.0.0"
-
 babel-loader@^8.0.0:
   version "8.3.0"
   resolved "https://registry.yarnpkg.com/babel-loader/-/babel-loader-8.3.0.tgz#124936e841ba4fe8176786d6ff28add1f134d6a8"
@@ -3669,6 +3661,14 @@ babel-loader@^8.0.0:
     loader-utils "^2.0.0"
     make-dir "^3.1.0"
     schema-utils "^2.6.5"
+
+babel-loader@^9.0.0:
+  version "9.1.0"
+  resolved "https://registry.yarnpkg.com/babel-loader/-/babel-loader-9.1.0.tgz#839e9ae88aea930864ef9ec0f356dfca96ecf238"
+  integrity sha512-Antt61KJPinUMwHwIIz9T5zfMgevnfZkEVWYDWlG888fgdvRRGD0JTuf/fFozQnfT+uq64sk1bmdHDy/mOEWnA==
+  dependencies:
+    find-cache-dir "^3.3.2"
+    schema-utils "^4.0.0"
 
 babel-plugin-add-react-displayname@^0.0.5:
   version "0.0.5"
@@ -11206,7 +11206,7 @@ vfile@^4.0.0:
     unist-util-stringify-position "^2.0.0"
     vfile-message "^2.0.0"
 
-vite@4.0.1, "vite@^3.0.0 || ^4.0.0":
+"vite@^3.0.0 || ^4.0.0", vite@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/vite/-/vite-4.0.1.tgz#e0a54d818c28ae47fd27bcac6a4a952c6a658502"
   integrity sha512-kZQPzbDau35iWOhy3CpkrRC7It+HIHtulAzBhMqzGHKRf/4+vmh8rPDDdv98SWQrFWo6//3ozwsRmwQIPZsK9g==
