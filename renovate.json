@@ -1,6 +1,29 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:base"
+  ],
+  "timezone": "Asia/Tokyo",
+  "schedule": "on saturday",
+  "labels": [
+    "renovate"
+  ],
+  "reviewers": [
+    "yutakam80"
+  ],
+  "lockFileMaintenance": {
+    "enabled": true
+  },
+  "updateInternalDeps": true,
+  "packageRules": [
+    {
+      "groupName": "minor dependencies",
+      "updateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "digest",
+        "lockFileMaintenance"
+      ]
+    }
   ]
 }
