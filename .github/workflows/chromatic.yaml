@@ -1,16 +1,11 @@
 name: 'Chromatic'
 
 on:
-  pull_request:
-    types: [opened, reopened, synchronize, ready_for_review]
+  workflow_run:
+    workflows: ['Check syntax']
     branches-ignore:
       - 'renovate/**'
       - 'dependabot/**'
-  push:
-    branches:
-      - main
-  workflow_run:
-    workflows: ['Check syntax']
     types:
       - completed
 
