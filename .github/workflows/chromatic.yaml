@@ -1,26 +1,56 @@
-# .github/workflows/chromatic.yml
-
-# Workflow name
 name: 'Chromatic'
 
-# Event for the workflow
-on: push
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+    branches-ignore:
+      - 'renovate/**'
+      - 'dependabot/**'
+  push:
+    branches:
+      - main
 
-# List of jobs
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   chromatic-deployment:
-    # Operating System
     runs-on: ubuntu-latest
-    # Job steps
     steps:
-      - uses: actions/checkout@v1
-      - name: Install dependencies
-        # 👇 Install dependencies with the same package manager used in the project (replace it as needed) e.g. yarn, npm, pnpm
-        run: yarn
-        # 👇 Adds Chromatic as a step in the workflow
-      - name: Publish to Chromatic
-        uses: chromaui/action@v1
-        # Chromatic GitHub Action options
+      - uses: actions/checkout@v2
         with:
-          # 👇 Chromatic projectToken, refer to the manage page to obtain it.
+          fetch-depth: 0
+      - name: Install dependencies
+        run: yarn install
+      - name: Publish to Chromatic
+        id: chromatic
+        uses: chromaui/action@v1
+        with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+
+      - name: Find Comment
+        uses: peter-evans/find-comment@v2
+        id: fc
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: Storybook Preview
+
+      - name: Create or update comment
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            ## chromatic
+
+            ### Outputs
+            | Name | Value |
+            |---|---|
+            | storybookUrl | ${{ steps.chromatic.outputs.storybookUrl }} |
+            | buildUrl | ${{ steps.chromatic.outputs.buildUrl }} |
+            | actualCaptureCount | ${{ steps.chromatic.outputs.actualCaptureCount }} |
+            | changeCount | ${{ steps.chromatic.outputs.changeCount }} |
+            | errorCount | ${{ steps.chromatic.outputs.errorCount }} |
+          edit-mode: replace
