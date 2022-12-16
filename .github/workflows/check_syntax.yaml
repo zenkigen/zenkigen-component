@@ -34,5 +34,5 @@ jobs:
           restore-keys: ${{ runner.os }}-yarn-
 
       - run: yarn install
-      - run: yarn type-check
-      - run: yarn lint
+      - run: yarn lint:tsc
+      - run: yarn lint:eslint
