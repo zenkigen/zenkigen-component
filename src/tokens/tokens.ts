@@ -1,6 +1,6 @@
 /**
  * Do not edit directly
- * Generated on Thu, 15 Dec 2022 13:33:45 GMT
+ * Generated on Fri, 16 Dec 2022 01:11:41 GMT
  */
 
 export const UserRed = "#f88282";
@@ -220,13 +220,13 @@ export const HeadingH224pxBold = {"fontFamily":"Helvetica","fontWeight":"Bold","
 export const HeadingH320pxBold = {"fontFamily":"Helvetica","fontWeight":"Bold","lineHeight":"160%","fontSize":20,"letterSpacing":"0%","paragraphSpacing":0,"textCase":"none","textDecoration":"none"};
 export const HeadingH416pxBold = {"fontFamily":"Helvetica","fontWeight":"Bold","lineHeight":"150%","fontSize":16,"letterSpacing":0,"paragraphSpacing":0,"textCase":"none","textDecoration":"none"};
 export const HeadingH514pxBold = {"fontFamily":"Helvetica","fontWeight":"Bold","lineHeight":"171%","fontSize":14,"letterSpacing":0,"paragraphSpacing":0,"textCase":"none","textDecoration":"none"};
-export const BodyBody114pxReagular = {"fontFamily":"Helvetica","fontWeight":"Regular","lineHeight":"171%","fontSize":14,"letterSpacing":0,"paragraphSpacing":0,"textCase":"none","textDecoration":"none"};
+export const BodyBody114pxRegular = {"fontFamily":"Helvetica","fontWeight":"Regular","lineHeight":"171%","fontSize":14,"letterSpacing":0,"paragraphSpacing":0,"textCase":"none","textDecoration":"none"};
 export const BodyBody213pxRegular = {"fontFamily":"Helvetica","fontWeight":"Regular","lineHeight":"153%","fontSize":13,"letterSpacing":"0%","paragraphSpacing":0,"textCase":"none","textDecoration":"none"};
 export const BodyBody312pxRegular = {"fontFamily":"Roboto","fontWeight":"Regular","lineHeight":"133%","fontSize":12,"letterSpacing":"0%","paragraphSpacing":0,"textCase":"none","textDecoration":"none"};
 export const LabelLabel116pxBold = {"fontFamily":"Helvetica","fontWeight":"Bold","lineHeight":"100%","fontSize":16,"letterSpacing":0,"paragraphSpacing":0,"textCase":"none","textDecoration":"none"};
 export const LabelLabel216pxRegular = {"fontFamily":"Helvetica","fontWeight":"Regular","lineHeight":"100%","fontSize":16,"letterSpacing":0,"paragraphSpacing":0,"textCase":"none","textDecoration":"none"};
 export const LabelLabel314pxBold = {"fontFamily":"Helvetica","fontWeight":"Bold","lineHeight":"100%","fontSize":14,"letterSpacing":0,"paragraphSpacing":0,"textCase":"none","textDecoration":"none"};
-export const LabelLabel414pxRegualr = {"fontFamily":"Helvetica","fontWeight":"Regular","lineHeight":"100%","fontSize":14,"letterSpacing":0,"paragraphSpacing":0,"textCase":"none","textDecoration":"none"};
+export const LabelLabel414pxRegular = {"fontFamily":"Helvetica","fontWeight":"Regular","lineHeight":"100%","fontSize":14,"letterSpacing":0,"paragraphSpacing":0,"textCase":"none","textDecoration":"none"};
 export const LabelLabel512pxBold = {"fontFamily":"Helvetica","fontWeight":"Bold","lineHeight":"100%","fontSize":12,"letterSpacing":0,"paragraphSpacing":0,"textCase":"none","textDecoration":"none"};
 export const LabelLabel612pxRegular = {"fontFamily":"Helvetica","fontWeight":"Regular","lineHeight":"100%","fontSize":12,"letterSpacing":0,"paragraphSpacing":0,"textCase":"none","textDecoration":"none"};
 export const LabelLabel711pxBold = {"fontFamily":"Helvetica","fontWeight":"Bold","lineHeight":"100%","fontSize":11,"letterSpacing":0,"paragraphSpacing":0,"textCase":"none","textDecoration":"none"};

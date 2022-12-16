@@ -1147,7 +1147,7 @@
     }
   },
   "Body": {
-    "Body1 14px Reagular": {
+    "Body1 14px Regular": {
       "value": {
         "fontFamily": "Helvetica",
         "fontWeight": "Regular",
@@ -1227,7 +1227,7 @@
       },
       "type": "typography"
     },
-    "Label4 14px Regualr": {
+    "Label4 14px Regular": {
       "value": {
         "fontFamily": "Helvetica",
         "fontWeight": "Regular",

@@ -4,8 +4,7 @@
     "lint:eslint": "eslint './**/*.ts{,x}'",
     "lint:tsc": "tsc --noEmit",
     "build": "tsc -p tsconfig.build.json",
-    "build:transform": "token-transformer style-dictionary/tokens.json style-dictionary/transformed-token.json zen",
-    "build:token": "style-dictionary build -c style-dictionary.json",
+    "build:token": "token-transformer style-dictionary/tokens.json style-dictionary/transformed-token.json zen && style-dictionary build -c style-dictionary.json",
     "generate-component": "hygen generator components",
     "storybook": "NODE_OPTIONS=--openssl-legacy-provider start-storybook -p 6006",
     "build-storybook": "build-storybook"
