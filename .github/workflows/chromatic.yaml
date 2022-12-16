@@ -3,11 +3,13 @@ name: 'Chromatic'
 on:
   workflow_run:
     workflows: ['Check syntax']
+    types:
+      - completed
+    branches:
+      - '*'
     branches-ignore:
       - 'renovate/**'
       - 'dependabot/**'
-    types:
-      - completed
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
