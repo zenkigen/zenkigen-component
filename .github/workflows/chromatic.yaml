@@ -1,15 +1,14 @@
 name: 'Chromatic'
 
 on:
-  workflow_run:
-    workflows: ['Check syntax']
-    types:
-      - completed
-    branches:
-      - '*'
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
     branches-ignore:
       - 'renovate/**'
       - 'dependabot/**'
+  push:
+    branches:
+      - main
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
