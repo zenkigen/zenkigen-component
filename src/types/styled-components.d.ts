@@ -1,5 +1,5 @@
 import 'styled-components';
-import * as theme from 'src/tokens/tokens';
+import * as theme from '../tokens/tokens';
 
 type Theme = typeof theme;
 
