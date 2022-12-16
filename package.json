@@ -1,6 +1,6 @@
 {
   "name": "@zenkigen/zenkigen-component",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "publishConfig": {
@@ -12,8 +12,7 @@
     "url": "https://github.com/zenkigen/zenkigen-component.git"
   },
   "files": [
-    "dist",
-    "README.md"
+    "dist"
   ],
   "author": "ZENKIGEN, Inc.",
   "scripts": {
