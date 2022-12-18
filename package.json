@@ -1,11 +1,11 @@
 {
   "name": "@zenkigen/zenkigen-component",
-  "version": "0.1.5",
+  "version": "0.1.7",
   "license": "UNLICENSED",
   "author": "ZENKIGEN, Inc.",
-  "main": "lib/index.js",
-  "module": "esm/index.js",
-  "types": "lib/index.d.ts",
+  "main": "dist/lib/index.js",
+  "module": "dist/esm/index.js",
+  "types": "index.d.ts",
   "publishConfig": {
     "access": "restricted",
     "registry": "https://npm.pkg.github.com/"
@@ -15,8 +15,9 @@
     "url": "https://github.com/zenkigen/zenkigen-component.git"
   },
   "files": [
-    "esm",
-    "lib"
+    "src",
+    "dist",
+    "index.d.ts"
   ],
   "scripts": {
     "lint:eslint": "eslint './**/*.ts{,x}'",
