@@ -36,11 +36,11 @@ export const Component = () => (
 styled-components の theme 機能を使ってコンポーネントで定義しているカラートークンを変更することができます。
 
 ```
-import { Button } from '@zenkigen/zenkigen-component';
+import { theme, Button } from '@zenkigen/zenkigen-component';
 
 export const App = () => {
   return (
-    <ThemeProvider theme={{ TokensInteractiveInteractive01: 'green' }}>
+    <ThemeProvider theme={{ ...theme, TokensInteractiveInteractive01: 'green' }}>
       <Button>Themed</Button>
     </ThemeProvider>
   )
@@ -57,3 +57,8 @@ export const App = () => {
 1. Figma Tokens で `Include parent key` の チェックを ON で Export する
 1. `style-dictionary/tokens.json` に上書きする
 1. `yarn build:token` を実行する
+
+### コーディングガイドライン
+
+開発する際は以下を参照してください。
+https://www.notion.so/zenkigen/5d4ebd0d93b74124a533cf167b852ec0
