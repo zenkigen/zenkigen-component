@@ -60,5 +60,5 @@ export const App = () => {
 
 ### コーディングガイドライン
 
-開発する際は以下を参照してください。
+開発する際は以下を参照してください。  
 https://www.notion.so/zenkigen/5d4ebd0d93b74124a533cf167b852ec0
