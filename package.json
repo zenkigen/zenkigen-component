@@ -1,6 +1,6 @@
 {
   "name": "@zenkigen/zenkigen-component",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "license": "UNLICENSED",
   "author": "ZENKIGEN, Inc.",
   "main": "dist/lib/index.js",
