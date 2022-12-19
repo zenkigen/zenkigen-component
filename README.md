@@ -54,9 +54,12 @@ export const App = () => {
 
 当ライブラリは Figma Tokens から export された tokens.json を token-transformer と Style Dictionary を用いてライブラリで使用できるよう変換しています。
 
-1. Figma Tokens で `Include parent key` の チェックを ON で Export する
+1. Figma Tokens で `Include parent key` の チェックを ON で export する
 1. `style-dictionary/tokens.json` に上書きする
 1. `yarn build:token` を実行する
+
+### 実装したコンポーネントを export する
+使用する側の import を簡略化させるため root にある [src/index.ts](https://github.com/zenkigen/zenkigen-component/blob/main/src/index.ts) に実装したコンポーネントを exportしてください。
 
 ### コーディングガイドライン
 
