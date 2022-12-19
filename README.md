@@ -61,6 +61,13 @@ export const App = () => {
 ### 実装したコンポーネントを export する
 使用する側の import を簡略化させるため root にある [src/index.ts](https://github.com/zenkigen/zenkigen-component/blob/main/src/index.ts) に実装したコンポーネントを exportしてください。
 
+### コンポーネントの雛形を生成する
+hygen で雛形を生成することができるので、必ずこのコマンドから生成されたファイルを元に実装を始めてください。
+
+```
+npx hygen generator components
+```
+
 ### コーディングガイドライン
 
 開発する際は以下を参照してください。  
