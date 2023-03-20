@@ -31,7 +31,7 @@
     "build-storybook": "build-storybook"
   },
   "devDependencies": {
-    "@babel/core": "7.21.0",
+    "@babel/core": "7.21.3",
     "@storybook/addon-actions": "6.5.16",
     "@storybook/addon-essentials": "6.5.16",
     "@storybook/addon-interactions": "6.5.16",
@@ -39,11 +39,11 @@
     "@storybook/builder-vite": "^0.4.0",
     "@storybook/react": "^6.5.14",
     "@storybook/testing-library": "^0.0.13",
-    "@types/node": "18.15.0",
+    "@types/node": "18.15.3",
     "@types/react-dom": "18.0.11",
     "@types/styled-components": "^5.1.26",
-    "@typescript-eslint/eslint-plugin": "5.54.1",
-    "@typescript-eslint/parser": "5.54.1",
+    "@typescript-eslint/eslint-plugin": "5.55.0",
+    "@typescript-eslint/parser": "5.55.0",
     "babel-loader": "^9.0.0",
     "eslint": "8.36.0",
     "eslint-config-prettier": "8.7.0",
@@ -52,17 +52,17 @@
     "eslint-plugin-react-hooks": "4.6.0",
     "eslint-plugin-storybook": "0.6.11",
     "hygen": "6.2.11",
-    "prettier": "2.8.4",
+    "prettier": "2.8.5",
     "style-dictionary": "3.7.2",
     "token-transformer": "0.0.30",
     "typescript": "4.9.5",
     "vite": "^4.0.1",
-    "vitest": "0.29.2"
+    "vitest": "0.29.3"
   },
   "dependencies": {
     "npm-run-all": "^4.1.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "styled-components": "5.3.8"
+    "styled-components": "5.3.9"
   }
 }
