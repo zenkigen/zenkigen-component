@@ -44,7 +44,7 @@
   "Tokens": {
     "Text": {
       "Text01": {
-        "value": "#2F3133",
+        "value": "#2F3233",
         "type": "color",
         "description": "Primary text, Body copy, Headers"
       },
@@ -54,7 +54,7 @@
         "description": "Secondary text, Input labels"
       },
       "Text03": {
-        "value": "#7C858A",
+        "value": "#7C868A",
         "type": "color",
         "description": "Tertiary text"
       },
@@ -89,7 +89,7 @@
         "description": "Tertiary text - Dark"
       },
       "TextPlaceholderDark": {
-        "value": "#7C858A",
+        "value": "#7C868A",
         "type": "color",
         "description": "Placeholder text - Dark"
       }
@@ -133,7 +133,7 @@
         "description": "List border color,  Container border - Dark"
       },
       "UiBorder02Dark": {
-        "value": "#7C858A",
+        "value": "#7C868A",
         "type": "color",
         "description": "Button border, Input border - Dark"
       }
@@ -150,27 +150,27 @@
         "description": "Side navigation background"
       },
       "UiBackground01Dark": {
-        "value": "#2F3133",
+        "value": "#2F3233",
         "type": "color",
         "description": "Default page background - Dark"
       },
       "UiBackground02Dark": {
-        "value": "#454A4C",
+        "value": "#454A4D",
         "type": "color",
         "description": "Side navigation background - Dark"
       },
       "UiBackground02Blue": {
-        "value": "#F7FBFF",
+        "value": "#F1F7FD",
         "type": "color",
         "description": "Side navigation background, checked background - Blue"
       },
       "UiBackgroundBlue": {
-        "value": "#F7FBFF",
+        "value": "#F1F7FD",
         "type": "color",
         "description": "info message background"
       },
       "UiBackgroundBlueDark": {
-        "value": "#1F5C99",
+        "value": "#115CA7",
         "type": "color",
         "description": "info message background - Dark"
       },
@@ -180,32 +180,32 @@
         "description": "message background"
       },
       "UiBackgroundGrayDark": {
-        "value": "#7C858A",
+        "value": "#7C868A",
         "type": "color",
-        "description": "message background"
+        "description": "message background - Dark"
       },
       "UiBackgroundSuccess": {
-        "value": "#E4F9EF",
+        "value": "#ECFBF4",
         "type": "color",
         "description": "Success message background"
       },
       "UiBackgroundSuccessDark": {
-        "value": "#25A266",
+        "value": "#1E8353",
         "type": "color",
         "description": "Success message background - Dark"
       },
       "UiBackgroundError": {
-        "value": "#FFF2F6",
+        "value": "#FCEFF3",
         "type": "color",
         "description": "Error message background"
       },
       "UiBackgroundErrorDark": {
-        "value": "#871430",
+        "value": "#A01D3E",
         "type": "color",
         "description": "Error message background - Dark"
       },
       "UiBackgroundWarning": {
-        "value": "#FFF6C4",
+        "value": "#FFFADC",
         "type": "color",
         "description": "Warning message background"
       },
@@ -215,7 +215,7 @@
         "description": "Warning message background - Dark"
       },
       "UiBackgroundTooltip": {
-        "value": "#2F3133",
+        "value": "#2F3233",
         "type": "color",
         "description": "ToolTip background"
       },
@@ -225,7 +225,7 @@
         "description": "ToolTip background - Dark"
       },
       "BackgroundOverlayGray": {
-        "value": "#2f313380",
+        "value": "#2f323380",
         "type": "color",
         "description": "Background overlay"
       },
@@ -237,7 +237,7 @@
     },
     "Icon": {
       "Icon01": {
-        "value": "#7C858A",
+        "value": "#7C868A",
         "type": "color",
         "description": "Primary icons"
       },
@@ -252,7 +252,7 @@
         "description": "Secondary icons"
       },
       "Icon02Dark": {
-        "value": "#7C858A",
+        "value": "#7C868A",
         "type": "color",
         "description": "Secondary icons - Dark"
       },
@@ -276,22 +276,32 @@
       "Interactive01": {
         "value": "#177EE5",
         "type": "color",
-        "description": "Primary Interactive color,  Primary buttons"
+        "description": "Primary Interactive color, Primary buttons"
       },
-      "Interactive01Dark": {
+      "InteractiveBg01": {
         "value": "#177EE5",
         "type": "color",
-        "description": "Primary Interactive color,  Primary buttons - Dark"
+        "description": "Primary Interactive color on background, Primary fill buttons"
+      },
+      "Interactive01Dark": {
+        "value": "#9FCBF5",
+        "type": "color",
+        "description": "Primary Interactive color, Primary buttons - Dark"
+      },
+      "InteractiveBg01Dark": {
+        "value": "#177EE5",
+        "type": "color",
+        "description": "Primary Interactive color on background, Primary fill buttons - Dark"
       },
       "Interactive02": {
-        "value": "#7C858A",
+        "value": "#7C868A",
         "type": "color",
-        "description": "Secondary Interactive color,  Secondary buttons"
+        "description": "Secondary Interactive color, Secondary buttons"
       },
       "Interactive02Dark": {
         "value": "#CACCCD",
         "type": "color",
-        "description": "Secondary Interactive color,  Secondary buttons -Dark"
+        "description": "Secondary Interactive color, Secondary buttons -Dark"
       },
       "Interactive03": {
         "value": "#177EE5",
@@ -299,7 +309,7 @@
         "description": "Tertiary button, Selected elements, Active elements, Accent icon"
       },
       "Interactive03Dark": {
-        "value": "#7C858A",
+        "value": "#7C868A",
         "type": "color",
         "description": "Tertiary button, Selected elements, Active elements, Accent icon -Dark"
       }
@@ -311,7 +321,7 @@
         "description": "Default input fields"
       },
       "FieldInputDark": {
-        "value": "#2F3133",
+        "value": "#2F3233",
         "type": "color",
         "description": "Default input fields - Dark"
       },
@@ -340,17 +350,17 @@
     },
     "Hover": {
       "Hover01": {
-        "value": "#246BB2",
+        "value": "#1366B9",
         "type": "color",
         "description": "$interactive-01 hover"
       },
       "Hover01Dark": {
-        "value": "#246BB2",
+        "value": "#1366B9",
         "type": "color",
         "description": "$interactive-01 hover - Dark"
       },
       "Hover02": {
-        "value": "#E8E9EB",
+        "value": "#E9EAEB",
         "type": "color",
         "description": "$interactive-02 hover"
       },
@@ -360,17 +370,17 @@
         "description": "$interactive-02 hover - Dark"
       },
       "Hover02Background": {
-        "value": "#E8E9EB",
+        "value": "#E9EAEB",
         "type": "color",
         "description": "$interactive-02 hover on background"
       },
       "Hover02BackgroundDark": {
-        "value": "#454A4C",
+        "value": "#454A4D",
         "type": "color",
         "description": "$interactive-02 hover on background - Dark"
       },
       "HoverUi": {
-        "value": "#E8E9EB",
+        "value": "#E9EAEB",
         "type": "color",
         "description": "hover ui background"
       },
@@ -380,9 +390,9 @@
         "description": "hover ui background - Dark"
       },
       "HoverUiBorder": {
-        "value": "#7C858A",
+        "value": "#7C868A",
         "type": "color",
-        "description": "hover ui background"
+        "description": "hover ui background - Dark"
       },
       "HoverUiBorderDark": {
         "value": "#CACCCD",
@@ -395,22 +405,32 @@
         "description": "Checkbox border color"
       },
       "HoverSelectedUiDark": {
-        "value": "#7C858A",
+        "value": "#7C868A",
         "type": "color",
         "description": "Checkbox border color - Dark"
       },
       "HoverDanger": {
-        "value": "#B22447",
+        "value": "#B22045",
         "type": "color",
-        "description": "Danger hover, $support-01 hover"
+        "description": "Danger hover"
       },
       "HoverDangerDark": {
-        "value": "#FFE5EC",
+        "value": "#F9E0E6",
         "type": "color",
-        "description": "Danger hover, $support-01 hover - Dark"
+        "description": "Danger hover - Dark"
+      },
+      "HoverError": {
+        "value": "#B22045",
+        "type": "color",
+        "description": "Error hover"
+      },
+      "HoverErrorDark": {
+        "value": "#F9E0E6",
+        "type": "color",
+        "description": "Error hover - Dark"
       },
       "HoverInput": {
-        "value": "#7C858A",
+        "value": "#7C868A",
         "type": "color",
         "description": "hover input"
       },
@@ -420,17 +440,17 @@
         "description": "hover input - Dark"
       },
       "HoverLink01": {
-        "value": "#246BB2",
+        "value": "#1366B9",
         "type": "color",
         "description": "hover primary link"
       },
       "HoverLink01Dark": {
-        "value": "#B9D8F7",
+        "value": "#9FCBF5",
         "type": "color",
         "description": "hover primary link - Dark"
       },
       "HoverLink02": {
-        "value": "#7C858A",
+        "value": "#7C868A",
         "type": "color",
         "description": "hover secondary link"
       },
@@ -442,12 +462,12 @@
     },
     "Active": {
       "Active01": {
-        "value": "#1A4D80",
+        "value": "#0E4B87",
         "type": "color",
         "description": "$interactive-01 active"
       },
       "Active01Dark": {
-        "value": "#1A4D80",
+        "value": "#0E4B87",
         "type": "color",
         "description": "$interactive-01 active - Dark"
       },
@@ -472,12 +492,12 @@
         "description": "$interactive-02 active on background - Dark"
       },
       "ActiveUi": {
-        "value": "#E5F2FF",
+        "value": "#D9EAFB",
         "type": "color",
         "description": "Active List background color"
       },
       "ActiveUiDark": {
-        "value": "#7C858A",
+        "value": "#7C868A",
         "type": "color",
         "description": "Active List background color - Dark"
       },
@@ -492,17 +512,17 @@
         "description": "Checkbox background color, Select border color - Dark"
       },
       "ActiveDanger": {
-        "value": "#B22447",
+        "value": "#B22045",
         "type": "color",
         "description": "Danger hover, $support-01 hover"
       },
       "ActiveDangerDark": {
-        "value": "#FFE5EC",
+        "value": "#F9E0E6",
         "type": "color",
         "description": "Danger hover, $support-01 hover - Dark"
       },
       "ActiveInput": {
-        "value": "#246BB2",
+        "value": "#1366B9",
         "type": "color",
         "description": "Active input"
       },
@@ -512,34 +532,34 @@
         "description": "Active input - Dark"
       },
       "ActiveLink01": {
-        "value": "#1A4D80",
+        "value": "#0E4B87",
         "type": "color",
         "description": "active primary link"
       },
       "ActiveLink01Dark": {
-        "value": "#E5F2FF",
+        "value": "#D9EAFB",
         "type": "color",
         "description": "active primary link - Dark"
       },
       "ActiveLink02": {
-        "value": "#2F3133",
+        "value": "#2F3233",
         "type": "color",
         "description": "active secondary link"
       },
       "ActiveLink02Dark": {
-        "value": "#E8E9EB",
+        "value": "#E9EAEB",
         "type": "color",
         "description": "active secondary link - Dark"
       }
     },
     "Selected": {
       "SelectedUi": {
-        "value": "#E5F2FF",
+        "value": "#D9EAFB",
         "type": "color",
         "description": "Selected List Navigation"
       },
       "SelectedUiDark": {
-        "value": "#246BB2",
+        "value": "#1366B9",
         "type": "color",
         "description": "Selected List Navigation - Dark"
       },
@@ -549,13 +569,23 @@
         "description": "Selected List Navigation Gray"
       },
       "SelectedUiGrayDark": {
-        "value": "#7C858A",
+        "value": "#7C868A",
         "type": "color",
         "description": "Selected List Navigation Gray - Dark"
       },
       "SelectedUiOnColor": {
         "value": "#FFFFFF",
         "type": "color"
+      },
+      "SelectedUiBorder": {
+        "value": "#177EE5",
+        "type": "color",
+        "description": "Selected Button Border"
+      },
+      "SelectedUiBorderDark": {
+        "value": "#9FCBF5",
+        "type": "color",
+        "description": "Selected Button Border - Dark"
       }
     },
     "Disabled": {
@@ -580,27 +610,27 @@
         "description": "Text on disabled button - Dark"
       },
       "Disabled03": {
-        "value": "#454A4C",
+        "value": "#454A4D",
         "type": "color",
-        "description": "Inverse Disabled fields,"
+        "description": "Inverse Disabled fields"
       },
       "Disabled04": {
-        "value": "#1A4D80",
+        "value": "#0E4B87",
         "type": "color",
         "description": "Inverse Disabled primary button"
       },
       "DisabledLink01": {
         "value": "#DEDFE0",
         "type": "color",
-        "description": "Disabled primary links, "
+        "description": "Disabled primary links"
       },
       "DisabledLink02": {
         "value": "#DEDFE0",
         "type": "color",
-        "description": "Disabled secondary links, "
+        "description": "Disabled secondary links"
       },
       "DisabledLink01Dark": {
-        "value": "#1F5C99",
+        "value": "#115CA7",
         "type": "color",
         "description": "Disabled primary links - Dark"
       },
@@ -610,12 +640,12 @@
         "description": "Disabled secondary links - Dark"
       },
       "DisabledOn": {
-        "value": "#E5F2FF",
+        "value": "#D9EAFB",
         "type": "color",
         "description": "Disabled on state"
       },
       "DisabledOnDark": {
-        "value": "#B9D8F7",
+        "value": "#9FCBF5",
         "type": "color",
         "description": "Disabled on state - Dark"
       }
@@ -627,17 +657,17 @@
         "description": "Error text, Icon with error, error element border"
       },
       "SupportErrorDark": {
-        "value": "#EE7A97",
+        "value": "#E67490",
         "type": "color",
         "description": "Error text, Icon with error, error element border - Dark"
       },
       "SupportSuccess": {
-        "value": "#56D99A",
+        "value": "#2DC87D",
         "type": "color",
         "description": "Success text,  button background, button border"
       },
       "SupportSuccessDark": {
-        "value": "#8AE5B9",
+        "value": "#69DDA5",
         "type": "color",
         "description": "Success text,  button background, button border - Dark"
       },
@@ -647,7 +677,7 @@
         "description": "Warning text, Icon with error, error element border"
       },
       "SupportWarningDark": {
-        "value": "#FFE354",
+        "value": "#FFE976",
         "type": "color",
         "description": "Warning text, Icon with error, error element border - Dark"
       },
@@ -657,7 +687,7 @@
         "description": "Danger text, button background, button border"
       },
       "SupportDangerDark": {
-        "value": "#EE7A97",
+        "value": "#E67490",
         "type": "color",
         "description": "Danger text, button background, button border - Dark"
       }
@@ -675,22 +705,22 @@
     },
     "Blue": {
       "Blue10": {
-        "value": "#F7FBFF",
+        "value": "#F1F7FD",
         "type": "color",
         "description": ""
       },
       "Blue20": {
-        "value": "#E5F2FF",
+        "value": "#D9EAFB",
         "type": "color",
         "description": ""
       },
       "Blue30": {
-        "value": "#B9D8F7",
+        "value": "#9FCBF5",
         "type": "color",
         "description": ""
       },
       "Blue40": {
-        "value": "#A2CBF5",
+        "value": "#60A8EF",
         "type": "color",
         "description": ""
       },
@@ -700,27 +730,27 @@
         "description": ""
       },
       "Blue60": {
-        "value": "#297BCC",
+        "value": "#1571CE",
         "type": "color",
         "description": ""
       },
       "Blue70": {
-        "value": "#246BB2",
+        "value": "#1366B9",
         "type": "color",
         "description": ""
       },
       "Blue80": {
-        "value": "#1F5C99",
+        "value": "#115CA7",
         "type": "color",
         "description": ""
       },
       "Blue90": {
-        "value": "#1C548C",
+        "value": "#0F5396",
         "type": "color",
         "description": ""
       },
       "Blue100": {
-        "value": "#1A4D80",
+        "value": "#0E4B87",
         "type": "color",
         "description": ""
       }
@@ -732,7 +762,7 @@
         "description": ""
       },
       "Gray20": {
-        "value": "#E8E9EB",
+        "value": "#E9EAEB",
         "type": "color",
         "description": ""
       },
@@ -757,7 +787,7 @@
         "description": ""
       },
       "Gray70": {
-        "value": "#7C858A",
+        "value": "#7C868A",
         "type": "color",
         "description": ""
       },
@@ -767,33 +797,33 @@
         "description": ""
       },
       "Gray90": {
-        "value": "#454A4C",
+        "value": "#454A4D",
         "type": "color",
         "description": ""
       },
       "Gray100": {
-        "value": "#2F3133",
+        "value": "#2F3233",
         "type": "color",
         "description": ""
       }
     },
     "Red": {
       "Red10": {
-        "value": "#FFF2F6",
+        "value": "#FCEFF3",
         "type": "color",
         "description": ""
       },
       "Red20": {
-        "value": "#FFE5EC",
+        "value": "#F9E0E6",
         "type": "color",
         "description": ""
       },
       "Red30": {
-        "value": "#FCB9C9",
+        "value": "#F1B1C1",
         "type": "color"
       },
       "Red40": {
-        "value": "#EE7A97",
+        "value": "#E67490",
         "type": "color"
       },
       "Red50": {
@@ -802,49 +832,49 @@
         "description": ""
       },
       "Red60": {
-        "value": "#CB234D",
+        "value": "#C6244D",
         "type": "color",
         "description": ""
       },
       "Red70": {
-        "value": "#B22447",
+        "value": "#B22045",
         "type": "color",
         "description": ""
       },
       "Red80": {
-        "value": "#871430",
+        "value": "#A01D3E",
         "type": "color",
         "description": ""
       },
       "Red90": {
-        "value": "#76122A",
+        "value": "#901A38",
         "type": "color",
         "description": ""
       },
       "Red100": {
-        "value": "#650E24",
+        "value": "#821732",
         "type": "color",
         "description": ""
       }
     },
     "Yellow": {
       "Yellow10": {
-        "value": "#FFF6C4",
+        "value": "#FFFADC",
         "type": "color",
         "description": ""
       },
       "Yellow20": {
-        "value": "#FFEF9B",
+        "value": "#FFF6C4",
         "type": "color",
         "description": ""
       },
       "Yellow30": {
-        "value": "#FFE976",
+        "value": "#FFEF9B",
         "type": "color",
         "description": ""
       },
       "Yellow40": {
-        "value": "#FFE354",
+        "value": "#FFE976",
         "type": "color",
         "description": ""
       },
@@ -881,81 +911,126 @@
     },
     "Green": {
       "Green10": {
-        "value": "#E4F9EF",
+        "value": "#ECFBF4",
         "type": "color",
         "description": ""
       },
       "Green20": {
-        "value": "#C9F3DF",
+        "value": "#D0F4E3",
         "type": "color",
         "description": ""
       },
       "Green30": {
-        "value": "#A8ECCB",
+        "value": "#A1EAC7",
         "type": "color",
         "description": ""
       },
       "Green40": {
-        "value": "#8AE5B9",
+        "value": "#69DDA5",
         "type": "color",
         "description": ""
       },
       "Green50": {
-        "value": "#56D99A",
-        "type": "color",
-        "description": ""
-      },
-      "Green60": {
-        "value": "#3DD38B",
-        "type": "color",
-        "description": ""
-      },
-      "Green70": {
         "value": "#2DC87D",
         "type": "color",
         "description": ""
       },
-      "Green80": {
+      "Green60": {
         "value": "#29B471",
         "type": "color",
         "description": ""
       },
-      "Green90": {
+      "Green70": {
         "value": "#25A266",
         "type": "color",
         "description": ""
       },
-      "Green100": {
+      "Green80": {
         "value": "#21925C",
+        "type": "color",
+        "description": ""
+      },
+      "Green90": {
+        "value": "#1E8353",
+        "type": "color",
+        "description": ""
+      },
+      "Green100": {
+        "value": "#1B764B",
         "type": "color",
         "description": ""
       }
     },
     "Purple": {
+      "Purple10": {
+        "value": "#F3F3FF",
+        "type": "color",
+        "description": ""
+      },
+      "Purple20": {
+        "value": "#E0E1FF",
+        "type": "color",
+        "description": ""
+      },
+      "Purple30": {
+        "value": "#C1C3FF",
+        "type": "color",
+        "description": ""
+      },
+      "Purple40": {
+        "value": "#989CFF",
+        "type": "color",
+        "description": ""
+      },
       "Purple50": {
         "value": "#7379FF",
+        "type": "color",
+        "description": ""
+      },
+      "Purple60": {
+        "value": "#4E56FF",
+        "type": "color",
+        "description": ""
+      },
+      "Purple70": {
+        "value": "#3F46DF",
+        "type": "color",
+        "description": ""
+      },
+      "Purple80": {
+        "value": "#3338BE",
+        "type": "color",
+        "description": ""
+      },
+      "Purple90": {
+        "value": "#2B30AA",
+        "type": "color",
+        "description": ""
+      },
+      "Purple100": {
+        "value": "#22278E",
         "type": "color",
         "description": ""
       }
     },
     "BlueGreen": {
       "BlueGreen10": {
-        "value": "#CFF6FA",
+        "value": "#ECFCFD",
         "type": "color",
         "description": ""
       },
       "BlueGreen20": {
-        "value": "#9FEEF5",
+        "value": "#CFF6FA",
         "type": "color",
         "description": ""
       },
       "BlueGreen30": {
-        "value": "#60E3EF",
+        "value": "#9FEEF5",
         "type": "color",
         "description": ""
       },
       "BlueGreen40": {
-        "value": "#44DEEC",
+        "value": "#60E3EF",
         "type": "color",
         "description": ""
       },
