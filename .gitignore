@@ -97,3 +97,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+# local version control
+.tool-versions
