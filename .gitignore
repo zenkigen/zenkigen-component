@@ -100,3 +100,8 @@ dist
 
 # local version control
 .tool-versions
+
+# yarn
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
