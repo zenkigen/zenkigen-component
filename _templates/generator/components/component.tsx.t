@@ -1,5 +1,5 @@
 ---
-to: src/components/<%= h.changeCase.pascal(component_name) %>/<%= h.changeCase.pascal(component_name) %>.tsx
+to: src/components/<%= component_name %>/<%= component_name %>.tsx
 ---
 import { ReactNode } from 'react'
 
