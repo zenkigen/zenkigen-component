@@ -3,6 +3,8 @@ name: 'Chromatic'
 on:
   pull_request:
     types: [opened, reopened, synchronize, ready_for_review]
+    branches-ignore:
+      - 'renovate/**'
   push:
     branches:
       - main
