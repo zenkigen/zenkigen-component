@@ -11,13 +11,13 @@ type Props = {
   children?: ReactNode;
 };
 
-export const Button = ({ disabled, isAnchor, children }: Props) => {
+export function Button({ disabled, isAnchor, children }: Props) {
   if (isAnchor) {
     return <StyledAnchor>{children}</StyledAnchor>;
   } else {
     return <StyledButton disabled={disabled}>{children}</StyledButton>;
   }
-};
+}
 
 const baseStyles = css`
   ${({ theme }) => theme.LabelLabel414pxRegular};
