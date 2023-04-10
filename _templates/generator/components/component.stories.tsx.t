@@ -7,4 +7,4 @@ export default {
   component: <%= h.changeCase.pascal(component_name) %>,
 };
 
-export const Base = { args: {  } };
+export const Base = { args: {} };
