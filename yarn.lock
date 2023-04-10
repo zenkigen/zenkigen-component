@@ -3563,6 +3563,7 @@ __metadata:
     storybook: next
     style-dictionary: 3.7.2
     styled-components: 5.3.9
+    styled-reset: ^4.4.5
     token-transformer: 0.0.32
     typescript: 5.0.4
     vite: ^4.0.1
@@ -10310,6 +10311,15 @@ __metadata:
     react-dom: ">= 16.8.0"
     react-is: ">= 16.8.0"
   checksum: 404311cc7028259218674d3f9f39bdda2342fc02f2ebbba8f057ef560b2ad205c5bd63b82deed4d0bf217ac7eb960d0e1127510b0b606e32cbd5a48c10373ce8
+  languageName: node
+  linkType: hard
+
+"styled-reset@npm:^4.4.5":
+  version: 4.4.5
+  resolution: "styled-reset@npm:4.4.5"
+  peerDependencies:
+    styled-components: ">=4.0.0 || >=5.0.0"
+  checksum: 3cd86e5d55edc26f254951dc0efe5ec2c8bed8f9056cda94e8808365a3809366890f31165bacc2663a67c3aee1cce35399c5c181142457035c91262341f943cf
   languageName: node
   linkType: hard
 
