@@ -2,7 +2,7 @@ name: 'Chromatic'
 
 on:
   workflow_run:
-    workflows: [Check syntax]
+    workflows: ['Check syntax']
     types: [completed]
 
 concurrency:
