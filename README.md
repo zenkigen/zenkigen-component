@@ -2,26 +2,10 @@
 
 ## インストール
 
-### インストールする際の準備
-zenkigen-component はプライベートレポジトリのため、そのままではインストールできません。  
-インストールするディレクトリに `.npmrc` ファイルを作成して以下を記述してください。
-```
-//npm.pkg.github.com/:_authToken=${GITHUB_READ_PACKAGES_TOKEN}
-@zenkigen:registry="https://npm.pkg.github.com"
-```
-
-`read:packages` の権限が付与された Personal access token(PTA) を発行してください。  
-発行されたトークンを `GITHUB_READ_PACKAGES_TOKEN` を環境変数として登録してください。
-
-### インストールコマンド
-```
-npm install @zenkigen/zenkigen-component
-```
-```
-yarn add @zenkigen/zenkigen-component
-```
+TBD
 
 ## 使用方法
+
 ```
 import { Button } from '@zenkigen/zenkigen-component';
 
@@ -33,6 +17,7 @@ export const Component = () => (
 ```
 
 ### カラートークンを変更する
+
 styled-components の theme 機能を使ってコンポーネントで定義しているカラートークンを変更することができます。
 
 ```
@@ -46,6 +31,7 @@ export const App = () => {
   )
 }
 ```
+
 トークン名は [src/tokens/tokens.ts](https://github.com/zenkigen/zenkigen-component/blob/main/src/tokens/tokens.ts) を参照してください。
 
 ## 開発者向け
@@ -59,9 +45,11 @@ export const App = () => {
 1. `yarn build:token` を実行する
 
 ### 実装したコンポーネントを export する
-使用する側の import を簡略化させるため root にある [src/index.ts](https://github.com/zenkigen/zenkigen-component/blob/main/src/index.ts) に実装したコンポーネントを exportしてください。
+
+使用する側の import を簡略化させるため root にある [src/index.ts](https://github.com/zenkigen/zenkigen-component/blob/main/src/index.ts) に実装したコンポーネントを export してください。
 
 ### コンポーネントの雛形を生成する
+
 hygen で雛形を生成することができるので、必ずこのコマンドから生成されたファイルを元に実装を始めてください。
 
 ```
@@ -70,5 +58,5 @@ npx hygen generator components
 
 ### コーディングガイドライン
 
-開発する際は以下を参照してください。  
+開発する際は以下を参照してください。
 https://www.notion.so/zenkigen/5d4ebd0d93b74124a533cf167b852ec0
