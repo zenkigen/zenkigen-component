@@ -4,6 +4,7 @@ on:
   workflow_run:
     workflows: ['Check syntax']
     types: [completed]
+    branches-ignore: ['renovate/**']
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
