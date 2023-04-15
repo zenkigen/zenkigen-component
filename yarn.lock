@@ -3727,12 +3727,16 @@ __metadata:
     react-dom: 18.2.0
     storybook: next
     style-dictionary: 3.7.2
-    styled-components: 5.3.9
+    styled-components: ^5.3.9
     styled-reset: 4.4.5
     token-transformer: 0.0.32
     typescript: 5.0.4
     vite: 4.0.1
     vitest: 0.30.0
+  peerDependencies:
+    react: 16.13.0 || ^17.0.1 || ^18.0.0
+    react-dom: 16.13.0 || ^17.0.1 || ^18.0.0
+    styled-components: ^5.0.1
   languageName: unknown
   linkType: soft
 
@@ -10516,7 +10520,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"styled-components@npm:5.3.9":
+"styled-components@npm:^5.3.9":
   version: 5.3.9
   resolution: "styled-components@npm:5.3.9"
   dependencies:
