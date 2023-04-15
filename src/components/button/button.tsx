@@ -3,7 +3,6 @@ import { ReactNode } from 'react';
 import styled, { css } from 'styled-components';
 
 import { space } from '../../helpers/space';
-import * as theme from '../../tokens/tokens';
 
 type Props = {
   disabled?: boolean;
@@ -47,15 +46,7 @@ const StyledButton = styled.button`
   border: none;
 `;
 
-StyledButton.defaultProps = {
-  theme,
-};
-
 const StyledAnchor = styled.a`
   ${baseStyles}
   text-decoration: none;
 `;
-
-StyledAnchor.defaultProps = {
-  theme,
-};
