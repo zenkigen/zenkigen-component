@@ -3,8 +3,7 @@
   "version": "0.1.10",
   "license": "UNLICENSED",
   "author": "ZENKIGEN, Inc.",
-  "main": "dist/lib/index.js",
-  "module": "dist/esm/index.js",
+  "main": "src/index.ts",
   "types": "dist/esm/index.d.ts",
   "publishConfig": {
     "access": "restricted",
