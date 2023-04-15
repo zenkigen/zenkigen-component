@@ -4,7 +4,6 @@
   "license": "UNLICENSED",
   "author": "ZENKIGEN, Inc.",
   "main": "src/index.ts",
-  "types": "dist/esm/index.d.ts",
   "publishConfig": {
     "access": "restricted",
     "registry": "https://npm.pkg.github.com/"
