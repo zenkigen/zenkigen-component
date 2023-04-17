@@ -1,7 +1,9 @@
 import React from 'react';
 
 import type { Preview } from '@storybook/react';
+import { ThemeProvider } from '../src/theme/theme-provider';
 import { Reset } from 'styled-reset';
+import { createTheme } from '../src/theme';
 
 const preview: Preview = {
   parameters: {
@@ -15,10 +17,10 @@ const preview: Preview = {
   },
   decorators: [
     (Story) => (
-      <>
+      <ThemeProvider theme={createTheme({ space: 4 })}>
         <Reset />
         <Story />
-      </>
+      </ThemeProvider>
     ),
   ],
 };
