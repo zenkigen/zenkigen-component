@@ -1,5 +1,6 @@
 import { createContext } from 'react';
 
-import { CreateTheme, createTheme } from '.';
+import { createTheme } from './create-theme';
+import type { CreateTheme } from './create-theme';
 
 export const ThemeContext = createContext<CreateTheme>(createTheme());
