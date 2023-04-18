@@ -4,26 +4,11 @@
   "license": "UNLICENSED",
   "author": "ZENKIGEN, Inc.",
   "main": "src/index.ts",
-  "publishConfig": {
-    "access": "restricted",
-    "registry": "https://npm.pkg.github.com/"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/zenkigen/zenkigen-component.git"
-  },
-  "files": [
-    "src",
-    "dist",
-    "index.d.ts"
-  ],
+  "packageManager": "yarn@3.5.0",
   "scripts": {
-    "lint:eslint": "eslint './**/*.ts{,x}'",
-    "lint:tsc": "tsc --noEmit",
-    "build": "run-p 'build:*'",
+    "lint": "eslint './**/*.ts{,x}'",
+    "type-check": "tsc --noEmit",
     "build:token": "token-transformer style-dictionary/tokens.json style-dictionary/transformed-token.json zen && style-dictionary build -c style-dictionary.json",
-    "build:lib": "tsc -p tsconfig.build.json",
-    "build:esm": "tsc -p tsconfig.esm.build.json",
     "generate-component": "hygen generator components",
     "storybook": "storybook dev",
     "build-storybook": "storybook build"
@@ -51,7 +36,6 @@
     "eslint-plugin-react-hooks": "4.6.0",
     "eslint-plugin-storybook": "0.6.11",
     "hygen": "6.2.11",
-    "npm-run-all": "4.1.5",
     "prettier": "2.8.7",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -63,11 +47,5 @@
     "typescript": "5.0.4",
     "vite": "4.2.1",
     "vitest": "0.30.1"
-  },
-  "peerDependencies": {
-    "react": "16.13.0 || ^17.0.1 || ^18.0.0",
-    "react-dom": "16.13.0 || ^17.0.1 || ^18.0.0",
-    "styled-components": "^5.0.1"
-  },
-  "packageManager": "yarn@3.5.0"
+  }
 }
