@@ -6,31 +6,7 @@ TBD
 
 ## 使用方法
 
-```
-import { Button } from '@zenkigen/zenkigen-component';
-
-export const Component = () => (
-  <div>
-    <Button>ボタン</Button>
-  </div>
-)
-```
-
-### カラートークンを変更する
-
-styled-components の theme 機能を使ってコンポーネントで定義しているカラートークンを変更することができます。
-
-```
-import { theme, Button } from '@zenkigen/zenkigen-component';
-
-export const App = () => {
-  return (
-    <ThemeProvider theme={{ ...theme, TokensInteractiveInteractive01: 'green' }}>
-      <Button>Themed</Button>
-    </ThemeProvider>
-  )
-}
-```
+TBD
 
 トークン名は [src/tokens/tokens.ts](https://github.com/zenkigen/zenkigen-component/blob/main/src/tokens/tokens.ts) を参照してください。
 
