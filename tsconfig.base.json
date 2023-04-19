@@ -1,15 +1,14 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "lib": ["esnext"],
+    "lib": ["esnext", "dom"],
     "module": "esnext",
-    "noEmit": true,
-    "checkJs": false,
+    "types": ["node"],
     "skipLibCheck": true,
     "moduleResolution": "node",
     "strict": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "noUncheckedIndexedAccess": true
+    "jsx": "preserve"
   }
 }

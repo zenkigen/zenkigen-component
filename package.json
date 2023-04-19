@@ -1,13 +1,16 @@
 {
-  "name": "@zenkigen/zenkigen-component",
-  "version": "0.1.10",
+  "name": "zenkigen-component",
+  "private": true,
   "license": "UNLICENSED",
   "author": "ZENKIGEN, Inc.",
-  "main": "src/index.ts",
   "packageManager": "yarn@3.5.0",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "lint": "eslint './**/*.ts{,x}'",
     "type-check": "tsc --noEmit",
+    "build": "yarn workspaces foreach run build",
     "build:token": "token-transformer style-dictionary/tokens.json style-dictionary/transformed-token.json zen && style-dictionary build -c style-dictionary.json",
     "generate-component": "hygen generator components",
     "storybook": "storybook dev",
@@ -19,6 +22,7 @@
     "@storybook/addon-essentials": "7.0.5",
     "@storybook/addon-interactions": "7.0.5",
     "@storybook/addon-links": "7.0.5",
+    "@storybook/addon-styling": "^1.0.1",
     "@storybook/react": "7.0.5",
     "@storybook/react-vite": "7.0.5",
     "@storybook/testing-library": "0.1.0",
@@ -40,6 +44,7 @@
     "react-dom": "18.2.0",
     "storybook": "next",
     "style-dictionary": "3.7.2",
+    "tailwindcss": "3.3.1",
     "token-transformer": "0.0.32",
     "typescript": "5.0.4",
     "vite": "4.2.1",
