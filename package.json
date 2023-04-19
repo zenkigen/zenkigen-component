@@ -8,7 +8,7 @@
   "scripts": {
     "lint": "eslint './packages/**/*.ts{,x}'",
     "type-check": "yarn workspaces foreach run type-check",
-    "build": "yarn workspaces foreach run build",
+    "build": "yarn workspace @zenkigen-component/theme build && yarn workspaces foreach run build",
     "build:token": "token-transformer style-dictionary/tokens.json style-dictionary/transformed-token.json zen && style-dictionary build -c style-dictionary.json",
     "generate-component": "hygen generator components",
     "storybook": "storybook dev",
