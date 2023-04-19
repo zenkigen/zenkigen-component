@@ -11,6 +11,7 @@
     "default": "./dist/index.modern.js"
   },
   "scripts": {
+    "type-check": "tsc --noEmit",
     "build": "microbundle --no-compress -f modern,esm,cjs --jsx React.createElement --jsxFragment React.Fragment"
   },
   "devDependencies": {

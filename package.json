@@ -1,15 +1,13 @@
 {
   "name": "zenkigen-component",
   "private": true,
-  "license": "UNLICENSED",
-  "author": "ZENKIGEN, Inc.",
   "packageManager": "yarn@3.5.0",
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
-    "lint": "eslint './**/*.ts{,x}'",
-    "type-check": "tsc --noEmit",
+    "lint": "eslint './packages/**/*.ts{,x}'",
+    "type-check": "yarn workspaces foreach run type-check",
     "build": "yarn workspaces foreach run build",
     "build:token": "token-transformer style-dictionary/tokens.json style-dictionary/transformed-token.json zen && style-dictionary build -c style-dictionary.json",
     "generate-component": "hygen generator components",
