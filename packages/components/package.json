@@ -12,7 +12,7 @@
   },
   "scripts": {
     "type-check": "tsc --noEmit",
-    "build": "microbundle --no-compress -f modern,esm,cjs --jsx React.createElement --jsxFragment React.Fragment"
+    "build": "microbundle --no-compress -f modern,esm,cjs --jsx React.createElement --jsxFragment React.Fragment --jsxImportSource react --globals react/jsx-runtime=jsx"
   },
   "devDependencies": {
     "@types/react": "18.0.37",
