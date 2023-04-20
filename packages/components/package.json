@@ -1,0 +1,27 @@
+{
+  "name": "@zenkigen-component/components",
+  "version": "1.0.0",
+  "type": "module",
+  "source": "./src/index.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.module.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "require": "./dist/index.cjs",
+    "default": "./dist/index.modern.js"
+  },
+  "scripts": {
+    "type-check": "tsc --noEmit",
+    "build": "microbundle --no-compress -f modern,esm,cjs --jsx React.createElement --jsxFragment React.Fragment --jsxImportSource react --globals react/jsx-runtime=jsx"
+  },
+  "devDependencies": {
+    "@types/react": "18.0.37",
+    "microbundle": "0.15.1",
+    "typescript": "5.0.4"
+  },
+  "dependencies": {
+    "@zenkigen-component/theme": "1.0.0",
+    "classnames": "2.3.2",
+    "react": "18.2.0"
+  }
+}

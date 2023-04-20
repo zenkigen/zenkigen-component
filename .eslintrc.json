@@ -7,6 +7,11 @@
     "plugin:react-hooks/recommended",
     "prettier"
   ],
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
   "parser": "@typescript-eslint/parser",
   "plugins": ["import", "react", "@typescript-eslint"],
   "settings": {
