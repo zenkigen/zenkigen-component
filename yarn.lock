@@ -3921,6 +3921,7 @@ __metadata:
   dependencies:
     "@types/react": 18.0.37
     "@zenkigen-component/theme": 1.0.0
+    classnames: 2.3.2
     microbundle: 0.15.1
     react: 18.2.0
     typescript: 5.0.4
@@ -3932,7 +3933,9 @@ __metadata:
   resolution: "@zenkigen-component/config@workspace:packages/config"
   dependencies:
     microbundle: 0.15.1
+    style-dictionary: 3.7.2
     tailwindcss: 3.3.1
+    token-transformer: ^0.0.32
     typescript: 5.0.4
   languageName: unknown
   linkType: soft
@@ -5043,6 +5046,13 @@ __metadata:
   version: 3.8.0
   resolution: "ci-info@npm:3.8.0"
   checksum: d0a4d3160497cae54294974a7246202244fff031b0a6ea20dd57b10ec510aa17399c41a1b0982142c105f3255aff2173e5c0dd7302ee1b2f28ba3debda375098
+  languageName: node
+  linkType: hard
+
+"classnames@npm:2.3.2":
+  version: 2.3.2
+  resolution: "classnames@npm:2.3.2"
+  checksum: 2c62199789618d95545c872787137262e741f9db13328e216b093eea91c85ef2bfb152c1f9e63027204e2559a006a92eb74147d46c800a9f96297ae1d9f96f4e
   languageName: node
   linkType: hard
 
@@ -12398,7 +12408,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"token-transformer@npm:0.0.32":
+"token-transformer@npm:^0.0.32":
   version: 0.0.32
   resolution: "token-transformer@npm:0.0.32"
   dependencies:
@@ -13354,9 +13364,7 @@ __metadata:
     react: 18.2.0
     react-dom: 18.2.0
     storybook: next
-    style-dictionary: 3.7.2
     tailwindcss: 3.3.1
-    token-transformer: 0.0.32
     typescript: 5.0.4
     vite: 4.2.1
     vitest: 0.30.1

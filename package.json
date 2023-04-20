@@ -9,7 +9,6 @@
     "lint": "eslint './packages/**/*.ts{,x}'",
     "type-check": "yarn workspaces foreach run type-check",
     "build": "yarn workspace @zenkigen-component/theme build && yarn workspaces foreach run build",
-    "build:token": "token-transformer style-dictionary/tokens.json style-dictionary/transformed-token.json zen && style-dictionary build -c style-dictionary.json",
     "generate-component": "hygen generator components",
     "storybook": "storybook dev",
     "build-storybook": "storybook build"
@@ -43,9 +42,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "storybook": "next",
-    "style-dictionary": "3.7.2",
     "tailwindcss": "3.3.1",
-    "token-transformer": "0.0.32",
     "typescript": "5.0.4",
     "vite": "4.2.1",
     "vitest": "0.30.1"
