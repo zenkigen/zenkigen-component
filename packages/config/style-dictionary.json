@@ -1,0 +1,27 @@
+{
+  "source": [
+    "./style-dictionary/transformed-tokens.json"
+  ],
+  "platforms": {
+    "css": {
+      "transformGroup": "css",
+      "buildPath": "src/tokens/",
+      "files": [
+        {
+          "destination": "tokens.css",
+          "format": "css/variables"
+        }
+      ]
+    },
+    "js": {
+      "transformGroup": "js",
+      "buildPath": "src/tokens/",
+      "files": [
+        {
+          "destination": "tokens.ts",
+          "format": "customTSFormat"
+        }
+      ]
+    }
+  }
+}

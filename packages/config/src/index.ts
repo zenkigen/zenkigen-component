@@ -1,1 +1,1 @@
-export * from './tailwindConfig';
+export * from './tailwind-config';
