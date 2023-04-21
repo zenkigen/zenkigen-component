@@ -4,6 +4,5 @@
     "lib": ["dom", "esnext"],
     "jsx": "preserve"
   },
-  "include": ["./src"],
-  "exclude": ["./src/**/*.test.*", "./src/**/*.stories.*"]
+  "include": ["./src"]
 }
