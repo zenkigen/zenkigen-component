@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 import { buttonColors, typography } from '@zenkigen-component/theme';
 import classNames from 'classnames';
 
-type Size = 'large' | 'medium' | 'small';
+type Size = 'small' | 'medium' | 'large';
 
 type Style = 'fill' | 'outline' | 'text';
 
@@ -22,8 +22,8 @@ type Props =
           target?: HTMLAnchorElement['target'];
         }
       | {
-          isAnchor: false;
-          onClick: () => void;
+          isAnchor?: false;
+          onClick?: () => void;
         }
     );
 
@@ -40,7 +40,7 @@ export function Button({ size = 'medium', style = 'fill', ...props }: Props) {
     typography.label.label1regular,
     { 'py-1 px-2': size === 'small' },
     { 'py-2 px-3': size === 'medium' },
-    { 'py-3 px-4': size === 'large' },
+    { 'py-2 px-4 leading-[24px]': size === 'large' },
     { 'inline-flex': props.isAnchor },
     { 'pointer-events-none': props.isDisabled },
   );
