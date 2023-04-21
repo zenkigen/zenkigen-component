@@ -21,3 +21,13 @@ export const buttonColors = {
     disabled: 'disabled:text-disabled-disabled01',
   },
 } as const;
+
+export const iconColors = {
+  icon01: 'fill-icon-icon01',
+  icon01Dark: 'fill-icon-icon01Dark',
+  icon02: 'fill-icon-icon02',
+  icon02Dark: 'fill-icon-icon02Dark',
+  icon03: 'fill-icon-icon03',
+  icon03Dark: 'fill-icon-icon03Dark',
+  iconOnColor: 'fill-icon-iconOnColor',
+} as const;
