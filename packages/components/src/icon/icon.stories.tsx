@@ -1,4 +1,102 @@
 import { Icon } from '.';
 
 export default { component: Icon };
-export const Base = { args: { name: 'add' } };
+export function Base() {
+  return (
+    <div>
+      <Icon name="add" />
+      <Icon name="ai" />
+      <Icon name="angle-down" />
+      <Icon name="angle-left" />
+      <Icon name="angle-right" />
+      <Icon name="angle-small-down" />
+      <Icon name="angle-small-up" />
+      <Icon name="angle-up" />
+      <Icon name="arrow-down" />
+      <Icon name="arrow-right" />
+      <Icon name="arrow-up" />
+      <Icon name="attachment" />
+      <Icon name="attention" />
+      <Icon name="building" />
+      <Icon name="calendar-check" />
+      <Icon name="calendar-draft" />
+      <Icon name="calendar-minus" />
+      <Icon name="calendar-today" />
+      <Icon name="calendar" />
+      <Icon name="caret-down" />
+      <Icon name="caret-right" />
+      <Icon name="chart-bar" />
+      <Icon name="chart-line" />
+      <Icon name="check" />
+      <Icon name="circle" />
+      <Icon name="close" />
+      <Icon name="comment" />
+      <Icon name="contract" />
+      <Icon name="copy" />
+      <Icon name="delete" />
+      <Icon name="document" />
+      <Icon name="documents" />
+      <Icon name="double circle" />
+      <Icon name="download-document" />
+      <Icon name="download" />
+      <Icon name="edit" />
+      <Icon name="email" />
+      <Icon name="expand" />
+      <Icon name="external-link" />
+      <Icon name="filter" />
+      <Icon name="flag" />
+      <Icon name="global" />
+      <Icon name="graph-line" />
+      <Icon name="hamburger-close" />
+      <Icon name="hamburger" />
+      <Icon name="help" />
+      <Icon name="home" />
+      <Icon name="image" />
+      <Icon name="information-filled" />
+      <Icon name="information" />
+      <Icon name="input-delete" />
+      <Icon name="link" />
+      <Icon name="list" />
+      <Icon name="message-text" />
+      <Icon name="more" />
+      <Icon name="movie" />
+      <Icon name="notification" />
+      <Icon name="pause" />
+      <Icon name="pdf" />
+      <Icon name="picture-in-picture" />
+      <Icon name="play-filled" />
+      <Icon name="play" />
+      <Icon name="presentation" />
+      <Icon name="remove" />
+      <Icon name="score" />
+      <Icon name="search" />
+      <Icon name="send" />
+      <Icon name="share" />
+      <Icon name="shuffle" />
+      <Icon name="sidebar" />
+      <Icon name="slider-editing" />
+      <Icon name="sort" />
+      <Icon name="star-filled" />
+      <Icon name="star" />
+      <Icon name="store" />
+      <Icon name="success-filled" />
+      <Icon name="table-download" />
+      <Icon name="table-upload" />
+      <Icon name="table" />
+      <Icon name="transcription" />
+      <Icon name="triangle" />
+      <Icon name="upload" />
+      <Icon name="user-add" />
+      <Icon name="user-group" />
+      <Icon name="user-line" />
+      <Icon name="user-multi" />
+      <Icon name="user-photograph" />
+      <Icon name="user-remove" />
+      <Icon name="user" />
+      <Icon name="video" />
+      <Icon name="volume-off" />
+      <Icon name="volume" />
+      <Icon name="warning" />
+    </div>
+  );
+}

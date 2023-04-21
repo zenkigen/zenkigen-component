@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 import { buttonColors, typography } from '@zenkigen-component/theme';
 import classNames from 'classnames';
 
-type Size = 'large' | 'medium' | 'small';
+type Size = 'small' | 'medium' | 'large';
 
 type Style = 'fill' | 'outline' | 'text';
 
@@ -12,7 +12,9 @@ type Props =
       size?: Size;
       isDisabled?: boolean;
       style?: Style;
-      children?: ReactNode;
+      before?: ReactNode;
+      after?: ReactNode;
+      children: ReactNode;
     } & (
       | {
           isAnchor: true;
@@ -20,36 +22,43 @@ type Props =
           target?: HTMLAnchorElement['target'];
         }
       | {
-          isAnchor: false;
-          onClick: () => void;
+          isAnchor?: false;
+          onClick?: () => void;
         }
     );
 
 export function Button({ size = 'medium', style = 'fill', ...props }: Props) {
   const baseClasses = classNames(
     'rounded',
+    'flex',
+    'gap-1',
+    'items-center',
     buttonColors[style].base,
     buttonColors[style].hover,
     buttonColors[style].active,
-    buttonColors[style].focus,
     buttonColors[style].disabled,
     typography.label.label1regular,
     { 'py-1 px-2': size === 'small' },
     { 'py-2 px-3': size === 'medium' },
-    { 'py-3 px-4': size === 'large' },
-    { 'inline-block': props.isAnchor },
+    { 'py-2 px-4 leading-[24px]': size === 'large' },
+    { 'inline-flex': props.isAnchor },
+    { 'pointer-events-none': props.isDisabled },
   );
 
   if (props.isAnchor) {
     return (
       <a className={baseClasses} href={props.href}>
+        {props.before}
         {props.children}
+        {props.after}
       </a>
     );
   } else {
     return (
       <button className={baseClasses} disabled={props.isDisabled}>
+        {props.before}
         {props.children}
+        {props.after}
       </button>
     );
   }
