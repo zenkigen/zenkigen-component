@@ -63,7 +63,7 @@ export function Base() {
       <Icon name="notification" />
       <Icon name="pause" />
       <Icon name="pdf" />
-      <Icon name="picture_in_picture" />
+      <Icon name="picture-in-picture" />
       <Icon name="play-filled" />
       <Icon name="play" />
       <Icon name="presentation" />
