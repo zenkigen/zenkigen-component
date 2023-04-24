@@ -47,7 +47,7 @@ export function Button({ size = 'medium', variant = 'fill', ...props }: Props) {
 
   if (props.isAnchor) {
     return (
-      <a className={baseClasses} href={props.href}>
+      <a className={baseClasses} href={props.href} target={props.target}>
         {props.before}
         {props.children}
         {props.after}
