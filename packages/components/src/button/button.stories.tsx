@@ -65,35 +65,16 @@ export function Base() {
           marginTop: '8px',
         }}
       >
-        <Button style="outline" size="small">
+        <Button variant="outline" size="small">
           ボタンラベル
         </Button>
-        <Button style="outline" size="small" before={<Icon name="add" size="small" />}>
+        <Button variant="outline" size="small" before={<Icon name="add" size="small" />}>
           ボタンラベル
         </Button>
-        <Button style="outline" size="small" after={<Icon name="add" size="small" />}>
+        <Button variant="outline" size="small" after={<Icon name="add" size="small" />}>
           ボタンラベル
         </Button>
-        <Button style="outline" size="small" isDisabled>
-          ボタンラベル
-        </Button>
-      </div>
-      <div
-        style={{
-          display: 'flex',
-          gap: '8px',
-          alignItems: 'center',
-          marginTop: '8px',
-        }}
-      >
-        <Button style="outline">ボタンラベル</Button>
-        <Button style="outline" before={<Icon name="add" size="small" />}>
-          ボタンラベル
-        </Button>
-        <Button style="outline" after={<Icon name="add" size="small" />}>
-          ボタンラベル
-        </Button>
-        <Button style="outline" isDisabled>
+        <Button variant="outline" size="small" isDisabled>
           ボタンラベル
         </Button>
       </div>
@@ -105,16 +86,35 @@ export function Base() {
           marginTop: '8px',
         }}
       >
-        <Button style="outline" size="large">
+        <Button variant="outline">ボタンラベル</Button>
+        <Button variant="outline" before={<Icon name="add" size="small" />}>
           ボタンラベル
         </Button>
-        <Button style="outline" size="large" before={<Icon name="add" size="large" />}>
+        <Button variant="outline" after={<Icon name="add" size="small" />}>
           ボタンラベル
         </Button>
-        <Button style="outline" size="large" after={<Icon name="add" size="large" />}>
+        <Button variant="outline" isDisabled>
           ボタンラベル
         </Button>
-        <Button style="outline" size="large" isDisabled>
+      </div>
+      <div
+        style={{
+          display: 'flex',
+          gap: '8px',
+          alignItems: 'center',
+          marginTop: '8px',
+        }}
+      >
+        <Button variant="outline" size="large">
+          ボタンラベル
+        </Button>
+        <Button variant="outline" size="large" before={<Icon name="add" size="large" />}>
+          ボタンラベル
+        </Button>
+        <Button variant="outline" size="large" after={<Icon name="add" size="large" />}>
+          ボタンラベル
+        </Button>
+        <Button variant="outline" size="large" isDisabled>
           ボタンラベル
         </Button>
       </div>
@@ -127,35 +127,16 @@ export function Base() {
           marginTop: '8px',
         }}
       >
-        <Button style="text" size="small">
+        <Button variant="text" size="small">
           ボタンラベル
         </Button>
-        <Button style="text" size="small" before={<Icon name="add" size="small" />}>
+        <Button variant="text" size="small" before={<Icon name="add" size="small" />}>
           ボタンラベル
         </Button>
-        <Button style="text" size="small" after={<Icon name="add" size="small" />}>
+        <Button variant="text" size="small" after={<Icon name="add" size="small" />}>
           ボタンラベル
         </Button>
-        <Button style="text" size="small" isDisabled>
-          ボタンラベル
-        </Button>
-      </div>
-      <div
-        style={{
-          display: 'flex',
-          gap: '8px',
-          alignItems: 'center',
-          marginTop: '8px',
-        }}
-      >
-        <Button style="text">ボタンラベル</Button>
-        <Button style="text" before={<Icon name="add" size="small" />}>
-          ボタンラベル
-        </Button>
-        <Button style="text" after={<Icon name="add" size="small" />}>
-          ボタンラベル
-        </Button>
-        <Button style="text" isDisabled>
+        <Button variant="text" size="small" isDisabled>
           ボタンラベル
         </Button>
       </div>
@@ -167,16 +148,35 @@ export function Base() {
           marginTop: '8px',
         }}
       >
-        <Button style="text" size="large">
+        <Button variant="text">ボタンラベル</Button>
+        <Button variant="text" before={<Icon name="add" size="small" />}>
           ボタンラベル
         </Button>
-        <Button style="text" size="large" before={<Icon name="add" size="large" />}>
+        <Button variant="text" after={<Icon name="add" size="small" />}>
           ボタンラベル
         </Button>
-        <Button style="text" size="large" after={<Icon name="add" size="large" />}>
+        <Button variant="text" isDisabled>
           ボタンラベル
         </Button>
-        <Button style="text" size="large" isDisabled>
+      </div>
+      <div
+        style={{
+          display: 'flex',
+          gap: '8px',
+          alignItems: 'center',
+          marginTop: '8px',
+        }}
+      >
+        <Button variant="text" size="large">
+          ボタンラベル
+        </Button>
+        <Button variant="text" size="large" before={<Icon name="add" size="large" />}>
+          ボタンラベル
+        </Button>
+        <Button variant="text" size="large" after={<Icon name="add" size="large" />}>
+          ボタンラベル
+        </Button>
+        <Button variant="text" size="large" isDisabled>
           ボタンラベル
         </Button>
       </div>

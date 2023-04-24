@@ -8,7 +8,7 @@
   "scripts": {
     "lint": "eslint './packages/**/*.ts{,x}'",
     "type-check": "yarn workspaces foreach run type-check",
-    "build": "yarn workspace @zenkigen-component/theme build && yarn workspaces foreach run build",
+    "build": "yarn workspaces foreach -pt run build",
     "storybook": "storybook dev",
     "build-storybook": "storybook build"
   },

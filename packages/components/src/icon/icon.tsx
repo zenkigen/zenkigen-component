@@ -2,7 +2,7 @@ import { IconName, iconElements } from '@zenkigen-component/icons';
 import { iconColors } from '@zenkigen-component/theme';
 import classNames from 'classnames';
 
-type Size = 'mini' | 'tiny' | 'small' | 'regular' | 'large' | 'huge' | 'mega';
+type Size = 'mini' | 'tiny' | 'small' | 'medium' | 'large' | 'huge' | 'mega';
 
 type Color = keyof typeof iconColors;
 
@@ -12,7 +12,7 @@ type Props = {
   color?: Color;
 };
 
-export const Icon = ({ size = 'regular', ...props }: Props) => {
+export const Icon = ({ size = 'medium', ...props }: Props) => {
   return (
     <span
       className={classNames('inline-block', {
@@ -26,7 +26,7 @@ export const Icon = ({ size = 'regular', ...props }: Props) => {
         'w-2.5 h-2.5': size === 'mini',
         'w-3.5 h-3.5': size === 'tiny',
         'w-4 h-4': size === 'small',
-        'w-5 h-5': size === 'regular',
+        'w-5 h-5': size === 'medium',
         'w-6 h-6': size === 'large',
         'w-8 h-8': size === 'huge',
         'w-16 h-16': size === 'mega',
