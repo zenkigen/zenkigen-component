@@ -16,7 +16,7 @@
     "build": "microbundle --no-compress -f modern,esm,cjs --jsx React.createElement --jsxFragment React.Fragment --jsxImportSource react --globals react/jsx-runtime=jsx"
   },
   "devDependencies": {
-    "@types/react": "18.0.37",
+    "@types/react": "18.0.38",
     "hygen": "6.2.11",
     "microbundle": "0.15.1",
     "typescript": "5.0.4"
