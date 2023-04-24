@@ -5,13 +5,13 @@ import classNames from 'classnames';
 
 type Size = 'small' | 'medium' | 'large';
 
-type Style = 'fill' | 'outline' | 'text';
+type Variant = 'fill' | 'outline' | 'text';
 
 type Props =
   | {
       size?: Size;
       isDisabled?: boolean;
-      style?: Style;
+      variant?: Variant;
       before?: ReactNode;
       after?: ReactNode;
       children: ReactNode;
@@ -27,16 +27,16 @@ type Props =
         }
     );
 
-export function Button({ size = 'medium', style = 'fill', ...props }: Props) {
+export function Button({ size = 'medium', variant = 'fill', ...props }: Props) {
   const baseClasses = classNames(
     'rounded',
     'flex',
     'gap-1',
     'items-center',
-    buttonColors[style].base,
-    buttonColors[style].hover,
-    buttonColors[style].active,
-    buttonColors[style].disabled,
+    buttonColors[variant].base,
+    buttonColors[variant].hover,
+    buttonColors[variant].active,
+    buttonColors[variant].disabled,
     typography.label.label1regular,
     { 'py-1 px-2': size === 'small' },
     { 'py-2 px-3': size === 'medium' },
