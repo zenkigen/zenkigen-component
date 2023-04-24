@@ -10,6 +10,7 @@
     "type-check": "yarn workspaces foreach run type-check",
     "build": "yarn workspaces foreach -pt run build",
     "storybook": "storybook dev",
+    "create-component": "yarn workspace @zenkigen-component/components hygen generator components",
     "build-storybook": "storybook build"
   },
   "devDependencies": {
