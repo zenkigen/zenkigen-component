@@ -3819,7 +3819,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitejs/plugin-react@npm:3.1.0, @vitejs/plugin-react@npm:^3.0.1":
+"@vitejs/plugin-react@npm:^3.0.1":
   version: 3.1.0
   resolution: "@vitejs/plugin-react@npm:3.1.0"
   dependencies:
@@ -13059,7 +13059,6 @@ __metadata:
     "@types/react-dom": 18.0.11
     "@typescript-eslint/eslint-plugin": 5.58.0
     "@typescript-eslint/parser": 5.58.0
-    "@vitejs/plugin-react": 3.1.0
     autoprefixer: 10.4.14
     babel-loader: 9.1.2
     eslint: 8.38.0
