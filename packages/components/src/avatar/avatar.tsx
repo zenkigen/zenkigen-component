@@ -6,18 +6,18 @@ export const isAsciiString = (str: string) => {
 };
 
 type Props = {
-  size: 'x-small' | 'small' | 'medium' | 'large' | 'x-large';
+  size?: 'x-small' | 'small' | 'medium' | 'large' | 'x-large';
   userId: number;
   firstName: string;
   lastName: string;
 };
 
-export function Avatar({ size, userId, firstName, lastName }: Props) {
+export function Avatar({ size = 'medium', ...props }: Props) {
   const classes = classNames(
     'text-text-textOnColor',
     'rounded-full',
     'flex items-center justify-center',
-    userColors[userId % userColors.length],
+    userColors[props.userId % userColors.length],
     {
       [`w-16 h-16 ${typography.label.label1regular}`]: size === 'x-large',
       [`w-12 h-12 ${typography.label.label2regular}`]: size === 'large',
@@ -27,8 +27,8 @@ export function Avatar({ size, userId, firstName, lastName }: Props) {
     },
   );
 
-  const trimmedFirstName = firstName.trim();
-  const trimmedLastName = lastName.trim();
+  const trimmedFirstName = props.firstName.trim();
+  const trimmedLastName = props.lastName.trim();
   const nameOnIcon = isAsciiString(trimmedLastName)
     ? trimmedFirstName.slice(0, 1).toUpperCase() + trimmedLastName.slice(0, 1).toUpperCase()
     : (trimmedLastName + trimmedFirstName).slice(0, 2);
