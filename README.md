@@ -17,15 +17,14 @@ git subtree pull --prefix=packages/zenkigen-component --squash zenkigen-componen
 package.json に以下を追記してください。
 
 ```json
-
 {
-"dependencies": {
-...
-"@zenkigen-component/components": "link:./packages/zenkigen-component/packages/components",
-"@zenkigen-component/config": "link:./packages/zenkigen-component/packages/config",
-"@zenkigen-component/theme": "link:./packages/zenkigen-component/packages/theme",
-...
-}
+  "dependencies": {
+    ...
+    "@zenkigen-component/components": "link:./packages/zenkigen-component/packages/components",
+    "@zenkigen-component/config": "link:./packages/zenkigen-component/packages/config",
+    "@zenkigen-component/theme": "link:./packages/zenkigen-component/packages/theme",
+    ...
+  }
 }
 ```
 
