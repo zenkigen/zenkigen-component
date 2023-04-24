@@ -1,13 +1,18 @@
 import { typography, userColors } from '@zenkigen-component/theme';
 import classNames from 'classnames';
 
+export const isAsciiString = (str: string) => {
+  return str.charCodeAt(0) < 256;
+};
+
 type Props = {
   size: 'x-small' | 'small' | 'medium' | 'large' | 'x-large';
   userId: number;
-  name: string;
+  firstName: string;
+  lastName: string;
 };
 
-export function Avatar({ size, userId, name }: Props) {
+export function Avatar({ size, userId, firstName, lastName }: Props) {
   const classes = classNames(
     'text-text-textOnColor',
     'rounded-full',
@@ -21,5 +26,12 @@ export function Avatar({ size, userId, name }: Props) {
       [`w-6 h-6 ${typography.label.label4regular}`]: size === 'x-small',
     },
   );
-  return <span className={classes}>{name.slice(0, 2)}</span>;
+
+  const trimmedFirstName = firstName.trim();
+  const trimmedLastName = lastName.trim();
+  const nameOnIcon = isAsciiString(trimmedLastName)
+    ? trimmedFirstName.slice(0, 1).toUpperCase() + trimmedLastName.slice(0, 1).toUpperCase()
+    : (trimmedLastName + trimmedFirstName).slice(0, 2);
+
+  return <span className={classes}>{nameOnIcon}</span>;
 }
