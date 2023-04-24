@@ -253,8 +253,7 @@ export const tokens = {
     }
   },
   "fontFamilies": {
-    "helvetica": "Helvetica",
-    "roboto": "Roboto"
+    "helvetica": "Helvetica"
   },
   "lineHeights": {
     "0": "125%",
@@ -267,8 +266,7 @@ export const tokens = {
   },
   "fontWeights": {
     "helvetica-0": "Bold",
-    "helvetica-1": "Regular",
-    "roboto-2": "Regular"
+    "helvetica-1": "Regular"
   },
   "fontSize": {
     "0": 11,
@@ -281,7 +279,7 @@ export const tokens = {
     "7": 32
   },
   "heading": {
-    "h1 32px Bold": {
+    "h1": {
       "fontFamily": "Helvetica",
       "fontWeight": "Bold",
       "lineHeight": "125%",
@@ -291,7 +289,7 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "h2 24px Bold": {
+    "h2": {
       "fontFamily": "Helvetica",
       "fontWeight": "Bold",
       "lineHeight": "133%",
@@ -301,7 +299,7 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "h3 20px Bold": {
+    "h3": {
       "fontFamily": "Helvetica",
       "fontWeight": "Bold",
       "lineHeight": "160%",
@@ -311,7 +309,7 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "h4 16px Bold": {
+    "h4": {
       "fontFamily": "Helvetica",
       "fontWeight": "Bold",
       "lineHeight": "150%",
@@ -321,7 +319,7 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "h5 14px Bold": {
+    "h5": {
       "fontFamily": "Helvetica",
       "fontWeight": "Bold",
       "lineHeight": "171%",
@@ -333,7 +331,7 @@ export const tokens = {
     }
   },
   "body": {
-    "body1 14px Regular": {
+    "body1_Regular": {
       "fontFamily": "Helvetica",
       "fontWeight": "Regular",
       "lineHeight": "171%",
@@ -343,7 +341,17 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "body2 13px Regular": {
+    "body1_Bold": {
+      "fontFamily": "Helvetica",
+      "fontWeight": "Bold",
+      "lineHeight": "171%",
+      "fontSize": 14,
+      "letterSpacing": 0,
+      "paragraphSpacing": 0,
+      "textCase": "none",
+      "textDecoration": "none"
+    },
+    "body2_Regular": {
       "fontFamily": "Helvetica",
       "fontWeight": "Regular",
       "lineHeight": "153%",
@@ -353,9 +361,29 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "body3 12px Regular": {
-      "fontFamily": "Roboto",
+    "body2_Bold": {
+      "fontFamily": "Helvetica",
+      "fontWeight": "Bold",
+      "lineHeight": "153%",
+      "fontSize": 13,
+      "letterSpacing": "0%",
+      "paragraphSpacing": 0,
+      "textCase": "none",
+      "textDecoration": "none"
+    },
+    "body3_Regular": {
+      "fontFamily": "Helvetica",
       "fontWeight": "Regular",
+      "lineHeight": "133%",
+      "fontSize": 12,
+      "letterSpacing": "0%",
+      "paragraphSpacing": 0,
+      "textCase": "none",
+      "textDecoration": "none"
+    },
+    "body3_Bold": {
+      "fontFamily": "Helvetica",
+      "fontWeight": "Bold",
       "lineHeight": "133%",
       "fontSize": 12,
       "letterSpacing": "0%",
@@ -365,7 +393,7 @@ export const tokens = {
     }
   },
   "label": {
-    "label1 16px Bold": {
+    "label1_Bold": {
       "fontFamily": "Helvetica",
       "fontWeight": "Bold",
       "lineHeight": "100%",
@@ -375,7 +403,7 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "label2 16px Regular": {
+    "label1_Regular": {
       "fontFamily": "Helvetica",
       "fontWeight": "Regular",
       "lineHeight": "100%",
@@ -385,7 +413,7 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "label3 14px Bold": {
+    "label2_Bold": {
       "fontFamily": "Helvetica",
       "fontWeight": "Bold",
       "lineHeight": "100%",
@@ -395,7 +423,7 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "label4 14px Regular": {
+    "label2_Regular": {
       "fontFamily": "Helvetica",
       "fontWeight": "Regular",
       "lineHeight": "100%",
@@ -405,7 +433,7 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "label5 12px Bold": {
+    "label3_Bold": {
       "fontFamily": "Helvetica",
       "fontWeight": "Bold",
       "lineHeight": "100%",
@@ -415,7 +443,7 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "label6 12px Regular": {
+    "label3_Regular": {
       "fontFamily": "Helvetica",
       "fontWeight": "Regular",
       "lineHeight": "100%",
@@ -425,7 +453,7 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "label7 11px Bold": {
+    "label4_Bold": {
       "fontFamily": "Helvetica",
       "fontWeight": "Bold",
       "lineHeight": "100%",
@@ -435,7 +463,7 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "label8 11px Regular": {
+    "label4_Regular": {
       "fontFamily": "Helvetica",
       "fontWeight": "Regular",
       "lineHeight": "100%",

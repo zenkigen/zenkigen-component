@@ -1,6 +1,6 @@
 /**
  * Do not edit directly
- * Generated on Thu, 20 Apr 2023 04:04:31 GMT
+ * Generated on Mon, 24 Apr 2023 16:40:04 GMT
  */
 
 :root {
@@ -212,7 +212,6 @@
   --colors-blue-green-blue-green90: #0F8C96;
   --colors-blue-green-blue-green100: #0E7E87;
   --font-families-helvetica: Helvetica;
-  --font-families-roboto: Roboto;
   --line-heights-0: 125%;
   --line-heights-1: 133%;
   --line-heights-2: 160%;
@@ -222,7 +221,6 @@
   --line-heights-6: 100%;
   --font-weights-helvetica-0: Bold;
   --font-weights-helvetica-1: Regular;
-  --font-weights-roboto-2: Regular;
   --font-size-0: 11;
   --font-size-1: 12;
   --font-size-2: 13;
@@ -231,22 +229,25 @@
   --font-size-5: 20;
   --font-size-6: 24;
   --font-size-7: 32;
-  --heading-h1-32px-bold: [object Object];
-  --heading-h2-24px-bold: [object Object];
-  --heading-h3-20px-bold: [object Object];
-  --heading-h4-16px-bold: [object Object];
-  --heading-h5-14px-bold: [object Object];
-  --body-body1-14px-regular: [object Object];
-  --body-body2-13px-regular: [object Object];
-  --body-body3-12px-regular: [object Object];
-  --label-label1-16px-bold: [object Object];
-  --label-label2-16px-regular: [object Object];
-  --label-label3-14px-bold: [object Object];
-  --label-label4-14px-regular: [object Object];
-  --label-label5-12px-bold: [object Object];
-  --label-label6-12px-regular: [object Object];
-  --label-label7-11px-bold: [object Object];
-  --label-label8-11px-regular: [object Object];
+  --heading-h1: [object Object];
+  --heading-h2: [object Object];
+  --heading-h3: [object Object];
+  --heading-h4: [object Object];
+  --heading-h5: [object Object];
+  --body-body1-regular: [object Object];
+  --body-body1-bold: [object Object];
+  --body-body2-regular: [object Object];
+  --body-body2-bold: [object Object];
+  --body-body3-regular: [object Object];
+  --body-body3-bold: [object Object];
+  --label-label1-bold: [object Object];
+  --label-label1-regular: [object Object];
+  --label-label2-bold: [object Object];
+  --label-label2-regular: [object Object];
+  --label-label3-bold: [object Object];
+  --label-label3-regular: [object Object];
+  --label-label4-bold: [object Object];
+  --label-label4-regular: [object Object];
   --letter-spacing-0: 0;
   --letter-spacing-1: 0%;
   --paragraph-spacing-0: 0;

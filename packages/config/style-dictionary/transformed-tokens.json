@@ -1070,10 +1070,6 @@
     "helvetica": {
       "value": "Helvetica",
       "type": "fontFamilies"
-    },
-    "roboto": {
-      "value": "Roboto",
-      "type": "fontFamilies"
     }
   },
   "lineHeights": {
@@ -1114,10 +1110,6 @@
     "helvetica-1": {
       "value": "Regular",
       "type": "fontWeights"
-    },
-    "roboto-2": {
-      "value": "Regular",
-      "type": "fontWeights"
     }
   },
   "fontSize": {
@@ -1155,7 +1147,7 @@
     }
   },
   "Heading": {
-    "H1 32px Bold": {
+    "H1": {
       "value": {
         "fontFamily": "Helvetica",
         "fontWeight": "Bold",
@@ -1168,7 +1160,7 @@
       },
       "type": "typography"
     },
-    "H2 24px Bold": {
+    "H2": {
       "value": {
         "fontFamily": "Helvetica",
         "fontWeight": "Bold",
@@ -1181,7 +1173,7 @@
       },
       "type": "typography"
     },
-    "H3 20px Bold": {
+    "H3": {
       "value": {
         "fontFamily": "Helvetica",
         "fontWeight": "Bold",
@@ -1194,7 +1186,7 @@
       },
       "type": "typography"
     },
-    "H4 16px Bold": {
+    "H4": {
       "value": {
         "fontFamily": "Helvetica",
         "fontWeight": "Bold",
@@ -1207,7 +1199,7 @@
       },
       "type": "typography"
     },
-    "H5 14px Bold": {
+    "H5": {
       "value": {
         "fontFamily": "Helvetica",
         "fontWeight": "Bold",
@@ -1222,7 +1214,7 @@
     }
   },
   "Body": {
-    "Body1 14px Regular": {
+    "Body1_Regular": {
       "value": {
         "fontFamily": "Helvetica",
         "fontWeight": "Regular",
@@ -1235,7 +1227,20 @@
       },
       "type": "typography"
     },
-    "Body2 13px Regular": {
+    "Body1_Bold": {
+      "value": {
+        "fontFamily": "Helvetica",
+        "fontWeight": "Bold",
+        "lineHeight": "171%",
+        "fontSize": 14,
+        "letterSpacing": 0,
+        "paragraphSpacing": 0,
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    },
+    "Body2_Regular": {
       "value": {
         "fontFamily": "Helvetica",
         "fontWeight": "Regular",
@@ -1248,10 +1253,36 @@
       },
       "type": "typography"
     },
-    "Body3 12px Regular": {
+    "Body2_Bold": {
       "value": {
-        "fontFamily": "Roboto",
+        "fontFamily": "Helvetica",
+        "fontWeight": "Bold",
+        "lineHeight": "153%",
+        "fontSize": 13,
+        "letterSpacing": "0%",
+        "paragraphSpacing": 0,
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    },
+    "Body3_Regular": {
+      "value": {
+        "fontFamily": "Helvetica",
         "fontWeight": "Regular",
+        "lineHeight": "133%",
+        "fontSize": 12,
+        "letterSpacing": "0%",
+        "paragraphSpacing": 0,
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    },
+    "Body3_Bold": {
+      "value": {
+        "fontFamily": "Helvetica",
+        "fontWeight": "Bold",
         "lineHeight": "133%",
         "fontSize": 12,
         "letterSpacing": "0%",
@@ -1263,7 +1294,7 @@
     }
   },
   "Label": {
-    "Label1 16px Bold": {
+    "Label1_Bold": {
       "value": {
         "fontFamily": "Helvetica",
         "fontWeight": "Bold",
@@ -1276,7 +1307,7 @@
       },
       "type": "typography"
     },
-    "Label2 16px Regular": {
+    "Label1_Regular": {
       "value": {
         "fontFamily": "Helvetica",
         "fontWeight": "Regular",
@@ -1289,7 +1320,7 @@
       },
       "type": "typography"
     },
-    "Label3 14px Bold": {
+    "Label2_Bold": {
       "value": {
         "fontFamily": "Helvetica",
         "fontWeight": "Bold",
@@ -1302,7 +1333,7 @@
       },
       "type": "typography"
     },
-    "Label4 14px Regular": {
+    "Label2_Regular": {
       "value": {
         "fontFamily": "Helvetica",
         "fontWeight": "Regular",
@@ -1315,7 +1346,7 @@
       },
       "type": "typography"
     },
-    "Label5 12px Bold": {
+    "Label3_Bold": {
       "value": {
         "fontFamily": "Helvetica",
         "fontWeight": "Bold",
@@ -1328,7 +1359,7 @@
       },
       "type": "typography"
     },
-    "Label6 12px Regular": {
+    "Label3_Regular": {
       "value": {
         "fontFamily": "Helvetica",
         "fontWeight": "Regular",
@@ -1341,7 +1372,7 @@
       },
       "type": "typography"
     },
-    "Label7 11px Bold": {
+    "Label4_Bold": {
       "value": {
         "fontFamily": "Helvetica",
         "fontWeight": "Bold",
@@ -1354,7 +1385,7 @@
       },
       "type": "typography"
     },
-    "Label8 11px Regular": {
+    "Label4_Regular": {
       "value": {
         "fontFamily": "Helvetica",
         "fontWeight": "Regular",
