@@ -1,3 +1,16 @@
+export const userColors = [
+  'bg-user-red',
+  'bg-user-pink',
+  'bg-user-purple',
+  'bg-user-turquoise',
+  'bg-user-royalBlue',
+  'bg-user-blue',
+  'bg-user-aquamarine',
+  'bg-user-yellowGreen',
+  'bg-user-yellow',
+  'bg-user-orange',
+] as const;
+
 export const buttonColors = {
   fill: {
     base: 'border border-interactive-interactive01 bg-interactive-interactive01 text-text-textOnColor fill-text-textOnColor',

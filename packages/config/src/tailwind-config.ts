@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        ...tokens.user,
+        user: tokens.user,
         ...tokens.tokens,
         ...tokens.colors,
       },
