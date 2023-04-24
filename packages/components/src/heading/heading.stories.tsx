@@ -1,3 +1,4 @@
+import { Button } from '../button';
 import { Icon } from '../icon';
 
 import { Heading } from '.';
@@ -39,6 +40,17 @@ export function Base() {
         after={<Icon name="information" size="small" />}
       >
         タイトル
+      </Heading>
+      <Heading
+        level={2}
+        before={<Icon name="chart-bar" size="huge" />}
+        after={
+          <Button variant="outline" before={<Icon name="add" size="medium" />}>
+            追加ボタン
+          </Button>
+        }
+      >
+        <div className="mr-auto">タイトル</div>
       </Heading>
     </div>
   );
