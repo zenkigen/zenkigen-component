@@ -2,7 +2,7 @@ import { IconName, iconElements } from '@zenkigen-component/icons';
 import { iconColors } from '@zenkigen-component/theme';
 import classNames from 'classnames';
 
-type Size = 'x-small' | 'small' | 'medium' | 'large';
+type Size = 'x-small' | 'small' | 'medium' | 'large' | 'x-large';
 
 type Color = keyof typeof iconColors;
 
@@ -27,6 +27,7 @@ export const Icon = ({ size = 'medium', ...props }: Props) => {
         'w-4 h-4': size === 'small',
         'w-6 h-6': size === 'medium',
         'w-8 h-8': size === 'large',
+        'w-10 h-10': size === 'x-large',
       })}
     >
       {iconElements[props.name]}

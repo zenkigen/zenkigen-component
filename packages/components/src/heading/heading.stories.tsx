@@ -14,7 +14,7 @@ export default {
 export function Base() {
   return (
     <div style={{ display: 'grid', gap: '30px' }}>
-      <Heading level={1} before={<Icon name="chart-bar" size="large" />} after={<Icon name="information" />}>
+      <Heading level={1} before={<Icon name="chart-bar" size="x-large" />} after={<Icon name="information" />}>
         タイトル
       </Heading>
       <Heading level={2} before={<Icon name="chart-bar" size="large" />} after={<Icon name="information" />}>
