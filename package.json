@@ -6,7 +6,7 @@
     "packages/*"
   ],
   "scripts": {
-    "lint": "eslint './packages/**/*.ts{,x}'",
+    "lint": "eslint './packages/**/*.ts{,x}' && prettier --check .",
     "type-check": "yarn workspaces foreach run type-check",
     "build": "yarn workspaces foreach -pt run build",
     "storybook": "storybook dev",
