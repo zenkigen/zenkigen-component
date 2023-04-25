@@ -130,10 +130,10 @@ export function Base() {
         <Button variant="text" size="small">
           ボタンラベル
         </Button>
-        <Button variant="text" size="small" before={<Icon name="add" size="medium" />}>
+        <Button variant="text" size="small" before={<Icon name="add" size="small" />}>
           ボタンラベル
         </Button>
-        <Button variant="text" size="small" after={<Icon name="add" size="medium" />}>
+        <Button variant="text" size="small" after={<Icon name="add" size="small" />}>
           ボタンラベル
         </Button>
         <Button variant="text" size="small" isDisabled>
