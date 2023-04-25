@@ -53,7 +53,7 @@ export function NotificationInline({ state = 'default', size = 'medium', ...prop
 
   const iconSize = {
     small: 'small',
-    medium: 'large',
+    medium: 'medium',
   } as const;
 
   return (
