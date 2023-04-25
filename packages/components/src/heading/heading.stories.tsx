@@ -16,19 +16,19 @@ export function Base() {
     <div style={{ display: 'grid', gap: '30px' }}>
       <Heading
         level={1}
-        before={<Icon name="chart-bar" size="huge" />}
+        before={<Icon name="chart-bar" size="large" />}
         after={<Icon name="information" size="large" />}
       >
         タイトル
       </Heading>
       <Heading
         level={2}
-        before={<Icon name="chart-bar" size="huge" />}
+        before={<Icon name="chart-bar" size="large" />}
         after={<Icon name="information" size="large" />}
       >
         タイトル
       </Heading>
-      <Heading level={3} before={<Icon name="chart-bar" size="huge" />} after={<Icon name="information" />}>
+      <Heading level={3} before={<Icon name="chart-bar" size="large" />} after={<Icon name="information" />}>
         タイトル
       </Heading>
       <Heading
@@ -48,7 +48,7 @@ export function Base() {
       <Heading level={3}>タイトル</Heading>
       <Heading
         level={2}
-        before={<Icon name="chart-bar" size="huge" />}
+        before={<Icon name="chart-bar" size="large" />}
         after={
           <Button variant="outline" before={<Icon name="add" size="medium" />}>
             追加ボタン
