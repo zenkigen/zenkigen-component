@@ -46,10 +46,10 @@ export function Base() {
         }}
       >
         <Button size="large">ボタンラベル</Button>
-        <Button size="large" before={<Icon name="add" size="large" />}>
+        <Button size="large" before={<Icon name="add" size="medium" />}>
           ボタンラベル
         </Button>
-        <Button size="large" after={<Icon name="add" size="large" />}>
+        <Button size="large" after={<Icon name="add" size="medium" />}>
           ボタンラベル
         </Button>
         <Button size="large" isDisabled>
@@ -108,10 +108,10 @@ export function Base() {
         <Button variant="outline" size="large">
           ボタンラベル
         </Button>
-        <Button variant="outline" size="large" before={<Icon name="add" size="large" />}>
+        <Button variant="outline" size="large" before={<Icon name="add" size="medium" />}>
           ボタンラベル
         </Button>
-        <Button variant="outline" size="large" after={<Icon name="add" size="large" />}>
+        <Button variant="outline" size="large" after={<Icon name="add" size="medium" />}>
           ボタンラベル
         </Button>
         <Button variant="outline" size="large" isDisabled>
@@ -170,10 +170,10 @@ export function Base() {
         <Button variant="text" size="large">
           ボタンラベル
         </Button>
-        <Button variant="text" size="large" before={<Icon name="add" size="large" />}>
+        <Button variant="text" size="large" before={<Icon name="add" size="medium" />}>
           ボタンラベル
         </Button>
-        <Button variant="text" size="large" after={<Icon name="add" size="large" />}>
+        <Button variant="text" size="large" after={<Icon name="add" size="medium" />}>
           ボタンラベル
         </Button>
         <Button variant="text" size="large" isDisabled>

@@ -44,7 +44,7 @@ export function IconButton({ size = 'medium', variant = 'outline', ...props }: P
     { 'pointer-events-none': props.isDisabled },
   );
 
-  const iconSize = size === 'small' ? 'small' : 'large';
+  const iconSize = size === 'small' ? 'small' : 'medium';
 
   if (props.isAnchor) {
     return (
