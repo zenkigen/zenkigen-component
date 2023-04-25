@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "rvest.vs-code-prettier-eslint",
+    "yoavbls.pretty-ts-errors",
+    "vincaslt.highlight-matching-tag",
+    "bradlc.vscode-tailwindcss"
+  ]
+}
