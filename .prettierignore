@@ -1,0 +1,6 @@
+.yarn/
+**/dist
+packages/icons/src/icon.tsx
+packages/config/style-dictionary/tokens.json
+packages/config/style-dictionary/transformed-tokens.json
+packages/config/src/tokens/tokens.ts

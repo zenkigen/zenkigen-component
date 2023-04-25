@@ -1,15 +1,9 @@
 {
-  "extends": [
-    "config:base"
-  ],
+  "extends": ["config:base"],
   "timezone": "Asia/Tokyo",
   "schedule": "on saturday",
-  "labels": [
-    "renovate"
-  ],
-  "reviewers": [
-    "yutakam80"
-  ],
+  "labels": ["renovate"],
+  "reviewers": ["yutakam80"],
   "lockFileMaintenance": {
     "enabled": true
   },
@@ -17,13 +11,7 @@
   "packageRules": [
     {
       "groupName": "minor dependencies",
-      "updateTypes": [
-        "minor",
-        "patch",
-        "pin",
-        "digest",
-        "lockFileMaintenance"
-      ]
+      "updateTypes": ["minor", "patch", "pin", "digest", "lockFileMaintenance"]
     }
   ]
 }

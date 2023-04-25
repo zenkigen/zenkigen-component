@@ -5,4 +5,4 @@ module.exports = [
     message: 'input component name',
     validate: (input) => input !== '',
   },
-]
+];
