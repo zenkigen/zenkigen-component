@@ -54,7 +54,7 @@ export function IconButton({ size = 'medium', variant = 'outline', ...props }: P
     );
   } else {
     return (
-      <button className={baseClasses} disabled={props.isDisabled}>
+      <button type="button" className={baseClasses} disabled={props.isDisabled}>
         <Icon name={props.icon} size={iconSize} />
       </button>
     );

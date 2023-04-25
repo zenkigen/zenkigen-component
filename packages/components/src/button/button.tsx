@@ -55,7 +55,7 @@ export function Button({ size = 'medium', variant = 'fill', ...props }: Props) {
     );
   } else {
     return (
-      <button className={baseClasses} disabled={props.isDisabled}>
+      <button type="button" className={baseClasses} disabled={props.isDisabled}>
         {props.before}
         {props.children}
         {props.after}
