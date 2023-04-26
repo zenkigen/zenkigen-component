@@ -19,18 +19,21 @@ export const buttonColors = {
     disabled: 'disabled:bg-disabled-disabled01 disabled:border-disabled-disabled01',
   },
   outline: {
-    base: 'border border-border-uiBorder02 text-interactive-interactive02  fill-interactive-interactive02',
-    hover: 'hover:bg-hover-hoverUi',
+    base: 'border border-border-uiBorder02 text-interactive-interactive02 fill-interactive-interactive02',
+    hover: 'hover:bg-hover-hover02',
     active: 'active:bg-active-active02',
     disabled: 'disabled:border-border-uiBorder01 disabled:text-disabled-disabled01 disabled:fill-disabled-disabled01',
   },
   text: {
     base: 'border border-transparent text-interactive-interactive02 fill-interactive-interactive02',
-    hover: 'hover:bg-hover-hoverUi hover:border-hover-hoverUi',
+    hover: 'hover:bg-hover-hover02 hover:border-hover-hover02',
     active: 'active:bg-active-active02 active:border-active-active02',
     disabled: 'disabled:text-disabled-disabled01 disabled:fill-disabled-disabled01',
   },
 } as const;
+
+export const focusVisible =
+  'focus-visible:outline focus-visible:outline-1 focus-visible:outline-focus-focus focus-visible:outline-offset-[-1px]';
 
 export const iconColors = {
   icon01: 'fill-icon-icon01',
@@ -40,4 +43,5 @@ export const iconColors = {
   icon03: 'fill-icon-icon03',
   icon03Dark: 'fill-icon-icon03Dark',
   iconOnColor: 'fill-icon-iconOnColor',
+  interactive01: 'fill-interactive-interactive01',
 } as const;
