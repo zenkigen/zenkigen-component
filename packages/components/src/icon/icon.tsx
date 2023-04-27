@@ -10,6 +10,7 @@ type Props = {
   name: IconName;
   size?: Size;
   color?: Color;
+  isDisabled?: boolean;
   className?: string;
 };
 
@@ -25,6 +26,7 @@ export const Icon = ({ size = 'medium', ...props }: Props) => {
         [iconColors.icon03Dark]: props.color === 'icon03Dark',
         [iconColors.iconOnColor]: props.color === 'iconOnColor',
         [iconColors.interactive01]: props.color === 'interactive01',
+        [iconColors.disabled01]: props.isDisabled,
         'w-3 h-3': size === 'x-small',
         'w-4 h-4': size === 'small',
         'w-6 h-6': size === 'medium',
