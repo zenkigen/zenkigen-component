@@ -1,7 +1,6 @@
 {
   "name": "@zenkigen-component/theme",
   "version": "1.0.0",
-  "type": "module",
   "source": "./src/index.ts",
   "main": "./dist/index.cjs",
   "module": "./dist/index.module.js",
