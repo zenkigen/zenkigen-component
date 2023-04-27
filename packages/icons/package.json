@@ -2,13 +2,10 @@
   "name": "@zenkigen-component/icons",
   "version": "1.0.0",
   "source": "./src/index.ts",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.module.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.esm.js",
   "types": "./dist/index.d.ts",
-  "exports": {
-    "require": "./dist/index.cjs",
-    "default": "./dist/index.modern.js"
-  },
+  "exports": "./dist/index.js",
   "scripts": {
     "generate": "node ./codegen.cjs",
     "build": "yarn generate && microbundle --no-compress -f modern,esm,cjs --jsx React.createElement --jsxFragment React.Fragment --jsxImportSource react --globals react/jsx-runtime=jsx"
