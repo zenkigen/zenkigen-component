@@ -1,5 +1,5 @@
 import { focusVisible, typography } from '@zenkigen-component/theme';
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 import { Icon } from '../icon';
 
@@ -12,9 +12,9 @@ type Props = {
 };
 
 export function SelectItem({ option, selectedOptionId, onClickItem }: Props) {
-  const listItemClass = classNames('flex items-center w-full');
+  const listItemClass = clsx('flex items-center w-full');
 
-  const itemClass = classNames(
+  const itemClass = clsx(
     'flex',
     'items-center',
     'w-full',
@@ -26,18 +26,15 @@ export function SelectItem({ option, selectedOptionId, onClickItem }: Props) {
     typography.label.label2regular,
   );
 
-  const leftIconClass = classNames('flex items-center mr-1');
+  const leftIconClass = clsx('flex items-center mr-1');
 
-  const valueClass = classNames('mr-6');
+  const valueClass = clsx('mr-6');
 
-  const checkIconClass = classNames('ml-auto');
+  const checkIconClass = clsx('ml-auto');
 
   return (
     <li className={listItemClass} key={option.id} onClick={onClickItem}>
-      <button
-        className={classNames(itemClass, { 'bg-selected-selectedUi': option.id === selectedOptionId })}
-        type="button"
-      >
+      <button className={clsx(itemClass, { 'bg-selected-selectedUi': option.id === selectedOptionId })} type="button">
         {option.icon && (
           <Icon
             name={option.icon}
@@ -47,7 +44,7 @@ export function SelectItem({ option, selectedOptionId, onClickItem }: Props) {
           />
         )}
         <span
-          className={classNames(
+          className={clsx(
             valueClass,
             option.id === selectedOptionId ? 'text-interactive-interactive01' : 'text-interactive-interactive02',
           )}

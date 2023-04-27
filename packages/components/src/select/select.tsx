@@ -2,7 +2,7 @@ import { CSSProperties, ReactNode, useCallback, useMemo, useState } from 'react'
 
 import { IconName } from '@zenkigen-component/icons';
 import { buttonColors, focusVisible, typography } from '@zenkigen-component/theme';
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 import { Icon } from '../icon';
 
@@ -71,7 +71,7 @@ export function Select({
       ? 'label3regular'
       : 'label2regular';
 
-  const wrapperClasses = classNames(
+  const wrapperClasses = clsx(
     'relative',
     'flex',
     'shrink-0',
@@ -87,7 +87,7 @@ export function Select({
     },
   );
 
-  const buttonClass = classNames(
+  const buttonClass = clsx(
     'flex',
     'items-center',
     'w-full',
@@ -105,7 +105,7 @@ export function Select({
     },
   );
 
-  const labelClass = classNames(
+  const labelClass = clsx(
     'flex',
     'item-center',
     'mr-2',
@@ -117,12 +117,12 @@ export function Select({
     },
   );
 
-  const arrowIconClass = classNames('ml-auto');
+  const arrowIconClass = clsx('ml-auto');
 
-  const leftIconClass = classNames('flex items-center mr-1');
+  const leftIconClass = clsx('flex items-center mr-1');
 
   return (
-    <div className={classNames(wrapperClasses, width ? `w-[${width}]` : 'w-fit')}>
+    <div className={clsx(wrapperClasses, width ? `w-[${width}]` : 'w-fit')}>
       <button type="button" onClick={handleToggle} disabled={isDisabled} className={buttonClass}>
         {(selectedOption?.icon || placeholder?.icon) && (
           <Icon

@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 import type { SelectOption } from './select';
 import { SelectItem } from './select-item';
@@ -14,7 +14,7 @@ type Props = {
 };
 
 export function SelectList({ size, variant, options, selectedOptionId, placeholder, onClickItem, onDeselect }: Props) {
-  const menuClass = classNames(
+  const menuClass = clsx(
     'absolute',
     'w-max',
     'py-2',
