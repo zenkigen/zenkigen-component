@@ -4,4 +4,5 @@ export * from './heading';
 export * from './icon';
 export * from './icon-button';
 export * from './notification-inline';
+export * from './search';
 export * from './tab';
