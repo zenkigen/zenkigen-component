@@ -54,7 +54,7 @@ export function Base() {
         <div className="mr-auto">タイトル</div>
       </Heading>
       <Heading level={2} before={<Avatar size="small" userId={1} lastName="全機現" firstName="太郎" />}>
-        <div className="flex gap-1 items-end">
+        <div className="flex items-end gap-1">
           全機現太郎<span className={clsx(typography.label.label1bold, 'mb-1')}>さん</span>
         </div>
       </Heading>
