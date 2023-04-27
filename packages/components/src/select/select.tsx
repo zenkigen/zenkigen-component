@@ -1,4 +1,4 @@
-import { CSSProperties, ReactNode, useCallback, useMemo, useState } from 'react';
+import { CSSProperties, useCallback, useMemo, useState } from 'react';
 
 import { IconName } from '@zenkigen-component/icons';
 import { buttonColors, focusVisible, typography } from '@zenkigen-component/theme';
@@ -22,12 +22,7 @@ type Props = {
   options: SelectOption[];
   defaultOptionId?: string;
   isDisabled?: boolean;
-  useSelected?: boolean;
   onChange?: (id: string, index: number) => void;
-  listHeight?: CSSProperties['height'];
-  listAlign?: 'left' | 'right';
-  listPosition?: 'top' | 'bottom';
-  children?: ReactNode;
 };
 
 export function Select({
@@ -63,13 +58,6 @@ export function Select({
     setSelectedOptionId(null);
     setShowOptionList(false);
   }, []);
-
-  const labelVariant =
-    size === 'small'
-      ? 'label4regular'
-      : size === 'small-medium' || size === 'medium'
-      ? 'label3regular'
-      : 'label2regular';
 
   const wrapperClasses = clsx(
     'relative',
@@ -110,7 +98,13 @@ export function Select({
     'item-center',
     'mr-2',
     'text-interactive-interactive02',
-    typography.label[labelVariant],
+    typography.label[
+      size === 'small'
+        ? 'label4regular'
+        : size === 'small-medium' || size === 'medium'
+        ? 'label3regular'
+        : 'label2regular'
+    ],
     {
       'mr-1': size === 'small',
       'text-disabled-disabled01': isDisabled,
