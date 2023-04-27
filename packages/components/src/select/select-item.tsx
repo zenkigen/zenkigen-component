@@ -26,9 +26,7 @@ export function SelectItem({ option, selectedOptionId, onClickItem }: Props) {
     typography.label.label2regular,
   );
 
-  const leftIconClass = clsx('flex items-center mr-1');
-
-  const valueClass = clsx('mr-6');
+  const valueClass = clsx('mr-6', 'ml-1');
 
   const checkIconClass = clsx('ml-auto');
 
@@ -36,12 +34,7 @@ export function SelectItem({ option, selectedOptionId, onClickItem }: Props) {
     <li className={listItemClass} key={option.id} onClick={onClickItem}>
       <button className={clsx(itemClass, { 'bg-selected-selectedUi': option.id === selectedOptionId })} type="button">
         {option.icon && (
-          <Icon
-            name={option.icon}
-            size="small"
-            color={option.id === selectedOptionId ? 'interactive01' : 'icon01'}
-            className={leftIconClass}
-          />
+          <Icon name={option.icon} size="small" color={option.id === selectedOptionId ? 'interactive01' : 'icon01'} />
         )}
         <span
           className={clsx(

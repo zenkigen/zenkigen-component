@@ -17,7 +17,7 @@ type Props = {
 export const Icon = ({ size = 'medium', ...props }: Props) => {
   return (
     <span
-      className={clsx('inline-block', props.className, {
+      className={clsx('inline-block', {
         [iconColors.icon01]: props.color === 'icon01',
         [iconColors.icon01Dark]: props.color === 'icon01Dark',
         [iconColors.icon02]: props.color === 'icon02',
