@@ -31,7 +31,7 @@ type Props = {
   children?: ReactNode;
 };
 
-export function Select({ size, variant, placeholder, options, defaultOptionId, onChange }: Props) {
+export function Select({ size, variant, placeholder, options, defaultOptionId, isDisabled = false, onChange }: Props) {
   const [selectedOptionId, setSelectedOptionId] = useState(defaultOptionId ? defaultOptionId : null);
   const [showOptionList, setShowOptionList] = useState(false);
 
@@ -66,6 +66,7 @@ export function Select({ size, variant, placeholder, options, defaultOptionId, o
   const wrapperClasses = classNames(
     'relative',
     'flex',
+    'shrink-0',
     'gap-1',
     'items-center',
     'w-fit',
@@ -75,6 +76,7 @@ export function Select({ size, variant, placeholder, options, defaultOptionId, o
       'h-6': size === 'small' || size === 'small-medium',
       'h-8': size === 'medium',
       'h-10': size === 'large',
+      'cursor-not-allowed': isDisabled,
     },
   );
 
@@ -92,6 +94,7 @@ export function Select({ size, variant, placeholder, options, defaultOptionId, o
     {
       'px-2': size === 'small' || size === 'small-medium',
       'px-4': size === 'medium' || size === 'large',
+      'pointer-events-none': isDisabled,
     },
   );
 
@@ -103,6 +106,7 @@ export function Select({ size, variant, placeholder, options, defaultOptionId, o
     typography.label[labelVariant],
     {
       'mr-1': size === 'small',
+      'text-disabled-disabled01': isDisabled,
     },
   );
 
@@ -112,12 +116,12 @@ export function Select({ size, variant, placeholder, options, defaultOptionId, o
 
   return (
     <div className={wrapperClasses}>
-      <button type="button" onClick={handleToggle} className={buttonClass}>
+      <button type="button" onClick={handleToggle} disabled={isDisabled} className={buttonClass}>
         {(selectedOption?.icon || placeholder?.icon) && (
           <Icon
             name={selectedOption?.icon ? selectedOption.icon : placeholder?.icon ? placeholder.icon : 'add'}
             size={size === 'large' ? 'medium' : 'small'}
-            color="icon01"
+            isDisabled={isDisabled}
             className={leftIconClass}
           />
         )}
@@ -127,11 +131,11 @@ export function Select({ size, variant, placeholder, options, defaultOptionId, o
         <Icon
           name={showOptionList ? 'angle-small-up' : 'angle-small-down'}
           size="small"
-          color="icon01"
+          isDisabled={isDisabled}
           className={arrowIconClass}
         />
       </button>
-      {showOptionList && (
+      {showOptionList && !isDisabled && (
         <SelectList
           size={size}
           variant={variant}
