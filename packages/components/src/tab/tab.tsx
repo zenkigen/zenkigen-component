@@ -1,13 +1,13 @@
 import { ReactNode } from 'react';
 
-import classNames from 'classnames';
+import { clsx } from 'clsx';
 
 type Props = {
   children?: ReactNode;
 };
 
 export function Tab({ children }: Props) {
-  const classes = classNames(
+  const classes = clsx(
     'flex',
     'px-6',
     'gap-4',

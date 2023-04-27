@@ -1,5 +1,5 @@
 import { typography } from '@zenkigen-component/theme';
-import classNames from 'classnames';
+import { clsx } from 'clsx';
 
 import { Avatar } from '../avatar';
 import { Button } from '../button';
@@ -55,7 +55,7 @@ export function Base() {
       </Heading>
       <Heading level={2} before={<Avatar size="small" userId={1} lastName="全機現" firstName="太郎" />}>
         <div className="flex gap-1 items-end">
-          全機現太郎<span className={classNames(typography.label.label1bold, 'mb-1')}>さん</span>
+          全機現太郎<span className={clsx(typography.label.label1bold, 'mb-1')}>さん</span>
         </div>
       </Heading>
     </div>

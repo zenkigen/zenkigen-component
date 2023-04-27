@@ -1,5 +1,5 @@
 import { typography, userColors } from '@zenkigen-component/theme';
-import classNames from 'classnames';
+import { clsx } from 'clsx';
 
 export const isAsciiString = (str: string) => {
   return str.charCodeAt(0) < 256;
@@ -13,7 +13,7 @@ type Props = {
 };
 
 export function Avatar({ size = 'medium', ...props }: Props) {
-  const classes = classNames(
+  const classes = clsx(
     'text-text-textOnColor',
     'rounded-full',
     'flex items-center justify-center',
