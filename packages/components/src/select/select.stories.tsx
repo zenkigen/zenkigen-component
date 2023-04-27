@@ -11,7 +11,16 @@ export function Base() {
     <div>
       <div style={{ display: 'flex', alignItems: 'center', gap: '80px', marginBottom: '200px' }}>
         <Select size="small" variant="outline" options={optionsList1} />
-        <Select size="small-medium" variant="outline" options={optionsList1} />
+        <Select
+          size="small-medium"
+          variant="outline"
+          options={optionsList1}
+          placeholder={{
+            id: 'placeholder',
+            value: '選択してください',
+            icon: 'add',
+          }}
+        />
         <Select size="medium" variant="outline" options={optionsList1} />
         <Select size="large" variant="outline" options={optionsList1} />
       </div>

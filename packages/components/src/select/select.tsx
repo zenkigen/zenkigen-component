@@ -141,22 +141,13 @@ export function Select({ size, variant, placeholder, options, defaultOptionId, o
   return (
     <div className={wrapperClasses}>
       <button type="button" onClick={handleToggle} className={buttonClass}>
-        {selectedOption?.icon ? (
+        {(selectedOption?.icon || placeholder?.icon) && (
           <Icon
-            name={selectedOption?.icon}
+            name={selectedOption?.icon ? selectedOption.icon : placeholder?.icon ? placeholder.icon : 'add'}
             size={size === 'large' ? 'medium' : 'small'}
             color="icon01"
             className={leftIconClass}
           />
-        ) : (
-          options[0]?.icon && (
-            <Icon
-              name={options[0]?.icon}
-              size={size === 'large' ? 'medium' : 'small'}
-              color="icon01"
-              className={leftIconClass}
-            />
-          )
         )}
         <span className={labelClass}>
           {selectedOption ? selectedOption.value : placeholder ? placeholder.value : options[0]?.value}
