@@ -2,13 +2,10 @@
   "name": "@zenkigen-component/config",
   "version": "1.0.0",
   "source": "./src/index.ts",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.module.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.esm.js",
   "types": "./dist/index.d.ts",
-  "exports": {
-    "require": "./dist/index.cjs",
-    "default": "./dist/index.modern.js"
-  },
+  "exports": "./dist/index.js",
   "scripts": {
     "type-check": "tsc --noEmit",
     "build:tokens": "token-transformer style-dictionary/tokens.json style-dictionary/transformed-tokens.json && node build.cjs",
