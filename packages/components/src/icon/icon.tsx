@@ -1,6 +1,6 @@
 import { IconName, iconElements } from '@zenkigen-component/icons';
 import { iconColors } from '@zenkigen-component/theme';
-import classNames from 'classnames';
+import { clsx } from 'clsx';
 
 type Size = 'x-small' | 'small' | 'medium' | 'large' | 'x-large';
 
@@ -15,7 +15,7 @@ type Props = {
 export const Icon = ({ size = 'medium', ...props }: Props) => {
   return (
     <span
-      className={classNames('inline-block', {
+      className={clsx('inline-block', {
         [iconColors.icon01]: props.color === 'icon01',
         [iconColors.icon01Dark]: props.color === 'icon01Dark',
         [iconColors.icon02]: props.color === 'icon02',

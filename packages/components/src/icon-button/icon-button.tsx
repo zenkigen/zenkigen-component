@@ -1,6 +1,6 @@
 import { IconName } from '@zenkigen-component/icons';
 import { buttonColors, typography } from '@zenkigen-component/theme';
-import classNames from 'classnames';
+import { clsx } from 'clsx';
 
 import { Icon } from '../icon/icon';
 
@@ -27,7 +27,7 @@ type Props =
     );
 
 export function IconButton({ size = 'medium', variant = 'outline', ...props }: Props) {
-  const baseClasses = classNames(
+  const baseClasses = clsx(
     'rounded',
     'flex',
     'gap-1',

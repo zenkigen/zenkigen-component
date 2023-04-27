@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 
 import { buttonColors, typography } from '@zenkigen-component/theme';
-import classNames from 'classnames';
+import { clsx } from 'clsx';
 
 type Size = 'small' | 'medium' | 'large';
 
@@ -28,7 +28,7 @@ type Props =
     );
 
 export function Button({ size = 'medium', variant = 'fill', ...props }: Props) {
-  const baseClasses = classNames(
+  const baseClasses = clsx(
     'rounded',
     'flex',
     'gap-1',

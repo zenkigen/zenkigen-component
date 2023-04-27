@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 
 import { typography } from '@zenkigen-component/theme';
-import classNames from 'classnames';
+import { clsx } from 'clsx';
 
 type Props = {
   id: string;
@@ -12,7 +12,7 @@ type Props = {
 };
 
 export const TabItem = (props: Props) => {
-  const classes = classNames(
+  const classes = clsx(
     'relative',
     'flex',
     'z-0',

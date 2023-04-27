@@ -1,7 +1,7 @@
 import { forwardRef, useState } from 'react';
 
 import { typography } from '@zenkigen-component/theme';
-import classNames from 'classnames';
+import { clsx } from 'clsx';
 
 import { Icon } from '../icon';
 
@@ -19,8 +19,8 @@ export const Search = forwardRef<HTMLDivElement, Props>(({ width = '100%', ...pr
     props.onSubmit(text);
   };
 
-  const wrapperClasses = classNames('relative');
-  const searchAreaClasses = classNames(
+  const wrapperClasses = clsx('relative');
+  const searchAreaClasses = clsx(
     'flex',
     'items-center',
     'h-8',
@@ -30,7 +30,7 @@ export const Search = forwardRef<HTMLDivElement, Props>(({ width = '100%', ...pr
     'border-border-uiBorder02',
     'focus-within:border-active-activeInput',
   );
-  const searchInputClasses = classNames(
+  const searchInputClasses = clsx(
     typography.label.label2regular,
     'placeholder:text-text-textPlaceholder',
     'ml-3',
