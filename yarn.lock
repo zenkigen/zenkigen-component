@@ -6209,6 +6209,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-plugin-tailwindcss@npm:3.11.0":
+  version: 3.11.0
+  resolution: "eslint-plugin-tailwindcss@npm:3.11.0"
+  dependencies:
+    fast-glob: ^3.2.5
+    postcss: ^8.4.4
+  peerDependencies:
+    tailwindcss: ^3.2.2
+  checksum: d5a3a9092770d832d74f10388c25213d553ae0873d5f2ee978c7214a65859efc112d194744aefe8b9002f307f3ea87bd5ffd80d426e12c83dd5701c29a8ac2a9
+  languageName: node
+  linkType: hard
+
 "eslint-scope@npm:^5.1.1":
   version: 5.1.1
   resolution: "eslint-scope@npm:5.1.1"
@@ -6476,7 +6488,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-glob@npm:^3.2.12, fast-glob@npm:^3.2.9":
+"fast-glob@npm:^3.2.12, fast-glob@npm:^3.2.5, fast-glob@npm:^3.2.9":
   version: 3.2.12
   resolution: "fast-glob@npm:3.2.12"
   dependencies:
@@ -10184,7 +10196,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:8.4.23, postcss@npm:^8.0.9, postcss@npm:^8.2.1, postcss@npm:^8.2.14, postcss@npm:^8.4.19, postcss@npm:^8.4.21":
+"postcss@npm:8.4.23, postcss@npm:^8.0.9, postcss@npm:^8.2.1, postcss@npm:^8.2.14, postcss@npm:^8.4.19, postcss@npm:^8.4.21, postcss@npm:^8.4.4":
   version: 8.4.23
   resolution: "postcss@npm:8.4.23"
   dependencies:
@@ -12887,6 +12899,7 @@ __metadata:
     eslint-plugin-react: 7.32.2
     eslint-plugin-react-hooks: 4.6.0
     eslint-plugin-storybook: 0.6.11
+    eslint-plugin-tailwindcss: 3.11.0
     postcss: 8.4.23
     prettier: 2.8.8
     react: 18.2.0
