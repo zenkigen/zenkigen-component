@@ -6,6 +6,8 @@ import classNames from 'classnames';
 
 import { Icon } from '../icon';
 
+import { SelectList } from './select-list';
+
 export type SelectOption = {
   id: string;
   value: string;
@@ -49,6 +51,10 @@ export function Select({ size, variant, placeholder, options, defaultOptionId, o
     },
     [onChange],
   );
+  const handleClickDeselect = useCallback(() => {
+    setSelectedOptionId(null);
+    setShowOptionList(false);
+  }, []);
 
   const labelVariant =
     size === 'small'
@@ -102,41 +108,7 @@ export function Select({ size, variant, placeholder, options, defaultOptionId, o
 
   const arrowIconClass = classNames('ml-auto');
 
-  const menuClass = classNames(
-    'absolute',
-    'w-max',
-    'py-2',
-    'overflow-y-auto',
-    'bg-background-uiBackground01',
-    'rounded',
-    'shadow-menu',
-    {
-      'top-7': size === 'small' || size === 'small-medium',
-      'top-9': size === 'medium',
-      'top-11': size === 'large',
-      'border-solid border border-border-uiBorder01': variant === 'outline',
-    },
-  );
-
-  const listItemClass = classNames('flex items-center w-full');
-
-  const itemClass = classNames(
-    'flex',
-    'items-center',
-    'w-full',
-    'h-8',
-    'px-3',
-    'hover:bg-hover-hover02',
-    'active:bg-active-active02',
-    focusVisible,
-    typography.label.label2regular,
-  );
-
   const leftIconClass = classNames('flex items-center mr-1');
-
-  const valueClass = classNames('mr-6');
-
-  const checkIconClass = classNames('ml-auto');
 
   return (
     <div className={wrapperClasses}>
@@ -160,39 +132,15 @@ export function Select({ size, variant, placeholder, options, defaultOptionId, o
         />
       </button>
       {showOptionList && (
-        <ul className={menuClass}>
-          {options.map((option, index) => (
-            <li className={listItemClass} key={option.id} onClick={() => handleClickItem(option.id, index)}>
-              <button
-                className={classNames(itemClass, { 'bg-selected-selectedUi': option.id === selectedOptionId })}
-                type="button"
-                data-selected={option.id === selectedOptionId}
-              >
-                {option.icon && (
-                  <Icon
-                    name={option.icon}
-                    size="small"
-                    color={option.id === selectedOptionId ? 'interactive01' : 'icon01'}
-                    className={leftIconClass}
-                  />
-                )}
-                <span
-                  className={classNames(
-                    valueClass,
-                    option.id === selectedOptionId
-                      ? 'text-interactive-interactive01'
-                      : 'text-interactive-interactive02',
-                  )}
-                >
-                  {option.value}
-                </span>
-                {option.id === selectedOptionId && (
-                  <Icon name="check" size="small" color="interactive01" className={checkIconClass} />
-                )}
-              </button>
-            </li>
-          ))}
-        </ul>
+        <SelectList
+          size={size}
+          variant={variant}
+          options={options}
+          placeholder={placeholder}
+          selectedOptionId={selectedOptionId}
+          onClickItem={handleClickItem}
+          onDeselect={handleClickDeselect}
+        />
       )}
     </div>
   );
