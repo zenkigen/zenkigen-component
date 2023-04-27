@@ -13,5 +13,6 @@
       "groupName": "minor dependencies",
       "updateTypes": ["minor", "patch", "pin", "digest", "lockFileMaintenance"]
     }
-  ]
+  ],
+  "ignoreDeps": ["@zenkigen-component/*"]
 }

@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 
 import { typography } from '@zenkigen-component/theme';
-import classNames from 'classnames';
+import { clsx } from 'clsx';
 
 import { Icon } from '../icon';
 import { IconButton } from '../icon-button';
@@ -19,7 +19,7 @@ type Props = {
 );
 
 export function NotificationInline({ state = 'default', size = 'medium', ...props }: Props) {
-  const wrapperClasses = classNames(
+  const wrapperClasses = clsx(
     'rounded',
     'text-text-text01',
     'flex',
@@ -37,7 +37,7 @@ export function NotificationInline({ state = 'default', size = 'medium', ...prop
     },
   );
 
-  const iconClasses = classNames('flex', 'items-center', {
+  const iconClasses = clsx('flex', 'items-center', {
     'fill-support-supportError': state === 'attention',
     'fill-support-supportWarning': state === 'warning',
     'fill-blue-blue50': state === 'information',
