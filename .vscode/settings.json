@@ -8,6 +8,5 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "search.exclude": {
     ".yarn": true
-  },
-  "cSpell.words": ["clsx"]
+  }
 }
