@@ -4,6 +4,11 @@ import { Select, SelectOption } from './select';
 
 const meta: Meta<typeof Select> = {
   component: Select,
+  argTypes: {
+    width: {
+      type: 'string',
+    },
+  },
 };
 export default meta;
 type Story = StoryObj<typeof Select>;

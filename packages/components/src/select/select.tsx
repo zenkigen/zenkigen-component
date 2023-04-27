@@ -19,19 +19,27 @@ type Props = {
   variant: 'text' | 'outline';
   width?: CSSProperties['width'];
   placeholder?: SelectOption;
-  listHeight?: number;
   options: SelectOption[];
   defaultOptionId?: string;
   isDisabled?: boolean;
-  isError?: boolean;
   useSelected?: boolean;
   onChange?: (id: string, index: number) => void;
+  listHeight?: CSSProperties['height'];
   listAlign?: 'left' | 'right';
   listPosition?: 'top' | 'bottom';
   children?: ReactNode;
 };
 
-export function Select({ size, variant, placeholder, options, defaultOptionId, isDisabled = false, onChange }: Props) {
+export function Select({
+  size,
+  variant,
+  width,
+  placeholder,
+  options,
+  defaultOptionId,
+  isDisabled = false,
+  onChange,
+}: Props) {
   const [selectedOptionId, setSelectedOptionId] = useState(defaultOptionId ? defaultOptionId : null);
   const [showOptionList, setShowOptionList] = useState(false);
 
@@ -69,7 +77,6 @@ export function Select({ size, variant, placeholder, options, defaultOptionId, i
     'shrink-0',
     'gap-1',
     'items-center',
-    'w-fit',
     'rounded',
     'bg-background-uiBackground01',
     {
@@ -115,7 +122,7 @@ export function Select({ size, variant, placeholder, options, defaultOptionId, i
   const leftIconClass = classNames('flex items-center mr-1');
 
   return (
-    <div className={wrapperClasses}>
+    <div className={classNames(wrapperClasses, width ? `w-[${width}]` : 'w-fit')}>
       <button type="button" onClick={handleToggle} disabled={isDisabled} className={buttonClass}>
         {(selectedOption?.icon || placeholder?.icon) && (
           <Icon
