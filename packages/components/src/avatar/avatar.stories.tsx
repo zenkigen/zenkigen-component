@@ -6,7 +6,7 @@ export default {
 
 export function Base() {
   return (
-    <div className="flex gap-2 flex-col">
+    <div className="flex flex-col gap-2">
       <div className="flex gap-2">
         <Avatar size="x-small" userId={1} lastName="全機現" firstName="太郎" />
         <Avatar size="small" userId={1} lastName="全機現" firstName="太郎" />
