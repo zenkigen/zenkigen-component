@@ -1,5 +1,6 @@
 import { mergeConfig } from 'vite';
 import path from 'path';
+import turbosnap from 'vite-plugin-turbosnap';
 
 const config = {
   stories: ['../packages/**/*.stories.@(ts|tsx)'],
@@ -23,8 +24,9 @@ const config = {
   features: {
     storyStoreV7: true,
   },
-  async viteFinal(config) {
+  viteFinal: async (config) => {
     return mergeConfig(config, {
+      plugins: [turbosnap({ rootDir: config.root ?? process.cwd() })],
       resolve: {
         alias: {
           src: path.resolve(__dirname, '../src'),

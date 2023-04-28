@@ -105,3 +105,6 @@ dist
 .yarn/*
 !.yarn/releases
 !.yarn/plugins
+
+# Storybook
+storybook-static
