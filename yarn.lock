@@ -12633,6 +12633,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"vite-plugin-turbosnap@npm:1.0.2":
+  version: 1.0.2
+  resolution: "vite-plugin-turbosnap@npm:1.0.2"
+  checksum: c5da204cd9fa0dbf8a5f3c151681057da0f8cec3acbec94bdc04e525d410d85bd87c46b73498ba20c487fe61a68b1486b0f88bc51fec48d7053d1f3597411231
+  languageName: node
+  linkType: hard
+
 "vite@npm:4.3.1":
   version: 4.3.1
   resolution: "vite@npm:4.3.1"
@@ -13005,5 +13012,6 @@ __metadata:
     tailwindcss: 3.3.1
     typescript: 5.0.4
     vite: 4.3.1
+    vite-plugin-turbosnap: 1.0.2
   languageName: unknown
   linkType: soft
