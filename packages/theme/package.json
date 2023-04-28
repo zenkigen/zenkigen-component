@@ -8,7 +8,7 @@
   "exports": "./dist/index.js",
   "scripts": {
     "type-check": "tsc --noEmit",
-    "build": "microbundle --no-compress -f modern,esm,cjs"
+    "build": "rimraf dist && microbundle --no-compress -f modern,esm,cjs"
   },
   "dependencies": {
     "microbundle": "0.15.1",
