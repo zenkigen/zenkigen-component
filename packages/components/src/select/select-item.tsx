@@ -3,7 +3,7 @@ import clsx from 'clsx';
 
 import { Icon } from '../icon';
 
-import type { SelectOption } from './select';
+import type { SelectOption } from './type';
 
 type Props = {
   option: SelectOption;
@@ -12,9 +12,9 @@ type Props = {
 };
 
 export function SelectItem({ option, selectedOptionId, onClickItem }: Props) {
-  const listItemClass = clsx('flex w-full items-center');
+  const listItemClasses = clsx('flex w-full items-center');
 
-  const itemClass = clsx(
+  const itemClasses = clsx(
     'flex',
     'items-center',
     'w-full',
@@ -24,27 +24,21 @@ export function SelectItem({ option, selectedOptionId, onClickItem }: Props) {
     'active:bg-active-active02',
     focusVisible,
     typography.label.label2regular,
+    {
+      'text-interactive-interactive01 fill-interactive-interactive01 bg-selected-selectedUi':
+        option.id === selectedOptionId,
+      'text-interactive-interactive02 fill-icon-icon01 bg-background-background01': option.id !== selectedOptionId,
+    },
   );
 
-  const valueClass = clsx('mr-6', 'ml-1');
-
   return (
-    <li className={listItemClass} key={option.id} onClick={onClickItem}>
-      <button className={clsx(itemClass, { 'bg-selected-selectedUi': option.id === selectedOptionId })} type="button">
-        {option.icon && (
-          <Icon name={option.icon} size="small" color={option.id === selectedOptionId ? 'interactive01' : 'icon01'} />
-        )}
-        <span
-          className={clsx(
-            valueClass,
-            option.id === selectedOptionId ? 'text-interactive-interactive01' : 'text-interactive-interactive02',
-          )}
-        >
-          {option.value}
-        </span>
+    <li className={listItemClasses} key={option.id} onClick={onClickItem}>
+      <button className={itemClasses} type="button">
+        {option.icon && <Icon name={option.icon} size="small" />}
+        <span className="ml-1 mr-6">{option.value}</span>
         {option.id === selectedOptionId && (
-          <div className="flex items-center ml-auto">
-            <Icon name="check" size="small" color="interactive01" />
+          <div className="ml-auto flex items-center">
+            <Icon name="check" size="small" />
           </div>
         )}
       </button>

@@ -1,20 +1,28 @@
 import clsx from 'clsx';
 
-import type { SelectOption } from './select';
 import { SelectItem } from './select-item';
+import type { SelectOption } from './type';
 
 type Props = {
   size: 'small' | 'small-medium' | 'medium' | 'large';
   variant: 'text' | 'outline';
   options: SelectOption[];
   selectedOptionId: string | null;
-  placeholder?: SelectOption;
+  placeholder?: string;
   onClickItem: (id: string, index: number) => void;
-  onDeselect: () => void;
+  onClickDeselect: () => void;
 };
 
-export function SelectList({ size, variant, options, selectedOptionId, placeholder, onClickItem, onDeselect }: Props) {
-  const menuClass = clsx(
+export function SelectList({
+  size,
+  variant,
+  options,
+  selectedOptionId,
+  placeholder,
+  onClickItem,
+  onClickDeselect,
+}: Props) {
+  const menuClasses = clsx(
     'absolute',
     'w-max',
     'py-2',
@@ -31,7 +39,7 @@ export function SelectList({ size, variant, options, selectedOptionId, placehold
   );
 
   return (
-    <ul className={menuClass}>
+    <ul className={menuClasses}>
       {options.map((option, index) => (
         <SelectItem
           key={option.id}
@@ -41,7 +49,7 @@ export function SelectList({ size, variant, options, selectedOptionId, placehold
         />
       ))}
       {placeholder && selectedOptionId !== null && (
-        <SelectItem option={{ id: 'deselect', value: '選択解除' }} onClickItem={onDeselect} />
+        <SelectItem option={{ id: 'deselect', value: '選択解除' }} onClickItem={onClickDeselect} />
       )}
     </ul>
   );

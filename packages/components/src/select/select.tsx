@@ -1,4 +1,4 @@
-import { CSSProperties, useCallback, useMemo, useState } from 'react';
+import { CSSProperties, useCallback, useState } from 'react';
 
 import { IconName } from '@zenkigen-component/icons';
 import { buttonColors, focusVisible, typography } from '@zenkigen-component/theme';
@@ -7,18 +7,14 @@ import clsx from 'clsx';
 import { Icon } from '../icon';
 
 import { SelectList } from './select-list';
-
-export type SelectOption = {
-  id: string;
-  value: string;
-  icon?: IconName;
-};
+import type { SelectOption } from './type';
 
 type Props = {
   size: 'small' | 'small-medium' | 'medium' | 'large';
   variant: 'text' | 'outline';
   width?: CSSProperties['width'];
-  placeholder?: SelectOption;
+  placeholder?: string;
+  placeholderIcon?: IconName;
   options: SelectOption[];
   defaultOptionId?: string;
   isDisabled?: boolean;
@@ -30,33 +26,29 @@ export function Select({
   variant,
   width,
   placeholder,
+  placeholderIcon,
   options,
   defaultOptionId,
   isDisabled = false,
   onChange,
 }: Props) {
   const [selectedOptionId, setSelectedOptionId] = useState(defaultOptionId ? defaultOptionId : null);
-  const [showOptionList, setShowOptionList] = useState(false);
+  const [isOptionListOpen, setIsOptionListOpen] = useState(false);
 
-  const selectedOption = useMemo(
-    () => options.find((option) => option.id === selectedOptionId),
-    [options, selectedOptionId],
-  );
+  const selectedOption = options.find((option) => option.id === selectedOptionId);
 
-  const handleToggle = useCallback(() => {
-    setShowOptionList((prev) => !prev);
-  }, []);
+  const handleClickToggle = () => setIsOptionListOpen((prev) => !prev);
   const handleClickItem = useCallback(
     (id: string, index: number) => {
       setSelectedOptionId(id);
-      onChange && onChange(id, index);
-      setShowOptionList(false);
+      onChange?.(id, index);
+      setIsOptionListOpen(false);
     },
     [onChange],
   );
   const handleClickDeselect = useCallback(() => {
     setSelectedOptionId(null);
-    setShowOptionList(false);
+    setIsOptionListOpen(false);
   }, []);
 
   const wrapperClasses = clsx(
@@ -75,7 +67,7 @@ export function Select({
     },
   );
 
-  const buttonClass = clsx(
+  const buttonClasses = clsx(
     'flex',
     'items-center',
     'w-full',
@@ -93,7 +85,7 @@ export function Select({
     },
   );
 
-  const labelClass = clsx(
+  const labelClasses = clsx(
     'flex',
     'items-center',
     'ml-1',
@@ -114,22 +106,21 @@ export function Select({
 
   return (
     <div className={wrapperClasses} style={{ width }}>
-      <button type="button" onClick={handleToggle} disabled={isDisabled} className={buttonClass}>
-        {(selectedOption?.icon || placeholder?.icon) && (
+      <button className={buttonClasses} type="button" onClick={handleClickToggle} disabled={isDisabled}>
+        {(selectedOption?.icon || (placeholder && placeholderIcon)) && (
           <Icon
-            name={selectedOption?.icon ? selectedOption.icon : placeholder?.icon ? placeholder.icon : 'add'}
+            name={selectedOption?.icon ? selectedOption.icon : placeholderIcon ? placeholderIcon : 'add'}
             size={size === 'large' ? 'medium' : 'small'}
-            isDisabled={isDisabled}
           />
         )}
-        <span className={labelClass}>
-          {selectedOption ? selectedOption.value : placeholder ? placeholder.value : options[0]?.value}
+        <span className={labelClasses}>
+          {selectedOption ? selectedOption.value : placeholder ? placeholder : options[0]?.value}
         </span>
         <div className="ml-auto flex items-center">
-          <Icon name={showOptionList ? 'angle-small-up' : 'angle-small-down'} size="small" isDisabled={isDisabled} />
+          <Icon name={isOptionListOpen ? 'angle-small-up' : 'angle-small-down'} size="small" />
         </div>
       </button>
-      {showOptionList && !isDisabled && (
+      {isOptionListOpen && !isDisabled && (
         <SelectList
           size={size}
           variant={variant}
@@ -137,7 +128,7 @@ export function Select({
           placeholder={placeholder}
           selectedOptionId={selectedOptionId}
           onClickItem={handleClickItem}
-          onDeselect={handleClickDeselect}
+          onClickDeselect={handleClickDeselect}
         />
       )}
     </div>
