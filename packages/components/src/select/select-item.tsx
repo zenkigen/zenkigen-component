@@ -28,8 +28,6 @@ export function SelectItem({ option, selectedOptionId, onClickItem }: Props) {
 
   const valueClass = clsx('mr-6', 'ml-1');
 
-  const checkIconClass = clsx('ml-auto');
-
   return (
     <li className={listItemClass} key={option.id} onClick={onClickItem}>
       <button className={clsx(itemClass, { 'bg-selected-selectedUi': option.id === selectedOptionId })} type="button">
@@ -45,7 +43,9 @@ export function SelectItem({ option, selectedOptionId, onClickItem }: Props) {
           {option.value}
         </span>
         {option.id === selectedOptionId && (
-          <Icon name="check" size="small" color="interactive01" className={checkIconClass} />
+          <div className="flex items-center ml-auto">
+            <Icon name="check" size="small" color="interactive01" />
+          </div>
         )}
       </button>
     </li>

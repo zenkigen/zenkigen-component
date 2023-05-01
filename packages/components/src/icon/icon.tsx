@@ -11,7 +11,6 @@ type Props = {
   size?: Size;
   color?: Color;
   isDisabled?: boolean;
-  className?: string;
 };
 
 export const Icon = ({ size = 'medium', ...props }: Props) => {
