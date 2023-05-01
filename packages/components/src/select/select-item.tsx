@@ -12,7 +12,7 @@ type Props = {
 };
 
 export function SelectItem({ option, selectedOptionId, onClickItem }: Props) {
-  const listItemClass = clsx('flex items-center w-full');
+  const listItemClass = clsx('flex w-full items-center');
 
   const itemClass = clsx(
     'flex',

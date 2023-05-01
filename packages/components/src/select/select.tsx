@@ -95,7 +95,7 @@ export function Select({
 
   const labelClass = clsx(
     'flex',
-    'item-center',
+    'items-center',
     'ml-1',
     'mr-2',
     'text-interactive-interactive02',
@@ -113,7 +113,7 @@ export function Select({
   );
 
   return (
-    <div className={clsx(wrapperClasses, width ? `w-[${width}]` : 'w-fit')}>
+    <div className={wrapperClasses} style={{ width }}>
       <button type="button" onClick={handleToggle} disabled={isDisabled} className={buttonClass}>
         {(selectedOption?.icon || placeholder?.icon) && (
           <Icon
@@ -125,7 +125,7 @@ export function Select({
         <span className={labelClass}>
           {selectedOption ? selectedOption.value : placeholder ? placeholder.value : options[0]?.value}
         </span>
-        <div className="flex items-center ml-auto">
+        <div className="ml-auto flex items-center">
           <Icon name={showOptionList ? 'angle-small-up' : 'angle-small-down'} size="small" isDisabled={isDisabled} />
         </div>
       </button>
