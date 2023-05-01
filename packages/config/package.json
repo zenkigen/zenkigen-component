@@ -9,12 +9,12 @@
   "scripts": {
     "type-check": "tsc --noEmit",
     "build:tokens": "token-transformer style-dictionary/tokens.json style-dictionary/transformed-tokens.json && node build.cjs",
-    "build": "microbundle --no-compress -f modern,esm,cjs"
+    "build": "rimraf dist && microbundle --no-compress -f modern,esm,cjs"
   },
   "devDependencies": {
     "microbundle": "0.15.1",
-    "style-dictionary": "3.7.2",
-    "tailwindcss": "3.3.1",
+    "style-dictionary": "3.8.0",
+    "tailwindcss": "3.3.2",
     "token-transformer": "^0.0.32",
     "typescript": "5.0.4"
   }

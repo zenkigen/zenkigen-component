@@ -8,11 +8,11 @@
   "exports": "./dist/index.js",
   "scripts": {
     "type-check": "tsc --noEmit",
-    "build": "microbundle --no-compress -f modern,esm,cjs"
+    "build": "rimraf dist && microbundle --no-compress -f modern,esm,cjs"
   },
   "dependencies": {
     "microbundle": "0.15.1",
-    "tailwindcss": "3.3.1",
+    "tailwindcss": "3.3.2",
     "typescript": "5.0.4"
   }
 }
