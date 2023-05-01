@@ -40,6 +40,4 @@ export const iconColors = {
   icon03: 'fill-icon-icon03',
   icon03Dark: 'fill-icon-icon03Dark',
   iconOnColor: 'fill-icon-iconOnColor',
-  interactive01: 'fill-interactive-interactive01',
-  disabled01: 'fill-disabled-disabled01',
 } as const;
