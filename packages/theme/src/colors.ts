@@ -32,9 +32,6 @@ export const buttonColors = {
   },
 } as const;
 
-export const focusVisible =
-  'focus-visible:outline focus-visible:outline-1 focus-visible:outline-focus-focus focus-visible:outline-offset-[-1px]';
-
 export const iconColors = {
   icon01: 'fill-icon-icon01',
   icon01Dark: 'fill-icon-icon01Dark',
