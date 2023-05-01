@@ -10,7 +10,7 @@ import { SelectList } from './select-list';
 import type { SelectOption } from './type';
 
 type Props = {
-  size: 'small' | 'small-medium' | 'medium' | 'large';
+  size: 'x-small' | 'small' | 'medium' | 'large';
   variant: 'text' | 'outline';
   width?: CSSProperties['width'];
   placeholder?: string;
@@ -60,7 +60,7 @@ export function Select({
     'rounded',
     'bg-background-uiBackground01',
     {
-      'h-6': size === 'small' || size === 'small-medium',
+      'h-6': size === 'x-small' || size === 'small',
       'h-8': size === 'medium',
       'h-10': size === 'large',
       'cursor-not-allowed': isDisabled,
@@ -79,7 +79,7 @@ export function Select({
     buttonColors[variant].disabled,
     focusVisible,
     {
-      'px-2': size === 'small' || size === 'small-medium',
+      'px-2': size === 'x-small' || size === 'small',
       'px-4': size === 'medium' || size === 'large',
       'pointer-events-none': isDisabled,
     },
@@ -92,11 +92,7 @@ export function Select({
     'mr-2',
     'text-interactive-interactive02',
     typography.label[
-      size === 'small'
-        ? 'label4regular'
-        : size === 'small-medium' || size === 'medium'
-        ? 'label3regular'
-        : 'label2regular'
+      size === 'x-small' ? 'label4regular' : size === 'small' || size === 'medium' ? 'label3regular' : 'label2regular'
     ],
     {
       'mr-1': size === 'small',

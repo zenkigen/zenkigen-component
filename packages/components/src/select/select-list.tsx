@@ -4,7 +4,7 @@ import { SelectItem } from './select-item';
 import type { SelectOption } from './type';
 
 type Props = {
-  size: 'small' | 'small-medium' | 'medium' | 'large';
+  size: 'x-small' | 'small' | 'medium' | 'large';
   variant: 'text' | 'outline';
   options: SelectOption[];
   selectedOptionId: string | null;
@@ -31,7 +31,7 @@ export function SelectList({
     'rounded',
     'shadow-menu',
     {
-      'top-7': size === 'small' || size === 'small-medium',
+      'top-7': size === 'x-small' || size === 'small',
       'top-9': size === 'medium',
       'top-11': size === 'large',
       'border-solid border border-border-uiBorder01': variant === 'outline',

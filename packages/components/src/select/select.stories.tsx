@@ -33,14 +33,14 @@ export const Base: Story = {
   render: ({ ...args }) => (
     <>
       <div style={{ display: 'flex', alignItems: 'center', gap: '80px', marginBottom: '200px' }}>
+        <Select {...args} size="x-small" variant="outline" options={optionsList} />
         <Select {...args} size="small" variant="outline" options={optionsList} />
-        <Select {...args} size="small-medium" variant="outline" options={optionsList} />
         <Select {...args} size="medium" variant="outline" options={optionsList} />
         <Select {...args} size="large" variant="outline" options={optionsList} />
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: '80px' }}>
+        <Select {...args} size="x-small" variant="text" options={optionsList} />
         <Select {...args} size="small" variant="text" options={optionsList} />
-        <Select {...args} size="small-medium" variant="text" options={optionsList} />
         <Select {...args} size="medium" variant="text" options={optionsList} />
         <Select {...args} size="large" variant="text" options={optionsList} />
       </div>
