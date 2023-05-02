@@ -6,4 +6,5 @@ export * from './icon';
 export * from './icon-button';
 export * from './notification-inline';
 export * from './search';
+export * from './select';
 export * from './tab';

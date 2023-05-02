@@ -19,14 +19,14 @@ export const buttonColors = {
     disabled: 'disabled:bg-disabled-disabled01 disabled:border-disabled-disabled01',
   },
   outline: {
-    base: 'border border-border-uiBorder02 text-interactive-interactive02  fill-interactive-interactive02',
-    hover: 'hover:bg-hover-hoverUi',
+    base: 'border border-border-uiBorder02 text-interactive-interactive02 fill-interactive-interactive02',
+    hover: 'hover:bg-hover-hover02',
     active: 'active:bg-active-active02',
     disabled: 'disabled:border-border-uiBorder01 disabled:text-disabled-disabled01 disabled:fill-disabled-disabled01',
   },
   text: {
     base: 'border border-transparent text-interactive-interactive02 fill-interactive-interactive02',
-    hover: 'hover:bg-hover-hoverUi hover:border-hover-hoverUi',
+    hover: 'hover:bg-hover-hover02 hover:border-hover-hover02',
     active: 'active:bg-active-active02 active:border-active-active02',
     disabled: 'disabled:text-disabled-disabled01 disabled:fill-disabled-disabled01',
   },
