@@ -17,10 +17,12 @@
     "microbundle": "0.15.1",
     "typescript": "5.0.4"
   },
+  "peerDependencies": {
+    "react": "18.2.0"
+  },
   "dependencies": {
     "@zenkigen-component/icons": "1.0.0",
     "@zenkigen-component/theme": "1.0.0",
-    "clsx": "^1.2.1",
-    "react": "18.2.0"
+    "clsx": "1.2.1"
   }
 }
