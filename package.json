@@ -12,7 +12,8 @@
     "storybook": "storybook dev",
     "create-component": "yarn workspace @zenkigen-component/components hygen generator components",
     "update-tokens": "yarn workspace @zenkigen-component/config run build:tokens",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "clean": "rimraf node_modules"
   },
   "devDependencies": {
     "@babel/core": "7.21.5",
