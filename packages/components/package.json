@@ -2,10 +2,13 @@
   "name": "@zenkigen-component/components",
   "version": "1.0.0",
   "source": "./src/index.ts",
+  "exports": {
+    "require": "./dist/index.js",
+    "default": "./dist/index.modern.mjs"
+  },
   "main": "./dist/index.js",
-  "module": "./dist/index.esm.js",
+  "module": "./dist/index.module.js",
   "types": "./dist/index.d.ts",
-  "exports": "./dist/index.js",
   "scripts": {
     "type-check": "tsc --noEmit",
     "generate-component": "hygen generator components",
