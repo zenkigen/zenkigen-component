@@ -7,7 +7,7 @@ import type { SelectOption } from './type';
 
 type Props = {
   option: SelectOption;
-  selectedOptionId?: string | null;
+  selectedOptionId: string | null;
   onClickItem: () => void;
 };
 
