@@ -1,3 +1,4 @@
+import { focusVisible, typography } from '@zenkigen-component/theme';
 import clsx from 'clsx';
 
 import { SelectItem } from './select-item';
@@ -22,7 +23,7 @@ export function SelectList({
   onClickItem,
   onClickDeselect,
 }: Props) {
-  const menuClasses = clsx(
+  const listClasses = clsx(
     'absolute',
     'w-max',
     'py-2',
@@ -38,8 +39,21 @@ export function SelectList({
     },
   );
 
+  const deselectButtonClasses = clsx(
+    'flex',
+    'items-center',
+    'w-full',
+    'h-8',
+    'px-3',
+    'hover:bg-hover-hover02',
+    'active:bg-active-active02',
+    'text-interactive-interactive02',
+    focusVisible,
+    typography.label.label2regular,
+  );
+
   return (
-    <ul className={menuClasses}>
+    <ul className={listClasses}>
       {options.map((option, index) => (
         <SelectItem
           key={option.id}
@@ -49,7 +63,11 @@ export function SelectList({
         />
       ))}
       {placeholder && selectedOptionId !== null && (
-        <SelectItem option={{ id: 'deselect', value: '選択解除' }} onClickItem={onClickDeselect} />
+        <li>
+          <button className={deselectButtonClasses} type="button" onClick={onClickDeselect}>
+            選択解除
+          </button>
+        </li>
       )}
     </ul>
   );
