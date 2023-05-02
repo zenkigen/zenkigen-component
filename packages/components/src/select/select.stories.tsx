@@ -14,7 +14,9 @@ const meta: Meta<typeof Select> = {
       type: 'string',
     },
     placeholderIcon: {
-      options: Object.keys(iconElements).map((iconName) => iconName),
+      options: Object.keys(iconElements)
+        .map((iconName) => iconName)
+        .concat(['']),
       control: 'select',
     },
     defaultOptionId: {
