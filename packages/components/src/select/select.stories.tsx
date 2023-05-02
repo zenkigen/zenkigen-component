@@ -1,8 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { iconElements } from '@zenkigen-component/icons';
+import { IconName, iconElements } from '@zenkigen-component/icons';
 
 import { Select } from './select';
-import type { SelectOption } from './type';
 
 const meta: Meta<typeof Select> = {
   component: Select,
@@ -28,10 +27,10 @@ export default meta;
 type Story = StoryObj<typeof Select>;
 
 const optionsList = [
-  { id: '1', value: '選択肢A', icon: 'add' },
-  { id: '2', value: '選択肢B', icon: 'add' },
-  { id: '3', value: '選択肢C', icon: 'add' },
-] as SelectOption[];
+  { id: '1', label: '選択肢A', value: 'A', icon: 'add' as IconName },
+  { id: '2', label: '選択肢B', value: 'B', icon: 'add' as IconName },
+  { id: '3', label: '選択肢C', value: 'C', icon: 'add' as IconName },
+];
 
 export const Base: Story = {
   render: ({ ...args }) => (

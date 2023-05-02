@@ -35,7 +35,7 @@ export function SelectItem({ option, selectedOptionId, onClickItem }: Props) {
     <li className={listItemClasses} key={option.id} onClick={onClickItem}>
       <button className={itemClasses} type="button">
         {option.icon && <Icon name={option.icon} size="small" />}
-        <span className="ml-1 mr-6">{option.value}</span>
+        <span className="ml-1 mr-6">{option.label}</span>
         {option.id === selectedOptionId && (
           <div className="ml-auto flex items-center">
             <Icon name="check" size="small" />

@@ -106,7 +106,7 @@ export function Select({
         ) : (
           placeholder && placeholderIcon && <Icon name={placeholderIcon} size={size === 'large' ? 'medium' : 'small'} />
         )}
-        <span className={labelClasses}>{selectedOption ? selectedOption.value : placeholder && placeholder}</span>
+        <span className={labelClasses}>{selectedOption ? selectedOption.label : placeholder && placeholder}</span>
         <div className="ml-auto flex items-center">
           <Icon name={isOptionListOpen ? 'angle-small-up' : 'angle-small-down'} size="small" />
         </div>
