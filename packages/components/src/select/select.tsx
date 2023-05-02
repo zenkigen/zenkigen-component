@@ -10,8 +10,8 @@ import { SelectList } from './select-list';
 import type { SelectOption } from './type';
 
 type Props = {
-  size: 'x-small' | 'small' | 'medium' | 'large';
-  variant: 'text' | 'outline';
+  size?: 'x-small' | 'small' | 'medium' | 'large';
+  variant?: 'outline' | 'text';
   width?: CSSProperties['width'];
   placeholder?: string;
   placeholderIcon?: IconName;
@@ -22,8 +22,8 @@ type Props = {
 };
 
 export function Select({
-  size,
-  variant,
+  size = 'medium',
+  variant = 'outline',
   width,
   placeholder,
   placeholderIcon,
