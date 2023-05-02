@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-import { Checkbox } from '.';
+import { Checkbox } from './checkbox';
 
 export default {
   component: Checkbox,
