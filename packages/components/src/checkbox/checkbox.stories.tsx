@@ -27,6 +27,7 @@ export function Base() {
         }}
       >
         <Checkbox
+          id="1"
           label="Checkbox"
           handleOnChange={handleCheckbox}
           isIndeterminate={isIndeterminate}
@@ -40,6 +41,7 @@ export function Base() {
         }}
       >
         <Checkbox
+          id="2"
           label="Switch to indeterminate"
           handleOnChange={handleIndeterminateCheckbox}
           isChecked={isIndeterminate}
