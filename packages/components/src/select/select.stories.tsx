@@ -35,28 +35,28 @@ export const Base: Story = {
   render: ({ ...args }) => (
     <div style={{ display: 'grid', rowGap: '180px' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '80px' }}>
-        <Select {...args} size="x-small" variant="outline" options={optionsList} />
-        <Select {...args} size="small" variant="outline" options={optionsList} />
-        <Select {...args} size="medium" variant="outline" options={optionsList} />
-        <Select {...args} size="large" variant="outline" options={optionsList} />
+        <Select {...args} size="x-small" variant="outline" options={optionsList} placeholder="選択" />
+        <Select {...args} size="small" variant="outline" options={optionsList} placeholder="選択" />
+        <Select {...args} size="medium" variant="outline" options={optionsList} placeholder="選択" />
+        <Select {...args} size="large" variant="outline" options={optionsList} placeholder="選択" />
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: '80px' }}>
-        <Select {...args} size="x-small" variant="text" options={optionsList} />
-        <Select {...args} size="small" variant="text" options={optionsList} />
-        <Select {...args} size="medium" variant="text" options={optionsList} />
-        <Select {...args} size="large" variant="text" options={optionsList} />
+        <Select {...args} size="x-small" variant="text" options={optionsList} placeholder="選択" />
+        <Select {...args} size="small" variant="text" options={optionsList} placeholder="選択" />
+        <Select {...args} size="medium" variant="text" options={optionsList} placeholder="選択" />
+        <Select {...args} size="large" variant="text" options={optionsList} placeholder="選択" />
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: '80px' }}>
-        <Select {...args} size="x-small" variant="outline" options={optionsList} isDisabled />
-        <Select {...args} size="small" variant="outline" options={optionsList} isDisabled />
-        <Select {...args} size="medium" variant="outline" options={optionsList} isDisabled />
-        <Select {...args} size="large" variant="outline" options={optionsList} isDisabled />
+        <Select {...args} size="x-small" variant="outline" options={optionsList} placeholder="選択" isDisabled />
+        <Select {...args} size="small" variant="outline" options={optionsList} placeholder="選択" isDisabled />
+        <Select {...args} size="medium" variant="outline" options={optionsList} placeholder="選択" isDisabled />
+        <Select {...args} size="large" variant="outline" options={optionsList} placeholder="選択" isDisabled />
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: '80px' }}>
-        <Select {...args} size="x-small" variant="text" options={optionsList} isDisabled />
-        <Select {...args} size="small" variant="text" options={optionsList} isDisabled />
-        <Select {...args} size="medium" variant="text" options={optionsList} isDisabled />
-        <Select {...args} size="large" variant="text" options={optionsList} isDisabled />
+        <Select {...args} size="x-small" variant="text" options={optionsList} placeholder="選択" isDisabled />
+        <Select {...args} size="small" variant="text" options={optionsList} placeholder="選択" isDisabled />
+        <Select {...args} size="medium" variant="text" options={optionsList} placeholder="選択" isDisabled />
+        <Select {...args} size="large" variant="text" options={optionsList} placeholder="選択" isDisabled />
       </div>
     </div>
   ),
