@@ -24,8 +24,8 @@
     "react": "18.2.0"
   },
   "dependencies": {
-    "@zenkigen-component/icons": "file:../icons",
-    "@zenkigen-component/theme": "file:../theme",
+    "@zenkigen-component/icons": "1.0.0",
+    "@zenkigen-component/theme": "1.0.0",
     "clsx": "1.2.1"
   }
 }
