@@ -1,5 +1,6 @@
 export * from './avatar';
 export * from './button';
+export * from './breadcrumb';
 export * from './heading';
 export * from './icon';
 export * from './icon-button';
