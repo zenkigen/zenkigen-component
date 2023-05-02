@@ -101,11 +101,10 @@ export function Select({
   return (
     <div className={wrapperClasses} style={{ width }}>
       <button className={buttonClasses} type="button" onClick={handleClickToggle} disabled={isDisabled}>
-        {(selectedOption?.icon || (placeholder && placeholderIcon)) && (
-          <Icon
-            name={selectedOption?.icon ? selectedOption.icon : placeholderIcon && placeholderIcon}
-            size={size === 'large' ? 'medium' : 'small'}
-          />
+        {selectedOption?.icon ? (
+          <Icon name={selectedOption.icon} size={size === 'large' ? 'medium' : 'small'} />
+        ) : (
+          placeholder && placeholderIcon && <Icon name={placeholderIcon} size={size === 'large' ? 'medium' : 'small'} />
         )}
         <span className={labelClasses}>{selectedOption ? selectedOption.value : placeholder && placeholder}</span>
         <div className="ml-auto flex items-center">
