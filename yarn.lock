@@ -3720,8 +3720,8 @@ __metadata:
   resolution: "@zenkigen-component/components@workspace:packages/components"
   dependencies:
     "@types/react": 18.2.0
-    "@zenkigen-component/icons": 1.0.0
-    "@zenkigen-component/theme": 1.0.0
+    "@zenkigen-component/icons": "file:../icons"
+    "@zenkigen-component/theme": "file:../theme"
     clsx: 1.2.1
     hygen: 6.2.11
     microbundle: 0.15.1
@@ -3743,7 +3743,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zenkigen-component/icons@1.0.0, @zenkigen-component/icons@workspace:packages/icons":
+"@zenkigen-component/icons@file:../icons::locator=%40zenkigen-component%2Fcomponents%40workspace%3Apackages%2Fcomponents":
+  version: 1.0.0
+  resolution: "@zenkigen-component/icons@file:../icons#../icons::hash=2da1be&locator=%40zenkigen-component%2Fcomponents%40workspace%3Apackages%2Fcomponents"
+  checksum: ac0fcc7c2c10dcd9af62795d96e07c51c5debbf9264d41f37e37a500a568929591f7556a4fad61346f3627e94fd1bc6dadfa6eabe214b8c67aaf35f28c2ee98c
+  languageName: node
+  linkType: hard
+
+"@zenkigen-component/icons@workspace:packages/icons":
   version: 0.0.0-use.local
   resolution: "@zenkigen-component/icons@workspace:packages/icons"
   dependencies:
@@ -3753,7 +3760,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zenkigen-component/theme@1.0.0, @zenkigen-component/theme@workspace:packages/theme":
+"@zenkigen-component/theme@file:../theme::locator=%40zenkigen-component%2Fcomponents%40workspace%3Apackages%2Fcomponents":
+  version: 1.0.0
+  resolution: "@zenkigen-component/theme@file:../theme#../theme::hash=acd238&locator=%40zenkigen-component%2Fcomponents%40workspace%3Apackages%2Fcomponents"
+  dependencies:
+    microbundle: 0.15.1
+    tailwindcss: 3.3.2
+    typescript: 5.0.4
+  checksum: c6fbad2cbf27a54574ba8dee2a3ddf3dd18c17d1a3c8eaf1f5187493485c178d17d3efc7a4758d4f1638f5bae4145b693dd5cade73a264c8458ef8e0611b0af0
+  languageName: node
+  linkType: hard
+
+"@zenkigen-component/theme@workspace:packages/theme":
   version: 0.0.0-use.local
   resolution: "@zenkigen-component/theme@workspace:packages/theme"
   dependencies:

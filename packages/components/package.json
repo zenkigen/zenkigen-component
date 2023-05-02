@@ -2,10 +2,13 @@
   "name": "@zenkigen-component/components",
   "version": "1.0.0",
   "source": "./src/index.ts",
+  "exports": {
+    "require": "./dist/index.js",
+    "default": "./dist/index.modern.mjs"
+  },
   "main": "./dist/index.js",
-  "module": "./dist/index.esm.js",
+  "module": "./dist/index.module.js",
   "types": "./dist/index.d.ts",
-  "exports": "./dist/index.js",
   "scripts": {
     "type-check": "tsc --noEmit",
     "generate-component": "hygen generator components",
@@ -21,8 +24,8 @@
     "react": "18.2.0"
   },
   "dependencies": {
-    "@zenkigen-component/icons": "1.0.0",
-    "@zenkigen-component/theme": "1.0.0",
+    "@zenkigen-component/icons": "file:../icons",
+    "@zenkigen-component/theme": "file:../theme",
     "clsx": "1.2.1"
   }
 }
