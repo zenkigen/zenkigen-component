@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { iconElements } from '@zenkigen-component/icons';
 
 import { Select } from './select';
 import type { SelectOption } from './type';
@@ -13,7 +14,8 @@ const meta: Meta<typeof Select> = {
       type: 'string',
     },
     placeholderIcon: {
-      type: 'string',
+      options: Object.keys(iconElements).map((iconName) => iconName),
+      control: 'select',
     },
     defaultOptionId: {
       type: 'string',
@@ -31,8 +33,8 @@ const optionsList = [
 
 export const Base: Story = {
   render: ({ ...args }) => (
-    <>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '80px', marginBottom: '200px' }}>
+    <div style={{ display: 'grid', rowGap: '180px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '80px' }}>
         <Select {...args} size="x-small" variant="outline" options={optionsList} />
         <Select {...args} size="small" variant="outline" options={optionsList} />
         <Select {...args} size="medium" variant="outline" options={optionsList} />
@@ -44,6 +46,18 @@ export const Base: Story = {
         <Select {...args} size="medium" variant="text" options={optionsList} />
         <Select {...args} size="large" variant="text" options={optionsList} />
       </div>
-    </>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '80px' }}>
+        <Select {...args} size="x-small" variant="outline" options={optionsList} isDisabled />
+        <Select {...args} size="small" variant="outline" options={optionsList} isDisabled />
+        <Select {...args} size="medium" variant="outline" options={optionsList} isDisabled />
+        <Select {...args} size="large" variant="outline" options={optionsList} isDisabled />
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '80px' }}>
+        <Select {...args} size="x-small" variant="text" options={optionsList} isDisabled />
+        <Select {...args} size="small" variant="text" options={optionsList} isDisabled />
+        <Select {...args} size="medium" variant="text" options={optionsList} isDisabled />
+        <Select {...args} size="large" variant="text" options={optionsList} isDisabled />
+      </div>
+    </div>
   ),
 };
