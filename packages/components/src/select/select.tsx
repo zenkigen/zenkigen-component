@@ -90,13 +90,11 @@ export function Select({
     'items-center',
     'ml-1',
     'mr-2',
-    'text-interactive-interactive02',
     typography.label[
       size === 'x-small' ? 'label4regular' : size === 'small' || size === 'medium' ? 'label3regular' : 'label2regular'
     ],
     {
       'mr-1': size === 'small',
-      'text-disabled-disabled01': isDisabled,
     },
   );
 
