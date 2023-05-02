@@ -3745,8 +3745,8 @@ __metadata:
 
 "@zenkigen-component/icons@file:../icons::locator=%40zenkigen-component%2Fcomponents%40workspace%3Apackages%2Fcomponents":
   version: 1.0.0
-  resolution: "@zenkigen-component/icons@file:../icons#../icons::hash=2da1be&locator=%40zenkigen-component%2Fcomponents%40workspace%3Apackages%2Fcomponents"
-  checksum: ac0fcc7c2c10dcd9af62795d96e07c51c5debbf9264d41f37e37a500a568929591f7556a4fad61346f3627e94fd1bc6dadfa6eabe214b8c67aaf35f28c2ee98c
+  resolution: "@zenkigen-component/icons@file:../icons#../icons::hash=2ca18f&locator=%40zenkigen-component%2Fcomponents%40workspace%3Apackages%2Fcomponents"
+  checksum: c71dee210d0048c2c0cce84c3b58d6e16cfe2e0ec9e26d03f0fd81e4d934b08399bfef7735ba3a9982d539c32d7f98e2e24044061128ea5988e72c2d4e1a3c0c
   languageName: node
   linkType: hard
 
@@ -3762,12 +3762,12 @@ __metadata:
 
 "@zenkigen-component/theme@file:../theme::locator=%40zenkigen-component%2Fcomponents%40workspace%3Apackages%2Fcomponents":
   version: 1.0.0
-  resolution: "@zenkigen-component/theme@file:../theme#../theme::hash=acd238&locator=%40zenkigen-component%2Fcomponents%40workspace%3Apackages%2Fcomponents"
+  resolution: "@zenkigen-component/theme@file:../theme#../theme::hash=479557&locator=%40zenkigen-component%2Fcomponents%40workspace%3Apackages%2Fcomponents"
   dependencies:
     microbundle: 0.15.1
     tailwindcss: 3.3.2
     typescript: 5.0.4
-  checksum: c6fbad2cbf27a54574ba8dee2a3ddf3dd18c17d1a3c8eaf1f5187493485c178d17d3efc7a4758d4f1638f5bae4145b693dd5cade73a264c8458ef8e0611b0af0
+  checksum: 32ef640a0394892d8f4579d1e87e2bf3f258e30fd9821efaad9eb6a88566bce00c65d37427cfc67b0c7321369e5be2b38875165f0434e651d1ee9255ef92c401
   languageName: node
   linkType: hard
 
