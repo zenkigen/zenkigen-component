@@ -15,12 +15,12 @@
     "@types/react": "18.2.0",
     "hygen": "6.2.11",
     "microbundle": "0.15.1",
+    "react": "18.2.0",
     "typescript": "5.0.4"
   },
   "dependencies": {
     "@zenkigen-component/icons": "1.0.0",
     "@zenkigen-component/theme": "1.0.0",
-    "clsx": "^1.2.1",
-    "react": "18.2.0"
+    "clsx": "^1.2.1"
   }
 }
