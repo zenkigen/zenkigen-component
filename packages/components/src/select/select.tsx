@@ -80,7 +80,7 @@ export function Select({
     buttonColors[variant].hover,
     buttonColors[variant].active,
     buttonColors[variant].disabled,
-    focusVisible,
+    focusVisible.normal,
     {
       'px-2': size === 'x-small' || size === 'small',
       'px-4': size === 'medium' || size === 'large',

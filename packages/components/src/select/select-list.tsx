@@ -48,7 +48,7 @@ export function SelectList({
     'hover:bg-hover-hover02',
     'active:bg-active-active02',
     'text-interactive-interactive02',
-    focusVisible,
+    focusVisible.inset,
     typography.label.label2regular,
   );
 

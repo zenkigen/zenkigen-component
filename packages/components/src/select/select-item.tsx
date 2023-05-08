@@ -22,7 +22,7 @@ export function SelectItem({ option, selectedOptionId, onClickItem }: Props) {
     'px-3',
     'hover:bg-hover-hover02',
     'active:bg-active-active02',
-    focusVisible,
+    focusVisible.inset,
     typography.label.label2regular,
     {
       'text-interactive-interactive01 fill-interactive-interactive01 bg-selected-selectedUi':
