@@ -1,4 +1,4 @@
-import { focusVisible, typography } from '@zenkigen-component/theme';
+import { focusVisible, typography, zIndex } from '@zenkigen-component/theme';
 import clsx from 'clsx';
 
 import { SelectItem } from './select-item';
@@ -53,7 +53,7 @@ export function SelectList({
   );
 
   return (
-    <ul className={listClasses}>
+    <ul className={listClasses} style={{ zIndex: zIndex.dropdown }}>
       {options.map((option, index) => (
         <SelectItem
           key={option.id}
