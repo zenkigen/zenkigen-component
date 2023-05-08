@@ -1,5 +1,5 @@
 import { IconName } from '@zenkigen-component/icons';
-import { buttonColors, typography } from '@zenkigen-component/theme';
+import { buttonColors, typography, focusVisible } from '@zenkigen-component/theme';
 import { clsx } from 'clsx';
 
 import { Icon } from '../icon/icon';
@@ -36,6 +36,7 @@ export function IconButton({ size = 'medium', variant = 'outline', ...props }: P
     buttonColors[variant].hover,
     buttonColors[variant].active,
     buttonColors[variant].disabled,
+    focusVisible,
     typography.label.label1regular,
     { 'py-1 px-1': size === 'small' },
     { 'py-1 px-1': size === 'medium' },
@@ -54,7 +55,7 @@ export function IconButton({ size = 'medium', variant = 'outline', ...props }: P
     );
   } else {
     return (
-      <button type="button" className={baseClasses} disabled={props.isDisabled}>
+      <button type="button" className={baseClasses} disabled={props.isDisabled} onClick={props.onClick}>
         <Icon name={props.icon} size={iconSize} />
       </button>
     );
