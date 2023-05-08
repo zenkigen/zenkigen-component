@@ -13,10 +13,7 @@ module.exports = {
       },
       fontSize: tokens.fontSize,
       lineHeight: tokens.lineHeights,
-      // TODO: tokens.jsonでShadow系トークンが定義されるまでの暫定的対応
-      boxShadow: {
-        menu: '0 0 10px rgba(0, 0, 0, 0.1)',
-      },
+      boxShadow: tokens.shadow,
       keyframes: {
         'circular-move': {
           '0%': {
