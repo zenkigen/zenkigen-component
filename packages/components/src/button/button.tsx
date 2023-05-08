@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { buttonColors, typography } from '@zenkigen-component/theme';
+import { buttonColors, typography, focusVisible } from '@zenkigen-component/theme';
 import { clsx } from 'clsx';
 
 type Size = 'small' | 'medium' | 'large';
@@ -37,6 +37,7 @@ export function Button({ size = 'medium', variant = 'fill', ...props }: Props) {
     buttonColors[variant].hover,
     buttonColors[variant].active,
     buttonColors[variant].disabled,
+    focusVisible,
     typography.label.label1regular,
     { 'py-1 px-2': size === 'small' },
     { 'py-2 px-3': size === 'medium' },
@@ -55,7 +56,7 @@ export function Button({ size = 'medium', variant = 'fill', ...props }: Props) {
     );
   } else {
     return (
-      <button type="button" className={baseClasses} disabled={props.isDisabled}>
+      <button type="button" className={baseClasses} disabled={props.isDisabled} onClick={props.onClick}>
         {props.before}
         {props.children}
         {props.after}
