@@ -13,7 +13,11 @@ module.exports = {
       },
       fontSize: tokens.fontSize,
       lineHeight: tokens.lineHeights,
-      boxShadow: tokens.shadow,
+      boxShadow: {
+        windowShadow: '0 0 10px rgba(0, 0, 0, 0.15)',
+        componentShadow: '0 0 10px rgba(0, 0, 0, 0.08)',
+        floatingShadow: '0 0 20px rgba(0, 0, 0, 0.1)',
+      },
       keyframes: {
         'circular-move': {
           '0%': {
