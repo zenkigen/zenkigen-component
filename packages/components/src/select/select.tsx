@@ -18,7 +18,7 @@ type Props = {
   options: SelectOption[];
   defaultOptionId?: string;
   isDisabled?: boolean;
-  onChange?: (id: string, index: number) => void;
+  onChange?: (id: string, index: number, value: string) => void;
 };
 
 export function Select({
@@ -39,9 +39,9 @@ export function Select({
 
   const handleClickToggle = () => setIsOptionListOpen((prev) => !prev);
   const handleClickItem = useCallback(
-    (id: string, index: number) => {
+    (id: string, index: number, value: string) => {
       setSelectedOptionId(id);
-      onChange?.(id, index);
+      onChange?.(id, index, value);
       setIsOptionListOpen(false);
     },
     [onChange],
