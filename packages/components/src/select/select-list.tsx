@@ -10,7 +10,7 @@ type Props = {
   options: SelectOption[];
   selectedOptionId: string | null;
   placeholder?: string;
-  onClickItem: (id: string, index: number) => void;
+  onClickItem: (id: string, index: number, value: string) => void;
   onClickDeselect: () => void;
 };
 
@@ -59,7 +59,7 @@ export function SelectList({
           key={option.id}
           option={option}
           selectedOptionId={selectedOptionId}
-          onClickItem={() => onClickItem(option.id, index)}
+          onClickItem={() => onClickItem(option.id, index, option.value)}
         />
       ))}
       {placeholder && selectedOptionId !== null && (
