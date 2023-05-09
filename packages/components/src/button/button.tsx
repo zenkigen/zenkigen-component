@@ -38,7 +38,7 @@ export function Button({ size = 'medium', variant = 'fill', ...props }: Props) {
     buttonColors[variant].active,
     buttonColors[variant].disabled,
     focusVisible,
-    typography.label.label1regular,
+    size === 'large' ? typography.label.label1regular : typography.label.label2regular,
     { 'py-1 px-2': size === 'small' },
     { 'py-2 px-3': size === 'medium' },
     { 'py-2 px-4 leading-[24px]': size === 'large' },
