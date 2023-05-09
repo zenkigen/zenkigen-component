@@ -94,7 +94,7 @@ export function Select({
     'ml-1',
     'mr-2',
     typography.label[
-      size === 'x-small' ? 'label4regular' : size === 'small' || size === 'medium' ? 'label3regular' : 'label2regular'
+      size === 'x-small' ? 'label3regular' : size === 'small' || size === 'medium' ? 'label2regular' : 'label1regular'
     ],
     {
       'mr-1': size === 'small',
