@@ -158,6 +158,8 @@ export const tokens = {
       "supportErrorDark": "#E67490",
       "supportSuccess": "#2DC87D",
       "supportSuccessDark": "#69DDA5",
+      "supportInfo": "#177EE5",
+      "supportInfoDark": "#177EE5",
       "supportWarning": "#FCD200",
       "supportWarningDark": "#FFE976",
       "supportDanger": "#D92B57",
@@ -486,5 +488,31 @@ export const tokens = {
   },
   "textDecoration": {
     "none": "none"
+  },
+  "shadow": {
+    "windowShadow": {
+      "color": "#00000026",
+      "type": "dropShadow",
+      "x": 0,
+      "y": 0,
+      "blur": 10,
+      "spread": 0
+    },
+    "componentShadow": {
+      "color": "#00000014",
+      "type": "dropShadow",
+      "x": 0,
+      "y": 0,
+      "blur": 10,
+      "spread": 0
+    },
+    "floatingShadow": {
+      "color": "#0000001a",
+      "type": "dropShadow",
+      "x": 0,
+      "y": 0,
+      "blur": 20,
+      "spread": 0
+    }
   }
 } as const;

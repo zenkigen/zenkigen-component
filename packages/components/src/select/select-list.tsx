@@ -30,7 +30,7 @@ export function SelectList({
     'overflow-y-auto',
     'bg-background-uiBackground01',
     'rounded',
-    'shadow-menu',
+    'shadow-componentShadow',
     {
       'top-7': size === 'x-small' || size === 'small',
       'top-9': size === 'medium',
