@@ -1,4 +1,4 @@
-import { focusVisible, typography, zIndex } from '@zenkigen-component/theme';
+import { focusVisible, typography } from '@zenkigen-component/theme';
 import clsx from 'clsx';
 
 import { SelectItem } from './select-item';
@@ -24,6 +24,7 @@ export function SelectList({
   onClickDeselect,
 }: Props) {
   const listClasses = clsx(
+    'z-dropdown',
     'absolute',
     'w-max',
     'py-2',
@@ -53,7 +54,7 @@ export function SelectList({
   );
 
   return (
-    <ul className={listClasses} style={{ zIndex: zIndex.dropdown }}>
+    <ul className={listClasses}>
       {options.map((option, index) => (
         <SelectItem
           key={option.id}
