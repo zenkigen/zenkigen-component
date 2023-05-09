@@ -1,29 +1,23 @@
 import { RefObject, useEffect } from 'react';
 
-/**
- * ある要素の領域外をクリックしたイベントを検知する。
- *
- * @param ref - 領域（起点）となる要素。
- * @param callback - 領域外をクリックした時に発火するコールバック関数
- * @param enabled - 有効化フラグ
- */
-export const useOutsideClick = (ref: RefObject<HTMLElement>, callback: (e: MouseEvent) => void, enabled = true) => {
+export const useOutsideClick = <T extends HTMLElement = HTMLElement>(
+  ref: RefObject<T>,
+  handler: (event: Event) => void,
+  enabled = true,
+) => {
   useEffect(() => {
-    const args = [
-      'click',
-      (e: MouseEvent) => {
-        if (ref.current !== null && !ref.current.contains(e.target as HTMLElement)) {
-          callback(e);
-        }
-      },
-      true,
-    ] as const;
+    const listener = (event: Event) => {
+      const element = ref?.current;
+      if (!element || element.contains((event?.target as Node) || null)) {
+        return;
+      }
+      handler(event);
+    };
 
     if (enabled) {
-      globalThis.removeEventListener(...args);
-      window.requestAnimationFrame(() => window.addEventListener(...args));
+      document.addEventListener('click', listener);
     }
 
-    return () => window.removeEventListener(...args);
-  }, [ref, callback, enabled]);
+    return () => document.removeEventListener('click', listener);
+  }, [ref, enabled, handler]);
 };
