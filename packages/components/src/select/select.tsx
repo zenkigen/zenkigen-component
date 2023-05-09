@@ -1,9 +1,10 @@
-import { CSSProperties, useCallback, useState } from 'react';
+import { CSSProperties, useCallback, useRef, useState } from 'react';
 
 import { IconName } from '@zenkigen-component/icons';
 import { buttonColors, focusVisible, typography } from '@zenkigen-component/theme';
 import clsx from 'clsx';
 
+import { useOutsideClick } from '../hooks/useOutsideClick';
 import { Icon } from '../icon';
 
 import { SelectList } from './select-list';
@@ -34,6 +35,8 @@ export function Select({
 }: Props) {
   const [selectedOptionId, setSelectedOptionId] = useState(defaultOptionId ? defaultOptionId : null);
   const [isOptionListOpen, setIsOptionListOpen] = useState(false);
+  const targetRef = useRef<HTMLDivElement>(null);
+  useOutsideClick(targetRef, () => setIsOptionListOpen(false));
 
   const selectedOption = options.find((option) => option.id === selectedOptionId);
 
@@ -77,7 +80,7 @@ export function Select({
     buttonColors[variant].hover,
     buttonColors[variant].active,
     buttonColors[variant].disabled,
-    focusVisible,
+    focusVisible.normal,
     {
       'px-2': size === 'x-small' || size === 'small',
       'px-4': size === 'medium' || size === 'large',
@@ -99,7 +102,7 @@ export function Select({
   );
 
   return (
-    <div className={wrapperClasses} style={{ width }}>
+    <div className={wrapperClasses} style={{ width }} ref={targetRef}>
       <button className={buttonClasses} type="button" onClick={handleClickToggle} disabled={isDisabled}>
         {selectedOption?.icon ? (
           <Icon name={selectedOption.icon} size={size === 'large' ? 'medium' : 'small'} />
