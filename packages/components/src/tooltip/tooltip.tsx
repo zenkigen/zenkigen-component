@@ -1,4 +1,4 @@
-import { CSSProperties, ReactNode, useCallback, useRef, useState } from 'react';
+import { CSSProperties, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 
 import { typography } from '@zenkigen-component/theme';
 import clsx from 'clsx';
@@ -44,6 +44,10 @@ export function Tooltip({
     };
     setTargetDimensions(calculatedDimensions);
   }, []);
+
+  useEffect(() => {
+    getDimensions();
+  }, [getDimensions]);
 
   const showTooltip = useCallback(() => {
     getDimensions();
