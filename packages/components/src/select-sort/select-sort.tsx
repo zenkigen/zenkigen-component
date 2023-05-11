@@ -14,7 +14,6 @@ type Props = {
   variant?: 'outline' | 'text';
   width?: CSSProperties['width'];
   label: string;
-  defaultOptionId?: string;
   sortOrder: SortOrder;
   isDisabled?: boolean;
   isSortKey?: boolean;
