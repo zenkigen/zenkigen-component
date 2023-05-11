@@ -42,7 +42,7 @@ const SelectSortBasic = () => {
           sortOrder={sortOrderDay}
           isSortKey={sortKey === 'day'}
           onChange={handleSortDay}
-          // onClickDeselect={handleClickDeselect}
+          onClickDeselect={handleClickDeselect}
         />
         <SelectSort
           label="項目名1"
