@@ -1,4 +1,4 @@
-import { CSSProperties, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import { CSSProperties, ReactNode, useCallback, useRef, useState } from 'react';
 
 import { typography } from '@zenkigen-component/theme';
 import clsx from 'clsx';
@@ -8,7 +8,6 @@ import type { VerticalPosition, HorizontalAlign } from './type';
 type Props = {
   children: ReactNode;
   content: string;
-  visible?: boolean;
   size?: 'small' | 'medium';
   maxWidth?: CSSProperties['width'];
   verticalPosition?: VerticalPosition;
@@ -21,7 +20,6 @@ const defaultDimensions = {
 };
 
 export function Tooltip({
-  visible,
   children,
   content,
   size = 'small',
@@ -29,7 +27,7 @@ export function Tooltip({
   verticalPosition = 'bottom',
   horizontalAlign = 'center',
 }: Props) {
-  const [isVisible, setIsVisible] = useState(visible);
+  const [isVisible, setIsVisible] = useState(false);
   const [targetDimensions, setTargetDimensions] = useState(defaultDimensions);
   const targetRef = useRef<HTMLDivElement>(null);
 
@@ -45,18 +43,14 @@ export function Tooltip({
     setTargetDimensions(calculatedDimensions);
   }, []);
 
-  useEffect(() => {
-    getDimensions();
-  }, [getDimensions]);
-
   const showTooltip = useCallback(() => {
     getDimensions();
     setIsVisible(true);
   }, [getDimensions]);
 
   const hideTooltip = useCallback(() => {
-    setIsVisible(visible);
-  }, [visible]);
+    setIsVisible(false);
+  }, []);
 
   const targetClasses = clsx('relative', 'flex', 'items-center', 'justify-center');
 

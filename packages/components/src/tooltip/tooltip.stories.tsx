@@ -28,37 +28,30 @@ export const Base: Story = {
   render: ({ ...args }) => (
     <div style={{ display: 'grid', rowGap: '50px', padding: '50px 100px' }}>
       <div style={{ display: 'flex', alignItems: 'center', columnGap: '100px' }}>
-        <Tooltip {...args} visible content="内容説明テキストテキスト" verticalPosition="top" horizontalAlign="right">
+        <Tooltip {...args} content="内容説明テキストテキスト" verticalPosition="top" horizontalAlign="right">
           <div className="flex h-10 w-24 items-center justify-center rounded border border-gray-400">target</div>
         </Tooltip>
-        <Tooltip {...args} visible content="内容説明テキストテキスト" verticalPosition="top" horizontalAlign="center">
+        <Tooltip {...args} content="内容説明テキストテキスト" verticalPosition="top" horizontalAlign="center">
           <div className="flex h-10 w-24 items-center justify-center rounded border border-gray-400">target</div>
         </Tooltip>
-        <Tooltip {...args} visible content="内容説明テキストテキスト" verticalPosition="top" horizontalAlign="left">
+        <Tooltip {...args} content="内容説明テキストテキスト" verticalPosition="top" horizontalAlign="left">
           <div className="flex h-10 w-24 items-center justify-center rounded border border-gray-400">target</div>
         </Tooltip>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', columnGap: '100px' }}>
-        <Tooltip {...args} visible content="内容説明テキストテキスト" verticalPosition="bottom" horizontalAlign="right">
+        <Tooltip {...args} content="内容説明テキストテキスト" verticalPosition="bottom" horizontalAlign="right">
           <div className="flex h-10 w-24 items-center justify-center rounded border border-gray-400">target</div>
         </Tooltip>
-        <Tooltip
-          {...args}
-          visible
-          content="内容説明テキストテキスト"
-          verticalPosition="bottom"
-          horizontalAlign="center"
-        >
+        <Tooltip {...args} content="内容説明テキストテキスト" verticalPosition="bottom" horizontalAlign="center">
           <div className="flex h-10 w-24 items-center justify-center rounded border border-gray-400">target</div>
         </Tooltip>
-        <Tooltip {...args} visible content="内容説明テキストテキスト" verticalPosition="bottom" horizontalAlign="left">
+        <Tooltip {...args} content="内容説明テキストテキスト" verticalPosition="bottom" horizontalAlign="left">
           <div className="flex h-10 w-24 items-center justify-center rounded border border-gray-400">target</div>
         </Tooltip>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', columnGap: '100px', marginTop: '100px' }}>
         <Tooltip
           {...args}
-          visible
           size="medium"
           content="内容説明テキストテキスト"
           verticalPosition="top"
@@ -68,7 +61,6 @@ export const Base: Story = {
         </Tooltip>
         <Tooltip
           {...args}
-          visible
           size="medium"
           content="内容説明テキストテキスト"
           verticalPosition="top"
@@ -78,7 +70,6 @@ export const Base: Story = {
         </Tooltip>
         <Tooltip
           {...args}
-          visible
           size="medium"
           content="内容説明テキストテキスト"
           verticalPosition="top"
@@ -90,7 +81,6 @@ export const Base: Story = {
       <div style={{ display: 'flex', alignItems: 'center', columnGap: '100px' }}>
         <Tooltip
           {...args}
-          visible
           size="medium"
           content="内容説明テキストテキスト"
           verticalPosition="bottom"
@@ -100,7 +90,6 @@ export const Base: Story = {
         </Tooltip>
         <Tooltip
           {...args}
-          visible
           size="medium"
           content="内容説明テキストテキスト"
           verticalPosition="bottom"
@@ -110,7 +99,6 @@ export const Base: Story = {
         </Tooltip>
         <Tooltip
           {...args}
-          visible
           size="medium"
           content="内容説明テキストテキスト"
           verticalPosition="bottom"
