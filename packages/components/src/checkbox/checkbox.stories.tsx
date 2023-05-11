@@ -5,6 +5,7 @@ import { Checkbox } from './checkbox';
 export default {
   component: Checkbox,
 };
+
 export function Base() {
   const [isCheck, setCheck] = useState(false);
 
@@ -46,6 +47,87 @@ export function Base() {
           handleOnChange={handleIndeterminateCheckbox}
           isChecked={isIndeterminate}
           color="default"
+        />
+      </div>
+      <div
+        style={{
+          marginBottom: '24px',
+        }}
+      >
+        <Checkbox
+          id="1"
+          label="Checkbox"
+          handleOnChange={handleCheckbox}
+          isIndeterminate={isIndeterminate}
+          isChecked={isCheck}
+          color="gray"
+        />
+      </div>
+      <div
+        style={{
+          marginBottom: '24px',
+        }}
+      >
+        <Checkbox
+          id="2"
+          label="Switch to indeterminate"
+          handleOnChange={handleIndeterminateCheckbox}
+          isChecked={isIndeterminate}
+          color="gray"
+        />
+      </div>
+      <div
+        style={{
+          marginBottom: '24px',
+        }}
+      >
+        <Checkbox
+          id="1"
+          label="Checkbox"
+          handleOnChange={handleCheckbox}
+          isIndeterminate={isIndeterminate}
+          isChecked={isCheck}
+          color="error"
+        />
+      </div>
+      <div
+        style={{
+          marginBottom: '24px',
+        }}
+      >
+        <Checkbox
+          id="2"
+          label="Switch to indeterminate"
+          handleOnChange={handleIndeterminateCheckbox}
+          isChecked={isIndeterminate}
+          color="error"
+        />
+      </div>
+      <div
+        style={{
+          marginBottom: '24px',
+        }}
+      >
+        <Checkbox
+          id="1"
+          label="Checkbox"
+          handleOnChange={handleCheckbox}
+          isIndeterminate={isIndeterminate}
+          isChecked={isCheck}
+          isDisabled
+        />
+      </div>
+      <div
+        style={{
+          marginBottom: '24px',
+        }}
+      >
+        <Checkbox
+          id="2"
+          label="Switch to indeterminate"
+          handleOnChange={handleIndeterminateCheckbox}
+          isChecked={isIndeterminate}
+          isDisabled
         />
       </div>
     </ul>

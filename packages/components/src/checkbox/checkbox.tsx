@@ -1,6 +1,7 @@
 import { ChangeEvent, useCallback } from 'react';
 
 import { typography } from '@zenkigen-component/theme';
+import { focusVisible } from '@zenkigen-component/theme';
 import clsx from 'clsx';
 
 type Props = {
@@ -8,7 +9,7 @@ type Props = {
   value?: string;
   id?: string;
   isChecked?: boolean;
-  color: 'default' | 'gray' | 'error';
+  color?: 'default' | 'gray' | 'error';
   isIndeterminate?: boolean;
   isDisabled?: boolean;
   label?: string;
@@ -35,7 +36,7 @@ export function Checkbox({
 
   const containerClasses = clsx('flex', 'items-center');
 
-  const baseClasses = clsx('flex', 'items-center', 'justify-center', 'h-6', 'w-6', 'peer/focus-visible');
+  const baseClasses = clsx('flex', 'items-center', 'justify-center', 'h-6', 'w-6');
 
   const boxClasses = clsx(
     'inline-flex',
@@ -46,11 +47,25 @@ export function Checkbox({
     'bg-white',
     'border',
     'rounded-sm',
+    {
+      'border-interactive-interactive02': color === 'gray',
+      'border-support-supportError': color === 'error',
+      'hover:border-disabled-disabled01': isDisabled,
+      'hover:border-hover-hoverError': color === 'error',
+      'hover:border-hover-hoverUiBorder': color === 'default' || color === 'gray',
+      'text-disabled-disabled01': isDisabled,
+    },
   );
 
-  const indicatorClasses = clsx('h-5', 'w-5', 'relative', 'inline-block', 'flex-[0_0_auto]');
+  const indicatorClasses = clsx('h-5', 'w-5', 'relative', 'inline-block', 'flex-[0_0_auto]', {
+    'bg-disabled-disabled01': isDisabled && isChecked,
+    'border-disabled-disabled01': isDisabled,
+  });
 
-  const baseInputClasses = clsx('absolute', 'z-[1]', 'opacity-0', 'cursor-pointer', 'w-5', 'h-5', 'peer');
+  const baseInputClasses = clsx('absolute', 'z-[1]', 'opacity-0', 'w-5', 'h-5', 'peer', focusVisible.normal, {
+    'cursor-not-allowed': isDisabled,
+    'cursor-pointer': !isDisabled,
+  });
 
   const afterClasses = clsx(
     'absolute',
@@ -61,27 +76,39 @@ export function Checkbox({
     'block',
     'm-auto',
     'rounded-sm',
-    'bg-active-activeSelectedUi',
-    'peer-hover:bg-hover-hover01',
     'transition-transform',
     'duration-150',
+    !isDisabled &&
+      isChecked &&
+      (color === 'gray'
+        ? 'bg-interactive-interactive02 peer-hover:bg-hover-hover02Dark'
+        : color === 'error'
+        ? 'bg-support-supportError peer-hover:bg-hover-hoverError'
+        : 'bg-active-activeSelectedUi peer-hover:bg-hover-hover01'),
     {
       'scale-0': !isChecked,
       'scale-100': isChecked,
     },
   );
 
-  const labelClasses = clsx(
-    'flex-[1_0_0]',
-    'ml-2',
-    typography.label.label4regular,
-    'text-text-text01',
-    'break-all',
-    'select-none',
-    'cursor-pointer',
-  );
+  const labelClasses = clsx('flex-[1_0_0]', 'ml-2', typography.label.label4regular, 'break-all', {
+    'text-disabled-disabled01': isDisabled,
+    'text-text-text01': !isDisabled,
+    'cursor-not-allowed': isDisabled,
+    'cursor-pointer': !isDisabled,
+    'pointer-events-none': isDisabled,
+  });
 
-  const svgClasses = clsx('z-10', 'absolute', 'h-5', 'w-5', 'fill-icon-iconOnColor', 'rounded-sm');
+  const svgClasses = clsx(
+    'z-10',
+    'absolute',
+    'h-5',
+    'w-5',
+    'fill-icon-iconOnColor',
+    'rounded-sm',
+    'hover:rounded-sm',
+    {},
+  );
 
   const CheckedIcon = (
     <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" className={svgClasses}>
