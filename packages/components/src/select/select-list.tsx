@@ -24,13 +24,14 @@ export function SelectList({
   onClickDeselect,
 }: Props) {
   const listClasses = clsx(
+    'z-dropdown',
     'absolute',
     'w-max',
     'py-2',
     'overflow-y-auto',
     'bg-background-uiBackground01',
     'rounded',
-    'shadow-menu',
+    'shadow-componentShadow',
     {
       'top-7': size === 'x-small' || size === 'small',
       'top-9': size === 'medium',
@@ -48,7 +49,7 @@ export function SelectList({
     'hover:bg-hover-hover02',
     'active:bg-active-active02',
     'text-interactive-interactive02',
-    focusVisible,
+    focusVisible.inset,
     typography.label.label2regular,
   );
 

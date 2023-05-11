@@ -36,7 +36,7 @@ export function IconButton({ size = 'medium', variant = 'outline', ...props }: P
     buttonColors[variant].hover,
     buttonColors[variant].active,
     buttonColors[variant].disabled,
-    focusVisible,
+    focusVisible.normal,
     typography.label.label1regular,
     { 'py-1 px-1': size === 'small' },
     { 'py-1 px-1': size === 'medium' },

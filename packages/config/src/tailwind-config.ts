@@ -13,9 +13,10 @@ module.exports = {
       },
       fontSize: tokens.fontSize,
       lineHeight: tokens.lineHeights,
-      // TODO: tokens.jsonでShadow系トークンが定義されるまでの暫定的対応
       boxShadow: {
-        menu: '0 0 10px rgba(0, 0, 0, 0.1)',
+        windowShadow: '0 0 10px rgba(0, 0, 0, 0.15)',
+        componentShadow: '0 0 10px rgba(0, 0, 0, 0.08)',
+        floatingShadow: '0 0 20px rgba(0, 0, 0, 0.1)',
       },
       keyframes: {
         'circular-move': {
@@ -37,6 +38,20 @@ module.exports = {
       },
       animation: {
         'circular-move': 'circular-move 1.4s ease-in-out infinite',
+      },
+      zIndex: {
+        hide: -1,
+        auto: 'auto',
+        base: 0,
+        badge: 10,
+        header: 100,
+        dropdown: 300,
+        popover: 500,
+        overlay: 1000,
+        modal: 1100,
+        preloader: 1200,
+        toast: 1300,
+        tooltip: 1400,
       },
     },
   },

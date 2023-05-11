@@ -1,9 +1,10 @@
-import { CSSProperties, useCallback, useState } from 'react';
+import { CSSProperties, useCallback, useRef, useState } from 'react';
 
 import { IconName } from '@zenkigen-component/icons';
 import { buttonColors, focusVisible, typography } from '@zenkigen-component/theme';
 import clsx from 'clsx';
 
+import { useOutsideClick } from '../hooks/useOutsideClick';
 import { Icon } from '../icon';
 
 import { SelectList } from './select-list';
@@ -34,6 +35,8 @@ export function Select({
 }: Props) {
   const [selectedOptionId, setSelectedOptionId] = useState(defaultOptionId ? defaultOptionId : null);
   const [isOptionListOpen, setIsOptionListOpen] = useState(false);
+  const targetRef = useRef<HTMLDivElement>(null);
+  useOutsideClick(targetRef, () => setIsOptionListOpen(false));
 
   const selectedOption = options.find((option) => option.id === selectedOptionId);
 
@@ -77,7 +80,7 @@ export function Select({
     buttonColors[variant].hover,
     buttonColors[variant].active,
     buttonColors[variant].disabled,
-    focusVisible,
+    focusVisible.normal,
     {
       'px-2': size === 'x-small' || size === 'small',
       'px-4': size === 'medium' || size === 'large',
@@ -88,23 +91,26 @@ export function Select({
   const labelClasses = clsx(
     'flex',
     'items-center',
-    'ml-1',
-    'mr-2',
+    size === 'x-small' ? 'mr-1' : 'mr-2',
     typography.label[
-      size === 'x-small' ? 'label4regular' : size === 'small' || size === 'medium' ? 'label3regular' : 'label2regular'
+      size === 'x-small' ? 'label3regular' : size === 'small' || size === 'medium' ? 'label2regular' : 'label1regular'
     ],
-    {
-      'mr-1': size === 'small',
-    },
   );
 
   return (
-    <div className={wrapperClasses} style={{ width }}>
+    <div className={wrapperClasses} style={{ width }} ref={targetRef}>
       <button className={buttonClasses} type="button" onClick={handleClickToggle} disabled={isDisabled}>
         {selectedOption?.icon ? (
-          <Icon name={selectedOption.icon} size={size === 'large' ? 'medium' : 'small'} />
+          <span className="mr-1 flex">
+            <Icon name={selectedOption.icon} size={size === 'large' ? 'medium' : 'small'} />
+          </span>
         ) : (
-          placeholder && placeholderIcon && <Icon name={placeholderIcon} size={size === 'large' ? 'medium' : 'small'} />
+          placeholder &&
+          placeholderIcon && (
+            <span className="mr-1 flex">
+              <Icon name={placeholderIcon} size={size === 'large' ? 'medium' : 'small'} />
+            </span>
+          )
         )}
         <span className={labelClasses}>{selectedOption ? selectedOption.label : placeholder && placeholder}</span>
         <div className="ml-auto flex items-center">
