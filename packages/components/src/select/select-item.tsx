@@ -27,7 +27,7 @@ export function SelectItem({ option, selectedOptionId, onClickItem }: Props) {
     {
       'text-interactive-interactive01 fill-interactive-interactive01 bg-selected-selectedUi':
         option.id === selectedOptionId,
-      'text-interactive-interactive02 fill-icon-icon01 bg-background-background01': option.id !== selectedOptionId,
+      'text-interactive-interactive02 fill-icon-icon01 bg-background-uiBackground01': option.id !== selectedOptionId,
     },
   );
 
