@@ -99,16 +99,7 @@ export function Checkbox({
     'pointer-events-none': isDisabled,
   });
 
-  const svgClasses = clsx(
-    'z-10',
-    'absolute',
-    'h-5',
-    'w-5',
-    'fill-icon-iconOnColor',
-    'rounded-sm',
-    'hover:rounded-sm',
-    {},
-  );
+  const svgClasses = clsx('z-10', 'absolute', 'h-5', 'w-5', 'fill-icon-iconOnColor', 'rounded-sm', 'hover:rounded-sm');
 
   const CheckedIcon = (
     <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" className={svgClasses}>
