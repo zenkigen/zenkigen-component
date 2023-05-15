@@ -14,11 +14,6 @@ type Props = {
   horizontalAlign?: HorizontalAlign;
 };
 
-const defaultDimensions = {
-  width: 0,
-  height: 0,
-};
-
 export function Tooltip({
   children,
   content,
@@ -28,7 +23,11 @@ export function Tooltip({
   horizontalAlign = 'center',
 }: Props) {
   const [isVisible, setIsVisible] = useState(false);
-  const [targetDimensions, setTargetDimensions] = useState(defaultDimensions);
+  const [targetDimensions, setTargetDimensions] = useState({
+    width: 0,
+    height: 0,
+  });
+
   const targetRef = useRef<HTMLDivElement>(null);
 
   const getDimensions = useCallback(() => {
