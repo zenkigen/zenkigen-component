@@ -3,15 +3,13 @@ import { CSSProperties, ReactNode, useCallback, useRef, useState } from 'react';
 import { typography } from '@zenkigen-component/theme';
 import clsx from 'clsx';
 
-import type { VerticalPosition, HorizontalAlign } from './type';
-
 type Props = {
   children: ReactNode;
   content: string;
   size?: 'small' | 'medium';
   maxWidth?: CSSProperties['width'];
-  verticalPosition?: VerticalPosition;
-  horizontalAlign?: HorizontalAlign;
+  verticalPosition?: 'top' | 'bottom';
+  horizontalAlign?: 'left' | 'center' | 'right';
 };
 
 export function Tooltip({
