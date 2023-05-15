@@ -47,14 +47,13 @@ export function Checkbox({
     'border',
     'rounded-sm',
     focusWithin.normal,
-    {
-      'border-interactive-interactive02': color === 'gray',
-      'border-support-supportError': color === 'error',
-      'hover:border-disabled-disabled01': isDisabled,
-      'hover:border-hover-hoverError': color === 'error',
-      'hover:border-hover-hoverUiBorder': color === 'default' || color === 'gray',
-      'text-disabled-disabled01': isDisabled,
-    },
+    isDisabled
+      ? 'border-disabled-disabled01 text-disabled-disabled01'
+      : color === 'error'
+      ? 'border-support-supportError hover:border-hover-hoverError'
+      : color === 'gray'
+      ? 'border-interactive-interactive02 hover:border-hover-hoverUiBorder'
+      : 'border-border-uiBorder02 hover:border-hover-hoverUiBorder',
   );
 
   const indicatorClasses = clsx('h-5', 'w-5', 'relative', 'inline-block', 'flex-[0_0_auto]', {
@@ -62,10 +61,15 @@ export function Checkbox({
     'border-disabled-disabled01': isDisabled,
   });
 
-  const baseInputClasses = clsx('absolute', 'z-[1]', 'opacity-0', 'w-5', 'h-5', 'peer', {
-    'cursor-not-allowed': isDisabled,
-    'cursor-pointer': !isDisabled,
-  });
+  const baseInputClasses = clsx(
+    'absolute',
+    'z-[1]',
+    'opacity-0',
+    'w-5',
+    'h-5',
+    'peer',
+    isDisabled ? 'cursor-not-allowed' : 'cursor-pointer',
+  );
 
   const afterClasses = clsx(
     'absolute',
@@ -84,20 +88,20 @@ export function Checkbox({
         ? 'bg-interactive-interactive02 peer-hover:bg-hover-hover02Dark'
         : color === 'error'
         ? 'bg-support-supportError peer-hover:bg-hover-hoverError'
-        : 'bg-active-activeSelectedUi peer-hover:bg-hover-hover01'),
+        : 'bg-interactive-interactive01 peer-hover:bg-hover-hover01'),
     {
       'scale-0': !isChecked,
       'scale-100': isChecked,
     },
   );
 
-  const labelClasses = clsx('flex-[1_0_0]', 'ml-2', typography.label.label4regular, 'break-all', {
-    'text-disabled-disabled01': isDisabled,
-    'text-text-text01': !isDisabled,
-    'cursor-not-allowed': isDisabled,
-    'cursor-pointer': !isDisabled,
-    'pointer-events-none': isDisabled,
-  });
+  const labelClasses = clsx(
+    'flex-[1_0_0]',
+    'ml-2',
+    typography.label.label4regular,
+    'break-all',
+    isDisabled ? 'pointer-events-none cursor-not-allowed text-disabled-disabled01' : 'cursor-pointer text-text-text01',
+  );
 
   const svgClasses = clsx('z-10', 'absolute', 'h-5', 'w-5', 'fill-icon-iconOnColor', 'rounded-sm', 'hover:rounded-sm');
 
