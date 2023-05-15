@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import type { Meta, StoryObj } from '@storybook/react';
 
@@ -16,21 +16,21 @@ const SelectSortBasic = () => {
   const [sortOrderDay, setSortOrderDay] = useState<SortOrder>(null);
   const [sortOrderMember, setSortOrderMember] = useState<SortOrder>(null);
 
-  const handleSortDay = (direction: SortOrder) => {
+  const handleSortDay = useCallback((direction: SortOrder) => {
     setSortOrderDay(direction);
     setSortOrderMember(null);
     setSortKey('day');
-  };
-  const handleSortMember = (direction: SortOrder) => {
+  }, []);
+  const handleSortMember = useCallback((direction: SortOrder) => {
     setSortOrderMember(direction);
     setSortOrderDay(null);
     setSortKey('member');
-  };
-  const handleClickDeselect = () => {
+  }, []);
+  const handleClickDeselect = useCallback(() => {
     setSortKey(null);
     setSortOrderDay(null);
     setSortOrderMember(null);
-  };
+  }, []);
 
   return (
     <div style={{ margin: '30px' }}>
