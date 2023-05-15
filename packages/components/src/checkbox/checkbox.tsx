@@ -1,7 +1,6 @@
 import { ChangeEvent, useCallback } from 'react';
 
-import { typography } from '@zenkigen-component/theme';
-import { focusVisible } from '@zenkigen-component/theme';
+import { focusVisible, typography } from '@zenkigen-component/theme';
 import clsx from 'clsx';
 
 type Props = {
@@ -25,7 +24,7 @@ export function Checkbox({
   isDisabled = false,
   handleOnChange,
   label,
-  color,
+  color = 'default',
 }: Props) {
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
