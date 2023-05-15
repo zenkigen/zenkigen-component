@@ -1,6 +1,6 @@
-import { ChangeEvent, useCallback } from 'react';
+import { ChangeEvent, useCallback, useState } from 'react';
 
-import { focusWithin, typography } from '@zenkigen-component/theme';
+import { focusVisible, typography } from '@zenkigen-component/theme';
 import clsx from 'clsx';
 
 type Props = {
@@ -33,33 +33,19 @@ export function Checkbox({
     [isDisabled, handleOnChange],
   );
 
+  const [isMouseOver, setIsMouseOver] = useState(false);
+
+  const handleMouseOverInput = useCallback(() => {
+    setIsMouseOver(true);
+  }, []);
+
+  const handleMouseOutInput = useCallback(() => {
+    setIsMouseOver(false);
+  }, []);
+
   const containerClasses = clsx('flex', 'items-center');
 
   const baseClasses = clsx('flex', 'items-center', 'justify-center', 'h-6', 'w-6');
-
-  const boxClasses = clsx(
-    'inline-flex',
-    'items-center',
-    'justify-center',
-    'h-5',
-    'w-5',
-    'bg-white',
-    'border',
-    'rounded-sm',
-    focusWithin.normal,
-    isDisabled
-      ? 'border-disabled-disabled01 text-disabled-disabled01'
-      : color === 'error'
-      ? 'border-support-supportError hover:border-hover-hoverError'
-      : color === 'gray'
-      ? 'border-interactive-interactive02 hover:border-hover-hoverUiBorder'
-      : 'border-border-uiBorder02 hover:border-hover-hoverUiBorder',
-  );
-
-  const indicatorClasses = clsx('h-5', 'w-5', 'relative', 'inline-block', 'flex-[0_0_auto]', {
-    'bg-disabled-disabled01': isDisabled && isChecked,
-    'border-disabled-disabled01': isDisabled,
-  });
 
   const baseInputClasses = clsx(
     'absolute',
@@ -70,6 +56,36 @@ export function Checkbox({
     'peer',
     isDisabled ? 'cursor-not-allowed' : 'cursor-pointer',
   );
+
+  const boxClasses = clsx(
+    'inline-flex',
+    'items-center',
+    'justify-center',
+    'h-5',
+    'w-5',
+    'bg-white',
+    'border',
+    'rounded-sm',
+    focusVisible.normalPeer,
+    isDisabled
+      ? 'border-disabled-disabled01'
+      : color === 'error'
+      ? isMouseOver
+        ? 'border-hover-hoverError'
+        : 'border-support-supportError'
+      : color === 'gray'
+      ? isMouseOver
+        ? 'border-hover-hoverUiBorder'
+        : 'border-interactive-interactive02'
+      : isMouseOver
+      ? 'border-hover-hoverUiBorder'
+      : 'border-border-uiBorder02',
+  );
+
+  const indicatorClasses = clsx('h-5', 'w-5', 'relative', 'inline-block', 'flex-[0_0_auto]', {
+    'bg-disabled-disabled01': isDisabled && isChecked,
+    'border-disabled-disabled01': isDisabled,
+  });
 
   const afterClasses = clsx(
     'absolute',
@@ -82,13 +98,19 @@ export function Checkbox({
     'rounded-sm',
     'transition-transform',
     'duration-150',
-    !isDisabled &&
-      isChecked &&
-      (color === 'gray'
-        ? 'bg-interactive-interactive02 peer-hover:bg-hover-hover02Dark'
-        : color === 'error'
-        ? 'bg-support-supportError peer-hover:bg-hover-hoverError'
-        : 'bg-interactive-interactive01 peer-hover:bg-hover-hover01'),
+    isDisabled && isChecked
+      ? 'bg-disabled-disabled01'
+      : color === 'gray'
+      ? isMouseOver
+        ? 'bg-hover-hover02Dark'
+        : 'bg-interactive-interactive02'
+      : color === 'error'
+      ? isMouseOver
+        ? 'bg-hover-hoverError'
+        : 'bg-support-supportError'
+      : isMouseOver
+      ? 'bg-hover-hover01'
+      : 'bg-interactive-interactive01',
     {
       'scale-0': !isChecked,
       'scale-100': isChecked,
@@ -124,18 +146,20 @@ export function Checkbox({
   return (
     <div className={containerClasses}>
       <div className={baseClasses}>
+        <input
+          type="checkbox"
+          value={value}
+          name={name}
+          id={id}
+          checked={isChecked}
+          disabled={isDisabled}
+          onChange={handleChange}
+          onMouseOver={handleMouseOverInput}
+          onMouseLeave={handleMouseOutInput}
+          className={baseInputClasses}
+        />
         <div color={color} className={boxClasses}>
           <div color={color} className={indicatorClasses}>
-            <input
-              type="checkbox"
-              value={value}
-              name={name}
-              id={id}
-              checked={isChecked}
-              disabled={isDisabled}
-              onChange={handleChange}
-              className={baseInputClasses}
-            />
             <span className={afterClasses}>
               {isChecked && !isIndeterminate && CheckedIcon}
               {isIndeterminate && MinusIcon}
