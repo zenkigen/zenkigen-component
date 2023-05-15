@@ -17,18 +17,24 @@ export const buttonColors = {
     hover: 'hover:bg-hover-hover01 hover:border-hover-hover01',
     active: 'active:bg-active-active01 active:border-active-active01',
     disabled: 'disabled:bg-disabled-disabled01 disabled:border-disabled-disabled01',
+    selected:
+      'border border-transparent bg-selected-selectedUi text-interactive-interactive01 fill-interactive-interactive01',
   },
   outline: {
     base: 'border border-border-uiBorder02 text-interactive-interactive02 fill-interactive-interactive02',
     hover: 'hover:bg-hover-hover02',
     active: 'active:bg-active-active02',
     disabled: 'disabled:border-border-uiBorder01 disabled:text-disabled-disabled01 disabled:fill-disabled-disabled01',
+    selected:
+      'border border-interactive-interactive01 bg-selected-selectedUi text-interactive-interactive01 fill-interactive-interactive01',
   },
   text: {
     base: 'border border-transparent text-interactive-interactive02 fill-interactive-interactive02',
     hover: 'hover:bg-hover-hover02 hover:border-hover-hover02',
     active: 'active:bg-active-active02 active:border-active-active02',
     disabled: 'disabled:text-disabled-disabled01 disabled:fill-disabled-disabled01',
+    selected:
+      'border border-transparent bg-selected-selectedUi text-interactive-interactive01 fill-interactive-interactive01',
   },
 } as const;
 
