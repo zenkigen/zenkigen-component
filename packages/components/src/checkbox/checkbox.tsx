@@ -1,6 +1,6 @@
 import { ChangeEvent, useCallback } from 'react';
 
-import { focusVisible, typography } from '@zenkigen-component/theme';
+import { focusWithin, typography } from '@zenkigen-component/theme';
 import clsx from 'clsx';
 
 type Props = {
@@ -46,6 +46,7 @@ export function Checkbox({
     'bg-white',
     'border',
     'rounded-sm',
+    focusWithin.normal,
     {
       'border-interactive-interactive02': color === 'gray',
       'border-support-supportError': color === 'error',
@@ -61,7 +62,7 @@ export function Checkbox({
     'border-disabled-disabled01': isDisabled,
   });
 
-  const baseInputClasses = clsx('absolute', 'z-[1]', 'opacity-0', 'w-5', 'h-5', 'peer', focusVisible.normal, {
+  const baseInputClasses = clsx('absolute', 'z-[1]', 'opacity-0', 'w-5', 'h-5', 'peer', {
     'cursor-not-allowed': isDisabled,
     'cursor-pointer': !isDisabled,
   });
