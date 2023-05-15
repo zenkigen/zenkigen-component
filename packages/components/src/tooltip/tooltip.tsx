@@ -3,6 +3,8 @@ import { CSSProperties, ReactNode, useCallback, useRef, useState } from 'react';
 import { typography } from '@zenkigen-component/theme';
 import clsx from 'clsx';
 
+import { TailIcon } from './tail-icon';
+
 type Props = {
   children: ReactNode;
   content: string;
@@ -65,49 +67,6 @@ export function Tooltip({
     typography.body[size === 'small' ? 'body3regular' : 'body2regular'],
   );
 
-  const tailClasses = clsx(
-    'absolute',
-    verticalPosition === 'bottom' ? 'rotate-180' : 'rotate-0',
-    verticalPosition === 'bottom'
-      ? size === 'small'
-        ? '-top-1'
-        : '-top-2'
-      : size === 'small'
-      ? '-bottom-1'
-      : '-bottom-2',
-    horizontalAlign === 'right'
-      ? size === 'small'
-        ? 'right-2'
-        : 'right-4'
-      : horizontalAlign === 'left'
-      ? size === 'small'
-        ? 'left-2'
-        : 'left-4'
-      : size === 'small'
-      ? 'left-2/4 -translate-x-1'
-      : 'left-2/4 -translate-x-2',
-    'fill-background-uiBackgroundTooltip',
-  );
-
-  const TailIconSmall = (
-    <svg className={tailClasses} width="8" height="4" viewBox="0 0 8 4" xmlns="http://www.w3.org/2000/svg">
-      <path d="M4 4L0 0H8L4 4Z" />
-    </svg>
-  );
-
-  const TailIconMedium = (
-    <svg
-      className={tailClasses}
-      width="14"
-      height="8"
-      viewBox="0 0 14 8"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path d="M7 8L0 0H14L7 8Z" />
-    </svg>
-  );
-
   return (
     <div ref={targetRef} className={targetClasses} onMouseOver={showTooltip} onMouseLeave={hideTooltip}>
       {children}
@@ -131,7 +90,7 @@ export function Tooltip({
           }}
         >
           {content}
-          {size === 'small' ? TailIconSmall : TailIconMedium}
+          <TailIcon size={size} verticalPosition={verticalPosition} horizontalAlign={horizontalAlign} />
         </div>
       )}
     </div>
