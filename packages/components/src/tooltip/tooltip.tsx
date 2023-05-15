@@ -30,24 +30,22 @@ export function Tooltip({
 
   const targetRef = useRef<HTMLDivElement>(null);
 
-  const getDimensions = useCallback(() => {
+  const handleMouseOverWrapper = useCallback(() => {
     if (targetRef.current === null) {
       return;
     }
+
     const dimensions = targetRef.current.getBoundingClientRect();
     const calculatedDimensions = {
       width: dimensions.right - dimensions.left,
       height: dimensions.bottom - dimensions.top,
     };
+
     setTargetDimensions(calculatedDimensions);
+    setIsVisible(true);
   }, []);
 
-  const showTooltip = useCallback(() => {
-    getDimensions();
-    setIsVisible(true);
-  }, [getDimensions]);
-
-  const hideTooltip = useCallback(() => {
+  const handleMouseOutWrapper = useCallback(() => {
     setIsVisible(false);
   }, []);
 
@@ -68,7 +66,12 @@ export function Tooltip({
   );
 
   return (
-    <div ref={targetRef} className={targetClasses} onMouseOver={showTooltip} onMouseLeave={hideTooltip}>
+    <div
+      ref={targetRef}
+      className={targetClasses}
+      onMouseOver={handleMouseOverWrapper}
+      onMouseLeave={handleMouseOutWrapper}
+    >
       {children}
       {isVisible && (
         <div
