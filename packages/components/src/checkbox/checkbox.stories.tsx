@@ -30,7 +30,7 @@ export function Base() {
         <Checkbox
           id="1"
           label="Checkbox"
-          handleOnChange={handleCheckbox}
+          onChange={handleCheckbox}
           isIndeterminate={isIndeterminate}
           isChecked={isCheck}
           color="default"
@@ -44,7 +44,7 @@ export function Base() {
         <Checkbox
           id="2"
           label="Switch to indeterminate"
-          handleOnChange={handleIndeterminateCheckbox}
+          onChange={handleIndeterminateCheckbox}
           isChecked={isIndeterminate}
           color="default"
         />
@@ -57,7 +57,7 @@ export function Base() {
         <Checkbox
           id="1"
           label="Checkbox"
-          handleOnChange={handleCheckbox}
+          onChange={handleCheckbox}
           isIndeterminate={isIndeterminate}
           isChecked={isCheck}
           color="gray"
@@ -71,7 +71,7 @@ export function Base() {
         <Checkbox
           id="2"
           label="Switch to indeterminate"
-          handleOnChange={handleIndeterminateCheckbox}
+          onChange={handleIndeterminateCheckbox}
           isChecked={isIndeterminate}
           color="gray"
         />
@@ -84,7 +84,7 @@ export function Base() {
         <Checkbox
           id="1"
           label="Checkbox"
-          handleOnChange={handleCheckbox}
+          onChange={handleCheckbox}
           isIndeterminate={isIndeterminate}
           isChecked={isCheck}
           color="error"
@@ -98,7 +98,7 @@ export function Base() {
         <Checkbox
           id="2"
           label="Switch to indeterminate"
-          handleOnChange={handleIndeterminateCheckbox}
+          onChange={handleIndeterminateCheckbox}
           isChecked={isIndeterminate}
           color="error"
         />
@@ -111,7 +111,7 @@ export function Base() {
         <Checkbox
           id="1"
           label="Checkbox"
-          handleOnChange={handleCheckbox}
+          onChange={handleCheckbox}
           isIndeterminate={isIndeterminate}
           isChecked={isCheck}
           isDisabled
@@ -125,7 +125,7 @@ export function Base() {
         <Checkbox
           id="2"
           label="Switch to indeterminate"
-          handleOnChange={handleIndeterminateCheckbox}
+          onChange={handleIndeterminateCheckbox}
           isChecked={isIndeterminate}
           isDisabled
         />
