@@ -12,7 +12,7 @@ type Props = {
   isIndeterminate?: boolean;
   isDisabled?: boolean;
   label?: string;
-  handleOnChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
 export function Checkbox({
@@ -22,17 +22,10 @@ export function Checkbox({
   isChecked = false,
   isIndeterminate = false,
   isDisabled = false,
-  handleOnChange,
+  onChange,
   label,
   color = 'default',
 }: Props) {
-  const handleChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      !isDisabled && handleOnChange?.(e);
-    },
-    [isDisabled, handleOnChange],
-  );
-
   const [isMouseOver, setIsMouseOver] = useState(false);
 
   const handleMouseOverInput = useCallback(() => {
@@ -43,7 +36,14 @@ export function Checkbox({
     setIsMouseOver(false);
   }, []);
 
-  const containerClasses = clsx('flex', 'items-center');
+  const handleChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      !isDisabled && onChange?.(e);
+    },
+    [isDisabled, onChange],
+  );
+
+  const wrapperClasses = clsx('flex', 'items-center');
 
   const baseClasses = clsx('flex', 'items-center', 'justify-center', 'h-6', 'w-6');
 
@@ -144,7 +144,7 @@ export function Checkbox({
   );
 
   return (
-    <div className={containerClasses}>
+    <div className={wrapperClasses}>
       <div className={baseClasses}>
         <input
           type="checkbox"
