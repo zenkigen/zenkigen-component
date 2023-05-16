@@ -10,6 +10,7 @@ type Props = {
   userId: number;
   firstName: string;
   lastName: string;
+  isDisabled?: boolean;
 };
 
 export function Avatar({ size = 'medium', ...props }: Props) {
@@ -17,7 +18,7 @@ export function Avatar({ size = 'medium', ...props }: Props) {
     'text-text-textOnColor',
     'rounded-full',
     'flex items-center justify-center',
-    userColors[props.userId % userColors.length],
+    props.isDisabled ? 'bg-disabled-disabled01' : userColors[props.userId % userColors.length],
     {
       [`w-16 h-16 ${typography.label.label1regular}`]: size === 'x-large',
       [`w-12 h-12 ${typography.label.label2regular}`]: size === 'large',
