@@ -141,8 +141,8 @@ export function Checkbox({
           onMouseLeave={handleMouseOutInput}
           className={baseInputClasses}
         />
-        <div /*color={color}*/ className={boxClasses}>
-          <div /*color={color}*/ className={indicatorClasses}>
+        <div className={boxClasses}>
+          <div className={indicatorClasses}>
             <span className={afterClasses}>
               {isChecked && !isIndeterminate && <CheckedIcon />}
               {isIndeterminate && <MinusIcon />}
