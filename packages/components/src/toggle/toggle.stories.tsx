@@ -16,8 +16,8 @@ const ToggleStoryBasic = () => {
   const [isOn2, setIsOn2] = useState(false);
 
   return (
-    <div style={{ margin: '30px' }}>
-      <div style={{ marginBottom: '30px' }}>
+    <div style={{ margin: '30px', display: 'grid', rowGap: '30px' }}>
+      <div style={{ display: 'flex', columnGap: '30px' }}>
         <Toggle
           id="switch-01"
           size="small"
@@ -25,14 +25,30 @@ const ToggleStoryBasic = () => {
           isChecked={isOn1}
           onChange={() => setIsOn1((prev) => !prev)}
         />
+        <Toggle
+          id="switch-01"
+          size="small"
+          label="ラベル1"
+          isChecked={isOn1}
+          onChange={() => setIsOn1((prev) => !prev)}
+          isDisabled
+        />
       </div>
-      <div style={{ marginBottom: '30px' }}>
+      <div style={{ display: 'flex', columnGap: '30px' }}>
         <Toggle
           id="switch-01"
           size="medium"
           label="ラベル2"
           isChecked={isOn2}
           onChange={() => setIsOn2((prev) => !prev)}
+        />
+        <Toggle
+          id="switch-01"
+          size="medium"
+          label="ラベル2"
+          isChecked={isOn2}
+          onChange={() => setIsOn2((prev) => !prev)}
+          isDisabled
         />
       </div>
     </div>
