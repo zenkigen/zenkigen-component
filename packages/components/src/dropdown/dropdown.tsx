@@ -89,7 +89,7 @@ export function Dropdown({
     isDisabled && 'cursor-not-allowed',
   );
 
-  const childrenButtonClasses = clsx('flex', 'items-center', 'justify-center', {
+  const childrenClasses = clsx('flex', 'items-center', 'justify-center', {
     'cursor-not-allowed': isDisabled,
   });
 
@@ -123,9 +123,9 @@ export function Dropdown({
   return (
     <div ref={targetRef} className={wrapperClasses}>
       {children ? (
-        <button type="button" className={childrenButtonClasses} onClick={handleToggle} disabled={isDisabled}>
+        <div className={childrenClasses} onClick={handleToggle}>
           {childrenWithProps}
-        </button>
+        </div>
       ) : (
         <button type="button" className={buttonClasses} onClick={handleToggle} disabled={isDisabled}>
           {icon && (
