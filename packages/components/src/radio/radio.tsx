@@ -22,7 +22,7 @@ export function Radio({ name = '', id, label = '', isChecked = false, isDisabled
 
   const wrapperClasses = clsx('flex', 'items-center');
 
-  const baseClasses = clsx('flex', 'items-center', 'content-center', 'h-6', 'w-6');
+  const baseClasses = clsx('flex', 'items-center', 'justify-center', 'h-6', 'w-6');
 
   const inputClasses = clsx('absolute', 'z-[1]', 'opacity-0', 'peer');
 
@@ -48,7 +48,7 @@ export function Radio({ name = '', id, label = '', isChecked = false, isDisabled
     },
   );
 
-  const indicatorClasses = clsx('h-5', 'w-5', 'relative', 'inline-block', 'flex-[0_0_auto]');
+  const indicatorClasses = clsx('h-5', 'w-5', 'relative', 'inline-block');
 
   const afterClasses = clsx(
     'h-3',
