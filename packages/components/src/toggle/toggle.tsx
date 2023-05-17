@@ -22,7 +22,7 @@ export function Toggle({
   labelPosition = 'right',
   isDisabled,
 }: Props) {
-  const wrapperClasses = clsx('flex', 'items-center');
+  const wrapperClasses = clsx('flex', 'flex-[0_0_auto]', 'items-center');
   const baseClasses = clsx(
     'relative',
     'flex',
@@ -55,13 +55,18 @@ export function Toggle({
   });
   const labelClasses = clsx(
     'ml-2',
-    'text-text-text01',
     typography.label[size === 'small' ? 'label3regular' : 'label1regular'],
+    'break-all',
+    isDisabled ? 'pointer-events-none cursor-not-allowed text-disabled-disabled01' : 'cursor-pointer text-text-text01',
   );
 
   return (
     <div className={wrapperClasses}>
-      {label && labelPosition === 'left' && <span className={labelClasses}>{label}</span>}
+      {label && labelPosition === 'left' && (
+        <label htmlFor={id} className={labelClasses}>
+          {label}
+        </label>
+      )}
       <div className={baseClasses}>
         <input
           className={inputClasses}
@@ -74,7 +79,11 @@ export function Toggle({
         />
         <span className={indicatorClasses} />
       </div>
-      {label && labelPosition === 'right' && <span className={labelClasses}>{label}</span>}
+      {label && labelPosition === 'right' && (
+        <label htmlFor={id} className={labelClasses}>
+          {label}
+        </label>
+      )}
     </div>
   );
 }

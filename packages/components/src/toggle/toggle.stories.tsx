@@ -36,14 +36,14 @@ const ToggleStoryBasic = () => {
       </div>
       <div style={{ display: 'flex', columnGap: '30px' }}>
         <Toggle
-          id="switch-01"
+          id="switch-02"
           size="medium"
           label="ラベル2"
           isChecked={isOn2}
           onChange={() => setIsOn2((prev) => !prev)}
         />
         <Toggle
-          id="switch-01"
+          id="switch-02"
           size="medium"
           label="ラベル2"
           isChecked={isOn2}
