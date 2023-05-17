@@ -54,7 +54,7 @@ export function Toggle({
     'ml-auto': isChecked,
   });
   const labelClasses = clsx(
-    'ml-2',
+    labelPosition === 'right' ? 'ml-2' : 'mr-2',
     typography.label[size === 'small' ? 'label3regular' : 'label1regular'],
     'break-all',
     isDisabled ? 'pointer-events-none cursor-not-allowed text-disabled-disabled01' : 'cursor-pointer text-text-text01',
