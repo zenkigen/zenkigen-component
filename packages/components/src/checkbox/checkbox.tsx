@@ -121,7 +121,7 @@ export function Checkbox({
   const labelClasses = clsx(
     'flex-[1_0_0]',
     'ml-2',
-    typography.label.label4regular,
+    typography.label.label2regular,
     'break-all',
     isDisabled ? 'pointer-events-none cursor-not-allowed text-disabled-disabled01' : 'cursor-pointer text-text-text01',
   );
