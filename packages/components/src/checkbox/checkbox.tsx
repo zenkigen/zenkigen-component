@@ -144,10 +144,8 @@ export function Checkbox({
         <div color={color} className={boxClasses}>
           <div color={color} className={indicatorClasses}>
             <span className={afterClasses}>
-              <>
-                {isChecked && !isIndeterminate && CheckedIcon}
-                {isIndeterminate && MinusIcon}
-              </>
+              {isChecked && !isIndeterminate && <CheckedIcon />}
+              {isIndeterminate && <MinusIcon />}
             </span>
           </div>
         </div>
