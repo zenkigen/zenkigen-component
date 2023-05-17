@@ -29,12 +29,11 @@ export const buttonColors = {
       'border border-interactive-interactive01 bg-selected-selectedUi text-interactive-interactive01 fill-interactive-interactive01',
   },
   text: {
-    base: 'border border-transparent text-interactive-interactive02 fill-interactive-interactive02',
-    hover: 'hover:bg-hover-hover02 hover:border-hover-hover02',
-    active: 'active:bg-active-active02 active:border-active-active02',
+    base: 'text-interactive-interactive02 fill-interactive-interactive02',
+    hover: 'hover:bg-hover-hover02',
+    active: 'active:bg-active-active02',
     disabled: 'disabled:text-disabled-disabled01 disabled:fill-disabled-disabled01',
-    selected:
-      'border border-transparent bg-selected-selectedUi text-interactive-interactive01 fill-interactive-interactive01',
+    selected: 'bg-selected-selectedUi text-interactive-interactive01 fill-interactive-interactive01',
   },
 } as const;
 
