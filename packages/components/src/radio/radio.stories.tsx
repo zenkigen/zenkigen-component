@@ -42,6 +42,34 @@ export function Base() {
           isChecked={selectedValue === 'bar'}
         />
       </div>
+      <div
+        style={{
+          marginBottom: '24px',
+        }}
+      >
+        <Radio
+          name="radio-group"
+          label="Radio button 1"
+          value="foo"
+          onChange={handleChange}
+          isChecked={selectedValue === 'foo'}
+          isDisabled
+        />
+      </div>
+      <div
+        style={{
+          marginBottom: '24px',
+        }}
+      >
+        <Radio
+          name="radio-group"
+          label="Radio button 2"
+          value="bar"
+          onChange={handleChange}
+          isChecked={selectedValue === 'bar'}
+          isDisabled
+        />
+      </div>
     </ul>
   );
 }
