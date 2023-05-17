@@ -1,10 +1,10 @@
-import clsx from 'clsx';
-
 export const CheckedIcon = () => {
-  const svgClasses = clsx('z-10', 'absolute', 'h-5', 'w-5', 'fill-icon-iconOnColor', 'rounded-sm', 'hover:rounded-sm');
-
   return (
-    <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" className={svgClasses}>
+    <svg
+      viewBox="0 0 20 20"
+      xmlns="http://www.w3.org/2000/svg"
+      className="absolute z-10 h-5 w-5 rounded-sm fill-icon-iconOnColor hover:rounded-sm"
+    >
       <path
         fillRule="evenodd"
         clipRule="evenodd"

@@ -22,11 +22,7 @@ export function Base() {
 
   return (
     <ul>
-      <div
-        style={{
-          marginBottom: '24px',
-        }}
-      >
+      <div className="mb-6">
         <Checkbox
           id="1"
           label="Checkbox"
@@ -36,11 +32,7 @@ export function Base() {
           color="default"
         />
       </div>
-      <div
-        style={{
-          marginBottom: '24px',
-        }}
-      >
+      <div className="mb-6">
         <Checkbox
           id="2"
           label="Switch to indeterminate"
@@ -49,11 +41,7 @@ export function Base() {
           color="default"
         />
       </div>
-      <div
-        style={{
-          marginBottom: '24px',
-        }}
-      >
+      <div className="mb-6">
         <Checkbox
           id="1"
           label="Checkbox"
@@ -63,11 +51,7 @@ export function Base() {
           color="gray"
         />
       </div>
-      <div
-        style={{
-          marginBottom: '24px',
-        }}
-      >
+      <div className="mb-6">
         <Checkbox
           id="2"
           label="Switch to indeterminate"
@@ -76,11 +60,7 @@ export function Base() {
           color="gray"
         />
       </div>
-      <div
-        style={{
-          marginBottom: '24px',
-        }}
-      >
+      <div className="mb-6">
         <Checkbox
           id="1"
           label="Checkbox"
@@ -90,11 +70,7 @@ export function Base() {
           color="error"
         />
       </div>
-      <div
-        style={{
-          marginBottom: '24px',
-        }}
-      >
+      <div className="mb-6">
         <Checkbox
           id="2"
           label="Switch to indeterminate"
@@ -103,11 +79,7 @@ export function Base() {
           color="error"
         />
       </div>
-      <div
-        style={{
-          marginBottom: '24px',
-        }}
-      >
+      <div className="mb-6">
         <Checkbox
           id="1"
           label="Checkbox"
@@ -117,11 +89,7 @@ export function Base() {
           isDisabled
         />
       </div>
-      <div
-        style={{
-          marginBottom: '24px',
-        }}
-      >
+      <div className="mb-6">
         <Checkbox
           id="2"
           label="Switch to indeterminate"
