@@ -23,13 +23,31 @@ export function Toggle({
   isDisabled,
 }: Props) {
   const wrapperClasses = clsx('flex', 'items-center');
-  const baseClasses = clsx('relative', 'flex', 'items-center', 'rounded-full', {
-    'w-8 h-4 px-[3px]': size === 'small',
-    'w-12 h-6 px-1': size === 'medium',
-    'bg-interactive-interactive01 hover:bg-hover-hover01': isChecked,
-    'bg-interactive-interactive02 hover:bg-hover-hover02Dark': !isChecked,
-  });
-  const inputClasses = clsx('absolute', 'top-0', 'left-0', 'right-0', 'bottom-0', 'opacity-0', 'cursor-pointer');
+  const baseClasses = clsx(
+    'relative',
+    'flex',
+    'items-center',
+    'rounded-full',
+    {
+      'w-8 h-4 px-[3px]': size === 'small',
+      'w-12 h-6 px-1': size === 'medium',
+    },
+    isDisabled
+      ? { 'bg-disabled-disabledOn': isChecked, 'bg-disabled-disabled01': !isChecked }
+      : {
+          'bg-interactive-interactive01 hover:bg-hover-hover01': isChecked,
+          'bg-interactive-interactive02 hover:bg-hover-hover02Dark': !isChecked,
+        },
+  );
+  const inputClasses = clsx(
+    'absolute',
+    'top-0',
+    'left-0',
+    'right-0',
+    'bottom-0',
+    'opacity-0',
+    isDisabled ? 'cursor-not-allowed' : 'cursor-pointer',
+  );
   const indicatorClasses = clsx('bg-icon-iconOnColor', 'rounded-full', {
     'w-2.5 h-2.5': size === 'small',
     'w-4 h-4': size === 'medium',
