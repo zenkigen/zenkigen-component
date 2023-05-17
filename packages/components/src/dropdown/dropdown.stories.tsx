@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { Avatar } from '../avatar';
+import { AvatarButton } from '../avatar-button';
 
 import { Dropdown } from './dropdown';
 import { DropdownItemType } from './type';
@@ -42,31 +42,31 @@ const DropdownBasic = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', margin: '0 100px' }}>
       <div style={{ display: 'flex', alignItems: 'center', columnGap: '180px', marginBottom: '150px' }}>
-        <Dropdown variant="outline" items={items}>
-          <Avatar size="x-small" userId={1} lastName="全機現" firstName="太郎" />
+        <Dropdown variant="text" items={items} horizontalAlign="right">
+          <AvatarButton size="x-small" userId={1} lastName="全機現" firstName="太郎" />
         </Dropdown>
-        <Dropdown variant="outline" items={items}>
-          <Avatar size="small" userId={1} lastName="全機現" firstName="太郎" />
+        <Dropdown variant="text" items={items} horizontalAlign="right">
+          <AvatarButton size="small" userId={1} lastName="全機現" firstName="太郎" />
         </Dropdown>
-        <Dropdown variant="outline" items={items}>
-          <Avatar size="medium" userId={1} lastName="全機現" firstName="太郎" />
+        <Dropdown variant="text" items={items} horizontalAlign="right">
+          <AvatarButton size="medium" userId={1} lastName="全機現" firstName="太郎" />
         </Dropdown>
-        <Dropdown variant="outline" items={items}>
-          <Avatar size="large" userId={1} lastName="全機現" firstName="太郎" />
+        <Dropdown variant="text" items={items} horizontalAlign="right">
+          <AvatarButton size="large" userId={1} lastName="全機現" firstName="太郎" />
         </Dropdown>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', columnGap: '180px', marginBottom: '90px' }}>
-        <Dropdown variant="outline" items={items} isDisabled>
-          <Avatar size="x-small" userId={1} lastName="全機現" firstName="太郎" />
+        <Dropdown variant="outline" items={items} horizontalAlign="right" isDisabled>
+          <AvatarButton size="x-small" userId={1} lastName="全機現" firstName="太郎" />
         </Dropdown>
-        <Dropdown variant="outline" items={items} isDisabled>
-          <Avatar size="small" userId={1} lastName="全機現" firstName="太郎" />
+        <Dropdown variant="outline" items={items} horizontalAlign="right" isDisabled>
+          <AvatarButton size="small" userId={1} lastName="全機現" firstName="太郎" />
         </Dropdown>
-        <Dropdown variant="outline" items={items} isDisabled>
-          <Avatar size="medium" userId={1} lastName="全機現" firstName="太郎" />
+        <Dropdown variant="outline" items={items} horizontalAlign="right" isDisabled>
+          <AvatarButton size="medium" userId={1} lastName="全機現" firstName="太郎" />
         </Dropdown>
-        <Dropdown variant="outline" items={items} isDisabled>
-          <Avatar size="large" userId={1} lastName="全機現" firstName="太郎" />
+        <Dropdown variant="outline" items={items} horizontalAlign="right" isDisabled>
+          <AvatarButton size="large" userId={1} lastName="全機現" firstName="太郎" />
         </Dropdown>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', columnGap: '180px', marginBottom: '150px' }}>
