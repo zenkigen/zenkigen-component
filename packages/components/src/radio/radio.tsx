@@ -13,7 +13,7 @@ type Props = {
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
-export function Radio({ name = '', value, id, label = '', isChecked = false, isDisabled = false, onChange }: Props) {
+export function Radio({ name, value, id, label, isChecked = false, isDisabled = false, onChange }: Props) {
   const [isMouseOver, setIsMouseOver] = useState(false);
 
   const handleMouseOverInput = useCallback(() => {
