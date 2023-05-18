@@ -16,11 +16,6 @@ type Props = {
 export function Radio({ name = '', value, id, label = '', isChecked = false, isDisabled = false, onChange }: Props) {
   const [isMouseOver, setIsMouseOver] = useState(false);
 
-  const handleChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => !isDisabled && onChange?.(e),
-    [isDisabled, onChange],
-  );
-
   const handleMouseOverInput = useCallback(() => {
     setIsMouseOver(true);
   }, []);
@@ -28,6 +23,11 @@ export function Radio({ name = '', value, id, label = '', isChecked = false, isD
   const handleMouseOutInput = useCallback(() => {
     setIsMouseOver(false);
   }, []);
+
+  const handleChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => !isDisabled && onChange?.(e),
+    [isDisabled, onChange],
+  );
 
   const wrapperClasses = clsx('flex', 'items-center');
 
