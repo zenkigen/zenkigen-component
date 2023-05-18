@@ -29,17 +29,10 @@ export function Radio({ name, value, id, label, isChecked = false, isDisabled = 
     [isDisabled, onChange],
   );
 
-  const wrapperClasses = clsx('flex', 'items-center');
-
-  const baseClasses = clsx('flex', 'items-center', 'justify-center', 'h-6', 'w-6');
-
-  const inputClasses = clsx(
-    'absolute',
-    'z-[1]',
-    'opacity-0',
-    'peer',
-    isDisabled ? 'cursor-not-allowed' : 'cursor-pointer',
-  );
+  const inputClasses = clsx('absolute', 'z-[1]', 'opacity-0', 'peer', {
+    'cursor-not-allowed': isDisabled,
+    'cursor-pointer': !isDisabled,
+  });
 
   const boxClasses = clsx(
     'inline-flex',
@@ -51,16 +44,17 @@ export function Radio({ name, value, id, label, isChecked = false, isDisabled = 
     'border',
     'border-solid',
     'rounded-full',
-    isDisabled ? 'cursor-not-allowed' : 'cursor-pointer',
     focusVisible.normalPeer,
     isDisabled
       ? 'border-disabled-disabled01 hover:border-disabled-disabled01'
       : isMouseOver
       ? 'border-hover-hoverUiBorder'
       : 'border-border-uiBorder02',
+    {
+      'cursor-not-allowed': isDisabled,
+      'cursor-pointer': !isDisabled,
+    },
   );
-
-  const indicatorClasses = clsx('h-5', 'w-5', 'relative', 'inline-block', 'flex-[0_0_auto]');
 
   const afterClasses = clsx(
     'h-3',
@@ -73,25 +67,22 @@ export function Radio({ name, value, id, label, isChecked = false, isDisabled = 
     'block',
     'm-auto',
     'rounded-full',
-    isDisabled && isChecked ? 'bg-disabled-disabled01' : 'bg-active-activeSelectedUi',
     {
+      'bg-disabled-disabled01': isDisabled && isChecked,
+      'bg-active-activeSelectedUi': !isDisabled && isChecked,
       'scale-0': !isChecked,
       'scale-100': isChecked,
     },
   );
 
-  const labelClasses = clsx(
-    'flex-[1_0_0]',
-    'ml-2',
-    typography.label.label2regular,
-    isDisabled ? 'pointer-events-none cursor-not-allowed text-disabled-disabled01' : 'cursor-pointer text-text-text01',
-    'break-all',
-    'select-none',
-  );
+  const labelClasses = clsx('flex-[1_0_0]', 'ml-2', typography.label.label2regular, 'break-all', 'select-none', {
+    'pointer-events-none cursor-not-allowed text-disabled-disabled01': isDisabled,
+    'cursor-pointer text-text-text01': !isDisabled,
+  });
 
   return (
-    <div className={wrapperClasses}>
-      <div className={baseClasses}>
+    <div className="flex items-center">
+      <div className="flex h-6 w-6 items-center justify-center">
         <input
           type="checkbox"
           value={value}
@@ -105,7 +96,7 @@ export function Radio({ name, value, id, label, isChecked = false, isDisabled = 
           className={inputClasses}
         />
         <div className={boxClasses}>
-          <div className={indicatorClasses}>
+          <div className="relative inline-block h-5 w-5 flex-[0_0_auto]">
             <span className={afterClasses} />
           </div>
         </div>
