@@ -16,12 +16,9 @@ export function Base() {
 
   return (
     <ul>
-      <div
-        style={{
-          marginBottom: '24px',
-        }}
-      >
+      <div className="mb-6">
         <Radio
+          id="1"
           name="radio-group"
           label="Radio button 1"
           value="foo"
@@ -29,12 +26,9 @@ export function Base() {
           isChecked={selectedValue === 'foo'}
         />
       </div>
-      <div
-        style={{
-          marginBottom: '24px',
-        }}
-      >
+      <div className="mb-6">
         <Radio
+          id="2"
           name="radio-group"
           label="Radio button 2"
           value="bar"
@@ -42,12 +36,9 @@ export function Base() {
           isChecked={selectedValue === 'bar'}
         />
       </div>
-      <div
-        style={{
-          marginBottom: '24px',
-        }}
-      >
+      <div className="mb-6">
         <Radio
+          id="1"
           name="radio-group"
           label="Radio button 1"
           value="foo"
@@ -56,12 +47,9 @@ export function Base() {
           isDisabled
         />
       </div>
-      <div
-        style={{
-          marginBottom: '24px',
-        }}
-      >
+      <div className="mb-6">
         <Radio
+          id="2"
           name="radio-group"
           label="Radio button 2"
           value="bar"
