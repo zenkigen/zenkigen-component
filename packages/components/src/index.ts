@@ -1,4 +1,5 @@
 export * from './avatar';
+export * from './avatar-button';
 export * from './breadcrumb';
 export * from './button';
 export * from './dropdown';
