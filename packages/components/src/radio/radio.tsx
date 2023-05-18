@@ -45,12 +45,10 @@ export function Radio({ name, value, id, label, isChecked = false, isDisabled = 
     'border-solid',
     'rounded-full',
     focusVisible.normalPeer,
-    isDisabled
-      ? 'border-disabled-disabled01 hover:border-disabled-disabled01'
-      : isMouseOver
-      ? 'border-hover-hoverUiBorder'
-      : 'border-border-uiBorder02',
     {
+      'border-disabled-disabled01 hover:border-disabled-disabled01': isDisabled && !isMouseOver,
+      'border-hover-hoverUiBorder': !isDisabled && isMouseOver,
+      'border-border-uiBorder02': !isDisabled,
       'cursor-not-allowed': isDisabled,
       'cursor-pointer': !isDisabled,
     },
