@@ -1,6 +1,7 @@
 export * from './avatar';
 export * from './breadcrumb';
 export * from './button';
+export * from './checkbox';
 export * from './heading';
 export * from './icon';
 export * from './icon-button';
@@ -9,4 +10,4 @@ export * from './notification-inline';
 export * from './search';
 export * from './select';
 export * from './tab';
-export * from './checkbox';
+export * from './toggle';
