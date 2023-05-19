@@ -7,6 +7,7 @@ export * from './icon';
 export * from './icon-button';
 export * from './loading';
 export * from './notification-inline';
+export * from './radio';
 export * from './search';
 export * from './select';
 export * from './select-sort';
