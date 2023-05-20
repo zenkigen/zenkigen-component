@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { Avatar } from '../avatar';
+import { Icon } from '../icon';
 
 import { Dropdown } from './dropdown';
 import { DropdownItemType } from './type';
@@ -41,7 +42,7 @@ const items: DropdownItemType[] = [
 const DropdownBasic = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', margin: '0 100px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', columnGap: '180px', marginBottom: '150px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', columnGap: '100px', marginBottom: '150px' }}>
         <Dropdown size="x-small" items={items} horizontalAlign="right">
           <Avatar userId={1} lastName="全機現" firstName="太郎" />
         </Dropdown>
@@ -54,31 +55,32 @@ const DropdownBasic = () => {
         <Dropdown size="large" items={items} horizontalAlign="right">
           <Avatar userId={1} lastName="全機現" firstName="太郎" />
         </Dropdown>
-      </div>
-      <div style={{ display: 'flex', alignItems: 'center', columnGap: '180px', marginBottom: '90px' }}>
-        <Dropdown size="x-small" items={items} horizontalAlign="right" isDisabled>
-          <Avatar userId={1} lastName="全機現" firstName="太郎" />
-        </Dropdown>
-        <Dropdown size="small" items={items} horizontalAlign="right" isDisabled>
-          <Avatar userId={1} lastName="全機現" firstName="太郎" />
-        </Dropdown>
-        <Dropdown size="medium" items={items} horizontalAlign="right" isDisabled>
-          <Avatar userId={1} lastName="全機現" firstName="太郎" />
-        </Dropdown>
         <Dropdown size="large" items={items} horizontalAlign="right" isDisabled>
           <Avatar userId={1} lastName="全機現" firstName="太郎" />
         </Dropdown>
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', columnGap: '180px', marginBottom: '150px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', columnGap: '100px', marginBottom: '150px' }}>
+        <Dropdown size="x-small" items={items} horizontalAlign="right">
+          <Icon name="more" />
+        </Dropdown>
+        <Dropdown size="small" items={items} horizontalAlign="right">
+          <Icon name="more" />
+        </Dropdown>
+        <Dropdown size="medium" items={items} horizontalAlign="right">
+          <Icon name="more" />
+        </Dropdown>
+        <Dropdown size="large" items={items} horizontalAlign="right">
+          <Icon name="more" />
+        </Dropdown>
+        <Dropdown size="large" items={items} horizontalAlign="right" isDisabled>
+          <Icon name="more" />
+        </Dropdown>
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', columnGap: '60px', marginBottom: '150px' }}>
         <Dropdown size="x-small" items={items} label="選択" icon="add" />
         <Dropdown size="small" items={items} label="選択" icon="add" />
         <Dropdown size="medium" items={items} label="選択" icon="add" />
         <Dropdown size="large" items={items} label="選択" icon="add" />
-      </div>
-      <div style={{ display: 'flex', alignItems: 'center', columnGap: '180px' }}>
-        <Dropdown size="x-small" items={items} label="選択" icon="add" isDisabled />
-        <Dropdown size="small" items={items} label="選択" icon="add" isDisabled />
-        <Dropdown size="medium" items={items} label="選択" icon="add" isDisabled />
         <Dropdown size="large" items={items} label="選択" icon="add" isDisabled />
       </div>
     </div>
