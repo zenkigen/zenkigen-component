@@ -82,6 +82,7 @@ const DropdownBasic = () => {
         <Dropdown size="small" items={items} label="選択" icon="add" />
         <Dropdown size="medium" items={items} label="選択" icon="add" />
         <Dropdown size="large" items={items} label="選択" icon="add" />
+        <Dropdown size="large" items={items} label="選択" icon="add" variant="text" />
         <Dropdown size="large" items={items} label="選択" icon="add" isDisabled />
       </div>
     </div>
