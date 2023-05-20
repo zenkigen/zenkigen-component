@@ -12,18 +12,18 @@ import { DropdownItemType, HorizontalAlign, VerticalPosition } from './type';
 
 type Props =
   | {
+      size?: 'x-small' | 'small' | 'medium' | 'large';
       variant?: 'text' | 'outline';
       items: DropdownItemType[];
       isDisabled?: boolean;
       verticalPosition?: VerticalPosition;
       horizontalAlign?: HorizontalAlign;
     } & (
-      | { children: ReactElement; label?: never; icon?: never; size?: never }
+      | { children: ReactElement; label?: never; icon?: never }
       | {
           children?: undefined;
           label: string;
           icon?: IconName;
-          size?: 'x-small' | 'small' | 'medium' | 'large';
         }
     );
 
@@ -78,38 +78,39 @@ export function Dropdown({
     'flex shrink-0 items-center gap-1',
     'rounded',
     'bg-background-uiBackground01',
-    !children && {
-      'h-6': size === 'x-small' || size === 'small',
-      'h-8': size === 'medium',
-      'h-10': size === 'large',
-    },
     isDisabled && 'cursor-not-allowed',
   );
 
   const childrenButtonClasses = clsx(
-    'flex items-center',
+    'flex items-center justify-center',
     'rounded',
-    'p-1',
     'hover:bg-hover-hover02',
     'active:bg-active-active02',
     focusVisible.normal,
     isDisabled && 'pointer-events-none',
+    {
+      'h-8 w-8': size === 'x-small',
+      'h-10 w-10': size === 'small',
+      'h-12 w-12': size === 'medium',
+      'h-14 w-14': size === 'large',
+      'border border-border-uiBorder02': variant === 'outline',
+    },
   );
 
   const buttonClasses = clsx(
     'flex items-center',
-    'h-full w-full',
     'rounded',
     buttonColors[variant].base,
     buttonColors[variant].hover,
     buttonColors[variant].active,
     buttonColors[variant].disabled,
     focusVisible.normal,
-    {
-      'px-2': size === 'x-small' || size === 'small',
-      'px-4': size === 'medium' || size === 'large',
-    },
     isDisabled && 'pointer-events-none',
+    {
+      'h-6 px-2': size === 'x-small' || size === 'small',
+      'h-8 px-4': size === 'medium',
+      'h-10 px-4': size === 'large',
+    },
   );
 
   const labelClasses = clsx(
