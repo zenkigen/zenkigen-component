@@ -43,36 +43,39 @@ const DropdownBasic = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', margin: '0 100px' }}>
       <div style={{ display: 'flex', alignItems: 'center', columnGap: '100px', marginBottom: '150px' }}>
-        <Dropdown items={items} horizontalAlign="right">
+        <Dropdown size="x-small" items={items} horizontalAlign="right">
           <Avatar size="x-small" userId={1} lastName="全機現" firstName="太郎" />
         </Dropdown>
-        <Dropdown items={items} horizontalAlign="right">
+        <Dropdown size="small" items={items} horizontalAlign="right">
           <Avatar size="small" userId={1} lastName="全機現" firstName="太郎" />
         </Dropdown>
-        <Dropdown items={items} horizontalAlign="right">
+        <Dropdown size="medium" items={items} horizontalAlign="right">
           <Avatar size="medium" userId={1} lastName="全機現" firstName="太郎" />
         </Dropdown>
-        <Dropdown items={items} horizontalAlign="right">
+        <Dropdown size="large" items={items} horizontalAlign="right">
           <Avatar size="large" userId={1} lastName="全機現" firstName="太郎" />
         </Dropdown>
-        <Dropdown items={items} horizontalAlign="right" isDisabled>
+        <Dropdown size="large" items={items} horizontalAlign="right" variant="outline">
+          <Avatar size="large" userId={1} lastName="全機現" firstName="太郎" />
+        </Dropdown>
+        <Dropdown size="large" items={items} horizontalAlign="right" isDisabled>
           <Avatar size="large" userId={1} lastName="全機現" firstName="太郎" />
         </Dropdown>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', columnGap: '100px', marginBottom: '150px' }}>
-        <Dropdown items={items} horizontalAlign="right">
-          <Icon name="more" size="small" color="icon01" />
-        </Dropdown>
-        <Dropdown items={items} horizontalAlign="right">
+        <Dropdown size="x-small" items={items} horizontalAlign="right">
           <Icon name="more" size="medium" color="icon01" />
         </Dropdown>
-        <Dropdown items={items} horizontalAlign="right">
+        <Dropdown size="small" items={items} horizontalAlign="right">
           <Icon name="more" size="large" color="icon01" />
         </Dropdown>
-        <Dropdown items={items} horizontalAlign="right">
+        <Dropdown size="medium" items={items} horizontalAlign="right">
           <Icon name="more" size="x-large" color="icon01" />
         </Dropdown>
-        <Dropdown items={items} horizontalAlign="right" isDisabled>
+        <Dropdown size="medium" items={items} horizontalAlign="right" variant="outline">
+          <Icon name="more" size="x-large" color="icon01" />
+        </Dropdown>
+        <Dropdown size="medium" items={items} horizontalAlign="right" isDisabled>
           <Icon name="more" size="x-large" color="icon01" />
         </Dropdown>
       </div>
