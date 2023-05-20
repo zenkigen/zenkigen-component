@@ -12,18 +12,18 @@ import { DropdownItemType, HorizontalAlign, VerticalPosition } from './type';
 
 type Props =
   | {
-      size?: 'x-small' | 'small' | 'medium' | 'large';
       variant?: 'text' | 'outline';
       items: DropdownItemType[];
       isDisabled?: boolean;
       verticalPosition?: VerticalPosition;
       horizontalAlign?: HorizontalAlign;
     } & (
-      | { children: ReactElement; label?: never; icon?: never }
+      | { children: ReactElement; label?: never; icon?: never; size?: never }
       | {
           children?: undefined;
           label: string;
           icon?: IconName;
+          size?: 'x-small' | 'small' | 'medium' | 'large';
         }
     );
 
@@ -71,7 +71,7 @@ export function Dropdown({
     onClickAction();
   }, []);
 
-  const childrenWithProps = children && cloneElement(children, { size, isDisabled });
+  const childrenWithProps = children && cloneElement(children, { isDisabled });
 
   const wrapperClasses = clsx(
     'relative',
@@ -101,10 +101,7 @@ export function Dropdown({
     buttonColors[variant].disabled,
     focusVisible.normal,
     children
-      ? {
-          'p-1': size === 'x-small' || size === 'small' || size === 'medium',
-          'p-2': size === 'large',
-        }
+      ? 'p-1'
       : {
           'px-2': size === 'x-small' || size === 'small',
           'px-4': size === 'medium' || size === 'large',
