@@ -56,24 +56,24 @@ const DropdownBasic = () => {
           <Avatar size="large" userId={1} lastName="全機現" firstName="太郎" />
         </Dropdown>
         <Dropdown items={items} horizontalAlign="right" isDisabled>
-          <Avatar userId={1} lastName="全機現" firstName="太郎" />
+          <Avatar size="large" userId={1} lastName="全機現" firstName="太郎" />
         </Dropdown>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', columnGap: '100px', marginBottom: '150px' }}>
         <Dropdown items={items} horizontalAlign="right">
-          <Icon name="more" size="small" />
+          <Icon name="more" size="small" color="icon01" />
         </Dropdown>
         <Dropdown items={items} horizontalAlign="right">
-          <Icon name="more" size="medium" />
+          <Icon name="more" size="medium" color="icon01" />
         </Dropdown>
         <Dropdown items={items} horizontalAlign="right">
-          <Icon name="more" size="large" />
+          <Icon name="more" size="large" color="icon01" />
         </Dropdown>
         <Dropdown items={items} horizontalAlign="right">
-          <Icon name="more" size="x-large" />
+          <Icon name="more" size="x-large" color="icon01" />
         </Dropdown>
         <Dropdown items={items} horizontalAlign="right" isDisabled>
-          <Icon name="more" size="x-large" />
+          <Icon name="more" size="x-large" color="icon01" />
         </Dropdown>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', columnGap: '60px', marginBottom: '150px' }}>
