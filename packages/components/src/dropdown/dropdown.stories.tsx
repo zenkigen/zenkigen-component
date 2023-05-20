@@ -1,3 +1,4 @@
+import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { Avatar } from '../avatar';
@@ -18,24 +19,21 @@ const items: DropdownItemType[] = [
     icon: 'edit' as const,
     label: '操作項目1',
     color: 'gray' as const,
-    // eslint-disable-next-line no-alert
-    onClick: () => alert('選択項目1'),
+    onClick: action('選択項目1'),
   },
   {
     id: '2',
     icon: 'edit' as const,
     label: '操作項目2',
     color: 'gray' as const,
-    // eslint-disable-next-line no-alert
-    onClick: () => alert('選択項目2'),
+    onClick: action('選択項目2'),
   },
   {
     id: '3',
     icon: 'edit' as const,
     label: '操作項目3',
     color: 'red' as const,
-    // eslint-disable-next-line no-alert
-    onClick: () => alert('選択項目3'),
+    onClick: action('選択項目3'),
   },
 ];
 
