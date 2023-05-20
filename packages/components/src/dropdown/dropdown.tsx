@@ -12,31 +12,31 @@ import { DropdownItemType, HorizontalAlign, VerticalPosition } from './type';
 
 type Props =
   | {
+      size?: 'x-small' | 'small' | 'medium' | 'large';
       variant?: 'text' | 'outline';
       items: DropdownItemType[];
       isDisabled?: boolean;
       verticalPosition?: VerticalPosition;
       horizontalAlign?: HorizontalAlign;
     } & (
-      | { children: ReactElement; label?: never; icon?: never; size?: never }
+      | { children: ReactElement; label?: never; icon?: never }
       | {
           children?: undefined;
           label: string;
           icon?: IconName;
-          size: 'x-small' | 'small' | 'medium' | 'large';
         }
     );
 
 export function Dropdown({
-  variant = 'outline',
+  children,
+  size = 'medium',
+  variant = children ? 'text' : 'outline',
   items,
   isDisabled = false,
   verticalPosition = 'bottom',
   horizontalAlign = 'center',
-  children,
   label,
   icon,
-  size = 'medium',
 }: Props) {
   const [isVisible, setIsVisible] = useState(false);
   const [targetDimensions, setTargetDimensions] = useState({
@@ -71,7 +71,7 @@ export function Dropdown({
     onClickAction();
   }, []);
 
-  const childrenWithProps = children && cloneElement(children, { isDisabled });
+  const childrenWithProps = children && cloneElement(children, { size, isDisabled });
 
   const wrapperClasses = clsx(
     'relative',
@@ -89,10 +89,6 @@ export function Dropdown({
     isDisabled && 'cursor-not-allowed',
   );
 
-  const childrenClasses = clsx('flex', 'items-center', 'justify-center', {
-    'cursor-not-allowed': isDisabled,
-  });
-
   const buttonClasses = clsx(
     'flex',
     'items-center',
@@ -104,10 +100,15 @@ export function Dropdown({
     buttonColors[variant].active,
     buttonColors[variant].disabled,
     focusVisible.normal,
-    !children && {
-      'px-2': size === 'x-small' || size === 'small',
-      'px-4': size === 'medium' || size === 'large',
-    },
+    children
+      ? {
+          'p-1': size === 'x-small' || size === 'small' || size === 'medium',
+          'p-2': size === 'large',
+        }
+      : {
+          'px-2': size === 'x-small' || size === 'small',
+          'px-4': size === 'medium' || size === 'large',
+        },
     isDisabled && 'pointer-events-none',
   );
 
@@ -122,23 +123,23 @@ export function Dropdown({
 
   return (
     <div ref={targetRef} className={wrapperClasses}>
-      {children ? (
-        <div className={childrenClasses} onClick={handleToggle}>
-          {childrenWithProps}
-        </div>
-      ) : (
-        <button type="button" className={buttonClasses} onClick={handleToggle} disabled={isDisabled}>
-          {icon && (
-            <span className="mr-1 flex">
-              <Icon name={icon} size={size === 'large' ? 'medium' : 'small'} />
-            </span>
-          )}
-          <span className={labelClasses}>{label}</span>
-          <div className="ml-auto flex items-center">
-            <Icon name={isVisible ? 'angle-small-up' : 'angle-small-down'} size="small" />
-          </div>
-        </button>
-      )}
+      <button type="button" className={buttonClasses} onClick={handleToggle} disabled={isDisabled}>
+        {children ? (
+          childrenWithProps
+        ) : (
+          <>
+            {icon && (
+              <span className="mr-1 flex">
+                <Icon name={icon} size={size === 'large' ? 'medium' : 'small'} />
+              </span>
+            )}
+            <span className={labelClasses}>{label}</span>
+            <div className="ml-auto flex items-center">
+              <Icon name={isVisible ? 'angle-small-up' : 'angle-small-down'} size="small" />
+            </div>
+          </>
+        )}
+      </button>
       {!isDisabled && isVisible && (
         <DropdownMenu
           variant={variant}
