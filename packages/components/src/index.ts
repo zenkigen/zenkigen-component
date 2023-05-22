@@ -2,6 +2,7 @@ export * from './avatar';
 export * from './breadcrumb';
 export * from './button';
 export * from './checkbox';
+export * from './dropdown';
 export * from './heading';
 export * from './icon';
 export * from './icon-button';
