@@ -12,7 +12,7 @@ import { Icon } from '../icon';
 import { SelectSort } from '../select-sort';
 import { SortOrder } from '../select-sort/type';
 
-import { TableContainer, TableRowContainer, TableHeading, TableCell } from '.';
+import { TableContainer, TableRowContainer, TableCell } from '.';
 
 const meta: Meta<typeof TableContainer> = {
   component: TableContainer,
@@ -72,7 +72,7 @@ const TableStoryBasic = () => {
     <div className="flex items-center p-10">
       <TableContainer rows="40px repeat(3, 48px)" columns="200px 400px 1fr 80px">
         <TableRowContainer>
-          <TableHeading>
+          <TableCell>
             <div className={headingClasses}>
               <SelectSort
                 size="small"
@@ -84,8 +84,8 @@ const TableStoryBasic = () => {
                 onClickDeselect={handleClickDeselect}
               />
             </div>
-          </TableHeading>
-          <TableHeading>
+          </TableCell>
+          <TableCell>
             <div className={headingClasses}>
               <SelectSort
                 size="small"
@@ -97,11 +97,11 @@ const TableStoryBasic = () => {
                 onClickDeselect={handleClickDeselect}
               />
             </div>
-          </TableHeading>
-          <TableHeading>
+          </TableCell>
+          <TableCell>
             <div className={headingClasses}>権限</div>
-          </TableHeading>
-          <TableHeading />
+          </TableCell>
+          <TableCell />
         </TableRowContainer>
         <TableRowContainer>
           <TableCell>
