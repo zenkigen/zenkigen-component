@@ -89,10 +89,10 @@ export function Dropdown({
     focusVisible.normal,
     isDisabled && 'pointer-events-none',
     {
-      'h-8 w-8': size === 'x-small',
-      'h-10 w-10': size === 'small',
-      'h-12 w-12': size === 'medium',
-      'h-14 w-14': size === 'large',
+      'h-6 w-6': size === 'x-small',
+      'h-8 w-8': size === 'small',
+      'h-10 w-10': size === 'medium',
+      'h-12 w-12': size === 'large',
       'border border-border-uiBorder02': variant === 'outline',
     },
   );
