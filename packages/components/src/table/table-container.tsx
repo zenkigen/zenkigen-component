@@ -1,7 +1,5 @@
 import { CSSProperties, ReactNode } from 'react';
 
-import clsx from 'clsx';
-
 type Props = {
   children?: ReactNode;
   rows?: CSSProperties['gridTemplateRows'];
@@ -9,10 +7,9 @@ type Props = {
 };
 
 export function TableContainer({ children, rows, columns }: Props) {
-  const containerClasses = clsx('grid w-full');
   return (
     <div
-      className={containerClasses}
+      className="grid w-full"
       style={{
         gridTemplateRows: rows,
         gridTemplateColumns: columns,
