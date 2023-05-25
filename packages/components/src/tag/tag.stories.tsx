@@ -219,13 +219,13 @@ export function Basic() {
       <h2 className="mb-1 text-gray-gray50">Basic</h2>
       <div className="flex items-center gap-x-5">
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="SupportInfo" size="medium">
+          <Tag color="Default" size="medium">
             タグラベル
           </Tag>
-          <Tag color="SupportInfo" size="small">
+          <Tag color="Default" size="small">
             タグラベル
           </Tag>
-          <Tag color="SupportInfo" size="x-small">
+          <Tag color="Default" size="x-small">
             タグラベル
           </Tag>
         </div>
@@ -332,7 +332,7 @@ export function Editable() {
       <h2 className="mb-1 text-gray-gray50">Default</h2>
       <div className="flex gap-x-3">
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="SupportInfo" size="medium" isEditable>
+          <Tag color="Default" size="medium" isEditable>
             タグラベル
           </Tag>
         </div>

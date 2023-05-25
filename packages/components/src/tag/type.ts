@@ -3,7 +3,6 @@ export type TagColor =
   | 'SupportSuccess'
   | 'SupportWarning'
   | 'SupportDanger'
-  | 'SupportInfo'
   | 'UserRed'
   | 'UserPink'
   | 'UserPurple'
@@ -14,4 +13,5 @@ export type TagColor =
   | 'UserYellowGreen'
   | 'UserYellow'
   | 'UserOrange'
+  | 'Default'
   | 'Gray';

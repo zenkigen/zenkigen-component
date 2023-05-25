@@ -53,7 +53,6 @@ export const tagColors = {
   SupportSuccess: 'text-text-textOnColor bg-support-supportSuccess',
   SupportWarning: 'text-text-textOnColor bg-support-supportWarning',
   SupportDanger: 'text-text-textOnColor bg-support-supportDanger',
-  SupportInfo: 'text-text-textOnColor bg-support-supportInfo',
   UserRed: 'text-text-textOnColor bg-user-red',
   UserPink: 'text-text-textOnColor bg-user-pink',
   UserPurple: 'text-text-textOnColor bg-user-purple',
@@ -64,5 +63,6 @@ export const tagColors = {
   UserYellowGreen: 'text-text-textOnColor bg-user-yellowGreen',
   UserYellow: 'text-text-textOnColor bg-user-yellow',
   UserOrange: 'text-text-textOnColor bg-user-orange',
+  Default: 'text-text-textOnColor bg-support-supportInfo',
   Gray: 'text-text-text02 bg-gray-gray10',
 } as const;
