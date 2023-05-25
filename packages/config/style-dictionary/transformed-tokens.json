@@ -39,6 +39,46 @@
     "Orange": {
       "value": "#f9b12c",
       "type": "color"
+    },
+    "RedLight": {
+      "value": "#FDDADA",
+      "type": "color"
+    },
+    "PinkLight": {
+      "value": "#FBDEF5",
+      "type": "color"
+    },
+    "PurpleLight": {
+      "value": "#EFDCF7",
+      "type": "color"
+    },
+    "TurquoiseLight": {
+      "value": "#DBF0F7",
+      "type": "color"
+    },
+    "RoyalBlueLight": {
+      "value": "#DFE8FB",
+      "type": "color"
+    },
+    "BlueLight": {
+      "value": "#D8EFFC",
+      "type": "color"
+    },
+    "AquamarineLight": {
+      "value": "#D7F9F4",
+      "type": "color"
+    },
+    "YellowGreenLight": {
+      "value": "#DCF7DC",
+      "type": "color"
+    },
+    "YellowLight": {
+      "value": "#FCEFB6",
+      "type": "color"
+    },
+    "OrangeLight": {
+      "value": "#FDE8C0",
+      "type": "color"
     }
   },
   "Tokens": {
@@ -120,22 +160,32 @@
       "UiBorder01": {
         "value": "#DEDFE0",
         "type": "color",
-        "description": "List border color,  Container border"
+        "description": "List border color, Container border"
+      },
+      "UiBorder01Dark": {
+        "value": "#5C6366",
+        "type": "color",
+        "description": "List border color, Container border - Dark"
       },
       "UiBorder02": {
         "value": "#CACCCD",
         "type": "color",
         "description": "Button border, Input border"
       },
-      "UiBorder01Dark": {
-        "value": "#5C6366",
-        "type": "color",
-        "description": "List border color,  Container border - Dark"
-      },
       "UiBorder02Dark": {
         "value": "#7C868A",
         "type": "color",
         "description": "Button border, Input border - Dark"
+      },
+      "UiBorder03": {
+        "value": "#A4A5A6",
+        "type": "color",
+        "description": "Checkbox border, Input border"
+      },
+      "UiBorder03Dark": {
+        "value": "#838789",
+        "type": "color",
+        "description": "Checkbox border, Input border - Dark"
       }
     },
     "Background": {
@@ -388,6 +438,16 @@
         "value": "#5C6366",
         "type": "color",
         "description": "hover ui background - Dark"
+      },
+      "HoverUi02": {
+        "value": "#F3F4F5",
+        "type": "color",
+        "description": "hover ui background with lighter color"
+      },
+      "HoverUi02Dark": {
+        "value": "#454A4D",
+        "type": "color",
+        "description": "hover ui background with darker color"
       },
       "HoverUiBorder": {
         "value": "#7C868A",
@@ -656,6 +716,11 @@
         "type": "color",
         "description": "Error text, Icon with error, error element border"
       },
+      "SupportErrorLight": {
+        "value": "#F4BFCD",
+        "type": "color",
+        "description": "Error light color"
+      },
       "SupportErrorDark": {
         "value": "#E67490",
         "type": "color",
@@ -665,6 +730,11 @@
         "value": "#2DC87D",
         "type": "color",
         "description": "Success text, button background, button border"
+      },
+      "SupportSuccessLight": {
+        "value": "#CCF4E1",
+        "type": "color",
+        "description": "Success light color"
       },
       "SupportSuccessDark": {
         "value": "#69DDA5",
@@ -676,6 +746,11 @@
         "type": "color",
         "description": "Information text, button background, button border"
       },
+      "SupportInfoLight": {
+        "value": "#B9D8F7",
+        "type": "color",
+        "description": "Information light color"
+      },
       "SupportInfoDark": {
         "value": "#177EE5",
         "type": "color",
@@ -686,6 +761,11 @@
         "type": "color",
         "description": "Warning text, Icon with error, error element border"
       },
+      "SupportWarningLight": {
+        "value": "#FFF4BA",
+        "type": "color",
+        "description": "Warning light color"
+      },
       "SupportWarningDark": {
         "value": "#FFE976",
         "type": "color",
@@ -695,6 +775,11 @@
         "value": "#D92B57",
         "type": "color",
         "description": "Danger text, button background, button border"
+      },
+      "SupportDangerLight": {
+        "value": "#F4BFCD",
+        "type": "color",
+        "description": "Danger light color"
       },
       "SupportDangerDark": {
         "value": "#E67490",
