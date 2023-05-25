@@ -48,7 +48,7 @@ export const iconColors = {
   iconOnColor: 'fill-icon-iconOnColor',
 } as const;
 
-export const tagColorDefinitions = {
+export const tagColors = {
   SupportError: {
     font: 'text-text-textOnColor',
     background: 'bg-support-supportError',
