@@ -1,14 +1,13 @@
-import { tagColorDefinitions, typography } from '@zenkigen-component/theme';
+import { tagColors, typography } from '@zenkigen-component/theme';
 import clsx from 'clsx';
 
 import { DeleteIcon } from './delete-icon';
-import { LightColor } from './light-colors';
 import { TagColor } from './type';
 
 type Props = {
   userId?: number;
   children?: string;
-  color: TagColor | LightColor;
+  color: TagColor;
   size?: 'medium' | 'x-small' | 'small';
   onClick?: () => void;
   className?: string;
@@ -21,8 +20,8 @@ export function Tag({ children, color, size, onDelete, isEditable = false }: Pro
     'flex',
     'items-center',
     'justify-center',
-    tagColorDefinitions[color].font,
-    tagColorDefinitions[color].background,
+    tagColors[color].font,
+    tagColors[color].background,
     // 'py-0.5',
     // 'px-1',
     'rounded',

@@ -1,10 +1,9 @@
 import clsx from 'clsx';
 
-import { LightColor } from './light-colors';
 import { TagColor } from './type';
 
 type Props = {
-  color?: TagColor | LightColor;
+  color?: TagColor;
   onClick?: () => void;
 };
 
