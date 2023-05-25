@@ -54,53 +54,6 @@ export function Basic() {
           </Tag>
         </div>
       </div>
-      <p className="my-1 text-sm text-gray-gray50">Light</p>
-      <div className="flex items-center gap-x-5">
-        <div className="grid justify-items-start gap-y-2">
-          <Tag color="SupportError" size="medium">
-            タグラベル
-          </Tag>
-          <Tag color="SupportError" size="small">
-            タグラベル
-          </Tag>
-          <Tag color="SupportError" size="x-small">
-            タグラベル
-          </Tag>
-        </div>
-        <div className="grid justify-items-start gap-y-2">
-          <Tag color="SupportSuccess" size="medium">
-            タグラベル
-          </Tag>
-          <Tag color="SupportSuccess" size="small">
-            タグラベル
-          </Tag>
-          <Tag color="SupportSuccess" size="x-small">
-            タグラベル
-          </Tag>
-        </div>
-        <div className="grid justify-items-start gap-y-2">
-          <Tag color="SupportWarning" size="medium">
-            タグラベル
-          </Tag>
-          <Tag color="SupportWarning" size="small">
-            タグラベル
-          </Tag>
-          <Tag color="SupportWarning" size="x-small">
-            タグラベル
-          </Tag>
-        </div>
-        <div className="grid justify-items-start gap-y-2">
-          <Tag color="SupportDanger" size="medium">
-            タグラベル
-          </Tag>
-          <Tag color="SupportDanger" size="small">
-            タグラベル
-          </Tag>
-          <Tag color="SupportDanger" size="x-small">
-            タグラベル
-          </Tag>
-        </div>
-      </div>
       <br />
       <h2 className="mb-1 text-gray-gray50">User</h2>
       <div className="flex flex-wrap items-center gap-5">
