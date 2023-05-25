@@ -49,84 +49,20 @@ export const iconColors = {
 } as const;
 
 export const tagColors = {
-  SupportError: {
-    font: 'text-text-textOnColor',
-    background: 'bg-support-supportError',
-    deleteIcon: 'fill-icon-iconOnColor',
-  },
-  SupportSuccess: {
-    font: 'text-text-textOnColor',
-    background: 'bg-support-supportSuccess',
-    deleteIcon: 'fill-icon-iconOnColor',
-  },
-  SupportWarning: {
-    font: 'text-text-textOnColor',
-    background: 'bg-support-supportWarning',
-    deleteIcon: 'fill-icon-iconOnColor',
-  },
-  SupportDanger: {
-    font: 'text-text-textOnColor',
-    background: 'bg-support-supportDanger',
-    deleteIcon: 'fill-icon-iconOnColor',
-  },
-  SupportInfo: {
-    font: 'text-text-textOnColor',
-    background: 'bg-support-supportInfo',
-    deleteIcon: 'fill-icon-iconOnColor',
-  },
-  UserRed: {
-    font: 'text-text-textOnColor',
-    background: 'bg-user-red',
-    deleteIcon: 'fill-icon-iconOnColor',
-  },
-  UserPink: {
-    font: 'text-text-textOnColor',
-    background: 'bg-user-pink',
-    deleteIcon: 'fill-icon-iconOnColor',
-  },
-  UserPurple: {
-    font: 'text-text-textOnColor',
-    background: 'bg-user-purple',
-    deleteIcon: 'fill-icon-iconOnColor',
-  },
-  UserTurquoise: {
-    font: 'text-text-textOnColor',
-    background: 'bg-user-turquoise',
-    deleteIcon: 'fill-icon-iconOnColor',
-  },
-  UserRoyalBlue: {
-    font: 'text-text-textOnColor',
-    background: 'bg-user-royalBlue',
-    deleteIcon: 'fill-icon-iconOnColor',
-  },
-  UserBlue: {
-    font: 'text-text-textOnColor',
-    background: 'bg-user-blue',
-    deleteIcon: 'fill-icon-iconOnColor',
-  },
-  UserAquamarine: {
-    font: 'text-text-textOnColor',
-    background: 'bg-user-aquamarine',
-    deleteIcon: 'fill-icon-iconOnColor',
-  },
-  UserYellowGreen: {
-    font: 'text-text-textOnColor',
-    background: 'bg-user-yellowGreen',
-    deleteIcon: 'fill-icon-iconOnColor',
-  },
-  UserYellow: {
-    font: 'text-text-textOnColor',
-    background: 'bg-user-yellow',
-    deleteIcon: 'fill-icon-iconOnColor',
-  },
-  UserOrange: {
-    font: 'text-text-textOnColor',
-    background: 'bg-user-orange',
-    deleteIcon: 'fill-icon-iconOnColor',
-  },
-  Gray: {
-    font: 'text-text-text02',
-    background: 'bg-gray-gray10',
-    deleteIcon: 'fill-icon-iconOnColor',
-  },
+  SupportError: 'text-text-textOnColor bg-support-supportError',
+  SupportSuccess: 'text-text-textOnColor bg-support-supportSuccess',
+  SupportWarning: 'text-text-textOnColor bg-support-supportWarning',
+  SupportDanger: 'text-text-textOnColor bg-support-supportDanger',
+  SupportInfo: 'text-text-textOnColor bg-support-supportInfo',
+  UserRed: 'text-text-textOnColor bg-user-red',
+  UserPink: 'text-text-textOnColor bg-user-pink',
+  UserPurple: 'text-text-textOnColor bg-user-purple',
+  UserTurquoise: 'text-text-textOnColor bg-user-turquoise',
+  UserRoyalBlue: 'text-text-textOnColor bg-user-royalBlue',
+  UserBlue: 'text-text-textOnColor bg-user-blue',
+  UserAquamarine: 'text-text-textOnColor bg-user-aquamarine',
+  UserYellowGreen: 'text-text-textOnColor bg-user-yellowGreen',
+  UserYellow: 'text-text-textOnColor bg-user-yellow',
+  UserOrange: 'text-text-textOnColor bg-user-orange',
+  Gray: 'text-text-text02 bg-gray-gray10',
 } as const;

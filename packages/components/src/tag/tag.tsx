@@ -13,23 +13,16 @@ type Props = {
 };
 
 export function Tag({ children, color, size = 'medium', isEditable = false, onDelete }: Props) {
-  const wrapperClasses = clsx(
-    'flex',
-    'items-center',
-    'justify-center',
-    tagColors[color].font,
-    tagColors[color].background,
-    {
-      [`h-[14px] ${typography.label.label4regular}`]: !isEditable && size === 'x-small',
-      [`h-4 ${typography.label.label3regular}`]: !isEditable && size === 'small',
-      [`h-[18px] ${typography.label.label2regular}`]: !isEditable && size === 'medium',
-      [`h-[22px] ${typography.label.label2regular}`]: isEditable && size === 'medium',
-      'rounded-full': isEditable,
-      rounded: !isEditable,
-      'py-0.5 px-1': !isEditable,
-      'py-1 px-2': isEditable,
-    },
-  );
+  const wrapperClasses = clsx('flex', 'items-center', 'justify-center', tagColors[color], {
+    [`h-[14px] ${typography.label.label4regular}`]: !isEditable && size === 'x-small',
+    [`h-4 ${typography.label.label3regular}`]: !isEditable && size === 'small',
+    [`h-[18px] ${typography.label.label2regular}`]: !isEditable && size === 'medium',
+    [`h-[22px] ${typography.label.label2regular}`]: isEditable && size === 'medium',
+    'rounded-full': isEditable,
+    rounded: !isEditable,
+    'py-0.5 px-1': !isEditable,
+    'py-1 px-2': isEditable,
+  });
 
   return (
     <div className={wrapperClasses}>
