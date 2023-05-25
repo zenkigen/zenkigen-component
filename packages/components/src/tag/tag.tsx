@@ -28,7 +28,6 @@ export function Tag({ children, color, size = 'medium', isEditable = false, onDe
       rounded: !isEditable,
       'py-0.5 px-1': !isEditable,
       'py-1 px-2': isEditable,
-      'hover:cursor-pointer': isEditable,
     },
   );
 
