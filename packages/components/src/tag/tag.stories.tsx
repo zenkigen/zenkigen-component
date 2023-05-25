@@ -13,10 +13,10 @@ export function Basic() {
           <Tag color="SupportError" size="medium">
             タグラベル
           </Tag>
-          <Tag color="SupportError" size="x-small">
+          <Tag color="SupportError" size="small">
             タグラベル
           </Tag>
-          <Tag color="SupportError" size="small">
+          <Tag color="SupportError" size="x-small">
             タグラベル
           </Tag>
         </div>
@@ -24,10 +24,10 @@ export function Basic() {
           <Tag color="SupportSuccess" size="medium">
             タグラベル
           </Tag>
-          <Tag color="SupportSuccess" size="x-small">
+          <Tag color="SupportSuccess" size="small">
             タグラベル
           </Tag>
-          <Tag color="SupportSuccess" size="small">
+          <Tag color="SupportSuccess" size="x-small">
             タグラベル
           </Tag>
         </div>
@@ -35,10 +35,10 @@ export function Basic() {
           <Tag color="SupportWarning" size="medium">
             タグラベル
           </Tag>
-          <Tag color="SupportWarning" size="x-small">
+          <Tag color="SupportWarning" size="small">
             タグラベル
           </Tag>
-          <Tag color="SupportWarning" size="small">
+          <Tag color="SupportWarning" size="x-small">
             タグラベル
           </Tag>
         </div>
@@ -46,10 +46,10 @@ export function Basic() {
           <Tag color="SupportDanger" size="medium">
             タグラベル
           </Tag>
-          <Tag color="SupportDanger" size="x-small">
+          <Tag color="SupportDanger" size="small">
             タグラベル
           </Tag>
-          <Tag color="SupportDanger" size="small">
+          <Tag color="SupportDanger" size="x-small">
             タグラベル
           </Tag>
         </div>
@@ -60,10 +60,10 @@ export function Basic() {
           <Tag color="SupportError" size="medium">
             タグラベル
           </Tag>
-          <Tag color="SupportError" size="x-small">
+          <Tag color="SupportError" size="small">
             タグラベル
           </Tag>
-          <Tag color="SupportError" size="small">
+          <Tag color="SupportError" size="x-small">
             タグラベル
           </Tag>
         </div>
@@ -71,10 +71,10 @@ export function Basic() {
           <Tag color="SupportSuccess" size="medium">
             タグラベル
           </Tag>
-          <Tag color="SupportSuccess" size="x-small">
+          <Tag color="SupportSuccess" size="small">
             タグラベル
           </Tag>
-          <Tag color="SupportSuccess" size="small">
+          <Tag color="SupportSuccess" size="x-small">
             タグラベル
           </Tag>
         </div>
@@ -82,10 +82,10 @@ export function Basic() {
           <Tag color="SupportWarning" size="medium">
             タグラベル
           </Tag>
-          <Tag color="SupportWarning" size="x-small">
+          <Tag color="SupportWarning" size="small">
             タグラベル
           </Tag>
-          <Tag color="SupportWarning" size="small">
+          <Tag color="SupportWarning" size="x-small">
             タグラベル
           </Tag>
         </div>
@@ -93,10 +93,10 @@ export function Basic() {
           <Tag color="SupportDanger" size="medium">
             タグラベル
           </Tag>
-          <Tag color="SupportDanger" size="x-small">
+          <Tag color="SupportDanger" size="small">
             タグラベル
           </Tag>
-          <Tag color="SupportDanger" size="small">
+          <Tag color="SupportDanger" size="x-small">
             タグラベル
           </Tag>
         </div>
@@ -108,10 +108,10 @@ export function Basic() {
           <Tag color="UserRed" size="medium">
             タグラベル
           </Tag>
-          <Tag color="UserRed" size="x-small">
+          <Tag color="UserRed" size="small">
             タグラベル
           </Tag>
-          <Tag color="UserRed" size="small">
+          <Tag color="UserRed" size="x-small">
             タグラベル
           </Tag>
         </div>
@@ -119,10 +119,10 @@ export function Basic() {
           <Tag color="UserPink" size="medium">
             タグラベル
           </Tag>
-          <Tag color="UserPink" size="x-small">
+          <Tag color="UserPink" size="small">
             タグラベル
           </Tag>
-          <Tag color="UserPink" size="small">
+          <Tag color="UserPink" size="x-small">
             タグラベル
           </Tag>
         </div>
@@ -130,10 +130,10 @@ export function Basic() {
           <Tag color="UserPurple" size="medium">
             タグラベル
           </Tag>
-          <Tag color="UserPurple" size="x-small">
+          <Tag color="UserPurple" size="small">
             タグラベル
           </Tag>
-          <Tag color="UserPurple" size="small">
+          <Tag color="UserPurple" size="x-small">
             タグラベル
           </Tag>
         </div>
@@ -141,10 +141,10 @@ export function Basic() {
           <Tag color="UserTurquoise" size="medium">
             タグラベル
           </Tag>
-          <Tag color="UserTurquoise" size="x-small">
+          <Tag color="UserTurquoise" size="small">
             タグラベル
           </Tag>
-          <Tag color="UserTurquoise" size="small">
+          <Tag color="UserTurquoise" size="x-small">
             タグラベル
           </Tag>
         </div>
@@ -152,10 +152,10 @@ export function Basic() {
           <Tag color="UserRoyalBlue" size="medium">
             タグラベル
           </Tag>
-          <Tag color="UserRoyalBlue" size="x-small">
+          <Tag color="UserRoyalBlue" size="small">
             タグラベル
           </Tag>
-          <Tag color="UserRoyalBlue" size="small">
+          <Tag color="UserRoyalBlue" size="x-small">
             タグラベル
           </Tag>
         </div>
@@ -163,10 +163,10 @@ export function Basic() {
           <Tag color="UserBlue" size="medium">
             タグラベル
           </Tag>
-          <Tag color="UserBlue" size="x-small">
+          <Tag color="UserBlue" size="small">
             タグラベル
           </Tag>
-          <Tag color="UserBlue" size="small">
+          <Tag color="UserBlue" size="x-small">
             タグラベル
           </Tag>
         </div>
@@ -174,10 +174,10 @@ export function Basic() {
           <Tag color="UserAquamarine" size="medium">
             タグラベル
           </Tag>
-          <Tag color="UserAquamarine" size="x-small">
+          <Tag color="UserAquamarine" size="small">
             タグラベル
           </Tag>
-          <Tag color="UserAquamarine" size="small">
+          <Tag color="UserAquamarine" size="x-small">
             タグラベル
           </Tag>
         </div>
@@ -185,10 +185,10 @@ export function Basic() {
           <Tag color="UserYellowGreen" size="medium">
             タグラベル
           </Tag>
-          <Tag color="UserYellowGreen" size="x-small">
+          <Tag color="UserYellowGreen" size="small">
             タグラベル
           </Tag>
-          <Tag color="UserYellowGreen" size="small">
+          <Tag color="UserYellowGreen" size="x-small">
             タグラベル
           </Tag>
         </div>
@@ -196,10 +196,10 @@ export function Basic() {
           <Tag color="UserYellow" size="medium">
             タグラベル
           </Tag>
-          <Tag color="UserYellow" size="x-small">
+          <Tag color="UserYellow" size="small">
             タグラベル
           </Tag>
-          <Tag color="UserYellow" size="small">
+          <Tag color="UserYellow" size="x-small">
             タグラベル
           </Tag>
         </div>
@@ -207,10 +207,10 @@ export function Basic() {
           <Tag color="UserOrange" size="medium">
             タグラベル
           </Tag>
-          <Tag color="UserOrange" size="x-small">
+          <Tag color="UserOrange" size="small">
             タグラベル
           </Tag>
-          <Tag color="UserOrange" size="small">
+          <Tag color="UserOrange" size="x-small">
             タグラベル
           </Tag>
         </div>
@@ -222,10 +222,10 @@ export function Basic() {
           <Tag color="SupportInfo" size="medium">
             タグラベル
           </Tag>
-          <Tag color="SupportInfo" size="x-small">
+          <Tag color="SupportInfo" size="small">
             タグラベル
           </Tag>
-          <Tag color="SupportInfo" size="small">
+          <Tag color="SupportInfo" size="x-small">
             タグラベル
           </Tag>
         </div>
@@ -233,10 +233,10 @@ export function Basic() {
           <Tag color="Gray" size="medium">
             タグラベル
           </Tag>
-          <Tag color="Gray" size="x-small">
+          <Tag color="Gray" size="small">
             タグラベル
           </Tag>
-          <Tag color="Gray" size="small">
+          <Tag color="Gray" size="x-small">
             タグラベル
           </Tag>
         </div>

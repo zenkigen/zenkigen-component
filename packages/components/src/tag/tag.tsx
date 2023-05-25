@@ -5,35 +5,27 @@ import { DeleteIcon } from './delete-icon';
 import { TagColor } from './type';
 
 type Props = {
-  userId?: number;
   children?: string;
   color: TagColor;
-  size?: 'medium' | 'x-small' | 'small';
-  onClick?: () => void;
-  className?: string;
-  onDelete?: () => void;
+  size?: 'x-small' | 'small' | 'medium';
   isEditable?: boolean;
+  onDelete?: () => void;
 };
 
-export function Tag({ children, color, size, onDelete, isEditable = false }: Props) {
+export function Tag({ children, color, size = 'medium', isEditable = false, onDelete }: Props) {
   const wrapperClasses = clsx(
     'flex',
     'items-center',
     'justify-center',
     tagColors[color].font,
     tagColors[color].background,
-    // 'py-0.5',
-    // 'px-1',
-    'rounded',
     {
+      [`h-[14px] ${typography.label.label4regular}`]: !isEditable && size === 'x-small',
+      [`h-4 ${typography.label.label3regular}`]: !isEditable && size === 'small',
       [`h-[18px] ${typography.label.label2regular}`]: !isEditable && size === 'medium',
-      [`h-4 ${typography.label.label3regular}`]: !isEditable && size === 'x-small',
-      [`h-[14px] ${typography.label.label4regular}`]: !isEditable && size === 'small',
       [`h-[22px] ${typography.label.label2regular}`]: isEditable && size === 'medium',
-      // [`h-4 ${typography.label.label3regular}`]: isEditable && size === 'x-small',
-      // [`h-[14px] ${typography.label.label4regular}`]: isEditable && size === 'small',
       'rounded-full': isEditable,
-      'rounded-sm': !isEditable,
+      rounded: !isEditable,
       'py-0.5 px-1': !isEditable,
       'py-1 px-2': isEditable,
       'hover:cursor-pointer': isEditable,
