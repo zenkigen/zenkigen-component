@@ -72,50 +72,38 @@ const TableStoryBasic = () => {
     <div className="flex items-center p-10">
       <TableContainer rows="40px repeat(3, 48px)" columns="200px 400px 1fr 80px">
         <TableRowContainer>
-          <TableCell>
-            <div className={headingClasses}>
-              <SelectSort
-                size="small"
-                variant="text"
-                label="氏名"
-                sortOrder={sortOrderName}
-                isSortKey={sortKey === 'name'}
-                onChange={handleSortName}
-                onClickDeselect={handleClickDeselect}
-              />
-            </div>
+          <TableCell className={headingClasses}>
+            <SelectSort
+              size="small"
+              variant="text"
+              label="氏名"
+              sortOrder={sortOrderName}
+              isSortKey={sortKey === 'name'}
+              onChange={handleSortName}
+              onClickDeselect={handleClickDeselect}
+            />
           </TableCell>
-          <TableCell>
-            <div className={headingClasses}>
-              <SelectSort
-                size="small"
-                variant="text"
-                label="メールアドレス"
-                sortOrder={sortOrderEmail}
-                isSortKey={sortKey === 'email'}
-                onChange={handleSortEmail}
-                onClickDeselect={handleClickDeselect}
-              />
-            </div>
+          <TableCell className={headingClasses}>
+            <SelectSort
+              size="small"
+              variant="text"
+              label="メールアドレス"
+              sortOrder={sortOrderEmail}
+              isSortKey={sortKey === 'email'}
+              onChange={handleSortEmail}
+              onClickDeselect={handleClickDeselect}
+            />
           </TableCell>
-          <TableCell>
-            <div className={headingClasses}>権限</div>
-          </TableCell>
+          <TableCell className={headingClasses}>権限</TableCell>
           <TableCell />
         </TableRowContainer>
         <TableRowContainer>
-          <TableCell>
-            <div className={cellClasses}>
-              <Avatar size="x-small" userId={1} lastName="全機現" firstName="太郎" />
-              全機現太郎
-            </div>
+          <TableCell className={cellClasses}>
+            <Avatar size="x-small" userId={1} lastName="全機現" firstName="太郎" />
+            全機現太郎
           </TableCell>
-          <TableCell>
-            <div className={cellClasses}>taro.zenkigen@zk-creative.jp</div>
-          </TableCell>
-          <TableCell>
-            <div className={cellClasses}>管理者</div>
-          </TableCell>
+          <TableCell className={cellClasses}>taro.zenkigen@zk-creative.jp</TableCell>
+          <TableCell className={cellClasses}>管理者</TableCell>
           <TableCell align="right">
             <Dropdown size="x-small" items={items} horizontalAlign="right">
               <Icon name="more" size="small" color="icon01" />
@@ -123,18 +111,12 @@ const TableStoryBasic = () => {
           </TableCell>
         </TableRowContainer>
         <TableRowContainer>
-          <TableCell>
-            <div className={cellClasses}>
-              <Avatar size="x-small" userId={1} lastName="全機現" firstName="太郎" />
-              全機現太郎
-            </div>
+          <TableCell className={cellClasses}>
+            <Avatar size="x-small" userId={1} lastName="全機現" firstName="太郎" />
+            全機現太郎
           </TableCell>
-          <TableCell>
-            <div className={cellClasses}>taro.zenkigen@zk-creative.jp</div>
-          </TableCell>
-          <TableCell>
-            <div className={cellClasses}>管理者</div>
-          </TableCell>
+          <TableCell className={cellClasses}>taro.zenkigen@zk-creative.jp</TableCell>
+          <TableCell className={cellClasses}>管理者</TableCell>
           <TableCell align="right">
             <Dropdown size="x-small" items={items} horizontalAlign="right">
               <Icon name="more" size="small" color="icon01" />
@@ -142,18 +124,12 @@ const TableStoryBasic = () => {
           </TableCell>
         </TableRowContainer>
         <TableRowContainer>
-          <TableCell>
-            <div className={cellClasses}>
-              <Avatar size="x-small" userId={1} lastName="全機現" firstName="太郎" />
-              全機現太郎
-            </div>
+          <TableCell className={cellClasses}>
+            <Avatar size="x-small" userId={1} lastName="全機現" firstName="太郎" />
+            全機現太郎
           </TableCell>
-          <TableCell>
-            <div className={cellClasses}>taro.zenkigen@zk-creative.jp</div>
-          </TableCell>
-          <TableCell>
-            <div className={cellClasses}>管理者</div>
-          </TableCell>
+          <TableCell className={cellClasses}>taro.zenkigen@zk-creative.jp</TableCell>
+          <TableCell className={cellClasses}>管理者</TableCell>
           <TableCell align="right">
             <Dropdown size="x-small" items={items} horizontalAlign="right">
               <Icon name="more" size="small" color="icon01" />
