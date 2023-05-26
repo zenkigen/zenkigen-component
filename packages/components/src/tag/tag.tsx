@@ -1,4 +1,4 @@
-import { tagColors, typography } from '@zenkigen-component/theme';
+import { tagColors, tagLightColors, typography } from '@zenkigen-component/theme';
 import clsx from 'clsx';
 
 import { DeleteIcon } from './delete-icon';
@@ -7,13 +7,16 @@ import { TagColor } from './type';
 type Props = {
   children?: string;
   color: TagColor;
+  variant?: 'normal' | 'light';
   size?: 'x-small' | 'small' | 'medium';
   isEditable?: boolean;
   onDelete?: () => void;
 };
 
-export function Tag({ children, color, size = 'medium', isEditable = false, onDelete }: Props) {
-  const wrapperClasses = clsx('flex', 'items-center', 'justify-center', tagColors[color], {
+export function Tag({ children, color, variant = 'normal', size = 'medium', isEditable = false, onDelete }: Props) {
+  const wrapperClasses = clsx('flex', 'items-center', 'justify-center', {
+    [tagColors[color]]: variant === 'normal',
+    [tagLightColors[color]]: variant === 'light',
     [`h-[14px] ${typography.label.label4regular}`]: !isEditable && size === 'x-small',
     [`h-4 ${typography.label.label3regular}`]: !isEditable && size === 'small',
     [`h-[18px] ${typography.label.label2regular}`]: !isEditable && size === 'medium',
