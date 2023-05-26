@@ -66,3 +66,22 @@ export const tagColors = {
   Default: 'text-text-textOnColor bg-support-supportInfo',
   Gray: 'text-text-text02 bg-gray-gray10',
 } as const;
+
+export const tagLightColors = {
+  SupportError: 'text-text-text01 bg-support-supportErrorLight',
+  SupportSuccess: 'text-text-text01 bg-support-supportSuccessLight',
+  SupportWarning: 'text-text-text01 bg-support-supportWarningLight',
+  SupportDanger: 'text-text-text01 bg-support-supportDangerLight',
+  UserRed: 'text-text-text01 bg-user-redLight',
+  UserPink: 'text-text-text01 bg-user-pinkLight',
+  UserPurple: 'text-text-text01 bg-user-purpleLight',
+  UserTurquoise: 'text-text-text01 bg-user-turquoiseLight',
+  UserRoyalBlue: 'text-text-text01 bg-user-royalBlueLight',
+  UserBlue: 'text-text-text01 bg-user-blueLight',
+  UserAquamarine: 'text-text-text01 bg-user-aquamarineLight',
+  UserYellowGreen: 'text-text-text01 bg-user-yellowGreenLight',
+  UserYellow: 'text-text-text01 bg-user-yellowLight',
+  UserOrange: 'text-text-text01 bg-user-orangeLight',
+  Default: 'text-text-text01 bg-support-supportInfoLight',
+  Gray: 'text-text-text01 bg-gray-gray10',
+} as const;
