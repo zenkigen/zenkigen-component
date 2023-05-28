@@ -2,7 +2,9 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "lib": ["dom", "esnext"],
-    "jsx": "preserve"
+    "jsx": "react-jsx",
+    "jsxFactory": "",
+    "jsxFragmentFactory": ""
   },
   "include": ["./src"]
 }
