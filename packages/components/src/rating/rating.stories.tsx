@@ -5,5 +5,5 @@ export default {
 };
 
 export const Base = {
-  render: ({ ...args }) => <Rating value={3} size="regular" />,
+  render: ({ ...args }) => <Rating value={3} size="large" {...args} />,
 };
