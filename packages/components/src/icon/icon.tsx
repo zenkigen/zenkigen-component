@@ -11,6 +11,8 @@ type Props = {
   size?: Size;
   color?: Color;
   isDisabled?: boolean;
+  onClick?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;
+  className?: string;
 };
 
 export const Icon = ({ size = 'medium', ...props }: Props) => {

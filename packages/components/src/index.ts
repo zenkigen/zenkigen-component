@@ -12,6 +12,7 @@ export * from './radio';
 export * from './search';
 export * from './select';
 export * from './select-sort';
+export * from './table';
 export * from './tab';
 export * from './table';
 export * from './toggle';
