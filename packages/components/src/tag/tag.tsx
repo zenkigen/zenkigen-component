@@ -2,12 +2,12 @@ import { tagColors, tagLightColors, typography } from '@zenkigen-component/theme
 import clsx from 'clsx';
 
 import { DeleteIcon } from './delete-icon';
-import { TagColor } from './type';
+import { ColorVariant, TagColor } from './type';
 
 type Props = {
   children?: string;
   color: TagColor;
-  variant?: 'normal' | 'light';
+  variant?: ColorVariant;
   size?: 'x-small' | 'small' | 'medium';
   isEditable?: boolean;
   onDelete?: () => void;
@@ -30,7 +30,7 @@ export function Tag({ children, color, variant = 'normal', size = 'medium', isEd
   return (
     <div className={wrapperClasses}>
       {children}
-      {isEditable === true ? <DeleteIcon onClick={onDelete} color={color} /> : null}
+      {isEditable === true ? <DeleteIcon onClick={onDelete} color={color} variant={variant} /> : null}
     </div>
   );
 }

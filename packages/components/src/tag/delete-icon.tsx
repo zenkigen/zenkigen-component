@@ -1,13 +1,14 @@
 import clsx from 'clsx';
 
-import { TagColor } from './type';
+import { ColorVariant, TagColor } from './type';
 
 type Props = {
   color?: TagColor;
+  variant?: ColorVariant;
   onClick?: () => void;
 };
 
-export const DeleteIcon = ({ color }: Props) => {
+export const DeleteIcon = ({ color, variant, onClick }: Props) => {
   const deleteSvgClasses = clsx(
     'h-[14px]',
     'w-[14px]',
@@ -20,12 +21,12 @@ export const DeleteIcon = ({ color }: Props) => {
   );
 
   const deletePathClasses = clsx({
-    'fill-interactive-interactive02': color === 'Gray',
+    'fill-interactive-interactive02': color === 'Gray' || variant === 'light',
     'group-hover:fill-interactive-interactive02 fill-icon-iconOnColor': color !== 'Gray',
   });
 
   return (
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className={deleteSvgClasses}>
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className={deleteSvgClasses} onClick={onClick}>
       <path
         fillRule="evenodd"
         clipRule="evenodd"

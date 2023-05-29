@@ -15,3 +15,5 @@ export type TagColor =
   | 'UserOrange'
   | 'Default'
   | 'Gray';
+
+export type ColorVariant = 'normal' | 'light';
