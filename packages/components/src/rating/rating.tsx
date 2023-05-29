@@ -10,7 +10,7 @@ type Props = {
   size?: 'medium' | 'large';
 };
 
-export function Rating({ value, isEditable = false, onChangeRating, size }: Props) {
+export function Rating({ value, isEditable = false, onChangeRating, size = 'medium' }: Props) {
   const maxRating = 5;
   const [currentRating, setCurrentRating] = useState(value);
 
