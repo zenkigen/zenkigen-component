@@ -1,3 +1,5 @@
+import { action } from '@storybook/addon-actions';
+
 import { Tag } from './tag';
 
 export default {
@@ -10,46 +12,46 @@ export function Basic() {
       <h2 className="mb-1 text-gray-gray50">Support</h2>
       <div className="flex items-center gap-x-5">
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="SupportError" size="medium">
+          <Tag id="1" color="SupportError" size="medium">
             タグラベル
           </Tag>
-          <Tag color="SupportError" size="small">
+          <Tag id="1" color="SupportError" size="small">
             タグラベル
           </Tag>
-          <Tag color="SupportError" size="x-small">
-            タグラベル
-          </Tag>
-        </div>
-        <div className="grid justify-items-start gap-y-2">
-          <Tag color="SupportSuccess" size="medium">
-            タグラベル
-          </Tag>
-          <Tag color="SupportSuccess" size="small">
-            タグラベル
-          </Tag>
-          <Tag color="SupportSuccess" size="x-small">
+          <Tag id="1" color="SupportError" size="x-small">
             タグラベル
           </Tag>
         </div>
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="SupportWarning" size="medium">
+          <Tag id="2" color="SupportSuccess" size="medium">
             タグラベル
           </Tag>
-          <Tag color="SupportWarning" size="small">
+          <Tag id="2" color="SupportSuccess" size="small">
             タグラベル
           </Tag>
-          <Tag color="SupportWarning" size="x-small">
+          <Tag id="2" color="SupportSuccess" size="x-small">
             タグラベル
           </Tag>
         </div>
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="SupportDanger" size="medium">
+          <Tag id="3" color="SupportWarning" size="medium">
             タグラベル
           </Tag>
-          <Tag color="SupportDanger" size="small">
+          <Tag id="3" color="SupportWarning" size="small">
             タグラベル
           </Tag>
-          <Tag color="SupportDanger" size="x-small">
+          <Tag id="3" color="SupportWarning" size="x-small">
+            タグラベル
+          </Tag>
+        </div>
+        <div className="grid justify-items-start gap-y-2">
+          <Tag id="4" color="SupportDanger" size="medium">
+            タグラベル
+          </Tag>
+          <Tag id="4" color="SupportDanger" size="small">
+            タグラベル
+          </Tag>
+          <Tag id="4" color="SupportDanger" size="x-small">
             タグラベル
           </Tag>
         </div>
@@ -57,46 +59,46 @@ export function Basic() {
       <br />
       <div className="flex items-center gap-x-5">
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="SupportError" variant="light" size="medium">
+          <Tag id="1" color="SupportError" variant="light" size="medium">
             タグラベル
           </Tag>
-          <Tag color="SupportError" variant="light" size="small">
+          <Tag id="1" color="SupportError" variant="light" size="small">
             タグラベル
           </Tag>
-          <Tag color="SupportError" variant="light" size="x-small">
-            タグラベル
-          </Tag>
-        </div>
-        <div className="grid justify-items-start gap-y-2">
-          <Tag color="SupportSuccess" variant="light" size="medium">
-            タグラベル
-          </Tag>
-          <Tag color="SupportSuccess" variant="light" size="small">
-            タグラベル
-          </Tag>
-          <Tag color="SupportSuccess" variant="light" size="x-small">
+          <Tag id="1" color="SupportError" variant="light" size="x-small">
             タグラベル
           </Tag>
         </div>
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="SupportWarning" variant="light" size="medium">
+          <Tag id="2" color="SupportSuccess" variant="light" size="medium">
             タグラベル
           </Tag>
-          <Tag color="SupportWarning" variant="light" size="small">
+          <Tag id="2" color="SupportSuccess" variant="light" size="small">
             タグラベル
           </Tag>
-          <Tag color="SupportWarning" variant="light" size="x-small">
+          <Tag id="2" color="SupportSuccess" variant="light" size="x-small">
             タグラベル
           </Tag>
         </div>
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="SupportDanger" variant="light" size="medium">
+          <Tag id="3" color="SupportWarning" variant="light" size="medium">
             タグラベル
           </Tag>
-          <Tag color="SupportDanger" variant="light" size="small">
+          <Tag id="3" color="SupportWarning" variant="light" size="small">
             タグラベル
           </Tag>
-          <Tag color="SupportDanger" variant="light" size="x-small">
+          <Tag id="3" color="SupportWarning" variant="light" size="x-small">
+            タグラベル
+          </Tag>
+        </div>
+        <div className="grid justify-items-start gap-y-2">
+          <Tag id="4" color="SupportDanger" variant="light" size="medium">
+            タグラベル
+          </Tag>
+          <Tag id="4" color="SupportDanger" variant="light" size="small">
+            タグラベル
+          </Tag>
+          <Tag id="4" color="SupportDanger" variant="light" size="x-small">
             タグラベル
           </Tag>
         </div>
@@ -105,112 +107,101 @@ export function Basic() {
       <h2 className="mb-1 text-gray-gray50">User</h2>
       <div className="flex flex-wrap items-center gap-5">
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserRed" size="medium">
+          <Tag id="1" color="UserRed" size="medium">
             タグラベル
           </Tag>
-          <Tag color="UserRed" size="small">
+          <Tag id="1" color="UserRed" size="small">
             タグラベル
           </Tag>
-          <Tag color="UserRed" size="x-small">
-            タグラベル
-          </Tag>
-        </div>
-        <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserPink" size="medium">
-            タグラベル
-          </Tag>
-          <Tag color="UserPink" size="small">
-            タグラベル
-          </Tag>
-          <Tag color="UserPink" size="x-small">
+          <Tag id="1" color="UserRed" size="x-small">
             タグラベル
           </Tag>
         </div>
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserPurple" size="medium">
+          <Tag id="2" color="UserPink" size="medium">
             タグラベル
           </Tag>
-          <Tag color="UserPurple" size="small">
+          <Tag id="2" color="UserPink" size="small">
             タグラベル
           </Tag>
-          <Tag color="UserPurple" size="x-small">
-            タグラベル
-          </Tag>
-        </div>
-        <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserTurquoise" size="medium">
-            タグラベル
-          </Tag>
-          <Tag color="UserTurquoise" size="small">
-            タグラベル
-          </Tag>
-          <Tag color="UserTurquoise" size="x-small">
+          <Tag id="2" color="UserPink" size="x-small">
             タグラベル
           </Tag>
         </div>
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserRoyalBlue" size="medium">
+          <Tag id="3" color="UserPurple" size="medium">
             タグラベル
           </Tag>
-          <Tag color="UserRoyalBlue" size="small">
+          <Tag id="3" color="UserPurple" size="small">
             タグラベル
           </Tag>
-          <Tag color="UserRoyalBlue" size="x-small">
-            タグラベル
-          </Tag>
-        </div>
-        <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserBlue" size="medium">
-            タグラベル
-          </Tag>
-          <Tag color="UserBlue" size="small">
-            タグラベル
-          </Tag>
-          <Tag color="UserBlue" size="x-small">
+          <Tag id="3" color="UserPurple" size="x-small">
             タグラベル
           </Tag>
         </div>
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserAquamarine" size="medium">
+          <Tag id="4" color="UserTurquoise" size="medium">
             タグラベル
           </Tag>
-          <Tag color="UserAquamarine" size="small">
+          <Tag id="4" color="UserTurquoise" size="small">
             タグラベル
           </Tag>
-          <Tag color="UserAquamarine" size="x-small">
-            タグラベル
-          </Tag>
-        </div>
-        <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserYellowGreen" size="medium">
-            タグラベル
-          </Tag>
-          <Tag color="UserYellowGreen" size="small">
-            タグラベル
-          </Tag>
-          <Tag color="UserYellowGreen" size="x-small">
+          <Tag id="4" color="UserTurquoise" size="x-small">
             タグラベル
           </Tag>
         </div>
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserYellow" size="medium">
+          <Tag id="5" color="UserRoyalBlue" size="medium">
             タグラベル
           </Tag>
-          <Tag color="UserYellow" size="small">
+          <Tag id="5" color="UserRoyalBlue" size="small">
             タグラベル
           </Tag>
-          <Tag color="UserYellow" size="x-small">
+          <Tag id="5" color="UserRoyalBlue" size="x-small">
             タグラベル
           </Tag>
         </div>
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserOrange" size="medium">
+          <Tag id="6" color="UserBlue" size="medium">
             タグラベル
           </Tag>
-          <Tag color="UserOrange" size="small">
+          <Tag id="6" color="UserBlue" size="small">
             タグラベル
           </Tag>
-          <Tag color="UserOrange" size="x-small">
+          <Tag id="6" color="UserBlue" size="x-small">
+            タグラベル
+          </Tag>
+        </div>
+        <div className="grid justify-items-start gap-y-2">
+          <Tag id="7" color="UserAquamarine" size="medium">
+            タグラベル
+          </Tag>
+          <Tag id="7" color="UserAquamarine" size="small">
+            タグラベル
+          </Tag>
+          <Tag id="7" color="UserAquamarine" size="x-small">
+            タグラベル
+          </Tag>
+        </div>
+        <div className="grid justify-items-start gap-y-2">
+          <Tag id="8" color="UserYellowGreen" size="medium">
+            タグラベル
+          </Tag>
+          <Tag id="8" color="UserYellowGreen" size="small">
+            タグラベル
+          </Tag>
+          <Tag id="8" color="UserYellowGreen" size="x-small">
+            タグラベル
+          </Tag>
+        </div>
+        <div className="grid justify-items-start gap-y-2">
+          <Tag id="9" color="UserYellow" size="medium">
+            タグラベル
+          </Tag>
+          <Tag id="9" color="UserYellow" size="small">
+            タグラベル
+          </Tag>
+          <Tag id="9" color="UserYellow" size="x-small">
             タグラベル
           </Tag>
         </div>
@@ -218,112 +209,112 @@ export function Basic() {
       <br />
       <div className="flex flex-wrap items-center gap-5">
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserRed" variant="light" size="medium">
+          <Tag id="1" color="UserRed" variant="light" size="medium">
             タグラベル
           </Tag>
-          <Tag color="UserRed" variant="light" size="small">
+          <Tag id="1" color="UserRed" variant="light" size="small">
             タグラベル
           </Tag>
-          <Tag color="UserRed" variant="light" size="x-small">
-            タグラベル
-          </Tag>
-        </div>
-        <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserPink" variant="light" size="medium">
-            タグラベル
-          </Tag>
-          <Tag color="UserPink" variant="light" size="small">
-            タグラベル
-          </Tag>
-          <Tag color="UserPink" variant="light" size="x-small">
+          <Tag id="1" color="UserRed" variant="light" size="x-small">
             タグラベル
           </Tag>
         </div>
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserPurple" variant="light" size="medium">
+          <Tag id="2" color="UserPink" variant="light" size="medium">
             タグラベル
           </Tag>
-          <Tag color="UserPurple" variant="light" size="small">
+          <Tag id="2" color="UserPink" variant="light" size="small">
             タグラベル
           </Tag>
-          <Tag color="UserPurple" variant="light" size="x-small">
-            タグラベル
-          </Tag>
-        </div>
-        <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserTurquoise" variant="light" size="medium">
-            タグラベル
-          </Tag>
-          <Tag color="UserTurquoise" variant="light" size="small">
-            タグラベル
-          </Tag>
-          <Tag color="UserTurquoise" variant="light" size="x-small">
+          <Tag id="2" color="UserPink" variant="light" size="x-small">
             タグラベル
           </Tag>
         </div>
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserRoyalBlue" variant="light" size="medium">
+          <Tag id="3" color="UserPurple" variant="light" size="medium">
             タグラベル
           </Tag>
-          <Tag color="UserRoyalBlue" variant="light" size="small">
+          <Tag id="3" color="UserPurple" variant="light" size="small">
             タグラベル
           </Tag>
-          <Tag color="UserRoyalBlue" variant="light" size="x-small">
-            タグラベル
-          </Tag>
-        </div>
-        <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserBlue" variant="light" size="medium">
-            タグラベル
-          </Tag>
-          <Tag color="UserBlue" variant="light" size="small">
-            タグラベル
-          </Tag>
-          <Tag color="UserBlue" variant="light" size="x-small">
+          <Tag id="3" color="UserPurple" variant="light" size="x-small">
             タグラベル
           </Tag>
         </div>
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserAquamarine" variant="light" size="medium">
+          <Tag id="4" color="UserTurquoise" variant="light" size="medium">
             タグラベル
           </Tag>
-          <Tag color="UserAquamarine" variant="light" size="small">
+          <Tag id="4" color="UserTurquoise" variant="light" size="small">
             タグラベル
           </Tag>
-          <Tag color="UserAquamarine" variant="light" size="x-small">
-            タグラベル
-          </Tag>
-        </div>
-        <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserYellowGreen" variant="light" size="medium">
-            タグラベル
-          </Tag>
-          <Tag color="UserYellowGreen" variant="light" size="small">
-            タグラベル
-          </Tag>
-          <Tag color="UserYellowGreen" variant="light" size="x-small">
+          <Tag id="4" color="UserTurquoise" variant="light" size="x-small">
             タグラベル
           </Tag>
         </div>
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserYellow" variant="light" size="medium">
+          <Tag id="5" color="UserRoyalBlue" variant="light" size="medium">
             タグラベル
           </Tag>
-          <Tag color="UserYellow" variant="light" size="small">
+          <Tag id="5" color="UserRoyalBlue" variant="light" size="small">
             タグラベル
           </Tag>
-          <Tag color="UserYellow" variant="light" size="x-small">
+          <Tag id="5" color="UserRoyalBlue" variant="light" size="x-small">
             タグラベル
           </Tag>
         </div>
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserOrange" variant="light" size="medium">
+          <Tag id="6" color="UserBlue" variant="light" size="medium">
             タグラベル
           </Tag>
-          <Tag color="UserOrange" variant="light" size="small">
+          <Tag id="6" color="UserBlue" variant="light" size="small">
             タグラベル
           </Tag>
-          <Tag color="UserOrange" variant="light" size="x-small">
+          <Tag id="6" color="UserBlue" variant="light" size="x-small">
+            タグラベル
+          </Tag>
+        </div>
+        <div className="grid justify-items-start gap-y-2">
+          <Tag id="7" color="UserAquamarine" variant="light" size="medium">
+            タグラベル
+          </Tag>
+          <Tag id="7" color="UserAquamarine" variant="light" size="small">
+            タグラベル
+          </Tag>
+          <Tag id="7" color="UserAquamarine" variant="light" size="x-small">
+            タグラベル
+          </Tag>
+        </div>
+        <div className="grid justify-items-start gap-y-2">
+          <Tag id="8" color="UserYellowGreen" variant="light" size="medium">
+            タグラベル
+          </Tag>
+          <Tag id="8" color="UserYellowGreen" variant="light" size="small">
+            タグラベル
+          </Tag>
+          <Tag id="8" color="UserYellowGreen" variant="light" size="x-small">
+            タグラベル
+          </Tag>
+        </div>
+        <div className="grid justify-items-start gap-y-2">
+          <Tag id="9" color="UserYellow" variant="light" size="medium">
+            タグラベル
+          </Tag>
+          <Tag id="9" color="UserYellow" variant="light" size="small">
+            タグラベル
+          </Tag>
+          <Tag id="9" color="UserYellow" variant="light" size="x-small">
+            タグラベル
+          </Tag>
+        </div>
+        <div className="grid justify-items-start gap-y-2">
+          <Tag id="10" color="UserOrange" variant="light" size="medium">
+            タグラベル
+          </Tag>
+          <Tag id="10" color="UserOrange" variant="light" size="small">
+            タグラベル
+          </Tag>
+          <Tag id="10" color="UserOrange" variant="light" size="x-small">
             タグラベル
           </Tag>
         </div>
@@ -332,24 +323,24 @@ export function Basic() {
       <h2 className="mb-1 text-gray-gray50">Basic</h2>
       <div className="flex items-center gap-x-5">
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="Default" size="medium">
+          <Tag id="1" color="Default" size="medium">
             タグラベル
           </Tag>
-          <Tag color="Default" size="small">
+          <Tag id="1" color="Default" size="small">
             タグラベル
           </Tag>
-          <Tag color="Default" size="x-small">
+          <Tag id="1" color="Default" size="x-small">
             タグラベル
           </Tag>
         </div>
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="Gray" size="medium">
+          <Tag id="2" color="Gray" size="medium">
             タグラベル
           </Tag>
-          <Tag color="Gray" size="small">
+          <Tag id="2" color="Gray" size="small">
             タグラベル
           </Tag>
-          <Tag color="Gray" size="x-small">
+          <Tag id="2" color="Gray" size="x-small">
             タグラベル
           </Tag>
         </div>
@@ -357,24 +348,24 @@ export function Basic() {
       <br />
       <div className="flex items-center gap-x-5">
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="Default" variant="light" size="medium">
+          <Tag id="1" color="Default" variant="light" size="medium">
             タグラベル
           </Tag>
-          <Tag color="Default" variant="light" size="small">
+          <Tag id="1" color="Default" variant="light" size="small">
             タグラベル
           </Tag>
-          <Tag color="Default" variant="light" size="x-small">
+          <Tag id="1" color="Default" variant="light" size="x-small">
             タグラベル
           </Tag>
         </div>
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="Gray" variant="light" size="medium">
+          <Tag id="2" color="Gray" variant="light" size="medium">
             タグラベル
           </Tag>
-          <Tag color="Gray" variant="light" size="small">
+          <Tag id="2" color="Gray" variant="light" size="small">
             タグラベル
           </Tag>
-          <Tag color="Gray" variant="light" size="x-small">
+          <Tag id="2" color="Gray" variant="light" size="x-small">
             タグラベル
           </Tag>
         </div>
@@ -389,22 +380,22 @@ export function Editable() {
       <h2 className="mb-1 text-gray-gray50">Support</h2>
       <div className="flex gap-x-3">
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="SupportError" size="medium" isEditable>
+          <Tag id="1" color="SupportError" size="medium" isEditable onDelete={action('tag削除')}>
             タグラベル
           </Tag>
         </div>
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="SupportSuccess" size="medium" isEditable>
+          <Tag id="2" color="SupportSuccess" size="medium" isEditable onDelete={action('tag削除')}>
             タグラベル
           </Tag>
         </div>
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="SupportWarning" size="medium" isEditable>
+          <Tag id="3" color="SupportWarning" size="medium" isEditable onDelete={action('tag削除')}>
             タグラベル
           </Tag>
         </div>
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="SupportDanger" size="medium" isEditable>
+          <Tag id="4" color="SupportDanger" size="medium" isEditable onDelete={action('tag削除')}>
             タグラベル
           </Tag>
         </div>
@@ -412,22 +403,22 @@ export function Editable() {
       <br />
       <div className="flex gap-x-3">
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="SupportError" variant="light" size="medium" isEditable>
+          <Tag id="1" color="SupportError" variant="light" size="medium" isEditable onDelete={action('tag削除')}>
             タグラベル
           </Tag>
         </div>
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="SupportSuccess" variant="light" size="medium" isEditable>
+          <Tag id="2" color="SupportSuccess" variant="light" size="medium" isEditable onDelete={action('tag削除')}>
             タグラベル
           </Tag>
         </div>
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="SupportWarning" variant="light" size="medium" isEditable>
+          <Tag id="3" color="SupportWarning" variant="light" size="medium" isEditable onDelete={action('tag削除')}>
             タグラベル
           </Tag>
         </div>
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="SupportDanger" variant="light" size="medium" isEditable>
+          <Tag id="4" color="SupportDanger" variant="light" size="medium" isEditable onDelete={action('tag削除')}>
             タグラベル
           </Tag>
         </div>
@@ -436,55 +427,27 @@ export function Editable() {
       <h2 className="mb-1 text-gray-gray50">User</h2>
       <div className="flex gap-x-3">
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserRed" size="medium" isEditable>
+          <Tag id="1" color="UserRed" size="medium" isEditable onDelete={action('tag削除')}>
             タグラベル
           </Tag>
         </div>
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserPink" size="medium" isEditable>
+          <Tag id="2" color="UserPink" size="medium" isEditable onDelete={action('tag削除')}>
             タグラベル
           </Tag>
         </div>
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserPurple" size="medium" isEditable>
+          <Tag id="3" color="UserPurple" size="medium" isEditable onDelete={action('tag削除')}>
             タグラベル
           </Tag>
         </div>
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserTurquoise" size="medium" isEditable>
+          <Tag id="4" color="UserTurquoise" size="medium" isEditable onDelete={action('tag削除')}>
             タグラベル
           </Tag>
         </div>
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserRoyalBlue" size="medium" isEditable>
-            タグラベル
-          </Tag>
-        </div>
-      </div>
-      <br />
-      <div className="flex gap-x-3">
-        <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserBlue" size="medium" isEditable>
-            タグラベル
-          </Tag>
-        </div>
-        <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserAquamarine" size="medium" isEditable>
-            タグラベル
-          </Tag>
-        </div>
-        <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserYellowGreen" size="medium" isEditable>
-            タグラベル
-          </Tag>
-        </div>
-        <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserYellow" size="medium" isEditable>
-            タグラベル
-          </Tag>
-        </div>
-        <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserOrange" size="medium" isEditable>
+          <Tag id="5" color="UserRoyalBlue" size="medium" isEditable onDelete={action('tag削除')}>
             タグラベル
           </Tag>
         </div>
@@ -492,27 +455,27 @@ export function Editable() {
       <br />
       <div className="flex gap-x-3">
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserRed" variant="light" size="medium" isEditable>
+          <Tag id="6" color="UserBlue" size="medium" isEditable onDelete={action('tag削除')}>
             タグラベル
           </Tag>
         </div>
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserPink" variant="light" size="medium" isEditable>
+          <Tag id="7" color="UserAquamarine" size="medium" isEditable onDelete={action('tag削除')}>
             タグラベル
           </Tag>
         </div>
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserPurple" variant="light" size="medium" isEditable>
+          <Tag id="8" color="UserYellowGreen" size="medium" isEditable onDelete={action('tag削除')}>
             タグラベル
           </Tag>
         </div>
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserTurquoise" variant="light" size="medium" isEditable>
+          <Tag id="9" color="UserYellow" size="medium" isEditable onDelete={action('tag削除')}>
             タグラベル
           </Tag>
         </div>
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserRoyalBlue" variant="light" size="medium" isEditable>
+          <Tag id="10" color="UserOrange" size="medium" isEditable onDelete={action('tag削除')}>
             タグラベル
           </Tag>
         </div>
@@ -520,27 +483,55 @@ export function Editable() {
       <br />
       <div className="flex gap-x-3">
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserBlue" variant="light" size="medium" isEditable>
+          <Tag id="1" color="UserRed" variant="light" size="medium" isEditable onDelete={action('tag削除')}>
             タグラベル
           </Tag>
         </div>
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserAquamarine" variant="light" size="medium" isEditable>
+          <Tag id="2" color="UserPink" variant="light" size="medium" isEditable onDelete={action('tag削除')}>
             タグラベル
           </Tag>
         </div>
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserYellowGreen" variant="light" size="medium" isEditable>
+          <Tag id="3" color="UserPurple" variant="light" size="medium" isEditable onDelete={action('tag削除')}>
             タグラベル
           </Tag>
         </div>
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserYellow" variant="light" size="medium" isEditable>
+          <Tag id="4" color="UserTurquoise" variant="light" size="medium" isEditable onDelete={action('tag削除')}>
             タグラベル
           </Tag>
         </div>
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="UserOrange" variant="light" size="medium" isEditable>
+          <Tag id="5" color="UserRoyalBlue" variant="light" size="medium" isEditable onDelete={action('tag削除')}>
+            タグラベル
+          </Tag>
+        </div>
+      </div>
+      <br />
+      <div className="flex gap-x-3">
+        <div className="grid justify-items-start gap-y-2">
+          <Tag id="6" color="UserBlue" variant="light" size="medium" isEditable onDelete={action('tag削除')}>
+            タグラベル
+          </Tag>
+        </div>
+        <div className="grid justify-items-start gap-y-2">
+          <Tag id="7" color="UserAquamarine" variant="light" size="medium" isEditable onDelete={action('tag削除')}>
+            タグラベル
+          </Tag>
+        </div>
+        <div className="grid justify-items-start gap-y-2">
+          <Tag id="8" color="UserYellowGreen" variant="light" size="medium" isEditable onDelete={action('tag削除')}>
+            タグラベル
+          </Tag>
+        </div>
+        <div className="grid justify-items-start gap-y-2">
+          <Tag id="9" color="UserYellow" variant="light" size="medium" isEditable onDelete={action('tag削除')}>
+            タグラベル
+          </Tag>
+        </div>
+        <div className="grid justify-items-start gap-y-2">
+          <Tag id="10" color="UserOrange" variant="light" size="medium" isEditable onDelete={action('tag削除')}>
             タグラベル
           </Tag>
         </div>
@@ -549,13 +540,13 @@ export function Editable() {
       <h2 className="mb-1 text-gray-gray50">Default</h2>
       <div className="flex gap-x-3">
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="Default" size="medium" isEditable>
+          <Tag id="1" color="Default" size="medium" isEditable onDelete={action('tag削除')}>
             タグラベル
           </Tag>
         </div>
 
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="Gray" size="medium" isEditable>
+          <Tag id="2" color="Gray" size="medium" isEditable onDelete={action('tag削除')}>
             タグラベル
           </Tag>
         </div>
@@ -563,13 +554,13 @@ export function Editable() {
       <br />
       <div className="flex gap-x-3">
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="Default" variant="light" size="medium" isEditable>
+          <Tag id="1" color="Default" variant="light" size="medium" isEditable onDelete={action('tag削除')}>
             タグラベル
           </Tag>
         </div>
 
         <div className="grid justify-items-start gap-y-2">
-          <Tag color="Gray" variant="light" size="medium" isEditable>
+          <Tag id="2" color="Gray" variant="light" size="medium" isEditable onDelete={action('tag削除')}>
             タグラベル
           </Tag>
         </div>
