@@ -4,16 +4,16 @@ import clsx from 'clsx';
 import { DeleteIcon } from './delete-icon';
 import { ColorVariant, TagColor } from './type';
 
-type Props = {
-  children?: string;
-  color: TagColor;
-  variant?: ColorVariant;
-  size?: 'x-small' | 'small' | 'medium';
-  isEditable?: boolean;
-  onDelete?: () => void;
-};
+type Props =
+  | {
+      id: string;
+      children: string;
+      color: TagColor;
+      variant?: ColorVariant;
+      size?: 'x-small' | 'small' | 'medium';
+    } & ({ isEditable: true; onDelete: (id: string) => void } | { isEditable?: undefined; onDelete?: never });
 
-export function Tag({ children, color, variant = 'normal', size = 'medium', isEditable = false, onDelete }: Props) {
+export function Tag({ id, children, color, variant = 'normal', size = 'medium', isEditable, onDelete }: Props) {
   const wrapperClasses = clsx('flex', 'items-center', 'justify-center', {
     [tagColors[color]]: variant === 'normal',
     [tagLightColors[color]]: variant === 'light',
@@ -30,7 +30,7 @@ export function Tag({ children, color, variant = 'normal', size = 'medium', isEd
   return (
     <div className={wrapperClasses}>
       {children}
-      {isEditable === true ? <DeleteIcon onClick={onDelete} color={color} variant={variant} /> : null}
+      {isEditable ? <DeleteIcon onClick={() => onDelete(id)} color={color} variant={variant} /> : null}
     </div>
   );
 }
