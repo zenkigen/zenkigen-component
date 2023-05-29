@@ -8,21 +8,12 @@ type Props = {
   isEditable?: boolean;
   onChangeRating?: (newRating: number) => void | null;
   size?: 'regular' | 'large';
-  className?: string;
-  clickHandler?: null | (() => void);
 };
 
-export function Rating({ value, isEditable = false, onChangeRating, size, clickHandler }: Props) {
+export function Rating({ value, isEditable = false, onChangeRating, size }: Props) {
   const maxRating = 5;
   const [ratingStars, setRatingStars] = useState([] as ReactNode[]);
-  const [currentRating, setCurrentRating] = useState(0);
-
-  useEffect(() => {
-    if (ratingValueIsIncorrect(value, maxRating)) {
-      // console.error('Rating value is not between 0 and' + `${maxRating}`);
-    }
-    setCurrentRating(value);
-  }, [value]);
+  const [currentRating, setCurrentRating] = useState(value);
 
   const handleChangeRating = useCallback(
     (newRating: number) => {
@@ -49,22 +40,9 @@ export function Rating({ value, isEditable = false, onChangeRating, size, clickH
           {iconElements['star-filled']}
         </span>,
       );
-      // <Icon key={i} name="star-filled" color={color} onClick={() => handleChangeRating(i)} />);
     }
     setRatingStars(newRatingStars);
   }, [currentRating, handleChangeRating, size]);
 
-  const handleOnClick = () => {
-    if (clickHandler) {
-      clickHandler();
-    }
-  };
-
-  const ratingValueIsIncorrect = (value: number, maxRating: number) => value < 0 || value > maxRating;
-
-  return (
-    <span onClick={handleOnClick} className="flex flex-row">
-      {ratingStars}
-    </span>
-  );
+  return <span className="flex flex-row">{ratingStars}</span>;
 }
