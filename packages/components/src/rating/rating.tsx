@@ -7,7 +7,7 @@ type Props = {
   value: number;
   isEditable?: boolean;
   onChangeRating?: (newRating: number) => void | null;
-  size?: 'regular' | 'large';
+  size?: 'medium' | 'large';
 };
 
 export function Rating({ value, isEditable = false, onChangeRating, size }: Props) {
@@ -26,7 +26,7 @@ export function Rating({ value, isEditable = false, onChangeRating, size }: Prop
     [isEditable, onChangeRating],
   );
 
-  const starClasses = clsx({ 'w-6 h-6': size === 'large', 'w-4 h-4': size === 'regular' });
+  const starClasses = clsx({ 'w-6 h-6': size === 'large', 'w-4 h-4': size === 'medium' });
   const ratingStars = [];
   for (let i = 1; i < maxRating + 1; i++) {
     const color = i <= currentRating ? 'fill-support-supportWarning' : 'fill-icon-icon02';
