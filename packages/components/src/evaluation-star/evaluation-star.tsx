@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 
 import { iconElements } from '@zenkigen-component/icons';
+import { focusVisible } from '@zenkigen-component/theme';
 import clsx from 'clsx';
 
 type Props = {
@@ -26,14 +27,20 @@ export function EvaluationStar({ value, isEditable = false, onChangeRating, size
     [isEditable, onChangeRating],
   );
 
-  const starClasses = clsx({ 'w-6 h-6': size === 'large', 'w-4 h-4': size === 'medium' });
+  const starClasses = clsx(focusVisible.inset, { 'w-6 h-6': size === 'large', 'w-4 h-4': size === 'medium' });
   const ratingStars = [];
   for (let i = 1; i < maxRating + 1; i++) {
     const color = i <= currentRating ? 'fill-support-supportWarning' : 'fill-icon-icon02';
     ratingStars.push(
-      <span key={i} onClick={() => handleChangeRating(i)} className={clsx(color, starClasses)}>
+      <button
+        type="button"
+        key={i}
+        onClick={() => handleChangeRating(i)}
+        className={clsx(color, starClasses)}
+        disabled={!isEditable}
+      >
         {iconElements['star-filled']}
-      </span>,
+      </button>,
     );
   }
 
