@@ -3,6 +3,7 @@ export * from './breadcrumb';
 export * from './button';
 export * from './checkbox';
 export * from './dropdown';
+export * from './evaluation-star';
 export * from './heading';
 export * from './icon';
 export * from './icon-button';
