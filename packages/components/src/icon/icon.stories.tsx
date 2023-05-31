@@ -12,6 +12,7 @@ export function Base() {
       <Icon name="angle-small-down" />
       <Icon name="angle-small-up" />
       <Icon name="angle-up" />
+      <Icon name="arrow-left" />
       <Icon name="arrow-down" />
       <Icon name="arrow-right" />
       <Icon name="arrow-up" />
