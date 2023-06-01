@@ -9,7 +9,17 @@ export const tokens = {
     "aquamarine": "#79ebda",
     "yellowGreen": "#8ae58b",
     "yellow": "#f3c90a",
-    "orange": "#f9b12c"
+    "orange": "#f9b12c",
+    "redLight": "#FDDADA",
+    "pinkLight": "#FBDEF5",
+    "purpleLight": "#EFDCF7",
+    "turquoiseLight": "#DBF0F7",
+    "royalBlueLight": "#DFE8FB",
+    "blueLight": "#D8EFFC",
+    "aquamarineLight": "#D7F9F4",
+    "yellowGreenLight": "#DCF7DC",
+    "yellowLight": "#FCEFB6",
+    "orangeLight": "#FDE8C0"
   },
   "tokens": {
     "text": {
@@ -32,9 +42,11 @@ export const tokens = {
     },
     "border": {
       "uiBorder01": "#DEDFE0",
-      "uiBorder02": "#CACCCD",
       "uiBorder01Dark": "#5C6366",
-      "uiBorder02Dark": "#7C868A"
+      "uiBorder02": "#CACCCD",
+      "uiBorder02Dark": "#7C868A",
+      "uiBorder03": "#A4A5A6",
+      "uiBorder03Dark": "#838789"
     },
     "background": {
       "uiBackground01": "#FFFFFF",
@@ -95,6 +107,8 @@ export const tokens = {
       "hover02BackgroundDark": "#454A4D",
       "hoverUi": "#E9EAEB",
       "hoverUiDark": "#5C6366",
+      "hoverUi02": "#F3F4F5",
+      "hoverUi02Dark": "#454A4D",
       "hoverUiBorder": "#7C868A",
       "hoverUiBorderDark": "#CACCCD",
       "hoverSelectedUi": "#CACCCD",
@@ -155,14 +169,19 @@ export const tokens = {
     },
     "support": {
       "supportError": "#D92B57",
+      "supportErrorLight": "#F4BFCD",
       "supportErrorDark": "#E67490",
       "supportSuccess": "#2DC87D",
+      "supportSuccessLight": "#CCF4E1",
       "supportSuccessDark": "#69DDA5",
       "supportInfo": "#177EE5",
+      "supportInfoLight": "#B9D8F7",
       "supportInfoDark": "#177EE5",
       "supportWarning": "#FCD200",
+      "supportWarningLight": "#FFF4BA",
       "supportWarningDark": "#FFE976",
       "supportDanger": "#D92B57",
+      "supportDangerLight": "#F4BFCD",
       "supportDangerDark": "#E67490"
     }
   },
