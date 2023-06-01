@@ -14,5 +14,6 @@ export * from './select';
 export * from './select-sort';
 export * from './tab';
 export * from './table';
+export * from './toast';
 export * from './toggle';
 export * from './tooltip';
