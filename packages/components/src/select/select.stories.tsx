@@ -59,6 +59,40 @@ export const Base: Story = {
         <Select {...args} size="medium" variant="text" options={optionsList} placeholder="選択" isDisabled />
         <Select {...args} size="large" variant="text" options={optionsList} placeholder="選択" isDisabled />
       </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '80px' }}>
+        <Select
+          {...args}
+          size="x-small"
+          variant="outline"
+          options={optionsList}
+          placeholder="選択選択選択選択選択"
+          width={140}
+        />
+        <Select
+          {...args}
+          size="small"
+          variant="outline"
+          options={optionsList}
+          placeholder="選択選択選択選択選択"
+          width={140}
+        />
+        <Select
+          {...args}
+          size="medium"
+          variant="outline"
+          options={optionsList}
+          placeholder="選択選択選択選択選択"
+          width={140}
+        />
+        <Select
+          {...args}
+          size="large"
+          variant="outline"
+          options={optionsList}
+          placeholder="選択選択選択選択選択"
+          width={140}
+        />
+      </div>
     </div>
   ),
 };
