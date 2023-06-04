@@ -89,8 +89,7 @@ export function Select({
   );
 
   const labelClasses = clsx(
-    'flex',
-    'items-center',
+    'overflow-hidden',
     size === 'x-small' ? 'mr-1' : 'mr-2',
     typography.label[
       size === 'x-small' ? 'label3regular' : size === 'small' || size === 'medium' ? 'label2regular' : 'label1regular'
@@ -101,18 +100,22 @@ export function Select({
     <div className={wrapperClasses} style={{ width }} ref={targetRef}>
       <button className={buttonClasses} type="button" onClick={handleClickToggle} disabled={isDisabled}>
         {selectedOption?.icon ? (
-          <span className="mr-1 flex">
+          <div className="mr-1 flex">
             <Icon name={selectedOption.icon} size={size === 'large' ? 'medium' : 'small'} />
-          </span>
+          </div>
         ) : (
           placeholder &&
           placeholderIcon && (
-            <span className="mr-1 flex">
+            <div className="mr-1 flex">
               <Icon name={placeholderIcon} size={size === 'large' ? 'medium' : 'small'} />
-            </span>
+            </div>
           )
         )}
-        <span className={labelClasses}>{selectedOption ? selectedOption.label : placeholder && placeholder}</span>
+        <div className={labelClasses}>
+          <div className="overflow-hidden text-ellipsis whitespace-nowrap">
+            {selectedOption ? selectedOption.label : placeholder && placeholder}
+          </div>
+        </div>
         <div className="ml-auto flex items-center">
           <Icon name={isOptionListOpen ? 'angle-small-up' : 'angle-small-down'} size="small" />
         </div>

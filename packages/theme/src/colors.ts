@@ -47,3 +47,41 @@ export const iconColors = {
   icon03Dark: 'fill-icon-icon03Dark',
   iconOnColor: 'fill-icon-iconOnColor',
 } as const;
+
+export const tagColors = {
+  SupportError: 'text-text-textOnColor bg-support-supportError',
+  SupportSuccess: 'text-text-textOnColor bg-support-supportSuccess',
+  SupportWarning: 'text-text-textOnColor bg-support-supportWarning',
+  SupportDanger: 'text-text-textOnColor bg-support-supportDanger',
+  UserRed: 'text-text-textOnColor bg-user-red',
+  UserPink: 'text-text-textOnColor bg-user-pink',
+  UserPurple: 'text-text-textOnColor bg-user-purple',
+  UserTurquoise: 'text-text-textOnColor bg-user-turquoise',
+  UserRoyalBlue: 'text-text-textOnColor bg-user-royalBlue',
+  UserBlue: 'text-text-textOnColor bg-user-blue',
+  UserAquamarine: 'text-text-textOnColor bg-user-aquamarine',
+  UserYellowGreen: 'text-text-textOnColor bg-user-yellowGreen',
+  UserYellow: 'text-text-textOnColor bg-user-yellow',
+  UserOrange: 'text-text-textOnColor bg-user-orange',
+  Default: 'text-text-textOnColor bg-support-supportInfo',
+  Gray: 'text-text-text02 bg-gray-gray10',
+} as const;
+
+export const tagLightColors = {
+  SupportError: 'text-text-text01 bg-support-supportErrorLight',
+  SupportSuccess: 'text-text-text01 bg-support-supportSuccessLight',
+  SupportWarning: 'text-text-text01 bg-support-supportWarningLight',
+  SupportDanger: 'text-text-text01 bg-support-supportDangerLight',
+  UserRed: 'text-text-text01 bg-user-redLight',
+  UserPink: 'text-text-text01 bg-user-pinkLight',
+  UserPurple: 'text-text-text01 bg-user-purpleLight',
+  UserTurquoise: 'text-text-text01 bg-user-turquoiseLight',
+  UserRoyalBlue: 'text-text-text01 bg-user-royalBlueLight',
+  UserBlue: 'text-text-text01 bg-user-blueLight',
+  UserAquamarine: 'text-text-text01 bg-user-aquamarineLight',
+  UserYellowGreen: 'text-text-text01 bg-user-yellowGreenLight',
+  UserYellow: 'text-text-text01 bg-user-yellowLight',
+  UserOrange: 'text-text-text01 bg-user-orangeLight',
+  Default: 'text-text-text01 bg-support-supportInfoLight',
+  Gray: 'text-text-text01 bg-gray-gray10',
+} as const;
