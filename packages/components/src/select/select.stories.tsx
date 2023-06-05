@@ -56,6 +56,7 @@ export const Base: Story = {
         <Select {...args} size="small" variant="outline" options={optionsList} placeholder="選択" />
         <Select {...args} size="medium" variant="outline" options={optionsList} placeholder="選択" />
         <Select {...args} size="large" variant="outline" options={optionsList} placeholder="選択" />
+        <Select {...args} size="large" variant="outline" options={optionsList} placeholder="選択" isDisabled />
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: '80px' }}>
         <Select
@@ -69,17 +70,6 @@ export const Base: Story = {
         <Select {...args} size="small" variant="text" options={optionsList} placeholder="選択" />
         <Select {...args} size="medium" variant="text" options={optionsList} placeholder="選択" />
         <Select {...args} size="large" variant="text" options={optionsList} placeholder="選択" />
-      </div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '80px' }}>
-        <Select {...args} size="x-small" variant="outline" options={optionsList} placeholder="選択" isDisabled />
-        <Select {...args} size="small" variant="outline" options={optionsList} placeholder="選択" isDisabled />
-        <Select {...args} size="medium" variant="outline" options={optionsList} placeholder="選択" isDisabled />
-        <Select {...args} size="large" variant="outline" options={optionsList} placeholder="選択" isDisabled />
-      </div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '80px' }}>
-        <Select {...args} size="x-small" variant="text" options={optionsList} placeholder="選択" isDisabled />
-        <Select {...args} size="small" variant="text" options={optionsList} placeholder="選択" isDisabled />
-        <Select {...args} size="medium" variant="text" options={optionsList} placeholder="選択" isDisabled />
         <Select {...args} size="large" variant="text" options={optionsList} placeholder="選択" isDisabled />
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: '80px' }}>
@@ -87,9 +77,10 @@ export const Base: Story = {
           {...args}
           size="x-small"
           variant="outline"
-          options={optionsList}
+          options={optionsList2}
           placeholder="選択選択選択選択選択"
           width={140}
+          optionListMaxHeight={120}
         />
         <Select
           {...args}
@@ -114,6 +105,15 @@ export const Base: Story = {
           options={optionsList}
           placeholder="選択選択選択選択選択"
           width={140}
+        />
+        <Select
+          {...args}
+          size="large"
+          variant="outline"
+          options={optionsList}
+          placeholder="選択選択選択選択選択"
+          width={140}
+          isDisabled
         />
       </div>
     </div>
