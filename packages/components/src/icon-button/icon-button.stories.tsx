@@ -70,6 +70,40 @@ export function Base() {
         <IconButton variant="text" icon="add" size="large" />
         <IconButton variant="text" icon="add" size="large" isDisabled />
       </div>
+
+      <div
+        style={{
+          display: 'flex',
+          gap: '8px',
+          alignItems: 'center',
+          marginTop: '8px',
+        }}
+      >
+        <IconButton variant="text" icon="add" size="small" isNoPadding />
+        <IconButton variant="text" icon="add" size="small" isNoPadding isDisabled />
+      </div>
+      <div
+        style={{
+          display: 'flex',
+          gap: '8px',
+          alignItems: 'center',
+          marginTop: '8px',
+        }}
+      >
+        <IconButton variant="text" icon="add" size="medium" isNoPadding />
+        <IconButton variant="text" icon="add" size="medium" isNoPadding isDisabled />
+      </div>
+      <div
+        style={{
+          display: 'flex',
+          gap: '8px',
+          alignItems: 'center',
+          marginTop: '8px',
+        }}
+      >
+        <IconButton variant="text" icon="add" size="large" isNoPadding />
+        <IconButton variant="text" icon="add" size="large" isNoPadding isDisabled />
+      </div>
     </div>
   );
 }

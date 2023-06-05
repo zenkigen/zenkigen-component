@@ -18,6 +18,7 @@ export const Icon = ({ size = 'medium', ...props }: Props) => {
     <span
       className={clsx(
         'inline-block',
+        'shrink-0',
         props.isDisabled
           ? 'fill-disabled-disabled01'
           : {
