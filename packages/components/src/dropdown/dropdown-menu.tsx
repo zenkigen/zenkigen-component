@@ -1,13 +1,13 @@
 import clsx from 'clsx';
 
 import { DropdownItem } from './dropdown-item';
-import { DropdownItemType, HorizontalAlign, VerticalPosition } from './type';
+import { DropdownItemType, DropdownHorizontalAlign, DropdownVerticalPosition } from './type';
 
 type Props = {
   variant: 'text' | 'outline';
   items: DropdownItemType[];
-  verticalPosition?: VerticalPosition;
-  horizontalAlign?: HorizontalAlign;
+  verticalPosition?: DropdownVerticalPosition;
+  horizontalAlign?: DropdownHorizontalAlign;
   targetDimensions: { width: number; height: number };
   onClickItem: (onClickAction: () => void) => void;
 };

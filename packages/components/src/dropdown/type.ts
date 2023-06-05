@@ -8,5 +8,5 @@ export type DropdownItemType = {
   onClick: () => void;
 };
 
-export type VerticalPosition = 'top' | 'bottom';
-export type HorizontalAlign = 'left' | 'center' | 'right';
+export type DropdownVerticalPosition = 'top' | 'bottom';
+export type DropdownHorizontalAlign = 'left' | 'center' | 'right';
