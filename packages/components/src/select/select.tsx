@@ -17,9 +17,9 @@ type Props = {
   placeholder?: string;
   placeholderIcon?: IconName;
   options: SelectOption[];
-  defaultOptionId?: string;
+  selectedOptionId?: string | null;
   isDisabled?: boolean;
-  onChange?: (id: string, index: number, value: string) => void;
+  onChange?: (id: string | null, index: number | null, value: string | null) => void;
 };
 
 export function Select({
@@ -29,11 +29,10 @@ export function Select({
   placeholder,
   placeholderIcon,
   options,
-  defaultOptionId,
+  selectedOptionId = null,
   isDisabled = false,
   onChange,
 }: Props) {
-  const [selectedOptionId, setSelectedOptionId] = useState(defaultOptionId ? defaultOptionId : null);
   const [isOptionListOpen, setIsOptionListOpen] = useState(false);
   const targetRef = useRef<HTMLDivElement>(null);
   useOutsideClick(targetRef, () => setIsOptionListOpen(false));
@@ -43,16 +42,15 @@ export function Select({
   const handleClickToggle = () => setIsOptionListOpen((prev) => !prev);
   const handleClickItem = useCallback(
     (id: string, index: number, value: string) => {
-      setSelectedOptionId(id);
       onChange?.(id, index, value);
       setIsOptionListOpen(false);
     },
     [onChange],
   );
   const handleClickDeselect = useCallback(() => {
-    setSelectedOptionId(null);
+    onChange?.(null, null, null);
     setIsOptionListOpen(false);
-  }, []);
+  }, [onChange]);
 
   const wrapperClasses = clsx(
     'relative',
