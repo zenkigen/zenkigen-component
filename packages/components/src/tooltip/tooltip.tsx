@@ -4,15 +4,15 @@ import { typography } from '@zenkigen-component/theme';
 import clsx from 'clsx';
 
 import { TailIcon } from './tail-icon';
-import { HorizontalAlign, Size, VerticalPosition } from './type';
+import { TooltipHorizontalAlign, TooltipSize, TooltipVerticalPosition } from './type';
 
 type Props = {
   children: ReactNode;
   content: string;
-  size?: Size;
+  size?: TooltipSize;
   maxWidth?: CSSProperties['width'];
-  verticalPosition?: VerticalPosition;
-  horizontalAlign?: HorizontalAlign;
+  verticalPosition?: TooltipVerticalPosition;
+  horizontalAlign?: TooltipHorizontalAlign;
 };
 
 export function Tooltip({

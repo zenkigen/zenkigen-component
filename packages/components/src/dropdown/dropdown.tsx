@@ -8,7 +8,7 @@ import { useOutsideClick } from '../hooks/useOutsideClick';
 import { Icon } from '../icon';
 
 import { DropdownMenu } from './dropdown-menu';
-import { DropdownItemType, HorizontalAlign, VerticalPosition } from './type';
+import { DropdownItemType, DropdownHorizontalAlign, DropdownVerticalPosition } from './type';
 
 type Props =
   | {
@@ -16,8 +16,8 @@ type Props =
       variant?: 'text' | 'outline';
       items: DropdownItemType[];
       isDisabled?: boolean;
-      verticalPosition?: VerticalPosition;
-      horizontalAlign?: HorizontalAlign;
+      verticalPosition?: DropdownVerticalPosition;
+      horizontalAlign?: DropdownHorizontalAlign;
     } & (
       | { children: ReactElement; label?: never; icon?: never }
       | {

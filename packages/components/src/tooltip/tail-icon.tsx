@@ -1,11 +1,11 @@
 import clsx from 'clsx';
 
-import { HorizontalAlign, Size, VerticalPosition } from './type';
+import { TooltipHorizontalAlign, TooltipSize, TooltipVerticalPosition } from './type';
 
 type Props = {
-  size: Size;
-  verticalPosition: VerticalPosition;
-  horizontalAlign: HorizontalAlign;
+  size: TooltipSize;
+  verticalPosition: TooltipVerticalPosition;
+  horizontalAlign: TooltipHorizontalAlign;
 };
 
 export const TailIcon = (props: Props) => {

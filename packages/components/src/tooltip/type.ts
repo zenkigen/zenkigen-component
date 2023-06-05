@@ -1,3 +1,3 @@
-export type Size = 'small' | 'medium';
-export type VerticalPosition = 'top' | 'bottom';
-export type HorizontalAlign = 'left' | 'center' | 'right';
+export type TooltipSize = 'small' | 'medium';
+export type TooltipVerticalPosition = 'top' | 'bottom';
+export type TooltipHorizontalAlign = 'left' | 'center' | 'right';
