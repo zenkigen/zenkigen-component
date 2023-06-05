@@ -4,7 +4,7 @@ import { IconName } from '@zenkigen-component/icons';
 import { buttonColors, focusVisible, typography } from '@zenkigen-component/theme';
 import clsx from 'clsx';
 
-import { useOutsideClick } from '../hooks/useOutsideClick';
+import { useOutsideClick } from '../hooks/use-outside-click';
 import { Icon } from '../icon';
 
 import { DropdownMenu } from './dropdown-menu';
