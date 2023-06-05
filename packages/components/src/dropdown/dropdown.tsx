@@ -4,11 +4,11 @@ import { IconName } from '@zenkigen-component/icons';
 import { buttonColors, focusVisible, typography } from '@zenkigen-component/theme';
 import clsx from 'clsx';
 
-import { useOutsideClick } from '../hooks/useOutsideClick';
+import { useOutsideClick } from '../hooks/use-outside-click';
 import { Icon } from '../icon';
 
 import { DropdownMenu } from './dropdown-menu';
-import { DropdownItemType, HorizontalAlign, VerticalPosition } from './type';
+import { DropdownItemType, DropdownHorizontalAlign, DropdownVerticalPosition } from './type';
 
 type Props =
   | {
@@ -16,8 +16,8 @@ type Props =
       variant?: 'text' | 'outline';
       items: DropdownItemType[];
       isDisabled?: boolean;
-      verticalPosition?: VerticalPosition;
-      horizontalAlign?: HorizontalAlign;
+      verticalPosition?: DropdownVerticalPosition;
+      horizontalAlign?: DropdownHorizontalAlign;
     } & (
       | { children: ReactElement; label?: never; icon?: never }
       | {
