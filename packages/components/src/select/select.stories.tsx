@@ -33,6 +33,15 @@ const optionsList = [
   { id: '3', label: '選択肢C', value: 'C', icon: 'add' as IconName },
 ];
 
+const optionsList2 = [
+  { id: '1', label: '選択肢A', value: 'A', icon: 'add' as IconName },
+  { id: '2', label: '選択肢B', value: 'B', icon: 'add' as IconName },
+  { id: '3', label: '選択肢C', value: 'C', icon: 'add' as IconName },
+  { id: '4', label: '選択肢D', value: 'D', icon: 'add' as IconName },
+  { id: '5', label: '選択肢E', value: 'E', icon: 'add' as IconName },
+  { id: '6', label: '選択肢F', value: 'F', icon: 'add' as IconName },
+];
+
 export function Base() {
   const [selectedOptionId1, setSelectedOptionId1] = useState<string | null>(null);
   const [selectedOptionId2, setSelectedOptionId2] = useState<string | null>(null);
@@ -46,10 +55,11 @@ export function Base() {
           <Select
             size="x-small"
             variant="outline"
-            options={optionsList}
+            options={optionsList2}
             placeholder="選択"
             selectedOptionId={selectedOptionId1}
             onChange={(id) => setSelectedOptionId1(id)}
+            optionListMaxHeight={120}
           />
           <Select
             size="small"
@@ -75,15 +85,25 @@ export function Base() {
             selectedOptionId={selectedOptionId4}
             onChange={(id) => setSelectedOptionId4(id)}
           />
+          <Select
+            size="large"
+            variant="outline"
+            options={optionsList}
+            placeholder="選択"
+            selectedOptionId={selectedOptionId4}
+            onChange={(id) => setSelectedOptionId4(id)}
+            isDisabled
+          />
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '80px' }}>
           <Select
             size="x-small"
             variant="text"
-            options={optionsList}
+            options={optionsList2}
             placeholder="選択"
             selectedOptionId={selectedOptionId1}
             onChange={(id) => setSelectedOptionId1(id)}
+            optionListMaxHeight={120}
           />
           <Select
             size="small"
@@ -109,73 +129,6 @@ export function Base() {
             selectedOptionId={selectedOptionId4}
             onChange={(id) => setSelectedOptionId4(id)}
           />
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '80px' }}>
-          <Select
-            size="x-small"
-            variant="outline"
-            options={optionsList}
-            placeholder="選択"
-            selectedOptionId={selectedOptionId1}
-            onChange={(id) => setSelectedOptionId1(id)}
-            isDisabled
-          />
-          <Select
-            size="small"
-            variant="outline"
-            options={optionsList}
-            placeholder="選択"
-            selectedOptionId={selectedOptionId2}
-            onChange={(id) => setSelectedOptionId2(id)}
-            isDisabled
-          />
-          <Select
-            size="medium"
-            variant="outline"
-            options={optionsList}
-            placeholder="選択"
-            selectedOptionId={selectedOptionId3}
-            onChange={(id) => setSelectedOptionId3(id)}
-            isDisabled
-          />
-          <Select
-            size="large"
-            variant="outline"
-            options={optionsList}
-            placeholder="選択"
-            selectedOptionId={selectedOptionId4}
-            onChange={(id) => setSelectedOptionId4(id)}
-            isDisabled
-          />
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '80px' }}>
-          <Select
-            size="x-small"
-            variant="text"
-            options={optionsList}
-            placeholder="選択"
-            selectedOptionId={selectedOptionId1}
-            onChange={(id) => setSelectedOptionId1(id)}
-            isDisabled
-          />
-          <Select
-            size="small"
-            variant="text"
-            options={optionsList}
-            placeholder="選択"
-            selectedOptionId={selectedOptionId2}
-            onChange={(id) => setSelectedOptionId2(id)}
-            isDisabled
-          />
-          <Select
-            size="medium"
-            variant="text"
-            options={optionsList}
-            placeholder="選択"
-            selectedOptionId={selectedOptionId3}
-            onChange={(id) => setSelectedOptionId3(id)}
-            isDisabled
-          />
           <Select
             size="large"
             variant="text"
@@ -190,11 +143,12 @@ export function Base() {
           <Select
             size="x-small"
             variant="outline"
-            options={optionsList}
+            options={optionsList2}
             placeholder="選択選択選択選択選択"
             selectedOptionId={selectedOptionId1}
             onChange={(id) => setSelectedOptionId1(id)}
             width={140}
+            optionListMaxHeight={120}
           />
           <Select
             size="small"
@@ -222,6 +176,16 @@ export function Base() {
             selectedOptionId={selectedOptionId4}
             onChange={(id) => setSelectedOptionId4(id)}
             width={140}
+          />
+          <Select
+            size="large"
+            variant="outline"
+            options={optionsList}
+            placeholder="選択選択選択選択選択"
+            selectedOptionId={selectedOptionId4}
+            onChange={(id) => setSelectedOptionId4(id)}
+            width={140}
+            isDisabled
           />
         </div>
       </div>
