@@ -18,6 +18,7 @@ type Props = {
   placeholderIcon?: IconName;
   options: SelectOption[];
   selectedOptionId?: string | null;
+  optionListMaxHeight?: CSSProperties['height'];
   isDisabled?: boolean;
   onChange?: (id: string | null, index: number | null, value: string | null) => void;
 };
@@ -30,6 +31,7 @@ export function Select({
   placeholderIcon,
   options,
   selectedOptionId = null,
+  optionListMaxHeight,
   isDisabled = false,
   onChange,
 }: Props) {
@@ -125,6 +127,7 @@ export function Select({
           options={options}
           placeholder={placeholder}
           selectedOptionId={selectedOptionId}
+          maxHeight={optionListMaxHeight}
           onClickItem={handleClickItem}
           onClickDeselect={handleClickDeselect}
         />

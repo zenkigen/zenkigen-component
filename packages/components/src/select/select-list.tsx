@@ -1,3 +1,5 @@
+import { CSSProperties } from 'react';
+
 import { focusVisible, typography } from '@zenkigen-component/theme';
 import clsx from 'clsx';
 
@@ -9,6 +11,7 @@ type Props = {
   variant: 'text' | 'outline';
   options: SelectOption[];
   selectedOptionId: string | null;
+  maxHeight?: CSSProperties['height'];
   placeholder?: string;
   onClickItem: (id: string, index: number, value: string) => void;
   onClickDeselect: () => void;
@@ -19,6 +22,7 @@ export function SelectList({
   variant,
   options,
   selectedOptionId,
+  maxHeight,
   placeholder,
   onClickItem,
   onClickDeselect,
@@ -54,7 +58,7 @@ export function SelectList({
   );
 
   return (
-    <ul className={listClasses}>
+    <ul className={listClasses} style={{ maxHeight }}>
       {options.map((option, index) => (
         <SelectItem
           key={option.id}
