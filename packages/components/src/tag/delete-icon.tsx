@@ -24,9 +24,9 @@ export const DeleteIcon = ({ color, variant, onClick }: Props) => {
   );
 
   const deletePathClasses = clsx({
-    'fill-interactive-interactive02': color === 'Gray' || variant === 'light',
+    'fill-interactive-interactive02': color === 'gray' || variant === 'light',
     'group-hover:fill-interactive-interactive02 group-focus-visible:fill-interactive-interactive02 fill-icon-iconOnColor':
-      color !== 'Gray',
+      color !== 'gray',
   });
 
   return (
