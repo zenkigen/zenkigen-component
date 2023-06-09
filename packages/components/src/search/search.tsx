@@ -8,13 +8,13 @@ import { Icon } from '../icon';
 type Props = {
   placeholder?: string;
   width?: string;
-  onSubmit: (name: string) => void;
+  onSubmit: (keyword: string) => void;
   onClickSearchModal?: () => void;
 };
 
 export const Search = forwardRef<HTMLDivElement, Props>(({ width = '100%', ...props }: Props, ref) => {
   const [text, setText] = useState('');
-  const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     props.onSubmit(text);
   };
@@ -41,7 +41,7 @@ export const Search = forwardRef<HTMLDivElement, Props>(({ width = '100%', ...pr
 
   return (
     <div className={wrapperClasses} ref={ref}>
-      <form onSubmit={handleOnSubmit}>
+      <form onSubmit={handleSubmit}>
         <div className={searchAreaClasses} style={{ width }}>
           <Icon name="search" color="icon01" size="small" />
           <input
