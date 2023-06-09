@@ -14,7 +14,6 @@ type Props =
   | {
       size?: 'x-small' | 'small' | 'medium' | 'large';
       variant?: 'text' | 'outline';
-      items: DropdownItemType[];
       isDisabled?: boolean;
       verticalPosition?: DropdownVerticalPosition;
       horizontalAlign?: DropdownHorizontalAlign;
@@ -25,13 +24,15 @@ type Props =
           label: string;
           icon?: IconName;
         }
-    );
+    ) &
+      ({ items: DropdownItemType[]; menuComponent?: never } | { items?: never; menuComponent: ReactElement });
 
 export function Dropdown({
   children,
   size = 'medium',
   variant = children ? 'text' : 'outline',
   items,
+  menuComponent,
   isDisabled = false,
   verticalPosition = 'bottom',
   horizontalAlign = 'center',
@@ -141,16 +142,29 @@ export function Dropdown({
           </div>
         </button>
       )}
-      {!isDisabled && isVisible && (
-        <DropdownMenu
-          variant={variant}
-          items={items}
-          targetDimensions={targetDimensions}
-          verticalPosition={verticalPosition}
-          horizontalAlign={horizontalAlign}
-          onClickItem={handleClickItem}
-        />
-      )}
+      {!isDisabled &&
+        isVisible &&
+        (menuComponent ? (
+          <DropdownMenu
+            variant={variant}
+            menuComponent={menuComponent && menuComponent}
+            targetDimensions={targetDimensions}
+            verticalPosition={verticalPosition}
+            horizontalAlign={horizontalAlign}
+            onClickItem={handleClickItem}
+          />
+        ) : (
+          items && (
+            <DropdownMenu
+              variant={variant}
+              items={items && items}
+              targetDimensions={targetDimensions}
+              verticalPosition={verticalPosition}
+              horizontalAlign={horizontalAlign}
+              onClickItem={handleClickItem}
+            />
+          )
+        ))}
     </div>
   );
 }
