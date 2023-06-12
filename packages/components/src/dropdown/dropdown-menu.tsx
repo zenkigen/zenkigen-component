@@ -13,12 +13,12 @@ type Props =
       horizontalAlign?: DropdownHorizontalAlign;
       targetDimensions: { width: number; height: number };
       onClickItem: (onClickAction: () => void) => void;
-    } & ({ items: DropdownItemType[]; menuComponent?: never } | { items?: never; menuComponent: ReactElement });
+    } & ({ items: DropdownItemType[]; menu?: never } | { items?: never; menu: ReactElement });
 
 export function DropdownMenu({
   variant,
   items,
-  menuComponent,
+  menu,
   maxHeight,
   verticalPosition,
   horizontalAlign,
@@ -55,7 +55,7 @@ export function DropdownMenu({
           ))}
         </ul>
       ) : (
-        menuComponent
+        menu
       )}
     </div>
   );

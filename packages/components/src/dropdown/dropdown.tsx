@@ -26,14 +26,14 @@ type Props =
           icon?: IconName;
         }
     ) &
-      ({ items: DropdownItemType[]; menuComponent?: never } | { items?: never; menuComponent: ReactElement });
+      ({ items: DropdownItemType[]; menu?: never } | { items?: never; menu: ReactElement });
 
 export function Dropdown({
   children,
   size = 'medium',
   variant = children ? 'text' : 'outline',
   items,
-  menuComponent,
+  menu,
   menuMaxHeight,
   isDisabled = false,
   verticalPosition = 'bottom',
@@ -146,10 +146,10 @@ export function Dropdown({
       )}
       {!isDisabled &&
         isVisible &&
-        (menuComponent ? (
+        (menu ? (
           <DropdownMenu
             variant={variant}
-            menuComponent={menuComponent && menuComponent}
+            menu={menu}
             maxHeight={menuMaxHeight}
             targetDimensions={targetDimensions}
             verticalPosition={verticalPosition}

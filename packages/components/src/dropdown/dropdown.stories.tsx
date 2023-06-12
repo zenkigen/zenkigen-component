@@ -213,7 +213,7 @@ const DropdownWithCustomMenu = () => {
         label="フィルター"
         icon="filter"
         horizontalAlign="right"
-        menuComponent={
+        menu={
           <ul className="flex w-[208px] flex-col gap-y-2.5 px-4 py-3">
             {items.map((item) => (
               <li key={item.id} className={clsx('flex w-full items-center', item.color)}>
