@@ -145,23 +145,29 @@ const DropdownWithCustomMenu = () => {
   const [isOn1, setIsOn1] = useState(false);
   const [isOn2, setIsOn2] = useState(false);
   const [isOn3, setIsOn3] = useState(false);
+  const [isOn4, setIsOn4] = useState(false);
+  const [isOn5, setIsOn5] = useState(false);
 
   const handleClickReset = () => {
     setIsOn1(false);
     setIsOn2(false);
     setIsOn3(false);
+    setIsOn4(false);
+    setIsOn5(false);
   };
 
   const items = [
     {
       id: '1',
+      icon: 'graph-line',
       label: '発話比率',
-      color: 'fill-user-turquoise',
+      color: 'fill-user-aquamarine',
       isChecked: isOn1,
       onChange: () => setIsOn1((prev) => !prev),
     },
     {
       id: '2',
+      icon: 'graph-line',
       label: '体の向き',
       color: 'fill-user-blue',
       isChecked: isOn2,
@@ -169,10 +175,25 @@ const DropdownWithCustomMenu = () => {
     },
     {
       id: '3',
+      icon: 'graph-line',
       label: '会話テンポ',
       color: 'fill-user-pink',
       isChecked: isOn3,
       onChange: () => setIsOn3((prev) => !prev),
+    },
+    {
+      id: '4',
+      label: '相づち',
+      color: 'fill-support-supportSuccess',
+      isChecked: isOn4,
+      onChange: () => setIsOn4((prev) => !prev),
+    },
+    {
+      id: '5',
+      label: 'NGワード',
+      color: 'fill-support-supportError',
+      isChecked: isOn5,
+      onChange: () => setIsOn5((prev) => !prev),
     },
   ];
   return (
@@ -186,7 +207,13 @@ const DropdownWithCustomMenu = () => {
           <ul className="flex w-[208px] flex-col gap-y-2.5 px-4 py-3">
             {items.map((item) => (
               <li key={item.id} className={clsx('flex w-full items-center', item.color)}>
-                <Icon name="graph-line" size="small" />
+                {item.icon ? (
+                  <Icon name={item.icon} size="small" />
+                ) : (
+                  <svg className="h-4 w-4">
+                    <circle r="6" cx="8" cy="8" className={clsx(item.color)} />
+                  </svg>
+                )}
                 <span className={clsx('ml-2 flex-1 text-text-text01', typography.label.label2regular)}>
                   {item.label}
                 </span>
