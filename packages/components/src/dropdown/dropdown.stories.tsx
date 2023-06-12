@@ -43,11 +43,56 @@ const items: DropdownItemType[] = [
   },
 ];
 
+const items2: DropdownItemType[] = [
+  {
+    id: '1',
+    icon: 'edit' as const,
+    label: '操作項目1',
+    color: 'gray' as const,
+    onClick: action('選択項目1'),
+  },
+  {
+    id: '2',
+    icon: 'edit' as const,
+    label: '操作項目2',
+    color: 'gray' as const,
+    onClick: action('選択項目2'),
+  },
+  {
+    id: '3',
+    icon: 'edit' as const,
+    label: '操作項目3',
+    color: 'gray' as const,
+    onClick: action('選択項目3'),
+  },
+  {
+    id: '4',
+    icon: 'edit' as const,
+    label: '操作項目4',
+    color: 'gray' as const,
+    onClick: action('選択項目4'),
+  },
+  {
+    id: '5',
+    icon: 'edit' as const,
+    label: '操作項目5',
+    color: 'gray' as const,
+    onClick: action('選択項目5'),
+  },
+  {
+    id: '6',
+    icon: 'edit' as const,
+    label: '操作項目6',
+    color: 'red' as const,
+    onClick: action('選択項目6'),
+  },
+];
+
 const DropdownBasic = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', margin: '0 100px' }}>
       <div style={{ display: 'flex', alignItems: 'center', columnGap: '100px', marginBottom: '150px' }}>
-        <Dropdown size="small" items={items} horizontalAlign="right">
+        <Dropdown size="small" items={items2} menuMaxHeight={120} horizontalAlign="right">
           <Avatar size="x-small" userId={1} lastName="全機現" firstName="太郎" />
         </Dropdown>
         <Dropdown size="medium" items={items} horizontalAlign="right">
@@ -64,7 +109,7 @@ const DropdownBasic = () => {
         </Dropdown>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', columnGap: '100px', marginBottom: '150px' }}>
-        <Dropdown size="x-small" items={items} horizontalAlign="right">
+        <Dropdown size="x-small" items={items2} menuMaxHeight={120} horizontalAlign="right">
           <Icon name="more" size="small" color="icon01" />
         </Dropdown>
         <Dropdown size="small" items={items} horizontalAlign="right">
@@ -81,7 +126,7 @@ const DropdownBasic = () => {
         </Dropdown>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', columnGap: '60px', marginBottom: '150px' }}>
-        <Dropdown size="x-small" items={items} label="選択" icon="add" />
+        <Dropdown size="x-small" items={items2} menuMaxHeight={120} label="選択" icon="add" />
         <Dropdown size="small" items={items} label="選択" icon="add" />
         <Dropdown size="medium" items={items} label="選択" icon="add" />
         <Dropdown size="large" items={items} label="選択" icon="add" />

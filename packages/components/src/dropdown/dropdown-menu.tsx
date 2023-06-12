@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import { CSSProperties, ReactElement } from 'react';
 
 import clsx from 'clsx';
 
@@ -8,6 +8,7 @@ import { DropdownItemType, DropdownHorizontalAlign, DropdownVerticalPosition } f
 type Props =
   | {
       variant: 'text' | 'outline';
+      maxHeight?: CSSProperties['height'];
       verticalPosition?: DropdownVerticalPosition;
       horizontalAlign?: DropdownHorizontalAlign;
       targetDimensions: { width: number; height: number };
@@ -18,6 +19,7 @@ export function DropdownMenu({
   variant,
   items,
   menuComponent,
+  maxHeight,
   verticalPosition,
   horizontalAlign,
   targetDimensions,
@@ -43,6 +45,7 @@ export function DropdownMenu({
       style={{
         top: verticalPosition === 'bottom' ? `${targetDimensions.height + 4}px` : 'unset',
         bottom: verticalPosition === 'top' ? `${targetDimensions.height + 4}px` : 'unset',
+        maxHeight,
       }}
     >
       {items ? (

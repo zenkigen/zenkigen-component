@@ -1,4 +1,4 @@
-import { ReactElement, cloneElement, useCallback, useRef, useState } from 'react';
+import { CSSProperties, ReactElement, cloneElement, useCallback, useRef, useState } from 'react';
 
 import { IconName } from '@zenkigen-component/icons';
 import { buttonColors, focusVisible, typography } from '@zenkigen-component/theme';
@@ -14,6 +14,7 @@ type Props =
   | {
       size?: 'x-small' | 'small' | 'medium' | 'large';
       variant?: 'text' | 'outline';
+      menuMaxHeight?: CSSProperties['height'];
       isDisabled?: boolean;
       verticalPosition?: DropdownVerticalPosition;
       horizontalAlign?: DropdownHorizontalAlign;
@@ -33,6 +34,7 @@ export function Dropdown({
   variant = children ? 'text' : 'outline',
   items,
   menuComponent,
+  menuMaxHeight,
   isDisabled = false,
   verticalPosition = 'bottom',
   horizontalAlign = 'center',
@@ -148,6 +150,7 @@ export function Dropdown({
           <DropdownMenu
             variant={variant}
             menuComponent={menuComponent && menuComponent}
+            maxHeight={menuMaxHeight}
             targetDimensions={targetDimensions}
             verticalPosition={verticalPosition}
             horizontalAlign={horizontalAlign}
@@ -158,6 +161,7 @@ export function Dropdown({
             <DropdownMenu
               variant={variant}
               items={items && items}
+              maxHeight={menuMaxHeight}
               targetDimensions={targetDimensions}
               verticalPosition={verticalPosition}
               horizontalAlign={horizontalAlign}
