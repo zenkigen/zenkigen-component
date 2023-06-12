@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
+import { IconName } from '@zenkigen-component/icons';
 import { typography } from '@zenkigen-component/theme';
 import clsx from 'clsx';
 
@@ -156,10 +157,19 @@ const DropdownWithCustomMenu = () => {
     setIsOn5(false);
   };
 
-  const items = [
+  type CustomItems = {
+    id: string;
+    icon?: IconName;
+    label: string;
+    color: string;
+    isChecked: boolean;
+    onChange: () => void;
+  };
+
+  const items: CustomItems[] = [
     {
       id: '1',
-      icon: 'graph-line',
+      icon: 'graph-line' as const,
       label: '発話比率',
       color: 'fill-user-aquamarine',
       isChecked: isOn1,
@@ -167,7 +177,7 @@ const DropdownWithCustomMenu = () => {
     },
     {
       id: '2',
-      icon: 'graph-line',
+      icon: 'graph-line' as const,
       label: '体の向き',
       color: 'fill-user-blue',
       isChecked: isOn2,
