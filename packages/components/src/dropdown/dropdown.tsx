@@ -1,4 +1,4 @@
-import { CSSProperties, ReactElement, cloneElement, useCallback, useRef, useState } from 'react';
+import { ReactElement, ReactNode, cloneElement, useCallback, useRef, useState } from 'react';
 
 import { IconName } from '@zenkigen-component/icons';
 import { buttonColors, focusVisible, typography } from '@zenkigen-component/theme';
@@ -7,39 +7,33 @@ import clsx from 'clsx';
 import { useOutsideClick } from '../hooks/use-outside-click';
 import { Icon } from '../icon';
 
+import { DropdownItem } from './dropdown-item';
 import { DropdownMenu } from './dropdown-menu';
-import { DropdownItemType, DropdownHorizontalAlign, DropdownVerticalPosition } from './type';
+import { DropdownContext } from './use-dropdown-context';
 
 type Props =
   | {
       size?: 'x-small' | 'small' | 'medium' | 'large';
       variant?: 'text' | 'outline';
-      menuMaxHeight?: CSSProperties['height'];
       isDisabled?: boolean;
       isShowArrow?: boolean;
-      verticalPosition?: DropdownVerticalPosition;
-      horizontalAlign?: DropdownHorizontalAlign;
+      children: ReactNode;
     } & (
-      | { children: ReactElement; label?: never; icon?: never }
+      | { target: ReactElement; label?: never; icon?: never }
       | {
-          children?: undefined;
+          target?: undefined;
           label: string;
           icon?: IconName;
         }
-    ) &
-      ({ items: DropdownItemType[]; menu?: never } | { items?: never; menu: ReactElement });
+    );
 
 export function Dropdown({
+  target,
   children,
   size = 'medium',
-  variant = children ? 'text' : 'outline',
-  items,
-  menu,
-  menuMaxHeight,
+  variant = target ? 'text' : 'outline',
   isDisabled = false,
   isShowArrow = true,
-  verticalPosition = 'bottom',
-  horizontalAlign = 'center',
   label,
   icon,
 }: Props) {
@@ -70,13 +64,6 @@ export function Dropdown({
       setIsVisible(true);
     }
   }, [isVisible]);
-
-  const handleClickItem = useCallback((onClickAction?: () => void) => {
-    setIsVisible(false);
-    onClickAction?.();
-  }, []);
-
-  const childrenWithProps = children && cloneElement(children, { isDisabled });
 
   const wrapperClasses = clsx(
     'relative',
@@ -127,52 +114,35 @@ export function Dropdown({
     ],
   );
 
+  const targetWithProps = target && cloneElement(target, { isDisabled });
+
   return (
-    <div ref={targetRef} className={wrapperClasses}>
-      {children ? (
-        <button type="button" className={childrenButtonClasses} onClick={handleToggle} disabled={isDisabled}>
-          {childrenWithProps}
-        </button>
-      ) : (
-        <button type="button" className={buttonClasses} onClick={handleToggle} disabled={isDisabled}>
-          {icon && (
-            <span className="mr-1 flex">
-              <Icon name={icon} size={size === 'large' ? 'medium' : 'small'} />
-            </span>
-          )}
-          <span className={labelClasses}>{label}</span>
-          {isShowArrow && (
-            <div className="ml-auto flex items-center">
-              <Icon name={isVisible ? 'angle-small-up' : 'angle-small-down'} size="small" />
-            </div>
-          )}
-        </button>
-      )}
-      {!isDisabled &&
-        isVisible &&
-        (menu ? (
-          <DropdownMenu
-            variant={variant}
-            menu={menu}
-            maxHeight={menuMaxHeight}
-            targetDimensions={targetDimensions}
-            verticalPosition={verticalPosition}
-            horizontalAlign={horizontalAlign}
-            onClickItem={handleClickItem}
-          />
+    <DropdownContext.Provider value={{ isVisible, setIsVisible, isDisabled, targetDimensions, variant }}>
+      <div ref={targetRef} className={wrapperClasses}>
+        {target ? (
+          <button type="button" className={childrenButtonClasses} onClick={handleToggle} disabled={isDisabled}>
+            {targetWithProps}
+          </button>
         ) : (
-          items && (
-            <DropdownMenu
-              variant={variant}
-              items={items && items}
-              maxHeight={menuMaxHeight}
-              targetDimensions={targetDimensions}
-              verticalPosition={verticalPosition}
-              horizontalAlign={horizontalAlign}
-              onClickItem={handleClickItem}
-            />
-          )
-        ))}
-    </div>
+          <button type="button" className={buttonClasses} onClick={handleToggle} disabled={isDisabled}>
+            {icon && (
+              <span className="mr-1 flex">
+                <Icon name={icon} size={size === 'large' ? 'medium' : 'small'} />
+              </span>
+            )}
+            <span className={labelClasses}>{label}</span>
+            {isShowArrow && (
+              <div className="ml-auto flex items-center">
+                <Icon name={isVisible ? 'angle-small-up' : 'angle-small-down'} size="small" />
+              </div>
+            )}
+          </button>
+        )}
+        {children}
+      </div>
+    </DropdownContext.Provider>
   );
 }
+
+Dropdown.Menu = DropdownMenu;
+Dropdown.Item = DropdownItem;
