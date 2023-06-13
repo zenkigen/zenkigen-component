@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { typography } from '@zenkigen-component/theme';
+import { focusVisible, typography } from '@zenkigen-component/theme';
 import clsx from 'clsx';
 
 type Props = {
@@ -22,12 +22,13 @@ export function Toggle({
   labelPosition = 'right',
   isDisabled,
 }: Props) {
-  const wrapperClasses = clsx('flex', 'flex-[0_0_auto]', 'items-center');
+  const wrapperClasses = clsx('flex', 'flex-[0_0_auto]', 'items-center', 'relative');
   const baseClasses = clsx(
     'relative',
     'flex',
     'items-center',
     'rounded-full',
+    focusVisible.normalPeer,
     {
       'w-8 h-4 px-[3px]': size === 'small',
       'w-12 h-6 px-1': size === 'medium',
@@ -41,12 +42,11 @@ export function Toggle({
   );
   const inputClasses = clsx(
     'absolute',
-    'top-0',
-    'left-0',
-    'right-0',
-    'bottom-0',
+    'inset-0',
+    'z-[1]',
     'opacity-0',
     isDisabled ? 'cursor-not-allowed' : 'cursor-pointer',
+    'peer',
   );
   const indicatorClasses = clsx('bg-icon-iconOnColor', 'rounded-full', {
     'w-2.5 h-2.5': size === 'small',
@@ -67,16 +67,16 @@ export function Toggle({
           {label}
         </label>
       )}
+      <input
+        className={inputClasses}
+        type="checkbox"
+        name={id}
+        id={id}
+        checked={isChecked}
+        onChange={onChange}
+        disabled={isDisabled}
+      />
       <div className={baseClasses}>
-        <input
-          className={inputClasses}
-          type="checkbox"
-          name={id}
-          id={id}
-          checked={isChecked}
-          onChange={onChange}
-          disabled={isDisabled}
-        />
         <span className={indicatorClasses} />
       </div>
       {label && labelPosition === 'right' && (

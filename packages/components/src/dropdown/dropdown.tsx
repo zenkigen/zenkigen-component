@@ -1,4 +1,4 @@
-import { ReactElement, cloneElement, useCallback, useRef, useState } from 'react';
+import { CSSProperties, ReactElement, cloneElement, useCallback, useRef, useState } from 'react';
 
 import { IconName } from '@zenkigen-component/icons';
 import { buttonColors, focusVisible, typography } from '@zenkigen-component/theme';
@@ -14,7 +14,7 @@ type Props =
   | {
       size?: 'x-small' | 'small' | 'medium' | 'large';
       variant?: 'text' | 'outline';
-      items: DropdownItemType[];
+      menuMaxHeight?: CSSProperties['height'];
       isDisabled?: boolean;
       verticalPosition?: DropdownVerticalPosition;
       horizontalAlign?: DropdownHorizontalAlign;
@@ -25,13 +25,16 @@ type Props =
           label: string;
           icon?: IconName;
         }
-    );
+    ) &
+      ({ items: DropdownItemType[]; menu?: never } | { items?: never; menu: ReactElement });
 
 export function Dropdown({
   children,
   size = 'medium',
   variant = children ? 'text' : 'outline',
   items,
+  menu,
+  menuMaxHeight,
   isDisabled = false,
   verticalPosition = 'bottom',
   horizontalAlign = 'center',
@@ -141,16 +144,31 @@ export function Dropdown({
           </div>
         </button>
       )}
-      {!isDisabled && isVisible && (
-        <DropdownMenu
-          variant={variant}
-          items={items}
-          targetDimensions={targetDimensions}
-          verticalPosition={verticalPosition}
-          horizontalAlign={horizontalAlign}
-          onClickItem={handleClickItem}
-        />
-      )}
+      {!isDisabled &&
+        isVisible &&
+        (menu ? (
+          <DropdownMenu
+            variant={variant}
+            menu={menu}
+            maxHeight={menuMaxHeight}
+            targetDimensions={targetDimensions}
+            verticalPosition={verticalPosition}
+            horizontalAlign={horizontalAlign}
+            onClickItem={handleClickItem}
+          />
+        ) : (
+          items && (
+            <DropdownMenu
+              variant={variant}
+              items={items && items}
+              maxHeight={menuMaxHeight}
+              targetDimensions={targetDimensions}
+              verticalPosition={verticalPosition}
+              horizontalAlign={horizontalAlign}
+              onClickItem={handleClickItem}
+            />
+          )
+        ))}
     </div>
   );
 }
