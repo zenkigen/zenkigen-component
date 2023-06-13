@@ -24,22 +24,19 @@ type Story = StoryObj<typeof TableContainer>;
 const items: DropdownItemType[] = [
   {
     id: '1',
-    icon: 'edit' as const,
-    label: '操作項目1',
+    content: '操作項目1',
     color: 'gray' as const,
     onClick: action('選択項目1'),
   },
   {
     id: '2',
-    icon: 'edit' as const,
-    label: '操作項目2',
+    content: '操作項目2',
     color: 'gray' as const,
     onClick: action('選択項目2'),
   },
   {
     id: '3',
-    icon: 'edit' as const,
-    label: '操作項目3',
+    content: '操作項目3',
     color: 'red' as const,
     onClick: action('選択項目3'),
   },
