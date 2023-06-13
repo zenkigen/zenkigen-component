@@ -23,14 +23,17 @@ type Story = StoryObj<typeof Dropdown>;
 const items: DropdownItemType[] = [
   {
     id: '1',
-    icon: 'edit' as const,
-    content: '操作項目1',
+    content: (
+      <div className="flex items-center gap-2">
+        <Icon name="edit" size="small" />
+        操作項目2
+      </div>
+    ),
     color: 'gray' as const,
     onClick: action('選択項目1'),
   },
   {
     id: '2',
-    icon: 'edit' as const,
     content: (
       <div className="flex items-center gap-2">
         操作項目2
@@ -42,7 +45,6 @@ const items: DropdownItemType[] = [
   },
   {
     id: '3',
-    icon: 'edit' as const,
     content: '操作項目3',
     color: 'red' as const,
     onClick: action('選択項目3'),
@@ -52,42 +54,36 @@ const items: DropdownItemType[] = [
 const items2: DropdownItemType[] = [
   {
     id: '1',
-    icon: 'edit' as const,
     content: '操作項目1',
     color: 'gray' as const,
     onClick: action('選択項目1'),
   },
   {
     id: '2',
-    icon: 'edit' as const,
     content: '操作項目2',
     color: 'gray' as const,
     onClick: action('選択項目2'),
   },
   {
     id: '3',
-    icon: 'edit' as const,
     content: '操作項目3',
     color: 'gray' as const,
     onClick: action('選択項目3'),
   },
   {
     id: '4',
-    icon: 'edit' as const,
     content: '操作項目4',
     color: 'gray' as const,
     onClick: action('選択項目4'),
   },
   {
     id: '5',
-    icon: 'edit' as const,
     content: '操作項目5',
     color: 'gray' as const,
     onClick: action('選択項目5'),
   },
   {
     id: '6',
-    icon: 'edit' as const,
     content: '操作項目6',
     color: 'red' as const,
     onClick: action('選択項目6'),
@@ -231,8 +227,12 @@ const DropdownWithCustomMenu = () => {
     <div style={{ display: 'flex', alignItems: 'center', margin: '60px 100px' }}>
       <Dropdown
         size="medium"
-        content="フィルター"
-        icon="filter"
+        content={
+          <div className="flex items-center gap-2">
+            <Icon name="filter" size="x-small" />
+            フィルター
+          </div>
+        }
         horizontalAlign="right"
         menu={
           <ul className="flex w-[208px] flex-col gap-y-2.5 px-4 py-3">

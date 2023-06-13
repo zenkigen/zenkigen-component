@@ -1,6 +1,5 @@
 import { CSSProperties, ReactElement, ReactNode, cloneElement, useCallback, useRef, useState } from 'react';
 
-import { IconName } from '@zenkigen-component/icons';
 import { buttonColors, focusVisible, typography } from '@zenkigen-component/theme';
 import clsx from 'clsx';
 
@@ -24,7 +23,6 @@ type Props =
       | {
           children?: undefined;
           content: ReactNode;
-          icon?: IconName;
         }
     ) &
       ({ items: DropdownItemType[]; menu?: never } | { items?: never; menu: ReactElement });
@@ -41,7 +39,6 @@ export function Dropdown({
   verticalPosition = 'bottom',
   horizontalAlign = 'center',
   content,
-  icon,
 }: Props) {
   const [isVisible, setIsVisible] = useState(false);
   const [targetDimensions, setTargetDimensions] = useState({
@@ -135,11 +132,6 @@ export function Dropdown({
         </button>
       ) : (
         <button type="button" className={buttonClasses} onClick={handleToggle} disabled={isDisabled}>
-          {icon && (
-            <span className="mr-1 flex">
-              <Icon name={icon} size={size === 'large' ? 'medium' : 'small'} />
-            </span>
-          )}
           <span className={contentClasses}>{content}</span>
           {isShowArrow && (
             <div className="ml-auto flex items-center">
