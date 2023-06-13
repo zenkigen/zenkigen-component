@@ -1,4 +1,4 @@
-import { CSSProperties, ReactElement, cloneElement, useCallback, useRef, useState } from 'react';
+import { CSSProperties, ReactElement, ReactNode, cloneElement, useCallback, useRef, useState } from 'react';
 
 import { IconName } from '@zenkigen-component/icons';
 import { buttonColors, focusVisible, typography } from '@zenkigen-component/theme';
@@ -20,10 +20,10 @@ type Props =
       verticalPosition?: DropdownVerticalPosition;
       horizontalAlign?: DropdownHorizontalAlign;
     } & (
-      | { children: ReactElement; label?: never; icon?: never }
+      | { children: ReactElement; content?: never; icon?: never }
       | {
           children?: undefined;
-          label: string;
+          content: ReactNode;
           icon?: IconName;
         }
     ) &
@@ -40,7 +40,7 @@ export function Dropdown({
   isShowArrow = true,
   verticalPosition = 'bottom',
   horizontalAlign = 'center',
-  label,
+  content,
   icon,
 }: Props) {
   const [isVisible, setIsVisible] = useState(false);
@@ -118,7 +118,7 @@ export function Dropdown({
     },
   );
 
-  const labelClasses = clsx(
+  const contentClasses = clsx(
     'flex',
     'items-center',
     isShowArrow ? (size === 'x-small' ? 'mr-1' : 'mr-2') : null,
@@ -140,7 +140,7 @@ export function Dropdown({
               <Icon name={icon} size={size === 'large' ? 'medium' : 'small'} />
             </span>
           )}
-          <span className={labelClasses}>{label}</span>
+          <span className={contentClasses}>{content}</span>
           {isShowArrow && (
             <div className="ml-auto flex items-center">
               <Icon name={isVisible ? 'angle-small-up' : 'angle-small-down'} size="small" />

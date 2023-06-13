@@ -24,21 +24,26 @@ const items: DropdownItemType[] = [
   {
     id: '1',
     icon: 'edit' as const,
-    label: '操作項目1',
+    content: '操作項目1',
     color: 'gray' as const,
     onClick: action('選択項目1'),
   },
   {
     id: '2',
     icon: 'edit' as const,
-    label: '操作項目2',
+    content: (
+      <div className="flex items-center gap-2">
+        操作項目2
+        <Avatar userId={1} firstName="太郎" lastName="全機現" size="x-small" />
+      </div>
+    ),
     color: 'gray' as const,
     onClick: action('選択項目2'),
   },
   {
     id: '3',
     icon: 'edit' as const,
-    label: '操作項目3',
+    content: '操作項目3',
     color: 'red' as const,
     onClick: action('選択項目3'),
   },
@@ -48,42 +53,42 @@ const items2: DropdownItemType[] = [
   {
     id: '1',
     icon: 'edit' as const,
-    label: '操作項目1',
+    content: '操作項目1',
     color: 'gray' as const,
     onClick: action('選択項目1'),
   },
   {
     id: '2',
     icon: 'edit' as const,
-    label: '操作項目2',
+    content: '操作項目2',
     color: 'gray' as const,
     onClick: action('選択項目2'),
   },
   {
     id: '3',
     icon: 'edit' as const,
-    label: '操作項目3',
+    content: '操作項目3',
     color: 'gray' as const,
     onClick: action('選択項目3'),
   },
   {
     id: '4',
     icon: 'edit' as const,
-    label: '操作項目4',
+    content: '操作項目4',
     color: 'gray' as const,
     onClick: action('選択項目4'),
   },
   {
     id: '5',
     icon: 'edit' as const,
-    label: '操作項目5',
+    content: '操作項目5',
     color: 'gray' as const,
     onClick: action('選択項目5'),
   },
   {
     id: '6',
     icon: 'edit' as const,
-    label: '操作項目6',
+    content: '操作項目6',
     color: 'red' as const,
     onClick: action('選択項目6'),
   },
@@ -127,28 +132,28 @@ const DropdownBasic = () => {
         </Dropdown>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', columnGap: '60px', marginBottom: '150px' }}>
-        <Dropdown size="x-small" items={items2} menuMaxHeight={120} label="選択" />
-        <Dropdown size="small" items={items} label="選択" />
-        <Dropdown size="medium" items={items} label="選択" />
-        <Dropdown size="large" items={items} label="選択" />
-        <Dropdown size="large" items={items} label="選択" variant="text" />
-        <Dropdown size="large" items={items} label="選択" isDisabled />
+        <Dropdown size="x-small" items={items2} menuMaxHeight={120} content="選択" />
+        <Dropdown size="small" items={items} content="選択" />
+        <Dropdown size="medium" items={items} content="選択" />
+        <Dropdown size="large" items={items} content="選択" />
+        <Dropdown size="large" items={items} content="選択" variant="text" />
+        <Dropdown size="large" items={items} content="選択" isDisabled />
       </div>
       <div style={{ display: 'flex', alignItems: 'center', columnGap: '60px', marginBottom: '150px' }}>
-        <Dropdown size="x-small" items={items2} menuMaxHeight={120} label="選択" icon="add" />
-        <Dropdown size="small" items={items} label="選択" icon="add" />
-        <Dropdown size="medium" items={items} label="選択" icon="add" />
-        <Dropdown size="large" items={items} label="選択" icon="add" />
-        <Dropdown size="large" items={items} label="選択" icon="add" variant="text" />
-        <Dropdown size="large" items={items} label="選択" icon="add" isDisabled />
+        <Dropdown size="x-small" items={items2} menuMaxHeight={120} content="選択" icon="add" />
+        <Dropdown size="small" items={items} content="選択" icon="add" />
+        <Dropdown size="medium" items={items} content="選択" icon="add" />
+        <Dropdown size="large" items={items} content="選択" icon="add" />
+        <Dropdown size="large" items={items} content="選択" icon="add" variant="text" />
+        <Dropdown size="large" items={items} content="選択" icon="add" isDisabled />
       </div>
       <div style={{ display: 'flex', alignItems: 'center', columnGap: '60px', marginBottom: '150px' }}>
-        <Dropdown size="x-small" items={items2} menuMaxHeight={120} label="選択" icon="add" isShowArrow={false} />
-        <Dropdown size="small" items={items} label="選択" icon="add" isShowArrow={false} />
-        <Dropdown size="medium" items={items} label="選択" icon="add" isShowArrow={false} />
-        <Dropdown size="large" items={items} label="選択" icon="add" isShowArrow={false} />
-        <Dropdown size="large" items={items} label="選択" icon="add" variant="text" isShowArrow={false} />
-        <Dropdown size="large" items={items} label="選択" icon="add" isDisabled isShowArrow={false} />
+        <Dropdown size="x-small" items={items2} menuMaxHeight={120} content="選択" icon="add" isShowArrow={false} />
+        <Dropdown size="small" items={items} content="選択" icon="add" isShowArrow={false} />
+        <Dropdown size="medium" items={items} content="選択" icon="add" isShowArrow={false} />
+        <Dropdown size="large" items={items} content="選択" icon="add" isShowArrow={false} />
+        <Dropdown size="large" items={items} content="選択" icon="add" variant="text" isShowArrow={false} />
+        <Dropdown size="large" items={items} content="選択" icon="add" isDisabled isShowArrow={false} />
       </div>
     </div>
   );
@@ -226,7 +231,7 @@ const DropdownWithCustomMenu = () => {
     <div style={{ display: 'flex', alignItems: 'center', margin: '60px 100px' }}>
       <Dropdown
         size="medium"
-        label="フィルター"
+        content="フィルター"
         icon="filter"
         horizontalAlign="right"
         menu={

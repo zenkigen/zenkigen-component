@@ -33,7 +33,7 @@ export function DropdownItem({ item, onClickItem }: Props) {
     <li className={listItemClasses} key={item.id} onClick={onClickItem}>
       <button className={itemClasses} type="button">
         {item.icon && <Icon name={item.icon} size="small" />}
-        <span className="ml-1 mr-2">{item.label}</span>
+        <span className="ml-1 mr-2">{item.content}</span>
       </button>
     </li>
   );
