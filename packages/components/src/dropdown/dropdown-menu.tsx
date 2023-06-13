@@ -12,7 +12,7 @@ type Props =
       verticalPosition?: DropdownVerticalPosition;
       horizontalAlign?: DropdownHorizontalAlign;
       targetDimensions: { width: number; height: number };
-      onClickItem: (onClickAction: () => void) => void;
+      onClickItem: (onClickAction?: () => void) => void;
     } & ({ items: DropdownItemType[]; menu?: never } | { items?: never; menu: ReactElement });
 
 export function DropdownMenu({
@@ -51,7 +51,7 @@ export function DropdownMenu({
       {items ? (
         <ul className={menuClasses}>
           {items.map((item) => (
-            <DropdownItem key={item.id} item={item} onClickItem={() => onClickItem(item.onClick)} />
+            <DropdownItem key={item.id} item={item} onClickItem={() => onClickItem(item?.onClick)} />
           ))}
         </ul>
       ) : (
