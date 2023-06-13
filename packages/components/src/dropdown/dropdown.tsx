@@ -121,7 +121,7 @@ export function Dropdown({
   const labelClasses = clsx(
     'flex',
     'items-center',
-    size === 'x-small' ? 'mr-1' : 'mr-2',
+    isShowArrow ? (size === 'x-small' ? 'mr-1' : 'mr-2') : null,
     typography.label[
       size === 'x-small' ? 'label3regular' : size === 'small' || size === 'medium' ? 'label2regular' : 'label1regular'
     ],
