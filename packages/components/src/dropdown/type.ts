@@ -5,7 +5,7 @@ export type DropdownItemType = {
   label: string;
   icon?: IconName;
   color?: 'gray' | 'red';
-  onClick: () => void;
+  onClick?: () => void;
 };
 
 export type DropdownVerticalPosition = 'top' | 'bottom';

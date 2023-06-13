@@ -16,6 +16,7 @@ type Props =
       variant?: 'text' | 'outline';
       menuMaxHeight?: CSSProperties['height'];
       isDisabled?: boolean;
+      isShowArrow?: boolean;
       verticalPosition?: DropdownVerticalPosition;
       horizontalAlign?: DropdownHorizontalAlign;
     } & (
@@ -36,6 +37,7 @@ export function Dropdown({
   menu,
   menuMaxHeight,
   isDisabled = false,
+  isShowArrow = true,
   verticalPosition = 'bottom',
   horizontalAlign = 'center',
   label,
@@ -69,9 +71,9 @@ export function Dropdown({
     }
   }, [isVisible]);
 
-  const handleClickItem = useCallback((onClickAction: () => void) => {
+  const handleClickItem = useCallback((onClickAction?: () => void) => {
     setIsVisible(false);
-    onClickAction();
+    onClickAction?.();
   }, []);
 
   const childrenWithProps = children && cloneElement(children, { isDisabled });
@@ -139,9 +141,11 @@ export function Dropdown({
             </span>
           )}
           <span className={labelClasses}>{label}</span>
-          <div className="ml-auto flex items-center">
-            <Icon name={isVisible ? 'angle-small-up' : 'angle-small-down'} size="small" />
-          </div>
+          {isShowArrow && (
+            <div className="ml-auto flex items-center">
+              <Icon name={isVisible ? 'angle-small-up' : 'angle-small-down'} size="small" />
+            </div>
+          )}
         </button>
       )}
       {!isDisabled &&
