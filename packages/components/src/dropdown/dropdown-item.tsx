@@ -1,8 +1,6 @@
 import { focusVisible, typography } from '@zenkigen-component/theme';
 import clsx from 'clsx';
 
-import { Icon } from '../icon';
-
 import type { DropdownItemType } from './type';
 
 type Props = {
@@ -32,8 +30,7 @@ export function DropdownItem({ item, onClickItem }: Props) {
   return (
     <li className={listItemClasses} key={item.id} onClick={onClickItem}>
       <button className={itemClasses} type="button">
-        {item.icon && <Icon name={item.icon} size="small" />}
-        <span className="ml-1 mr-2">{item.label}</span>
+        <div>{item.content}</div>
       </button>
     </li>
   );

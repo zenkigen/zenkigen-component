@@ -1,9 +1,8 @@
-import { IconName } from '@zenkigen-component/icons';
+import { ReactNode } from 'react';
 
 export type DropdownItemType = {
   id: string;
-  label: string;
-  icon?: IconName;
+  content: ReactNode;
   color?: 'gray' | 'red';
   onClick?: () => void;
 };

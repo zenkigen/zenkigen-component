@@ -23,22 +23,29 @@ type Story = StoryObj<typeof Dropdown>;
 const items: DropdownItemType[] = [
   {
     id: '1',
-    icon: 'edit' as const,
-    label: '操作項目1',
+    content: (
+      <div className="flex items-center gap-2">
+        <Icon name="edit" size="small" />
+        操作項目2
+      </div>
+    ),
     color: 'gray' as const,
     onClick: action('選択項目1'),
   },
   {
     id: '2',
-    icon: 'edit' as const,
-    label: '操作項目2',
+    content: (
+      <div className="flex items-center gap-2">
+        操作項目2
+        <Avatar userId={1} firstName="太郎" lastName="全機現" size="x-small" />
+      </div>
+    ),
     color: 'gray' as const,
     onClick: action('選択項目2'),
   },
   {
     id: '3',
-    icon: 'edit' as const,
-    label: '操作項目3',
+    content: '操作項目3',
     color: 'red' as const,
     onClick: action('選択項目3'),
   },
@@ -47,43 +54,37 @@ const items: DropdownItemType[] = [
 const items2: DropdownItemType[] = [
   {
     id: '1',
-    icon: 'edit' as const,
-    label: '操作項目1',
+    content: '操作項目1',
     color: 'gray' as const,
     onClick: action('選択項目1'),
   },
   {
     id: '2',
-    icon: 'edit' as const,
-    label: '操作項目2',
+    content: '操作項目2',
     color: 'gray' as const,
     onClick: action('選択項目2'),
   },
   {
     id: '3',
-    icon: 'edit' as const,
-    label: '操作項目3',
+    content: '操作項目3',
     color: 'gray' as const,
     onClick: action('選択項目3'),
   },
   {
     id: '4',
-    icon: 'edit' as const,
-    label: '操作項目4',
+    content: '操作項目4',
     color: 'gray' as const,
     onClick: action('選択項目4'),
   },
   {
     id: '5',
-    icon: 'edit' as const,
-    label: '操作項目5',
+    content: '操作項目5',
     color: 'gray' as const,
     onClick: action('選択項目5'),
   },
   {
     id: '6',
-    icon: 'edit' as const,
-    label: '操作項目6',
+    content: '操作項目6',
     color: 'red' as const,
     onClick: action('選択項目6'),
   },
