@@ -1,5 +1,6 @@
-import { CSSProperties, ReactElement, ReactNode, cloneElement, useCallback, useRef, useState } from 'react';
+import { CSSProperties, ReactElement, cloneElement, useCallback, useRef, useState } from 'react';
 
+import { IconName } from '@zenkigen-component/icons';
 import { buttonColors, focusVisible, typography } from '@zenkigen-component/theme';
 import clsx from 'clsx';
 
@@ -19,10 +20,11 @@ type Props =
       verticalPosition?: DropdownVerticalPosition;
       horizontalAlign?: DropdownHorizontalAlign;
     } & (
-      | { children: ReactElement; content?: never; icon?: never }
+      | { children: ReactElement; label?: never; icon?: never }
       | {
           children?: undefined;
-          content: ReactNode;
+          label: string;
+          icon?: IconName;
         }
     ) &
       ({ items: DropdownItemType[]; menu?: never } | { items?: never; menu: ReactElement });
@@ -38,7 +40,8 @@ export function Dropdown({
   isShowArrow = true,
   verticalPosition = 'bottom',
   horizontalAlign = 'center',
-  content,
+  label,
+  icon,
 }: Props) {
   const [isVisible, setIsVisible] = useState(false);
   const [targetDimensions, setTargetDimensions] = useState({
@@ -115,7 +118,7 @@ export function Dropdown({
     },
   );
 
-  const contentClasses = clsx(
+  const labelClasses = clsx(
     'flex',
     'items-center',
     isShowArrow ? (size === 'x-small' ? 'mr-1' : 'mr-2') : null,
@@ -132,7 +135,12 @@ export function Dropdown({
         </button>
       ) : (
         <button type="button" className={buttonClasses} onClick={handleToggle} disabled={isDisabled}>
-          <span className={contentClasses}>{content}</span>
+          {icon && (
+            <span className="mr-1 flex">
+              <Icon name={icon} size={size === 'large' ? 'medium' : 'small'} />
+            </span>
+          )}
+          <span className={labelClasses}>{label}</span>
           {isShowArrow && (
             <div className="ml-auto flex items-center">
               <Icon name={isVisible ? 'angle-small-up' : 'angle-small-down'} size="small" />

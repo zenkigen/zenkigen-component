@@ -128,28 +128,28 @@ const DropdownBasic = () => {
         </Dropdown>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', columnGap: '60px', marginBottom: '150px' }}>
-        <Dropdown size="x-small" items={items2} menuMaxHeight={120} content="選択" />
-        <Dropdown size="small" items={items} content="選択" />
-        <Dropdown size="medium" items={items} content="選択" />
-        <Dropdown size="large" items={items} content="選択" />
-        <Dropdown size="large" items={items} content="選択" variant="text" />
-        <Dropdown size="large" items={items} content="選択" isDisabled />
+        <Dropdown size="x-small" items={items2} menuMaxHeight={120} label="選択" />
+        <Dropdown size="small" items={items} label="選択" />
+        <Dropdown size="medium" items={items} label="選択" />
+        <Dropdown size="large" items={items} label="選択" />
+        <Dropdown size="large" items={items} label="選択" variant="text" />
+        <Dropdown size="large" items={items} label="選択" isDisabled />
       </div>
       <div style={{ display: 'flex', alignItems: 'center', columnGap: '60px', marginBottom: '150px' }}>
-        <Dropdown size="x-small" items={items2} menuMaxHeight={120} content="選択" icon="add" />
-        <Dropdown size="small" items={items} content="選択" icon="add" />
-        <Dropdown size="medium" items={items} content="選択" icon="add" />
-        <Dropdown size="large" items={items} content="選択" icon="add" />
-        <Dropdown size="large" items={items} content="選択" icon="add" variant="text" />
-        <Dropdown size="large" items={items} content="選択" icon="add" isDisabled />
+        <Dropdown size="x-small" items={items2} menuMaxHeight={120} label="選択" icon="add" />
+        <Dropdown size="small" items={items} label="選択" icon="add" />
+        <Dropdown size="medium" items={items} label="選択" icon="add" />
+        <Dropdown size="large" items={items} label="選択" icon="add" />
+        <Dropdown size="large" items={items} label="選択" icon="add" variant="text" />
+        <Dropdown size="large" items={items} label="選択" icon="add" isDisabled />
       </div>
       <div style={{ display: 'flex', alignItems: 'center', columnGap: '60px', marginBottom: '150px' }}>
-        <Dropdown size="x-small" items={items2} menuMaxHeight={120} content="選択" icon="add" isShowArrow={false} />
-        <Dropdown size="small" items={items} content="選択" icon="add" isShowArrow={false} />
-        <Dropdown size="medium" items={items} content="選択" icon="add" isShowArrow={false} />
-        <Dropdown size="large" items={items} content="選択" icon="add" isShowArrow={false} />
-        <Dropdown size="large" items={items} content="選択" icon="add" variant="text" isShowArrow={false} />
-        <Dropdown size="large" items={items} content="選択" icon="add" isDisabled isShowArrow={false} />
+        <Dropdown size="x-small" items={items2} menuMaxHeight={120} label="選択" icon="add" isShowArrow={false} />
+        <Dropdown size="small" items={items} label="選択" icon="add" isShowArrow={false} />
+        <Dropdown size="medium" items={items} label="選択" icon="add" isShowArrow={false} />
+        <Dropdown size="large" items={items} label="選択" icon="add" isShowArrow={false} />
+        <Dropdown size="large" items={items} label="選択" icon="add" variant="text" isShowArrow={false} />
+        <Dropdown size="large" items={items} label="選択" icon="add" isDisabled isShowArrow={false} />
       </div>
     </div>
   );
@@ -227,12 +227,8 @@ const DropdownWithCustomMenu = () => {
     <div style={{ display: 'flex', alignItems: 'center', margin: '60px 100px' }}>
       <Dropdown
         size="medium"
-        content={
-          <div className="flex items-center gap-2">
-            <Icon name="filter" size="x-small" />
-            フィルター
-          </div>
-        }
+        label="フィルター"
+        icon="filter"
         horizontalAlign="right"
         menu={
           <ul className="flex w-[208px] flex-col gap-y-2.5 px-4 py-3">
