@@ -2,8 +2,8 @@ import { CSSProperties, ReactNode, useContext } from 'react';
 
 import clsx from 'clsx';
 
+import { DropdownContext } from './dropdown-context';
 import { DropdownHorizontalAlign, DropdownVerticalPosition } from './type';
-import { DropdownContext } from './use-dropdown-context';
 
 type Props = {
   children: ReactNode;

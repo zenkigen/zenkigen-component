@@ -3,7 +3,7 @@ import { MouseEvent, ReactNode, useContext } from 'react';
 import { focusVisible, typography } from '@zenkigen-component/theme';
 import clsx from 'clsx';
 
-import { DropdownContext } from './use-dropdown-context';
+import { DropdownContext } from './dropdown-context';
 
 type Props = {
   children: ReactNode;

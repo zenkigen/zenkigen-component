@@ -7,9 +7,9 @@ import clsx from 'clsx';
 import { useOutsideClick } from '../hooks/use-outside-click';
 import { Icon } from '../icon';
 
+import { DropdownContext } from './dropdown-context';
 import { DropdownItem } from './dropdown-item';
 import { DropdownMenu } from './dropdown-menu';
-import { DropdownContext } from './use-dropdown-context';
 
 type Props =
   | {
