@@ -28,14 +28,14 @@ type Props =
     );
 
 export function Dropdown({
-  target,
   children,
+  target,
+  label,
+  icon,
   size = 'medium',
   variant = target ? 'text' : 'outline',
   isDisabled = false,
   isShowArrow = true,
-  label,
-  icon,
 }: Props) {
   const [isVisible, setIsVisible] = useState(false);
   const [targetDimensions, setTargetDimensions] = useState({
