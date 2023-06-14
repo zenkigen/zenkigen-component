@@ -158,7 +158,7 @@ const DropdownBasic = () => {
             ))}
           </Dropdown.Menu>
         </Dropdown>
-        <Dropdown size="small" target={<Icon name="more" size="small" color="icon01" />}>
+        <Dropdown size="small" target={<Icon name="more" size="medium" color="icon01" />}>
           <Dropdown.Menu horizontalAlign="right">
             {items.map((item) => (
               <Dropdown.Item key={item.id} onClick={item.onClick}>
@@ -167,7 +167,7 @@ const DropdownBasic = () => {
             ))}
           </Dropdown.Menu>
         </Dropdown>
-        <Dropdown size="medium" target={<Icon name="more" size="small" color="icon01" />}>
+        <Dropdown size="medium" target={<Icon name="more" size="large" color="icon01" />}>
           <Dropdown.Menu horizontalAlign="right">
             {items.map((item) => (
               <Dropdown.Item key={item.id} onClick={item.onClick}>
@@ -176,7 +176,7 @@ const DropdownBasic = () => {
             ))}
           </Dropdown.Menu>
         </Dropdown>
-        <Dropdown size="medium" variant="outline" target={<Icon name="more" size="small" color="icon01" />}>
+        <Dropdown size="medium" variant="outline" target={<Icon name="more" size="large" color="icon01" />}>
           <Dropdown.Menu horizontalAlign="right">
             {items.map((item) => (
               <Dropdown.Item key={item.id} onClick={item.onClick}>
@@ -185,7 +185,7 @@ const DropdownBasic = () => {
             ))}
           </Dropdown.Menu>
         </Dropdown>
-        <Dropdown size="medium" isDisabled target={<Icon name="more" size="small" color="icon01" />}>
+        <Dropdown size="medium" isDisabled target={<Icon name="more" size="large" color="icon01" />}>
           <Dropdown.Menu horizontalAlign="right">
             {items.map((item) => (
               <Dropdown.Item key={item.id} onClick={item.onClick}>
