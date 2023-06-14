@@ -460,7 +460,7 @@ const DropdownWithCustomMenu = () => {
                 variant="outline"
                 size="medium"
                 onClick={handleClickReset}
-                isDisabled={!isOn1 && !isOn2 && !isOn3}
+                isDisabled={!isOn1 && !isOn2 && !isOn3 && !isOn4 && !isOn5}
               >
                 初期値に戻す
               </Button>
