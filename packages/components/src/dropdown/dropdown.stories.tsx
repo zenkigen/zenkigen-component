@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
@@ -26,7 +26,7 @@ const items: DropdownItemType[] = [
     content: (
       <div className="flex items-center gap-2">
         <Icon name="edit" size="small" />
-        操作項目2
+        操作項目1
       </div>
     ),
     color: 'gray' as const,
@@ -94,62 +94,274 @@ const DropdownBasic = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', margin: '0 100px' }}>
       <div style={{ display: 'flex', alignItems: 'center', columnGap: '100px', marginBottom: '150px' }}>
-        <Dropdown size="small" items={items2} menuMaxHeight={120} horizontalAlign="right">
-          <Avatar size="x-small" userId={1} lastName="全機現" firstName="太郎" />
+        <Dropdown size="small" target={<Avatar size="x-small" userId={1} lastName="全機現" firstName="太郎" />}>
+          <Dropdown.Menu horizontalAlign="right" maxHeight={120}>
+            {items2.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
         </Dropdown>
-        <Dropdown size="medium" items={items} horizontalAlign="right">
-          <Avatar size="small" userId={1} lastName="全機現" firstName="太郎" />
+        <Dropdown size="medium" target={<Avatar size="small" userId={1} lastName="全機現" firstName="太郎" />}>
+          <Dropdown.Menu horizontalAlign="right">
+            {items.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
         </Dropdown>
-        <Dropdown size="large" items={items} horizontalAlign="right">
-          <Avatar size="medium" userId={1} lastName="全機現" firstName="太郎" />
+        <Dropdown size="large" target={<Avatar size="medium" userId={1} lastName="全機現" firstName="太郎" />}>
+          <Dropdown.Menu horizontalAlign="right">
+            {items.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
         </Dropdown>
-        <Dropdown size="large" items={items} horizontalAlign="right" variant="outline">
-          <Avatar size="medium" userId={1} lastName="全機現" firstName="太郎" />
+        <Dropdown
+          size="large"
+          variant="outline"
+          target={<Avatar size="medium" userId={1} lastName="全機現" firstName="太郎" />}
+        >
+          <Dropdown.Menu horizontalAlign="right">
+            {items.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
         </Dropdown>
-        <Dropdown size="large" items={items} horizontalAlign="right" isDisabled>
-          <Avatar size="medium" userId={1} lastName="全機現" firstName="太郎" />
+        <Dropdown
+          size="large"
+          isDisabled
+          target={<Avatar size="medium" userId={1} lastName="全機現" firstName="太郎" />}
+        >
+          <Dropdown.Menu horizontalAlign="right">
+            {items.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
         </Dropdown>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', columnGap: '100px', marginBottom: '150px' }}>
-        <Dropdown size="x-small" items={items2} menuMaxHeight={120} horizontalAlign="right">
-          <Icon name="more" size="small" color="icon01" />
+        <Dropdown size="x-small" target={<Icon name="more" size="small" color="icon01" />}>
+          <Dropdown.Menu horizontalAlign="right" maxHeight={120}>
+            {items2.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
         </Dropdown>
-        <Dropdown size="small" items={items} horizontalAlign="right">
-          <Icon name="more" size="medium" color="icon01" />
+        <Dropdown size="small" target={<Icon name="more" size="medium" color="icon01" />}>
+          <Dropdown.Menu horizontalAlign="right">
+            {items.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
         </Dropdown>
-        <Dropdown size="medium" items={items} horizontalAlign="right">
-          <Icon name="more" size="large" color="icon01" />
+        <Dropdown size="medium" target={<Icon name="more" size="large" color="icon01" />}>
+          <Dropdown.Menu horizontalAlign="right">
+            {items.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
         </Dropdown>
-        <Dropdown size="medium" items={items} horizontalAlign="right" variant="outline">
-          <Icon name="more" size="large" color="icon01" />
+        <Dropdown size="medium" variant="outline" target={<Icon name="more" size="large" color="icon01" />}>
+          <Dropdown.Menu horizontalAlign="right">
+            {items.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
         </Dropdown>
-        <Dropdown size="medium" items={items} horizontalAlign="right" isDisabled>
-          <Icon name="more" size="large" color="icon01" />
+        <Dropdown size="medium" isDisabled target={<Icon name="more" size="large" color="icon01" />}>
+          <Dropdown.Menu horizontalAlign="right">
+            {items.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
         </Dropdown>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', columnGap: '60px', marginBottom: '150px' }}>
-        <Dropdown size="x-small" items={items2} menuMaxHeight={120} label="選択" />
-        <Dropdown size="small" items={items} label="選択" />
-        <Dropdown size="medium" items={items} label="選択" />
-        <Dropdown size="large" items={items} label="選択" />
-        <Dropdown size="large" items={items} label="選択" variant="text" />
-        <Dropdown size="large" items={items} label="選択" isDisabled />
+        <Dropdown size="x-small" label="選択">
+          <Dropdown.Menu horizontalAlign="left" maxHeight={120}>
+            {items2.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+        <Dropdown size="small" label="選択">
+          <Dropdown.Menu horizontalAlign="left">
+            {items.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+        <Dropdown size="medium" label="選択">
+          <Dropdown.Menu horizontalAlign="left">
+            {items.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+        <Dropdown size="large" label="選択">
+          <Dropdown.Menu horizontalAlign="left">
+            {items.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+        <Dropdown size="large" label="選択" variant="text">
+          <Dropdown.Menu horizontalAlign="left">
+            {items.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+        <Dropdown size="large" label="選択" isDisabled>
+          <Dropdown.Menu horizontalAlign="left">
+            {items.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', columnGap: '60px', marginBottom: '150px' }}>
-        <Dropdown size="x-small" items={items2} menuMaxHeight={120} label="選択" icon="add" />
-        <Dropdown size="small" items={items} label="選択" icon="add" />
-        <Dropdown size="medium" items={items} label="選択" icon="add" />
-        <Dropdown size="large" items={items} label="選択" icon="add" />
-        <Dropdown size="large" items={items} label="選択" icon="add" variant="text" />
-        <Dropdown size="large" items={items} label="選択" icon="add" isDisabled />
+        <Dropdown size="x-small" label="選択" icon="add">
+          <Dropdown.Menu horizontalAlign="left" maxHeight={120}>
+            {items2.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+        <Dropdown size="small" label="選択" icon="add">
+          <Dropdown.Menu horizontalAlign="left">
+            {items.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+        <Dropdown size="medium" label="選択" icon="add">
+          <Dropdown.Menu horizontalAlign="left">
+            {items.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+        <Dropdown size="large" label="選択" icon="add">
+          <Dropdown.Menu horizontalAlign="left">
+            {items.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+        <Dropdown size="large" label="選択" icon="add" variant="text">
+          <Dropdown.Menu horizontalAlign="left">
+            {items.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+        <Dropdown size="large" label="選択" icon="add" isDisabled>
+          <Dropdown.Menu horizontalAlign="left">
+            {items.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', columnGap: '60px', marginBottom: '150px' }}>
-        <Dropdown size="x-small" items={items2} menuMaxHeight={120} label="選択" icon="add" isShowArrow={false} />
-        <Dropdown size="small" items={items} label="選択" icon="add" isShowArrow={false} />
-        <Dropdown size="medium" items={items} label="選択" icon="add" isShowArrow={false} />
-        <Dropdown size="large" items={items} label="選択" icon="add" isShowArrow={false} />
-        <Dropdown size="large" items={items} label="選択" icon="add" variant="text" isShowArrow={false} />
-        <Dropdown size="large" items={items} label="選択" icon="add" isDisabled isShowArrow={false} />
+        <Dropdown size="x-small" label="選択" icon="add" isShowArrow={false}>
+          <Dropdown.Menu horizontalAlign="left" maxHeight={120}>
+            {items2.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+        <Dropdown size="small" label="選択" icon="add" isShowArrow={false}>
+          <Dropdown.Menu horizontalAlign="left">
+            {items.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+        <Dropdown size="medium" label="選択" icon="add" isShowArrow={false}>
+          <Dropdown.Menu horizontalAlign="left">
+            {items.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+        <Dropdown size="large" label="選択" icon="add" isShowArrow={false}>
+          <Dropdown.Menu horizontalAlign="left">
+            {items.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+        <Dropdown size="large" label="選択" icon="add" variant="text" isShowArrow={false}>
+          <Dropdown.Menu horizontalAlign="left">
+            {items.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+        <Dropdown size="large" label="選択" icon="add" isDisabled isShowArrow={false}>
+          <Dropdown.Menu horizontalAlign="left">
+            {items.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
       </div>
     </div>
   );
@@ -225,12 +437,8 @@ const DropdownWithCustomMenu = () => {
   ];
   return (
     <div style={{ display: 'flex', alignItems: 'center', margin: '60px 100px' }}>
-      <Dropdown
-        size="medium"
-        label="フィルター"
-        icon="filter"
-        horizontalAlign="right"
-        menu={
+      <Dropdown size="medium" label="フィルター" icon="filter">
+        <Dropdown.Menu horizontalAlign="left" isNoPadding>
           <ul className="flex w-[208px] flex-col gap-y-2.5 px-4 py-3">
             {items.map((item) => (
               <li key={item.id} className={clsx('flex w-full items-center', item.color)}>
@@ -252,14 +460,14 @@ const DropdownWithCustomMenu = () => {
                 variant="outline"
                 size="medium"
                 onClick={handleClickReset}
-                isDisabled={!isOn1 && !isOn2 && !isOn3}
+                isDisabled={!isOn1 && !isOn2 && !isOn3 && !isOn4 && !isOn5}
               >
                 初期値に戻す
               </Button>
             </div>
           </ul>
-        }
-      />
+        </Dropdown.Menu>
+      </Dropdown>
     </div>
   );
 };

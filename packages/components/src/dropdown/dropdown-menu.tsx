@@ -1,33 +1,30 @@
-import { CSSProperties, ReactElement } from 'react';
+import { CSSProperties, ReactNode, useContext } from 'react';
 
 import clsx from 'clsx';
 
-import { DropdownItem } from './dropdown-item';
-import { DropdownItemType, DropdownHorizontalAlign, DropdownVerticalPosition } from './type';
+import { DropdownContext } from './dropdown-context';
+import { DropdownHorizontalAlign, DropdownVerticalPosition } from './type';
 
-type Props =
-  | {
-      variant: 'text' | 'outline';
-      maxHeight?: CSSProperties['height'];
-      verticalPosition?: DropdownVerticalPosition;
-      horizontalAlign?: DropdownHorizontalAlign;
-      targetDimensions: { width: number; height: number };
-      onClickItem: (onClickAction?: () => void) => void;
-    } & ({ items: DropdownItemType[]; menu?: never } | { items?: never; menu: ReactElement });
+type Props = {
+  children: ReactNode;
+  maxHeight?: CSSProperties['height'];
+  isNoPadding?: boolean;
+  verticalPosition?: DropdownVerticalPosition;
+  horizontalAlign?: DropdownHorizontalAlign;
+};
 
 export function DropdownMenu({
-  variant,
-  items,
-  menu,
+  children,
   maxHeight,
-  verticalPosition,
-  horizontalAlign,
-  targetDimensions,
-  onClickItem,
+  isNoPadding,
+  verticalPosition = 'bottom',
+  horizontalAlign = 'left',
 }: Props) {
+  const { isVisible, isDisabled, targetDimensions, variant } = useContext(DropdownContext);
   const wrapperClasses = clsx(
     'z-dropdown',
     'absolute',
+    'w-max',
     'bg-background-uiBackground01',
     'rounded',
     'shadow-componentShadow',
@@ -35,28 +32,23 @@ export function DropdownMenu({
     horizontalAlign === 'left' ? 'left-0' : horizontalAlign === 'right' ? 'right-0' : 'left-auto',
     {
       'border-solid border border-border-uiBorder01': variant === 'outline',
+      'py-2': !isNoPadding,
     },
   );
-  const menuClasses = clsx('w-max', 'py-2');
 
   return (
-    <div
-      className={wrapperClasses}
-      style={{
-        top: verticalPosition === 'bottom' ? `${targetDimensions.height + 4}px` : 'unset',
-        bottom: verticalPosition === 'top' ? `${targetDimensions.height + 4}px` : 'unset',
-        maxHeight,
-      }}
-    >
-      {items ? (
-        <ul className={menuClasses}>
-          {items.map((item) => (
-            <DropdownItem key={item.id} item={item} onClickItem={() => onClickItem(item?.onClick)} />
-          ))}
-        </ul>
-      ) : (
-        menu
-      )}
-    </div>
+    isVisible &&
+    !isDisabled && (
+      <ul
+        className={wrapperClasses}
+        style={{
+          top: verticalPosition === 'bottom' ? `${targetDimensions.height + 4}px` : 'unset',
+          bottom: verticalPosition === 'top' ? `${targetDimensions.height + 4}px` : 'unset',
+          maxHeight,
+        }}
+      >
+        {children}
+      </ul>
+    )
   );
 }

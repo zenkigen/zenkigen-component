@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import React from 'react';
 
 import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
@@ -102,8 +103,14 @@ const TableStoryBasic = () => {
           <TableCell className={cellClasses}>taro.zenkigen@zk-creative.jp</TableCell>
           <TableCell className={cellClasses}>管理者</TableCell>
           <TableCell align="right">
-            <Dropdown size="x-small" items={items} horizontalAlign="right">
-              <Icon name="more" size="small" color="icon01" />
+            <Dropdown size="x-small" target={<Icon name="more" size="small" color="icon01" />}>
+              <Dropdown.Menu horizontalAlign="right">
+                {items.map((item) => (
+                  <Dropdown.Item key={item.id} color={item.color} onClick={item.onClick}>
+                    {item.content}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
             </Dropdown>
           </TableCell>
         </TableRowContainer>
@@ -115,8 +122,14 @@ const TableStoryBasic = () => {
           <TableCell className={cellClasses}>taro.zenkigen@zk-creative.jp</TableCell>
           <TableCell className={cellClasses}>管理者</TableCell>
           <TableCell align="right">
-            <Dropdown size="x-small" items={items} horizontalAlign="right">
-              <Icon name="more" size="small" color="icon01" />
+            <Dropdown size="x-small" target={<Icon name="more" size="small" color="icon01" />}>
+              <Dropdown.Menu horizontalAlign="right">
+                {items.map((item) => (
+                  <Dropdown.Item key={item.id} color={item.color} onClick={item.onClick}>
+                    {item.content}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
             </Dropdown>
           </TableCell>
         </TableRowContainer>
@@ -128,8 +141,14 @@ const TableStoryBasic = () => {
           <TableCell className={cellClasses}>taro.zenkigen@zk-creative.jp</TableCell>
           <TableCell className={cellClasses}>管理者</TableCell>
           <TableCell align="right">
-            <Dropdown size="x-small" items={items} horizontalAlign="right">
-              <Icon name="more" size="small" color="icon01" />
+            <Dropdown size="x-small" target={<Icon name="more" size="small" color="icon01" />}>
+              <Dropdown.Menu horizontalAlign="right">
+                {items.map((item) => (
+                  <Dropdown.Item key={item.id} color={item.color} onClick={item.onClick}>
+                    {item.content}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
             </Dropdown>
           </TableCell>
         </TableRowContainer>

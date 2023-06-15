@@ -1,16 +1,23 @@
+import { MouseEvent, ReactNode, useContext } from 'react';
+
 import { focusVisible, typography } from '@zenkigen-component/theme';
 import clsx from 'clsx';
 
-import type { DropdownItemType } from './type';
+import { DropdownContext } from './dropdown-context';
 
 type Props = {
-  item: DropdownItemType;
-  onClickItem: () => void;
+  children: ReactNode;
+  color?: 'gray' | 'red';
+  onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
 };
 
-export function DropdownItem({ item, onClickItem }: Props) {
+export function DropdownItem({ children, color = 'gray', onClick }: Props) {
+  const { setIsVisible } = useContext(DropdownContext);
+  const handleClickItem = (event: MouseEvent<HTMLButtonElement>) => {
+    setIsVisible(false);
+    onClick && onClick(event);
+  };
   const listItemClasses = clsx('flex w-full items-center');
-
   const itemClasses = clsx(
     'flex',
     'items-center',
@@ -22,15 +29,15 @@ export function DropdownItem({ item, onClickItem }: Props) {
     focusVisible.inset,
     typography.label.label2regular,
     {
-      'bg-background-uiBackground01 fill-icon-icon01 text-interactive-interactive02': item.color === 'gray',
-      'fill-support-supportDanger text-support-supportDanger': item.color === 'red',
+      'bg-background-uiBackground01 fill-icon-icon01 text-interactive-interactive02': color === 'gray',
+      'fill-support-supportDanger text-support-supportDanger': color === 'red',
     },
   );
 
   return (
-    <li className={listItemClasses} key={item.id} onClick={onClickItem}>
-      <button className={itemClasses} type="button">
-        <div>{item.content}</div>
+    <li className={listItemClasses}>
+      <button className={itemClasses} type="button" onClick={handleClickItem}>
+        {children}
       </button>
     </li>
   );
