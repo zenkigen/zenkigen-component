@@ -63,7 +63,7 @@ const TableStoryBasic = () => {
     setSortOrderName(null);
     setSortOrderEmail(null);
   }, []);
-  const headingClasses = clsx(typography.label.label2regular, 'text-text-text02');
+  const headingClasses = clsx(typography.label.label2regular, 'flex items-center text-text-text02');
   const cellClasses = clsx(typography.label.label1regular, 'text-text-text01', 'flex items-center', 'gap-2');
 
   return (
@@ -102,7 +102,7 @@ const TableStoryBasic = () => {
           </TableCell>
           <TableCell className={cellClasses}>taro.zenkigen@zk-creative.jp</TableCell>
           <TableCell className={cellClasses}>管理者</TableCell>
-          <TableCell align="right">
+          <TableCell className={`${cellClasses} flex justify-end`}>
             <Dropdown size="x-small" target={<Icon name="more" size="small" color="icon01" />}>
               <Dropdown.Menu horizontalAlign="right">
                 {items.map((item) => (
@@ -121,7 +121,7 @@ const TableStoryBasic = () => {
           </TableCell>
           <TableCell className={cellClasses}>taro.zenkigen@zk-creative.jp</TableCell>
           <TableCell className={cellClasses}>管理者</TableCell>
-          <TableCell align="right">
+          <TableCell className={`${cellClasses} flex justify-end`}>
             <Dropdown size="x-small" target={<Icon name="more" size="small" color="icon01" />}>
               <Dropdown.Menu horizontalAlign="right">
                 {items.map((item) => (
@@ -140,7 +140,7 @@ const TableStoryBasic = () => {
           </TableCell>
           <TableCell className={cellClasses}>taro.zenkigen@zk-creative.jp</TableCell>
           <TableCell className={cellClasses}>管理者</TableCell>
-          <TableCell align="right">
+          <TableCell className={`${cellClasses} flex justify-end`}>
             <Dropdown size="x-small" target={<Icon name="more" size="small" color="icon01" />}>
               <Dropdown.Menu horizontalAlign="right">
                 {items.map((item) => (
