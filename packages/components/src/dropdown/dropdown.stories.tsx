@@ -308,7 +308,7 @@ const DropdownBasic = () => {
         </Dropdown>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', columnGap: '60px', marginBottom: '150px' }}>
-        <Dropdown size="x-small" label="選択" icon="add" isShowArrow={false}>
+        <Dropdown size="x-small" label="選択" icon="add" isArrowHidden>
           <Dropdown.Menu horizontalAlign="left" maxHeight={120}>
             {items2.map((item) => (
               <Dropdown.Item key={item.id} onClick={item.onClick}>
@@ -317,7 +317,7 @@ const DropdownBasic = () => {
             ))}
           </Dropdown.Menu>
         </Dropdown>
-        <Dropdown size="small" label="選択" icon="add" isShowArrow={false}>
+        <Dropdown size="small" label="選択" icon="add" isArrowHidden>
           <Dropdown.Menu horizontalAlign="left">
             {items.map((item) => (
               <Dropdown.Item key={item.id} onClick={item.onClick}>
@@ -326,7 +326,7 @@ const DropdownBasic = () => {
             ))}
           </Dropdown.Menu>
         </Dropdown>
-        <Dropdown size="medium" label="選択" icon="add" isShowArrow={false}>
+        <Dropdown size="medium" label="選択" icon="add" isArrowHidden>
           <Dropdown.Menu horizontalAlign="left">
             {items.map((item) => (
               <Dropdown.Item key={item.id} onClick={item.onClick}>
@@ -335,7 +335,7 @@ const DropdownBasic = () => {
             ))}
           </Dropdown.Menu>
         </Dropdown>
-        <Dropdown size="large" label="選択" icon="add" isShowArrow={false}>
+        <Dropdown size="large" label="選択" icon="add" isArrowHidden>
           <Dropdown.Menu horizontalAlign="left">
             {items.map((item) => (
               <Dropdown.Item key={item.id} onClick={item.onClick}>
@@ -344,7 +344,7 @@ const DropdownBasic = () => {
             ))}
           </Dropdown.Menu>
         </Dropdown>
-        <Dropdown size="large" label="選択" icon="add" variant="text" isShowArrow={false}>
+        <Dropdown size="large" label="選択" icon="add" variant="text" isArrowHidden>
           <Dropdown.Menu horizontalAlign="left">
             {items.map((item) => (
               <Dropdown.Item key={item.id} onClick={item.onClick}>
@@ -353,7 +353,7 @@ const DropdownBasic = () => {
             ))}
           </Dropdown.Menu>
         </Dropdown>
-        <Dropdown size="large" label="選択" icon="add" isDisabled isShowArrow={false}>
+        <Dropdown size="large" label="選択" icon="add" isDisabled isArrowHidden>
           <Dropdown.Menu horizontalAlign="left">
             {items.map((item) => (
               <Dropdown.Item key={item.id} onClick={item.onClick}>
