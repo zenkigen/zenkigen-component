@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import React from 'react';
 
 import type { Meta } from '@storybook/react';
 import { IconName, iconElements } from '@zenkigen-component/icons';
 
 import { Select } from './select';
+import { SelectOption } from './type';
 
 const meta: Meta<typeof Select> = {
   component: Select,
@@ -20,7 +22,7 @@ const meta: Meta<typeof Select> = {
         .concat(['']),
       control: 'select',
     },
-    selectedOptionId: {
+    selectedOption: {
       type: 'string',
     },
   },
@@ -43,10 +45,10 @@ const optionsList2 = [
 ];
 
 export function Base() {
-  const [selectedOptionId1, setSelectedOptionId1] = useState<string | null>(null);
-  const [selectedOptionId2, setSelectedOptionId2] = useState<string | null>(null);
-  const [selectedOptionId3, setSelectedOptionId3] = useState<string | null>(null);
-  const [selectedOptionId4, setSelectedOptionId4] = useState<string | null>(null);
+  const [selectedOption1, setSelectedOption1] = useState<SelectOption | null>(null);
+  const [selectedOption2, setSelectedOption2] = useState<SelectOption | null>(null);
+  const [selectedOption3, setSelectedOption3] = useState<SelectOption | null>(null);
+  const [selectedOption4, setSelectedOption4] = useState<SelectOption | null>(null);
 
   return (
     <>
@@ -55,138 +57,183 @@ export function Base() {
           <Select
             size="x-small"
             variant="outline"
-            options={optionsList2}
             placeholder="選択"
-            selectedOptionId={selectedOptionId1}
-            onChange={(id) => setSelectedOptionId1(id)}
+            selectedOption={selectedOption1}
+            onChange={(option) => setSelectedOption1(option)}
             optionListMaxHeight={120}
-          />
+          >
+            {optionsList2.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
           <Select
             size="small"
             variant="outline"
-            options={optionsList}
             placeholder="選択"
-            selectedOptionId={selectedOptionId2}
-            onChange={(id) => setSelectedOptionId2(id)}
-          />
+            selectedOption={selectedOption2}
+            onChange={(option) => setSelectedOption2(option)}
+          >
+            {optionsList.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
           <Select
             size="medium"
             variant="outline"
-            options={optionsList}
             placeholder="選択"
-            selectedOptionId={selectedOptionId3}
-            onChange={(id) => setSelectedOptionId3(id)}
-          />
+            selectedOption={selectedOption3}
+            onChange={(option) => setSelectedOption3(option)}
+          >
+            {optionsList.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
           <Select
             size="large"
             variant="outline"
-            options={optionsList}
             placeholder="選択"
-            selectedOptionId={selectedOptionId4}
-            onChange={(id) => setSelectedOptionId4(id)}
-          />
+            selectedOption={selectedOption4}
+            onChange={(option) => setSelectedOption4(option)}
+          >
+            {optionsList.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
           <Select
             size="large"
             variant="outline"
-            options={optionsList}
             placeholder="選択"
-            selectedOptionId={selectedOptionId4}
-            onChange={(id) => setSelectedOptionId4(id)}
+            selectedOption={selectedOption4}
+            onChange={(option) => setSelectedOption4(option)}
             isDisabled
-          />
+          >
+            {optionsList.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '80px' }}>
           <Select
             size="x-small"
             variant="text"
-            options={optionsList2}
             placeholder="選択"
-            selectedOptionId={selectedOptionId1}
-            onChange={(id) => setSelectedOptionId1(id)}
+            selectedOption={selectedOption1}
+            onChange={(option) => setSelectedOption1(option)}
             optionListMaxHeight={120}
-          />
+          >
+            {optionsList2.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
           <Select
             size="small"
             variant="text"
-            options={optionsList}
             placeholder="選択"
-            selectedOptionId={selectedOptionId2}
-            onChange={(id) => setSelectedOptionId2(id)}
-          />
+            selectedOption={selectedOption2}
+            onChange={(option) => setSelectedOption2(option)}
+          >
+            {optionsList.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
           <Select
             size="medium"
             variant="text"
-            options={optionsList}
             placeholder="選択"
-            selectedOptionId={selectedOptionId3}
-            onChange={(id) => setSelectedOptionId3(id)}
-          />
+            selectedOption={selectedOption3}
+            onChange={(option) => setSelectedOption3(option)}
+          >
+            {optionsList.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
           <Select
             size="large"
             variant="text"
-            options={optionsList}
             placeholder="選択"
-            selectedOptionId={selectedOptionId4}
-            onChange={(id) => setSelectedOptionId4(id)}
-          />
+            selectedOption={selectedOption4}
+            onChange={(option) => setSelectedOption4(option)}
+          >
+            {optionsList.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
           <Select
             size="large"
             variant="text"
-            options={optionsList}
             placeholder="選択"
-            selectedOptionId={selectedOptionId4}
-            onChange={(id) => setSelectedOptionId4(id)}
+            selectedOption={selectedOption4}
+            onChange={(option) => setSelectedOption4(option)}
             isDisabled
-          />
+          >
+            {optionsList.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '80px' }}>
           <Select
             size="x-small"
             variant="outline"
-            options={optionsList2}
             placeholder="選択選択選択選択選択"
-            selectedOptionId={selectedOptionId1}
-            onChange={(id) => setSelectedOptionId1(id)}
+            selectedOption={selectedOption1}
+            onChange={(option) => setSelectedOption1(option)}
             width={140}
             optionListMaxHeight={120}
-          />
+          >
+            {optionsList2.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
           <Select
             size="small"
             variant="outline"
-            options={optionsList}
             placeholder="選択選択選択選択選択"
-            selectedOptionId={selectedOptionId2}
-            onChange={(id) => setSelectedOptionId2(id)}
+            selectedOption={selectedOption2}
+            onChange={(option) => setSelectedOption2(option)}
             width={140}
-          />
+          >
+            {optionsList.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
           <Select
             size="medium"
             variant="outline"
-            options={optionsList}
             placeholder="選択選択選択選択選択"
-            selectedOptionId={selectedOptionId3}
-            onChange={(id) => setSelectedOptionId3(id)}
+            selectedOption={selectedOption3}
+            onChange={(option) => setSelectedOption3(option)}
             width={140}
-          />
+          >
+            {optionsList.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
           <Select
             size="large"
             variant="outline"
-            options={optionsList}
             placeholder="選択選択選択選択選択"
-            selectedOptionId={selectedOptionId4}
-            onChange={(id) => setSelectedOptionId4(id)}
+            selectedOption={selectedOption4}
+            onChange={(option) => setSelectedOption4(option)}
             width={140}
-          />
+          >
+            {optionsList.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
           <Select
             size="large"
             variant="outline"
-            options={optionsList}
             placeholder="選択選択選択選択選択"
-            selectedOptionId={selectedOptionId4}
-            onChange={(id) => setSelectedOptionId4(id)}
+            selectedOption={selectedOption4}
+            onChange={(option) => setSelectedOption4(option)}
             width={140}
             isDisabled
-          />
+          >
+            {optionsList.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
         </div>
       </div>
     </>
