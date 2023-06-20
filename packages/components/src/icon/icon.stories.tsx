@@ -84,6 +84,7 @@ export function Base() {
       <Icon name="table-download" />
       <Icon name="table-upload" />
       <Icon name="table" />
+      <Icon name="timer" />
       <Icon name="transcription" />
       <Icon name="triangle" />
       <Icon name="upload" />
