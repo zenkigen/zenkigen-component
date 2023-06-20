@@ -1,32 +1,23 @@
-import { CSSProperties } from 'react';
+import { CSSProperties, ReactNode, useContext } from 'react';
 
 import { focusVisible, typography } from '@zenkigen-component/theme';
 import clsx from 'clsx';
 
-import { SelectItem } from './select-item';
-import type { SelectOption } from './type';
+import { SelectContext } from './select-context';
 
 type Props = {
-  size: 'x-small' | 'small' | 'medium' | 'large';
-  variant: 'text' | 'outline';
-  options: SelectOption[];
-  selectedOptionId: string | null;
+  children: ReactNode;
   maxHeight?: CSSProperties['height'];
-  placeholder?: string;
-  onClickItem: (id: string, index: number, value: string) => void;
-  onClickDeselect: () => void;
 };
 
-export function SelectList({
-  size,
-  variant,
-  options,
-  selectedOptionId,
-  maxHeight,
-  placeholder,
-  onClickItem,
-  onClickDeselect,
-}: Props) {
+export function SelectList({ children, maxHeight }: Props) {
+  const { size, selectedOption, setIsOptionListOpen, variant, placeholder, onChange } = useContext(SelectContext);
+
+  const handleClickDeselect = () => {
+    onChange?.(null);
+    setIsOptionListOpen(false);
+  };
+
   const listClasses = clsx(
     'z-dropdown',
     'absolute',
@@ -59,17 +50,10 @@ export function SelectList({
 
   return (
     <ul className={listClasses} style={{ maxHeight }}>
-      {options.map((option, index) => (
-        <SelectItem
-          key={option.id}
-          option={option}
-          selectedOptionId={selectedOptionId}
-          onClickItem={() => onClickItem(option.id, index, option.value)}
-        />
-      ))}
-      {placeholder && selectedOptionId !== null && (
+      {children}
+      {placeholder && selectedOption !== null && (
         <li>
-          <button className={deselectButtonClasses} type="button" onClick={onClickDeselect}>
+          <button className={deselectButtonClasses} type="button" onClick={handleClickDeselect}>
             選択解除
           </button>
         </li>
