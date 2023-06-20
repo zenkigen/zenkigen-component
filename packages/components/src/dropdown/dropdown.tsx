@@ -16,7 +16,7 @@ type Props =
       size?: 'x-small' | 'small' | 'medium' | 'large';
       variant?: 'text' | 'outline';
       isDisabled?: boolean;
-      isShowArrow?: boolean;
+      isArrowHidden?: boolean;
       children: ReactNode;
     } & (
       | { target: ReactElement; label?: never; icon?: never }
@@ -35,7 +35,7 @@ export function Dropdown({
   size = 'medium',
   variant = target ? 'text' : 'outline',
   isDisabled = false,
-  isShowArrow = true,
+  isArrowHidden = false,
 }: Props) {
   const [isVisible, setIsVisible] = useState(false);
   const [targetDimensions, setTargetDimensions] = useState({
@@ -108,7 +108,7 @@ export function Dropdown({
   const labelClasses = clsx(
     'flex',
     'items-center',
-    isShowArrow ? (size === 'x-small' ? 'mr-1' : 'mr-2') : null,
+    isArrowHidden ? (size === 'x-small' ? 'mr-1' : 'mr-2') : null,
     typography.label[
       size === 'x-small' ? 'label3regular' : size === 'small' || size === 'medium' ? 'label2regular' : 'label1regular'
     ],
@@ -131,7 +131,7 @@ export function Dropdown({
               </span>
             )}
             <span className={labelClasses}>{label}</span>
-            {isShowArrow && (
+            {!isArrowHidden && (
               <div className="ml-auto flex items-center">
                 <Icon name={isVisible ? 'angle-small-up' : 'angle-small-down'} size="small" />
               </div>
