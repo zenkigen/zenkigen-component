@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import React from 'react';
 
 import type { Meta } from '@storybook/react';
 import { IconName, iconElements } from '@zenkigen-component/icons';
