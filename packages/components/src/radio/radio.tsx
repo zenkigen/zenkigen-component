@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback, useState } from 'react';
+import { ChangeEvent, useCallback, useState } from 'react';
 
 import { focusVisible, typography } from '@zenkigen-component/theme';
 import clsx from 'clsx';
