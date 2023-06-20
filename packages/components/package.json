@@ -9,7 +9,7 @@
   "scripts": {
     "type-check": "tsc --noEmit",
     "generate-component": "hygen generator components",
-    "build": "rimraf dist && microbundle --no-compress -f modern,esm,cjs --jsx React.createElement --jsxFragment React.Fragment --jsxImportSource react --globals react/jsx-runtime=jsx"
+    "build": "rimraf dist && microbundle --no-compress -f modern,esm,cjs --jsx React.createElement --jsxFragment React.Fragment --jsxImportSource react --globals react/jsx-runtime=jsx --tsconfig tsconfig.build.json"
   },
   "devDependencies": {
     "@types/react": "18.2.12",
