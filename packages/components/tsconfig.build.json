@@ -1,9 +1,4 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "lib": ["dom", "esnext"],
-    "jsx": "preserve"
-  },
-  "include": ["./src"],
+  "extends": "./tsconfig.json",
   "exclude": ["./src/**/*.stories.tsx"]
 }
