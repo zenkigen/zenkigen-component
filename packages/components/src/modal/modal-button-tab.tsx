@@ -23,7 +23,7 @@ export function ModalButtonTab({
   isDanger,
   isNoBorder,
 }: Props) {
-  const { setIsOpen } = useContext(ModalContext);
+  const { size, setIsOpen } = useContext(ModalContext);
   const handleClickPrimaryButton = () => {
     onClickPrimaryButton();
     setIsOpen(false);
@@ -38,21 +38,34 @@ export function ModalButtonTab({
     'shrink-0',
     'justify-end',
     'items-center',
-    'gap-x-4',
     'w-full',
     'h-[72px]',
     'rounded-b-lg',
     'px-6',
     {
+      'gap-x-2': size === 'small',
+      'gap-x-4': size === 'medium' || size === 'large' || size === 'x-large',
       'border-t-[1px] border-border-uiBorder01': !isNoBorder,
     },
   );
   return (
     <div className={footerClasses}>
-      <Button key="1" variant="outline" size="large" onClick={handleClickSecondaryButton}>
+      <Button
+        key="1"
+        variant="outline"
+        size="large"
+        width={size === 'small' ? 132 : 'auto'}
+        onClick={handleClickSecondaryButton}
+      >
         {secondaryButtonLabel}
       </Button>
-      <Button key="2" variant={isDanger ? 'fillDanger' : 'fill'} size="large" onClick={handleClickPrimaryButton}>
+      <Button
+        key="2"
+        variant={isDanger ? 'fillDanger' : 'fill'}
+        size="large"
+        width={size === 'small' ? 132 : 'auto'}
+        onClick={handleClickPrimaryButton}
+      >
         {primaryButtonLabel}
       </Button>
     </div>

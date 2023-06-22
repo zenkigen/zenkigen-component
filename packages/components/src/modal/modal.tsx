@@ -10,7 +10,7 @@ import { ModalTab } from './modal-tab';
 
 type Props = {
   children?: ReactNode;
-  widthVariant?: 'narrow' | 'medium' | 'wide';
+  size?: 'small' | 'medium' | 'large' | 'x-large';
   height?: CSSProperties['height'];
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -22,7 +22,7 @@ type Props = {
 
 export function Modal({
   children,
-  widthVariant = 'narrow',
+  size = 'medium',
   height,
   isOpen,
   setIsOpen,
@@ -41,15 +41,16 @@ export function Modal({
     'h-full w-full',
   );
   const modalBaseClasses = clsx('flex', 'shrink-0', 'flex-col', 'bg-background-uiBackground01', 'rounded-lg', {
-    'w-[480px]': widthVariant === 'narrow',
-    'w-[640px]': widthVariant === 'medium',
-    'w-[720px]': widthVariant === 'wide',
+    'w-[320px]': size === 'small',
+    'w-[480px]': size === 'medium',
+    'w-[640px]': size === 'large',
+    'w-[720px]': size === 'x-large',
   });
   const contentClasses = clsx('flex', 'items-center', 'justify-center', 'overflow-y-auto');
 
   return createPortal(
     isOpen && (
-      <ModalContext.Provider value={{ setIsOpen }}>
+      <ModalContext.Provider value={{ size, setIsOpen }}>
         <div className={wrapperClasses}>
           <div className={modalBaseClasses} style={{ height }}>
             {headerElement}
