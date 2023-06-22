@@ -8,7 +8,7 @@ type Props = {
 
 export function ModalTab({ tabItems, selectedTab, setSelectedTab }: Props) {
   return (
-    <div className="w-full">
+    <div className="mt-2 w-full">
       <Tab>
         {tabItems.map((item) => (
           <TabItem key={item.id} id={item.id} isSelected={selectedTab === item.id} onClick={setSelectedTab}>
