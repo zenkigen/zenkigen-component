@@ -22,7 +22,35 @@ export function Base() {
       <Modal
         isOpen
         setIsOpen={setIsOpen}
-        widthVariant="narrow"
+        size="medium"
+        headerElement={<Modal.Header>タイトル</Modal.Header>}
+        buttonTabElement={
+          <Modal.ButtonTab
+            primaryButtonLabel="保存する"
+            secondaryButtonLabel="キャンセル"
+            onClickPrimaryButton={action('保存する')}
+            onClickSecondaryButton={action('キャンセル')}
+          />
+        }
+      >
+        <div className="flex h-20 w-full items-center justify-center">Content</div>
+      </Modal>
+    </div>
+  );
+}
+
+export function SizeSmall() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <div>
+      <button type="button" onClick={() => setIsOpen(true)}>
+        open
+      </button>
+      <Modal
+        isOpen
+        setIsOpen={setIsOpen}
+        size="small"
         headerElement={<Modal.Header>タイトル</Modal.Header>}
         buttonTabElement={
           <Modal.ButtonTab
@@ -50,7 +78,7 @@ export function FixedHeight() {
       <Modal
         isOpen
         setIsOpen={setIsOpen}
-        widthVariant="narrow"
+        size="medium"
         height={500}
         headerElement={<Modal.Header>タイトル</Modal.Header>}
         buttonTabElement={
@@ -85,7 +113,7 @@ export function WithTabs() {
       <Modal
         isOpen
         setIsOpen={setIsOpen}
-        widthVariant="narrow"
+        size="medium"
         headerElement={<Modal.Header isNoBorder>タイトル</Modal.Header>}
         tabElement={<Modal.Tab tabItems={tabItems} selectedTab={selectedTab} setSelectedTab={setSelectedTab} />}
         buttonTabElement={
@@ -115,7 +143,7 @@ export function WithoutButton() {
       <button type="button" onClick={() => setIsOpen(true)}>
         open
       </button>
-      <Modal isOpen setIsOpen={setIsOpen} widthVariant="narrow" headerElement={<Modal.Header>タイトル</Modal.Header>}>
+      <Modal isOpen setIsOpen={setIsOpen} size="medium" headerElement={<Modal.Header>タイトル</Modal.Header>}>
         <div className="flex h-20 w-full items-center justify-center">Content</div>
       </Modal>
     </div>
@@ -133,7 +161,7 @@ export function Danger() {
       <Modal
         isOpen
         setIsOpen={setIsOpen}
-        widthVariant="narrow"
+        size="medium"
         headerElement={
           <Modal.Header isNoBorder isNoCloseButton>
             タイトル
