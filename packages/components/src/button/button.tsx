@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { CSSProperties, ReactNode } from 'react';
 
 import { buttonColors, typography, focusVisible } from '@zenkigen-component/theme';
 import { clsx } from 'clsx';
@@ -10,6 +10,7 @@ type Variant = 'fill' | 'fillDanger' | 'outline' | 'text';
 type Props =
   | {
       size?: Size;
+      width?: CSSProperties['width'];
       isDisabled?: boolean;
       variant?: Variant;
       before?: ReactNode;
@@ -31,8 +32,10 @@ export function Button({ size = 'medium', variant = 'fill', ...props }: Props) {
   const baseClasses = clsx(
     'rounded',
     'flex',
+    'shrink-0',
     'gap-1',
     'items-center',
+    'justify-center',
     buttonColors[variant].base,
     buttonColors[variant].hover,
     buttonColors[variant].active,
@@ -56,7 +59,13 @@ export function Button({ size = 'medium', variant = 'fill', ...props }: Props) {
     );
   } else {
     return (
-      <button type="button" className={baseClasses} disabled={props.isDisabled} onClick={props.onClick}>
+      <button
+        type="button"
+        className={baseClasses}
+        disabled={props.isDisabled}
+        onClick={props.onClick}
+        style={{ width: props.width }}
+      >
         {props.before}
         {props.children}
         {props.after}
