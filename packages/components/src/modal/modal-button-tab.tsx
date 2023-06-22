@@ -35,6 +35,7 @@ export function ModalButtonTab({
 
   const footerClasses = clsx(
     'flex',
+    'shrink-0',
     'justify-end',
     'items-center',
     'gap-x-4',

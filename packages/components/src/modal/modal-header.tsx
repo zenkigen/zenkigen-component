@@ -17,6 +17,7 @@ export function ModalHeader({ children, isNoBorder, isNoCloseButton }: Props) {
   const { setIsOpen } = useContext(ModalContext);
   const headerClasses = clsx(
     'flex',
+    'shrink-0',
     'items-center',
     'justify-between',
     'w-full',
