@@ -1,12 +1,38 @@
+import { useContext } from 'react';
+
 import clsx from 'clsx';
 
 import { Button } from '../button';
 
+import { ModalContext } from './modal-context';
+
 type Props = {
+  primaryButtonLabel: string;
+  secondaryButtonLabel: string;
+  onClickPrimaryButton: () => void;
+  onClickSecondaryButton: () => void;
+  isDanger?: boolean;
   isNoBorder?: boolean;
 };
 
-export function ModalFooter({ isNoBorder }: Props) {
+export function ModalFooter({
+  primaryButtonLabel,
+  secondaryButtonLabel,
+  onClickPrimaryButton,
+  onClickSecondaryButton,
+  isDanger,
+  isNoBorder,
+}: Props) {
+  const { setIsOpen } = useContext(ModalContext);
+  const handleClickPrimaryButton = () => {
+    onClickPrimaryButton();
+    setIsOpen(false);
+  };
+  const handleClickSecondaryButton = () => {
+    onClickSecondaryButton();
+    setIsOpen(false);
+  };
+
   const footerClasses = clsx(
     'flex',
     'justify-end',
@@ -17,16 +43,16 @@ export function ModalFooter({ isNoBorder }: Props) {
     'rounded-b-lg',
     'px-6',
     {
-      'border border-t-[1px] border-border-uiBorder01': !isNoBorder,
+      'border-t-[1px] border-border-uiBorder01': !isNoBorder,
     },
   );
   return (
     <div className={footerClasses}>
-      <Button key="1" variant="outline" size="large">
-        キャンセル
+      <Button key="1" variant="outline" size="large" onClick={handleClickSecondaryButton}>
+        {secondaryButtonLabel}
       </Button>
-      <Button key="2" variant="fill" size="large">
-        保存する
+      <Button key="2" variant={isDanger ? 'fillDanger' : 'fill'} size="large" onClick={handleClickPrimaryButton}>
+        {primaryButtonLabel}
       </Button>
     </div>
   );
