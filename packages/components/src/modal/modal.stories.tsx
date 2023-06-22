@@ -22,10 +22,10 @@ export function Base() {
       <Modal
         isOpen
         setIsOpen={setIsOpen}
-        widthVariant="normal"
+        widthVariant="narrow"
         headerElement={<Modal.Header>タイトル</Modal.Header>}
-        footerElement={
-          <Modal.Footer
+        buttonTabElement={
+          <Modal.ButtonTab
             primaryButtonLabel="保存する"
             secondaryButtonLabel="キャンセル"
             onClickPrimaryButton={action('保存する')}
@@ -56,11 +56,11 @@ export function WithTabs() {
       <Modal
         isOpen
         setIsOpen={setIsOpen}
-        widthVariant="normal"
+        widthVariant="narrow"
         headerElement={<Modal.Header isNoBorder>タイトル</Modal.Header>}
         tabElement={<Modal.Tab tabItems={tabItems} selectedTab={selectedTab} setSelectedTab={setSelectedTab} />}
-        footerElement={
-          <Modal.Footer
+        buttonTabElement={
+          <Modal.ButtonTab
             primaryButtonLabel="保存する"
             secondaryButtonLabel="キャンセル"
             onClickPrimaryButton={action('保存する')}
@@ -86,7 +86,7 @@ export function WithoutButton() {
       <button type="button" onClick={() => setIsOpen(true)}>
         open
       </button>
-      <Modal isOpen setIsOpen={setIsOpen} widthVariant="normal" headerElement={<Modal.Header>タイトル</Modal.Header>}>
+      <Modal isOpen setIsOpen={setIsOpen} widthVariant="narrow" headerElement={<Modal.Header>タイトル</Modal.Header>}>
         <div className="flex h-20 w-full items-center justify-center">Content</div>
       </Modal>
     </div>
@@ -110,8 +110,8 @@ export function Danger() {
             タイトル
           </Modal.Header>
         }
-        footerElement={
-          <Modal.Footer
+        buttonTabElement={
+          <Modal.ButtonTab
             primaryButtonLabel="削除する"
             secondaryButtonLabel="キャンセル"
             onClickPrimaryButton={action('削除する')}

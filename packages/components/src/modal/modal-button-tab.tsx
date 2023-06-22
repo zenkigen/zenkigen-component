@@ -15,7 +15,7 @@ type Props = {
   isNoBorder?: boolean;
 };
 
-export function ModalFooter({
+export function ModalButtonTab({
   primaryButtonLabel,
   secondaryButtonLabel,
   onClickPrimaryButton,
