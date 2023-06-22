@@ -6,25 +6,27 @@ import { createPortal } from 'react-dom';
 import { ModalContext } from './modal-context';
 import { ModalFooter } from './modal-footer';
 import { ModalHeader } from './modal-header';
-import { WidthVariant } from './type';
+import { ModalTab } from './modal-tab';
 
 type Props = {
   children?: ReactNode;
-  widthVariant?: WidthVariant;
+  widthVariant?: 'narrow' | 'normal' | 'wide';
   isOpen: boolean;
-  onClose: () => void;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   portalTargetRef?: MutableRefObject<HTMLElement | null>;
   headerElement?: ReactElement;
+  tabElement?: ReactElement;
   footerElement?: ReactElement;
 };
 
 export function Modal({
   children,
-  widthVariant,
+  widthVariant = 'normal',
   isOpen,
-  onClose,
+  setIsOpen,
   portalTargetRef,
   headerElement,
+  tabElement,
   footerElement,
 }: Props) {
   const wrapperClasses = clsx(
@@ -36,15 +38,20 @@ export function Modal({
     'fixed left-0 top-0',
     'h-full w-full',
   );
-  const modalBaseClasses = clsx('flex', 'flex-col', 'w-[480px]', 'bg-background-uiBackground01', 'rounded-lg');
+  const modalBaseClasses = clsx('flex', 'flex-col', 'bg-background-uiBackground01', 'rounded-lg', {
+    'w-[480px]': widthVariant === 'narrow',
+    'w-[640px]': widthVariant === 'normal',
+    'w-[720px]': widthVariant === 'wide',
+  });
   const contentClasses = clsx('flex', 'items-center', 'justify-center');
 
   return createPortal(
     isOpen && (
-      <ModalContext.Provider value={{ onClose, widthVariant }}>
+      <ModalContext.Provider value={{ setIsOpen }}>
         <div className={wrapperClasses}>
           <div className={modalBaseClasses}>
             {headerElement}
+            {tabElement}
             <div className={contentClasses}>{children}</div>
             {footerElement}
           </div>
@@ -56,4 +63,5 @@ export function Modal({
 }
 
 Modal.Header = ModalHeader;
+Modal.Tab = ModalTab;
 Modal.Footer = ModalFooter;
