@@ -39,6 +39,35 @@ export function Base() {
   );
 }
 
+export function FixedHeight() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <div>
+      <button type="button" onClick={() => setIsOpen(true)}>
+        open
+      </button>
+      <Modal
+        isOpen
+        setIsOpen={setIsOpen}
+        widthVariant="narrow"
+        height={500}
+        headerElement={<Modal.Header>タイトル</Modal.Header>}
+        buttonTabElement={
+          <Modal.ButtonTab
+            primaryButtonLabel="保存する"
+            secondaryButtonLabel="キャンセル"
+            onClickPrimaryButton={action('保存する')}
+            onClickSecondaryButton={action('キャンセル')}
+          />
+        }
+      >
+        <div className="flex h-[800px] w-full items-center justify-center">Content</div>
+      </Modal>
+    </div>
+  );
+}
+
 export function WithTabs() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isOpen, setIsOpen] = useState(false);
