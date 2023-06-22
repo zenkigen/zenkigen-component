@@ -65,6 +65,68 @@ export function Base() {
           marginTop: '8px',
         }}
       >
+        <Button size="small" variant="fillDanger">
+          ボタンラベル
+        </Button>
+        <Button size="small" variant="fillDanger" before={<Icon name="add" size="small" />}>
+          ボタンラベル
+        </Button>
+        <Button size="small" variant="fillDanger" after={<Icon name="add" size="small" />}>
+          ボタンラベル
+        </Button>
+        <Button size="small" variant="fillDanger" isDisabled>
+          ボタンラベル
+        </Button>
+      </div>
+      <div
+        style={{
+          display: 'flex',
+          gap: '8px',
+          alignItems: 'center',
+          marginTop: '8px',
+        }}
+      >
+        <Button variant="fillDanger">ボタンラベル</Button>
+        <Button variant="fillDanger" before={<Icon name="add" size="small" />}>
+          ボタンラベル
+        </Button>
+        <Button variant="fillDanger" after={<Icon name="add" size="small" />}>
+          ボタンラベル
+        </Button>
+        <Button variant="fillDanger" isDisabled>
+          ボタンラベル
+        </Button>
+      </div>
+      <div
+        style={{
+          display: 'flex',
+          gap: '8px',
+          alignItems: 'center',
+          marginTop: '8px',
+        }}
+      >
+        <Button size="large" variant="fillDanger">
+          ボタンラベル
+        </Button>
+        <Button size="large" variant="fillDanger" before={<Icon name="add" size="medium" />}>
+          ボタンラベル
+        </Button>
+        <Button size="large" variant="fillDanger" after={<Icon name="add" size="medium" />}>
+          ボタンラベル
+        </Button>
+        <Button size="large" variant="fillDanger" isDisabled>
+          ボタンラベル
+        </Button>
+      </div>
+
+      <div
+        style={{
+          display: 'flex',
+          gap: '8px',
+          alignItems: 'center',
+          marginTop: '8px',
+        }}
+      >
         <Button variant="outline" size="small">
           ボタンラベル
         </Button>

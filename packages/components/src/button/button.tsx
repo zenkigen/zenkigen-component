@@ -5,7 +5,7 @@ import { clsx } from 'clsx';
 
 type Size = 'small' | 'medium' | 'large';
 
-type Variant = 'fill' | 'outline' | 'text';
+type Variant = 'fill' | 'fillDanger' | 'outline' | 'text';
 
 type Props =
   | {
