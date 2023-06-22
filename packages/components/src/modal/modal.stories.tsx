@@ -33,7 +33,70 @@ export function Base() {
           />
         }
       >
-        <div className="flex h-20 w-full items-center justify-center">Content</div>
+        <div className="flex h-[200px] w-full items-center justify-center">Content</div>
+      </Modal>
+    </div>
+  );
+}
+
+export function WithCheckbox() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isOpen, setIsOpen] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
+  return (
+    <div>
+      <button type="button" onClick={() => setIsOpen(true)}>
+        open
+      </button>
+      <Modal
+        isOpen
+        setIsOpen={setIsOpen}
+        size="medium"
+        headerElement={<Modal.Header>タイトル</Modal.Header>}
+        buttonTabElement={
+          <Modal.ButtonTab
+            primaryButtonLabel="保存する"
+            secondaryButtonLabel="キャンセル"
+            onClickPrimaryButton={action('保存する')}
+            onClickSecondaryButton={action('キャンセル')}
+            isWithCheckbox
+            checkboxLabel="ラベル"
+            isChecked={isChecked}
+            onChange={() => setIsChecked((prev) => !prev)}
+          />
+        }
+      >
+        <div className="flex h-[200px] w-full items-center justify-center">Content</div>
+      </Modal>
+    </div>
+  );
+}
+
+export function WithSubButton() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <div>
+      <button type="button" onClick={() => setIsOpen(true)}>
+        open
+      </button>
+      <Modal
+        isOpen
+        setIsOpen={setIsOpen}
+        size="medium"
+        headerElement={<Modal.Header>タイトル</Modal.Header>}
+        buttonTabElement={
+          <Modal.ButtonTab
+            primaryButtonLabel="保存する"
+            secondaryButtonLabel="キャンセル"
+            onClickPrimaryButton={action('保存する')}
+            onClickSecondaryButton={action('キャンセル')}
+            subButtonLabel="ボタンラベル"
+            onClickSubButton={action('サブボタンアクション')}
+          />
+        }
+      >
+        <div className="flex h-[200px] w-full items-center justify-center">Content</div>
       </Modal>
     </div>
   );
@@ -61,7 +124,69 @@ export function SizeSmall() {
           />
         }
       >
-        <div className="flex h-20 w-full items-center justify-center">Content</div>
+        <div className="flex h-[200px] w-full items-center justify-center">Content</div>
+      </Modal>
+    </div>
+  );
+}
+export function SizeSmallWithCheckbox() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isOpen, setIsOpen] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
+  return (
+    <div>
+      <button type="button" onClick={() => setIsOpen(true)}>
+        open
+      </button>
+      <Modal
+        isOpen
+        setIsOpen={setIsOpen}
+        size="small"
+        headerElement={<Modal.Header>タイトル</Modal.Header>}
+        buttonTabElement={
+          <Modal.ButtonTab
+            primaryButtonLabel="保存する"
+            secondaryButtonLabel="キャンセル"
+            onClickPrimaryButton={action('保存する')}
+            onClickSecondaryButton={action('キャンセル')}
+            isWithCheckbox
+            checkboxLabel="ラベル"
+            isChecked={isChecked}
+            onChange={() => setIsChecked((prev) => !prev)}
+          />
+        }
+      >
+        <div className="flex h-[200px] w-full items-center justify-center">Content</div>
+      </Modal>
+    </div>
+  );
+}
+
+export function SizeSmallWithSubButton() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <div>
+      <button type="button" onClick={() => setIsOpen(true)}>
+        open
+      </button>
+      <Modal
+        isOpen
+        setIsOpen={setIsOpen}
+        size="small"
+        headerElement={<Modal.Header>タイトル</Modal.Header>}
+        buttonTabElement={
+          <Modal.ButtonTab
+            primaryButtonLabel="保存する"
+            secondaryButtonLabel="キャンセル"
+            onClickPrimaryButton={action('保存する')}
+            onClickSecondaryButton={action('キャンセル')}
+            subButtonLabel="ボタンラベル"
+            onClickSubButton={action('サブボタンアクション')}
+          />
+        }
+      >
+        <div className="flex h-[200px] w-full items-center justify-center">Content</div>
       </Modal>
     </div>
   );
@@ -125,7 +250,7 @@ export function WithTabs() {
           />
         }
       >
-        <div className="flex h-20 w-full items-center justify-center">
+        <div className="flex h-[200px] w-full items-center justify-center">
           {selectedTab === 'tab1' && <div>Content 1</div>}
           {selectedTab === 'tab2' && <div>Content 2</div>}
           {selectedTab === 'tab3' && <div>Content 3</div>}
@@ -144,7 +269,7 @@ export function WithoutButton() {
         open
       </button>
       <Modal isOpen setIsOpen={setIsOpen} size="medium" headerElement={<Modal.Header>タイトル</Modal.Header>}>
-        <div className="flex h-20 w-full items-center justify-center">Content</div>
+        <div className="flex h-[200px] w-full items-center justify-center">Content</div>
       </Modal>
     </div>
   );
