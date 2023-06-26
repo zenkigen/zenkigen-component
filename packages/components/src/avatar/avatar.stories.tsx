@@ -25,6 +25,7 @@ export function Base() {
         <Avatar size="medium" userId={8} lastName="全機現" firstName="太郎" />
         <Avatar size="medium" userId={9} lastName="全機現" firstName="太郎" />
         <Avatar size="medium" userId={10} lastName="全機現" firstName="太郎" />
+        <Avatar size="medium" lastName="全機現" firstName="太郎" />
       </div>
       <div className="flex gap-2">
         <Avatar size="medium" userId={1} lastName="Smith" firstName="John" />
