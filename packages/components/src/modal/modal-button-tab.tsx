@@ -78,7 +78,7 @@ export function ModalButtonTab({
     <div className={wrapperClasses}>
       {isWithCheckbox ? (
         <div>
-          <Checkbox label={checkboxLabel} isChecked={isChecked} onChange={onChange} />
+          <Checkbox id="modal-checkbox" label={checkboxLabel} isChecked={isChecked} onChange={onChange} />
         </div>
       ) : subButtonLabel && onClickSubButton ? (
         <Button key="0" variant="text" size="large" onClick={handleClickSubButton}>
