@@ -12,8 +12,7 @@ const meta: Meta<typeof Modal> = {
 export default meta;
 
 export function Base() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isOpen, setIsOpen] = useState(false);
+  const [_, setIsOpen] = useState(false);
   return (
     <div>
       <button type="button" onClick={() => setIsOpen(true)}>
@@ -40,8 +39,7 @@ export function Base() {
 }
 
 export function WithCheckbox() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isOpen, setIsOpen] = useState(false);
+  const [_, setIsOpen] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   return (
     <div>
@@ -73,8 +71,7 @@ export function WithCheckbox() {
 }
 
 export function WithSubButton() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isOpen, setIsOpen] = useState(false);
+  const [_, setIsOpen] = useState(false);
   return (
     <div>
       <button type="button" onClick={() => setIsOpen(true)}>
@@ -103,8 +100,7 @@ export function WithSubButton() {
 }
 
 export function SizeSmall() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isOpen, setIsOpen] = useState(false);
+  const [_, setIsOpen] = useState(false);
   return (
     <div>
       <button type="button" onClick={() => setIsOpen(true)}>
@@ -130,8 +126,7 @@ export function SizeSmall() {
   );
 }
 export function SizeSmallWithCheckbox() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isOpen, setIsOpen] = useState(false);
+  const [_, setIsOpen] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   return (
     <div>
@@ -163,8 +158,7 @@ export function SizeSmallWithCheckbox() {
 }
 
 export function SizeSmallWithSubButton() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isOpen, setIsOpen] = useState(false);
+  const [_, setIsOpen] = useState(false);
   return (
     <div>
       <button type="button" onClick={() => setIsOpen(true)}>
@@ -193,8 +187,7 @@ export function SizeSmallWithSubButton() {
 }
 
 export function FixedHeight() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isOpen, setIsOpen] = useState(false);
+  const [_, setIsOpen] = useState(false);
   return (
     <div>
       <button type="button" onClick={() => setIsOpen(true)}>
@@ -222,8 +215,7 @@ export function FixedHeight() {
 }
 
 export function WithTabs() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isOpen, setIsOpen] = useState(false);
+  const [_, setIsOpen] = useState(false);
   const [selectedTab, setSelectedTab] = useState('tab1');
   const tabItems = [
     { id: 'tab1', label: 'タブラベル1' },
@@ -261,8 +253,7 @@ export function WithTabs() {
 }
 
 export function WithoutButton() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isOpen, setIsOpen] = useState(false);
+  const [_, setIsOpen] = useState(false);
   return (
     <div>
       <button type="button" onClick={() => setIsOpen(true)}>
@@ -276,8 +267,7 @@ export function WithoutButton() {
 }
 
 export function Danger() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isOpen, setIsOpen] = useState(false);
+  const [_, setIsOpen] = useState(false);
   return (
     <div>
       <button type="button" onClick={() => setIsOpen(true)}>
