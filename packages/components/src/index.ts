@@ -8,6 +8,7 @@ export * from './heading';
 export * from './icon';
 export * from './icon-button';
 export * from './loading';
+export * from './modal';
 export * from './notification-inline';
 export * from './radio';
 export * from './search';
