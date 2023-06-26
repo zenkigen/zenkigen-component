@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useCallback, useContext } from 'react';
 
 import clsx from 'clsx';
 
@@ -49,17 +49,17 @@ export function ModalButtonTab({
   onClickSubButton,
 }: Props) {
   const { size, setIsOpen } = useContext(ModalContext);
-  const handleClickPrimaryButton = () => {
+  const handleClickPrimaryButton = useCallback(() => {
     onClickPrimaryButton();
     setIsOpen(false);
-  };
-  const handleClickSecondaryButton = () => {
+  }, [onClickPrimaryButton, setIsOpen]);
+  const handleClickSecondaryButton = useCallback(() => {
     onClickSecondaryButton();
     setIsOpen(false);
-  };
-  const handleClickSubButton = () => {
+  }, [onClickSecondaryButton, setIsOpen]);
+  const handleClickSubButton = useCallback(() => {
     onClickSubButton?.();
-  };
+  }, [onClickSubButton]);
 
   const wrapperClasses = clsx('flex', 'shrink-0', 'items-center', 'w-full', 'rounded-b-lg', 'py-4', 'px-6', {
     'justify-between': isWithCheckbox || (subButtonLabel && size !== 'small'),
