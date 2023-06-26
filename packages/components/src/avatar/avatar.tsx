@@ -7,7 +7,7 @@ export const isAsciiString = (str: string) => {
 
 type Props = {
   size?: 'x-small' | 'small' | 'medium' | 'large' | 'x-large';
-  userId: number;
+  userId?: number;
   firstName: string;
   lastName: string;
   isDisabled?: boolean;
@@ -18,7 +18,11 @@ export function Avatar({ size = 'medium', ...props }: Props) {
     'text-text-textOnColor',
     'rounded-full',
     'flex items-center justify-center',
-    props.isDisabled ? 'bg-disabled-disabled01' : userColors[props.userId % userColors.length],
+    props.isDisabled
+      ? 'bg-disabled-disabled01'
+      : props.userId
+      ? userColors[props.userId % userColors.length]
+      : 'bg-icon-icon01',
     {
       [`w-16 h-16 ${typography.label.label1regular}`]: size === 'x-large',
       [`w-12 h-12 ${typography.label.label2regular}`]: size === 'large',
