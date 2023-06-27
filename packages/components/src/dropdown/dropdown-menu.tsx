@@ -27,7 +27,7 @@ export function DropdownMenu({
     'w-max',
     'bg-background-uiBackground01',
     'rounded',
-    'shadow-componentShadow',
+    'shadow-floatingShadow',
     'overflow-y-auto',
     horizontalAlign === 'left' ? 'left-0' : horizontalAlign === 'right' ? 'right-0' : 'left-auto',
     {

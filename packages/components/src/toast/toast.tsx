@@ -14,7 +14,7 @@ type Props = {
 };
 
 export function Toast({ state = 'information', width, children, onClickClose }: Props) {
-  const wrapperClasses = clsx('flex items-start gap-1', 'p-4', 'shadow-componentShadow');
+  const wrapperClasses = clsx('flex items-start gap-1', 'p-4', 'shadow-floatingShadow');
 
   const iconClasses = clsx('flex', 'items-center', {
     'fill-support-supportSuccess': state === 'success',
