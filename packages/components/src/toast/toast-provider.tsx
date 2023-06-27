@@ -31,7 +31,7 @@ export const ToastProvider = ({ children }: PropsWithChildren) => {
       {createPortal(
         <div className="pointer-events-none fixed bottom-0 left-0 z-toast mb-4 ml-4 flex w-full flex-col-reverse">
           {toasts.map(({ id, message, state }) => (
-            <Toast key={id} state={state} autoClose onClickClose={() => removeToast(id)} width={475}>
+            <Toast key={id} state={state} isAutoClose isAnimation onClickClose={() => removeToast(id)} width={475}>
               {message}
             </Toast>
           ))}

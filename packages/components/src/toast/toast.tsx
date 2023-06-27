@@ -1,4 +1,4 @@
-import { CSSProperties, ReactNode, useEffect } from 'react';
+import { AnimationEvent, CSSProperties, ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { typography } from '@zenkigen-component/theme';
 import clsx from 'clsx';
@@ -13,12 +13,38 @@ const CLOSE_TIME_MSEC = 5000;
 type Props = {
   state?: ToastState;
   width?: CSSProperties['width'];
-  autoClose?: boolean;
+  isAutoClose?: boolean;
+  isAnimation?: boolean;
   children?: ReactNode;
   onClickClose: () => void;
 };
 
-export function Toast({ state = 'information', width = 'auto', autoClose, children, onClickClose }: Props) {
+export function Toast({
+  state = 'information',
+  width = 'auto',
+  isAutoClose,
+  isAnimation,
+  children,
+  onClickClose,
+}: Props) {
+  const [isRemoving, setIsRemoving] = useState(false);
+
+  const handleClose = useCallback(() => {
+    if (isAnimation) {
+      setIsRemoving(true);
+    } else {
+      onClickClose();
+    }
+  }, [isAnimation, onClickClose]);
+
+  const handleAnimationEnd = (e: AnimationEvent<HTMLDivElement>) => {
+    window.getComputedStyle(e.currentTarget).opacity === '0' && onClickClose();
+  };
+
+  const wrapperClasses = clsx('pointer-events-auto flex items-start gap-1 bg-white p-4 shadow-componentShadow', {
+    ['animate-toast-in']: isAnimation && !isRemoving,
+    ['animate-toast-out opacity-0']: isAnimation && isRemoving,
+  });
   const iconClasses = clsx('flex', 'items-center', {
     'fill-support-supportSuccess': state === 'success',
     'fill-support-supportError': state === 'error',
@@ -40,21 +66,21 @@ export function Toast({ state = 'information', width = 'auto', autoClose, childr
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
-      if (autoClose) {
-        onClickClose();
+      if (isAutoClose) {
+        setIsRemoving(true);
       }
     }, CLOSE_TIME_MSEC);
 
     return () => window.clearTimeout(timer);
-  }, [autoClose, onClickClose]);
+  }, [isAutoClose]);
 
   return (
-    <div className="pointer-events-auto flex items-start gap-1 bg-white p-4 shadow-componentShadow" style={{ width }}>
+    <div className={wrapperClasses} style={{ width }} onAnimationEnd={handleAnimationEnd}>
       <div className={iconClasses}>
         <Icon name={iconName[state]} />
       </div>
       <p className={textClasses}>{children}</p>
-      <IconButton icon="close" size="medium" variant="text" onClick={onClickClose} isNoPadding />
+      <IconButton icon="close" size="medium" variant="text" onClick={handleClose} isNoPadding />
     </div>
   );
 }

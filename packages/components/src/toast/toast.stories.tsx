@@ -10,9 +10,9 @@ export default {
   component: Toast,
   decorators: [
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (StoryFn: any) => (
+    (Story: any) => (
       <ToastProvider>
-        <StoryFn />
+        <Story />
       </ToastProvider>
     ),
   ],
