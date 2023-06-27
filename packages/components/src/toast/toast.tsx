@@ -41,7 +41,7 @@ export function Toast({
     window.getComputedStyle(e.currentTarget).opacity === '0' && onClickClose();
   };
 
-  const wrapperClasses = clsx('pointer-events-auto flex items-start gap-1 bg-white p-4 shadow-componentShadow', {
+  const wrapperClasses = clsx('pointer-events-auto flex items-start gap-1 bg-white p-4 shadow-floatingShadow', {
     ['animate-toast-in']: isAnimation && !isRemoving,
     ['animate-toast-out opacity-0']: isAnimation && isRemoving,
   });
@@ -51,7 +51,6 @@ export function Toast({
     'fill-support-supportWarning': state === 'warning',
     'fill-support-supportInfo': state === 'information',
   });
-
   const textClasses = clsx('flex-1', 'pt-[3px]', typography.body.body2regular, {
     'text-support-supportError': state === 'error',
     'text-text-text01': state === 'success' || state === 'warning' || state === 'information',
