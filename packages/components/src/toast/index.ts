@@ -1,1 +1,2 @@
-export { Toast } from './toast';
+export * from './toast';
+export * from './toast-provider';

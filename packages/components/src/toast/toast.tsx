@@ -1,4 +1,4 @@
-import { CSSProperties, ReactNode } from 'react';
+import { CSSProperties, ReactNode, useEffect } from 'react';
 
 import { typography } from '@zenkigen-component/theme';
 import clsx from 'clsx';
@@ -6,16 +6,19 @@ import clsx from 'clsx';
 import { Icon } from '../icon';
 import { IconButton } from '../icon-button';
 
+import { ToastState } from './type';
+
+const CLOSE_TIME_MSEC = 5000;
+
 type Props = {
-  state?: 'success' | 'error' | 'warning' | 'information';
+  state?: ToastState;
   width?: CSSProperties['width'];
+  autoClose?: boolean;
   children?: ReactNode;
   onClickClose: () => void;
 };
 
-export function Toast({ state = 'information', width, children, onClickClose }: Props) {
-  const wrapperClasses = clsx('flex items-start gap-1', 'p-4', 'shadow-componentShadow');
-
+export function Toast({ state = 'information', width = 'auto', autoClose, children, onClickClose }: Props) {
   const iconClasses = clsx('flex', 'items-center', {
     'fill-support-supportSuccess': state === 'success',
     'fill-support-supportError': state === 'error',
@@ -35,8 +38,18 @@ export function Toast({ state = 'information', width, children, onClickClose }: 
     information: 'information-filled',
   } as const;
 
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      if (autoClose) {
+        onClickClose();
+      }
+    }, CLOSE_TIME_MSEC);
+
+    return () => window.clearTimeout(timer);
+  }, [autoClose, onClickClose]);
+
   return (
-    <div className={wrapperClasses} style={{ width }}>
+    <div className="pointer-events-auto flex items-start gap-1 bg-white p-4 shadow-componentShadow" style={{ width }}>
       <div className={iconClasses}>
         <Icon name={iconName[state]} />
       </div>
