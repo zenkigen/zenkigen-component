@@ -199,6 +199,11 @@
         "type": "color",
         "description": "Side navigation background"
       },
+      "UiBackground02Light": {
+        "value": "#FAFAFA",
+        "type": "color",
+        "description": "Side navigation background in lighter hue"
+      },
       "UiBackground01Dark": {
         "value": "#2F3233",
         "type": "color",
@@ -572,14 +577,14 @@
         "description": "Checkbox background color, Select border color - Dark"
       },
       "ActiveDanger": {
-        "value": "#B22045",
+        "value": "#821732",
         "type": "color",
-        "description": "Danger hover, $support-01 hover"
+        "description": "Danger active"
       },
       "ActiveDangerDark": {
-        "value": "#F9E0E6",
+        "value": "#FCEFF3",
         "type": "color",
-        "description": "Danger hover, $support-01 hover - Dark"
+        "description": "Danger active - Dark"
       },
       "ActiveInput": {
         "value": "#1366B9",
@@ -851,6 +856,11 @@
       }
     },
     "Gray": {
+      "Gray05": {
+        "value": "#FAFAFA",
+        "type": "color",
+        "description": ""
+      },
       "Gray10": {
         "value": "#F3F4F5",
         "type": "color",
@@ -1523,41 +1533,20 @@
     }
   },
   "Shadow": {
-    "WindowShadow": {
-      "value": {
-        "color": "#00000026",
-        "type": "dropShadow",
-        "x": 0,
-        "y": 0,
-        "blur": 10,
-        "spread": 0
-      },
+    "ModalShadow": {
+      "value": "0 0 0 0 #0000001a, 0 9px 20px 0 #0000001a, 0 37px 37px 0 #00000017, 0 84px 50px 0 #0000000d, 0 149px 60px 0 #00000003, 0 232px 65px 0 #00000000",
       "type": "boxShadow",
-      "description": "Modal/Toastで使用"
-    },
-    "ComponentShadow": {
-      "value": {
-        "color": "#00000014",
-        "type": "dropShadow",
-        "x": 0,
-        "y": 0,
-        "blur": 10,
-        "spread": 0
-      },
-      "type": "boxShadow",
-      "description": "Select/Dropdown/TooltipなどのUIの上に乗るパーツに使用。"
+      "description": "Modalで使用"
     },
     "FloatingShadow": {
-      "value": {
-        "color": "#0000001a",
-        "type": "dropShadow",
-        "x": 0,
-        "y": 0,
-        "blur": 20,
-        "spread": 0
-      },
+      "value": "0 4px 20px 0 #00000014",
       "type": "boxShadow",
-      "description": ""
+      "description": "Toast/Popup/Popover/Accordion/List/SliderなどUI上に重ねて表示する要素に使用"
+    },
+    "LayoutShadow": {
+      "value": "0 4px 10px 0 #00000014",
+      "type": "boxShadow",
+      "description": "FixedMenuなどレイアウト用に使用"
     }
   }
 }

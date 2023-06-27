@@ -35,7 +35,7 @@ export function SelectList({
     'overflow-y-auto',
     'bg-background-uiBackground01',
     'rounded',
-    'shadow-componentShadow',
+    'shadow-floatingShadow',
     {
       'top-7': size === 'x-small' || size === 'small',
       'top-9': size === 'medium',
