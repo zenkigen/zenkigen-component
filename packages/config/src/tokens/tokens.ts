@@ -51,6 +51,7 @@ export const tokens = {
     "background": {
       "uiBackground01": "#FFFFFF",
       "uiBackground02": "#F3F4F5",
+      "uiBackground02Light": "#FAFAFA",
       "uiBackground01Dark": "#2F3233",
       "uiBackground02Dark": "#454A4D",
       "uiBackground02Blue": "#F1F7FD",
@@ -135,8 +136,8 @@ export const tokens = {
       "activeUiDark": "#7C868A",
       "activeSelectedUi": "#177EE5",
       "activeSelectedUiDark": "#177EE5",
-      "activeDanger": "#B22045",
-      "activeDangerDark": "#F9E0E6",
+      "activeDanger": "#821732",
+      "activeDangerDark": "#FCEFF3",
       "activeInput": "#1366B9",
       "activeInputDark": "#CACCCD",
       "activeLink01": "#0E4B87",
@@ -201,6 +202,7 @@ export const tokens = {
       "blue100": "#0E4B87"
     },
     "gray": {
+      "gray05": "#FAFAFA",
       "gray10": "#F3F4F5",
       "gray20": "#E9EAEB",
       "gray30": "#DEDFE0",
@@ -509,29 +511,8 @@ export const tokens = {
     "none": "none"
   },
   "shadow": {
-    "windowShadow": {
-      "color": "#00000026",
-      "type": "dropShadow",
-      "x": 0,
-      "y": 0,
-      "blur": 10,
-      "spread": 0
-    },
-    "componentShadow": {
-      "color": "#00000014",
-      "type": "dropShadow",
-      "x": 0,
-      "y": 0,
-      "blur": 10,
-      "spread": 0
-    },
-    "floatingShadow": {
-      "color": "#0000001a",
-      "type": "dropShadow",
-      "x": 0,
-      "y": 0,
-      "blur": 20,
-      "spread": 0
-    }
+    "modalShadow": "0 0 0 0 #0000001a, 0 9px 20px 0 #0000001a, 0 37px 37px 0 #00000017, 0 84px 50px 0 #0000000d, 0 149px 60px 0 #00000003, 0 232px 65px 0 #00000000",
+    "floatingShadow": "0 4px 20px 0 #00000014",
+    "layoutShadow": "0 4px 10px 0 #00000014"
   }
 } as const;
