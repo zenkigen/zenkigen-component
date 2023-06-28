@@ -82,10 +82,10 @@ export function Checkbox({
         : 'border-interactive-interactive02'
       : isMouseOver
       ? 'border-hover-hoverUiBorder'
-      : 'border-border-uiBorder02',
+      : 'border-border-uiBorder03',
   );
 
-  const indicatorClasses = clsx('h-5', 'w-5', 'relative', 'inline-block', 'flex-[0_0_auto]', {
+  const indicatorClasses = clsx('h-5', 'w-5', 'relative', 'flex', 'flex-[0_0_auto]', 'items-center', 'justify-center', {
     'bg-disabled-disabled01': isDisabled && isChecked,
     'border-disabled-disabled01': isDisabled,
   });
@@ -118,6 +118,14 @@ export function Checkbox({
     },
   );
 
+  const hoverIndicatorClasses = clsx(
+    'w-3',
+    'h-3',
+    'inline-block',
+    'rounded-[1px]',
+    !isDisabled && !isChecked && isMouseOver && 'bg-hover-hoverUi',
+  );
+
   const labelClasses = clsx(
     'flex-[1_0_0]',
     'ml-2',
@@ -147,6 +155,7 @@ export function Checkbox({
               {isChecked && !isIndeterminate && <CheckedIcon />}
               {isIndeterminate && <MinusIcon />}
             </span>
+            <span className={hoverIndicatorClasses} />
           </div>
         </div>
       </div>
