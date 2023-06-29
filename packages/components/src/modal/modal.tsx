@@ -40,12 +40,20 @@ export function Modal({
     'fixed left-0 top-0',
     'h-full w-full',
   );
-  const modalBaseClasses = clsx('flex', 'shrink-0', 'flex-col', 'bg-background-uiBackground01', 'rounded-lg', {
-    'w-[320px]': size === 'small',
-    'w-[480px]': size === 'medium',
-    'w-[640px]': size === 'large',
-    'w-[720px]': size === 'x-large',
-  });
+  const modalBaseClasses = clsx(
+    'flex',
+    'shrink-0',
+    'flex-col',
+    'bg-background-uiBackground01',
+    'rounded-lg',
+    'shadow-modalShadow',
+    {
+      'w-[320px]': size === 'small',
+      'w-[480px]': size === 'medium',
+      'w-[640px]': size === 'large',
+      'w-[720px]': size === 'x-large',
+    },
+  );
   const contentClasses = clsx('flex', 'items-center', 'justify-center', 'overflow-y-auto');
 
   return createPortal(
