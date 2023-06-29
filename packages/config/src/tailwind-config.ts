@@ -14,9 +14,9 @@ module.exports = {
       fontSize: tokens.fontSize,
       lineHeight: tokens.lineHeights,
       boxShadow: {
-        windowShadow: '0 0 10px rgba(0, 0, 0, 0.15)',
-        componentShadow: '0 0 10px rgba(0, 0, 0, 0.08)',
-        floatingShadow: '0 0 20px rgba(0, 0, 0, 0.1)',
+        modalShadow: tokens.shadow.modalShadow,
+        floatingShadow: tokens.shadow.floatingShadow,
+        layoutShadow: tokens.shadow.layoutShadow,
       },
       keyframes: {
         'circular-move': {
@@ -35,9 +35,31 @@ module.exports = {
             transform: 'rotate(360deg)',
           },
         },
+        'toast-in': {
+          from: {
+            opacity: 0,
+            transform: 'translate3d(-10%, 0, 0)',
+          },
+          to: {
+            opacity: 1,
+            transform: 'translate3d(0, 0, 0)',
+          },
+        },
+        'toast-out': {
+          from: {
+            opacity: 1,
+            transform: 'translate3d(0, 0, 0)',
+          },
+          to: {
+            opacity: 0,
+            transform: 'translate3d(-50%, 0, 0)',
+          },
+        },
       },
       animation: {
         'circular-move': 'circular-move 1.4s ease-in-out infinite',
+        'toast-in': 'toast-in 0.25s cubic-bezier(.11, .57, .14, 1)',
+        'toast-out': 'toast-out 0.25s cubic-bezier(0, .14, .75, 1)',
       },
       zIndex: {
         hide: -1,
