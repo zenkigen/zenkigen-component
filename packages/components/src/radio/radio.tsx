@@ -48,7 +48,7 @@ export function Radio({ name, value, id, label, isChecked = false, isDisabled = 
     {
       'border-disabled-disabled01 hover:border-disabled-disabled01': isDisabled && !isMouseOver,
       'border-hover-hoverUiBorder': !isDisabled && isMouseOver,
-      'border-border-uiBorder02': !isDisabled,
+      'border-border-uiBorder03': !isDisabled,
       'cursor-not-allowed': isDisabled,
       'cursor-pointer': !isDisabled,
     },
@@ -73,6 +73,14 @@ export function Radio({ name, value, id, label, isChecked = false, isDisabled = 
     },
   );
 
+  const hoverIndicatorClasses = clsx(
+    'w-3',
+    'h-3',
+    'inline-block',
+    'rounded-full',
+    !isDisabled && !isChecked && isMouseOver && 'bg-hover-hoverUi',
+  );
+
   const labelClasses = clsx('flex-[1_0_0]', 'ml-2', typography.label.label2regular, 'break-all', 'select-none', {
     'pointer-events-none cursor-not-allowed text-disabled-disabled01': isDisabled,
     'cursor-pointer text-text-text01': !isDisabled,
@@ -94,8 +102,9 @@ export function Radio({ name, value, id, label, isChecked = false, isDisabled = 
           className={inputClasses}
         />
         <div className={boxClasses}>
-          <div className="relative inline-block h-5 w-5 flex-[0_0_auto]">
+          <div className="relative flex h-5 w-5 flex-[0_0_auto] items-center justify-center">
             <span className={afterClasses} />
+            <span className={hoverIndicatorClasses} />
           </div>
         </div>
       </div>
