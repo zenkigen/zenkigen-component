@@ -75,7 +75,7 @@ export function Toggle({
         onChange={onChange}
         disabled={isDisabled}
       />
-      <div role="button" className={baseClasses}>
+      <div className={baseClasses}>
         <span className={indicatorClasses} />
       </div>
       {label && labelPosition === 'right' && (
