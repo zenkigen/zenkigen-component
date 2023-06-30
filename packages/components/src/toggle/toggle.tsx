@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { focusVisible, typography } from '@zenkigen-component/theme';
+import { typography } from '@zenkigen-component/theme';
 import clsx from 'clsx';
 
 type Props = {
@@ -28,7 +28,6 @@ export function Toggle({
     'flex',
     'items-center',
     'rounded-full',
-    focusVisible.normalPeer,
     {
       'w-8 h-4 px-[3px]': size === 'small',
       'w-12 h-6 px-1': size === 'medium',
@@ -36,17 +35,17 @@ export function Toggle({
     isDisabled
       ? { 'bg-disabled-disabledOn': isChecked, 'bg-disabled-disabled01': !isChecked }
       : {
-          'bg-interactive-interactive01 hover:bg-hover-hover01': isChecked,
-          'bg-interactive-interactive02 hover:bg-hover-hover02Dark': !isChecked,
+          'bg-interactive-interactive01 peer-hover:bg-hover-hover01': isChecked,
+          'bg-interactive-interactive02 peer-hover:bg-hover-hover02Dark': !isChecked,
         },
   );
   const inputClasses = clsx(
+    'peer',
     'absolute',
     'inset-0',
     'z-[1]',
     'opacity-0',
     isDisabled ? 'cursor-not-allowed' : 'cursor-pointer',
-    'peer',
   );
   const indicatorClasses = clsx('bg-icon-iconOnColor', 'rounded-full', {
     'w-2.5 h-2.5': size === 'small',
@@ -76,7 +75,7 @@ export function Toggle({
         onChange={onChange}
         disabled={isDisabled}
       />
-      <div className={baseClasses}>
+      <div role="button" className={baseClasses}>
         <span className={indicatorClasses} />
       </div>
       {label && labelPosition === 'right' && (
