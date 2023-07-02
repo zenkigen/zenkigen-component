@@ -15,7 +15,7 @@
     "@types/react": "18.2.14",
     "hygen": "6.2.11",
     "microbundle": "0.15.1",
-    "typescript": "5.1.3"
+    "typescript": "5.1.6"
   },
   "peerDependencies": {
     "react": "18.2.0"
