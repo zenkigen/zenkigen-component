@@ -20,6 +20,14 @@ export const buttonColors = {
     selected:
       'border border-transparent bg-selected-selectedUi text-interactive-interactive01 fill-interactive-interactive01',
   },
+  fillDanger: {
+    base: 'border border-support-supportDanger bg-support-supportDanger text-text-textOnColor fill-text-textOnColor',
+    hover: 'hover:bg-hover-hoverDanger hover:border-hover-hoverDanger',
+    active: 'active:bg-active-activeDanger active:border-active-activeDanger',
+    disabled: 'disabled:bg-disabled-disabled01 disabled:border-disabled-disabled01',
+    selected:
+      'border border-transparent bg-support-supportDangerLight text-support-supportDanger fill-support-supportDanger',
+  },
   outline: {
     base: 'border border-border-uiBorder02 text-interactive-interactive02 fill-interactive-interactive02',
     hover: 'hover:bg-hover-hover02',
