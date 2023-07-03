@@ -13,6 +13,7 @@ type Props = {
   maxWidth?: CSSProperties['width'];
   verticalPosition?: TooltipVerticalPosition;
   horizontalAlign?: TooltipHorizontalAlign;
+  isDisabledHover?: boolean;
 };
 
 export function Tooltip({
@@ -22,6 +23,7 @@ export function Tooltip({
   maxWidth,
   verticalPosition = 'bottom',
   horizontalAlign = 'center',
+  isDisabledHover = false,
 }: Props) {
   const [isVisible, setIsVisible] = useState(false);
   const [targetDimensions, setTargetDimensions] = useState({
@@ -32,7 +34,7 @@ export function Tooltip({
   const targetRef = useRef<HTMLDivElement>(null);
 
   const handleMouseOverWrapper = useCallback(() => {
-    if (targetRef.current === null) {
+    if (targetRef.current === null || isDisabledHover) {
       return;
     }
 
@@ -44,7 +46,7 @@ export function Tooltip({
 
     setTargetDimensions(calculatedDimensions);
     setIsVisible(true);
-  }, []);
+  }, [isDisabledHover]);
 
   const handleMouseOutWrapper = useCallback(() => {
     setIsVisible(false);
