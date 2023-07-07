@@ -3,8 +3,6 @@ name: 'Chromatic'
 on:
   pull_request:
     types: [opened, reopened, synchronize, ready_for_review]
-    branches-ignore:
-      - 'renovate/**'
   push:
     branches:
       - main
@@ -15,7 +13,7 @@ concurrency:
 
 jobs:
   chromatic-deployment:
-    if: github.event.pull_request.draft == false
+    if: github.event.pull_request.draft == false && contains(github.event.pull_request.labels.*.name, 'renovate') == false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -42,16 +40,15 @@ jobs:
         with:
           issue-number: ${{ github.event.pull_request.number }}
           comment-author: 'github-actions[bot]'
-          body-includes: Storybook Preview
+          body-includes: Chromatic results
 
       - name: Create or update comment
         uses: peter-evans/create-or-update-comment@v3
-        if: success() && github.event.number && steps.fc.outputs.comment-id != 0
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            ## chromatic
+            ## Chromatic results
 
             ### Outputs
             | Name | Value |
