@@ -11,21 +11,20 @@ import { DropdownContext } from './dropdown-context';
 import { DropdownItem } from './dropdown-item';
 import { DropdownMenu } from './dropdown-menu';
 
-type Props =
+type Props = {
+  size?: 'x-small' | 'small' | 'medium' | 'large';
+  variant?: 'text' | 'outline';
+  isDisabled?: boolean;
+  isArrowHidden?: boolean;
+  children: ReactNode;
+} & (
+  | { target: ReactElement; label?: never; icon?: never }
   | {
-      size?: 'x-small' | 'small' | 'medium' | 'large';
-      variant?: 'text' | 'outline';
-      isDisabled?: boolean;
-      isArrowHidden?: boolean;
-      children: ReactNode;
-    } & (
-      | { target: ReactElement; label?: never; icon?: never }
-      | {
-          target?: undefined;
-          label: string;
-          icon?: IconName;
-        }
-    );
+      target?: undefined;
+      label: string;
+      icon?: IconName;
+    }
+);
 
 export function Dropdown({
   children,

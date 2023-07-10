@@ -7,26 +7,25 @@ type Size = 'small' | 'medium' | 'large';
 
 type Variant = 'fill' | 'fillDanger' | 'outline' | 'text';
 
-type Props =
+type Props = {
+  size?: Size;
+  width?: CSSProperties['width'];
+  isDisabled?: boolean;
+  variant?: Variant;
+  before?: ReactNode;
+  after?: ReactNode;
+  children: ReactNode;
+} & (
   | {
-      size?: Size;
-      width?: CSSProperties['width'];
-      isDisabled?: boolean;
-      variant?: Variant;
-      before?: ReactNode;
-      after?: ReactNode;
-      children: ReactNode;
-    } & (
-      | {
-          isAnchor: true;
-          href: string;
-          target?: HTMLAnchorElement['target'];
-        }
-      | {
-          isAnchor?: false;
-          onClick?: () => void;
-        }
-    );
+      isAnchor: true;
+      href: string;
+      target?: HTMLAnchorElement['target'];
+    }
+  | {
+      isAnchor?: false;
+      onClick?: () => void;
+    }
+);
 
 export function Button({ size = 'medium', variant = 'fill', ...props }: Props) {
   const baseClasses = clsx(

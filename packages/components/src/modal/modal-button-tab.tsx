@@ -7,32 +7,31 @@ import { Checkbox } from '../checkbox';
 
 import { ModalContext } from './modal-context';
 
-type Props =
+type Props = {
+  primaryButtonLabel: string;
+  secondaryButtonLabel: string;
+  onClickPrimaryButton: () => void;
+  onClickSecondaryButton: () => void;
+  isDanger?: boolean;
+  isNoBorder?: boolean;
+} & (
   | {
-      primaryButtonLabel: string;
-      secondaryButtonLabel: string;
-      onClickPrimaryButton: () => void;
-      onClickSecondaryButton: () => void;
-      isDanger?: boolean;
-      isNoBorder?: boolean;
-    } & (
-      | {
-          isWithCheckbox?: boolean;
-          checkboxLabel?: string;
-          isChecked?: boolean;
-          onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-          subButtonLabel?: never;
-          onClickSubButton?: never;
-        }
-      | {
-          isWithCheckbox?: never;
-          checkboxLabel?: never;
-          isChecked?: never;
-          onChange?: never;
-          subButtonLabel?: string;
-          onClickSubButton?: () => void;
-        }
-    );
+      isWithCheckbox?: boolean;
+      checkboxLabel?: string;
+      isChecked?: boolean;
+      onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+      subButtonLabel?: never;
+      onClickSubButton?: never;
+    }
+  | {
+      isWithCheckbox?: never;
+      checkboxLabel?: never;
+      isChecked?: never;
+      onChange?: never;
+      subButtonLabel?: string;
+      onClickSubButton?: () => void;
+    }
+);
 
 export function ModalButtonTab({
   primaryButtonLabel,
