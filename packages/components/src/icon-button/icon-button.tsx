@@ -8,24 +8,23 @@ type Size = 'small' | 'medium' | 'large';
 
 type Variant = 'outline' | 'text';
 
-type Props =
+type Props = {
+  icon: IconName;
+  size?: Size;
+  isDisabled?: boolean;
+  isNoPadding?: boolean;
+  variant?: Variant;
+} & (
   | {
-      icon: IconName;
-      size?: Size;
-      isDisabled?: boolean;
-      isNoPadding?: boolean;
-      variant?: Variant;
-    } & (
-      | {
-          isAnchor: true;
-          href: string;
-          target?: HTMLAnchorElement['target'];
-        }
-      | {
-          isAnchor?: false;
-          onClick?: () => void;
-        }
-    );
+      isAnchor: true;
+      href: string;
+      target?: HTMLAnchorElement['target'];
+    }
+  | {
+      isAnchor?: false;
+      onClick?: () => void;
+    }
+);
 
 export function IconButton({ size = 'medium', variant = 'outline', ...props }: Props) {
   const baseClasses = clsx(
