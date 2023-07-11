@@ -107,7 +107,6 @@ export function SelectSort({
         <SelectList
           size={size}
           variant={variant}
-          label={label}
           sortOrder={sortOrder}
           onClickItem={handleClickItem}
           onClickDeselect={onClickDeselect}
