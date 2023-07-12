@@ -43,21 +43,12 @@ export function Select({
 
   const handleClickToggle = () => setIsOptionListOpen((prev) => !prev);
 
-  const wrapperClasses = clsx(
-    'relative',
-    'flex',
-    'shrink-0',
-    'gap-1',
-    'items-center',
-    'rounded',
-    'bg-background-uiBackground01',
-    {
-      'h-6': size === 'x-small' || size === 'small',
-      'h-8': size === 'medium',
-      'h-10': size === 'large',
-      'cursor-not-allowed': isDisabled,
-    },
-  );
+  const wrapperClasses = clsx('relative', 'flex', 'shrink-0', 'gap-1', 'items-center', 'rounded', {
+    'h-6': size === 'x-small' || size === 'small',
+    'h-8': size === 'medium',
+    'h-10': size === 'large',
+    'cursor-not-allowed': isDisabled,
+  });
 
   const buttonClasses = clsx(
     'flex',
