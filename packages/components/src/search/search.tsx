@@ -1,62 +1,36 @@
-import { forwardRef, useState } from 'react';
+import { ChangeEvent, FormEvent, forwardRef } from 'react';
 
 import { typography } from '@zenkigen-component/theme';
-import { clsx } from 'clsx';
 
 import { Icon } from '../icon';
 
 type Props = {
   placeholder?: string;
   width?: string;
-  defaultValue?: string;
-  onSubmit: (keyword: string) => void;
+  value?: string;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onSubmit?: (e: FormEvent<HTMLFormElement>) => void;
   onClickSearchModal?: () => void;
 };
 
-export const Search = forwardRef<HTMLDivElement, Props>(
-  ({ width = '100%', defaultValue = '', ...props }: Props, ref) => {
-    const [text, setText] = useState(defaultValue);
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      props.onSubmit(text);
-    };
-
-    const wrapperClasses = clsx('relative');
-    const searchAreaClasses = clsx(
-      'flex',
-      'items-center',
-      'h-8',
-      'px-3',
-      'rounded-full',
-      'border',
-      'border-border-uiBorder02',
-      'focus-within:border-active-activeInput',
-    );
-    const searchInputClasses = clsx(
-      typography.label.label2regular,
-      'placeholder:text-text-textPlaceholder',
-      'ml-3',
-      'outline-0',
-      'flex-1',
-      'h-full',
-    );
-
-    return (
-      <div className={wrapperClasses} ref={ref}>
-        <form onSubmit={handleSubmit}>
-          <div className={searchAreaClasses} style={{ width }}>
-            <Icon name="search" color="icon01" size="small" />
-            <input
-              type="text"
-              size={1}
-              className={searchInputClasses}
-              placeholder={props.placeholder}
-              onChange={(e) => setText(e.target.value)}
-            />
-          </div>
-        </form>
+export const Search = forwardRef<HTMLDivElement, Props>(({ width = '100%', value = '', ...props }: Props, ref) => (
+  <div className="relative" ref={ref}>
+    <form onSubmit={props.onSubmit}>
+      <div
+        className="flex h-8 items-center rounded-full border border-border-uiBorder02 px-3 focus-within:border-active-activeInput"
+        style={{ width }}
+      >
+        <Icon name="search" color="icon01" size="small" />
+        <input
+          type="text"
+          size={1}
+          value={value}
+          className={`${typography.label.label2regular} ml-3 h-full flex-1 outline-0 placeholder:text-text-textPlaceholder`}
+          placeholder={props.placeholder}
+          onChange={props.onChange}
+        />
       </div>
-    );
-  },
-);
+    </form>
+  </div>
+));
 Search.displayName = 'Search';
