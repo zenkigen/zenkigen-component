@@ -7,13 +7,12 @@ import type { SortOrder } from './type';
 type Props = {
   size: 'x-small' | 'small' | 'medium' | 'large';
   variant: 'text' | 'outline';
-  label: string;
   sortOrder: SortOrder;
   onClickItem: (value: SortOrder) => void;
   onClickDeselect?: () => void;
 };
 
-export function SelectList({ size, variant, label, sortOrder, onClickItem, onClickDeselect }: Props) {
+export function SelectList({ size, variant, sortOrder, onClickItem, onClickDeselect }: Props) {
   const listClasses = clsx(
     'z-dropdown',
     'absolute',
@@ -47,10 +46,10 @@ export function SelectList({ size, variant, label, sortOrder, onClickItem, onCli
   return (
     <ul className={listClasses}>
       <SelectItem isSortKey={sortOrder === 'ascend'} onClickItem={() => onClickItem('ascend')}>
-        {label}の昇順
+        昇順で並び替え
       </SelectItem>
       <SelectItem isSortKey={sortOrder === 'descend'} onClickItem={() => onClickItem('descend')}>
-        {label}の降順
+        降順で並び替え
       </SelectItem>
       {sortOrder !== null && onClickDeselect && (
         <li>
