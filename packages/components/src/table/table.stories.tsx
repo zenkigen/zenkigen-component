@@ -94,7 +94,7 @@ const TableStoryBasic = () => {
           <TableCell className={headingClasses}>権限</TableCell>
           <TableCell />
         </TableRowContainer>
-        <TableRowContainer>
+        <TableRowContainer isHoverBackgroundVisible>
           <TableCell className={cellClasses}>
             <Avatar size="x-small" userId={1} lastName="全機現" firstName="太郎" />
             全機現太郎
@@ -113,7 +113,7 @@ const TableStoryBasic = () => {
             </Dropdown>
           </TableCell>
         </TableRowContainer>
-        <TableRowContainer>
+        <TableRowContainer isHoverBackgroundVisible>
           <TableCell className={cellClasses}>
             <Avatar size="x-small" userId={1} lastName="全機現" firstName="太郎" />
             全機現太郎
@@ -132,7 +132,7 @@ const TableStoryBasic = () => {
             </Dropdown>
           </TableCell>
         </TableRowContainer>
-        <TableRowContainer>
+        <TableRowContainer isHoverBackgroundVisible>
           <TableCell className={cellClasses}>
             <Avatar size="x-small" userId={1} lastName="全機現" firstName="太郎" />
             全機現太郎

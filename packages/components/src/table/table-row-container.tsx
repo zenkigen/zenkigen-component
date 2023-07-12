@@ -1,8 +1,12 @@
 import { ReactNode } from 'react';
 
+import clsx from 'clsx';
+
 type Props = {
   children?: ReactNode;
+  isHoverBackgroundVisible?: boolean;
 };
-export function TableRowContainer({ children }: Props) {
-  return <div className="contents">{children}</div>;
+export function TableRowContainer({ children, isHoverBackgroundVisible }: Props) {
+  const rowClasses = clsx('contents', isHoverBackgroundVisible && '[&:hover>div]:bg-hover-hoverUi02');
+  return <div className={rowClasses}>{children}</div>;
 }
