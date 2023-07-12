@@ -68,7 +68,6 @@ export function Dropdown({
     'relative',
     'flex shrink-0 items-center gap-1',
     'rounded',
-    'bg-background-uiBackground01',
     isDisabled && 'cursor-not-allowed',
   );
 
