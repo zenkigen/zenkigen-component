@@ -111,9 +111,7 @@ export function Select({
             )
           )}
           <div className={labelClasses}>
-            <div className="overflow-hidden text-ellipsis whitespace-nowrap">
-              {selectedOption ? selectedOption.label : placeholder && placeholder}
-            </div>
+            <div className="truncate">{selectedOption ? selectedOption.label : placeholder && placeholder}</div>
           </div>
           <div className="ml-auto flex items-center">
             <Icon name={isOptionListOpen ? 'angle-small-up' : 'angle-small-down'} size="small" />
