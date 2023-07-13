@@ -66,8 +66,8 @@ const TableStoryBasic = () => {
   const cellClasses = clsx(typography.label.label1regular, 'text-text-text01', 'flex items-center', 'gap-2');
 
   return (
-    <div className="flex items-center p-10">
-      <TableContainer rows="40px repeat(3, 48px)" columns="200px 400px 1fr 80px">
+    <div className="flex flex-col gap-10">
+      <TableContainer width="100%" rows="40px repeat(3, 48px)" columns="200px 400px 1fr 80px">
         <TableRowContainer>
           <TableCell className={headingClasses}>
             <SelectSort
@@ -113,6 +113,47 @@ const TableStoryBasic = () => {
             </Dropdown>
           </TableCell>
         </TableRowContainer>
+        <TableRowContainer isHoverBackgroundVisible>
+          <TableCell className={cellClasses}>
+            <Avatar size="x-small" userId={1} lastName="全機現" firstName="太郎" />
+            全機現太郎
+          </TableCell>
+          <TableCell className={cellClasses}>taro.zenkigen@zk-creative.jp</TableCell>
+          <TableCell className={cellClasses}>管理者</TableCell>
+          <TableCell className={`${cellClasses} flex justify-end`}>
+            <Dropdown size="x-small" target={<Icon name="more" size="small" color="icon01" />}>
+              <Dropdown.Menu horizontalAlign="right">
+                {items.map((item) => (
+                  <Dropdown.Item key={item.id} color={item.color} onClick={item.onClick}>
+                    {item.content}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+          </TableCell>
+        </TableRowContainer>
+        <TableRowContainer isHoverBackgroundVisible>
+          <TableCell className={cellClasses}>
+            <Avatar size="x-small" userId={1} lastName="全機現" firstName="太郎" />
+            全機現太郎
+          </TableCell>
+          <TableCell className={cellClasses}>taro.zenkigen@zk-creative.jp</TableCell>
+          <TableCell className={cellClasses}>管理者</TableCell>
+          <TableCell className={`${cellClasses} flex justify-end`}>
+            <Dropdown size="x-small" target={<Icon name="more" size="small" color="icon01" />}>
+              <Dropdown.Menu horizontalAlign="right">
+                {items.map((item) => (
+                  <Dropdown.Item key={item.id} color={item.color} onClick={item.onClick}>
+                    {item.content}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+          </TableCell>
+        </TableRowContainer>
+      </TableContainer>
+
+      <TableContainer rows="40px repeat(3, 48px)" columns="200px 400px 100px 80px">
         <TableRowContainer isHoverBackgroundVisible>
           <TableCell className={cellClasses}>
             <Avatar size="x-small" userId={1} lastName="全機現" firstName="太郎" />
