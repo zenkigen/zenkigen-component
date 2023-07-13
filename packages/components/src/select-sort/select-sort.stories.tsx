@@ -110,6 +110,44 @@ const SelectSortBasic = () => {
           onClickDeselect={handleClickDeselect}
         />
       </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '80px', marginBottom: '140px' }}>
+        <SelectSort
+          label="項目名項目名項目名"
+          size="x-small"
+          width={120}
+          sortOrder={sortOrderMember}
+          isSortKey={sortKey === 'member'}
+          onChange={handleSortMember}
+          onClickDeselect={handleClickDeselect}
+        />
+        <SelectSort
+          label="項目名項目名項目名"
+          size="small"
+          width={120}
+          sortOrder={sortOrderMember}
+          isSortKey={sortKey === 'member'}
+          onChange={handleSortMember}
+          onClickDeselect={handleClickDeselect}
+        />
+        <SelectSort
+          label="項目名項目名項目名"
+          size="medium"
+          width={120}
+          sortOrder={sortOrderMember}
+          isSortKey={sortKey === 'member'}
+          onChange={handleSortMember}
+          onClickDeselect={handleClickDeselect}
+        />
+        <SelectSort
+          label="項目名項目名項目名"
+          size="large"
+          width={120}
+          sortOrder={sortOrderMember}
+          isSortKey={sortKey === 'member'}
+          onChange={handleSortMember}
+          onClickDeselect={handleClickDeselect}
+        />
+      </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: '80px', marginBottom: '20px' }}>
         <SelectSort label="項目名1" size="x-small" variant="outline" sortOrder={sortOrderDay} isDisabled />
         <SelectSort label="項目名1" size="small" variant="outline" sortOrder={sortOrderDay} isDisabled />
