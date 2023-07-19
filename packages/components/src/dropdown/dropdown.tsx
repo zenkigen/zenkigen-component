@@ -14,6 +14,7 @@ import { DropdownMenu } from './dropdown-menu';
 type Props = {
   size?: 'x-small' | 'small' | 'medium' | 'large';
   variant?: 'text' | 'outline';
+  title?: string;
   isDisabled?: boolean;
   isArrowHidden?: boolean;
   children: ReactNode;
@@ -33,6 +34,7 @@ export function Dropdown({
   icon,
   size = 'medium',
   variant = target ? 'text' : 'outline',
+  title,
   isDisabled = false,
   isArrowHidden = false,
 }: Props) {
@@ -118,11 +120,17 @@ export function Dropdown({
     <DropdownContext.Provider value={{ isVisible, setIsVisible, isDisabled, targetDimensions, variant }}>
       <div ref={targetRef} className={wrapperClasses}>
         {target ? (
-          <button type="button" className={childrenButtonClasses} onClick={handleToggle} disabled={isDisabled}>
+          <button
+            type="button"
+            title={title}
+            className={childrenButtonClasses}
+            onClick={handleToggle}
+            disabled={isDisabled}
+          >
             {targetWithProps}
           </button>
         ) : (
-          <button type="button" className={buttonClasses} onClick={handleToggle} disabled={isDisabled}>
+          <button type="button" title={title} className={buttonClasses} onClick={handleToggle} disabled={isDisabled}>
             {icon && (
               <span className="mr-1 flex">
                 <Icon name={icon} size={size === 'large' ? 'medium' : 'small'} />
