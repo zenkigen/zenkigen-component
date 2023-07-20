@@ -3,13 +3,13 @@ import { tokens } from './tokens/tokens';
 module.exports = {
   theme: {
     extend: {
+      fontFamily: {
+        sans: `'Noto Sans JP', ${tokens.fontFamilies.helvetica}, sans-serif`,
+      },
       colors: {
         user: tokens.user,
         ...tokens.tokens,
         ...tokens.colors,
-      },
-      fontFamily: {
-        body: `'Noto Sans JP', ${tokens.fontFamilies.helvetica}, sans-serif`,
       },
       fontSize: tokens.fontSize,
       lineHeight: tokens.lineHeights,
