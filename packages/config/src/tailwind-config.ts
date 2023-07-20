@@ -9,7 +9,7 @@ module.exports = {
         ...tokens.colors,
       },
       fontFamily: {
-        helvetica: tokens.fontFamilies.helvetica,
+        body: `'Noto Sans JP', ${tokens.fontFamilies.helvetica}, sans-serif`,
       },
       fontSize: tokens.fontSize,
       lineHeight: tokens.lineHeights,
