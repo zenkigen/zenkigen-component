@@ -43,21 +43,12 @@ export function Select({
 
   const handleClickToggle = () => setIsOptionListOpen((prev) => !prev);
 
-  const wrapperClasses = clsx(
-    'relative',
-    'flex',
-    'shrink-0',
-    'gap-1',
-    'items-center',
-    'rounded',
-    'bg-background-uiBackground01',
-    {
-      'h-6': size === 'x-small' || size === 'small',
-      'h-8': size === 'medium',
-      'h-10': size === 'large',
-      'cursor-not-allowed': isDisabled,
-    },
-  );
+  const wrapperClasses = clsx('relative', 'flex', 'shrink-0', 'gap-1', 'items-center', 'rounded', {
+    'h-6': size === 'x-small' || size === 'small',
+    'h-8': size === 'medium',
+    'h-10': size === 'large',
+    'cursor-not-allowed': isDisabled,
+  });
 
   const buttonClasses = clsx(
     'flex',
@@ -111,9 +102,7 @@ export function Select({
             )
           )}
           <div className={labelClasses}>
-            <div className="overflow-hidden text-ellipsis whitespace-nowrap">
-              {selectedOption ? selectedOption.label : placeholder && placeholder}
-            </div>
+            <div className="truncate">{selectedOption ? selectedOption.label : placeholder && placeholder}</div>
           </div>
           <div className="ml-auto flex items-center">
             <Icon name={isOptionListOpen ? 'angle-small-up' : 'angle-small-down'} size="small" />

@@ -45,21 +45,12 @@ export function SelectSort({
     [onChange],
   );
 
-  const wrapperClasses = clsx(
-    'relative',
-    'flex',
-    'shrink-0',
-    'gap-1',
-    'items-center',
-    'rounded',
-    'bg-background-uiBackground01',
-    {
-      'h-6': size === 'x-small' || size === 'small',
-      'h-8': size === 'medium',
-      'h-10': size === 'large',
-      'cursor-not-allowed': isDisabled,
-    },
-  );
+  const wrapperClasses = clsx('relative', 'flex', 'shrink-0', 'gap-1', 'items-center', 'rounded', {
+    'h-6': size === 'x-small' || size === 'small',
+    'h-8': size === 'medium',
+    'h-10': size === 'large',
+    'cursor-not-allowed': isDisabled,
+  });
 
   const buttonClasses = clsx(
     'flex',
@@ -80,8 +71,7 @@ export function SelectSort({
   );
 
   const labelClasses = clsx(
-    'flex',
-    'items-center',
+    'truncate',
     size === 'x-small' ? 'mr-1' : 'mr-2',
     typography.label[
       size === 'x-small' ? 'label3regular' : size === 'small' || size === 'medium' ? 'label2regular' : 'label1regular'
@@ -91,7 +81,7 @@ export function SelectSort({
   return (
     <div className={wrapperClasses} style={{ width }} ref={targetRef}>
       <button className={buttonClasses} type="button" onClick={handleClickToggle} disabled={isDisabled}>
-        <span className={labelClasses}>{label}</span>
+        <div className={labelClasses}>{label}</div>
         <div className="ml-auto flex items-center">
           {isSortKey ? (
             <Icon

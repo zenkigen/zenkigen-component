@@ -1,16 +1,17 @@
-import { CSSProperties, ReactNode } from 'react';
+import { CSSProperties, PropsWithChildren } from 'react';
 
 type Props = {
-  children?: ReactNode;
+  width?: CSSProperties['width'];
   rows?: CSSProperties['gridTemplateRows'];
   columns?: CSSProperties['gridTemplateColumns'];
 };
 
-export function TableContainer({ children, rows, columns }: Props) {
+export function TableContainer({ width, rows, columns, children }: PropsWithChildren<Props>) {
   return (
     <div
-      className="grid w-full"
+      className="grid"
       style={{
+        width,
         gridTemplateRows: rows,
         gridTemplateColumns: columns,
       }}
