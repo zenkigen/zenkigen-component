@@ -30,7 +30,11 @@ yarn generate-component
 
 使用する側の import を簡略化させるため root にある [packages/components/src/index.ts](https://github.com/zenkigen/zenkigen-component/blob/main/packages/components/src/index.ts) に実装したコンポーネントを export してください。
 
-### コーディングガイドライン
+### コーディングガイドライン（社内のみ）
 
 開発する際は以下を参照してください。
 https://www.notion.so/zenkigen/5d4ebd0d93b74124a533cf167b852ec0
+
+## ライセンス
+
+@zenkigen-component/components は MIT ライセンスに基づいています。
