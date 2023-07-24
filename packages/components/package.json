@@ -23,6 +23,6 @@
   "dependencies": {
     "@zenkigen-component/icons": "1.0.0",
     "@zenkigen-component/theme": "1.0.0",
-    "clsx": "1.2.1"
+    "clsx": "2.0.0"
   }
 }
