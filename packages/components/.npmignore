@@ -1,6 +1,7 @@
 _templates/
 node_modules/
 src/
+.npmrc
 .npmignore
 tsconfig.build.json
 tsconfig.json
