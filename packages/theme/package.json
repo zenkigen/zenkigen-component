@@ -1,9 +1,11 @@
 {
   "name": "@zenkigen-component/theme",
   "version": "1.0.0",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/zenkigen/zenkigen-component.git"
+  "repository": "https://github.com/zenkigen/zenkigen-component",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://npm.pkg.github.com"
   },
   "source": "./src/index.ts",
   "main": "./dist/index.js",
