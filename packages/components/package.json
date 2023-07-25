@@ -1,6 +1,10 @@
 {
   "name": "@zenkigen-component/components",
   "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zenkigen/zenkigen-component.git"
+  },
   "source": "./src/index.ts",
   "main": "./dist/index.js",
   "module": "./dist/index.esm.js",
