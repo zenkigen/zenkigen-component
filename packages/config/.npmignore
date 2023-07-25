@@ -1,0 +1,6 @@
+node_modules/
+src/
+.npmignore
+build.cjs
+style-dictionary.json
+tsconfig.json

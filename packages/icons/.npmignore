@@ -1,0 +1,6 @@
+node_modules/
+src/
+.npmignore
+codegen.cjs
+template.ejs
+tsconfig.json
