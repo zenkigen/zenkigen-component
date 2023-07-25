@@ -4023,12 +4023,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zenkigen-component/components@workspace:packages/components":
+"@zenkigen/components@workspace:packages/components":
   version: 0.0.0-use.local
-  resolution: "@zenkigen-component/components@workspace:packages/components"
+  resolution: "@zenkigen/components@workspace:packages/components"
   dependencies:
-    "@zenkigen-component/icons": 1.0.0
-    "@zenkigen-component/theme": 1.0.0
+    "@zenkigen/icons": 1.0.0
+    "@zenkigen/theme": 1.0.0
     clsx: 2.0.0
     hygen: 6.2.11
     microbundle: 0.15.1
@@ -4039,9 +4039,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zenkigen-component/config@workspace:packages/config":
+"@zenkigen/config@workspace:packages/config":
   version: 0.0.0-use.local
-  resolution: "@zenkigen-component/config@workspace:packages/config"
+  resolution: "@zenkigen/config@workspace:packages/config"
   dependencies:
     microbundle: 0.15.1
     style-dictionary: 3.8.0
@@ -4051,9 +4051,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zenkigen-component/icons@1.0.0, @zenkigen-component/icons@workspace:packages/icons":
+"@zenkigen/icons@1.0.0, @zenkigen/icons@workspace:packages/icons":
   version: 0.0.0-use.local
-  resolution: "@zenkigen-component/icons@workspace:packages/icons"
+  resolution: "@zenkigen/icons@workspace:packages/icons"
   dependencies:
     cheerio: 1.0.0-rc.12
     ejs: 3.1.9
@@ -4062,9 +4062,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zenkigen-component/theme@1.0.0, @zenkigen-component/theme@workspace:packages/theme":
+"@zenkigen/theme@1.0.0, @zenkigen/theme@workspace:packages/theme":
   version: 0.0.0-use.local
-  resolution: "@zenkigen-component/theme@workspace:packages/theme"
+  resolution: "@zenkigen/theme@workspace:packages/theme"
   dependencies:
     microbundle: 0.15.1
     tailwindcss: 3.3.3

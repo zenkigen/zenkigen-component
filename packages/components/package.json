@@ -1,5 +1,5 @@
 {
-  "name": "@zenkigen-component/components",
+  "name": "@zenkigen/components",
   "version": "1.0.0",
   "repository": "https://github.com/zenkigen/zenkigen-component",
   "license": "MIT",
@@ -16,7 +16,7 @@
     "type-check": "tsc --noEmit",
     "generate-component": "hygen generator components",
     "build": "rimraf dist && microbundle --no-compress -f modern,esm,cjs --jsx React.createElement --jsxFragment React.Fragment --jsxImportSource react --globals react/jsx-runtime=jsx --tsconfig tsconfig.build.json",
-    "publish": "yarn npm publish"
+    "publish": "yarn npm publish --scope"
   },
   "devDependencies": {
     "hygen": "6.2.11",
@@ -28,8 +28,8 @@
     "react": "^18.0.0"
   },
   "dependencies": {
-    "@zenkigen-component/icons": "1.0.0",
-    "@zenkigen-component/theme": "1.0.0",
+    "@zenkigen/icons": "1.0.0",
+    "@zenkigen/theme": "1.0.0",
     "clsx": "2.0.0"
   }
 }
