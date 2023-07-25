@@ -1,6 +1,6 @@
 import { AnimationEvent, CSSProperties, ReactNode, useCallback, useEffect, useState } from 'react';
 
-import { typography } from '@zenkigen-component/theme';
+import { typography } from '@zenkigen/theme';
 import clsx from 'clsx';
 
 import { Icon } from '../icon';

@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, forwardRef } from 'react';
 
-import { typography } from '@zenkigen-component/theme';
+import { typography } from '@zenkigen/theme';
 
 import { Icon } from '../icon';
 

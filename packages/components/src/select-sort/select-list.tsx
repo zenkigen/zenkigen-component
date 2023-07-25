@@ -1,4 +1,4 @@
-import { focusVisible, typography } from '@zenkigen-component/theme';
+import { focusVisible, typography } from '@zenkigen/theme';
 import clsx from 'clsx';
 
 import { SelectItem } from './select-item';

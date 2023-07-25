@@ -14,5 +14,5 @@
       "updateTypes": ["minor", "patch", "pin", "digest", "lockFileMaintenance"]
     }
   ],
-  "ignoreDeps": ["@zenkigen-component/*"]
+  "ignoreDeps": ["@zenkigen/*"]
 }

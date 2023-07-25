@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { typography } from '@zenkigen-component/theme';
+import { typography } from '@zenkigen/theme';
 import { clsx } from 'clsx';
 
 type Level = 1 | 2 | 3 | 4 | 5;

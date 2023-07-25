@@ -2,8 +2,8 @@ import { useState } from 'react';
 
 import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
-import { IconName } from '@zenkigen-component/icons';
-import { typography } from '@zenkigen-component/theme';
+import { IconName } from '@zenkigen/icons';
+import { typography } from '@zenkigen/theme';
 import clsx from 'clsx';
 
 import { Avatar } from '../avatar';

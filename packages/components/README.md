@@ -1,9 +1,9 @@
-# @zenkigen-component/components
+# @zenkigen/components
 
 ## インストール
 
 ```bash
-yarn add @zenkigen-component/components
+yarn add @zenkigen/components
 ```
 
 ## 利用方法
@@ -37,4 +37,4 @@ https://www.notion.so/zenkigen/5d4ebd0d93b74124a533cf167b852ec0
 
 ## ライセンス
 
-@zenkigen-component/components は MIT ライセンスに基づいています。
+@zenkigen/components は MIT ライセンスに基づいています。

@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 
-import { iconElements } from '@zenkigen-component/icons';
-import { focusVisible } from '@zenkigen-component/theme';
+import { iconElements } from '@zenkigen/icons';
+import { focusVisible } from '@zenkigen/theme';
 import clsx from 'clsx';
 
 type Props = {

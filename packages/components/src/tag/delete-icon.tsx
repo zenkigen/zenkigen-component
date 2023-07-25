@@ -1,4 +1,4 @@
-import { focusVisible } from '@zenkigen-component/theme';
+import { focusVisible } from '@zenkigen/theme';
 import clsx from 'clsx';
 
 import { ColorVariant, TagColor } from './type';

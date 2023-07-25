@@ -1,6 +1,6 @@
 import { CSSProperties, ReactNode, useContext } from 'react';
 
-import { focusVisible, typography } from '@zenkigen-component/theme';
+import { focusVisible, typography } from '@zenkigen/theme';
 import clsx from 'clsx';
 
 import { SelectContext } from './select-context';

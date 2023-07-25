@@ -1,5 +1,5 @@
-import { IconName, iconElements } from '@zenkigen-component/icons';
-import { iconColors } from '@zenkigen-component/theme';
+import { IconName, iconElements } from '@zenkigen/icons';
+import { iconColors } from '@zenkigen/theme';
 import { clsx } from 'clsx';
 
 type Size = 'x-small' | 'small' | 'medium' | 'large' | 'x-large';

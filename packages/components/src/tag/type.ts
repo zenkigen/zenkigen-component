@@ -1,4 +1,4 @@
-import { tagLightColors } from '@zenkigen-component/theme';
+import { tagLightColors } from '@zenkigen/theme';
 
 export type TagColor = keyof typeof tagLightColors;
 

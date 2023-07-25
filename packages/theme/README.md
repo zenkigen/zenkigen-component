@@ -1,5 +1,5 @@
-# @zenkigen-component/theme
+# @zenkigen/theme
 
 ## ライセンス
 
-@zenkigen-component/theme は MIT ライセンスに基づいています。
+@zenkigen/theme は MIT ライセンスに基づいています。
