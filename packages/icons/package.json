@@ -14,7 +14,8 @@
   "exports": "./dist/index.js",
   "scripts": {
     "generate": "node ./codegen.cjs",
-    "build": "rimraf dist && yarn generate && microbundle --no-compress -f modern,esm,cjs --jsx React.createElement --jsxFragment React.Fragment --jsxImportSource react --globals react/jsx-runtime=jsx"
+    "build": "rimraf dist && yarn generate && microbundle --no-compress -f modern,esm,cjs --jsx React.createElement --jsxFragment React.Fragment --jsxImportSource react --globals react/jsx-runtime=jsx",
+    "publish": "yarn npm publish"
   },
   "devDependencies": {
     "cheerio": "1.0.0-rc.12",

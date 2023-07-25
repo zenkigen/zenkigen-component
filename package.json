@@ -9,6 +9,7 @@
     "lint": "eslint './packages/**/*.ts{,x}' && prettier --check .",
     "type-check": "yarn workspaces foreach run type-check",
     "build": "yarn workspaces foreach -pt run build",
+    "publish": "yarn workspaces foreach -pt run publish",
     "storybook": "storybook dev",
     "create-component": "yarn workspace @zenkigen-component/components hygen generator components",
     "update-tokens": "yarn workspace @zenkigen-component/config run build:tokens",
