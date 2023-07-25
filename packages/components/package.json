@@ -16,7 +16,7 @@
     "type-check": "tsc --noEmit",
     "generate-component": "hygen generator components",
     "build": "rimraf dist && microbundle --no-compress -f modern,esm,cjs --jsx React.createElement --jsxFragment React.Fragment --jsxImportSource react --globals react/jsx-runtime=jsx --tsconfig tsconfig.build.json",
-    "publish": "yarn npm publish --scope"
+    "publish": "npm publish"
   },
   "devDependencies": {
     "hygen": "6.2.11",

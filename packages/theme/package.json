@@ -15,7 +15,7 @@
   "scripts": {
     "type-check": "tsc --noEmit",
     "build": "rimraf dist && microbundle --no-compress -f modern,esm,cjs",
-    "publish": "yarn npm publish"
+    "publish": "npm publish"
   },
   "devDependencies": {
     "microbundle": "0.15.1",
