@@ -1,9 +1,11 @@
 {
   "name": "@zenkigen-component/config",
   "version": "1.0.0",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/zenkigen/zenkigen-component.git"
+  "repository": "https://github.com/zenkigen/zenkigen-component",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://npm.pkg.github.com"
   },
   "source": "./src/index.ts",
   "main": "./dist/index.js",
@@ -13,7 +15,8 @@
   "scripts": {
     "type-check": "tsc --noEmit",
     "build:tokens": "token-transformer style-dictionary/tokens.json style-dictionary/transformed-tokens.json && node build.cjs",
-    "build": "rimraf dist && microbundle --no-compress -f modern,esm,cjs"
+    "build": "rimraf dist && microbundle --no-compress -f modern,esm,cjs",
+    "publish": "yarn npm publish"
   },
   "devDependencies": {
     "microbundle": "0.15.1",

@@ -1,9 +1,11 @@
 {
   "name": "@zenkigen-component/icons",
   "version": "1.0.0",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/zenkigen/zenkigen-component.git"
+  "repository": "https://github.com/zenkigen/zenkigen-component",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://npm.pkg.github.com"
   },
   "source": "./src/index.ts",
   "main": "./dist/index.js",
@@ -12,7 +14,8 @@
   "exports": "./dist/index.js",
   "scripts": {
     "generate": "node ./codegen.cjs",
-    "build": "rimraf dist && yarn generate && microbundle --no-compress -f modern,esm,cjs --jsx React.createElement --jsxFragment React.Fragment --jsxImportSource react --globals react/jsx-runtime=jsx"
+    "build": "rimraf dist && yarn generate && microbundle --no-compress -f modern,esm,cjs --jsx React.createElement --jsxFragment React.Fragment --jsxImportSource react --globals react/jsx-runtime=jsx",
+    "publish": "yarn npm publish"
   },
   "devDependencies": {
     "cheerio": "1.0.0-rc.12",

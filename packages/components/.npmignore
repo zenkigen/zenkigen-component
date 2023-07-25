@@ -1,0 +1,6 @@
+_templates/
+node_modules/
+src/
+.npmignore
+tsconfig.build.json
+tsconfig.json
