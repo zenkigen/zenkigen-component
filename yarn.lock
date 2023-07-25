@@ -3964,7 +3964,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:18.2.15, @types/react@npm:>=16":
+"@types/react@npm:*, @types/react@npm:>=16":
   version: 18.2.15
   resolution: "@types/react@npm:18.2.15"
   dependencies:
@@ -4287,7 +4287,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zenkigen-component/components@workspace:packages/components"
   dependencies:
-    "@types/react": 18.2.15
     "@zenkigen-component/icons": 1.0.0
     "@zenkigen-component/theme": 1.0.0
     clsx: 1.2.1
@@ -4295,7 +4294,8 @@ __metadata:
     microbundle: 0.15.1
     typescript: 5.1.6
   peerDependencies:
-    react: 18.2.0
+    "@types/react": ^18.0.0
+    react: ^18.0.0
   languageName: unknown
   linkType: soft
 
@@ -4306,7 +4306,7 @@ __metadata:
     microbundle: 0.15.1
     style-dictionary: 3.8.0
     tailwindcss: 3.3.3
-    token-transformer: ^0.0.33
+    token-transformer: 0.0.33
     typescript: 5.1.6
   languageName: unknown
   linkType: soft
@@ -4318,6 +4318,7 @@ __metadata:
     cheerio: 1.0.0-rc.12
     ejs: 3.1.9
     microbundle: 0.15.1
+    typescript: 5.1.6
   languageName: unknown
   linkType: soft
 
@@ -12862,7 +12863,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"token-transformer@npm:^0.0.33":
+"token-transformer@npm:0.0.33":
   version: 0.0.33
   resolution: "token-transformer@npm:0.0.33"
   dependencies:

@@ -17,6 +17,7 @@
   "devDependencies": {
     "cheerio": "1.0.0-rc.12",
     "ejs": "3.1.9",
-    "microbundle": "0.15.1"
+    "microbundle": "0.15.1",
+    "typescript": "5.1.6"
   }
 }
