@@ -20,7 +20,7 @@
       "version": "detect"
     }
   },
-  "ignorePatterns": ["/packages/components/dist"],
+  "ignorePatterns": ["/packages/component-ui/dist"],
   "rules": {
     "no-console": "error",
     "no-alert": "error",

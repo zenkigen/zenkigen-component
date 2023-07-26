@@ -28,7 +28,7 @@ yarn generate-component
 
 ### 実装したコンポーネントを export する
 
-使用する側の import を簡略化させるため root にある [packages/components/src/index.ts](https://github.com/zenkigen/zenkigen-component/blob/main/packages/components/src/index.ts) に実装したコンポーネントを export してください。
+使用する側の import を簡略化させるため root にある [packages/component-ui/src/index.ts](https://github.com/zenkigen/zenkigen-component/blob/main/packages/components/src/index.ts) に実装したコンポーネントを export してください。
 
 ### コーディングガイドライン（社内のみ）
 
