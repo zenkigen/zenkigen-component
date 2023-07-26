@@ -4023,25 +4023,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zenkigen/components@workspace:packages/components":
+"@zenkigen/component-config@workspace:packages/component-config":
   version: 0.0.0-use.local
-  resolution: "@zenkigen/components@workspace:packages/components"
-  dependencies:
-    "@zenkigen/icons": 1.0.0
-    "@zenkigen/theme": 1.0.0
-    clsx: 2.0.0
-    hygen: 6.2.11
-    microbundle: 0.15.1
-    typescript: 5.1.6
-  peerDependencies:
-    "@types/react": ^18.0.0
-    react: ^18.0.0
-  languageName: unknown
-  linkType: soft
-
-"@zenkigen/config@workspace:packages/config":
-  version: 0.0.0-use.local
-  resolution: "@zenkigen/config@workspace:packages/config"
+  resolution: "@zenkigen/component-config@workspace:packages/component-config"
   dependencies:
     microbundle: 0.15.1
     style-dictionary: 3.8.0
@@ -4051,9 +4035,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zenkigen/icons@1.0.0, @zenkigen/icons@workspace:packages/icons":
+"@zenkigen/component-icons@1.0.0, @zenkigen/component-icons@workspace:packages/component-icons":
   version: 0.0.0-use.local
-  resolution: "@zenkigen/icons@workspace:packages/icons"
+  resolution: "@zenkigen/component-icons@workspace:packages/component-icons"
   dependencies:
     cheerio: 1.0.0-rc.12
     ejs: 3.1.9
@@ -4062,13 +4046,29 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zenkigen/theme@1.0.0, @zenkigen/theme@workspace:packages/theme":
+"@zenkigen/component-theme@1.0.0, @zenkigen/component-theme@workspace:packages/component-theme":
   version: 0.0.0-use.local
-  resolution: "@zenkigen/theme@workspace:packages/theme"
+  resolution: "@zenkigen/component-theme@workspace:packages/component-theme"
   dependencies:
     microbundle: 0.15.1
     tailwindcss: 3.3.3
     typescript: 5.1.6
+  languageName: unknown
+  linkType: soft
+
+"@zenkigen/component-ui@workspace:packages/component-ui":
+  version: 0.0.0-use.local
+  resolution: "@zenkigen/component-ui@workspace:packages/component-ui"
+  dependencies:
+    "@zenkigen/component-icons": 1.0.0
+    "@zenkigen/component-theme": 1.0.0
+    clsx: 2.0.0
+    hygen: 6.2.11
+    microbundle: 0.15.1
+    typescript: 5.1.6
+  peerDependencies:
+    "@types/react": ^18.0.0
+    react: ^18.0.0
   languageName: unknown
   linkType: soft
 
