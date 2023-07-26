@@ -22,9 +22,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ steps.node-version.outputs.node_version }}
-          registry-url: https://npm.pkg.github.com
+          registry-url: 'https://npm.pkg.github.com'
           scope: '@zenkigen'
-          always-auth: true
 
       - name: Install dependencies
         run: yarn install
