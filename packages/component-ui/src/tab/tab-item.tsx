@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { typography } from '@zenkigen/component-theme';
+import { typography } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
 
 type Props = {

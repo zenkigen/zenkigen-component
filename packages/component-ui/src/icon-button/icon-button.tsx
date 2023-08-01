@@ -1,5 +1,5 @@
-import { IconName } from '@zenkigen/component-icons';
-import { buttonColors, typography, focusVisible } from '@zenkigen/component-theme';
+import { IconName } from '@zenkigen-inc/component-icons';
+import { buttonColors, typography, focusVisible } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
 
 import { Icon } from '../icon/icon';

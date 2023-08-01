@@ -1,6 +1,6 @@
 import { CSSProperties, useCallback, useRef, useState } from 'react';
 
-import { buttonColors, focusVisible, typography } from '@zenkigen/component-theme';
+import { buttonColors, focusVisible, typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
 
 import { useOutsideClick } from '../hooks/use-outside-click';

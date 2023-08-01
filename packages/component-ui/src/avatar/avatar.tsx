@@ -1,4 +1,4 @@
-import { typography, userColors } from '@zenkigen/component-theme';
+import { typography, userColors } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
 
 export const isAsciiString = (str: string) => {

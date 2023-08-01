@@ -1,5 +1,5 @@
-# @zenkigen/theme
+# @zenkigen-inc/theme
 
 ## ライセンス
 
-@zenkigen/theme は MIT ライセンスに基づいています。
+@zenkigen-inc/theme は MIT ライセンスに基づいています。

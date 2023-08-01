@@ -1,11 +1,10 @@
 {
-  "name": "@zenkigen/component-ui",
+  "name": "@zenkigen-inc/component-ui",
   "version": "1.0.0",
   "repository": "https://github.com/zenkigen/zenkigen-component",
   "license": "MIT",
   "publishConfig": {
-    "access": "public",
-    "registry": "https://npm.pkg.github.com"
+    "access": "public"
   },
   "source": "./src/index.ts",
   "main": "./dist/index.js",
@@ -27,8 +26,8 @@
     "react": "^18.0.0"
   },
   "dependencies": {
-    "@zenkigen/component-icons": "1.0.0",
-    "@zenkigen/component-theme": "1.0.0",
+    "@zenkigen-inc/component-icons": "1.0.0",
+    "@zenkigen-inc/component-theme": "1.0.0",
     "clsx": "2.0.0"
   }
 }

@@ -1,6 +1,6 @@
 import { ReactNode, useContext } from 'react';
 
-import { typography } from '@zenkigen/component-theme';
+import { typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
 
 import { IconButton } from '../icon-button';

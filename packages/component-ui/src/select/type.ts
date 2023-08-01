@@ -1,4 +1,4 @@
-import { IconName } from '@zenkigen/component-icons';
+import { IconName } from '@zenkigen-inc/component-icons';
 
 export type SelectOption = {
   id: string;

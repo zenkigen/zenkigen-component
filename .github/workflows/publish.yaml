@@ -1,0 +1,38 @@
+name: Publish
+
+on:
+  workflow_run:
+    workflows: ['Check syntax']
+    types:
+      - completed
+    branches:
+      - main
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Read Node version from .node-version
+        run: echo "node_version=$(cat .node-version)" >> $GITHUB_OUTPUT
+        id: node-version
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ steps.node-version.outputs.node_version }}
+          registry-url: 'https://registry.npmjs.org'
+          scope: '@zenkigen-inc'
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build npm package
+        run: yarn build:all
+
+      - name: Publish npm package
+        run: yarn publish:all
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_OPTIONS: --max_old_space_size=8192
