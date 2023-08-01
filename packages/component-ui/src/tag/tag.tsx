@@ -1,4 +1,4 @@
-import { tagColors, tagLightColors, typography } from '@zenkigen/component-theme';
+import { tagColors, tagLightColors, typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
 
 import { DeleteIcon } from './delete-icon';

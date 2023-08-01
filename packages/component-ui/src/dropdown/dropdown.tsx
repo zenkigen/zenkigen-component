@@ -1,7 +1,7 @@
 import { ReactElement, ReactNode, cloneElement, useCallback, useRef, useState } from 'react';
 
-import { IconName } from '@zenkigen/component-icons';
-import { buttonColors, focusVisible, typography } from '@zenkigen/component-theme';
+import { IconName } from '@zenkigen-inc/component-icons';
+import { buttonColors, focusVisible, typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
 
 import { useOutsideClick } from '../hooks/use-outside-click';

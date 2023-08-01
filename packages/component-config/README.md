@@ -1,4 +1,4 @@
-# @zenkigen/config
+# @zenkigen-inc/config
 
 ## 開発者向け
 
@@ -12,4 +12,4 @@ Figma Tokens から export された tokens.json を token-transformer と Style
 
 ## ライセンス
 
-@zenkigen/config は MIT ライセンスに基づいています。
+@zenkigen-inc/config は MIT ライセンスに基づいています。

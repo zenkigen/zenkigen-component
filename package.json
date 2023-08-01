@@ -7,12 +7,12 @@
   ],
   "scripts": {
     "lint": "eslint './packages/**/*.ts{,x}' && prettier --check .",
-    "type-check": "yarn workspaces foreach run type-check",
-    "build:all": "yarn workspaces foreach -pt run build",
-    "publish:all": "yarn workspaces foreach npm publish",
+    "type-check": "yarn workspaces foreach --exclude zenkigen-component run type-check",
+    "build:all": "yarn workspaces foreach -pt --exclude zenkigen-component run build",
+    "publish:all": "yarn workspaces foreach --exclude zenkigen-component npm publish",
     "storybook": "storybook dev",
-    "create-component": "yarn workspace @zenkigen/components hygen generator components",
-    "update-tokens": "yarn workspace @zenkigen/config run build:tokens",
+    "create-component": "yarn workspace @zenkigen-inc/components hygen generator components",
+    "update-tokens": "yarn workspace @zenkigen-inc/config run build:tokens",
     "build-storybook": "storybook build",
     "clean": "rimraf node_modules"
   },

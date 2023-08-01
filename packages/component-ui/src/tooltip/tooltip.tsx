@@ -1,6 +1,6 @@
 import { CSSProperties, ReactNode, useCallback, useRef, useState } from 'react';
 
-import { typography } from '@zenkigen/component-theme';
+import { typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
 
 import { TailIcon } from './tail-icon';
