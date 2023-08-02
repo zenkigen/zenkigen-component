@@ -1,15 +1,15 @@
-# @zenkigen-inc/components
+# @zenkigen-inc/component-ui
 
 ## インストール
 
 ```bash
-yarn add @zenkigen-inc/components
+yarn add @zenkigen-inc/component-ui
 ```
 
 ## 利用方法
 
 ```tsx
-import { Button } from 'zenkigen-component';
+import { Button } from '@zenkigen-inc/component-ui';
 
 const Component = () => {
   return <Button>ボタン</Button>;
@@ -37,4 +37,4 @@ https://www.notion.so/zenkigen/5d4ebd0d93b74124a533cf167b852ec0
 
 ## ライセンス
 
-@zenkigen-inc/components は MIT ライセンスに基づいています。
+@zenkigen-inc/component-ui は MIT ライセンスに基づいています。

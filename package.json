@@ -11,8 +11,8 @@
     "build:all": "yarn workspaces foreach -pt --exclude zenkigen-component run build",
     "publish:all": "yarn workspaces foreach --exclude zenkigen-component npm publish",
     "storybook": "storybook dev",
-    "create-component": "yarn workspace @zenkigen-inc/components hygen generator components",
-    "update-tokens": "yarn workspace @zenkigen-inc/config run build:tokens",
+    "create-component": "yarn workspace @zenkigen-inc/component-ui hygen generator components",
+    "update-tokens": "yarn workspace @zenkigen-inc/component-config run build:tokens",
     "build-storybook": "storybook build",
     "clean": "rimraf node_modules"
   },
