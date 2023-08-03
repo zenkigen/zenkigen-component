@@ -26,8 +26,8 @@
     "react": "^18.0.0"
   },
   "dependencies": {
-    "@zenkigen-inc/component-icons": "1.0.0",
-    "@zenkigen-inc/component-theme": "1.0.0",
+    "@zenkigen-inc/component-icons": "1.0.1",
+    "@zenkigen-inc/component-theme": "1.0.1",
     "clsx": "2.0.0"
   }
 }
