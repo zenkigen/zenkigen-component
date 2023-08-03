@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: `${tokens.fontFamilies.helvetica}, 'Noto Sans JP', sans-serif`,
+        sans: "Arial, 'Noto Sans JP', sans-serif",
       },
       colors: {
         user: tokens.user,
