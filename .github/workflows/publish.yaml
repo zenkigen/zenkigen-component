@@ -1,12 +1,9 @@
-name: Publish
+name: Publish npm package
 
 on:
-  workflow_run:
-    workflows: ['Check syntax']
-    types:
-      - completed
-    branches:
-      - main
+  push:
+    tags:
+      - 'v*'
 
 jobs:
   publish:
@@ -24,6 +21,7 @@ jobs:
           node-version: ${{ steps.node-version.outputs.node_version }}
           registry-url: 'https://registry.npmjs.org'
           scope: '@zenkigen-inc'
+          always-auth: true
 
       - name: Install dependencies
         run: yarn install
