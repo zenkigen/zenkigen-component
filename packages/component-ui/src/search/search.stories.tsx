@@ -19,8 +19,9 @@ export function Base() {
   };
 
   return (
-    <div>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
       <Search placeholder="検索" value="" onSubmit={handleSubmit} onChange={handleOnChange}></Search>
+      <Search placeholder="検索" size="large" value="" onSubmit={handleSubmit} onChange={handleOnChange}></Search>
     </div>
   );
 }
