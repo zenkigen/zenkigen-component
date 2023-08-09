@@ -480,7 +480,7 @@
         "description": "Danger hover"
       },
       "HoverDangerDark": {
-        "value": "#F9E0E6",
+        "value": "#B22045",
         "type": "color",
         "description": "Danger hover - Dark"
       },
@@ -582,7 +582,7 @@
         "description": "Danger active"
       },
       "ActiveDangerDark": {
-        "value": "#FCEFF3",
+        "value": "#821732",
         "type": "color",
         "description": "Danger active - Dark"
       },
