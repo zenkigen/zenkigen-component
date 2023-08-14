@@ -11,6 +11,7 @@ import { ModalTab } from './modal-tab';
 type Props = {
   children?: ReactNode;
   size?: 'small' | 'medium' | 'large' | 'x-large';
+  width?: CSSProperties['width'];
   height?: CSSProperties['height'];
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -23,6 +24,7 @@ type Props = {
 export function Modal({
   children,
   size = 'medium',
+  width,
   height,
   isOpen,
   setIsOpen,
@@ -60,7 +62,7 @@ export function Modal({
     isOpen && (
       <ModalContext.Provider value={{ size, setIsOpen }}>
         <div className={wrapperClasses}>
-          <div className={modalBaseClasses} style={{ height }}>
+          <div className={modalBaseClasses} style={{ width, height }}>
             {headerElement}
             {tabElement}
             <div className={contentClasses}>{children}</div>
