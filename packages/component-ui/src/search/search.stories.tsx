@@ -1,4 +1,4 @@
-import { FormEvent, ChangeEvent } from 'react';
+import { useState, FormEvent, ChangeEvent } from 'react';
 
 import { action } from '@storybook/addon-actions';
 
@@ -9,19 +9,41 @@ export default {
 };
 
 export function Base() {
+  const [value, setValue] = useState('');
+  const [value2, setValue2] = useState('');
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     action('onSubmit')(e);
   };
 
-  const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
-    action('onChange')(e);
-  };
-
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-      <Search placeholder="検索" value="" onSubmit={handleSubmit} onChange={handleOnChange}></Search>
-      <Search placeholder="検索" size="large" value="" onSubmit={handleSubmit} onChange={handleOnChange}></Search>
+      <Search
+        placeholder="検索"
+        value={value}
+        onSubmit={handleSubmit}
+        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+          setValue(e.target.value);
+          action('onChange')(e);
+        }}
+        onClickClearButton={() => {
+          setValue('');
+        }}
+      ></Search>
+      <Search
+        placeholder="検索"
+        size="large"
+        value={value2}
+        onSubmit={handleSubmit}
+        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+          setValue2(e.target.value);
+          action('onChange')(e);
+        }}
+        onClickClearButton={() => {
+          setValue2('');
+        }}
+      ></Search>
     </div>
   );
 }
