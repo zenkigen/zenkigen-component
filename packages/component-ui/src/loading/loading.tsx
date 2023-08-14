@@ -21,8 +21,7 @@ export function Loading({ size = 'medium', position = 'fixed', height = '100%' }
         {size === 'small' && (
           <svg className={svgClasses} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle
-              className="animate-circular-small-move stroke-interactive-interactive01"
-              style={{ transformOrigin: 'center center' }}
+              className="origin-center animate-circular-small-move stroke-interactive-interactive01"
               cx="8"
               cy="8"
               r="7"
@@ -35,8 +34,7 @@ export function Loading({ size = 'medium', position = 'fixed', height = '100%' }
         {size === 'medium' && (
           <svg className={svgClasses} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle
-              className="animate-circular-medium-move stroke-interactive-interactive01"
-              style={{ transformOrigin: 'center center' }}
+              className="origin-center animate-circular-medium-move stroke-interactive-interactive01"
               cx="16"
               cy="16"
               r="15"
@@ -49,8 +47,7 @@ export function Loading({ size = 'medium', position = 'fixed', height = '100%' }
         {size === 'large' && (
           <svg className={svgClasses} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle
-              className="animate-circular-large-move stroke-interactive-interactive01"
-              style={{ transformOrigin: 'center center' }}
+              className="origin-center animate-circular-large-move stroke-interactive-interactive01"
               cx="32"
               cy="32"
               r="30"
