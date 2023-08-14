@@ -29,7 +29,7 @@ export function Radio({ name, value, id, label, isChecked = false, isDisabled = 
     [isDisabled, onChange],
   );
 
-  const inputClasses = clsx('absolute', 'z-[1]', 'opacity-0', 'peer', {
+  const inputClasses = clsx('absolute', 'z-[1]', 'opacity-0', 'peer', 'h-6', 'w-6', {
     'cursor-not-allowed': isDisabled,
     'cursor-pointer': !isDisabled,
   });
