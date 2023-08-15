@@ -32,7 +32,7 @@ export function DropdownMenu({
     horizontalAlign === 'left' ? 'left-0' : horizontalAlign === 'right' ? 'right-0' : 'left-auto',
     {
       'border-solid border border-border-uiBorder01': variant === 'outline',
-      'py-2': !isNoPadding,
+      'py-1': !isNoPadding,
     },
   );
 
