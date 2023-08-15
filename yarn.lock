@@ -13843,7 +13843,6 @@ __metadata:
   resolution: "zenkigen-component@workspace:."
   dependencies:
     "@babel/core": 7.22.10
-    "@storybook/addon-actions": 7.2.3
     "@storybook/addon-essentials": 7.2.3
     "@storybook/addon-interactions": 7.2.3
     "@storybook/addon-links": 7.2.3
