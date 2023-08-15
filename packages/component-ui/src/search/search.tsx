@@ -42,10 +42,6 @@ export const Search = forwardRef<HTMLDivElement, Props>(({ width = '100%', size 
     },
   );
 
-  const handleClickClear = () => {
-    props.onClickClearButton && props.onClickClearButton();
-  };
-
   return (
     <div className="relative" ref={ref}>
       <form onSubmit={props.onSubmit}>
@@ -57,9 +53,7 @@ export const Search = forwardRef<HTMLDivElement, Props>(({ width = '100%', size 
             value={props.value}
             className={inputClasses}
             placeholder={props.placeholder}
-            onChange={(e) => {
-              props.onChange && props.onChange(e);
-            }}
+            onChange={props.onChange}
           />
           {props.value && props.value.length !== 0 && (
             <IconButton
@@ -67,7 +61,7 @@ export const Search = forwardRef<HTMLDivElement, Props>(({ width = '100%', size 
               icon="close"
               size={size === 'medium' ? 'small' : 'medium'}
               isNoPadding
-              onClick={() => handleClickClear()}
+              onClick={props.onClickClearButton}
             />
           )}
         </div>
