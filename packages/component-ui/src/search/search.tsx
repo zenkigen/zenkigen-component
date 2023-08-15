@@ -4,6 +4,7 @@ import { typography } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
 
 import { Icon } from '../icon';
+import { IconButton } from '../icon-button';
 
 type Props = {
   size?: 'medium' | 'large';
@@ -27,17 +28,18 @@ export const Search = forwardRef<HTMLDivElement, Props>(({ width = '100%', size 
     { 'h-10 px-4': size === 'large' },
   );
 
-  const inputClasses = clsx('ml-3', 'h-full', 'flex-1', 'outline-0', 'placeholder:text-text-textPlaceholder', {
-    [`${typography.label.label2regular}`]: size === 'medium',
-    [`${typography.label.label1regular}`]: size === 'large',
-  });
-
-  const clearButtonClasses = clsx(
-    'flex',
-    'items-center',
-    ' mr-1',
-    { 'h-4': size === 'medium' },
-    { 'h-8': size === 'large' },
+  const inputClasses = clsx(
+    'ml-2.5',
+    'mr-2.5',
+    'h-full',
+    'flex-1',
+    'outline-0',
+    'text-text-text01',
+    'placeholder:text-text-textPlaceholder',
+    {
+      [`${typography.label.label2regular}`]: size === 'medium',
+      [`${typography.label.label1regular}`]: size === 'large',
+    },
   );
 
   const handleClickClear = () => {
@@ -60,9 +62,13 @@ export const Search = forwardRef<HTMLDivElement, Props>(({ width = '100%', size 
             }}
           />
           {props.value && props.value.length !== 0 && (
-            <button type="button" onClick={() => handleClickClear()} className={clearButtonClasses}>
-              <Icon name="close" color="icon01" size={size === 'medium' ? 'small' : 'medium'} />
-            </button>
+            <IconButton
+              variant="text"
+              icon="close"
+              size={size === 'medium' ? 'small' : 'medium'}
+              isNoPadding
+              onClick={() => handleClickClear()}
+            />
           )}
         </div>
       </form>
