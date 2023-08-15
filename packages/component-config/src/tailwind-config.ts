@@ -19,7 +19,23 @@ module.exports = {
         layoutShadow: tokens.shadow.layoutShadow,
       },
       keyframes: {
-        'circular-move': {
+        'circular-small-move': {
+          '0%': {
+            strokeDasharray: '1px, 100px',
+            strokeDashoffset: '0px',
+            transform: 'rotate(0deg)',
+          },
+          '50%': {
+            strokeDasharray: '50px, 100px',
+            strokeDashoffset: '-8px',
+          },
+          '100%': {
+            strokeDasharray: '50px, 100px',
+            strokeDashoffset: '-64px',
+            transform: 'rotate(360deg)',
+          },
+        },
+        'circular-medium-move': {
           '0%': {
             strokeDasharray: '1px, 200px',
             strokeDashoffset: '0px',
@@ -32,6 +48,22 @@ module.exports = {
           '100%': {
             strokeDasharray: '100px, 200px',
             strokeDashoffset: '-125px',
+            transform: 'rotate(360deg)',
+          },
+        },
+        'circular-large-move': {
+          '0%': {
+            strokeDasharray: '1px, 400px',
+            strokeDashoffset: '0px',
+            transform: 'rotate(0deg)',
+          },
+          '50%': {
+            strokeDasharray: '200px, 400px',
+            strokeDashoffset: '-30px',
+          },
+          '100%': {
+            strokeDasharray: '200px, 400px',
+            strokeDashoffset: '-250px',
             transform: 'rotate(360deg)',
           },
         },
@@ -57,7 +89,9 @@ module.exports = {
         },
       },
       animation: {
-        'circular-move': 'circular-move 1.4s ease-in-out infinite',
+        'circular-small-move': 'circular-small-move 1.4s ease-in-out infinite',
+        'circular-medium-move': 'circular-medium-move 1.4s ease-in-out infinite',
+        'circular-large-move': 'circular-large-move 1.4s ease-in-out infinite',
         'toast-in': 'toast-in 0.25s cubic-bezier(.11, .57, .14, 1)',
         'toast-out': 'toast-out 0.25s cubic-bezier(0, .14, .75, 1)',
       },

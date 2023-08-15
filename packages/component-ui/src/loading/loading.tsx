@@ -16,20 +16,48 @@ export function Loading({ size = 'medium', position = 'fixed', height = '100%' }
   );
 
   return (
-    <div className={wrapperClasses} style={{ height }}>
-      <svg className={svgClasses} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle className="stroke-border-uiBorder01" cx="16" cy="16" r="14" strokeWidth="3" fill="none" />
-        <circle
-          className="animate-circular-move stroke-interactive-interactive01"
-          style={{ strokeDasharray: '80px 200px', strokeDashoffset: '0px', transformOrigin: 'center center' }}
-          cx="16"
-          cy="16"
-          r="14"
-          stroke="currentColor"
-          strokeWidth="3"
-          fill="none"
-        />
-      </svg>
-    </div>
+    <>
+      <div className={wrapperClasses} style={{ height }}>
+        {size === 'small' && (
+          <svg className={svgClasses} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle
+              className="origin-center animate-circular-small-move stroke-interactive-interactive01"
+              cx="8"
+              cy="8"
+              r="7"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              fill="none"
+            />
+          </svg>
+        )}
+        {size === 'medium' && (
+          <svg className={svgClasses} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle
+              className="origin-center animate-circular-medium-move stroke-interactive-interactive01"
+              cx="16"
+              cy="16"
+              r="15"
+              stroke="currentColor"
+              strokeWidth="2"
+              fill="none"
+            />
+          </svg>
+        )}
+        {size === 'large' && (
+          <svg className={svgClasses} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle
+              className="origin-center animate-circular-large-move stroke-interactive-interactive01"
+              cx="32"
+              cy="32"
+              r="30"
+              stroke="currentColor"
+              strokeWidth="3"
+              fill="none"
+            />
+          </svg>
+        )}
+      </div>
+    </>
   );
 }
