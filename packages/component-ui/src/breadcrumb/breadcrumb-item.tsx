@@ -10,7 +10,7 @@ type Props = {
 export const BreadcrumbItem = ({ children, isLast }: Props) => {
   return (
     <>
-      <li className={clsx('[&_a]:text-interactive-interactive02')}>{children}</li>
+      <li className={clsx('[&_a]:text-interactive-interactive02', '[&_a]:hover:underline')}>{children}</li>
       {!isLast && (
         <li aria-hidden="true" className="text-interactive-interactive02">
           /
