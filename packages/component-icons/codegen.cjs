@@ -14,6 +14,8 @@ async function exec() {
         decodeEntities: false,
       });
 
+      const key = file.split('/').pop().split('.').shift();
+
       $('style,title,defs').remove();
       $('[id]:not(symbol)').removeAttr('id');
       $('[class^="st"],[class^="cls"]').removeAttr('class');
@@ -25,7 +27,8 @@ async function exec() {
       $('[width]').removeAttr('width');
       $('[height]').removeAttr('height');
 
-      const key = file.split('/').pop().split('.').shift();
+      $('svg').attr('role', 'img').prepend(`\n<title>${key}</title>`);
+
       const value = $.xml('svg')
         .replaceAll('"{', '{')
         .replaceAll('}"', '}')
