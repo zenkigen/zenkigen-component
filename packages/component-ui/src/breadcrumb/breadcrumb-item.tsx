@@ -3,11 +3,11 @@ import { ReactNode } from 'react';
 import clsx from 'clsx';
 
 type Props = {
-  isLast: boolean;
+  isLast?: boolean;
   children?: ReactNode;
 };
 
-export const BreadcrumbItem = ({ children, isLast }: Props) => {
+export const BreadcrumbItem = ({ children, isLast = false }: Props) => {
   return (
     <>
       <li className={clsx('[&_a]:text-interactive-interactive02', '[&_a]:hover:underline')}>{children}</li>
