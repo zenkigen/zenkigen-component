@@ -12,14 +12,14 @@ import { Icon } from '../icon';
 import { SelectSort } from '../select-sort';
 import { SortOrder } from '../select-sort/type';
 
-import { TableContainer, TableRowContainer, TableCell } from '.';
+import { Table } from '.';
 
-const meta: Meta<typeof TableContainer> = {
-  component: TableContainer,
+const meta: Meta<typeof Table> = {
+  component: Table,
 };
 
 export default meta;
-type Story = StoryObj<typeof TableContainer>;
+type Story = StoryObj<typeof Table>;
 
 const items: DropdownItemType[] = [
   {
@@ -67,9 +67,9 @@ const TableStoryBasic = () => {
 
   return (
     <div className="flex flex-col gap-10">
-      <TableContainer width="100%" rows="40px repeat(3, 48px)" columns="200px 400px 1fr 80px">
-        <TableRowContainer>
-          <TableCell className={headingClasses}>
+      <Table width="100%" rows="40px repeat(3, 48px)" columns="200px 400px 1fr 80px">
+        <Table.Row>
+          <Table.Cell className={headingClasses}>
             <SelectSort
               size="small"
               variant="text"
@@ -79,8 +79,8 @@ const TableStoryBasic = () => {
               onChange={handleSortName}
               onClickDeselect={handleClickDeselect}
             />
-          </TableCell>
-          <TableCell className={headingClasses}>
+          </Table.Cell>
+          <Table.Cell className={headingClasses}>
             <SelectSort
               size="small"
               variant="text"
@@ -90,18 +90,18 @@ const TableStoryBasic = () => {
               onChange={handleSortEmail}
               onClickDeselect={handleClickDeselect}
             />
-          </TableCell>
-          <TableCell className={headingClasses}>権限</TableCell>
-          <TableCell />
-        </TableRowContainer>
-        <TableRowContainer isHoverBackgroundVisible>
-          <TableCell className={cellClasses}>
+          </Table.Cell>
+          <Table.Cell className={headingClasses}>権限</Table.Cell>
+          <Table.Cell />
+        </Table.Row>
+        <Table.Row isHoverBackgroundVisible>
+          <Table.Cell className={cellClasses}>
             <Avatar size="x-small" userId={1} lastName="全機現" firstName="太郎" />
             全機現太郎
-          </TableCell>
-          <TableCell className={cellClasses}>taro.zenkigen@zk-creative.jp</TableCell>
-          <TableCell className={cellClasses}>管理者</TableCell>
-          <TableCell className={`${cellClasses} flex justify-end`}>
+          </Table.Cell>
+          <Table.Cell className={cellClasses}>taro.zenkigen@zk-creative.jp</Table.Cell>
+          <Table.Cell className={cellClasses}>管理者</Table.Cell>
+          <Table.Cell className={`${cellClasses} flex justify-end`}>
             <Dropdown size="x-small" target={<Icon name="more" size="small" color="icon01" />}>
               <Dropdown.Menu horizontalAlign="right">
                 {items.map((item) => (
@@ -111,16 +111,16 @@ const TableStoryBasic = () => {
                 ))}
               </Dropdown.Menu>
             </Dropdown>
-          </TableCell>
-        </TableRowContainer>
-        <TableRowContainer isHoverBackgroundVisible>
-          <TableCell className={cellClasses}>
+          </Table.Cell>
+        </Table.Row>
+        <Table.Row isHoverBackgroundVisible>
+          <Table.Cell className={cellClasses}>
             <Avatar size="x-small" userId={1} lastName="全機現" firstName="太郎" />
             全機現太郎
-          </TableCell>
-          <TableCell className={cellClasses}>taro.zenkigen@zk-creative.jp</TableCell>
-          <TableCell className={cellClasses}>管理者</TableCell>
-          <TableCell className={`${cellClasses} flex justify-end`}>
+          </Table.Cell>
+          <Table.Cell className={cellClasses}>taro.zenkigen@zk-creative.jp</Table.Cell>
+          <Table.Cell className={cellClasses}>管理者</Table.Cell>
+          <Table.Cell className={`${cellClasses} flex justify-end`}>
             <Dropdown size="x-small" target={<Icon name="more" size="small" color="icon01" />}>
               <Dropdown.Menu horizontalAlign="right">
                 {items.map((item) => (
@@ -130,16 +130,16 @@ const TableStoryBasic = () => {
                 ))}
               </Dropdown.Menu>
             </Dropdown>
-          </TableCell>
-        </TableRowContainer>
-        <TableRowContainer isHoverBackgroundVisible>
-          <TableCell className={cellClasses}>
+          </Table.Cell>
+        </Table.Row>
+        <Table.Row isHoverBackgroundVisible>
+          <Table.Cell className={cellClasses}>
             <Avatar size="x-small" userId={1} lastName="全機現" firstName="太郎" />
             全機現太郎
-          </TableCell>
-          <TableCell className={cellClasses}>taro.zenkigen@zk-creative.jp</TableCell>
-          <TableCell className={cellClasses}>管理者</TableCell>
-          <TableCell className={`${cellClasses} flex justify-end`}>
+          </Table.Cell>
+          <Table.Cell className={cellClasses}>taro.zenkigen@zk-creative.jp</Table.Cell>
+          <Table.Cell className={cellClasses}>管理者</Table.Cell>
+          <Table.Cell className={`${cellClasses} flex justify-end`}>
             <Dropdown size="x-small" target={<Icon name="more" size="small" color="icon01" />}>
               <Dropdown.Menu horizontalAlign="right">
                 {items.map((item) => (
@@ -149,19 +149,19 @@ const TableStoryBasic = () => {
                 ))}
               </Dropdown.Menu>
             </Dropdown>
-          </TableCell>
-        </TableRowContainer>
-      </TableContainer>
+          </Table.Cell>
+        </Table.Row>
+      </Table>
 
-      <TableContainer rows="40px repeat(3, 48px)" columns="200px 400px 100px 80px">
-        <TableRowContainer isHoverBackgroundVisible>
-          <TableCell className={cellClasses}>
+      <Table rows="40px repeat(3, 48px)" columns="200px 400px 100px 80px">
+        <Table.Row isHoverBackgroundVisible>
+          <Table.Cell className={cellClasses}>
             <Avatar size="x-small" userId={1} lastName="全機現" firstName="太郎" />
             全機現太郎
-          </TableCell>
-          <TableCell className={cellClasses}>taro.zenkigen@zk-creative.jp</TableCell>
-          <TableCell className={cellClasses}>管理者</TableCell>
-          <TableCell className={`${cellClasses} flex justify-end`}>
+          </Table.Cell>
+          <Table.Cell className={cellClasses}>taro.zenkigen@zk-creative.jp</Table.Cell>
+          <Table.Cell className={cellClasses}>管理者</Table.Cell>
+          <Table.Cell className={`${cellClasses} flex justify-end`}>
             <Dropdown size="x-small" target={<Icon name="more" size="small" color="icon01" />}>
               <Dropdown.Menu horizontalAlign="right">
                 {items.map((item) => (
@@ -171,16 +171,16 @@ const TableStoryBasic = () => {
                 ))}
               </Dropdown.Menu>
             </Dropdown>
-          </TableCell>
-        </TableRowContainer>
-        <TableRowContainer isHoverBackgroundVisible>
-          <TableCell className={cellClasses}>
+          </Table.Cell>
+        </Table.Row>
+        <Table.Row isHoverBackgroundVisible>
+          <Table.Cell className={cellClasses}>
             <Avatar size="x-small" userId={1} lastName="全機現" firstName="太郎" />
             全機現太郎
-          </TableCell>
-          <TableCell className={cellClasses}>taro.zenkigen@zk-creative.jp</TableCell>
-          <TableCell className={cellClasses}>管理者</TableCell>
-          <TableCell className={`${cellClasses} flex justify-end`}>
+          </Table.Cell>
+          <Table.Cell className={cellClasses}>taro.zenkigen@zk-creative.jp</Table.Cell>
+          <Table.Cell className={cellClasses}>管理者</Table.Cell>
+          <Table.Cell className={`${cellClasses} flex justify-end`}>
             <Dropdown size="x-small" target={<Icon name="more" size="small" color="icon01" />}>
               <Dropdown.Menu horizontalAlign="right">
                 {items.map((item) => (
@@ -190,9 +190,9 @@ const TableStoryBasic = () => {
                 ))}
               </Dropdown.Menu>
             </Dropdown>
-          </TableCell>
-        </TableRowContainer>
-      </TableContainer>
+          </Table.Cell>
+        </Table.Row>
+      </Table>
     </div>
   );
 };
