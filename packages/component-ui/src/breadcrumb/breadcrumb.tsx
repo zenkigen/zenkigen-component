@@ -12,7 +12,7 @@ type Props = {
 export const Breadcrumb = ({ children }: Props) => {
   return (
     <nav aria-label="breadcrumb">
-      <ul className={clsx(typography.label.label2regular, 'flex flex-wrap gap-2 whitespace-nowrap')}>
+      <ul className={clsx(typography.label.label2regular, 'flex flex-wrap gap-2 whitespace-nowrap text-text-text01')}>
         {children.map((child, i) => {
           return (
             <BreadcrumbItem key={i} isLast={i === children.length - 1}>

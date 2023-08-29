@@ -5,22 +5,14 @@ import turbosnap from 'vite-plugin-turbosnap';
 const config = {
   stories: ['../packages/**/*.stories.@(ts|tsx)'],
   addons: [
-    '@storybook/addon-links',
     '@storybook/addon-essentials',
     '@storybook/addon-interactions',
     '@storybook/addon-actions',
-    {
-      name: '@storybook/addon-styling',
-      options: {
-        postCss: true,
-      },
-    },
+    '@storybook/addon-styling',
   ],
   framework: {
     name: '@storybook/react-vite',
-    options: {},
   },
-  core: {},
   features: {
     storyStoreV7: true,
   },
