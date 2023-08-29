@@ -55,7 +55,7 @@ export const Search = forwardRef<HTMLDivElement, Props>(({ width = '100%', size 
             placeholder={props.placeholder}
             onChange={props.onChange}
           />
-          {props.value && props.value.length !== 0 && (
+          {props.onClickClearButton && props.value && props.value.length !== 0 && (
             <IconButton
               variant="text"
               icon="close"
