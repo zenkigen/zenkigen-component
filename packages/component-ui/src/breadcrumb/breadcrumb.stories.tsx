@@ -2,16 +2,20 @@ import { Breadcrumb } from '.';
 
 export default { component: Breadcrumb };
 
+const breadcrumbList = [
+  { key: 1, label: 'ホーム', href: '/' },
+  { key: 2, label: '2層目', href: '/' },
+  { key: 3, label: '3層目' },
+];
+
 export function Base() {
   return (
     <Breadcrumb>
-      <Breadcrumb.Item>
-        <a href="/">ホーム</a>
-      </Breadcrumb.Item>
-      <Breadcrumb.Item>
-        <a href="/about">2層目</a>
-      </Breadcrumb.Item>
-      <Breadcrumb.Item isLast>3層目</Breadcrumb.Item>
+      {breadcrumbList.map((item, index) => (
+        <Breadcrumb.Item key={item.key} isLast={breadcrumbList.length - 1 === index}>
+          {item.href ? <a href="/">{item.label}</a> : <>{item.label}</>}
+        </Breadcrumb.Item>
+      ))}
     </Breadcrumb>
   );
 }
