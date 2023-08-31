@@ -2,6 +2,8 @@ import { ReactNode } from 'react';
 
 import { clsx } from 'clsx';
 
+import { TabItem } from './tab-item';
+
 type Props = {
   children?: ReactNode;
 };
@@ -27,3 +29,5 @@ export function Tab({ children }: Props) {
     </div>
   );
 }
+
+Tab.Item = TabItem;
