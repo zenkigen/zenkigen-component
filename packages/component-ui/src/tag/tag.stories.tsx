@@ -205,6 +205,17 @@ export function Basic() {
             タグラベル
           </Tag>
         </div>
+        <div className="grid justify-items-start gap-y-2">
+          <Tag id="9" color="userOrange" size="medium">
+            タグラベル
+          </Tag>
+          <Tag id="9" color="userOrange" size="small">
+            タグラベル
+          </Tag>
+          <Tag id="9" color="userOrange" size="x-small">
+            タグラベル
+          </Tag>
+        </div>
       </div>
       <br />
       <div className="flex flex-wrap items-center gap-5">
