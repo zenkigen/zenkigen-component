@@ -13,7 +13,7 @@ export function Base() {
     <Breadcrumb>
       {breadcrumbList.map((item, index) => (
         <Breadcrumb.Item key={item.key} isLast={breadcrumbList.length - 1 === index}>
-          {item.href ? <a href="/">{item.label}</a> : <>{item.label}</>}
+          {item.href ? <a href={item.href}>{item.label}</a> : item.label}
         </Breadcrumb.Item>
       ))}
     </Breadcrumb>
