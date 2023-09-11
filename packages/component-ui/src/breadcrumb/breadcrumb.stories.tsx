@@ -11,8 +11,8 @@ const breadcrumbList = [
 export function Base() {
   return (
     <Breadcrumb>
-      {breadcrumbList.map((item, index) => (
-        <Breadcrumb.Item key={item.key} isLast={breadcrumbList.length - 1 === index}>
+      {breadcrumbList.map((item) => (
+        <Breadcrumb.Item key={item.key}>
           {item.href ? <a href={item.href}>{item.label}</a> : item.label}
         </Breadcrumb.Item>
       ))}
