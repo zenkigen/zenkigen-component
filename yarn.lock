@@ -4527,7 +4527,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zenkigen-inc/component-icons@1.0.2, @zenkigen-inc/component-icons@workspace:packages/component-icons":
+"@zenkigen-inc/component-icons@1.1.0, @zenkigen-inc/component-icons@workspace:packages/component-icons":
   version: 0.0.0-use.local
   resolution: "@zenkigen-inc/component-icons@workspace:packages/component-icons"
   dependencies:
@@ -4538,7 +4538,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zenkigen-inc/component-theme@1.0.2, @zenkigen-inc/component-theme@workspace:packages/component-theme":
+"@zenkigen-inc/component-theme@1.1.0, @zenkigen-inc/component-theme@workspace:packages/component-theme":
   version: 0.0.0-use.local
   resolution: "@zenkigen-inc/component-theme@workspace:packages/component-theme"
   dependencies:
@@ -4552,8 +4552,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zenkigen-inc/component-ui@workspace:packages/component-ui"
   dependencies:
-    "@zenkigen-inc/component-icons": 1.0.2
-    "@zenkigen-inc/component-theme": 1.0.2
+    "@zenkigen-inc/component-icons": 1.1.0
+    "@zenkigen-inc/component-theme": 1.1.0
     clsx: 2.0.0
     hygen: 6.2.11
     microbundle: 0.15.1
