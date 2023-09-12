@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import clsx from 'clsx';
 
@@ -6,9 +6,6 @@ import { typography } from '../../../component-theme/dist';
 import { IconButton } from '../icon-button';
 import { SelectOption } from '../select';
 import { Select } from '../select';
-
-const arrayRange = (start: number, stop: number, step: number): Array<number> =>
-  Array.from({ length: (stop - start) / step + 1 }, (value, index) => start + index * step);
 
 type Props = {
   total: number;
@@ -22,8 +19,8 @@ type Props = {
 export function PaginationSelect({
   total,
   currentPage,
-  pageLimit = 10,
-  countLabel = '',
+  pageLimit,
+  countLabel = '件',
   pageLabel = 'ページ',
   onChange,
 }: Props) {
@@ -31,8 +28,33 @@ export function PaginationSelect({
     return Math.ceil(total / pageLimit);
   }, [pageLimit, total]);
 
-  const [optionsList, setOptionsList] = useState<SelectOption[] | null>();
   const [selectedOption, setSelectedOption] = useState<SelectOption | null>(null);
+
+  const optionsList: SelectOption[] = useMemo(
+    () =>
+      [...Array(pageMax).fill(null)].map((_, index) => {
+        const value = (index + 1).toString();
+        return {
+          id: value,
+          value,
+          label: value,
+        };
+      }),
+    [pageMax],
+  );
+
+  const startNum: number = useMemo(() => {
+    return (currentPage - 1) * pageLimit + 1;
+  }, [currentPage, pageLimit]);
+
+  const endNum: number = useMemo(() => {
+    return currentPage * pageLimit > total ? total : currentPage * pageLimit;
+  }, [currentPage, pageLimit, total]);
+
+  useEffect(() => {
+    const currentOption = optionsList.find((option) => option.value === currentPage.toString());
+    if (currentOption) setSelectedOption(currentOption);
+  }, [currentPage, optionsList]);
 
   const classes = clsx('flex', 'items-center', 'gap-x-1');
   const leftGroupClasses = clsx('flex', 'items-center', 'gap-x-2');
@@ -40,40 +62,21 @@ export function PaginationSelect({
   const pageClasses = clsx('text-text-text03', typography.label.label2regular);
   const navClasses = clsx('flex', 'items-center');
 
-  const handleOnChange = useCallback(
-    (option: SelectOption | null) => {
-      if (option) {
-        onChange && onChange(Number(option.value));
-      }
-    },
-    [onChange],
-  );
-
-  useEffect(() => {
-    const pageNoList: Array<number> = arrayRange(1, pageMax, 1);
-    const optionsList: Array<SelectOption> = [];
-    pageNoList.map((pageNo) => {
-      const pageNoStr = pageNo.toString();
-      optionsList.push({ id: pageNoStr, value: pageNoStr, label: pageNoStr });
-    });
-    setOptionsList(optionsList);
-    setSelectedOption(optionsList[0] ? optionsList[0] : null);
-  }, [pageMax]);
-
-  useEffect(() => {
-    const currentOption = optionsList?.find((option) => option.value === currentPage.toString());
-    if (currentOption) setSelectedOption(currentOption);
-  }, [currentPage, optionsList]);
-
   return (
     <>
       <div className={classes}>
         <div className={leftGroupClasses}>
           <div className={countClasses}>
-            {(currentPage - 1) * pageLimit + 1} - {currentPage * pageLimit > total ? total : currentPage * pageLimit}
+            {startNum} - {endNum}
             {countLabel}
           </div>
-          <Select size="medium" variant="outline" selectedOption={selectedOption} onChange={handleOnChange}>
+          <Select
+            size="medium"
+            variant="outline"
+            selectedOption={selectedOption}
+            optionListMaxHeight={190}
+            onChange={(option) => onChange && option && onChange(Number(option.value))}
+          >
             {optionsList && optionsList.map((option) => <Select.Option key={option.id} option={option} />)}
           </Select>
           <div className={pageClasses}>
