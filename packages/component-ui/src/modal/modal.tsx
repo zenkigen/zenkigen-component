@@ -15,14 +15,11 @@ type Props = {
   height?: CSSProperties['height'];
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  isConfirm?: boolean;
   portalTargetRef?: MutableRefObject<HTMLElement | null>;
   headerElement?: ReactElement;
   tabElement?: ReactElement;
   buttonTabElement?: ReactElement;
 };
-
-const confirmModalWidth = 420;
 
 export function Modal({
   children,
@@ -31,7 +28,6 @@ export function Modal({
   height,
   isOpen,
   setIsOpen,
-  isConfirm,
   portalTargetRef,
   headerElement,
   tabElement,
@@ -66,7 +62,7 @@ export function Modal({
     isOpen && (
       <ModalContext.Provider value={{ size, setIsOpen }}>
         <div className={wrapperClasses}>
-          <div className={modalBaseClasses} style={{ width: isConfirm ? confirmModalWidth : width, height }}>
+          <div className={modalBaseClasses} style={{ width: width, height }}>
             {headerElement}
             {tabElement}
             <div className={contentClasses}>{children}</div>

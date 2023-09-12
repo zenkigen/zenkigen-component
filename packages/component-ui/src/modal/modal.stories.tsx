@@ -275,8 +275,8 @@ export function Danger() {
       </button>
       <Modal
         isOpen
-        isConfirm
         setIsOpen={setIsOpen}
+        width={420}
         headerElement={
           <Modal.Header isNoBorder isNoCloseButton>
             タイトル
