@@ -79,7 +79,7 @@ export function PaginationSelect({
 
   return (
     <>
-      <div className={classes}>
+      <nav aria-label="pagination" className={classes}>
         <div className={leftGroupClasses}>
           <div className={countClasses}>
             {startNum} - {endNum}
@@ -115,8 +115,7 @@ export function PaginationSelect({
             onClick={onClickNextButton}
           />
         </div>
-      </div>
-      <div></div>
+      </nav>
     </>
   );
 }
