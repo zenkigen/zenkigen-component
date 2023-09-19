@@ -1,21 +1,9 @@
-import { ReactNode } from 'react';
+import { PropsWithChildren } from 'react';
 
-import clsx from 'clsx';
-
-type Props = {
-  isLast: boolean;
-  children?: ReactNode;
-};
-
-export const BreadcrumbItem = ({ children, isLast }: Props) => {
+export const BreadcrumbItem = ({ children }: PropsWithChildren) => {
   return (
-    <>
-      <li className={clsx('[&_a]:text-interactive-interactive02', '[&_a]:hover:underline')}>{children}</li>
-      {!isLast && (
-        <li aria-hidden="true" className="text-interactive-interactive02">
-          /
-        </li>
-      )}
-    </>
+    <li className="flex gap-2 after:content-['/'] last:after:content-none [&_a]:text-interactive-interactive02 [&_a]:hover:underline">
+      {children}
+    </li>
   );
 };
