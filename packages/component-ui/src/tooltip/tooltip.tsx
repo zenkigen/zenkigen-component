@@ -60,7 +60,7 @@ export function Tooltip({
     'w-max',
     horizontalAlign === 'left' ? 'left-0' : horizontalAlign === 'right' ? 'right-0' : 'left-auto',
     'inline-block',
-    size === 'small' ? 'px-2 py-1' : 'px-4 py-3',
+    size === 'small' ? 'px-2 pb-1 pt-1.5' : 'px-4 py-3',
     'text-text-textOnColor',
     'bg-background-uiBackgroundTooltip',
     'rounded',
