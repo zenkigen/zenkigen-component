@@ -9,7 +9,7 @@ import { PaginationSelect } from '.';
 const meta: Meta<typeof PaginationSelect> = {
   component: PaginationSelect,
   argTypes: {
-    total: {
+    totalSize: {
       type: 'number',
     },
     currentPage: {
@@ -21,7 +21,7 @@ const meta: Meta<typeof PaginationSelect> = {
     pageLabel: {
       type: 'string',
     },
-    pageLimit: {
+    sizePerPage: {
       type: 'number',
     },
   },
@@ -32,9 +32,9 @@ type Story = StoryObj<typeof PaginationSelect>;
 
 export const Base: Story = {
   args: {
-    total: 4000,
+    totalSize: 4000,
     currentPage: 1,
-    pageLimit: 25,
+    sizePerPage: 25,
   },
   render: function MyFunc({ ...args }) {
     const [_, updateArgs] = useArgs();
@@ -46,6 +46,16 @@ export const Base: Story = {
             currentPage: value,
           });
         }}
+        onClickPrevButton={() => {
+          updateArgs({
+            currentPage: args.currentPage - 1,
+          });
+        }}
+        onClickNextButton={() => {
+          updateArgs({
+            currentPage: args.currentPage + 1,
+          });
+        }}
       ></PaginationSelect>
     );
   },
@@ -53,9 +63,9 @@ export const Base: Story = {
 
 export const LayoutExample: Story = {
   args: {
-    total: 4000,
+    totalSize: 4000,
     currentPage: 1,
-    pageLimit: 50,
+    sizePerPage: 50,
     countLabel: '件',
     pageLabel: '頁',
   },
@@ -78,7 +88,7 @@ export const LayoutExample: Story = {
             <Icon name="close" />
           </div>
           <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 10 }}>
-            結果：{args.total}件
+            結果：{args.totalSize}件
             <Icon name="triangle" />
             <PaginationSelect
               {...args}
@@ -87,12 +97,24 @@ export const LayoutExample: Story = {
                   currentPage: value,
                 });
               }}
+              onClickPrevButton={() => {
+                updateArgs({
+                  currentPage: args.currentPage - 1,
+                });
+              }}
+              onClickNextButton={() => {
+                updateArgs({
+                  currentPage: args.currentPage + 1,
+                });
+              }}
             ></PaginationSelect>
           </div>
         </div>
         <div>
-          {args.total}件中、{(args.currentPage! - 1) * args.pageLimit! + 1} ~{' '}
-          {args.currentPage! * args.pageLimit! > args.total ? args.total : args.currentPage! * args.pageLimit!}{' '}
+          {args.totalSize}件中、{(args.currentPage! - 1) * args.sizePerPage! + 1} ~{' '}
+          {args.currentPage! * args.sizePerPage! > args.totalSize
+            ? args.totalSize
+            : args.currentPage! * args.sizePerPage!}{' '}
           をリスト表示
         </div>
       </div>

@@ -8,25 +8,37 @@ import { SelectOption } from '../select';
 import { Select } from '../select';
 
 type Props = {
-  total: number;
+  /** トータル件数 */
+  totalSize: number;
+  /** ページあたり件数 */
+  sizePerPage: number;
+  /** 現在のページ番号 */
   currentPage: number;
-  pageLimit: number;
+  /** 件数表示単位ラベル */
   countLabel?: string;
+  /** ページ表示単位ラベル */
   pageLabel?: string;
+  /** 戻るボタンクリック時のイベントハンドラ */
+  onClickPrevButton?: () => void;
+  /** 進むボタンクリック時のイベントハンドラ */
+  onClickNextButton?: () => void;
+  /** Selectが切り替わった時のイベントハンドラ */
   onChange?: (value: number) => void;
 };
 
 export function PaginationSelect({
-  total,
+  totalSize,
   currentPage,
-  pageLimit,
+  sizePerPage,
   countLabel = '件',
   pageLabel = 'ページ',
   onChange,
+  onClickPrevButton,
+  onClickNextButton,
 }: Props) {
   const pageMax = useMemo(() => {
-    return Math.ceil(total / pageLimit);
-  }, [pageLimit, total]);
+    return Math.ceil(totalSize / sizePerPage);
+  }, [sizePerPage, totalSize]);
 
   const [selectedOption, setSelectedOption] = useState<SelectOption | null>(null);
 
@@ -44,12 +56,12 @@ export function PaginationSelect({
   );
 
   const startNum: number = useMemo(() => {
-    return (currentPage - 1) * pageLimit + 1;
-  }, [currentPage, pageLimit]);
+    return (currentPage - 1) * sizePerPage + 1;
+  }, [currentPage, sizePerPage]);
 
   const endNum: number = useMemo(() => {
-    return currentPage * pageLimit > total ? total : currentPage * pageLimit;
-  }, [currentPage, pageLimit, total]);
+    return currentPage * sizePerPage > totalSize ? totalSize : currentPage * sizePerPage;
+  }, [currentPage, sizePerPage, totalSize]);
 
   useEffect(() => {
     const currentOption = optionsList.find((option) => option.value === currentPage.toString());
@@ -90,14 +102,14 @@ export function PaginationSelect({
             icon="angle-left"
             size="small"
             isDisabled={currentPage === 1}
-            onClick={() => onChange && onChange(currentPage - 1)}
+            onClick={onClickPrevButton}
           />
           <IconButton
             variant="text"
             icon="angle-right"
             size="small"
             isDisabled={currentPage === pageMax}
-            onClick={() => onChange && onChange(currentPage + 1)}
+            onClick={onClickNextButton}
           />
         </div>
       </div>
