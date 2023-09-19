@@ -18,6 +18,8 @@ type Props = {
   countLabel?: string;
   /** ページ表示単位ラベル */
   pageLabel?: string;
+  /** Selectのリストの最大の高さ */
+  optionListMaxHeight?: number;
   /** 戻るボタンクリック時のイベントハンドラ */
   onClickPrevButton?: () => void;
   /** 進むボタンクリック時のイベントハンドラ */
@@ -32,9 +34,10 @@ export function PaginationSelect({
   sizePerPage,
   countLabel = '件',
   pageLabel = 'ページ',
-  onChange,
+  optionListMaxHeight = 190,
   onClickPrevButton,
   onClickNextButton,
+  onChange,
 }: Props) {
   const pageMax = useMemo(() => {
     return Math.ceil(totalSize / sizePerPage);
@@ -86,7 +89,7 @@ export function PaginationSelect({
             size="medium"
             variant="outline"
             selectedOption={selectedOption}
-            optionListMaxHeight={190}
+            optionListMaxHeight={optionListMaxHeight}
             onChange={(option) => onChange && option && onChange(Number(option.value))}
           >
             {optionsList && optionsList.map((option) => <Select.Option key={option.id} option={option} />)}

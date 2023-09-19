@@ -68,6 +68,7 @@ export const LayoutExample: Story = {
     sizePerPage: 50,
     countLabel: '件',
     pageLabel: '頁',
+    optionListMaxHeight: 315,
   },
   render: function MyFunc({ ...args }) {
     const [_, updateArgs] = useArgs();
