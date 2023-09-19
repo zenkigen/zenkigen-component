@@ -62,7 +62,7 @@ export function Modal({
     isOpen && (
       <ModalContext.Provider value={{ size, setIsOpen }}>
         <div className={wrapperClasses}>
-          <div className={modalBaseClasses} style={{ width: width, height }}>
+          <div className={modalBaseClasses} style={{ width, height }}>
             {headerElement}
             {tabElement}
             <div className={contentClasses}>{children}</div>
