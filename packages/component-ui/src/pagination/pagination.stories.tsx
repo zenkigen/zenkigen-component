@@ -1,29 +1,66 @@
-import { useState } from 'react';
+import { useArgs } from '@storybook/preview-api';
+import { Meta, StoryObj } from '@storybook/react';
 
-import { Pagination } from '.';
+import { Pagination } from './pagination';
 
-export default {
+const meta: Meta<typeof Pagination> = {
   component: Pagination,
+  argTypes: {
+    count: {
+      type: 'number',
+    },
+    current: {
+      type: 'number',
+    },
+    total: {
+      type: 'number',
+    },
+  },
+};
+export default meta;
+
+type Story = StoryObj<typeof Pagination>;
+
+export const Base: Story = {
+  args: {
+    current: 1,
+    total: 20,
+    count: 8,
+  },
+  render: function MyFunc({ ...args }) {
+    const [_, updateArgs] = useArgs();
+    return (
+      <Pagination
+        {...args}
+        onClick={(value) => {
+          updateArgs({
+            current: value,
+          });
+        }}
+      ></Pagination>
+    );
+  },
 };
 
-export function Base() {
-  const [current, setCurrent] = useState(7);
-
-  const handleClick = (value: number) => {
-    setCurrent(value);
-  };
-
-  return (
-    <div>
-      <div className="mb-6">
+export const LayoutExample: Story = {
+  args: {
+    current: 1,
+    total: 20,
+    count: 8,
+  },
+  render: function MyFunc({ ...args }) {
+    const [_, updateArgs] = useArgs();
+    return (
+      <div style={{ display: 'flex', width: '100%', height: '100vh', justifyContent: 'center', alignItems: 'center' }}>
         <Pagination
-          current={current}
-          total={10}
+          {...args}
           onClick={(value) => {
-            handleClick(value);
+            updateArgs({
+              current: value,
+            });
           }}
-        />
+        ></Pagination>
       </div>
-    </div>
-  );
-}
+    );
+  },
+};

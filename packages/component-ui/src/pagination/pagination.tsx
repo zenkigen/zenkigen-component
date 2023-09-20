@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 
 import clsx from 'clsx';
 
@@ -10,42 +10,45 @@ import { PaginationContext } from './pagination-context';
 const startPageNo = 1;
 
 type Props = {
+  count: number;
   current: number;
   total: number;
-} & {
   onClick?: (value: number) => void;
 };
 
-export function Pagination({ total, current, onClick }: Props) {
-  const classes = clsx('flex', 'gap-2');
+export function Pagination({ count, current, total, onClick }: Props) {
+  const pageNumberList = useMemo(() => {
+    let center = Math.max(current, startPageNo + 1);
+    center = Math.min(center, total - 1);
 
-  const [pageNumberList, setPageNumberList] = useState<Array<number>>([]);
+    const half = Math.floor(count / 2);
 
-  const computePaginationList = (count: number, maxPageNumber: number, currentPageNumber: number) => {
-    const halfWindowSize = Math.floor(count / 2);
-    let startPage = currentPageNumber - halfWindowSize;
-    let endPage = currentPageNumber + halfWindowSize;
+    const start = Math.max(center - half, startPageNo + 1);
+    const end = Math.min(center + half, total - 1);
 
-    if (startPage < 1) {
-      endPage += Math.abs(startPage) + 1;
-      startPage = 1;
+    const offsetStart = center + half >= total ? total - center - half : 0;
+    const offsetEnd = center <= half ? half - center + 1 : 0;
+
+    const result: Array<number> = [];
+    for (let i = start + offsetStart; i <= end + offsetEnd; i++) {
+      result.push(i);
     }
-    if (endPage > maxPageNumber) {
-      startPage -= endPage - maxPageNumber;
-      endPage = maxPageNumber;
-    }
+    return result;
+  }, [count, current, total]);
 
-    const pageList: Array<number> = [];
-    for (let i = startPage; i <= endPage; i++) {
-      pageList.push(i);
+  const handleDot = (type: 'left' | 'right') => {
+    if (!pageNumberList) return;
+    if (!pageNumberList.length) return;
+    if (type === 'left') {
+      const pageNum = pageNumberList[0];
+      pageNum && onClick && onClick(pageNum - 1);
+    } else {
+      const pageNum = pageNumberList[pageNumberList.length - 1];
+      pageNum && onClick && onClick(pageNum + 1);
     }
-    return pageList;
   };
 
-  useEffect(() => {
-    const pageNumberList = computePaginationList(7, total, current);
-    setPageNumberList(pageNumberList);
-  }, [current, total]);
+  const classes = clsx('flex', 'gap-2');
 
   return (
     <PaginationContext.Provider
@@ -63,12 +66,28 @@ export function Pagination({ total, current, onClick }: Props) {
             onClick={() => onClick && onClick(current - 1)}
           />
         </li>
+        <li>
+          <PaginationButton onClick={() => onClick && onClick(startPageNo)} pageNumber={startPageNo} />
+        </li>
+        {pageNumberList && pageNumberList.length !== 0 && pageNumberList[0] !== 2 && (
+          <li>
+            <IconButton variant="text" icon="more" size="medium" onClick={() => handleDot('left')} />
+          </li>
+        )}
         {pageNumberList &&
           pageNumberList.map((pageNo: number, index: number) => (
             <li key={index}>
               <PaginationButton onClick={() => onClick && onClick(pageNo)} pageNumber={pageNo} />
             </li>
           ))}
+        {pageNumberList && pageNumberList.length !== 0 && pageNumberList[pageNumberList.length - 1] !== total - 1 && (
+          <li>
+            <IconButton variant="text" icon="more" size="medium" onClick={() => handleDot('right')} />
+          </li>
+        )}
+        <li>
+          <PaginationButton onClick={() => onClick && onClick(total)} pageNumber={total} />
+        </li>
         <li>
           <IconButton
             isDisabled={current === total}
