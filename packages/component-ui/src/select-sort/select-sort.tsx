@@ -89,7 +89,10 @@ export function SelectSort({
               size={size === 'large' ? 'medium' : 'small'}
             />
           ) : (
-            <Icon name={isOptionListOpen ? 'angle-small-up' : 'angle-small-down'} size="small" />
+            <Icon
+              name={isOptionListOpen ? 'angle-small-up' : 'angle-small-down'}
+              size={size === 'large' ? 'medium' : 'small'}
+            />
           )}
         </div>
       </button>
