@@ -39,43 +39,33 @@ export function PaginationSelect({
   onClickNextButton,
   onChange,
 }: Props) {
-  const pageMax = useMemo(() => {
-    return Math.ceil(totalSize / sizePerPage);
-  }, [sizePerPage, totalSize]);
+  const pageMax = Math.ceil(totalSize / sizePerPage);
 
   const [selectedOption, setSelectedOption] = useState<SelectOption | null>(null);
 
-  const optionsList: SelectOption[] = useMemo(
-    () =>
-      [...Array(pageMax).fill(null)].map((_, index) => {
-        const value = (index + 1).toString();
-        return {
-          id: value,
-          value,
-          label: value,
-        };
-      }),
-    [pageMax],
-  );
+  const optionsList: SelectOption[] = (() =>
+    [...Array(pageMax).fill(null)].map((_, index) => {
+      const value = (index + 1).toString();
+      return {
+        id: value,
+        value,
+        label: value,
+      };
+    }))();
 
-  const startNum: number = useMemo(() => {
-    return (currentPage - 1) * sizePerPage + 1;
-  }, [currentPage, sizePerPage]);
-
-  const endNum: number = useMemo(() => {
-    return currentPage * sizePerPage > totalSize ? totalSize : currentPage * sizePerPage;
-  }, [currentPage, sizePerPage, totalSize]);
+  const startNum: number = (currentPage - 1) * sizePerPage + 1;
+  const endNum: number = currentPage * sizePerPage > totalSize ? totalSize : currentPage * sizePerPage;
 
   useEffect(() => {
     const currentOption = optionsList.find((option) => option.value === currentPage.toString());
     if (currentOption) setSelectedOption(currentOption);
   }, [currentPage, optionsList]);
 
-  const classes = clsx('flex', 'items-center', 'gap-x-1');
-  const leftGroupClasses = clsx('flex', 'items-center', 'gap-x-2');
+  const classes = 'flex items-center gap-x-1';
+  const leftGroupClasses = 'flex items-center gap-x-2';
   const countClasses = clsx('text-text-text01', typography.label.label2regular);
   const pageClasses = clsx('text-text-text03', typography.label.label2regular);
-  const navClasses = clsx('flex', 'items-center');
+  const navClasses = 'flex items-center';
 
   return (
     <>
