@@ -64,7 +64,6 @@ export function Tooltip({
     'text-text-textOnColor',
     'bg-background-uiBackgroundTooltip',
     'rounded',
-    'shadow-floatingShadow',
     typography.body[size === 'small' ? 'body3regular' : 'body2regular'],
   );
 
