@@ -1,7 +1,3 @@
-import { useMemo } from 'react';
-
-import clsx from 'clsx';
-
 import { IconButton } from '../icon-button';
 
 import { PaginationButton } from './pagination-button';
@@ -17,7 +13,7 @@ type Props = {
 };
 
 export function Pagination({ count, current, total, onClick }: Props) {
-  const pageNumberList = useMemo(() => {
+  const pageNumberList = (() => {
     let center = Math.max(current, startPageNo + 1);
     center = Math.min(center, total - 1);
 
@@ -34,9 +30,9 @@ export function Pagination({ count, current, total, onClick }: Props) {
       result.push(i);
     }
     return result;
-  }, [count, current, total]);
+  })();
 
-  const handleDot = (type: 'left' | 'right') => {
+  const handleClickDot = (type: 'left' | 'right') => {
     if (!pageNumberList) return;
     if (!pageNumberList.length) return;
     if (type === 'left') {
@@ -48,7 +44,7 @@ export function Pagination({ count, current, total, onClick }: Props) {
     }
   };
 
-  const classes = clsx('flex', 'gap-2');
+  const classes = 'flex gap-2';
 
   return (
     <PaginationContext.Provider
@@ -71,7 +67,7 @@ export function Pagination({ count, current, total, onClick }: Props) {
         </li>
         {pageNumberList && pageNumberList.length !== 0 && pageNumberList[0] !== 2 && (
           <li>
-            <IconButton variant="text" icon="more" size="medium" onClick={() => handleDot('left')} />
+            <IconButton variant="text" icon="more" size="medium" onClick={() => handleClickDot('left')} />
           </li>
         )}
         {pageNumberList &&
@@ -82,7 +78,7 @@ export function Pagination({ count, current, total, onClick }: Props) {
           ))}
         {pageNumberList && pageNumberList.length !== 0 && pageNumberList[pageNumberList.length - 1] !== total - 1 && (
           <li>
-            <IconButton variant="text" icon="more" size="medium" onClick={() => handleDot('right')} />
+            <IconButton variant="text" icon="more" size="medium" onClick={() => handleClickDot('right')} />
           </li>
         )}
         <li>
