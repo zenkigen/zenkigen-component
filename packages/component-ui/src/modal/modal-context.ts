@@ -1,11 +1,11 @@
 import { createContext } from 'react';
 
 type ModalReturnType = {
-  size?: 'small' | 'medium' | 'large' | 'x-large';
+  width: number;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const ModalContext = createContext<ModalReturnType>({
-  size: 'medium',
+  width: 480,
   setIsOpen: () => false,
 });

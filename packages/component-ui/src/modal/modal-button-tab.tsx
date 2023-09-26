@@ -33,6 +33,8 @@ type Props = {
     }
 );
 
+const sizeMedium = 480;
+
 export function ModalButtonTab({
   primaryButtonLabel,
   secondaryButtonLabel,
@@ -47,7 +49,7 @@ export function ModalButtonTab({
   subButtonLabel,
   onClickSubButton,
 }: Props) {
-  const { size, setIsOpen } = useContext(ModalContext);
+  const { width, setIsOpen } = useContext(ModalContext);
   const handleClickPrimaryButton = useCallback(() => {
     onClickPrimaryButton();
     setIsOpen(false);
@@ -61,17 +63,18 @@ export function ModalButtonTab({
   }, [onClickSubButton]);
 
   const wrapperClasses = clsx('flex', 'shrink-0', 'items-center', 'w-full', 'rounded-b-lg', 'py-4', 'px-6', {
-    'justify-between': isWithCheckbox || (subButtonLabel && size !== 'small'),
+    'justify-between': isWithCheckbox || (subButtonLabel && sizeMedium <= width),
     'justify-end': !isWithCheckbox || !subButtonLabel,
-    'justify-center': subButtonLabel && size === 'small',
+    'justify-center': subButtonLabel && width < sizeMedium,
     'border-t-[1px] border-border-uiBorder01': !isNoBorder,
-    'gap-y-4': size === 'small',
-    'flex-wrap': size === 'small' && isWithCheckbox,
-    'flex-wrap-reverse': size === 'small' && subButtonLabel,
+    'gap-y-4': width < sizeMedium,
+    'flex-wrap': width < sizeMedium && isWithCheckbox,
+    'flex-wrap-reverse': width < sizeMedium && subButtonLabel,
   });
   const buttonContainerClasses = clsx('flex', 'items-center', {
-    'gap-x-2': size === 'small',
-    'gap-x-4': size === 'medium' || size === 'large' || size === 'x-large',
+    'w-full justify-center': width < sizeMedium,
+    'gap-x-2': width < sizeMedium,
+    'gap-x-4': sizeMedium <= width,
   });
   return (
     <div className={wrapperClasses}>
@@ -89,7 +92,7 @@ export function ModalButtonTab({
           key="1"
           variant="outline"
           size="large"
-          width={size === 'small' ? 132 : 'auto'}
+          width={width < sizeMedium ? 132 : 'auto'}
           onClick={handleClickSecondaryButton}
         >
           {secondaryButtonLabel}
@@ -98,7 +101,7 @@ export function ModalButtonTab({
           key="2"
           variant={isDanger ? 'fillDanger' : 'fill'}
           size="large"
-          width={size === 'small' ? 132 : 'auto'}
+          width={width < sizeMedium ? 132 : 'auto'}
           onClick={handleClickPrimaryButton}
         >
           {primaryButtonLabel}
