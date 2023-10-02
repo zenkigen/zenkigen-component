@@ -6,24 +6,22 @@ import { PaginationContext } from './pagination-context';
 const startPageNo = 1;
 
 type Props = {
-  count: number;
   current: number;
   total: number;
+  sideNumPagesToShow?: number;
   onClick?: (value: number) => void;
 };
 
-export function Pagination({ count, current, total, onClick }: Props) {
+export function Pagination({ current, total, sideNumPagesToShow = 3, onClick }: Props) {
   const pageNumberList = (() => {
     let center = Math.max(current, startPageNo + 1);
     center = Math.min(center, total - 1);
 
-    const half = Math.floor(count / 2);
+    const start = Math.max(center - sideNumPagesToShow, startPageNo + 1);
+    const end = Math.min(center + sideNumPagesToShow, total - 1);
 
-    const start = Math.max(center - half, startPageNo + 1);
-    const end = Math.min(center + half, total - 1);
-
-    const offsetStart = center + half >= total ? total - center - half : 0;
-    const offsetEnd = center <= half ? half - center + 1 : 0;
+    const offsetStart = center + sideNumPagesToShow >= total ? total - center - sideNumPagesToShow : 0;
+    const offsetEnd = center <= sideNumPagesToShow ? sideNumPagesToShow - center + 1 : 0;
 
     const result: Array<number> = [];
     for (let i = start + offsetStart; i <= end + offsetEnd; i++) {

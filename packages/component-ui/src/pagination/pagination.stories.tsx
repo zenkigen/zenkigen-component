@@ -6,7 +6,7 @@ import { Pagination } from './pagination';
 const meta: Meta<typeof Pagination> = {
   component: Pagination,
   argTypes: {
-    count: {
+    sideNumPagesToShow: {
       type: 'number',
     },
     current: {
@@ -25,7 +25,7 @@ export const Base: Story = {
   args: {
     current: 1,
     total: 20,
-    count: 8,
+    sideNumPagesToShow: 4,
   },
   render: function MyFunc({ ...args }) {
     const [_, updateArgs] = useArgs();
@@ -46,7 +46,7 @@ export const LayoutExample: Story = {
   args: {
     current: 1,
     total: 20,
-    count: 8,
+    sideNumPagesToShow: 4,
   },
   render: function MyFunc({ ...args }) {
     const [_, updateArgs] = useArgs();
