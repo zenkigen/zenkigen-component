@@ -89,12 +89,12 @@
         "description": "Primary text, Body copy, Headers"
       },
       "Text02": {
-        "value": "#838789",
+        "value": "#6F7476",
         "type": "color",
         "description": "Secondary text, Input labels"
       },
       "Text03": {
-        "value": "#7C868A",
+        "value": "#838789",
         "type": "color",
         "description": "Tertiary text"
       },
@@ -129,7 +129,7 @@
         "description": "Tertiary text - Dark"
       },
       "TextPlaceholderDark": {
-        "value": "#7C868A",
+        "value": "#838789",
         "type": "color",
         "description": "Placeholder text - Dark"
       }
@@ -173,7 +173,7 @@
         "description": "Button border, Input border"
       },
       "UiBorder02Dark": {
-        "value": "#7C868A",
+        "value": "#838789",
         "type": "color",
         "description": "Button border, Input border - Dark"
       },
@@ -235,7 +235,7 @@
         "description": "message background"
       },
       "UiBackgroundGrayDark": {
-        "value": "#7C868A",
+        "value": "#838789",
         "type": "color",
         "description": "message background - Dark"
       },
@@ -292,7 +292,7 @@
     },
     "Icon": {
       "Icon01": {
-        "value": "#7C868A",
+        "value": "#6F7476",
         "type": "color",
         "description": "Primary icons"
       },
@@ -307,7 +307,7 @@
         "description": "Secondary icons"
       },
       "Icon02Dark": {
-        "value": "#7C868A",
+        "value": "#838789",
         "type": "color",
         "description": "Secondary icons - Dark"
       },
@@ -349,7 +349,7 @@
         "description": "Primary Interactive color on background, Primary fill buttons - Dark"
       },
       "Interactive02": {
-        "value": "#7C868A",
+        "value": "#6F7476",
         "type": "color",
         "description": "Secondary Interactive color, Secondary buttons"
       },
@@ -364,7 +364,7 @@
         "description": "Tertiary button, Selected elements, Active elements, Accent icon"
       },
       "Interactive03Dark": {
-        "value": "#7C868A",
+        "value": "#838789",
         "type": "color",
         "description": "Tertiary button, Selected elements, Active elements, Accent icon -Dark"
       }
@@ -455,7 +455,7 @@
         "description": "hover ui background with darker color"
       },
       "HoverUiBorder": {
-        "value": "#7C868A",
+        "value": "#6F7476",
         "type": "color",
         "description": "hover ui background - Dark"
       },
@@ -470,7 +470,7 @@
         "description": "Checkbox border color"
       },
       "HoverSelectedUiDark": {
-        "value": "#7C868A",
+        "value": "#838789",
         "type": "color",
         "description": "Checkbox border color - Dark"
       },
@@ -495,7 +495,7 @@
         "description": "Error hover - Dark"
       },
       "HoverInput": {
-        "value": "#7C868A",
+        "value": "#6F7476",
         "type": "color",
         "description": "hover input"
       },
@@ -515,7 +515,7 @@
         "description": "hover primary link - Dark"
       },
       "HoverLink02": {
-        "value": "#7C868A",
+        "value": "#6F7476",
         "type": "color",
         "description": "hover secondary link"
       },
@@ -562,7 +562,7 @@
         "description": "Active List background color"
       },
       "ActiveUiDark": {
-        "value": "#7C868A",
+        "value": "#838789",
         "type": "color",
         "description": "Active List background color - Dark"
       },
@@ -634,7 +634,7 @@
         "description": "Selected List Navigation Gray"
       },
       "SelectedUiGrayDark": {
-        "value": "#7C868A",
+        "value": "#838789",
         "type": "color",
         "description": "Selected List Navigation Gray - Dark"
       },
@@ -892,7 +892,7 @@
         "description": ""
       },
       "Gray70": {
-        "value": "#7C868A",
+        "value": "#6F7476",
         "type": "color",
         "description": ""
       },

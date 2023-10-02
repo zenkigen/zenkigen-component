@@ -24,15 +24,15 @@ export const tokens = {
   "tokens": {
     "text": {
       "text01": "#2F3233",
-      "text02": "#838789",
-      "text03": "#7C868A",
+      "text02": "#6F7476",
+      "text03": "#838789",
       "textPlaceholder": "#CACCCD",
       "textOnColor": "#FFFFFF",
       "textBlack": "#000000",
       "text01Dark": "#FFFFFF",
       "text02Dark": "#CACCCD",
       "text03Dark": "#A4A5A6",
-      "textPlaceholderDark": "#7C868A"
+      "textPlaceholderDark": "#838789"
     },
     "link": {
       "link01": "#177EE5",
@@ -44,7 +44,7 @@ export const tokens = {
       "uiBorder01": "#DEDFE0",
       "uiBorder01Dark": "#5C6366",
       "uiBorder02": "#CACCCD",
-      "uiBorder02Dark": "#7C868A",
+      "uiBorder02Dark": "#838789",
       "uiBorder03": "#A4A5A6",
       "uiBorder03Dark": "#838789"
     },
@@ -58,7 +58,7 @@ export const tokens = {
       "uiBackgroundBlue": "#F1F7FD",
       "uiBackgroundBlueDark": "#115CA7",
       "uiBackgroundGray": "#F3F4F5",
-      "uiBackgroundGrayDark": "#7C868A",
+      "uiBackgroundGrayDark": "#838789",
       "uiBackgroundSuccess": "#ECFBF4",
       "uiBackgroundSuccessDark": "#1E8353",
       "uiBackgroundError": "#FCEFF3",
@@ -71,10 +71,10 @@ export const tokens = {
       "backgroundOverlayBlack": "#00000099"
     },
     "icon": {
-      "icon01": "#7C868A",
+      "icon01": "#6F7476",
       "icon01Dark": "#CACCCD",
       "icon02": "#A4A5A6",
-      "icon02Dark": "#7C868A",
+      "icon02Dark": "#838789",
       "icon03": "#CACCCD",
       "icon03Dark": "#5C6366",
       "iconOnColor": "#FFFFFF"
@@ -84,10 +84,10 @@ export const tokens = {
       "interactiveBg01": "#177EE5",
       "interactive01Dark": "#9FCBF5",
       "interactiveBg01Dark": "#177EE5",
-      "interactive02": "#7C868A",
+      "interactive02": "#6F7476",
       "interactive02Dark": "#CACCCD",
       "interactive03": "#177EE5",
-      "interactive03Dark": "#7C868A"
+      "interactive03Dark": "#838789"
     },
     "field": {
       "fieldInput": "#FFFFFF",
@@ -110,19 +110,19 @@ export const tokens = {
       "hoverUiDark": "#5C6366",
       "hoverUi02": "#F3F4F5",
       "hoverUi02Dark": "#454A4D",
-      "hoverUiBorder": "#7C868A",
+      "hoverUiBorder": "#6F7476",
       "hoverUiBorderDark": "#CACCCD",
       "hoverSelectedUi": "#CACCCD",
-      "hoverSelectedUiDark": "#7C868A",
+      "hoverSelectedUiDark": "#838789",
       "hoverDanger": "#B22045",
       "hoverDangerDark": "#B22045",
       "hoverError": "#B22045",
       "hoverErrorDark": "#F9E0E6",
-      "hoverInput": "#7C868A",
+      "hoverInput": "#6F7476",
       "hoverInputDark": "#A4A5A6",
       "hoverLink01": "#1366B9",
       "hoverLink01Dark": "#9FCBF5",
-      "hoverLink02": "#7C868A",
+      "hoverLink02": "#6F7476",
       "hoverLink02Dark": "#DEDFE0"
     },
     "active": {
@@ -133,7 +133,7 @@ export const tokens = {
       "active02Background": "#DEDFE0",
       "active02BackgroundDark": "#5C6366",
       "activeUi": "#D9EAFB",
-      "activeUiDark": "#7C868A",
+      "activeUiDark": "#838789",
       "activeSelectedUi": "#177EE5",
       "activeSelectedUiDark": "#177EE5",
       "activeDanger": "#821732",
@@ -149,7 +149,7 @@ export const tokens = {
       "selectedUi": "#D9EAFB",
       "selectedUiDark": "#1366B9",
       "selectedUiGray": "#DEDFE0",
-      "selectedUiGrayDark": "#7C868A",
+      "selectedUiGrayDark": "#838789",
       "selectedUiOnColor": "#FFFFFF",
       "selectedUiBorder": "#177EE5",
       "selectedUiBorderDark": "#9FCBF5"
@@ -209,7 +209,7 @@ export const tokens = {
       "gray40": "#CACCCD",
       "gray50": "#A4A5A6",
       "gray60": "#838789",
-      "gray70": "#7C868A",
+      "gray70": "#6F7476",
       "gray80": "#5C6366",
       "gray90": "#454A4D",
       "gray100": "#2F3233"
