@@ -41,26 +41,3 @@ export const Base: Story = {
     );
   },
 };
-
-export const LayoutExample: Story = {
-  args: {
-    current: 1,
-    total: 20,
-    sideNumPagesToShow: 4,
-  },
-  render: function MyFunc({ ...args }) {
-    const [_, updateArgs] = useArgs();
-    return (
-      <div style={{ display: 'flex', width: '100%', height: '100vh', justifyContent: 'center', alignItems: 'center' }}>
-        <Pagination
-          {...args}
-          onClick={(value) => {
-            updateArgs({
-              current: value,
-            });
-          }}
-        ></Pagination>
-      </div>
-    );
-  },
-};

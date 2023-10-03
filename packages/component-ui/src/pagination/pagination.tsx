@@ -6,9 +6,13 @@ import { PaginationContext } from './pagination-context';
 const startPageNo = 1;
 
 type Props = {
+  /** 現在のページ番号 */
   current: number;
+  /** トータルのページ数 */
   total: number;
+  /** 現在のページ番号を中心としたときの、左右のページボタン数 */
   sideNumPagesToShow?: number;
+  /** ボタンが押されたときのイベントハンドラ */
   onClick?: (value: number) => void;
 };
 
