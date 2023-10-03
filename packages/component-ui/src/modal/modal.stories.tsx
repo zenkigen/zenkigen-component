@@ -18,8 +18,6 @@ type Story = StoryObj<typeof Modal>;
 
 const widthSmall = 320;
 const widthMedium = 480;
-// const widthLarge = 640;
-// const widthXLarge = 720;
 
 export default meta;
 

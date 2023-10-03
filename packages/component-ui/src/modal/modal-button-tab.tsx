@@ -33,7 +33,7 @@ type Props = {
     }
 );
 
-const sizeMedium = 480;
+const sizeSmallLimit = 420;
 
 export function ModalButtonTab({
   primaryButtonLabel,
@@ -63,18 +63,18 @@ export function ModalButtonTab({
   }, [onClickSubButton]);
 
   const wrapperClasses = clsx('flex', 'shrink-0', 'items-center', 'w-full', 'rounded-b-lg', 'py-4', 'px-6', {
-    'justify-between': isWithCheckbox || (subButtonLabel && sizeMedium <= width),
+    'justify-between': isWithCheckbox || (subButtonLabel && sizeSmallLimit <= width),
     'justify-end': !isWithCheckbox || !subButtonLabel,
-    'justify-center': subButtonLabel && width < sizeMedium,
+    'justify-center': subButtonLabel && width < sizeSmallLimit,
     'border-t-[1px] border-border-uiBorder01': !isNoBorder,
-    'gap-y-4': width < sizeMedium,
-    'flex-wrap': width < sizeMedium && isWithCheckbox,
-    'flex-wrap-reverse': width < sizeMedium && subButtonLabel,
+    'gap-y-4': width < sizeSmallLimit,
+    'flex-wrap': width < sizeSmallLimit && isWithCheckbox,
+    'flex-wrap-reverse': width < sizeSmallLimit && subButtonLabel,
   });
   const buttonContainerClasses = clsx('flex', 'items-center', {
-    'w-full justify-center': width < sizeMedium,
-    'gap-x-2': width < sizeMedium,
-    'gap-x-4': sizeMedium <= width,
+    'w-full justify-center': width < sizeSmallLimit,
+    'gap-x-2': width < sizeSmallLimit,
+    'gap-x-4': sizeSmallLimit <= width,
   });
   return (
     <div className={wrapperClasses}>
@@ -92,7 +92,7 @@ export function ModalButtonTab({
           key="1"
           variant="outline"
           size="large"
-          width={width < sizeMedium ? 132 : 'auto'}
+          width={width < sizeSmallLimit ? 132 : 'auto'}
           onClick={handleClickSecondaryButton}
         >
           {secondaryButtonLabel}
@@ -101,7 +101,7 @@ export function ModalButtonTab({
           key="2"
           variant={isDanger ? 'fillDanger' : 'fill'}
           size="large"
-          width={width < sizeMedium ? 132 : 'auto'}
+          width={width < sizeSmallLimit ? 132 : 'auto'}
           onClick={handleClickPrimaryButton}
         >
           {primaryButtonLabel}
