@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react';
-
 import { typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
 
