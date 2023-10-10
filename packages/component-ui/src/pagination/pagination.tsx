@@ -1,3 +1,5 @@
+import { useCallback } from 'react';
+
 import { IconButton } from '../icon-button';
 
 import { PaginationButton } from './pagination-button';
@@ -13,7 +15,7 @@ type Props = {
   /** 現在のページ番号を中心としたときの、左右のページボタン数 */
   sideNumPagesToShow?: number;
   /** ボタンが押されたときのイベントハンドラ */
-  onClick?: (value: number) => void;
+  onClick: (value: number) => void;
 };
 
 export function Pagination({ current, total, sideNumPagesToShow = 3, onClick }: Props) {
@@ -34,19 +36,20 @@ export function Pagination({ current, total, sideNumPagesToShow = 3, onClick }: 
     return result;
   })();
 
-  const handleClickDot = (type: 'left' | 'right') => {
-    if (!pageNumberList) return;
-    if (!pageNumberList.length) return;
-    if (type === 'left') {
-      const pageNum = pageNumberList[0];
-      pageNum && onClick && onClick(pageNum - 1);
-    } else {
-      const pageNum = pageNumberList[pageNumberList.length - 1];
-      pageNum && onClick && onClick(pageNum + 1);
-    }
-  };
-
-  const classes = 'flex gap-2';
+  const handleClickDot = useCallback(
+    (type: 'left' | 'right') => {
+      if (!pageNumberList) return;
+      if (!pageNumberList.length) return;
+      if (type === 'left') {
+        const pageNum = pageNumberList[0];
+        pageNum && onClick(pageNum - 1);
+      } else {
+        const pageNum = pageNumberList[pageNumberList.length - 1];
+        pageNum && onClick(pageNum + 1);
+      }
+    },
+    [onClick, pageNumberList],
+  );
 
   return (
     <PaginationContext.Provider
@@ -54,18 +57,18 @@ export function Pagination({ current, total, sideNumPagesToShow = 3, onClick }: 
         current,
       }}
     >
-      <ul className={classes}>
+      <ul className="flex gap-2">
         <li>
           <IconButton
             isDisabled={current === startPageNo}
             variant="text"
             icon="angle-left"
             size="medium"
-            onClick={() => onClick && onClick(current - 1)}
+            onClick={() => onClick(current - 1)}
           />
         </li>
         <li>
-          <PaginationButton onClick={() => onClick && onClick(startPageNo)} pageNumber={startPageNo} />
+          <PaginationButton onClick={() => onClick(startPageNo)} pageNumber={startPageNo} />
         </li>
         {pageNumberList && pageNumberList.length !== 0 && pageNumberList[0] !== 2 && (
           <li>
@@ -75,7 +78,7 @@ export function Pagination({ current, total, sideNumPagesToShow = 3, onClick }: 
         {pageNumberList &&
           pageNumberList.map((pageNo: number, index: number) => (
             <li key={index}>
-              <PaginationButton onClick={() => onClick && onClick(pageNo)} pageNumber={pageNo} />
+              <PaginationButton onClick={() => onClick(pageNo)} pageNumber={pageNo} />
             </li>
           ))}
         {pageNumberList && pageNumberList.length !== 0 && pageNumberList[pageNumberList.length - 1] !== total - 1 && (
@@ -84,7 +87,7 @@ export function Pagination({ current, total, sideNumPagesToShow = 3, onClick }: 
           </li>
         )}
         <li>
-          <PaginationButton onClick={() => onClick && onClick(total)} pageNumber={total} />
+          <PaginationButton onClick={() => onClick(total)} pageNumber={total} />
         </li>
         <li>
           <IconButton
@@ -92,7 +95,7 @@ export function Pagination({ current, total, sideNumPagesToShow = 3, onClick }: 
             variant="text"
             icon="angle-right"
             size="medium"
-            onClick={() => onClick && onClick(current + 1)}
+            onClick={() => onClick(current + 1)}
           />
         </li>
       </ul>
