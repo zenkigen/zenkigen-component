@@ -41,8 +41,6 @@ export function PaginationSelect({
 }: Props) {
   const pageMax = Math.ceil(totalSize / sizePerPage);
 
-  const [selectedOption, setSelectedOption] = useState<SelectOption | null>(null);
-
   const optionsList: SelectOption[] = [...Array(pageMax)].map((_, index) => {
     const value = (index + 1).toString();
     return {
@@ -52,26 +50,19 @@ export function PaginationSelect({
     };
   });
 
-  const startNum: number = (currentPage - 1) * sizePerPage + 1;
-  const endNum: number = currentPage * sizePerPage > totalSize ? totalSize : currentPage * sizePerPage;
-
-  useEffect(() => {
-    const currentOption = optionsList.find((option) => option.value === currentPage.toString());
-    if (currentOption) setSelectedOption(currentOption);
-  }, [currentPage, optionsList]);
-
   return (
     <>
       <nav aria-label="pagination" className="flex items-center gap-x-1">
         <div className="flex items-center gap-x-2">
           <div className={clsx('text-text-text01', typography.label.label2regular)}>
-            {startNum} - {endNum}
+            {(currentPage - 1) * sizePerPage + 1} -{' '}
+            {currentPage * sizePerPage > totalSize ? totalSize : currentPage * sizePerPage}
             {countLabel}
           </div>
           <Select
             size="medium"
             variant="outline"
-            selectedOption={selectedOption}
+            selectedOption={optionsList.find((option) => option.value === currentPage.toString())}
             optionListMaxHeight={optionListMaxHeight}
             onChange={(option) => onChange && option && onChange(Number(option.value))}
           >
