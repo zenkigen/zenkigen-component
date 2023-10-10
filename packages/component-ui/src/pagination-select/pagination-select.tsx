@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 
+import { typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
 
-import { typography } from '../../../component-theme/dist';
 import { IconButton } from '../icon-button';
 import { SelectOption } from '../select';
 import { Select } from '../select';
@@ -21,11 +21,11 @@ type Props = {
   /** Selectのリストの最大の高さ */
   optionListMaxHeight?: number;
   /** 戻るボタンクリック時のイベントハンドラ */
-  onClickPrevButton?: () => void;
+  onClickPrevButton: () => void;
   /** 進むボタンクリック時のイベントハンドラ */
-  onClickNextButton?: () => void;
+  onClickNextButton: () => void;
   /** Selectが切り替わった時のイベントハンドラ */
-  onChange?: (value: number) => void;
+  onChange: (value: number) => void;
 };
 
 export function PaginationSelect({
@@ -43,15 +43,14 @@ export function PaginationSelect({
 
   const [selectedOption, setSelectedOption] = useState<SelectOption | null>(null);
 
-  const optionsList: SelectOption[] = (() =>
-    [...Array(pageMax).fill(null)].map((_, index) => {
-      const value = (index + 1).toString();
-      return {
-        id: value,
-        value,
-        label: value,
-      };
-    }))();
+  const optionsList: SelectOption[] = [...Array(pageMax)].map((_, index) => {
+    const value = (index + 1).toString();
+    return {
+      id: value,
+      value,
+      label: value,
+    };
+  });
 
   const startNum: number = (currentPage - 1) * sizePerPage + 1;
   const endNum: number = currentPage * sizePerPage > totalSize ? totalSize : currentPage * sizePerPage;
@@ -61,17 +60,11 @@ export function PaginationSelect({
     if (currentOption) setSelectedOption(currentOption);
   }, [currentPage, optionsList]);
 
-  const classes = 'flex items-center gap-x-1';
-  const leftGroupClasses = 'flex items-center gap-x-2';
-  const countClasses = clsx('text-text-text01', typography.label.label2regular);
-  const pageClasses = clsx('text-text-text03', typography.label.label2regular);
-  const navClasses = 'flex items-center';
-
   return (
     <>
-      <nav aria-label="pagination" className={classes}>
-        <div className={leftGroupClasses}>
-          <div className={countClasses}>
+      <nav aria-label="pagination" className="flex items-center gap-x-1">
+        <div className="flex items-center gap-x-2">
+          <div className={clsx('text-text-text01', typography.label.label2regular)}>
             {startNum} - {endNum}
             {countLabel}
           </div>
@@ -84,12 +77,12 @@ export function PaginationSelect({
           >
             {optionsList && optionsList.map((option) => <Select.Option key={option.id} option={option} />)}
           </Select>
-          <div className={pageClasses}>
+          <div className={clsx('text-text-text03', typography.label.label2regular)}>
             / {pageMax}
             {pageLabel}
           </div>
         </div>
-        <div className={navClasses}>
+        <div className="flex items-center">
           <IconButton
             variant="text"
             icon="angle-left"
