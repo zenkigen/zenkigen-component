@@ -62,7 +62,7 @@ export function PaginationSelect({
             variant="outline"
             selectedOption={optionsList.find((option) => option.value === currentPage.toString())}
             optionListMaxHeight={optionListMaxHeight}
-            onChange={(option) => onChange && option && onChange(Number(option.value))}
+            onChange={(option) => option && onChange(Number(option.value))}
           >
             {optionsList && optionsList.map((option) => <Select.Option key={option.id} option={option} />)}
           </Select>
