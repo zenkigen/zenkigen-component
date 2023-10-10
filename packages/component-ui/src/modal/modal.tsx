@@ -1,6 +1,5 @@
 import { CSSProperties, MutableRefObject, ReactElement, ReactNode } from 'react';
 
-import clsx from 'clsx';
 import { createPortal } from 'react-dom';
 
 import { ModalButtonTab } from './modal-button-tab';
@@ -10,7 +9,7 @@ import { ModalTab } from './modal-tab';
 
 type Props = {
   children?: ReactNode;
-  size?: 'small' | 'medium' | 'large' | 'x-large';
+  width: number;
   height?: CSSProperties['height'];
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -22,7 +21,7 @@ type Props = {
 
 export function Modal({
   children,
-  size = 'medium',
+  width = 480,
   height,
   isOpen,
   setIsOpen,
@@ -31,36 +30,16 @@ export function Modal({
   tabElement,
   buttonTabElement,
 }: Props) {
-  const wrapperClasses = clsx(
-    'flex',
-    'items-center',
-    'justify-center',
-    'z-overlay',
-    'bg-background-backgroundOverlayBlack',
-    'fixed left-0 top-0',
-    'h-full w-full',
-  );
-  const modalBaseClasses = clsx(
-    'flex',
-    'shrink-0',
-    'flex-col',
-    'bg-background-uiBackground01',
-    'rounded-lg',
-    'shadow-modalShadow',
-    {
-      'w-[320px]': size === 'small',
-      'w-[480px]': size === 'medium',
-      'w-[640px]': size === 'large',
-      'w-[720px]': size === 'x-large',
-    },
-  );
-  const contentClasses = clsx('flex', 'items-center', 'justify-center', 'overflow-y-auto');
+  const wrapperClasses =
+    'flex items-center justify-center z-overlay bg-background-backgroundOverlayBlack fixed left-0 top-0 h-full w-full';
+  const modalBaseClasses = 'flex shrink-0 flex-col bg-background-uiBackground01 rounded-lg shadow-modalShadow';
+  const contentClasses = 'flex items-center justify-center overflow-y-auto';
 
   return createPortal(
     isOpen && (
-      <ModalContext.Provider value={{ size, setIsOpen }}>
+      <ModalContext.Provider value={{ width, setIsOpen }}>
         <div className={wrapperClasses}>
-          <div className={modalBaseClasses} style={{ height }}>
+          <div className={modalBaseClasses} style={{ width, height }}>
             {headerElement}
             {tabElement}
             <div className={contentClasses}>{children}</div>
