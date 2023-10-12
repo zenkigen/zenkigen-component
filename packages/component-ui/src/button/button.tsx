@@ -29,7 +29,7 @@ type Props = {
 
 export function Button({ size = 'medium', variant = 'fill', ...props }: Props) {
   const baseClasses = clsx(
-    'rounded',
+    'rounded-button',
     'flex',
     'shrink-0',
     'gap-1',
