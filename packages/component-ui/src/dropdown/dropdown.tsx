@@ -80,11 +80,8 @@ export function Dropdown({
     'active:bg-active-active02',
     focusVisible.normal,
     isDisabled && 'pointer-events-none',
+    'p-1',
     {
-      'h-6 w-6': size === 'x-small',
-      'h-8 w-8': size === 'small',
-      'h-10 w-10': size === 'medium',
-      'h-12 w-12': size === 'large',
       'border border-border-uiBorder02': variant === 'outline',
     },
   );
