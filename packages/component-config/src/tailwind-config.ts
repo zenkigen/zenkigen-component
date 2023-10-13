@@ -13,6 +13,9 @@ module.exports = {
       },
       fontSize: tokens.fontSize,
       lineHeight: tokens.lineHeights,
+      borderRadius: {
+        button: '.25rem',
+      },
       boxShadow: {
         modalShadow: tokens.shadow.modalShadow,
         floatingShadow: tokens.shadow.floatingShadow,
