@@ -49,45 +49,43 @@ export function PaginationSelect({
   });
 
   return (
-    <>
-      <nav aria-label="pagination" className="flex items-center gap-x-1">
-        <div className="flex items-center gap-x-2">
-          <div className={clsx('text-text-text01', typography.label.label2regular)}>
-            {(currentPage - 1) * sizePerPage + 1} -{' '}
-            {currentPage * sizePerPage > totalSize ? totalSize : currentPage * sizePerPage}
-            {countLabel}
-          </div>
-          <Select
-            size="medium"
-            variant="outline"
-            selectedOption={optionsList.find((option) => option.value === currentPage.toString())}
-            optionListMaxHeight={optionListMaxHeight}
-            onChange={(option) => option && onChange(Number(option.value))}
-          >
-            {optionsList && optionsList.map((option) => <Select.Option key={option.id} option={option} />)}
-          </Select>
-          <div className={clsx('text-text-text03', typography.label.label2regular)}>
-            / {pageMax}
-            {pageLabel}
-          </div>
+    <nav aria-label="pagination" className="flex items-center gap-x-1">
+      <div className="flex items-center gap-x-2">
+        <div className={clsx('text-text-text01', typography.label.label2regular)}>
+          {(currentPage - 1) * sizePerPage + 1} -{' '}
+          {currentPage * sizePerPage > totalSize ? totalSize : currentPage * sizePerPage}
+          {countLabel}
         </div>
-        <div className="flex items-center">
-          <IconButton
-            variant="text"
-            icon="angle-left"
-            size="small"
-            isDisabled={currentPage === 1}
-            onClick={onClickPrevButton}
-          />
-          <IconButton
-            variant="text"
-            icon="angle-right"
-            size="small"
-            isDisabled={currentPage === pageMax}
-            onClick={onClickNextButton}
-          />
+        <Select
+          size="medium"
+          variant="outline"
+          selectedOption={optionsList.find((option) => option.value === currentPage.toString())}
+          optionListMaxHeight={optionListMaxHeight}
+          onChange={(option) => option && onChange(Number(option.value))}
+        >
+          {optionsList && optionsList.map((option) => <Select.Option key={option.id} option={option} />)}
+        </Select>
+        <div className={clsx('text-text-text03', typography.label.label2regular)}>
+          / {pageMax}
+          {pageLabel}
         </div>
-      </nav>
-    </>
+      </div>
+      <div className="flex items-center">
+        <IconButton
+          variant="text"
+          icon="angle-left"
+          size="small"
+          isDisabled={currentPage === 1}
+          onClick={onClickPrevButton}
+        />
+        <IconButton
+          variant="text"
+          icon="angle-right"
+          size="small"
+          isDisabled={currentPage === pageMax}
+          onClick={onClickNextButton}
+        />
+      </div>
+    </nav>
   );
 }
