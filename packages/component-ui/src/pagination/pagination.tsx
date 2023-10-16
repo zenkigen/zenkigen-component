@@ -60,18 +60,17 @@ export function Pagination({ currentPage, totalPage, sideNumPagesToShow = 3, onC
         <li>
           <PaginationButton onClick={() => onClick(START_PAGE)} page={START_PAGE} />
         </li>
-        {pageList && pageList.length !== 0 && pageList[0] !== 2 && (
+        {pageList.length !== 0 && pageList[0] !== 2 && (
           <li>
             <IconButton variant="text" icon="more" size="medium" onClick={() => handleClickDot('left')} />
           </li>
         )}
-        {pageList &&
-          pageList.map((page: number, index: number) => (
-            <li key={index}>
-              <PaginationButton onClick={() => onClick(page)} page={page} />
-            </li>
-          ))}
-        {pageList && pageList.length !== 0 && pageList[pageList.length - 1] !== totalPage - 1 && (
+        {pageList.map((page: number, index: number) => (
+          <li key={index}>
+            <PaginationButton onClick={() => onClick(page)} page={page} />
+          </li>
+        ))}
+        {pageList.length !== 0 && pageList[pageList.length - 1] !== totalPage - 1 && (
           <li>
             <IconButton variant="text" icon="more" size="medium" onClick={() => handleClickDot('right')} />
           </li>
