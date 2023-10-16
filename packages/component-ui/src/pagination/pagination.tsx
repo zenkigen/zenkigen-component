@@ -1,5 +1,3 @@
-import { useCallback } from 'react';
-
 import { IconButton } from '../icon-button';
 
 import { PaginationButton } from './pagination-button';
@@ -19,37 +17,29 @@ type Props = {
 };
 
 export function Pagination({ currentPage, totalPage, sideNumPagesToShow = 3, onClick }: Props) {
-  const pageList = (() => {
-    let center = Math.max(currentPage, START_PAGE + 1);
-    center = Math.min(center, totalPage - 1);
+  let center = Math.max(currentPage, START_PAGE + 1);
+  center = Math.min(center, totalPage - 1);
 
-    const start = Math.max(center - sideNumPagesToShow, START_PAGE + 1);
-    const end = Math.min(center + sideNumPagesToShow, totalPage - 1);
+  const start = Math.max(center - sideNumPagesToShow, START_PAGE + 1);
+  const end = Math.min(center + sideNumPagesToShow, totalPage - 1);
+  const offsetStart = center + sideNumPagesToShow >= totalPage ? totalPage - center - sideNumPagesToShow : 0;
+  const offsetEnd = center <= sideNumPagesToShow ? sideNumPagesToShow - center + 1 : 0;
 
-    const offsetStart = center + sideNumPagesToShow >= totalPage ? totalPage - center - sideNumPagesToShow : 0;
-    const offsetEnd = center <= sideNumPagesToShow ? sideNumPagesToShow - center + 1 : 0;
+  const pageList: Array<number> = [];
+  for (let i = start + offsetStart; i <= end + offsetEnd; i++) {
+    pageList.push(i);
+  }
 
-    const result: Array<number> = [];
-    for (let i = start + offsetStart; i <= end + offsetEnd; i++) {
-      result.push(i);
+  const handleClickDot = (type: 'left' | 'right') => {
+    if (!pageList.length) return;
+    if (type === 'left') {
+      const pageNum = pageList[0];
+      pageNum && onClick(pageNum - 1);
+    } else {
+      const pageNum = pageList[pageList.length - 1];
+      pageNum && onClick(pageNum + 1);
     }
-    return result;
-  })();
-
-  const handleClickDot = useCallback(
-    (type: 'left' | 'right') => {
-      if (!pageList) return;
-      if (!pageList.length) return;
-      if (type === 'left') {
-        const pageNum = pageList[0];
-        pageNum && onClick(pageNum - 1);
-      } else {
-        const pageNum = pageList[pageList.length - 1];
-        pageNum && onClick(pageNum + 1);
-      }
-    },
-    [onClick, pageList],
-  );
+  };
 
   return (
     <PaginationContext.Provider
