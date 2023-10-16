@@ -1,4 +1,4 @@
-import { ReactElement, ReactNode, cloneElement, useCallback, useRef, useState } from 'react';
+import { ReactElement, ReactNode, useCallback, useRef, useState } from 'react';
 
 import { IconName } from '@zenkigen-inc/component-icons';
 import { buttonColors, focusVisible, typography } from '@zenkigen-inc/component-theme';
@@ -80,11 +80,8 @@ export function Dropdown({
     'active:bg-active-active02',
     focusVisible.normal,
     isDisabled && 'pointer-events-none',
+    'p-1',
     {
-      'h-6 w-6': size === 'x-small',
-      'h-8 w-8': size === 'small',
-      'h-10 w-10': size === 'medium',
-      'h-12 w-12': size === 'large',
       'border border-border-uiBorder02': variant === 'outline',
     },
   );
@@ -114,8 +111,6 @@ export function Dropdown({
     ],
   );
 
-  const targetWithProps = target && cloneElement(target, { isDisabled });
-
   return (
     <DropdownContext.Provider value={{ isVisible, setIsVisible, isDisabled, targetDimensions, variant }}>
       <div ref={targetRef} className={wrapperClasses}>
@@ -127,7 +122,7 @@ export function Dropdown({
             onClick={handleToggle}
             disabled={isDisabled}
           >
-            {targetWithProps}
+            {target}
           </button>
         ) : (
           <button type="button" title={title} className={buttonClasses} onClick={handleToggle} disabled={isDisabled}>
