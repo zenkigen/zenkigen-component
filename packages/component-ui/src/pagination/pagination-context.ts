@@ -2,9 +2,9 @@ import { createContext } from 'react';
 
 type PaginationContextType = {
   /** 現在のページ番号 */
-  current: number;
+  currentPage: number;
 };
 
 export const PaginationContext = createContext<PaginationContextType>({
-  current: 0,
+  currentPage: 0,
 });

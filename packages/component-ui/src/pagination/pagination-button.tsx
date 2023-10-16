@@ -5,17 +5,17 @@ import { Button } from '../button';
 import { PaginationContext } from './pagination-context';
 
 type Props = {
-  pageNumber: number;
+  page: number;
 } & {
   onClick?: (value: number) => void;
 };
 
-export function PaginationButton({ pageNumber, onClick }: Props) {
-  const { current } = useContext(PaginationContext);
+export function PaginationButton({ page, onClick }: Props) {
+  const { currentPage } = useContext(PaginationContext);
 
   return (
-    <Button variant={pageNumber === current ? 'outline' : 'text'} onClick={() => onClick && onClick(pageNumber)}>
-      {pageNumber}
+    <Button variant={page === currentPage ? 'outline' : 'text'} onClick={() => onClick && onClick(page)}>
+      {page}
     </Button>
   );
 }

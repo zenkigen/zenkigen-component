@@ -9,10 +9,10 @@ const meta: Meta<typeof Pagination> = {
     sideNumPagesToShow: {
       type: 'number',
     },
-    current: {
+    currentPage: {
       type: 'number',
     },
-    total: {
+    totalPage: {
       type: 'number',
     },
   },
@@ -23,8 +23,8 @@ type Story = StoryObj<typeof Pagination>;
 
 export const Base: Story = {
   args: {
-    current: 1,
-    total: 20,
+    currentPage: 1,
+    totalPage: 20,
     sideNumPagesToShow: 4,
   },
   render: function MyFunc({ ...args }) {
@@ -34,7 +34,7 @@ export const Base: Story = {
         {...args}
         onClick={(value) => {
           updateArgs({
-            current: value,
+            currentPage: value,
           });
         }}
       ></Pagination>
