@@ -16,6 +16,7 @@ export * from './search';
 export * from './select';
 export * from './select-sort';
 export * from './tab';
+export * from './text-input';
 export * from './table';
 export * from './tag';
 export * from './toast';
