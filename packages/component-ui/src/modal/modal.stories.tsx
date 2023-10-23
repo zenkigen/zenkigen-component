@@ -3,6 +3,10 @@ import { useState } from 'react';
 import { action } from '@storybook/addon-actions';
 import { Meta, StoryObj } from '@storybook/react';
 
+import { Button } from '../button';
+import { Checkbox } from '../checkbox';
+import { Tab } from '../tab';
+
 import { Modal } from '.';
 
 const meta: Meta<typeof Modal> = {
@@ -36,17 +40,17 @@ export const Base: Story = {
           isOpen
           setIsOpen={setIsOpen}
           width={args.width}
-          headerElement={<Modal.Header>タイトル</Modal.Header>}
-          buttonTabElement={
-            <Modal.ButtonTab
-              primaryButtonLabel="保存する"
-              secondaryButtonLabel="キャンセル"
-              onClickPrimaryButton={action('保存する')}
-              onClickSecondaryButton={action('キャンセル')}
-            />
-          }
         >
-          <div className="flex h-[200px] w-full items-center justify-center">Content</div>
+          <Modal.Header>タイトル</Modal.Header>
+          <Modal.Body>
+            <div className="flex h-[200px] w-full items-center justify-center">Content</div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Modal.FooterGroup>
+              <Modal.Button variant="outline" size="large" onClick={action('キャンセル')}>キャンセル</Modal.Button>
+              <Modal.Button variant="fill" size="large" onClick={action('保存する')}>保存する</Modal.Button>
+            </Modal.FooterGroup>
+          </Modal.Footer>
         </Modal>
       </div>
     );
@@ -69,21 +73,20 @@ export const WithCheckbox: Story = {
           isOpen
           setIsOpen={setIsOpen}
           width={args.width}
-          headerElement={<Modal.Header>タイトル</Modal.Header>}
-          buttonTabElement={
-            <Modal.ButtonTab
-              primaryButtonLabel="保存する"
-              secondaryButtonLabel="キャンセル"
-              onClickPrimaryButton={action('保存する')}
-              onClickSecondaryButton={action('キャンセル')}
-              isWithCheckbox
-              checkboxLabel="ラベル"
-              isChecked={isChecked}
-              onChange={() => setIsChecked((prev) => !prev)}
-            />
-          }
         >
-          <div className="flex h-[200px] w-full items-center justify-center">Content</div>
+          <Modal.Header>タイトル</Modal.Header>
+          <Modal.Body>
+            <div className="flex h-[200px] w-full items-center justify-center">Content</div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Modal.FooterGroup type='checkbox'>
+              <Checkbox id="modal-checkbox" label="ラベル" isChecked={isChecked} onChange={() => setIsChecked((prev) => !prev)} />
+            </Modal.FooterGroup>
+            <Modal.FooterGroup>
+              <Modal.Button variant="outline" size="large" onClick={action('キャンセル')}>キャンセル</Modal.Button>
+              <Modal.Button variant="fill" size="large" onClick={action('保存する')}>保存する</Modal.Button>
+            </Modal.FooterGroup>
+          </Modal.Footer>
         </Modal>
       </div>
     );
@@ -105,19 +108,20 @@ export const WithSubButton: Story = {
           isOpen
           setIsOpen={setIsOpen}
           width={args.width}
-          headerElement={<Modal.Header>タイトル</Modal.Header>}
-          buttonTabElement={
-            <Modal.ButtonTab
-              primaryButtonLabel="保存する"
-              secondaryButtonLabel="キャンセル"
-              onClickPrimaryButton={action('保存する')}
-              onClickSecondaryButton={action('キャンセル')}
-              subButtonLabel="ボタンラベル"
-              onClickSubButton={action('サブボタンアクション')}
-            />
-          }
         >
-          <div className="flex h-[200px] w-full items-center justify-center">Content</div>
+          <Modal.Header>タイトル</Modal.Header>
+          <Modal.Body>
+            <div className="flex h-[200px] w-full items-center justify-center">Content</div>
+          </Modal.Body>
+          <Modal.Footer abc>
+            <Modal.FooterGroup>
+              <Button variant="text" size="large" onClick={action('ボタンラベル')}>ボタンラベル</Button>
+            </Modal.FooterGroup>
+            <Modal.FooterGroup>
+              <Modal.Button variant="outline" size="large" onClick={action('キャンセル')}>キャンセル</Modal.Button>
+              <Modal.Button variant="fill" size="large" onClick={action('保存する')}>保存する</Modal.Button>
+            </Modal.FooterGroup>
+          </Modal.Footer>
         </Modal>
       </div>
     );
@@ -139,17 +143,17 @@ export const SizeSmall: Story = {
           isOpen
           setIsOpen={setIsOpen}
           width={args.width}
-          headerElement={<Modal.Header>タイトル</Modal.Header>}
-          buttonTabElement={
-            <Modal.ButtonTab
-              primaryButtonLabel="保存する"
-              secondaryButtonLabel="キャンセル"
-              onClickPrimaryButton={action('保存する')}
-              onClickSecondaryButton={action('キャンセル')}
-            />
-          }
         >
-          <div className="flex h-[200px] w-full items-center justify-center">Content</div>
+          <Modal.Header>タイトル</Modal.Header>
+          <Modal.Body>
+            <div className="flex h-[200px] w-full items-center justify-center">Content</div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Modal.FooterGroup>
+              <Modal.Button variant="outline" size="large" onClick={action('キャンセル')}>キャンセル</Modal.Button>
+              <Modal.Button variant="fill" size="large" onClick={action('保存する')}>保存する</Modal.Button>
+            </Modal.FooterGroup>
+          </Modal.Footer>
         </Modal>
       </div>
     );
@@ -172,21 +176,20 @@ export const SizeSmallWithCheckbox: Story = {
           isOpen
           setIsOpen={setIsOpen}
           width={args.width}
-          headerElement={<Modal.Header>タイトル</Modal.Header>}
-          buttonTabElement={
-            <Modal.ButtonTab
-              primaryButtonLabel="保存する"
-              secondaryButtonLabel="キャンセル"
-              onClickPrimaryButton={action('保存する')}
-              onClickSecondaryButton={action('キャンセル')}
-              isWithCheckbox
-              checkboxLabel="ラベル"
-              isChecked={isChecked}
-              onChange={() => setIsChecked((prev) => !prev)}
-            />
-          }
         >
-          <div className="flex h-[200px] w-full items-center justify-center">Content</div>
+          <Modal.Header>タイトル</Modal.Header>
+          <Modal.Body>
+            <div className="flex h-[200px] w-full items-center justify-center">Content</div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Modal.FooterGroup type='checkbox'>
+              <Checkbox id="modal-checkbox" label="ラベル" isChecked={isChecked} onChange={() => setIsChecked((prev) => !prev)} />
+            </Modal.FooterGroup>
+            <Modal.FooterGroup>
+              <Modal.Button variant="outline" size="large" onClick={action('キャンセル')}>キャンセル</Modal.Button>
+              <Modal.Button variant="fill" size="large" onClick={action('保存する')}>保存する</Modal.Button>
+            </Modal.FooterGroup>
+          </Modal.Footer>
         </Modal>
       </div>
     );
@@ -208,19 +211,21 @@ export const SizeSmallWithSubButton: Story = {
           isOpen
           setIsOpen={setIsOpen}
           width={args.width}
-          headerElement={<Modal.Header>タイトル</Modal.Header>}
-          buttonTabElement={
-            <Modal.ButtonTab
-              primaryButtonLabel="保存する"
-              secondaryButtonLabel="キャンセル"
-              onClickPrimaryButton={action('保存する')}
-              onClickSecondaryButton={action('キャンセル')}
-              subButtonLabel="ボタンラベル"
-              onClickSubButton={action('サブボタンアクション')}
-            />
-          }
+          // headerElement={}
         >
-          <div className="flex h-[200px] w-full items-center justify-center">Content</div>
+          <Modal.Header>タイトル</Modal.Header>
+          <Modal.Body>
+            <div className="flex h-[200px] w-full items-center justify-center">Content</div>
+          </Modal.Body>
+          <Modal.Footer abc>
+            <Modal.FooterGroup>
+              <Button variant="text" size="large" onClick={action('ボタンラベル')}>ボタンラベル</Button>
+            </Modal.FooterGroup>
+            <Modal.FooterGroup>
+              <Modal.Button variant="outline" size="large" onClick={action('キャンセル')}>キャンセル</Modal.Button>
+              <Modal.Button variant="fill" size="large" onClick={action('保存する')}>保存する</Modal.Button>
+            </Modal.FooterGroup>
+          </Modal.Footer>
         </Modal>
       </div>
     );
@@ -243,17 +248,18 @@ export const FixedHeight: Story = {
           setIsOpen={setIsOpen}
           width={args.width}
           height={500}
-          headerElement={<Modal.Header>タイトル</Modal.Header>}
-          buttonTabElement={
-            <Modal.ButtonTab
-              primaryButtonLabel="保存する"
-              secondaryButtonLabel="キャンセル"
-              onClickPrimaryButton={action('保存する')}
-              onClickSecondaryButton={action('キャンセル')}
-            />
-          }
+          // headerElement={}
         >
-          <div className="flex h-[800px] w-full items-center justify-center">Content</div>
+          <Modal.Header>タイトル</Modal.Header>
+          <Modal.Body>
+            <div className="flex h-[800px] w-full items-center justify-center">Content</div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Modal.FooterGroup>
+              <Modal.Button variant="outline" size="large" onClick={action('キャンセル')}>キャンセル</Modal.Button>
+              <Modal.Button variant="fill" size="large" onClick={action('保存する')}>保存する</Modal.Button>
+            </Modal.FooterGroup>
+          </Modal.Footer>
         </Modal>
       </div>
     );
@@ -281,22 +287,28 @@ export const WithTabs: Story = {
           isOpen
           setIsOpen={setIsOpen}
           width={args.width}
-          headerElement={<Modal.Header isNoBorder>タイトル</Modal.Header>}
-          tabElement={<Modal.Tab tabItems={tabItems} selectedTab={selectedTab} setSelectedTab={setSelectedTab} />}
-          buttonTabElement={
-            <Modal.ButtonTab
-              primaryButtonLabel="保存する"
-              secondaryButtonLabel="キャンセル"
-              onClickPrimaryButton={action('保存する')}
-              onClickSecondaryButton={action('キャンセル')}
-            />
-          }
         >
-          <div className="flex h-[200px] w-full items-center justify-center">
-            {selectedTab === 'tab1' && <div>Content 1</div>}
-            {selectedTab === 'tab2' && <div>Content 2</div>}
-            {selectedTab === 'tab3' && <div>Content 3</div>}
-          </div>
+          <Modal.Header isNoBorder>タイトル</Modal.Header>
+          <Modal.Tab>
+            {tabItems.map((item) => (
+              <Tab.Item key={item.id} id={item.id} isSelected={selectedTab === item.id} onClick={setSelectedTab}>
+                {item.label}
+              </Tab.Item>
+            ))}
+          </Modal.Tab>
+          <Modal.Body>
+            <div className="flex h-[200px] w-full items-center justify-center">
+              {selectedTab === 'tab1' && <div>Content 1</div>}
+              {selectedTab === 'tab2' && <div>Content 2</div>}
+              {selectedTab === 'tab3' && <div>Content 3</div>}
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Modal.FooterGroup>
+              <Modal.Button variant="outline" size="large" onClick={action('キャンセル')}>キャンセル</Modal.Button>
+              <Modal.Button variant="fill" size="large" onClick={action('保存する')}>保存する</Modal.Button>
+            </Modal.FooterGroup>
+          </Modal.Footer>
         </Modal>
       </div>
     );
@@ -314,8 +326,11 @@ export const WithoutButton: Story = {
         <button type="button" onClick={() => setIsOpen(true)}>
           open
         </button>
-        <Modal isOpen setIsOpen={setIsOpen} width={args.width} headerElement={<Modal.Header>タイトル</Modal.Header>}>
-          <div className="flex h-[200px] w-full items-center justify-center">Content</div>
+        <Modal isOpen setIsOpen={setIsOpen} width={args.width}>
+          <Modal.Header>タイトル</Modal.Header>
+          <Modal.Body>
+            <div className="flex h-[200px] w-full items-center justify-center">Content</div>
+          </Modal.Body>
         </Modal>
       </div>
     );
@@ -337,23 +352,19 @@ export const Danger: Story = {
           isOpen
           setIsOpen={setIsOpen}
           width={args.width}
-          headerElement={
-            <Modal.Header isNoBorder isNoCloseButton>
-              タイトル
-            </Modal.Header>
-          }
-          buttonTabElement={
-            <Modal.ButtonTab
-              primaryButtonLabel="削除する"
-              secondaryButtonLabel="キャンセル"
-              onClickPrimaryButton={action('削除する')}
-              onClickSecondaryButton={action('キャンセル')}
-              isNoBorder
-              isDanger
-            />
-          }
         >
-          <div className="flex h-16 w-full items-center justify-center">Content</div>
+          <Modal.Header isNoBorder isNoCloseButton>
+            タイトル
+          </Modal.Header>
+          <Modal.Body>
+            <div className="flex h-16 w-full items-center justify-center">Content</div>
+          </Modal.Body>
+          <Modal.Footer isNoBorder>
+            <Modal.FooterGroup>
+              <Modal.Button variant="outline" size="large" onClick={action('キャンセル')}>キャンセル</Modal.Button>
+              <Modal.Button variant="fillDanger" size="large" onClick={action('削除する')}>削除する</Modal.Button>
+            </Modal.FooterGroup>
+          </Modal.Footer>
         </Modal>
       </div>
     );

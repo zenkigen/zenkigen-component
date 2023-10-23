@@ -33,8 +33,6 @@ type Props = {
     }
 );
 
-const sizeSmallLimit = 420;
-
 export function ModalButtonTab({
   primaryButtonLabel,
   secondaryButtonLabel,
@@ -49,7 +47,7 @@ export function ModalButtonTab({
   subButtonLabel,
   onClickSubButton,
 }: Props) {
-  const { width, setIsOpen } = useContext(ModalContext);
+  const { width, widthLimit, setIsOpen } = useContext(ModalContext);
   const handleClickPrimaryButton = useCallback(() => {
     onClickPrimaryButton();
     setIsOpen(false);
@@ -63,18 +61,18 @@ export function ModalButtonTab({
   }, [onClickSubButton]);
 
   const wrapperClasses = clsx('flex', 'shrink-0', 'items-center', 'w-full', 'rounded-b-lg', 'py-4', 'px-6', {
-    'justify-between': isWithCheckbox || (subButtonLabel && sizeSmallLimit <= width),
+    'justify-between': isWithCheckbox || (subButtonLabel && widthLimit <= width),
     'justify-end': !isWithCheckbox || !subButtonLabel,
-    'justify-center': subButtonLabel && width < sizeSmallLimit,
+    'justify-center': subButtonLabel && width < widthLimit,
     'border-t-[1px] border-border-uiBorder01': !isNoBorder,
-    'gap-y-4': width < sizeSmallLimit,
-    'flex-wrap': width < sizeSmallLimit && isWithCheckbox,
-    'flex-wrap-reverse': width < sizeSmallLimit && subButtonLabel,
+    'gap-y-4': width < widthLimit,
+    'flex-wrap': width < widthLimit && isWithCheckbox,
+    'flex-wrap-reverse': width < widthLimit && subButtonLabel,
   });
   const buttonContainerClasses = clsx('flex', 'items-center', {
-    'w-full justify-center': width < sizeSmallLimit,
-    'gap-x-2': width < sizeSmallLimit,
-    'gap-x-4': sizeSmallLimit <= width,
+    'w-full justify-center': width < widthLimit,
+    'gap-x-2': width < widthLimit,
+    'gap-x-4': widthLimit <= width,
   });
   return (
     <div className={wrapperClasses}>
@@ -92,7 +90,7 @@ export function ModalButtonTab({
           key="1"
           variant="outline"
           size="large"
-          width={width < sizeSmallLimit ? 132 : 'auto'}
+          width={width < widthLimit ? 132 : 'auto'}
           onClick={handleClickSecondaryButton}
         >
           {secondaryButtonLabel}
@@ -101,7 +99,7 @@ export function ModalButtonTab({
           key="2"
           variant={isDanger ? 'fillDanger' : 'fill'}
           size="large"
-          width={width < sizeSmallLimit ? 132 : 'auto'}
+          width={width < widthLimit ? 132 : 'auto'}
           onClick={handleClickPrimaryButton}
         >
           {primaryButtonLabel}
