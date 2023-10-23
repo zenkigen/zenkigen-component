@@ -9,9 +9,7 @@ type Props = {
 export function ModalTab({ children }: Props) {
   return (
     <div className="mt-2 w-full">
-      <Tab>
-        {children}
-      </Tab>
+      <Tab>{children}</Tab>
     </div>
   );
 }

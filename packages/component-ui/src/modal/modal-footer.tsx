@@ -13,7 +13,7 @@ type Props = {
 export function ModalFooter({ children, abc = false, isNoBorder }: Props) {
   const childCount = React.Children.count(children);
   const { width, widthLimit } = useContext(ModalContext);
-  const wrapperClasses = clsx('flex',  'shrink-0', 'items-center', 'w-full', 'rounded-b-lg', 'py-4', 'px-6', {
+  const wrapperClasses = clsx('flex', 'shrink-0', 'items-center', 'w-full', 'rounded-b-lg', 'py-4', 'px-6', {
     // 'justify-between': isWithCheckbox || (subButtonLabel && widthLimit <= width),
     // 'justify-end': !isWithCheckbox || !subButtonLabel,
     // 'justify-center': subButtonLabel && width < widthLimit,
@@ -29,9 +29,5 @@ export function ModalFooter({ children, abc = false, isNoBorder }: Props) {
     // 'flex-wrap-reverse': width < widthLimit && subButtonLabel,
   });
 
-  return (
-    <div className={wrapperClasses}>
-      {children}
-    </div>
-  );
+  return <div className={wrapperClasses}>{children}</div>;
 }

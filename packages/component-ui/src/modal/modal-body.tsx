@@ -5,9 +5,5 @@ type Props = {
 };
 
 export function ModalBody({ children }: Props) {
-  return (
-    <div className='flex items-center justify-center overflow-y-auto'>
-      {children}
-    </div>
-  );
+  return <div className="flex items-center justify-center overflow-y-auto">{children}</div>;
 }

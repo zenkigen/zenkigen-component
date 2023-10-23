@@ -2,7 +2,7 @@ import { createContext } from 'react';
 
 type ModalReturnType = {
   width: number;
-  widthLimit :number;
+  widthLimit: number;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 

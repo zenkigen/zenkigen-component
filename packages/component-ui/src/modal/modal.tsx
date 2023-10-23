@@ -20,15 +20,7 @@ type Props = {
   portalTargetRef?: MutableRefObject<HTMLElement | null>;
 };
 
-export function Modal({
-  children,
-  width = 480,
-  height,
-  isOpen,
-  widthLimit = 420,
-  setIsOpen,
-  portalTargetRef,
-}: Props) {
+export function Modal({ children, width = 480, height, isOpen, widthLimit = 420, setIsOpen, portalTargetRef }: Props) {
   const wrapperClasses =
     'flex items-center justify-center z-overlay bg-background-backgroundOverlayBlack fixed left-0 top-0 h-full w-full';
   const modalBaseClasses = 'flex shrink-0 flex-col bg-background-uiBackground01 rounded-lg shadow-modalShadow';
@@ -50,7 +42,6 @@ export function Modal({
 Modal.Body = ModalBody;
 Modal.Header = ModalHeader;
 Modal.Tab = ModalTab;
-Modal.FooterGroup = ModalFooterGroup
+Modal.FooterGroup = ModalFooterGroup;
 Modal.Button = ModalButton;
 Modal.Footer = ModalFooter;
-
