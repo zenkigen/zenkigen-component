@@ -149,9 +149,7 @@ export const WithSubButton: Story = {
     const footerClasses = clsx('flex', 'w-full', 'items-center', 'justify-between', {
       'flex-col-reverse gap-4': args.width < widthLimit,
     });
-    const footerLeftBoxClasses = clsx('flex', 'items-center', 'flex-wrap', {
-      // 'w-full': args.width < widthLimit,
-    });
+    const footerLeftBoxClasses = 'flex items-center flex-wrap';
     const footerButtonClasses = clsx('flex', 'items-center', 'flex-wrap', {
       'justify-end': args.width >= widthLimit,
       'justify-center': args.width < widthLimit,
@@ -323,9 +321,7 @@ export const SizeSmallWithSubButton: Story = {
     const footerClasses = clsx('flex', 'w-full', 'items-center', 'justify-between', {
       'flex-col-reverse gap-4': args.width < widthLimit,
     });
-    const footerLeftBoxClasses = clsx('flex', 'items-center', 'flex-wrap', {
-      // 'w-full': args.width < widthLimit,
-    });
+    const footerLeftBoxClasses = 'flex items-center flex-wrap';
     const footerButtonClasses = clsx('flex', 'items-center', 'flex-wrap', {
       'justify-end': args.width >= widthLimit,
       'justify-center': args.width < widthLimit,
