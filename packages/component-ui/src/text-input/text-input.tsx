@@ -6,7 +6,6 @@ import { clsx } from 'clsx';
 import { IconButton } from '../icon-button';
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
-  hint?: string;
   status?: 'error';
   sizeValue?: 'medium' | 'large';
   value: string;
@@ -21,14 +20,16 @@ export const TextInput = forwardRef<HTMLInputElement, Props>(({ sizeValue = 'med
     'border',
     'overflow-hidden',
     'rounded',
-    'px-2',
-    'hover:border-hover-hoverInput',
-    {
-      'focus-within:border-active-activeInput': props.status !== 'error',
-    },
+    'pl-2',
+    'pr-3',
     {
       'border-border-uiBorder01': props.status !== 'error',
-      'border-support-supportError': props.status === 'error',
+      'border-support-supportError': props.status === 'error' && !props.disabled,
+    },
+    {
+      'hover:border-hover-hoverInput': !props.disabled && props.status !== 'error',
+      'hover:focus-within:border-active-activeInput': props.status !== 'error',
+      'focus-within:border-active-activeInput': props.status !== 'error',
     },
     {
       'bg-disabled-disabled02 border-disabled-disabled02': props.disabled,
@@ -39,41 +40,31 @@ export const TextInput = forwardRef<HTMLInputElement, Props>(({ sizeValue = 'med
     'flex-1',
     'outline-0',
     'placeholder:text-text-textPlaceholder',
+    'disabled:text-text-text03',
     {
-      [`${typography.label.label2regular} my-1`]: sizeValue === 'medium',
-      [`${typography.label.label1regular} my-2.5`]: sizeValue === 'large',
+      [`${typography.label.label2regular} pt-1.5 pb-2`]: sizeValue === 'medium',
+      [`${typography.label.label1regular} py-2.5`]: sizeValue === 'large',
     },
     {
       'text-text-text01': props.status !== 'error',
       'text-support-supportError': props.status === 'error',
     },
-    {
-      'disabled:text-text-text01': props.disabled,
-    },
   );
 
-  const hintClasses = clsx('px-2', 'mt-1', `${typography.label.label4regular}`, {
-    'text-text-text02': props.status !== 'error',
-    'text-support-supportError': props.status === 'error',
-  });
-
   return (
-    <div className="flex flex-col">
-      <div className={inputWrapClasses}>
-        <input
-          ref={ref}
-          size={1}
-          id={props.id}
-          className={inputClasses}
-          placeholder={props.placeholder}
-          onChange={props.onChange}
-          {...props}
-        />
-        {props.onClickClearButton && props.value && props.value.length !== 0 && (
-          <IconButton variant="text" icon="close" size="small" isNoPadding onClick={props.onClickClearButton} />
-        )}
-      </div>
-      <div className={hintClasses}>{props.hint}</div>
+    <div className={inputWrapClasses}>
+      <input
+        ref={ref}
+        size={1}
+        id={props.id}
+        className={inputClasses}
+        placeholder={props.placeholder}
+        onChange={props.onChange}
+        {...props}
+      />
+      {props.onClickClearButton && props.value && props.value.length !== 0 && !props.disabled && (
+        <IconButton variant="text" icon="close" size="small" isNoPadding onClick={props.onClickClearButton} />
+      )}
     </div>
   );
 });

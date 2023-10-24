@@ -1,178 +1,255 @@
-import { ChangeEvent, useState } from 'react';
+import { ReactNode, ChangeEvent, useState } from 'react';
 
 import { action } from '@storybook/addon-actions';
 import { Meta, StoryObj } from '@storybook/react';
+import { typography } from '@zenkigen-inc/component-theme';
+import clsx from 'clsx';
 
 import { TextInput } from '.';
 
 const meta: Meta<typeof TextInput> = {
   component: TextInput,
-  argTypes: {
-    // size: {
-    //   options: ['medium', 'large'],
-    //   control: { type: 'radio' },
-    // },
-    status: {
-      options: [null, 'error'],
-      control: { type: 'radio' },
-    },
-  },
 };
 
 type Story = StoryObj<typeof TextInput>;
 
 export default meta;
 
+type ErrorTextProps = {
+  children?: ReactNode;
+  status?: 'error';
+};
+
+const ErrorText = ({ ...props }: ErrorTextProps) => {
+  const classes = clsx('px-2', 'mt-1', `${typography.label.label4regular}`, {
+    'text-text-text02': props.status !== 'error',
+    'text-support-supportError': props.status === 'error',
+  });
+  return <div className={classes}>{props.children}</div>;
+};
+
 export const Base: Story = {
   args: {},
   render: function MyFunc({ ...args }) {
     const [value, setValue] = useState<string>(args.value);
     const [value2, setValue2] = useState<string>('入力した文字列。');
+    const [valueNumber, setValueNumber] = useState<string>('123');
+    const [valuePassword, setValuePassword] = useState<string>('abcdefg');
     return (
-      <div className="flex flex-col gap-10">
-        <div>
-          <TextInput
-            value={value}
-            placeholder="入力してください"
-            hint="文字以内で入力してください"
-            sizeValue="medium"
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              action('onChange')(e);
-              setValue(e.target.value);
-            }}
-            onClickClearButton={() => {
-              setValue('');
-            }}
-          />
+      <div className="flex gap-10">
+        <div style={{ width: 300 }} className="flex flex-col gap-12">
+          <div>
+            <TextInput
+              value={value}
+              placeholder="入力してください"
+              sizeValue="medium"
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+              onClickClearButton={() => {
+                setValue('');
+              }}
+            />
+            <ErrorText>文字以内で入力してください</ErrorText>
+          </div>
+          <div>
+            <TextInput
+              value={value}
+              status="error"
+              placeholder="入力してください"
+              sizeValue="medium"
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+              onClickClearButton={() => {
+                setValue('');
+              }}
+            />
+            <ErrorText status="error">文字以内で入力してください</ErrorText>
+          </div>
+          <div>
+            <TextInput
+              value={value2}
+              status="error"
+              placeholder="入力してください"
+              sizeValue="medium"
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                action('onChange')(e);
+                setValue2(e.target.value);
+              }}
+              onClickClearButton={() => {
+                setValue2('');
+              }}
+            />
+            <ErrorText status="error">文字以内で入力してください</ErrorText>
+          </div>
+          <div>
+            <TextInput
+              value={value}
+              placeholder="入力してください"
+              sizeValue="medium"
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+              onClickClearButton={() => {
+                setValue('');
+              }}
+              disabled
+            />
+          </div>
+          <div>
+            <TextInput
+              value={value2}
+              status="error"
+              placeholder="入力してください"
+              sizeValue="medium"
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                action('onChange')(e);
+                setValue2(e.target.value);
+              }}
+              onClickClearButton={() => {
+                setValue2('');
+              }}
+              disabled
+            />
+          </div>
+          <div>
+            <TextInput
+              value={valueNumber}
+              placeholder="入力してください"
+              sizeValue="medium"
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                action('onChange')(e);
+                setValueNumber(e.target.value);
+              }}
+              type="number"
+            />
+          </div>
+          <div>
+            <TextInput
+              value={valuePassword}
+              placeholder="入力してください"
+              sizeValue="medium"
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                action('onChange')(e);
+                setValuePassword(e.target.value);
+              }}
+              onClickClearButton={() => {
+                setValuePassword('');
+              }}
+              type="password"
+            />
+          </div>
         </div>
-        <div>
-          <TextInput
-            value={value}
-            status="error"
-            placeholder="入力してください"
-            hint="入力内容にエラーがあります"
-            sizeValue="medium"
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              action('onChange')(e);
-              setValue(e.target.value);
-            }}
-            onClickClearButton={() => {
-              setValue('');
-            }}
-          />
-        </div>
-        <div>
-          <TextInput
-            value={value2}
-            status="error"
-            placeholder="入力してください"
-            hint="入力内容にエラーがあります"
-            sizeValue="medium"
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              action('onChange')(e);
-              setValue2(e.target.value);
-            }}
-            onClickClearButton={() => {
-              setValue2('');
-            }}
-          />
-        </div>
-        <div>
-          <TextInput
-            value={value}
-            placeholder="入力してください"
-            hint="文字以内で入力してください"
-            sizeValue="large"
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              action('onChange')(e);
-              setValue(e.target.value);
-            }}
-            onClickClearButton={() => {
-              setValue('');
-            }}
-          />
-        </div>
-        <div>
-          <TextInput
-            value={value}
-            status="error"
-            placeholder="入力してください"
-            hint="入力内容にエラーがあります"
-            sizeValue="large"
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              action('onChange')(e);
-              setValue(e.target.value);
-            }}
-            onClickClearButton={() => {
-              setValue('');
-            }}
-          />
-        </div>
-        <div>
-          <TextInput
-            value={value2}
-            status="error"
-            placeholder="入力してください"
-            hint="入力内容にエラーがあります"
-            sizeValue="large"
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              action('onChange')(e);
-              setValue2(e.target.value);
-            }}
-            onClickClearButton={() => {
-              setValue2('');
-            }}
-          />
-        </div>
-      </div>
-    );
-  },
-};
-
-export const Layout: Story = {
-  args: {
-    placeholder: '入力してください',
-    hint: '入力してください',
-  },
-  render: function MyFunc({ ...args }) {
-    const [value, setValue] = useState<string>(args.value);
-    return (
-      <div className="flex flex-col gap-10">
-        <div>
-          <label htmlFor="my-input">名前：</label>
-          <TextInput
-            id="my-input"
-            value={value}
-            placeholder={args.placeholder}
-            status={args.status}
-            hint={args.hint}
-            sizeValue="medium"
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              action('onChange')(e);
-              setValue(e.target.value);
-            }}
-            onClickClearButton={() => {
-              setValue('');
-            }}
-          />
-        </div>
-        <div>
-          <label htmlFor="my-input-2">住所：</label>
-          <TextInput
-            id="my-input-2"
-            value={value}
-            placeholder={args.placeholder}
-            status={args.status}
-            hint={args.hint}
-            sizeValue="large"
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              action('onChange')(e);
-              setValue(e.target.value);
-            }}
-            onClickClearButton={() => {
-              setValue('');
-            }}
-          />
+        <div style={{ width: 300 }} className="flex flex-col gap-10">
+          <div>
+            <TextInput
+              value={value}
+              placeholder="入力してください"
+              sizeValue="large"
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+              onClickClearButton={() => {
+                setValue('');
+              }}
+            />
+            <ErrorText>文字以内で入力してください</ErrorText>
+          </div>
+          <div>
+            <TextInput
+              value={value}
+              status="error"
+              placeholder="入力してください"
+              sizeValue="large"
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+              onClickClearButton={() => {
+                setValue('');
+              }}
+            />
+            <ErrorText status="error">文字以内で入力してください</ErrorText>
+          </div>
+          <div>
+            <TextInput
+              value={value2}
+              status="error"
+              placeholder="入力してください"
+              sizeValue="large"
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                action('onChange')(e);
+                setValue2(e.target.value);
+              }}
+              onClickClearButton={() => {
+                setValue2('');
+              }}
+            />
+            <ErrorText status="error">文字以内で入力してください</ErrorText>
+          </div>
+          <div>
+            <TextInput
+              value=""
+              status="error"
+              placeholder="入力してください"
+              sizeValue="large"
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                action('onChange')(e);
+                setValue2(e.target.value);
+              }}
+              onClickClearButton={() => {
+                setValue2('');
+              }}
+              disabled
+            />
+          </div>
+          <div>
+            <TextInput
+              value={value2}
+              placeholder="入力してください"
+              sizeValue="large"
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+              onClickClearButton={() => {
+                setValue('');
+              }}
+              disabled
+            />
+          </div>
+          <div>
+            <TextInput
+              value={valueNumber}
+              placeholder="入力してください"
+              sizeValue="large"
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                action('onChange')(e);
+                setValueNumber(e.target.value);
+              }}
+              type="number"
+            />
+          </div>
+          <div>
+            <TextInput
+              value={valuePassword}
+              placeholder="入力してください"
+              sizeValue="large"
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                action('onChange')(e);
+                setValuePassword(e.target.value);
+              }}
+              onClickClearButton={() => {
+                setValuePassword('');
+              }}
+              type="password"
+            />
+          </div>
         </div>
       </div>
     );
