@@ -8,7 +8,7 @@ import { ModalFooter } from './modal-footer';
 import { ModalHeader } from './modal-header';
 
 type Props = {
-  children?: ReactNode;
+  children: ReactNode;
   width: number;
   height?: CSSProperties['height'];
   isOpen: boolean;
