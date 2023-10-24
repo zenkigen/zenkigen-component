@@ -8,7 +8,7 @@ import { IconButton } from '../icon-button';
 import { ModalContext } from './modal-context';
 
 type Props = {
-  children: ReactNode;
+  children?: ReactNode;
   isNoBorder?: boolean;
   isNoCloseButton?: boolean;
 };
@@ -33,7 +33,7 @@ export function ModalHeader({ children, isNoBorder, isNoCloseButton }: Props) {
   );
   return (
     <div className={headerClasses}>
-      {children}
+      <div>{children}</div>
       {!isNoCloseButton && <IconButton icon="close" size="small" variant="text" onClick={() => setIsOpen(false)} />}
     </div>
   );
