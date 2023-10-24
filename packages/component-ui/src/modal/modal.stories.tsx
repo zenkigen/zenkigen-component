@@ -51,10 +51,20 @@ export const Base: Story = {
           </Modal.Body>
           <Modal.Footer>
             <div className={footerClasses}>
-              <Button variant="outline" size="large" onClick={action('キャンセル')} width={args.width < widthLimit ? 132 : 'auto'}>
+              <Button
+                variant="outline"
+                size="large"
+                onClick={action('キャンセル')}
+                width={args.width < widthLimit ? 132 : 'auto'}
+              >
                 キャンセル
               </Button>
-              <Button variant="fill" size="large" onClick={action('保存する')} width={args.width < widthLimit ? 132 : 'auto'}>
+              <Button
+                variant="fill"
+                size="large"
+                onClick={action('保存する')}
+                width={args.width < widthLimit ? 132 : 'auto'}
+              >
                 保存する
               </Button>
             </div>
@@ -105,10 +115,20 @@ export const WithCheckbox: Story = {
                 />
               </div>
               <div className={footerButtonClasses}>
-                <Button variant="outline" size="large" onClick={action('キャンセル')} width={args.width < widthLimit ? 132 : 'auto'}>
+                <Button
+                  variant="outline"
+                  size="large"
+                  onClick={action('キャンセル')}
+                  width={args.width < widthLimit ? 132 : 'auto'}
+                >
                   キャンセル
                 </Button>
-                <Button variant="fill" size="large" onClick={action('保存する')} width={args.width < widthLimit ? 132 : 'auto'}>
+                <Button
+                  variant="fill"
+                  size="large"
+                  onClick={action('保存する')}
+                  width={args.width < widthLimit ? 132 : 'auto'}
+                >
                   保存する
                 </Button>
               </div>
@@ -156,10 +176,20 @@ export const WithSubButton: Story = {
                 </Button>
               </div>
               <div className={footerButtonClasses}>
-                <Button variant="outline" size="large" onClick={action('キャンセル')} width={args.width < widthLimit ? 132 : 'auto'}>
+                <Button
+                  variant="outline"
+                  size="large"
+                  onClick={action('キャンセル')}
+                  width={args.width < widthLimit ? 132 : 'auto'}
+                >
                   キャンセル
                 </Button>
-                <Button variant="fill" size="large" onClick={action('保存する')} width={args.width < widthLimit ? 132 : 'auto'}>
+                <Button
+                  variant="fill"
+                  size="large"
+                  onClick={action('保存する')}
+                  width={args.width < widthLimit ? 132 : 'auto'}
+                >
                   保存する
                 </Button>
               </div>
@@ -195,10 +225,20 @@ export const SizeSmall: Story = {
           </Modal.Body>
           <Modal.Footer>
             <div className={footerClasses}>
-              <Button variant="outline" size="large" onClick={action('キャンセル')} width={args.width < widthLimit ? 132 : 'auto'}>
+              <Button
+                variant="outline"
+                size="large"
+                onClick={action('キャンセル')}
+                width={args.width < widthLimit ? 132 : 'auto'}
+              >
                 キャンセル
               </Button>
-              <Button variant="fill" size="large" onClick={action('保存する')} width={args.width < widthLimit ? 132 : 'auto'}>
+              <Button
+                variant="fill"
+                size="large"
+                onClick={action('保存する')}
+                width={args.width < widthLimit ? 132 : 'auto'}
+              >
                 保存する
               </Button>
             </div>
@@ -206,7 +246,6 @@ export const SizeSmall: Story = {
         </Modal>
       </div>
     );
-
   },
 };
 
@@ -250,10 +289,20 @@ export const SizeSmallWithCheckbox: Story = {
                 />
               </div>
               <div className={footerButtonClasses}>
-                <Button variant="outline" size="large" onClick={action('キャンセル')} width={args.width < widthLimit ? 132 : 'auto'}>
+                <Button
+                  variant="outline"
+                  size="large"
+                  onClick={action('キャンセル')}
+                  width={args.width < widthLimit ? 132 : 'auto'}
+                >
                   キャンセル
                 </Button>
-                <Button variant="fill" size="large" onClick={action('保存する')} width={args.width < widthLimit ? 132 : 'auto'}>
+                <Button
+                  variant="fill"
+                  size="large"
+                  onClick={action('保存する')}
+                  width={args.width < widthLimit ? 132 : 'auto'}
+                >
                   保存する
                 </Button>
               </div>
@@ -301,10 +350,20 @@ export const SizeSmallWithSubButton: Story = {
                 </Button>
               </div>
               <div className={footerButtonClasses}>
-                <Button variant="outline" size="large" onClick={action('キャンセル')} width={args.width < widthLimit ? 132 : 'auto'}>
+                <Button
+                  variant="outline"
+                  size="large"
+                  onClick={action('キャンセル')}
+                  width={args.width < widthLimit ? 132 : 'auto'}
+                >
                   キャンセル
                 </Button>
-                <Button variant="fill" size="large" onClick={action('保存する')} width={args.width < widthLimit ? 132 : 'auto'}>
+                <Button
+                  variant="fill"
+                  size="large"
+                  onClick={action('保存する')}
+                  width={args.width < widthLimit ? 132 : 'auto'}
+                >
                   保存する
                 </Button>
               </div>
@@ -333,22 +392,27 @@ export const FixedHeight: Story = {
         <button type="button" onClick={() => setIsOpen(true)}>
           open
         </button>
-        <Modal
-          isOpen
-          setIsOpen={setIsOpen}
-          width={args.width}
-          height={500}
-        >
+        <Modal isOpen setIsOpen={setIsOpen} width={args.width} height={500}>
           <Modal.Header>タイトル</Modal.Header>
           <Modal.Body>
             <div className="flex h-[800px] w-full items-center justify-center">Content</div>
           </Modal.Body>
           <Modal.Footer>
             <div className={footerClasses}>
-              <Button variant="outline" size="large" onClick={action('キャンセル')} width={args.width < widthLimit ? 132 : 'auto'}>
+              <Button
+                variant="outline"
+                size="large"
+                onClick={action('キャンセル')}
+                width={args.width < widthLimit ? 132 : 'auto'}
+              >
                 キャンセル
               </Button>
-              <Button variant="fill" size="large" onClick={action('保存する')} width={args.width < widthLimit ? 132 : 'auto'}>
+              <Button
+                variant="fill"
+                size="large"
+                onClick={action('保存する')}
+                width={args.width < widthLimit ? 132 : 'auto'}
+              >
                 保存する
               </Button>
             </div>
@@ -385,7 +449,7 @@ export const WithTabs: Story = {
         <Modal isOpen setIsOpen={setIsOpen} width={args.width}>
           <Modal.Header isNoBorder>タイトル</Modal.Header>
           <Modal.Body>
-            <div className='mt-2 flex w-full flex-col'>
+            <div className="mt-2 flex w-full flex-col">
               <div className="w-full">
                 <Tab>
                   {tabItems.map((item) => (
@@ -404,10 +468,20 @@ export const WithTabs: Story = {
           </Modal.Body>
           <Modal.Footer>
             <div className={footerClasses}>
-              <Button variant="outline" size="large" onClick={action('キャンセル')} width={args.width < widthLimit ? 132 : 'auto'}>
+              <Button
+                variant="outline"
+                size="large"
+                onClick={action('キャンセル')}
+                width={args.width < widthLimit ? 132 : 'auto'}
+              >
                 キャンセル
               </Button>
-              <Button variant="fill" size="large" onClick={action('保存する')} width={args.width < widthLimit ? 132 : 'auto'}>
+              <Button
+                variant="fill"
+                size="large"
+                onClick={action('保存する')}
+                width={args.width < widthLimit ? 132 : 'auto'}
+              >
                 保存する
               </Button>
             </div>
@@ -466,10 +540,20 @@ export const Danger: Story = {
           </Modal.Body>
           <Modal.Footer isNoBorder>
             <div className={footerClasses}>
-              <Button variant="outline" size="large" onClick={action('キャンセル')} width={args.width < widthLimit ? 132 : 'auto'}>
+              <Button
+                variant="outline"
+                size="large"
+                onClick={action('キャンセル')}
+                width={args.width < widthLimit ? 132 : 'auto'}
+              >
                 キャンセル
               </Button>
-              <Button variant="fillDanger" size="large" onClick={action('削除する')} width={args.width < widthLimit ? 132 : 'auto'}>
+              <Button
+                variant="fillDanger"
+                size="large"
+                onClick={action('削除する')}
+                width={args.width < widthLimit ? 132 : 'auto'}
+              >
                 削除する
               </Button>
             </div>
