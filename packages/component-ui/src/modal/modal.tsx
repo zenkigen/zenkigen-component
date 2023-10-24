@@ -1,4 +1,4 @@
-import { CSSProperties, MutableRefObject, ReactNode } from 'react';
+import { CSSProperties, MutableRefObject, PropsWithChildren } from 'react';
 
 import { createPortal } from 'react-dom';
 
@@ -8,7 +8,6 @@ import { ModalFooter } from './modal-footer';
 import { ModalHeader } from './modal-header';
 
 type Props = {
-  children: ReactNode;
   width: number;
   height?: CSSProperties['height'];
   isOpen: boolean;
@@ -16,7 +15,7 @@ type Props = {
   portalTargetRef?: MutableRefObject<HTMLElement | null>;
 };
 
-export function Modal({ children, width = 480, height, isOpen, setIsOpen, portalTargetRef }: Props) {
+export function Modal({ children, width = 480, height, isOpen, setIsOpen, portalTargetRef }: PropsWithChildren<Props>) {
   return createPortal(
     isOpen && (
       <ModalContext.Provider value={{ setIsOpen }}>
