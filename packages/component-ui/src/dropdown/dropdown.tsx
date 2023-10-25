@@ -1,12 +1,10 @@
-import { ReactElement, ReactNode, useCallback, useRef, useState } from 'react';
-
 import { IconName } from '@zenkigen-inc/component-icons';
 import { buttonColors, focusVisible, typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
+import { ReactElement, ReactNode, useCallback, useRef, useState } from 'react';
 
 import { useOutsideClick } from '../hooks/use-outside-click';
 import { Icon } from '../icon';
-
 import { DropdownContext } from './dropdown-context';
 import { DropdownItem } from './dropdown-item';
 import { DropdownMenu } from './dropdown-menu';

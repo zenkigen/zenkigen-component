@@ -1,7 +1,6 @@
-import { CSSProperties, ReactNode, useCallback, useRef, useState } from 'react';
-
 import { typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
+import { CSSProperties, ReactNode, useCallback, useRef, useState } from 'react';
 
 import { TailIcon } from './tail-icon';
 import { TooltipHorizontalAlign, TooltipSize, TooltipVerticalPosition } from './type';

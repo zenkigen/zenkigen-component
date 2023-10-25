@@ -1,10 +1,8 @@
-import { PropsWithChildren, useContext } from 'react';
-
 import { typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
+import { PropsWithChildren, useContext } from 'react';
 
 import { IconButton } from '../icon-button';
-
 import { ModalContext } from './modal-context';
 
 type Props = {
@@ -30,6 +28,7 @@ export function ModalHeader({ children, isNoBorder, isNoCloseButton }: PropsWith
       'h-12': isNoCloseButton,
     },
   );
+
   return (
     <div className={headerClasses}>
       <div>{children}</div>

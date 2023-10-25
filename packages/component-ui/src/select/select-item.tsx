@@ -1,10 +1,8 @@
-import { useContext } from 'react';
-
 import { focusVisible, typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
+import { useContext } from 'react';
 
 import { Icon } from '../icon';
-
 import { SelectContext } from './select-context';
 import type { SelectOption } from './type';
 

@@ -1,7 +1,6 @@
-import { CSSProperties, ReactNode } from 'react';
-
-import { buttonColors, typography, focusVisible } from '@zenkigen-inc/component-theme';
+import { buttonColors, focusVisible, typography } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
+import { CSSProperties, ReactNode } from 'react';
 
 type Size = 'small' | 'medium' | 'large';
 

@@ -1,6 +1,5 @@
-import { CSSProperties, ReactNode, useContext } from 'react';
-
 import clsx from 'clsx';
+import { CSSProperties, ReactNode, useContext } from 'react';
 
 import { DropdownContext } from './dropdown-context';
 import { DropdownHorizontalAlign, DropdownVerticalPosition } from './type';

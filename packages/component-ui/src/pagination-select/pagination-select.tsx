@@ -41,6 +41,7 @@ export function PaginationSelect({
 
   const optionsList: SelectOption[] = [...Array(pageMax)].map((_, index) => {
     const value = (index + 1).toString();
+
     return {
       id: value,
       value,

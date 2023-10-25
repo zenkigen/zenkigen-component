@@ -1,12 +1,10 @@
-import { useState } from 'react';
-
 import { action } from '@storybook/addon-actions';
 import { Meta, StoryObj } from '@storybook/react';
+import { useState } from 'react';
 
 import { Button } from '../button';
 import { Checkbox } from '../checkbox';
 import { Tab } from '../tab';
-
 import { Modal } from '.';
 
 const meta: Meta<typeof Modal> = {
@@ -55,7 +53,7 @@ export const WithCheckbox: Story = {
     width: 480,
   },
   render: function MyFunc({ ...args }) {
-    const [_, setIsOpen] = useState(false);
+    const [, setIsOpen] = useState(false);
     const [isChecked, setIsChecked] = useState(false);
 
     return (
@@ -99,7 +97,7 @@ export const WithSubButton: Story = {
     width: 480,
   },
   render: function MyFunc({ ...args }) {
-    const [_, setIsOpen] = useState(false);
+    const [, setIsOpen] = useState(false);
 
     return (
       <div>
@@ -139,7 +137,7 @@ export const FixedHeight: Story = {
     width: 480,
   },
   render: function MyFunc({ ...args }) {
-    const [_, setIsOpen] = useState(false);
+    const [, setIsOpen] = useState(false);
 
     return (
       <div>
@@ -172,7 +170,7 @@ export const WithTabs: Story = {
     width: 480,
   },
   render: function MyFunc({ ...args }) {
-    const [_, setIsOpen] = useState(false);
+    const [, setIsOpen] = useState(false);
     const [selectedTab, setSelectedTab] = useState('tab1');
     const tabItems = [
       { id: 'tab1', label: 'タブラベル1' },
@@ -226,7 +224,8 @@ export const WithoutButton: Story = {
     width: 480,
   },
   render: function MyFunc({ ...args }) {
-    const [_, setIsOpen] = useState(false);
+    const [, setIsOpen] = useState(false);
+
     return (
       <div>
         <button type="button" onClick={() => setIsOpen(true)}>
@@ -248,7 +247,7 @@ export const Danger: Story = {
     width: 420,
   },
   render: function MyFunc({ ...args }) {
-    const [_, setIsOpen] = useState(false);
+    const [, setIsOpen] = useState(false);
 
     return (
       <div>

@@ -1,6 +1,5 @@
-import { PropsWithChildren } from 'react';
-
 import { typography } from '@zenkigen-inc/component-theme';
+import { PropsWithChildren } from 'react';
 
 import { BreadcrumbItem } from './breadcrumb-item';
 
