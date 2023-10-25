@@ -8,5 +8,6 @@ type Props = {
 };
 export function TableRow({ children, isHoverBackgroundVisible }: Props) {
   const rowClasses = clsx('contents', isHoverBackgroundVisible && '[&:hover>div]:bg-hover-hoverUi02');
+
   return <div className={rowClasses}>{children}</div>;
 }

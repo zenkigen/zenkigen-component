@@ -227,6 +227,7 @@ export const WithoutButton: Story = {
   },
   render: function MyFunc({ ...args }) {
     const [_, setIsOpen] = useState(false);
+
     return (
       <div>
         <button type="button" onClick={() => setIsOpen(true)}>

@@ -28,6 +28,7 @@
     "eqeqeq": "error",
     "prefer-template": "error",
     "camelcase": "error",
+    "newline-before-return": "error",
     "import/prefer-default-export": "off",
     "import/order": [
       "error",

@@ -35,6 +35,7 @@ export const Base: Story = {
   },
   render: function MyFunc({ ...args }) {
     const [_, updateArgs] = useArgs();
+
     return (
       <PaginationSelect
         {...args}

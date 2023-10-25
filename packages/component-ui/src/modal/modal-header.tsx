@@ -30,6 +30,7 @@ export function ModalHeader({ children, isNoBorder, isNoCloseButton }: PropsWith
       'h-12': isNoCloseButton,
     },
   );
+
   return (
     <div className={headerClasses}>
       <div>{children}</div>
