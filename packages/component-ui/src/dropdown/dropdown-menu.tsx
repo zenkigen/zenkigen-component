@@ -1,11 +1,10 @@
 import clsx from 'clsx';
-import { CSSProperties, ReactNode, useContext } from 'react';
+import { CSSProperties, PropsWithChildren, useContext } from 'react';
 
 import { DropdownContext } from './dropdown-context';
 import { DropdownHorizontalAlign, DropdownVerticalPosition } from './type';
 
 type Props = {
-  children: ReactNode;
   maxHeight?: CSSProperties['height'];
   isNoPadding?: boolean;
   verticalPosition?: DropdownVerticalPosition;
@@ -18,7 +17,7 @@ export function DropdownMenu({
   isNoPadding,
   verticalPosition = 'bottom',
   horizontalAlign = 'left',
-}: Props) {
+}: PropsWithChildren<Props>) {
   const { isVisible, isDisabled, targetDimensions, variant } = useContext(DropdownContext);
   const wrapperClasses = clsx(
     'z-dropdown',

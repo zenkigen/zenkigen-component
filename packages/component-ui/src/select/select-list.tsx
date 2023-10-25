@@ -1,15 +1,14 @@
 import { focusVisible, typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
-import { CSSProperties, ReactNode, useContext } from 'react';
+import { CSSProperties, PropsWithChildren, useContext } from 'react';
 
 import { SelectContext } from './select-context';
 
 type Props = {
-  children: ReactNode;
   maxHeight?: CSSProperties['height'];
 };
 
-export function SelectList({ children, maxHeight }: Props) {
+export function SelectList({ children, maxHeight }: PropsWithChildren<Props>) {
   const { size, selectedOption, setIsOptionListOpen, variant, placeholder, onChange } = useContext(SelectContext);
 
   const handleClickDeselect = () => {
