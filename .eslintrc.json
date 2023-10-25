@@ -14,6 +14,9 @@
     "node": true
   },
   "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
   "plugins": ["import", "react", "@typescript-eslint"],
   "settings": {
     "react": {
@@ -48,6 +51,15 @@
       }
     ],
     "@typescript-eslint/no-unused-vars": ["error", { "varsIgnorePattern": "_" }],
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        "selector": "variable",
+        "types": ["boolean"],
+        "format": ["PascalCase"],
+        "prefix": ["is", "should", "has", "can"]
+      }
+    ],
     "react/jsx-filename-extension": [
       "error",
       {
