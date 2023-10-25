@@ -1,49 +1,36 @@
-import { CSSProperties, MutableRefObject, ReactElement, ReactNode } from 'react';
+import { CSSProperties, MutableRefObject, PropsWithChildren } from 'react';
 
 import { createPortal } from 'react-dom';
 
-import { ModalButtonTab } from './modal-button-tab';
+import { ModalBody } from './modal-body';
 import { ModalContext } from './modal-context';
+import { ModalFooter } from './modal-footer';
 import { ModalHeader } from './modal-header';
-import { ModalTab } from './modal-tab';
+
+const LIMIT_WIDTH = 320;
+const LIMIT_HEIGHT = 184;
 
 type Props = {
-  children?: ReactNode;
-  width: number;
+  width?: CSSProperties['width'];
   height?: CSSProperties['height'];
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   portalTargetRef?: MutableRefObject<HTMLElement | null>;
-  headerElement?: ReactElement;
-  tabElement?: ReactElement;
-  buttonTabElement?: ReactElement;
 };
 
-export function Modal({
-  children,
-  width = 480,
-  height,
-  isOpen,
-  setIsOpen,
-  portalTargetRef,
-  headerElement,
-  tabElement,
-  buttonTabElement,
-}: Props) {
-  const wrapperClasses =
-    'flex items-center justify-center z-overlay bg-background-backgroundOverlayBlack fixed left-0 top-0 h-full w-full';
-  const modalBaseClasses = 'flex shrink-0 flex-col bg-background-uiBackground01 rounded-lg shadow-modalShadow';
-  const contentClasses = 'flex items-center justify-center overflow-y-auto';
+export function Modal({ children, width = 480, height, isOpen, setIsOpen, portalTargetRef }: PropsWithChildren<Props>) {
+  const renderWidth = typeof width === 'number' ? Math.max(width, LIMIT_WIDTH) : width;
+  const renderHeight = typeof height === 'number' ? Math.max(height, LIMIT_HEIGHT) : height;
 
   return createPortal(
     isOpen && (
-      <ModalContext.Provider value={{ width, setIsOpen }}>
-        <div className={wrapperClasses}>
-          <div className={modalBaseClasses} style={{ width, height }}>
-            {headerElement}
-            {tabElement}
-            <div className={contentClasses}>{children}</div>
-            {buttonTabElement}
+      <ModalContext.Provider value={{ setIsOpen }}>
+        <div className="fixed left-0 top-0 z-overlay flex h-full w-full items-center justify-center bg-background-backgroundOverlayBlack">
+          <div
+            className="flex shrink-0 flex-col rounded-lg bg-background-uiBackground01 shadow-modalShadow"
+            style={{ width: renderWidth, height: renderHeight }}
+          >
+            {children}
           </div>
         </div>
       </ModalContext.Provider>
@@ -52,6 +39,6 @@ export function Modal({
   );
 }
 
+Modal.Body = ModalBody;
 Modal.Header = ModalHeader;
-Modal.Tab = ModalTab;
-Modal.ButtonTab = ModalButtonTab;
+Modal.Footer = ModalFooter;
