@@ -4,7 +4,6 @@ import { clsx } from 'clsx';
 import { Avatar } from '../avatar';
 import { Button } from '../button';
 import { Icon } from '../icon';
-
 import { Heading } from '.';
 
 export default {

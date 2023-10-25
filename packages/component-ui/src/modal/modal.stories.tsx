@@ -1,12 +1,10 @@
-import { useState } from 'react';
-
 import { action } from '@storybook/addon-actions';
 import { Meta, StoryObj } from '@storybook/react';
+import { useState } from 'react';
 
 import { Button } from '../button';
 import { Checkbox } from '../checkbox';
 import { Tab } from '../tab';
-
 import { Modal } from '.';
 
 const meta: Meta<typeof Modal> = {

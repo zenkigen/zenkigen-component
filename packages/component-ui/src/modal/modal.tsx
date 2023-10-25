@@ -1,5 +1,4 @@
 import { CSSProperties, MutableRefObject, PropsWithChildren } from 'react';
-
 import { createPortal } from 'react-dom';
 
 import { ModalBody } from './modal-body';

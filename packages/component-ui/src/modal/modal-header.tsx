@@ -1,10 +1,8 @@
-import { PropsWithChildren, useContext } from 'react';
-
 import { typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
+import { PropsWithChildren, useContext } from 'react';
 
 import { IconButton } from '../icon-button';
-
 import { ModalContext } from './modal-context';
 
 type Props = {

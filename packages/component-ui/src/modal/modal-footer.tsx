@@ -1,6 +1,5 @@
-import React, { PropsWithChildren } from 'react';
-
 import clsx from 'clsx';
+import React, { PropsWithChildren } from 'react';
 
 type Props = {
   isNoBorder?: boolean;

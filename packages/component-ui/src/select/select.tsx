@@ -1,12 +1,10 @@
-import { CSSProperties, ReactNode, useRef, useState } from 'react';
-
 import { IconName } from '@zenkigen-inc/component-icons';
 import { buttonColors, focusVisible, typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
+import { CSSProperties, ReactNode, useRef, useState } from 'react';
 
 import { useOutsideClick } from '../hooks/use-outside-click';
 import { Icon } from '../icon';
-
 import { SelectContext } from './select-context';
 import { SelectItem } from './select-item';
 import { SelectList } from './select-list';

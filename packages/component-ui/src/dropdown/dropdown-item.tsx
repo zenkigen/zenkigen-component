@@ -1,7 +1,6 @@
-import { MouseEvent, ReactNode, useContext } from 'react';
-
 import { focusVisible, typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
+import { MouseEvent, ReactNode, useContext } from 'react';
 
 import { DropdownContext } from './dropdown-context';
 

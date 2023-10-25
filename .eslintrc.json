@@ -17,7 +17,7 @@
   "parserOptions": {
     "project": "./tsconfig.json"
   },
-  "plugins": ["import", "react", "@typescript-eslint"],
+  "plugins": ["simple-import-sort", "react", "@typescript-eslint"],
   "settings": {
     "react": {
       "version": "detect"
@@ -32,24 +32,8 @@
     "prefer-template": "error",
     "camelcase": "error",
     "newline-before-return": "error",
-    "import/prefer-default-export": "off",
-    "import/order": [
-      "error",
-      {
-        "newlines-between": "always",
-        "alphabetize": {
-          "order": "asc"
-        },
-        "pathGroups": [
-          {
-            "pattern": "react",
-            "group": "external",
-            "position": "before"
-          }
-        ],
-        "pathGroupsExcludedImportTypes": ["builtin"]
-      }
-    ],
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
     "@typescript-eslint/no-unused-vars": ["error", { "varsIgnorePattern": "_" }],
     "@typescript-eslint/naming-convention": [
       "error",

@@ -1,16 +1,14 @@
-import { useState } from 'react';
-
 import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
 import { IconName } from '@zenkigen-inc/component-icons';
 import { typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
+import { useState } from 'react';
 
 import { Avatar } from '../avatar';
 import { Button } from '../button';
 import { Icon } from '../icon';
 import { Toggle } from '../toggle';
-
 import { Dropdown } from './dropdown';
 import { DropdownItemType } from './type';
 

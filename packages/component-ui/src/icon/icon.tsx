@@ -1,4 +1,4 @@
-import { IconName, iconElements } from '@zenkigen-inc/component-icons';
+import { iconElements, IconName } from '@zenkigen-inc/component-icons';
 import { iconColors } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
 
