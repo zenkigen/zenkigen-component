@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  type-check:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@main
+
+      - name: Read Node version from .node-version
+        run: echo "node_version=$(cat .node-version)" >> $GITHUB_OUTPUT
+        id: node-version
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ steps.node-version.outputs.node_version }}
+
+      - name: Yarn install
+        uses: ./.github/actions/yarn-install
+
+      - name: Build
+        run: yarn build:all
+
+      - name: TypeScript type check
+        run: yarn type-check
+
+  lint:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@main
+
+      - name: Read Node version from .node-version
+        run: echo "node_version=$(cat .node-version)" >> $GITHUB_OUTPUT
+        id: node-version
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ steps.node-version.outputs.node_version }}
+
+      - name: Yarn install
+        uses: ./.github/actions/yarn-install
+
+      - name: Build
+        run: yarn build:all
+
+      - name: Lint
+        run: yarn lint
