@@ -54,5 +54,8 @@ jobs:
       - name: Yarn install
         uses: ./.github/actions/yarn-install
 
+      - name: Build
+        run: yarn build:all
+
       - name: Lint
         run: yarn lint
