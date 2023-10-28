@@ -20,8 +20,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install dependencies
-        run: yarn install
+      - name: Yarn install
+        uses: ./.github/actions/yarn-install
 
       - name: Build
         run: yarn build:all
