@@ -1,13 +1,11 @@
-import { CSSProperties, ReactNode, useCallback, useRef, useState } from 'react';
-
 import { typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
+import { CSSProperties, PropsWithChildren, useCallback, useRef, useState } from 'react';
 
 import { TailIcon } from './tail-icon';
 import { TooltipHorizontalAlign, TooltipSize, TooltipVerticalPosition } from './type';
 
 type Props = {
-  children: ReactNode;
   content: string;
   size?: TooltipSize;
   maxWidth?: CSSProperties['width'];
@@ -24,7 +22,7 @@ export function Tooltip({
   verticalPosition = 'bottom',
   horizontalAlign = 'center',
   isDisabledHover = false,
-}: Props) {
+}: PropsWithChildren<Props>) {
   const [isVisible, setIsVisible] = useState(false);
   const [targetDimensions, setTargetDimensions] = useState({
     width: 0,

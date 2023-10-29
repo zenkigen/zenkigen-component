@@ -1,9 +1,8 @@
-import { useCallback, useState } from 'react';
-
 import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
 import { typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
+import { useCallback, useState } from 'react';
 
 import { Avatar } from '../avatar';
 import { Dropdown } from '../dropdown';
@@ -11,7 +10,6 @@ import { DropdownItemType } from '../dropdown/type';
 import { Icon } from '../icon';
 import { SelectSort } from '../select-sort';
 import { SortOrder } from '../select-sort/type';
-
 import { Table } from '.';
 
 const meta: Meta<typeof Table> = {

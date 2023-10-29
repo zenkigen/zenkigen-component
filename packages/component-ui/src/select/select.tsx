@@ -1,19 +1,16 @@
-import { CSSProperties, ReactNode, useRef, useState } from 'react';
-
 import { IconName } from '@zenkigen-inc/component-icons';
 import { buttonColors, focusVisible, typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
+import { CSSProperties, PropsWithChildren, useRef, useState } from 'react';
 
 import { useOutsideClick } from '../hooks/use-outside-click';
 import { Icon } from '../icon';
-
 import { SelectContext } from './select-context';
 import { SelectItem } from './select-item';
 import { SelectList } from './select-list';
 import type { SelectOption } from './type';
 
 type Props = {
-  children: ReactNode;
   size?: 'x-small' | 'small' | 'medium' | 'large';
   variant?: 'outline' | 'text';
   width?: CSSProperties['width'];
@@ -36,7 +33,7 @@ export function Select({
   isDisabled = false,
   onChange,
   optionListMaxHeight,
-}: Props) {
+}: PropsWithChildren<Props>) {
   const [isOptionListOpen, setIsOptionListOpen] = useState(false);
   const targetRef = useRef<HTMLDivElement>(null);
   useOutsideClick(targetRef, () => setIsOptionListOpen(false));

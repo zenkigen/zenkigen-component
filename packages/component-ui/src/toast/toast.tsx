@@ -1,11 +1,9 @@
-import { AnimationEvent, CSSProperties, ReactNode, useCallback, useEffect, useState } from 'react';
-
 import { typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
+import { AnimationEvent, CSSProperties, ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { Icon } from '../icon';
 import { IconButton } from '../icon-button';
-
 import { ToastState } from './type';
 
 const CLOSE_TIME_MSEC = 5000;

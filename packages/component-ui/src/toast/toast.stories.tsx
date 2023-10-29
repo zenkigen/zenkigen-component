@@ -1,9 +1,7 @@
+import { action } from '@storybook/addon-actions';
 import { useCallback } from 'react';
 
-import { action } from '@storybook/addon-actions';
-
 import { Button } from '../button';
-
 import { Toast, ToastProvider, useToast } from '.';
 
 export default {

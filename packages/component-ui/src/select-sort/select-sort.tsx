@@ -1,11 +1,9 @@
-import { CSSProperties, useCallback, useRef, useState } from 'react';
-
 import { buttonColors, focusVisible, typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
+import { CSSProperties, useCallback, useRef, useState } from 'react';
 
 import { useOutsideClick } from '../hooks/use-outside-click';
 import { Icon } from '../icon';
-
 import { SelectList } from './select-list';
 import type { SortOrder } from './type';
 

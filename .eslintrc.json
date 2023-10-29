@@ -14,7 +14,10 @@
     "node": true
   },
   "parser": "@typescript-eslint/parser",
-  "plugins": ["import", "react", "@typescript-eslint"],
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "plugins": ["simple-import-sort", "react", "@typescript-eslint"],
   "settings": {
     "react": {
       "version": "detect"
@@ -28,25 +31,19 @@
     "eqeqeq": "error",
     "prefer-template": "error",
     "camelcase": "error",
-    "import/prefer-default-export": "off",
-    "import/order": [
+    "newline-before-return": "error",
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
+    "@typescript-eslint/no-unused-vars": ["error", { "varsIgnorePattern": "_" }],
+    "@typescript-eslint/naming-convention": [
       "error",
       {
-        "newlines-between": "always",
-        "alphabetize": {
-          "order": "asc"
-        },
-        "pathGroups": [
-          {
-            "pattern": "react",
-            "group": "external",
-            "position": "before"
-          }
-        ],
-        "pathGroupsExcludedImportTypes": ["builtin"]
+        "selector": "variable",
+        "types": ["boolean"],
+        "format": ["PascalCase"],
+        "prefix": ["is", "should", "has", "can"]
       }
     ],
-    "@typescript-eslint/no-unused-vars": ["error", { "varsIgnorePattern": "_" }],
     "react/jsx-filename-extension": [
       "error",
       {

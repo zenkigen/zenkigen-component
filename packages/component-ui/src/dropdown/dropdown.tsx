@@ -1,12 +1,10 @@
-import { ReactElement, ReactNode, useCallback, useRef, useState } from 'react';
-
 import { IconName } from '@zenkigen-inc/component-icons';
 import { buttonColors, focusVisible, typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
+import { PropsWithChildren, ReactElement, useCallback, useRef, useState } from 'react';
 
 import { useOutsideClick } from '../hooks/use-outside-click';
 import { Icon } from '../icon';
-
 import { DropdownContext } from './dropdown-context';
 import { DropdownItem } from './dropdown-item';
 import { DropdownMenu } from './dropdown-menu';
@@ -17,7 +15,6 @@ type Props = {
   title?: string;
   isDisabled?: boolean;
   isArrowHidden?: boolean;
-  children: ReactNode;
 } & (
   | { target: ReactElement; label?: never; icon?: never }
   | {
@@ -37,7 +34,7 @@ export function Dropdown({
   title,
   isDisabled = false,
   isArrowHidden = false,
-}: Props) {
+}: PropsWithChildren<Props>) {
   const [isVisible, setIsVisible] = useState(false);
   const [targetDimensions, setTargetDimensions] = useState({
     width: 0,

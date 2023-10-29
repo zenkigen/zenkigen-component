@@ -1,17 +1,15 @@
-import { ReactNode } from 'react';
-
 import { focusVisible, typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
+import { PropsWithChildren } from 'react';
 
 import { Icon } from '../icon';
 
 type Props = {
-  children: ReactNode;
   isSortKey: boolean;
   onClickItem: () => void;
 };
 
-export function SelectItem({ children, isSortKey, onClickItem }: Props) {
+export function SelectItem({ children, isSortKey, onClickItem }: PropsWithChildren<Props>) {
   const listItemClasses = clsx('flex w-full items-center');
 
   const itemClasses = clsx(

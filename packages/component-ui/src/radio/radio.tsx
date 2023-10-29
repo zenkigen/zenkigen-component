@@ -1,7 +1,6 @@
-import { ChangeEvent, useCallback, useState } from 'react';
-
 import { focusVisible, typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
+import { ChangeEvent, useCallback, useState } from 'react';
 
 type Props = {
   name?: string;
