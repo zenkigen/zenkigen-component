@@ -1,10 +1,10 @@
-import { ReactNode, ChangeEvent, useState } from 'react';
-
 import { action } from '@storybook/addon-actions';
 import { Meta, StoryObj } from '@storybook/react';
 import { typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
+import { ChangeEvent, ReactNode, useState } from 'react';
 
+import { Button } from '../button';
 import { TextInput } from '.';
 
 const meta: Meta<typeof TextInput> = {
@@ -17,15 +17,16 @@ export default meta;
 
 type ErrorTextProps = {
   children?: ReactNode;
-  status?: 'error';
+  isError?: boolean;
 };
 
 const ErrorText = ({ ...props }: ErrorTextProps) => {
   const classes = clsx('px-2', 'mt-1', `${typography.label.label4regular}`, {
-    'text-text-text02': props.status !== 'error',
-    'text-support-supportError': props.status === 'error',
+    'text-text-text02': !props.isError,
+    'text-support-supportError': props.isError,
   });
-  return <div className={classes}>{props.children}</div>;
+  
+return <div className={classes}>{props.children}</div>;
 };
 
 export const Base: Story = {
@@ -35,7 +36,8 @@ export const Base: Story = {
     const [value2, setValue2] = useState<string>('入力した文字列。');
     const [valueNumber, setValueNumber] = useState<string>('123');
     const [valuePassword, setValuePassword] = useState<string>('abcdefg');
-    return (
+    
+return (
       <div className="flex gap-10">
         <div style={{ width: 300 }} className="flex flex-col gap-12">
           <div>
@@ -56,9 +58,9 @@ export const Base: Story = {
           <div>
             <TextInput
               value={value}
-              status="error"
               placeholder="入力してください"
               sizeValue="medium"
+              isError
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 action('onChange')(e);
                 setValue(e.target.value);
@@ -67,14 +69,14 @@ export const Base: Story = {
                 setValue('');
               }}
             />
-            <ErrorText status="error">文字以内で入力してください</ErrorText>
+            <ErrorText isError>文字以内で入力してください</ErrorText>
           </div>
           <div>
             <TextInput
               value={value2}
-              status="error"
               placeholder="入力してください"
               sizeValue="medium"
+              isError
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 action('onChange')(e);
                 setValue2(e.target.value);
@@ -83,7 +85,7 @@ export const Base: Story = {
                 setValue2('');
               }}
             />
-            <ErrorText status="error">文字以内で入力してください</ErrorText>
+            <ErrorText isError>文字以内で入力してください</ErrorText>
           </div>
           <div>
             <TextInput
@@ -103,9 +105,10 @@ export const Base: Story = {
           <div>
             <TextInput
               value={value2}
-              status="error"
               placeholder="入力してください"
               sizeValue="medium"
+              isError
+              disabled
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 action('onChange')(e);
                 setValue2(e.target.value);
@@ -113,7 +116,6 @@ export const Base: Story = {
               onClickClearButton={() => {
                 setValue2('');
               }}
-              disabled
             />
           </div>
           <div>
@@ -163,9 +165,9 @@ export const Base: Story = {
           <div>
             <TextInput
               value={value}
-              status="error"
               placeholder="入力してください"
               sizeValue="large"
+              isError
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 action('onChange')(e);
                 setValue(e.target.value);
@@ -174,14 +176,14 @@ export const Base: Story = {
                 setValue('');
               }}
             />
-            <ErrorText status="error">文字以内で入力してください</ErrorText>
+            <ErrorText isError>文字以内で入力してください</ErrorText>
           </div>
           <div>
             <TextInput
               value={value2}
-              status="error"
               placeholder="入力してください"
               sizeValue="large"
+              isError
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 action('onChange')(e);
                 setValue2(e.target.value);
@@ -190,14 +192,14 @@ export const Base: Story = {
                 setValue2('');
               }}
             />
-            <ErrorText status="error">文字以内で入力してください</ErrorText>
+            <ErrorText isError>文字以内で入力してください</ErrorText>
           </div>
           <div>
             <TextInput
               value=""
-              status="error"
               placeholder="入力してください"
               sizeValue="large"
+              isError
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 action('onChange')(e);
                 setValue2(e.target.value);
@@ -213,15 +215,15 @@ export const Base: Story = {
               value={value2}
               placeholder="入力してください"
               sizeValue="large"
-              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              disabled
+               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 action('onChange')(e);
                 setValue(e.target.value);
               }}
               onClickClearButton={() => {
                 setValue('');
               }}
-              disabled
-            />
+           />
           </div>
           <div>
             <TextInput
@@ -255,3 +257,92 @@ export const Base: Story = {
     );
   },
 };
+
+export const Layout: Story = {
+  args: {},
+  render: function MyFunc({ ...args }) {
+    const [value, setValue] = useState<string>(args.value);
+    const [isError, setIsError] = useState<boolean>(false);
+    const handleSubmit = (value: string) => {
+      if(value !== 'abc'){
+        setIsError(true);
+      }else{
+        setIsError(false);
+      }
+    }
+    
+return (
+      <div className="flex gap-10">
+        <div style={{ width: 300 }} className="flex flex-col gap-12">
+          <div>
+            <TextInput
+              value={value}
+              placeholder="入力してください"
+              sizeValue="large"
+              isError={isError}
+              onChange={(e) => {
+                action('onChange')(e);
+                setIsError(false);
+                setValue(() => {
+                  return e.target.value;
+                });
+              }}
+              onClickClearButton={() => {
+                setValue('');
+              }}
+            />
+            <ErrorText isError={isError}>abcと入力してください</ErrorText>
+          </div>
+          <div>
+            <Button onClick={() => handleSubmit(value)}>送信</Button>
+          </div>
+        </div>
+      </div>
+    );
+  },
+};
+
+export const Layout2: Story = {
+  args: {},
+  render: function MyFunc({ ...args }) {
+    const [value, setValue] = useState<string>(args.value);
+    const [isError, setIsError] = useState<boolean>(false);
+    const handleSubmit = (value: string) => {
+      if(value !== 'abc'){
+        setIsError(true);
+      }else{
+        setIsError(false);
+      }
+    }
+    
+return (
+      <div className="flex gap-10">
+        <div style={{ width: 300 }} className="flex flex-col gap-12">
+          <div>
+            <TextInput
+              value={value}
+              placeholder="入力してください"
+              sizeValue="large"
+              isError={isError}
+              onChange={(e) => {
+                action('onChange')(e);
+                handleSubmit(e.target.value);
+                setValue(() => {
+                  return e.target.value;
+                });
+              }}
+              onClickClearButton={() => {
+                setValue('');
+              }}
+            />
+            <ErrorText isError={isError}>abcと入力してください</ErrorText>
+          </div>
+          <div>
+            <Button onClick={() => handleSubmit(value)}>送信</Button>
+          </div>
+        </div>
+      </div>
+    );
+  },
+};
+
