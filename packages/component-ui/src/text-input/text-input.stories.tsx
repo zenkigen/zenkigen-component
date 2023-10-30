@@ -25,8 +25,8 @@ const ErrorText = ({ ...props }: ErrorTextProps) => {
     'text-text-text02': !props.isError,
     'text-support-supportError': props.isError,
   });
-  
-return <div className={classes}>{props.children}</div>;
+
+  return <div className={classes}>{props.children}</div>;
 };
 
 export const Base: Story = {
@@ -36,8 +36,8 @@ export const Base: Story = {
     const [value2, setValue2] = useState<string>('入力した文字列。');
     const [valueNumber, setValueNumber] = useState<string>('123');
     const [valuePassword, setValuePassword] = useState<string>('abcdefg');
-    
-return (
+
+    return (
       <div className="flex gap-10">
         <div style={{ width: 300 }} className="flex flex-col gap-12">
           <div>
@@ -216,14 +216,14 @@ return (
               placeholder="入力してください"
               sizeValue="large"
               disabled
-               onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 action('onChange')(e);
                 setValue(e.target.value);
               }}
               onClickClearButton={() => {
                 setValue('');
               }}
-           />
+            />
           </div>
           <div>
             <TextInput
@@ -264,14 +264,14 @@ export const Layout: Story = {
     const [value, setValue] = useState<string>(args.value);
     const [isError, setIsError] = useState<boolean>(false);
     const handleSubmit = (value: string) => {
-      if(value !== 'abc'){
+      if (value !== 'abc') {
         setIsError(true);
-      }else{
+      } else {
         setIsError(false);
       }
-    }
-    
-return (
+    };
+
+    return (
       <div className="flex gap-10">
         <div style={{ width: 300 }} className="flex flex-col gap-12">
           <div>
@@ -308,14 +308,14 @@ export const Layout2: Story = {
     const [value, setValue] = useState<string>(args.value);
     const [isError, setIsError] = useState<boolean>(false);
     const handleSubmit = (value: string) => {
-      if(value !== 'abc'){
+      if (value !== 'abc') {
         setIsError(true);
-      }else{
+      } else {
         setIsError(false);
       }
-    }
-    
-return (
+    };
+
+    return (
       <div className="flex gap-10">
         <div style={{ width: 300 }} className="flex flex-col gap-12">
           <div>
@@ -345,4 +345,3 @@ return (
     );
   },
 };
-

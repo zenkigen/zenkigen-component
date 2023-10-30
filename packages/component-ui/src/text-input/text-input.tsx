@@ -12,37 +12,25 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const TextInput = forwardRef<HTMLInputElement, Props>(({ sizeValue = 'medium', ...props }: Props, ref) => {
-  const inputWrapClasses = clsx(
-    'flex items-center gap-2 overflow-hidden rounded border pl-2 pr-3',
-    {
-      'border-border-uiBorder01': !props.isError,
-      'border-support-supportError': props.isError && !props.disabled,
-      'hover:border-hover-hoverInput': !props.disabled && !props.isError,
-      'hover:focus-within:border-active-activeInput': !props.isError,
-      'focus-within:border-active-activeInput': !props.isError,
-      'bg-disabled-disabled02 border-disabled-disabled02': props.disabled,
-    },
-  );
+  const inputWrapClasses = clsx('flex items-center gap-2 overflow-hidden rounded border pl-2 pr-3', {
+    'border-border-uiBorder01': !props.isError,
+    'border-support-supportError': props.isError && !props.disabled,
+    'hover:border-hover-hoverInput': !props.disabled && !props.isError,
+    'hover:focus-within:border-active-activeInput': !props.isError,
+    'focus-within:border-active-activeInput': !props.isError,
+    'bg-disabled-disabled02 border-disabled-disabled02': props.disabled,
+  });
 
-  const inputClasses = clsx(
-    'flex-1 outline-0 placeholder:text-text-textPlaceholder disabled:text-text-text03',
-    {
-      [`${typography.label.label2regular} pt-1.5 pb-2`]: sizeValue === 'medium',
-      [`${typography.label.label1regular} py-2.5`]: sizeValue === 'large',
-      'text-text-text01': !props.isError,
-      'text-support-supportError': props.isError,
-    },
-  );
+  const inputClasses = clsx('flex-1 outline-0 placeholder:text-text-textPlaceholder disabled:text-text-text03', {
+    [`${typography.label.label2regular} pt-1.5 pb-2`]: sizeValue === 'medium',
+    [`${typography.label.label1regular} py-2.5`]: sizeValue === 'large',
+    'text-text-text01': !props.isError,
+    'text-support-supportError': props.isError,
+  });
 
   return (
     <div className={inputWrapClasses}>
-      <input
-        ref={ref}
-        size={1}
-        className={inputClasses}
-        onChange={props.onChange}
-        {...props}
-      />
+      <input ref={ref} size={1} className={inputClasses} onChange={props.onChange} {...props} />
       {props.onClickClearButton && props.value && props.value.length !== 0 && !props.disabled && (
         <IconButton variant="text" icon="close" size="small" isNoPadding onClick={props.onClickClearButton} />
       )}
