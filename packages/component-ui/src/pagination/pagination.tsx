@@ -1,5 +1,5 @@
+import { Icon } from '../icon';
 import { IconButton } from '../icon-button';
-
 import { PaginationButton } from './pagination-button';
 import { PaginationContext } from './pagination-context';
 
@@ -30,16 +30,7 @@ export function Pagination({ currentPage, totalPage, sideNumPagesToShow = 3, onC
     pageList.push(i);
   }
 
-  const handleClickDot = (type: 'left' | 'right') => {
-    if (!pageList.length) return;
-    if (type === 'left') {
-      const pageNum = pageList[0];
-      pageNum && onClick(pageNum - 1);
-    } else {
-      const pageNum = pageList[pageList.length - 1];
-      pageNum && onClick(pageNum + 1);
-    }
-  };
+  const threeDotIconClasses = 'flex h-8 w-8 items-center justify-center gap-1 fill-icon-icon01';
 
   return (
     <PaginationContext.Provider
@@ -61,8 +52,8 @@ export function Pagination({ currentPage, totalPage, sideNumPagesToShow = 3, onC
           <PaginationButton onClick={() => onClick(START_PAGE)} page={START_PAGE} />
         </li>
         {pageList.length !== 0 && pageList[0] !== 2 && (
-          <li>
-            <IconButton variant="text" icon="more" size="medium" onClick={() => handleClickDot('left')} />
+          <li className={threeDotIconClasses}>
+            <Icon name="more" size="medium" />
           </li>
         )}
         {pageList.map((page: number, index: number) => (
@@ -71,8 +62,8 @@ export function Pagination({ currentPage, totalPage, sideNumPagesToShow = 3, onC
           </li>
         ))}
         {pageList.length !== 0 && pageList[pageList.length - 1] !== totalPage - 1 && (
-          <li>
-            <IconButton variant="text" icon="more" size="medium" onClick={() => handleClickDot('right')} />
+          <li className={threeDotIconClasses}>
+            <Icon name="more" size="medium" />
           </li>
         )}
         <li>
