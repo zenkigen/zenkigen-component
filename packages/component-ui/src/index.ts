@@ -18,6 +18,7 @@ export * from './select-sort';
 export * from './tab';
 export * from './table';
 export * from './tag';
+export * from './text-area';
 export * from './toast';
 export * from './toggle';
 export * from './tooltip';
