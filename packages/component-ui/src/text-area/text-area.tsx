@@ -14,7 +14,7 @@ interface Props extends TextareaHTMLAttributes<HTMLTextAreaElement> {
 
 export const TextArea = forwardRef<HTMLTextAreaElement, Props>(
   ({ sizeValue = 'medium', isResizable = false, rows = 7, ...props }: Props, ref) => {
-    const inputWrapClasses = clsx('flex items-center gap-2 overflow-hidden rounded border', {
+    const inputWrapClasses = clsx('relative flex items-start gap-2 overflow-hidden rounded border', {
       'border-border-uiBorder01': !props.isError,
       'border-support-supportError': props.isError && !props.disabled,
       'hover:border-hover-hoverInput': !props.disabled && !props.isError,
@@ -23,10 +23,15 @@ export const TextArea = forwardRef<HTMLTextAreaElement, Props>(
       'bg-disabled-disabled02 border-disabled-disabled02': props.disabled,
     });
 
+    const clearButtonClasses = clsx('absolute', {
+      [`${typography.label.label2regular} right-2 pt-1.5`]: sizeValue === 'medium',
+      [`${typography.label.label1regular} right-2 py-2.5`]: sizeValue === 'large',
+    });
+
     const inputClasses = clsx(
-      'flex-1 pl-2 pr-3 outline-0 placeholder:text-text-textPlaceholder disabled:text-text-text03',
+      'flex-1 pl-2 pr-7 outline-0 placeholder:text-text-textPlaceholder disabled:text-text-text03',
       {
-        [`${typography.label.label2regular} pt-1.5 pb-2`]: sizeValue === 'medium',
+        [`${typography.label.label2regular} pt-1.5 pb-2 `]: sizeValue === 'medium',
         [`${typography.label.label1regular} py-2.5`]: sizeValue === 'large',
         'text-text-text01': !props.isError,
         'text-support-supportError': props.isError,
@@ -45,7 +50,9 @@ export const TextArea = forwardRef<HTMLTextAreaElement, Props>(
           style={{ lineHeight: '171%' }}
         />
         {props.onClickClearButton && props.value && props.value.length !== 0 && !props.disabled && (
-          <IconButton variant="text" icon="close" size="small" isNoPadding onClick={props.onClickClearButton} />
+          <div className={clearButtonClasses}>
+            <IconButton variant="text" icon="close" size="small" isNoPadding onClick={props.onClickClearButton} />
+          </div>
         )}
       </div>
     );
