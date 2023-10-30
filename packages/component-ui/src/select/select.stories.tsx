@@ -1,7 +1,6 @@
-import { useState } from 'react';
-
 import type { Meta } from '@storybook/react';
-import { IconName, iconElements } from '@zenkigen-inc/component-icons';
+import { iconElements, IconName } from '@zenkigen-inc/component-icons';
+import { useState } from 'react';
 
 import { Select } from './select';
 import { SelectOption } from './type';

@@ -1,7 +1,6 @@
-import { CSSProperties, ReactNode } from 'react';
-
-import { buttonColors, typography, focusVisible } from '@zenkigen-inc/component-theme';
+import { buttonColors, focusVisible, typography } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
+import { CSSProperties, PropsWithChildren, ReactNode } from 'react';
 
 type Size = 'small' | 'medium' | 'large';
 
@@ -14,7 +13,6 @@ type Props = {
   variant?: Variant;
   before?: ReactNode;
   after?: ReactNode;
-  children: ReactNode;
 } & (
   | {
       isAnchor: true;
@@ -27,7 +25,7 @@ type Props = {
     }
 );
 
-export function Button({ size = 'medium', variant = 'fill', ...props }: Props) {
+export function Button({ size = 'medium', variant = 'fill', ...props }: PropsWithChildren<Props>) {
   const baseClasses = clsx(
     'rounded-button',
     'flex',

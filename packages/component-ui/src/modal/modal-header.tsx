@@ -1,19 +1,16 @@
-import { ReactNode, useContext } from 'react';
-
 import { typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
+import { PropsWithChildren, useContext } from 'react';
 
 import { IconButton } from '../icon-button';
-
 import { ModalContext } from './modal-context';
 
 type Props = {
-  children: ReactNode;
   isNoBorder?: boolean;
   isNoCloseButton?: boolean;
 };
 
-export function ModalHeader({ children, isNoBorder, isNoCloseButton }: Props) {
+export function ModalHeader({ children, isNoBorder, isNoCloseButton }: PropsWithChildren<Props>) {
   const { setIsOpen } = useContext(ModalContext);
   const headerClasses = clsx(
     'flex',
@@ -31,9 +28,10 @@ export function ModalHeader({ children, isNoBorder, isNoCloseButton }: Props) {
       'h-12': isNoCloseButton,
     },
   );
+
   return (
     <div className={headerClasses}>
-      {children}
+      <div>{children}</div>
       {!isNoCloseButton && <IconButton icon="close" size="small" variant="text" onClick={() => setIsOpen(false)} />}
     </div>
   );

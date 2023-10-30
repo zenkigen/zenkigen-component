@@ -1,12 +1,10 @@
-import { ReactElement, ReactNode, cloneElement, useCallback, useRef, useState } from 'react';
-
 import { IconName } from '@zenkigen-inc/component-icons';
 import { buttonColors, focusVisible, typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
+import { PropsWithChildren, ReactElement, useCallback, useRef, useState } from 'react';
 
 import { useOutsideClick } from '../hooks/use-outside-click';
 import { Icon } from '../icon';
-
 import { DropdownContext } from './dropdown-context';
 import { DropdownItem } from './dropdown-item';
 import { DropdownMenu } from './dropdown-menu';
@@ -17,7 +15,6 @@ type Props = {
   title?: string;
   isDisabled?: boolean;
   isArrowHidden?: boolean;
-  children: ReactNode;
 } & (
   | { target: ReactElement; label?: never; icon?: never }
   | {
@@ -37,7 +34,7 @@ export function Dropdown({
   title,
   isDisabled = false,
   isArrowHidden = false,
-}: Props) {
+}: PropsWithChildren<Props>) {
   const [isVisible, setIsVisible] = useState(false);
   const [targetDimensions, setTargetDimensions] = useState({
     width: 0,
@@ -80,11 +77,8 @@ export function Dropdown({
     'active:bg-active-active02',
     focusVisible.normal,
     isDisabled && 'pointer-events-none',
+    'p-1',
     {
-      'h-6 w-6': size === 'x-small',
-      'h-8 w-8': size === 'small',
-      'h-10 w-10': size === 'medium',
-      'h-12 w-12': size === 'large',
       'border border-border-uiBorder02': variant === 'outline',
     },
   );
@@ -114,8 +108,6 @@ export function Dropdown({
     ],
   );
 
-  const targetWithProps = target && cloneElement(target, { isDisabled });
-
   return (
     <DropdownContext.Provider value={{ isVisible, setIsVisible, isDisabled, targetDimensions, variant }}>
       <div ref={targetRef} className={wrapperClasses}>
@@ -127,7 +119,7 @@ export function Dropdown({
             onClick={handleToggle}
             disabled={isDisabled}
           >
-            {targetWithProps}
+            {target}
           </button>
         ) : (
           <button type="button" title={title} className={buttonClasses} onClick={handleToggle} disabled={isDisabled}>

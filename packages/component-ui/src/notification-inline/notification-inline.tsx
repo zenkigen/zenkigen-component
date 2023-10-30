@@ -1,7 +1,6 @@
-import { ReactNode } from 'react';
-
 import { typography } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
+import { ReactNode } from 'react';
 
 import { Icon } from '../icon';
 import { IconButton } from '../icon-button';

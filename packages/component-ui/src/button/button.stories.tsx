@@ -1,5 +1,4 @@
 import { Icon } from '../icon';
-
 import { Button } from '.';
 
 export default { component: Button };

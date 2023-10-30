@@ -1,17 +1,15 @@
-import { MouseEvent, ReactNode, useContext } from 'react';
-
 import { focusVisible, typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
+import { MouseEvent, PropsWithChildren, useContext } from 'react';
 
 import { DropdownContext } from './dropdown-context';
 
 type Props = {
-  children: ReactNode;
   color?: 'gray' | 'red';
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
 };
 
-export function DropdownItem({ children, color = 'gray', onClick }: Props) {
+export function DropdownItem({ children, color = 'gray', onClick }: PropsWithChildren<Props>) {
   const { setIsVisible } = useContext(DropdownContext);
   const handleClickItem = (event: MouseEvent<HTMLButtonElement>) => {
     setIsVisible(false);
