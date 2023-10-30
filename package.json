@@ -1,16 +1,16 @@
 {
   "name": "zenkigen-component",
   "private": true,
-  "packageManager": "yarn@3.6.4",
+  "packageManager": "yarn@4.0.1",
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
     "lint": "eslint './packages/**/*.ts{,x}' && prettier --check .",
     "lint:fix": "eslint './packages/**/*.ts{,x}' --fix && prettier --write .",
-    "type-check": "yarn workspaces foreach --exclude zenkigen-component run type-check",
-    "build:all": "yarn workspaces foreach -pt --exclude zenkigen-component run build",
-    "publish:all": "yarn workspaces foreach --exclude zenkigen-component npm publish",
+    "type-check": "yarn workspaces foreach --all --exclude zenkigen-component run type-check",
+    "build:all": "yarn workspaces foreach --all -pt --exclude zenkigen-component run build",
+    "publish:all": "yarn workspaces foreach --all --exclude zenkigen-component npm publish",
     "storybook": "storybook dev",
     "create-component": "yarn workspace @zenkigen-inc/component-ui hygen generator components",
     "update-tokens": "yarn workspace @zenkigen-inc/component-config run build:tokens",
