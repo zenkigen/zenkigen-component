@@ -42,6 +42,7 @@ export const Base: Story = {
               value={value}
               placeholder="入力してください"
               sizeValue="medium"
+              rows={7}
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                 action('onChange')(e);
                 setValue(e.target.value);
@@ -57,6 +58,7 @@ export const Base: Story = {
               value={value}
               placeholder="入力してください"
               sizeValue="medium"
+              rows={7}
               isError
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                 action('onChange')(e);
@@ -73,6 +75,7 @@ export const Base: Story = {
               value={value2}
               placeholder="入力してください"
               sizeValue="medium"
+              rows={7}
               isError
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                 action('onChange')(e);
@@ -89,6 +92,7 @@ export const Base: Story = {
               value={value}
               placeholder="入力してください"
               sizeValue="medium"
+              rows={7}
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                 action('onChange')(e);
                 setValue(e.target.value);
@@ -104,6 +108,7 @@ export const Base: Story = {
               value={value2}
               placeholder="入力してください"
               sizeValue="medium"
+              rows={7}
               isError
               disabled
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -122,6 +127,7 @@ export const Base: Story = {
               value={value}
               placeholder="入力してください"
               sizeValue="medium"
+              rows={7}
               isResizable
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                 action('onChange')(e);
@@ -138,6 +144,7 @@ export const Base: Story = {
               value={value}
               placeholder="入力してください"
               sizeValue="medium"
+              rows={7}
               isError
               isResizable
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -155,6 +162,7 @@ export const Base: Story = {
               value={value2}
               placeholder="入力してください"
               sizeValue="medium"
+              rows={7}
               isError
               isResizable
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -172,6 +180,7 @@ export const Base: Story = {
               value={value}
               placeholder="入力してください"
               sizeValue="medium"
+              rows={7}
               isResizable
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                 action('onChange')(e);
@@ -188,6 +197,7 @@ export const Base: Story = {
               value={value2}
               placeholder="入力してください"
               sizeValue="medium"
+              rows={7}
               isError
               isResizable
               disabled
@@ -207,6 +217,7 @@ export const Base: Story = {
               value={value}
               placeholder="入力してください"
               sizeValue="large"
+              rows={7}
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                 action('onChange')(e);
                 setValue(e.target.value);
@@ -222,6 +233,7 @@ export const Base: Story = {
               value={value}
               placeholder="入力してください"
               sizeValue="large"
+              rows={7}
               isError
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                 action('onChange')(e);
@@ -238,6 +250,7 @@ export const Base: Story = {
               value={value2}
               placeholder="入力してください"
               sizeValue="large"
+              rows={7}
               isError
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                 action('onChange')(e);
@@ -254,6 +267,7 @@ export const Base: Story = {
               value={value}
               placeholder="入力してください"
               sizeValue="large"
+              rows={7}
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                 action('onChange')(e);
                 setValue(e.target.value);
@@ -269,6 +283,7 @@ export const Base: Story = {
               value={value2}
               placeholder="入力してください"
               sizeValue="large"
+              rows={7}
               isError
               disabled
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -287,6 +302,7 @@ export const Base: Story = {
               value={value}
               placeholder="入力してください"
               sizeValue="large"
+              rows={7}
               isResizable
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                 action('onChange')(e);
@@ -303,6 +319,7 @@ export const Base: Story = {
               value={value}
               placeholder="入力してください"
               sizeValue="large"
+              rows={7}
               isError
               isResizable
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -320,6 +337,7 @@ export const Base: Story = {
               value={value2}
               placeholder="入力してください"
               sizeValue="large"
+              rows={7}
               isError
               isResizable
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -337,6 +355,7 @@ export const Base: Story = {
               value={value}
               placeholder="入力してください"
               sizeValue="large"
+              rows={7}
               isResizable
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                 action('onChange')(e);
@@ -353,6 +372,7 @@ export const Base: Story = {
               value={value2}
               placeholder="入力してください"
               sizeValue="large"
+              rows={7}
               isError
               isResizable
               disabled
