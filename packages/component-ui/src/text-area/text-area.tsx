@@ -30,7 +30,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, Props>(
         'bg-disabled-disabled02 border-disabled-disabled02': props.disabled,
         'pr-7': !props.disabled,
         [`${typography.body.body2regular} pt-1.5 pb-2 `]: sizeValue === 'medium',
-        [`${typography.body.body1regular} py-2.5`]: sizeValue === 'large' && !props.disabled,
+        [`${typography.body.body1regular} py-2.5`]: sizeValue === 'large',
         'text-support-supportError': props.isError,
         'resize-none': !isResizable,
       },
