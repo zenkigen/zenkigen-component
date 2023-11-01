@@ -4,14 +4,14 @@ import { forwardRef, InputHTMLAttributes } from 'react';
 
 import { IconButton } from '../icon-button';
 
-interface Props extends InputHTMLAttributes<HTMLInputElement> {
-  sizeValue?: 'medium' | 'large';
+interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
+  size?: 'medium' | 'large';
   value: string;
   isError?: boolean;
   onClickClearButton?: () => void;
 }
 
-export const TextInput = forwardRef<HTMLInputElement, Props>(({ sizeValue = 'medium', ...props }: Props, ref) => {
+export const TextInput = forwardRef<HTMLInputElement, Props>(({ size = 'medium', ...props }: Props, ref) => {
   const inputWrapClasses = clsx('flex items-center gap-2 overflow-hidden rounded border pl-2 pr-3', {
     'border-border-uiBorder01': !props.isError,
     'border-support-supportError': props.isError && !props.disabled,
@@ -22,8 +22,8 @@ export const TextInput = forwardRef<HTMLInputElement, Props>(({ sizeValue = 'med
   });
 
   const inputClasses = clsx('flex-1 outline-0 placeholder:text-text-textPlaceholder disabled:text-text-text03', {
-    [`${typography.label.label2regular} pt-1.5 pb-2`]: sizeValue === 'medium',
-    [`${typography.label.label1regular} py-2.5`]: sizeValue === 'large',
+    [`${typography.label.label2regular} pt-1.5 pb-2`]: size === 'medium',
+    [`${typography.label.label1regular} py-2.5`]: size === 'large',
     'text-text-text01': !props.isError,
     'text-support-supportError': props.isError,
   });

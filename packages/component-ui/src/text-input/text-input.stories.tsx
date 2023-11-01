@@ -44,7 +44,7 @@ export const Base: Story = {
             <TextInput
               value={value}
               placeholder="入力してください"
-              sizeValue="medium"
+              size="medium"
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 action('onChange')(e);
                 setValue(e.target.value);
@@ -59,7 +59,7 @@ export const Base: Story = {
             <TextInput
               value={value}
               placeholder="入力してください"
-              sizeValue="medium"
+              size="medium"
               isError
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 action('onChange')(e);
@@ -75,7 +75,7 @@ export const Base: Story = {
             <TextInput
               value={value2}
               placeholder="入力してください"
-              sizeValue="medium"
+              size="medium"
               isError
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 action('onChange')(e);
@@ -91,7 +91,7 @@ export const Base: Story = {
             <TextInput
               value={value}
               placeholder="入力してください"
-              sizeValue="medium"
+              size="medium"
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 action('onChange')(e);
                 setValue(e.target.value);
@@ -106,7 +106,7 @@ export const Base: Story = {
             <TextInput
               value={value2}
               placeholder="入力してください"
-              sizeValue="medium"
+              size="medium"
               isError
               disabled
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
@@ -122,7 +122,7 @@ export const Base: Story = {
             <TextInput
               value={valueNumber}
               placeholder="入力してください"
-              sizeValue="medium"
+              size="medium"
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 action('onChange')(e);
                 setValueNumber(e.target.value);
@@ -134,7 +134,7 @@ export const Base: Story = {
             <TextInput
               value={valuePassword}
               placeholder="入力してください"
-              sizeValue="medium"
+              size="medium"
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 action('onChange')(e);
                 setValuePassword(e.target.value);
@@ -151,7 +151,7 @@ export const Base: Story = {
             <TextInput
               value={value}
               placeholder="入力してください"
-              sizeValue="large"
+              size="large"
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 action('onChange')(e);
                 setValue(e.target.value);
@@ -166,7 +166,7 @@ export const Base: Story = {
             <TextInput
               value={value}
               placeholder="入力してください"
-              sizeValue="large"
+              size="large"
               isError
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 action('onChange')(e);
@@ -182,7 +182,7 @@ export const Base: Story = {
             <TextInput
               value={value2}
               placeholder="入力してください"
-              sizeValue="large"
+              size="large"
               isError
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 action('onChange')(e);
@@ -198,7 +198,7 @@ export const Base: Story = {
             <TextInput
               value=""
               placeholder="入力してください"
-              sizeValue="large"
+              size="large"
               isError
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 action('onChange')(e);
@@ -214,7 +214,7 @@ export const Base: Story = {
             <TextInput
               value={value2}
               placeholder="入力してください"
-              sizeValue="large"
+              size="large"
               disabled
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 action('onChange')(e);
@@ -229,7 +229,7 @@ export const Base: Story = {
             <TextInput
               value={valueNumber}
               placeholder="入力してください"
-              sizeValue="large"
+              size="large"
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 action('onChange')(e);
                 setValueNumber(e.target.value);
@@ -241,7 +241,7 @@ export const Base: Story = {
             <TextInput
               value={valuePassword}
               placeholder="入力してください"
-              sizeValue="large"
+              size="large"
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 action('onChange')(e);
                 setValuePassword(e.target.value);
@@ -278,7 +278,7 @@ export const Layout: Story = {
             <TextInput
               value={value}
               placeholder="入力してください"
-              sizeValue="large"
+              size="large"
               isError={isError}
               onChange={(e) => {
                 action('onChange')(e);
@@ -322,7 +322,7 @@ export const Layout2: Story = {
             <TextInput
               value={value}
               placeholder="入力してください"
-              sizeValue="large"
+              size="large"
               isError={isError}
               onChange={(e) => {
                 action('onChange')(e);
