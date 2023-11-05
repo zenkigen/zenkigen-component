@@ -53,7 +53,7 @@ export function Pagination({ currentPage, totalPage, sideNumPagesToShow = 3, onC
         </li>
         {pageList.length !== 0 && pageList[0] !== 2 && (
           <li className={threeDotIconClasses}>
-            <Icon name="more" size="medium" />
+            <Icon name="more" size="small" />
           </li>
         )}
         {pageList.map((page: number, index: number) => (
@@ -63,7 +63,7 @@ export function Pagination({ currentPage, totalPage, sideNumPagesToShow = 3, onC
         ))}
         {pageList.length !== 0 && pageList[pageList.length - 1] !== totalPage - 1 && (
           <li className={threeDotIconClasses}>
-            <Icon name="more" size="medium" />
+            <Icon name="more" size="small" />
           </li>
         )}
         <li>
