@@ -41,8 +41,8 @@ export const Base: Story = {
             <TextArea
               value={value}
               placeholder="入力してください"
-              sizeValue="medium"
-              rows={7}
+              size="medium"
+              height={120}
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                 action('onChange')(e);
                 setValue(e.target.value);
@@ -51,14 +51,44 @@ export const Base: Story = {
                 setValue('');
               }}
             />
-            <ErrorText>文字以内で入力してください</ErrorText>
+            <ErrorText></ErrorText>
           </div>
           <div>
             <TextArea
               value={value}
               placeholder="入力してください"
-              sizeValue="medium"
-              rows={7}
+              size="medium"
+              height={120}
+              isResizable
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+              onClickClearButton={() => {
+                setValue('');
+              }}
+            />
+            <ErrorText>リサイズ可能</ErrorText>
+          </div>
+          <div>
+            <TextArea
+              value={value}
+              placeholder="入力してください"
+              size="medium"
+              height={120}
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+            />
+            <ErrorText>クリアボタンなし</ErrorText>
+          </div>
+          <div>
+            <TextArea
+              value={value}
+              placeholder="入力してください"
+              size="medium"
+              height={120}
               isError
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                 action('onChange')(e);
@@ -68,14 +98,14 @@ export const Base: Story = {
                 setValue('');
               }}
             />
-            <ErrorText isError>文字以内で入力してください</ErrorText>
+            <ErrorText isError>未入力 ＋ エラー</ErrorText>
           </div>
           <div>
             <TextArea
               value={value2}
               placeholder="入力してください"
-              sizeValue="medium"
-              rows={7}
+              size="medium"
+              height={120}
               isError
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                 action('onChange')(e);
@@ -85,14 +115,14 @@ export const Base: Story = {
                 setValue2('');
               }}
             />
-            <ErrorText isError>文字以内で入力してください</ErrorText>
+            <ErrorText isError>入力済み ＋ エラー</ErrorText>
           </div>
           <div>
             <TextArea
               value={value}
               placeholder="入力してください"
-              sizeValue="medium"
-              rows={7}
+              size="medium"
+              height={120}
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                 action('onChange')(e);
                 setValue(e.target.value);
@@ -102,13 +132,14 @@ export const Base: Story = {
               }}
               disabled
             />
+            <ErrorText>未入力 ＋ disabled</ErrorText>
           </div>
           <div>
             <TextArea
               value={value2}
               placeholder="入力してください"
-              sizeValue="medium"
-              rows={7}
+              size="medium"
+              height={120}
               isError
               disabled
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -119,6 +150,7 @@ export const Base: Story = {
                 setValue2('');
               }}
             />
+            <ErrorText>入力済み ＋ disabled</ErrorText>
           </div>
         </div>
         <div style={{ width: 400 }} className="flex flex-col gap-12">
@@ -126,9 +158,8 @@ export const Base: Story = {
             <TextArea
               value={value}
               placeholder="入力してください"
-              sizeValue="medium"
-              rows={7}
-              isResizable
+              size="large"
+              height={120}
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                 action('onChange')(e);
                 setValue(e.target.value);
@@ -137,15 +168,14 @@ export const Base: Story = {
                 setValue('');
               }}
             />
-            <ErrorText>文字以内で入力してください</ErrorText>
+            <ErrorText></ErrorText>
           </div>
           <div>
             <TextArea
               value={value}
               placeholder="入力してください"
-              sizeValue="medium"
-              rows={7}
-              isError
+              size="large"
+              height={120}
               isResizable
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                 action('onChange')(e);
@@ -155,102 +185,45 @@ export const Base: Story = {
                 setValue('');
               }}
             />
-            <ErrorText isError>文字以内で入力してください</ErrorText>
+            <ErrorText>リサイズ可能</ErrorText>
+          </div>
+          <div>
+            <TextArea
+              value={value}
+              placeholder="入力してください"
+              size="large"
+              height={120}
+              isResizable
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+            />
+            <ErrorText>クリアボタンなし</ErrorText>
+          </div>
+          <div>
+            <TextArea
+              value={value}
+              placeholder="入力してください"
+              size="large"
+              height={120}
+              isError
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+              onClickClearButton={() => {
+                setValue('');
+              }}
+            />
+            <ErrorText isError>未入力 ＋ エラー</ErrorText>
           </div>
           <div>
             <TextArea
               value={value2}
               placeholder="入力してください"
-              sizeValue="medium"
-              rows={7}
-              isError
-              isResizable
-              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
-                action('onChange')(e);
-                setValue2(e.target.value);
-              }}
-              onClickClearButton={() => {
-                setValue2('');
-              }}
-            />
-            <ErrorText isError>文字以内で入力してください</ErrorText>
-          </div>
-          <div>
-            <TextArea
-              value={value}
-              placeholder="入力してください"
-              sizeValue="medium"
-              rows={7}
-              isResizable
-              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
-                action('onChange')(e);
-                setValue(e.target.value);
-              }}
-              onClickClearButton={() => {
-                setValue('');
-              }}
-              disabled
-            />
-          </div>
-          <div>
-            <TextArea
-              value={value2}
-              placeholder="入力してください"
-              sizeValue="medium"
-              rows={7}
-              isError
-              isResizable
-              disabled
-              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
-                action('onChange')(e);
-                setValue2(e.target.value);
-              }}
-              onClickClearButton={() => {
-                setValue2('');
-              }}
-            />
-          </div>
-        </div>
-        <div style={{ width: 400 }} className="flex flex-col gap-12">
-          <div>
-            <TextArea
-              value={value}
-              placeholder="入力してください"
-              sizeValue="large"
-              rows={7}
-              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
-                action('onChange')(e);
-                setValue(e.target.value);
-              }}
-              onClickClearButton={() => {
-                setValue('');
-              }}
-            />
-            <ErrorText>文字以内で入力してください</ErrorText>
-          </div>
-          <div>
-            <TextArea
-              value={value}
-              placeholder="入力してください"
-              sizeValue="large"
-              rows={7}
-              isError
-              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
-                action('onChange')(e);
-                setValue(e.target.value);
-              }}
-              onClickClearButton={() => {
-                setValue('');
-              }}
-            />
-            <ErrorText isError>文字以内で入力してください</ErrorText>
-          </div>
-          <div>
-            <TextArea
-              value={value2}
-              placeholder="入力してください"
-              sizeValue="large"
-              rows={7}
+              size="large"
+              height={120}
               isError
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                 action('onChange')(e);
@@ -260,14 +233,14 @@ export const Base: Story = {
                 setValue2('');
               }}
             />
-            <ErrorText isError>文字以内で入力してください</ErrorText>
+            <ErrorText isError>入力済み ＋ エラー</ErrorText>
           </div>
           <div>
             <TextArea
               value={value}
               placeholder="入力してください"
-              sizeValue="large"
-              rows={7}
+              size="large"
+              height={120}
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                 action('onChange')(e);
                 setValue(e.target.value);
@@ -277,13 +250,14 @@ export const Base: Story = {
               }}
               disabled
             />
+            <ErrorText>未入力 ＋ disabled</ErrorText>
           </div>
           <div>
             <TextArea
               value={value2}
               placeholder="入力してください"
-              sizeValue="large"
-              rows={7}
+              size="large"
+              height={120}
               isError
               disabled
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -294,96 +268,7 @@ export const Base: Story = {
                 setValue2('');
               }}
             />
-          </div>
-        </div>
-        <div style={{ width: 400 }} className="flex flex-col gap-12">
-          <div>
-            <TextArea
-              value={value}
-              placeholder="入力してください"
-              sizeValue="large"
-              rows={7}
-              isResizable
-              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
-                action('onChange')(e);
-                setValue(e.target.value);
-              }}
-              onClickClearButton={() => {
-                setValue('');
-              }}
-            />
-            <ErrorText>文字以内で入力してください</ErrorText>
-          </div>
-          <div>
-            <TextArea
-              value={value}
-              placeholder="入力してください"
-              sizeValue="large"
-              rows={7}
-              isError
-              isResizable
-              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
-                action('onChange')(e);
-                setValue(e.target.value);
-              }}
-              onClickClearButton={() => {
-                setValue('');
-              }}
-            />
-            <ErrorText isError>文字以内で入力してください</ErrorText>
-          </div>
-          <div>
-            <TextArea
-              value={value2}
-              placeholder="入力してください"
-              sizeValue="large"
-              rows={7}
-              isError
-              isResizable
-              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
-                action('onChange')(e);
-                setValue2(e.target.value);
-              }}
-              onClickClearButton={() => {
-                setValue2('');
-              }}
-            />
-            <ErrorText isError>文字以内で入力してください</ErrorText>
-          </div>
-          <div>
-            <TextArea
-              value={value}
-              placeholder="入力してください"
-              sizeValue="large"
-              rows={7}
-              isResizable
-              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
-                action('onChange')(e);
-                setValue(e.target.value);
-              }}
-              onClickClearButton={() => {
-                setValue('');
-              }}
-              disabled
-            />
-          </div>
-          <div>
-            <TextArea
-              value={value2}
-              placeholder="入力してください"
-              sizeValue="large"
-              rows={7}
-              isError
-              isResizable
-              disabled
-              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
-                action('onChange')(e);
-                setValue2(e.target.value);
-              }}
-              onClickClearButton={() => {
-                setValue2('');
-              }}
-            />
+            <ErrorText>入力済み ＋ disabled</ErrorText>
           </div>
         </div>
       </div>
