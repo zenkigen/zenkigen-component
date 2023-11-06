@@ -193,7 +193,6 @@ export const Base: Story = {
               placeholder="入力してください"
               size="large"
               height={120}
-              isResizable
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                 action('onChange')(e);
                 setValue(e.target.value);
