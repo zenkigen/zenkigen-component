@@ -16,8 +16,8 @@ interface Props extends TextareaHTMLAttributes<HTMLTextAreaElement> {
 export const TextArea = forwardRef<HTMLTextAreaElement, Props>(
   ({ size = 'medium', isResizable = false, ...props }: Props, ref) => {
     const clearButtonClasses = clsx('absolute', {
-      [`${typography.body.body2regular} right-3 pt-2`]: size === 'medium',
-      [`${typography.body.body1regular} right-3 py-3.5`]: size === 'large',
+      'right-3 pt-2.5': size === 'medium',
+      'right-3 py-3.5': size === 'large',
     });
 
     const textareaClasses = clsx(
@@ -32,8 +32,8 @@ export const TextArea = forwardRef<HTMLTextAreaElement, Props>(
         'px-3.5': size === 'large',
         'pr-8': size === 'medium' && props.onClickClearButton && !props.disabled,
         'pr-9': size === 'large' && props.onClickClearButton && !props.disabled,
-        [`${typography.body.body2regular} pt-1.5 pb-2 `]: size === 'medium',
-        [`${typography.body.body1regular} py-2.5`]: size === 'large',
+        [`${typography.body.body1regular} pt-1.5 pb-2 `]: size === 'medium',
+        [`text-4 py-2.5`]: size === 'large',
         'text-support-supportError': props.isError,
         'resize-none': !isResizable,
       },
