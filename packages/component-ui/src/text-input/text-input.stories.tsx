@@ -4,7 +4,6 @@ import { typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
 import { ChangeEvent, ReactNode, useState } from 'react';
 
-import { Button } from '../button';
 import { TextInput } from '.';
 
 const meta: Meta<typeof TextInput> = {
@@ -251,94 +250,6 @@ export const Base: Story = {
               }}
               type="password"
             />
-          </div>
-        </div>
-      </div>
-    );
-  },
-};
-
-export const Layout: Story = {
-  args: {},
-  render: function MyFunc({ ...args }) {
-    const [value, setValue] = useState<string>(args.value);
-    const [isError, setIsError] = useState<boolean>(false);
-    const handleSubmit = (value: string) => {
-      if (value !== 'abc') {
-        setIsError(true);
-      } else {
-        setIsError(false);
-      }
-    };
-
-    return (
-      <div className="flex gap-10">
-        <div style={{ width: 300 }} className="flex flex-col gap-12">
-          <div>
-            <TextInput
-              value={value}
-              placeholder="入力してください"
-              size="large"
-              isError={isError}
-              onChange={(e) => {
-                action('onChange')(e);
-                setIsError(false);
-                setValue(() => {
-                  return e.target.value;
-                });
-              }}
-              onClickClearButton={() => {
-                setValue('');
-              }}
-            />
-            <ErrorText isError={isError}>abcと入力してください</ErrorText>
-          </div>
-          <div>
-            <Button onClick={() => handleSubmit(value)}>送信</Button>
-          </div>
-        </div>
-      </div>
-    );
-  },
-};
-
-export const Layout2: Story = {
-  args: {},
-  render: function MyFunc({ ...args }) {
-    const [value, setValue] = useState<string>(args.value);
-    const [isError, setIsError] = useState<boolean>(false);
-    const handleSubmit = (value: string) => {
-      if (value !== 'abc') {
-        setIsError(true);
-      } else {
-        setIsError(false);
-      }
-    };
-
-    return (
-      <div className="flex gap-10">
-        <div style={{ width: 300 }} className="flex flex-col gap-12">
-          <div>
-            <TextInput
-              value={value}
-              placeholder="入力してください"
-              size="large"
-              isError={isError}
-              onChange={(e) => {
-                action('onChange')(e);
-                handleSubmit(e.target.value);
-                setValue(() => {
-                  return e.target.value;
-                });
-              }}
-              onClickClearButton={() => {
-                setValue('');
-              }}
-            />
-            <ErrorText isError={isError}>abcと入力してください</ErrorText>
-          </div>
-          <div>
-            <Button onClick={() => handleSubmit(value)}>送信</Button>
           </div>
         </div>
       </div>
