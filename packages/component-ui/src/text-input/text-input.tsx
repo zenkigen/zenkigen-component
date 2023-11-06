@@ -21,12 +21,15 @@ export const TextInput = forwardRef<HTMLInputElement, Props>(({ size = 'medium',
     'bg-disabled-disabled02 border-disabled-disabled02': props.disabled,
   });
 
-  const inputClasses = clsx('flex-1 outline-0 placeholder:text-text-textPlaceholder disabled:text-text-textPlaceholder', {
-    [`${typography.label.label2regular} pt-1.5 pb-2`]: size === 'medium',
-    [`${typography.label.label1regular} py-2.5`]: size === 'large',
-    'text-text-text01': !props.isError,
-    'text-support-supportError': props.isError,
-  });
+  const inputClasses = clsx(
+    'flex-1 outline-0 placeholder:text-text-textPlaceholder disabled:text-text-textPlaceholder',
+    {
+      [`${typography.label.label2regular} pt-1.5 pb-2`]: size === 'medium',
+      [`${typography.label.label1regular} py-2.5`]: size === 'large',
+      'text-text-text01': !props.isError,
+      'text-support-supportError': props.isError,
+    },
+  );
 
   return (
     <div className={inputWrapClasses}>
