@@ -1,6 +1,6 @@
 import { focusVisible, typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
-import { CSSProperties, PropsWithChildren, useContext } from 'react';
+import { CSSProperties, PropsWithChildren, useContext, useEffect, useRef } from 'react';
 
 import { SelectContext } from './select-context';
 
@@ -9,12 +9,19 @@ type Props = {
 };
 
 export function SelectList({ children, maxHeight }: PropsWithChildren<Props>) {
+  const ulistRef = useRef<HTMLUListElement>(null);
   const { size, selectedOption, setIsOptionListOpen, variant, placeholder, onChange } = useContext(SelectContext);
 
   const handleClickDeselect = () => {
     onChange?.(null);
     setIsOptionListOpen(false);
   };
+
+  useEffect(()=>{
+    // TODO:
+    // - 選択済み要素の位置を計算しscrollする
+    ulistRef.current?.scroll(0, 100)
+  }, [])
 
   const listClasses = clsx(
     'z-dropdown',
@@ -47,7 +54,7 @@ export function SelectList({ children, maxHeight }: PropsWithChildren<Props>) {
   );
 
   return (
-    <ul className={listClasses} style={{ maxHeight }}>
+    <ul className={listClasses} style={{ maxHeight }} ref={ulistRef}>
       {children}
       {placeholder && selectedOption !== null && (
         <li>
