@@ -29,7 +29,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, Props>(
 
     return (
       <div className="flex">
-        <textarea ref={ref} className={classes} onChange={props.onChange} {...props} style={{ height: props.height }} />
+        <textarea ref={ref} className={classes} {...props} style={{ height: props.height }} />
       </div>
     );
   },
