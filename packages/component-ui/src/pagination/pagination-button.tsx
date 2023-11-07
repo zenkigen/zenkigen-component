@@ -5,7 +5,6 @@ import { PaginationContext } from './pagination-context';
 
 type Props = {
   page: number;
-} & {
   onClick: (value: number) => void;
 };
 
