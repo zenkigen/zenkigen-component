@@ -47,9 +47,6 @@ export const Base: Story = {
                 action('onChange')(e);
                 setValue(e.target.value);
               }}
-              onClickClearButton={() => {
-                setValue('');
-              }}
             />
             <ErrorText></ErrorText>
           </div>
@@ -64,24 +61,8 @@ export const Base: Story = {
                 action('onChange')(e);
                 setValue(e.target.value);
               }}
-              onClickClearButton={() => {
-                setValue('');
-              }}
             />
             <ErrorText>リサイズ可能</ErrorText>
-          </div>
-          <div>
-            <TextArea
-              value={value}
-              placeholder="入力してください"
-              size="medium"
-              height={120}
-              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
-                action('onChange')(e);
-                setValue(e.target.value);
-              }}
-            />
-            <ErrorText>クリアボタンなし</ErrorText>
           </div>
           <div>
             <TextArea
@@ -93,9 +74,6 @@ export const Base: Story = {
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                 action('onChange')(e);
                 setValue(e.target.value);
-              }}
-              onClickClearButton={() => {
-                setValue('');
               }}
             />
             <ErrorText isError>未入力 ＋ エラー</ErrorText>
@@ -111,9 +89,6 @@ export const Base: Story = {
                 action('onChange')(e);
                 setValue2(e.target.value);
               }}
-              onClickClearButton={() => {
-                setValue2('');
-              }}
             />
             <ErrorText isError>入力済み ＋ エラー</ErrorText>
           </div>
@@ -126,9 +101,6 @@ export const Base: Story = {
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                 action('onChange')(e);
                 setValue(e.target.value);
-              }}
-              onClickClearButton={() => {
-                setValue('');
               }}
               disabled
             />
@@ -145,9 +117,6 @@ export const Base: Story = {
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                 action('onChange')(e);
                 setValue2(e.target.value);
-              }}
-              onClickClearButton={() => {
-                setValue2('');
               }}
             />
             <ErrorText>入力済み ＋ disabled</ErrorText>
@@ -164,9 +133,6 @@ export const Base: Story = {
                 action('onChange')(e);
                 setValue(e.target.value);
               }}
-              onClickClearButton={() => {
-                setValue('');
-              }}
             />
             <ErrorText></ErrorText>
           </div>
@@ -181,24 +147,8 @@ export const Base: Story = {
                 action('onChange')(e);
                 setValue(e.target.value);
               }}
-              onClickClearButton={() => {
-                setValue('');
-              }}
             />
             <ErrorText>リサイズ可能</ErrorText>
-          </div>
-          <div>
-            <TextArea
-              value={value}
-              placeholder="入力してください"
-              size="large"
-              height={120}
-              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
-                action('onChange')(e);
-                setValue(e.target.value);
-              }}
-            />
-            <ErrorText>クリアボタンなし</ErrorText>
           </div>
           <div>
             <TextArea
@@ -210,9 +160,6 @@ export const Base: Story = {
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                 action('onChange')(e);
                 setValue(e.target.value);
-              }}
-              onClickClearButton={() => {
-                setValue('');
               }}
             />
             <ErrorText isError>未入力 ＋ エラー</ErrorText>
@@ -228,9 +175,6 @@ export const Base: Story = {
                 action('onChange')(e);
                 setValue2(e.target.value);
               }}
-              onClickClearButton={() => {
-                setValue2('');
-              }}
             />
             <ErrorText isError>入力済み ＋ エラー</ErrorText>
           </div>
@@ -243,9 +187,6 @@ export const Base: Story = {
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                 action('onChange')(e);
                 setValue(e.target.value);
-              }}
-              onClickClearButton={() => {
-                setValue('');
               }}
               disabled
             />
@@ -262,9 +203,6 @@ export const Base: Story = {
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                 action('onChange')(e);
                 setValue2(e.target.value);
-              }}
-              onClickClearButton={() => {
-                setValue2('');
               }}
             />
             <ErrorText>入力済み ＋ disabled</ErrorText>
