@@ -37,7 +37,7 @@ export function SelectItem({ option }: Props) {
   );
 
   return (
-    <li className={listItemClasses} key={option.id}>
+    <li className={listItemClasses} key={option.id} data-id={option.id}>
       <button className={itemClasses} type="button" onClick={() => handleClickItem(option)}>
         {option.icon && <Icon name={option.icon} size="small" />}
         <span className="ml-1 mr-6">{option.label}</span>

@@ -9,7 +9,7 @@ type Props = {
 };
 
 export function SelectList({ children, maxHeight }: PropsWithChildren<Props>) {
-  const ulistRef = useRef<HTMLUListElement>(null);
+  const ref = useRef<HTMLUListElement>(null);
   const { size, selectedOption, setIsOptionListOpen, variant, placeholder, onChange } = useContext(SelectContext);
 
   const handleClickDeselect = () => {
@@ -17,11 +17,19 @@ export function SelectList({ children, maxHeight }: PropsWithChildren<Props>) {
     setIsOptionListOpen(false);
   };
 
-  useEffect(()=>{
-    // TODO:
-    // - 選択済み要素の位置を計算しscrollする
-    ulistRef.current?.scroll(0, 100)
-  }, [])
+  useEffect(() => {
+    if (maxHeight && ref.current) {
+      const element = Array.from(ref.current?.children || []).find(
+        (item) => item.getAttribute('data-id') === selectedOption?.id,
+      );
+      if (element) {
+        const wrapRect = ref.current.getBoundingClientRect();
+        const rect = element.getBoundingClientRect();
+        ref.current?.scroll(0, rect.top - wrapRect.top - wrapRect.height / 2 + rect.height / 2);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const listClasses = clsx(
     'z-dropdown',
@@ -54,7 +62,7 @@ export function SelectList({ children, maxHeight }: PropsWithChildren<Props>) {
   );
 
   return (
-    <ul className={listClasses} style={{ maxHeight }} ref={ulistRef}>
+    <ul className={listClasses} style={{ maxHeight }} ref={ref}>
       {children}
       {placeholder && selectedOption !== null && (
         <li>
