@@ -11,18 +11,18 @@ interface Props extends TextareaHTMLAttributes<HTMLTextAreaElement> {
 }
 
 export const TextArea = forwardRef<HTMLTextAreaElement, Props>(
-  ({ size = 'medium', isResizable = false, ...props }: Props, ref) => {
+  ({ size = 'medium', isResizable = false, isError, ...props }: Props, ref) => {
     const classes = clsx(
       'w-full rounded border outline-0 placeholder:text-text-textPlaceholder disabled:text-text-textPlaceholder',
       {
-        'border-support-supportError': props.isError && !props.disabled,
-        'hover:border-hover-hoverInput': !props.disabled && !props.isError,
+        'border-support-supportError': isError && !props.disabled,
+        'hover:border-hover-hoverInput': !props.disabled && !isError,
         'border-border-uiBorder01 hover:focus-within:border-active-activeInput focus-within:border-active-activeInput text-text-text01':
-          !props.isError,
+          !isError,
         'bg-disabled-disabled02 border-disabled-disabled02': props.disabled,
         [`${typography.body.body1regular} px-2 pt-1.5 pb-2`]: size === 'medium',
         [`text-4 px-3.5 py-2.5 `]: size === 'large',
-        'text-support-supportError': props.isError,
+        'text-support-supportError': isError,
         'resize-none': !isResizable,
       },
     );
