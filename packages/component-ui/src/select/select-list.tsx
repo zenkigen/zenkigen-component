@@ -1,6 +1,6 @@
 import { focusVisible, typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
-import { CSSProperties, PropsWithChildren, useContext, useEffect, useRef } from 'react';
+import { CSSProperties, PropsWithChildren, useContext, useLayoutEffect, useRef } from 'react';
 
 import { SelectContext } from './select-context';
 
@@ -17,15 +17,15 @@ export function SelectList({ children, maxHeight }: PropsWithChildren<Props>) {
     setIsOptionListOpen(false);
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (maxHeight && ref.current) {
-      const element = Array.from(ref.current?.children || []).find(
+      const element = Array.from(ref.current.children || []).find(
         (item) => item.getAttribute('data-id') === selectedOption?.id,
       );
       if (element) {
         const wrapRect = ref.current.getBoundingClientRect();
         const rect = element.getBoundingClientRect();
-        ref.current?.scroll(0, rect.top - wrapRect.top - wrapRect.height / 2 + rect.height / 2);
+        ref.current.scroll(0, rect.top - wrapRect.top - wrapRect.height / 2 + rect.height / 2);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
