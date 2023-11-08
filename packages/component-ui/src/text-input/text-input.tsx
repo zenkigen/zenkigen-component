@@ -4,12 +4,12 @@ import { forwardRef, InputHTMLAttributes } from 'react';
 
 import { IconButton } from '../icon-button';
 
-interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
+type Props = Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> & {
   size?: 'medium' | 'large';
   value: string;
   isError?: boolean;
   onClickClearButton?: () => void;
-}
+};
 
 export const TextInput = forwardRef<HTMLInputElement, Props>(
   ({ size = 'medium', isError, onClickClearButton, ...props }: Props, ref) => {
