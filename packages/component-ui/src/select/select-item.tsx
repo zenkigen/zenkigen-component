@@ -12,12 +12,11 @@ type Props = {
 
 export function SelectItem({ option }: Props) {
   const { setIsOptionListOpen, selectedOption, onChange } = useContext(SelectContext);
+
   const handleClickItem = (option: SelectOption) => {
     onChange?.(option);
     setIsOptionListOpen(false);
   };
-
-  const listItemClasses = clsx('flex w-full items-center');
 
   const itemClasses = clsx(
     'flex',
@@ -37,7 +36,7 @@ export function SelectItem({ option }: Props) {
   );
 
   return (
-    <li className={listItemClasses} key={option.id}>
+    <li className="flex w-full items-center" key={option.id} data-id={option.id}>
       <button className={itemClasses} type="button" onClick={() => handleClickItem(option)}>
         {option.icon && <Icon name={option.icon} size="small" />}
         <span className="ml-1 mr-6">{option.label}</span>
