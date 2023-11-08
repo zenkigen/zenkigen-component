@@ -2,13 +2,13 @@ import { typography } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
 import { CSSProperties, forwardRef, TextareaHTMLAttributes } from 'react';
 
-interface Props extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+type Props = TextareaHTMLAttributes<HTMLTextAreaElement> & {
   size?: 'medium' | 'large';
   value: string;
   height?: CSSProperties['height'];
   isResizable?: boolean;
   isError?: boolean;
-}
+};
 
 export const TextArea = forwardRef<HTMLTextAreaElement, Props>(
   ({ size = 'medium', isResizable = false, isError, ...props }: Props, ref) => {
