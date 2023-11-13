@@ -1,3 +1,7 @@
+import { typography } from '@zenkigen-inc/component-theme';
+/* eslint-disable @typescript-eslint/no-var-requires */
+import plugin from 'tailwindcss/plugin';
+
 import { tokens } from './tokens/tokens';
 
 module.exports = {
@@ -114,5 +118,20 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(({ addComponents }) => {
+      addComponents(
+        Object.entries(typography).reduce(
+          (acc, [, innerObj]) => (
+            Object.entries(innerObj).forEach(
+              ([innerKey, value]) => (acc[`.typography-${innerKey}`] = { [`@apply ${value}`]: {} }),
+            ),
+            acc
+          ),
+          // eslint-disable-next-line @typescript-eslint/ban-types
+          {} as Record<string, Record<string, {}>>,
+        ),
+      );
+    }),
+  ],
 };
