@@ -5,13 +5,7 @@ export default { component: Button };
 export function Base() {
   return (
     <div>
-      <div
-        style={{
-          display: 'flex',
-          gap: '8px',
-          alignItems: 'center',
-        }}
-      >
+      <div className="mt-2 flex items-center gap-2">
         <Button size="small">ボタンラベル</Button>
         <Button size="small" before={<Icon name="add" size="small" />}>
           ボタンラベル
@@ -23,27 +17,13 @@ export function Base() {
           ボタンラベル
         </Button>
       </div>
-      <div
-        style={{
-          display: 'flex',
-          gap: '8px',
-          alignItems: 'center',
-          marginTop: '8px',
-        }}
-      >
+      <div className="mt-2 flex items-center gap-2">
         <Button>ボタンラベル</Button>
         <Button before={<Icon name="add" size="small" />}>ボタンラベル</Button>
         <Button after={<Icon name="add" size="small" />}>ボタンラベル</Button>
         <Button isDisabled>ボタンラベル</Button>
       </div>
-      <div
-        style={{
-          display: 'flex',
-          gap: '8px',
-          alignItems: 'center',
-          marginTop: '8px',
-        }}
-      >
+      <div className="mt-2 flex items-center gap-2">
         <Button size="large">ボタンラベル</Button>
         <Button size="large" before={<Icon name="add" size="medium" />}>
           ボタンラベル
@@ -55,15 +35,7 @@ export function Base() {
           ボタンラベル
         </Button>
       </div>
-
-      <div
-        style={{
-          display: 'flex',
-          gap: '8px',
-          alignItems: 'center',
-          marginTop: '8px',
-        }}
-      >
+      <div className="mt-2 flex items-center gap-2">
         <Button size="small" variant="fillDanger">
           ボタンラベル
         </Button>
@@ -77,14 +49,7 @@ export function Base() {
           ボタンラベル
         </Button>
       </div>
-      <div
-        style={{
-          display: 'flex',
-          gap: '8px',
-          alignItems: 'center',
-          marginTop: '8px',
-        }}
-      >
+      <div className="mt-2 flex items-center gap-2">
         <Button variant="fillDanger">ボタンラベル</Button>
         <Button variant="fillDanger" before={<Icon name="add" size="small" />}>
           ボタンラベル
@@ -96,14 +61,7 @@ export function Base() {
           ボタンラベル
         </Button>
       </div>
-      <div
-        style={{
-          display: 'flex',
-          gap: '8px',
-          alignItems: 'center',
-          marginTop: '8px',
-        }}
-      >
+      <div className="mt-2 flex items-center gap-2">
         <Button size="large" variant="fillDanger">
           ボタンラベル
         </Button>
@@ -117,15 +75,7 @@ export function Base() {
           ボタンラベル
         </Button>
       </div>
-
-      <div
-        style={{
-          display: 'flex',
-          gap: '8px',
-          alignItems: 'center',
-          marginTop: '8px',
-        }}
-      >
+      <div className="mt-2 flex items-center gap-2">
         <Button variant="outline" size="small">
           ボタンラベル
         </Button>
@@ -139,14 +89,7 @@ export function Base() {
           ボタンラベル
         </Button>
       </div>
-      <div
-        style={{
-          display: 'flex',
-          gap: '8px',
-          alignItems: 'center',
-          marginTop: '8px',
-        }}
-      >
+      <div className="mt-2 flex items-center gap-2">
         <Button variant="outline">ボタンラベル</Button>
         <Button variant="outline" before={<Icon name="add" size="small" />}>
           ボタンラベル
@@ -158,14 +101,7 @@ export function Base() {
           ボタンラベル
         </Button>
       </div>
-      <div
-        style={{
-          display: 'flex',
-          gap: '8px',
-          alignItems: 'center',
-          marginTop: '8px',
-        }}
-      >
+      <div className="mt-2 flex items-center gap-2">
         <Button variant="outline" size="large">
           ボタンラベル
         </Button>
@@ -180,14 +116,7 @@ export function Base() {
         </Button>
       </div>
 
-      <div
-        style={{
-          display: 'flex',
-          gap: '8px',
-          alignItems: 'center',
-          marginTop: '8px',
-        }}
-      >
+      <div className="mt-2 flex items-center gap-2">
         <Button variant="text" size="small">
           ボタンラベル
         </Button>
@@ -201,14 +130,7 @@ export function Base() {
           ボタンラベル
         </Button>
       </div>
-      <div
-        style={{
-          display: 'flex',
-          gap: '8px',
-          alignItems: 'center',
-          marginTop: '8px',
-        }}
-      >
+      <div className="mt-2 flex items-center gap-2">
         <Button variant="text">ボタンラベル</Button>
         <Button variant="text" before={<Icon name="add" size="small" />}>
           ボタンラベル
@@ -220,14 +142,7 @@ export function Base() {
           ボタンラベル
         </Button>
       </div>
-      <div
-        style={{
-          display: 'flex',
-          gap: '8px',
-          alignItems: 'center',
-          marginTop: '8px',
-        }}
-      >
+      <div className="mt-2 flex items-center gap-2">
         <Button variant="text" size="large">
           ボタンラベル
         </Button>
@@ -240,6 +155,9 @@ export function Base() {
         <Button variant="text" size="large" isDisabled>
           ボタンラベル
         </Button>
+      </div>
+      <div className="mt-2 flex items-center gap-2">
+        <Button borderRadius={9999}>ボタンラベル</Button>
       </div>
     </div>
   );
