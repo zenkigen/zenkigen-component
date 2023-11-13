@@ -112,7 +112,9 @@ export function Dropdown({
   );
 
   return (
-    <DropdownContext.Provider value={{ isVisible, setIsVisible, isDisabled, targetDimensions, variant, portalTargetRef }}>
+    <DropdownContext.Provider
+      value={{ isVisible, setIsVisible, isDisabled, targetDimensions, variant, portalTargetRef }}
+    >
       <div ref={targetRef} className={wrapperClasses}>
         {target ? (
           <button
@@ -139,7 +141,9 @@ export function Dropdown({
             )}
           </button>
         )}
-        {!portalTargetRef ? children : portalTargetRef && portalTargetRef.current && createPortal(children, portalTargetRef.current)}
+        {!portalTargetRef
+          ? children
+          : portalTargetRef && portalTargetRef.current && createPortal(children, portalTargetRef.current)}
       </div>
     </DropdownContext.Provider>
   );

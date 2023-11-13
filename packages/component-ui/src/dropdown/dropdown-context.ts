@@ -1,4 +1,4 @@
-import { createContext,MutableRefObject } from 'react';
+import { createContext, MutableRefObject } from 'react';
 
 type UseDropdownReturnType = {
   isVisible: boolean;

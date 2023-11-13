@@ -28,7 +28,7 @@ export function DropdownMenu({
     'overflow-y-auto',
     horizontalAlign === 'left' ? 'left-0' : horizontalAlign === 'right' ? 'right-0' : 'left-auto',
     {
-      'absolute': !portalTargetRef,
+      absolute: !portalTargetRef,
       'border-solid border border-border-uiBorder01': variant === 'outline',
       'py-1': !isNoPadding,
     },
