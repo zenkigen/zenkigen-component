@@ -1,7 +1,6 @@
 import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
 import { IconName } from '@zenkigen-inc/component-icons';
-import { typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
 import { useState } from 'react';
 
@@ -448,9 +447,7 @@ const DropdownWithCustomMenu = () => {
                     <circle r="6" cx="8" cy="8" className={clsx(item.color)} />
                   </svg>
                 )}
-                <span className={clsx('ml-2 flex-1 text-text-text01', typography.label.label2regular)}>
-                  {item.label}
-                </span>
+                <span className="typography-label2regular ml-2 flex-1 text-text-text01">{item.label}</span>
                 <Toggle id="1" size="small" isChecked={item.isChecked} onChange={item.onChange} />
               </li>
             ))}

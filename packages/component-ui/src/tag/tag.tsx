@@ -1,4 +1,4 @@
-import { tagColors, tagLightColors, typography } from '@zenkigen-inc/component-theme';
+import { tagColors, tagLightColors } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
 
 import { DeleteIcon } from './delete-icon';
@@ -16,10 +16,10 @@ export function Tag({ id, children, color, variant = 'normal', size = 'medium', 
   const wrapperClasses = clsx('flex', 'items-center', 'justify-center', {
     [tagColors[color]]: variant === 'normal',
     [tagLightColors[color]]: variant === 'light',
-    [`h-[14px] ${typography.label.label4regular}`]: !isEditable && size === 'x-small',
-    [`h-4 ${typography.label.label3regular}`]: !isEditable && size === 'small',
-    [`h-[18px] ${typography.label.label2regular}`]: !isEditable && size === 'medium',
-    [`h-[22px] ${typography.label.label2regular}`]: isEditable && size === 'medium',
+    ['h-[14px] typography-label4regular']: !isEditable && size === 'x-small',
+    ['h-4 typography-label3regular']: !isEditable && size === 'small',
+    ['h-[18px] typography-label2regular']: !isEditable && size === 'medium',
+    ['h-[22px] typography-label2regular']: isEditable && size === 'medium',
     'rounded-full': isEditable,
     rounded: !isEditable,
     'py-0.5 px-1': !isEditable,

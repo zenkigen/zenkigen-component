@@ -1,4 +1,3 @@
-import { typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
 import { ReactNode } from 'react';
 
@@ -21,12 +20,9 @@ export function Toggle({
   labelPosition = 'right',
   isDisabled,
 }: Props) {
-  const wrapperClasses = clsx('flex', 'flex-[0_0_auto]', 'items-center', 'relative');
+  const wrapperClasses = 'flex flex-[0_0_auto] items-center relative';
   const baseClasses = clsx(
-    'relative',
-    'flex',
-    'items-center',
-    'rounded-full',
+    'relative flex items-center rounded-full',
     {
       'w-8 h-4 px-[3px]': size === 'small',
       'w-12 h-6 px-1': size === 'medium',
@@ -39,11 +35,7 @@ export function Toggle({
         },
   );
   const inputClasses = clsx(
-    'peer',
-    'absolute',
-    'inset-0',
-    'z-[1]',
-    'opacity-0',
+    'peer absolute inset-0 z-[1] opacity-0',
     isDisabled ? 'cursor-not-allowed' : 'cursor-pointer',
   );
   const indicatorClasses = clsx('bg-icon-iconOnColor', 'rounded-full', {
@@ -51,12 +43,14 @@ export function Toggle({
     'w-4 h-4': size === 'medium',
     'ml-auto': isChecked,
   });
-  const labelClasses = clsx(
-    labelPosition === 'right' ? 'ml-2' : 'mr-2',
-    typography.label[size === 'small' ? 'label3regular' : 'label1regular'],
-    'break-all',
-    isDisabled ? 'pointer-events-none cursor-not-allowed text-disabled-disabled01' : 'cursor-pointer text-text-text01',
-  );
+  const labelClasses = clsx('break-all', {
+    'mr-2': labelPosition === 'left',
+    'ml-2': labelPosition === 'right',
+    'typography-label3regular': size === 'small',
+    'typography-label1regular': size === 'medium',
+    'pointer-events-none cursor-not-allowed text-disabled-disabled01': isDisabled,
+    'cursor-pointer text-text-text01': !isDisabled,
+  });
 
   return (
     <div className={wrapperClasses}>

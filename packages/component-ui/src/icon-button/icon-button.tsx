@@ -1,5 +1,5 @@
 import { IconName } from '@zenkigen-inc/component-icons';
-import { buttonColors, focusVisible, typography } from '@zenkigen-inc/component-theme';
+import { buttonColors, focusVisible } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
 
 import { Icon } from '../icon/icon';
@@ -28,17 +28,12 @@ type Props = {
 
 export function IconButton({ size = 'medium', variant = 'outline', ...props }: Props) {
   const baseClasses = clsx(
-    'rounded',
-    'flex',
-    'gap-1',
-    'items-center',
-    'justify-center',
+    'typography-label1regular flex items-center justify-center gap-1 rounded',
     buttonColors[variant].base,
     buttonColors[variant].hover,
     buttonColors[variant].active,
     buttonColors[variant].disabled,
     focusVisible.normal,
-    typography.label.label1regular,
     { 'h-6 w-6': size === 'small' && !props.isNoPadding },
     { 'h-8 w-8': size === 'medium' && !props.isNoPadding },
     { 'h-10 w-10': size === 'large' && !props.isNoPadding },

@@ -1,4 +1,3 @@
-import { typography } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
 import { ChangeEvent, FormEvent, forwardRef } from 'react';
 
@@ -17,29 +16,15 @@ type Props = {
 
 export const Search = forwardRef<HTMLDivElement, Props>(({ width = '100%', size = 'medium', ...props }: Props, ref) => {
   const classes = clsx(
-    'flex',
-    'items-center',
-    'rounded-full',
-    'border',
-    'border-border-uiBorder02',
-    'focus-within:border-active-activeInput',
+    'flex items-center rounded-full border border-border-uiBorder02 focus-within:border-active-activeInput',
     { 'h-8 px-3': size === 'medium' },
     { 'h-10 px-4': size === 'large' },
   );
 
-  const inputClasses = clsx(
-    'ml-2.5',
-    'mr-2.5',
-    'h-full',
-    'flex-1',
-    'outline-0',
-    'text-text-text01',
-    'placeholder:text-text-textPlaceholder',
-    {
-      [`${typography.label.label2regular}`]: size === 'medium',
-      [`${typography.label.label1regular}`]: size === 'large',
-    },
-  );
+  const inputClasses = clsx('mx-2.5 h-full flex-1 text-text-text01 outline-0 placeholder:text-text-textPlaceholder', {
+    ['typography-label2regular']: size === 'medium',
+    ['typography-label1regular']: size === 'large',
+  });
 
   return (
     <div className="relative" ref={ref}>

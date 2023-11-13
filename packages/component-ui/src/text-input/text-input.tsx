@@ -1,4 +1,3 @@
-import { typography } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
 import { forwardRef, InputHTMLAttributes } from 'react';
 
@@ -25,8 +24,8 @@ export const TextInput = forwardRef<HTMLInputElement, Props>(
     const inputClasses = clsx(
       'flex-1 outline-0 placeholder:text-text-textPlaceholder disabled:text-text-textPlaceholder',
       {
-        [`${typography.label.label2regular} pt-1.5 pb-2`]: size === 'medium',
-        [`${typography.label.label1regular} py-2.5`]: size === 'large',
+        ['typography-label2regular pt-1.5 pb-2']: size === 'medium',
+        ['typography-label1regular py-2.5']: size === 'large',
         'text-text-text01': !isError,
         'text-support-supportError': isError,
       },

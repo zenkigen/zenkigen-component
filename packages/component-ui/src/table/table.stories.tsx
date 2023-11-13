@@ -1,7 +1,5 @@
 import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
-import { typography } from '@zenkigen-inc/component-theme';
-import clsx from 'clsx';
 import { useCallback, useState } from 'react';
 
 import { Avatar } from '../avatar';
@@ -60,8 +58,8 @@ const TableStoryBasic = () => {
     setSortOrderName(null);
     setSortOrderEmail(null);
   }, []);
-  const headingClasses = clsx(typography.label.label2regular, 'flex items-center text-text-text02');
-  const cellClasses = clsx(typography.label.label1regular, 'text-text-text01', 'flex items-center', 'gap-2');
+  const headingClasses = 'typography-label2regular flex items-center text-text-text02';
+  const cellClasses = 'typography-label1regular text-text-text01 flex items-center gap-2';
 
   return (
     <div className="flex flex-col gap-10">

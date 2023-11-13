@@ -1,4 +1,3 @@
-import { typography } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
 import { ReactNode } from 'react';
 
@@ -26,9 +25,9 @@ export const TabItem = (props: Props) => {
     'disabled:text-disabled-disabled01',
     'disabled:pointer-events-none',
     {
-      [`${typography.label.label2regular}`]: !props.isSelected,
+      ['typography-label2regular']: !props.isSelected,
       ['text-interactive-interactive02 hover:before:bg-border-uiBorder02Dark']: !props.isSelected,
-      [`${typography.label.label2bold}`]: props.isSelected,
+      ['typography-label1regularlabel.label2bold}']: props.isSelected,
       ['before:bg-interactive-interactive01 hover:before:bg-interactive-interactive01 pointer-events-none']:
         props.isSelected,
     },

@@ -1,5 +1,5 @@
 import { IconName } from '@zenkigen-inc/component-icons';
-import { buttonColors, focusVisible, typography } from '@zenkigen-inc/component-theme';
+import { buttonColors, focusVisible } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
 import { CSSProperties, PropsWithChildren, useRef, useState } from 'react';
 
@@ -40,7 +40,7 @@ export function Select({
 
   const handleClickToggle = () => setIsOptionListOpen((prev) => !prev);
 
-  const wrapperClasses = clsx('relative', 'flex', 'shrink-0', 'gap-1', 'items-center', 'rounded', {
+  const wrapperClasses = clsx('relative flex shrink-0 items-center gap-1 rounded', {
     'h-6': size === 'x-small' || size === 'small',
     'h-8': size === 'medium',
     'h-10': size === 'large',
@@ -48,11 +48,7 @@ export function Select({
   });
 
   const buttonClasses = clsx(
-    'flex',
-    'items-center',
-    'w-full',
-    'h-full',
-    'rounded',
+    'flex h-full w-full items-center rounded',
     buttonColors[variant].base,
     buttonColors[variant].hover,
     buttonColors[variant].active,
@@ -65,13 +61,13 @@ export function Select({
     },
   );
 
-  const labelClasses = clsx(
-    'overflow-hidden',
-    size === 'x-small' ? 'mr-1' : 'mr-2',
-    typography.label[
-      size === 'x-small' ? 'label3regular' : size === 'small' || size === 'medium' ? 'label2regular' : 'label1regular'
-    ],
-  );
+  const labelClasses = clsx('overflow-hidden', {
+    'mr-1': size === 'x-small',
+    'mr-2': size !== 'x-small',
+    'typography-label3regular': size === 'x-small',
+    'typography-label2regular': size === 'small' || size === 'medium',
+    'typography-label1regular': size === 'large',
+  });
 
   return (
     <SelectContext.Provider

@@ -1,4 +1,3 @@
-import { typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
 import { PropsWithChildren, useContext } from 'react';
 
@@ -13,15 +12,7 @@ type Props = {
 export function ModalHeader({ children, isNoBorder, isNoCloseButton }: PropsWithChildren<Props>) {
   const { setIsOpen } = useContext(ModalContext);
   const headerClasses = clsx(
-    'flex',
-    'shrink-0',
-    'items-center',
-    'justify-between',
-    'w-full',
-    'rounded-t-lg',
-    'px-6',
-    'text-text-text01',
-    typography.heading.h5,
+    'typography-h5 flex w-full shrink-0 items-center justify-between rounded-t-lg px-6 text-text-text01',
     {
       'border-b-[1px] border-border-uiBorder01': !isNoBorder,
       'h-14': !isNoCloseButton,

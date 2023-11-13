@@ -1,4 +1,4 @@
-import { focusVisible, typography } from '@zenkigen-inc/component-theme';
+import { focusVisible } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
 import { ChangeEvent, useCallback, useState } from 'react';
 
@@ -28,21 +28,13 @@ export function Radio({ name, value, id, label, isChecked = false, isDisabled = 
     [isDisabled, onChange],
   );
 
-  const inputClasses = clsx('absolute', 'z-[1]', 'opacity-0', 'peer', 'h-6', 'w-6', {
+  const inputClasses = clsx('peer absolute z-[1] h-6 w-6 opacity-0', {
     'cursor-not-allowed': isDisabled,
     'cursor-pointer': !isDisabled,
   });
 
   const boxClasses = clsx(
-    'inline-flex',
-    'items-center',
-    'justify-center',
-    'h-5',
-    'w-5',
-    'bg-white',
-    'border',
-    'border-solid',
-    'rounded-full',
+    'inline-flex h-5 w-5 items-center justify-center rounded-full border border-solid bg-white',
     focusVisible.normalPeer,
     {
       'border-disabled-disabled01 hover:border-disabled-disabled01': isDisabled && !isMouseOver,
@@ -53,34 +45,18 @@ export function Radio({ name, value, id, label, isChecked = false, isDisabled = 
     },
   );
 
-  const afterClasses = clsx(
-    'h-3',
-    'w-3',
-    'absolute',
-    'top-0',
-    'right-0',
-    'bottom-0',
-    'left-0',
-    'block',
-    'm-auto',
-    'rounded-full',
-    {
-      'bg-disabled-disabled01': isDisabled && isChecked,
-      'bg-active-activeSelectedUi': !isDisabled && isChecked,
-      'scale-0': !isChecked,
-      'scale-100': isChecked,
-    },
-  );
+  const afterClasses = clsx('absolute inset-0 m-auto block h-3 w-3 rounded-full', {
+    'bg-disabled-disabled01': isDisabled && isChecked,
+    'bg-active-activeSelectedUi': !isDisabled && isChecked,
+    'scale-0': !isChecked,
+    'scale-100': isChecked,
+  });
 
-  const hoverIndicatorClasses = clsx(
-    'w-3',
-    'h-3',
-    'inline-block',
-    'rounded-full',
-    !isDisabled && !isChecked && isMouseOver && 'bg-hover-hoverUi',
-  );
+  const hoverIndicatorClasses = clsx('inline-block h-3 w-3 rounded-full', {
+    'bg-hover-hoverUi': !isDisabled && !isChecked && isMouseOver,
+  });
 
-  const labelClasses = clsx('flex-[1_0_0]', 'ml-2', typography.label.label2regular, 'break-all', 'select-none', {
+  const labelClasses = clsx('typography-label2regular ml-2 flex-[1_0_0] select-none break-all', {
     'pointer-events-none cursor-not-allowed text-disabled-disabled01': isDisabled,
     'cursor-pointer text-text-text01': !isDisabled,
   });

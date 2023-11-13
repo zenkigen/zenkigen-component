@@ -1,4 +1,3 @@
-import { typography } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
 import { ReactNode } from 'react';
 
@@ -18,23 +17,15 @@ type Props = {
 );
 
 export function NotificationInline({ state = 'default', size = 'medium', ...props }: Props) {
-  const wrapperClasses = clsx(
-    'rounded',
-    'text-text-text01',
-    'flex',
-    'gap-1',
-    'items-center',
-    typography.body.body2regular,
-    {
-      'bg-background-uiBackgroundError': state === 'attention',
-      'bg-background-uiBackgroundWarning': state === 'warning',
-      'bg-background-uiBackgroundBlue': state === 'information',
-      'bg-background-uiBackgroundSuccess': state === 'success',
-      'bg-background-uiBackgroundGray': state === 'default',
-      'p-2': size === 'small',
-      'p-3': size === 'medium',
-    },
-  );
+  const wrapperClasses = clsx('typography-body2regular flex items-center gap-1 rounded text-text-text01', {
+    'bg-background-uiBackgroundError': state === 'attention',
+    'bg-background-uiBackgroundWarning': state === 'warning',
+    'bg-background-uiBackgroundBlue': state === 'information',
+    'bg-background-uiBackgroundSuccess': state === 'success',
+    'bg-background-uiBackgroundGray': state === 'default',
+    'p-2': size === 'small',
+    'p-3': size === 'medium',
+  });
 
   const iconClasses = clsx('flex', 'items-center', {
     'fill-support-supportError': state === 'attention',

@@ -1,4 +1,4 @@
-import { focusVisible, typography } from '@zenkigen-inc/component-theme';
+import { focusVisible } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
 import { PropsWithChildren } from 'react';
 
@@ -13,18 +13,12 @@ export function SelectItem({ children, isSortKey, onClickItem }: PropsWithChildr
   const listItemClasses = clsx('flex w-full items-center');
 
   const itemClasses = clsx(
-    'flex',
-    'items-center',
-    'w-full',
-    'h-8',
-    'px-3',
-    'hover:bg-hover-hover02',
-    'active:bg-active-active02',
+    'typography-label2regular flex h-8 w-full items-center px-3 hover:bg-hover-hover02 active:bg-active-active02',
     focusVisible.inset,
-    typography.label.label2regular,
-    isSortKey
-      ? 'bg-selected-selectedUi fill-interactive-interactive01 text-interactive-interactive01'
-      : 'bg-background-uiBackground01 fill-icon-icon01 text-interactive-interactive02',
+    {
+      'bg-selected-selectedUi fill-interactive-interactive01 text-interactive-interactive01': isSortKey,
+      'bg-background-uiBackground01 fill-icon-icon01 text-interactive-interactive02': !isSortKey,
+    },
   );
 
   return (

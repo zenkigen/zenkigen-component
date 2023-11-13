@@ -1,4 +1,3 @@
-import { typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
 import { CSSProperties, PropsWithChildren, useCallback, useRef, useState } from 'react';
 
@@ -53,16 +52,16 @@ export function Tooltip({
   const targetClasses = clsx('relative', 'flex', 'items-center', 'justify-center');
 
   const tooltipBodyClasses = clsx(
-    'z-tooltip',
-    'absolute',
-    'w-max',
-    horizontalAlign === 'left' ? 'left-0' : horizontalAlign === 'right' ? 'right-0' : 'left-auto',
-    'inline-block',
-    size === 'small' ? 'px-2 pb-1 pt-1.5' : 'px-4 py-3',
-    'text-text-textOnColor',
-    'bg-background-uiBackgroundTooltip',
-    'rounded',
-    typography.body[size === 'small' ? 'body3regular' : 'body2regular'],
+    'absolute z-tooltip inline-block w-max rounded bg-background-uiBackgroundTooltip text-text-textOnColor',
+    {
+      'typography-body3regular': size === 'small',
+      'typography-body2regular': size === 'medium',
+      'px-2 pb-1 pt-1.5': size === 'small',
+      'px-4 py-3': size === 'medium',
+      'left-0': horizontalAlign === 'left',
+      'right-0': horizontalAlign === 'right',
+      'left-auto': horizontalAlign === 'center',
+    },
   );
 
   return (
