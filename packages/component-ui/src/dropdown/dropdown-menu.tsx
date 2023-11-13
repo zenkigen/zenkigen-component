@@ -18,10 +18,9 @@ export function DropdownMenu({
   verticalPosition = 'bottom',
   horizontalAlign = 'left',
 }: PropsWithChildren<Props>) {
-  const { isVisible, isDisabled, targetDimensions, variant } = useContext(DropdownContext);
+  const { isVisible, isDisabled, targetDimensions, variant, portalTargetRef } = useContext(DropdownContext);
   const wrapperClasses = clsx(
     'z-dropdown',
-    'absolute',
     'w-max',
     'bg-background-uiBackground01',
     'rounded',
@@ -29,6 +28,7 @@ export function DropdownMenu({
     'overflow-y-auto',
     horizontalAlign === 'left' ? 'left-0' : horizontalAlign === 'right' ? 'right-0' : 'left-auto',
     {
+      absolute: !portalTargetRef,
       'border-solid border border-border-uiBorder01': variant === 'outline',
       'py-1': !isNoPadding,
     },
@@ -40,8 +40,8 @@ export function DropdownMenu({
       <ul
         className={wrapperClasses}
         style={{
-          top: verticalPosition === 'bottom' ? `${targetDimensions.height + 4}px` : 'unset',
-          bottom: verticalPosition === 'top' ? `${targetDimensions.height + 4}px` : 'unset',
+          top: !portalTargetRef && verticalPosition === 'bottom' ? `${targetDimensions.height + 4}px` : 'unset',
+          bottom: !portalTargetRef && verticalPosition === 'top' ? `${targetDimensions.height + 4}px` : 'unset',
           maxHeight,
         }}
       >
