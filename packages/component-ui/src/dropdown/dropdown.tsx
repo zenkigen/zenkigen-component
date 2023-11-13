@@ -1,5 +1,5 @@
 import { IconName } from '@zenkigen-inc/component-icons';
-import { buttonColors, focusVisible, typography } from '@zenkigen-inc/component-theme';
+import { buttonColors, focusVisible } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
 import { MutableRefObject, PropsWithChildren, ReactElement, useCallback, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
@@ -102,14 +102,13 @@ export function Dropdown({
     },
   );
 
-  const labelClasses = clsx(
-    'flex',
-    'items-center',
-    !isArrowHidden ? (size === 'x-small' ? 'mr-1' : 'mr-2') : null,
-    typography.label[
-      size === 'x-small' ? 'label3regular' : size === 'small' || size === 'medium' ? 'label2regular' : 'label1regular'
-    ],
-  );
+  const labelClasses = clsx('flex items-center', {
+    'mr-1': !isArrowHidden && size === 'x-small',
+    'mr-2': !isArrowHidden && size !== 'x-small',
+    'typography-label3regular': size === 'x-small',
+    'typography-label2regular': size === 'small' || size === 'medium',
+    'typography-label1regular': size === 'large',
+  });
 
   return (
     <DropdownContext.Provider

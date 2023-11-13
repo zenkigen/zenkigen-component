@@ -15,9 +15,7 @@ export function Heading(props: Props) {
   const TagName = `h${props.level}` as const;
 
   const classes = clsx(
-    'flex',
-    'items-center',
-    'text-text-text01',
+    `flex items-center text-text-text01`,
     typography.heading[TagName],
     { 'gap-2': props.level === 1 },
     { 'gap-1': props.level > 1 },

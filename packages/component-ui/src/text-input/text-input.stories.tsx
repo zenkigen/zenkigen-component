@@ -1,6 +1,5 @@
 import { action } from '@storybook/addon-actions';
 import { Meta, StoryObj } from '@storybook/react';
-import { typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
 import { ChangeEvent, ReactNode, useState } from 'react';
 
@@ -20,7 +19,7 @@ type ErrorTextProps = {
 };
 
 const ErrorText = ({ ...props }: ErrorTextProps) => {
-  const classes = clsx('px-2', 'mt-1', `${typography.label.label4regular}`, {
+  const classes = clsx('typography-label4regular mt-1 px-2', {
     'text-text-text02': !props.isError,
     'text-support-supportError': props.isError,
   });

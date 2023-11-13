@@ -20,17 +20,14 @@ export function DropdownMenu({
 }: PropsWithChildren<Props>) {
   const { isVisible, isDisabled, targetDimensions, variant, portalTargetRef } = useContext(DropdownContext);
   const wrapperClasses = clsx(
-    'z-dropdown',
-    'w-max',
-    'bg-background-uiBackground01',
-    'rounded',
-    'shadow-floatingShadow',
-    'overflow-y-auto',
-    horizontalAlign === 'left' ? 'left-0' : horizontalAlign === 'right' ? 'right-0' : 'left-auto',
+    'z-dropdown w-max overflow-y-auto rounded bg-background-uiBackground01 shadow-floatingShadow',
     {
       absolute: !portalTargetRef,
       'border-solid border border-border-uiBorder01': variant === 'outline',
       'py-1': !isNoPadding,
+      'left-0': horizontalAlign === 'left',
+      'right-0': horizontalAlign === 'right',
+      'left-auto': horizontalAlign === 'center',
     },
   );
 

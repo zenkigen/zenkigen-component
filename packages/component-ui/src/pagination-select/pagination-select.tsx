@@ -1,6 +1,3 @@
-import { typography } from '@zenkigen-inc/component-theme';
-import clsx from 'clsx';
-
 import { IconButton } from '../icon-button';
 import { SelectOption } from '../select';
 import { Select } from '../select';
@@ -52,7 +49,7 @@ export function PaginationSelect({
   return (
     <nav aria-label="pagination" className="flex items-center gap-x-1">
       <div className="flex items-center gap-x-2">
-        <div className={clsx('text-text-text01', typography.label.label2regular)}>
+        <div className="typography-label2regular text-text-text01">
           {(currentPage - 1) * sizePerPage + 1} -{' '}
           {currentPage * sizePerPage > totalSize ? totalSize : currentPage * sizePerPage}
           {countLabel}
@@ -66,7 +63,7 @@ export function PaginationSelect({
         >
           {optionsList && optionsList.map((option) => <Select.Option key={option.id} option={option} />)}
         </Select>
-        <div className={clsx('text-text-text03', typography.label.label2regular)}>
+        <div className="typography-label2regular text-text-text03">
           / {pageMax}
           {pageLabel}
         </div>

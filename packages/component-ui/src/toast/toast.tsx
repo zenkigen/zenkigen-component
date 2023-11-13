@@ -1,4 +1,3 @@
-import { typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
 import { AnimationEvent, CSSProperties, ReactNode, useCallback, useEffect, useState } from 'react';
 
@@ -43,13 +42,13 @@ export function Toast({
     ['animate-toast-in']: isAnimation && !isRemoving,
     ['animate-toast-out opacity-0']: isAnimation && isRemoving,
   });
-  const iconClasses = clsx('flex', 'items-center', {
+  const iconClasses = clsx('flex items-center', {
     'fill-support-supportSuccess': state === 'success',
     'fill-support-supportError': state === 'error',
     'fill-support-supportWarning': state === 'warning',
     'fill-support-supportInfo': state === 'information',
   });
-  const textClasses = clsx('flex-1', 'pt-[3px]', typography.body.body2regular, {
+  const textClasses = clsx('typography-body2regular flex-1 pt-[3px]', {
     'text-support-supportError': state === 'error',
     'text-text-text01': state === 'success' || state === 'warning' || state === 'information',
   });

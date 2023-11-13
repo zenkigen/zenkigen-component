@@ -1,4 +1,4 @@
-import { buttonColors, focusVisible, typography } from '@zenkigen-inc/component-theme';
+import { buttonColors, focusVisible } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
 import { CSSProperties, PropsWithChildren, ReactNode } from 'react';
 
@@ -38,7 +38,7 @@ export function Button({ size = 'medium', variant = 'fill', ...props }: PropsWit
     buttonColors[variant].active,
     buttonColors[variant].disabled,
     focusVisible.normal,
-    size === 'large' ? typography.label.label1regular : typography.label.label2regular,
+    size === 'large' ? 'typography-label1regular' : 'typography-label2regular',
     { 'h-6 px-2.5': size === 'small' },
     { 'h-8 px-3': size === 'medium' },
     { 'h-10 px-4 leading-[24px]': size === 'large' },

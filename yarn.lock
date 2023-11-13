@@ -4526,6 +4526,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zenkigen-inc/component-config@workspace:packages/component-config"
   dependencies:
+    "@zenkigen-inc/component-theme": "npm:1.4.0"
     microbundle: "npm:0.15.1"
     style-dictionary: "npm:3.9.0"
     tailwindcss: "npm:3.3.5"

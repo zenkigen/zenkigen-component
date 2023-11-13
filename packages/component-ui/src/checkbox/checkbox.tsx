@@ -1,4 +1,4 @@
-import { focusVisible, typography } from '@zenkigen-inc/component-theme';
+import { focusVisible } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
 import { ChangeEvent, useCallback, useState } from 'react';
 
@@ -126,10 +126,7 @@ export function Checkbox({
   );
 
   const labelClasses = clsx(
-    'flex-[1_0_0]',
-    'ml-2',
-    typography.label.label2regular,
-    'break-all',
+    'typography-label2regular ml-2 flex-[1_0_0] break-all',
     isDisabled ? 'pointer-events-none cursor-not-allowed text-disabled-disabled01' : 'cursor-pointer text-text-text01',
   );
 

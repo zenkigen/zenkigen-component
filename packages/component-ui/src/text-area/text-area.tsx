@@ -1,4 +1,3 @@
-import { typography } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
 import { CSSProperties, forwardRef, TextareaHTMLAttributes } from 'react';
 
@@ -20,8 +19,8 @@ export const TextArea = forwardRef<HTMLTextAreaElement, Props>(
         'border-border-uiBorder01 hover:focus-within:border-active-activeInput focus-within:border-active-activeInput text-text-text01':
           !isError,
         'bg-disabled-disabled02 border-disabled-disabled02': props.disabled,
-        [`${typography.body.body1regular} px-2 pt-1.5 pb-2`]: size === 'medium',
-        [`text-4 px-3.5 py-2.5 `]: size === 'large',
+        ['typography-body1regular px-2 pt-1.5 pb-2']: size === 'medium',
+        ['text-4 px-3.5 py-2.5']: size === 'large',
         'text-support-supportError': isError,
         'resize-none': !isResizable,
       },

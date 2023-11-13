@@ -1,4 +1,4 @@
-import { focusVisible, typography } from '@zenkigen-inc/component-theme';
+import { focusVisible } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
 import { CSSProperties, PropsWithChildren, useContext, useLayoutEffect, useRef } from 'react';
 
@@ -32,14 +32,7 @@ export function SelectList({ children, maxHeight }: PropsWithChildren<Props>) {
   }, []);
 
   const listClasses = clsx(
-    'z-dropdown',
-    'absolute',
-    'w-max',
-    'py-2',
-    'overflow-y-auto',
-    'bg-background-uiBackground01',
-    'rounded',
-    'shadow-floatingShadow',
+    'absolute z-dropdown w-max overflow-y-auto rounded bg-background-uiBackground01 py-2 shadow-floatingShadow',
     {
       'top-7': size === 'x-small' || size === 'small',
       'top-9': size === 'medium',
@@ -49,16 +42,8 @@ export function SelectList({ children, maxHeight }: PropsWithChildren<Props>) {
   );
 
   const deselectButtonClasses = clsx(
-    'flex',
-    'items-center',
-    'w-full',
-    'h-8',
-    'px-3',
-    'hover:bg-hover-hover02',
-    'active:bg-active-active02',
-    'text-interactive-interactive02',
+    'typography-label2regular flex h-8 w-full items-center px-3 text-interactive-interactive02 hover:bg-hover-hover02 active:bg-active-active02',
     focusVisible.inset,
-    typography.label.label2regular,
   );
 
   return (
