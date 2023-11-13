@@ -38,13 +38,16 @@ export function Button({ size = 'medium', variant = 'fill', ...props }: PropsWit
     buttonColors[variant].active,
     buttonColors[variant].disabled,
     focusVisible.normal,
-    size === 'large' ? 'typography-label1regular' : 'typography-label2regular',
-    { 'h-6 px-2.5': size === 'small' },
-    { 'h-8 px-3': size === 'medium' },
-    { 'h-10 px-4 leading-[24px]': size === 'large' },
-    { 'inline-flex': props.isAnchor },
-    { 'pointer-events-none': props.isDisabled },
-    { 'rounded-button': !props.borderRadius },
+    {
+      'h-6 px-2.5': size === 'small',
+      'h-8 px-3': size === 'medium',
+      'h-10 px-4 leading-[24px]': size === 'large',
+      'inline-flex': props.isAnchor,
+      'pointer-events-none': props.isDisabled,
+      'rounded-button': !props.borderRadius,
+      'typography-label1regular': size === 'large',
+      'typography-label2regular': size !== 'large',
+    },
   );
 
   if (props.isAnchor) {
