@@ -13,6 +13,7 @@ type Props = {
   variant?: Variant;
   before?: ReactNode;
   after?: ReactNode;
+  borderRadius?: CSSProperties['borderRadius'];
 } & (
   | {
       isAnchor: true;
@@ -27,7 +28,6 @@ type Props = {
 
 export function Button({ size = 'medium', variant = 'fill', ...props }: PropsWithChildren<Props>) {
   const baseClasses = clsx(
-    'rounded-button',
     'flex',
     'shrink-0',
     'gap-1',
@@ -44,11 +44,12 @@ export function Button({ size = 'medium', variant = 'fill', ...props }: PropsWit
     { 'h-10 px-4 leading-[24px]': size === 'large' },
     { 'inline-flex': props.isAnchor },
     { 'pointer-events-none': props.isDisabled },
+    { 'rounded-button': !props.borderRadius },
   );
 
   if (props.isAnchor) {
     return (
-      <a className={baseClasses} href={props.href} target={props.target}>
+      <a className={baseClasses} href={props.href} target={props.target} style={{ borderRadius: props.borderRadius }}>
         {props.before}
         {props.children}
         {props.after}
@@ -61,7 +62,7 @@ export function Button({ size = 'medium', variant = 'fill', ...props }: PropsWit
         className={baseClasses}
         disabled={props.isDisabled}
         onClick={props.onClick}
-        style={{ width: props.width }}
+        style={{ width: props.width, borderRadius: props.borderRadius }}
       >
         {props.before}
         {props.children}
