@@ -1,7 +1,8 @@
 import { IconName } from '@zenkigen-inc/component-icons';
 import { buttonColors, focusVisible } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
-import { PropsWithChildren, ReactElement, useCallback, useRef, useState } from 'react';
+import { MutableRefObject, PropsWithChildren, ReactElement, useCallback, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 import { useOutsideClick } from '../hooks/use-outside-click';
 import { Icon } from '../icon';
@@ -15,6 +16,7 @@ type Props = {
   title?: string;
   isDisabled?: boolean;
   isArrowHidden?: boolean;
+  portalTargetRef?: MutableRefObject<HTMLElement | null>;
 } & (
   | { target: ReactElement; label?: never; icon?: never }
   | {
@@ -34,6 +36,7 @@ export function Dropdown({
   title,
   isDisabled = false,
   isArrowHidden = false,
+  portalTargetRef,
 }: PropsWithChildren<Props>) {
   const [isVisible, setIsVisible] = useState(false);
   const [targetDimensions, setTargetDimensions] = useState({
@@ -108,7 +111,9 @@ export function Dropdown({
   });
 
   return (
-    <DropdownContext.Provider value={{ isVisible, setIsVisible, isDisabled, targetDimensions, variant }}>
+    <DropdownContext.Provider
+      value={{ isVisible, setIsVisible, isDisabled, targetDimensions, variant, portalTargetRef }}
+    >
       <div ref={targetRef} className={wrapperClasses}>
         {target ? (
           <button
@@ -135,7 +140,9 @@ export function Dropdown({
             )}
           </button>
         )}
-        {children}
+        {!portalTargetRef
+          ? children
+          : portalTargetRef && portalTargetRef.current && createPortal(children, portalTargetRef.current)}
       </div>
     </DropdownContext.Provider>
   );
