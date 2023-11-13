@@ -27,7 +27,7 @@ export const TabItem = (props: Props) => {
     {
       ['typography-label2regular']: !props.isSelected,
       ['text-interactive-interactive02 hover:before:bg-border-uiBorder02Dark']: !props.isSelected,
-      ['typography-label1regularlabel.label2bold}']: props.isSelected,
+      ['typography-label2bold']: props.isSelected,
       ['before:bg-interactive-interactive01 hover:before:bg-interactive-interactive01 pointer-events-none']:
         props.isSelected,
     },

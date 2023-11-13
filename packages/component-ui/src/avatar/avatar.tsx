@@ -22,7 +22,7 @@ export function Avatar({ size = 'medium', ...props }: Props) {
     'w-6 h-6 typography-label4regular': size === 'x-small',
     'bg-disabled-disabled01': props.isDisabled,
     'bg-icon-icon01': !props.userId,
-    [userColors[props.userId ?? 0 % userColors.length] as string]: props.userId,
+    [userColors[(props.userId ?? 0) % userColors.length] as string]: props.userId && !props.isDisabled,
   });
 
   const trimmedFirstName = props.firstName.trim();
