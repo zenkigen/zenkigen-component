@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { IconName } from '@zenkigen-inc/component-icons';
 import { typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
-import { useState } from 'react';
+import { forwardRef, PropsWithChildren, useRef, useState } from 'react';
 
 import { Avatar } from '../avatar';
 import { Button } from '../button';
@@ -433,10 +433,10 @@ const DropdownWithCustomMenu = () => {
       onChange: () => setIsOn5((prev) => !prev),
     },
   ];
-
-  return (
+  
+return (
     <div style={{ display: 'flex', alignItems: 'center', margin: '60px 100px' }}>
-      <Dropdown size="medium" label="フィルター" icon="filter">
+      <Dropdown size="medium" label="フィルター" icon="filter" >
         <Dropdown.Menu horizontalAlign="left" isNoPadding>
           <ul className="flex w-[208px] flex-col gap-y-2.5 px-4 py-3">
             {items.map((item) => (
@@ -473,4 +473,93 @@ const DropdownWithCustomMenu = () => {
 
 export const WithCustomMenu: Story = {
   render: () => <DropdownWithCustomMenu />,
+};
+
+const DropdownMenuContainer = forwardRef<HTMLDivElement, PropsWithChildren>(
+  ({ children }: PropsWithChildren, ref) => {
+    const classes = clsx(
+      'absolute',
+      'top-10',
+      'left-10',
+    );
+    
+    return (
+      <div className={classes} ref={ref}>{children}</div>
+    );
+  },
+);
+DropdownMenuContainer.displayName = 'DropdownMenuContainer';
+
+
+const DropdownWithPortal = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  return (
+    <div>
+      <div style={{ display: 'flex', alignItems: "center", justifyContent: "center", height: "100vh"}}>
+        <div style={{ display: 'flex', flexDirection: 'row', gap: "100px"}}>
+          <div>
+            <Dropdown size="large" target={<Avatar size="medium" userId={1} lastName="全機現" firstName="太郎" />} portalTargetRef={containerRef}>
+                <Dropdown.Menu>
+                  {items.map((item) => (
+                    <Dropdown.Item key={item.id} onClick={item.onClick}>
+                      {item.content}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+            </Dropdown>
+          </div>
+          <div>
+            <Dropdown size="medium" target={<Icon name="more" size="large" color="icon01" />} portalTargetRef={containerRef}>
+                <Dropdown.Menu>
+                  {items.map((item) => (
+                    <Dropdown.Item key={item.id} onClick={item.onClick}>
+                      {item.content}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+            </Dropdown>
+          </div>
+          <div>
+            <Dropdown size="large" label="選択" portalTargetRef={containerRef}>
+                <Dropdown.Menu horizontalAlign="left">
+                  {items2.map((item) => (
+                    <Dropdown.Item key={item.id} onClick={item.onClick}>
+                      {item.content}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+            </Dropdown>
+          </div>
+          <div>
+            <Dropdown size="large" label="選択" icon="add" portalTargetRef={containerRef}>
+                <Dropdown.Menu horizontalAlign="left">
+                  {items2.map((item) => (
+                    <Dropdown.Item key={item.id} onClick={item.onClick}>
+                      {item.content}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+            </Dropdown>
+          </div>
+          <div>
+            <Dropdown size="large" label="選択" icon="add" isArrowHidden portalTargetRef={containerRef}>
+                <Dropdown.Menu horizontalAlign="left">
+                  {items2.map((item) => (
+                    <Dropdown.Item key={item.id} onClick={item.onClick}>
+                      {item.content}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+            </Dropdown>
+          </div>
+        </div>
+      </div>
+      <DropdownMenuContainer ref={containerRef}/>
+    </div>
+  );
+};
+
+export const WithPortal: Story = {
+  render: () => <DropdownWithPortal />,
 };
