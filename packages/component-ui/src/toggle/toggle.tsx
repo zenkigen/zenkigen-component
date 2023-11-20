@@ -20,25 +20,19 @@ export function Toggle({
   labelPosition = 'right',
   isDisabled,
 }: Props) {
-  const wrapperClasses = 'flex flex-[0_0_auto] items-center relative';
-  const baseClasses = clsx(
-    'relative flex items-center rounded-full',
-    {
-      'w-8 h-4 px-[3px]': size === 'small',
-      'w-12 h-6 px-1': size === 'medium',
-    },
-    isDisabled
-      ? { 'bg-disabled-disabledOn': isChecked, 'bg-disabled-disabled01': !isChecked }
-      : {
-          'bg-interactive-interactive01 peer-hover:bg-hover-hover01': isChecked,
-          'bg-interactive-interactive02 peer-hover:bg-hover-hover02Dark': !isChecked,
-        },
-  );
+  const baseClasses = clsx('relative flex items-center rounded-full', {
+    'bg-disabled-disabledOn': isDisabled && isChecked,
+    'bg-disabled-disabled01': isDisabled && !isChecked,
+    'bg-interactive-interactive01 peer-hover:bg-hover-hover01': !isDisabled && isChecked,
+    'bg-interactive-interactive02 peer-hover:bg-hover-hover02Dark': !isDisabled && !isChecked,
+    'w-8 h-4 px-[3px]': size === 'small',
+    'w-12 h-6 px-1': size === 'medium',
+  });
   const inputClasses = clsx(
     'peer absolute inset-0 z-[1] opacity-0',
     isDisabled ? 'cursor-not-allowed' : 'cursor-pointer',
   );
-  const indicatorClasses = clsx('bg-icon-iconOnColor', 'rounded-full', {
+  const indicatorClasses = clsx('rounded-full bg-icon-iconOnColor', {
     'w-2.5 h-2.5': size === 'small',
     'w-4 h-4': size === 'medium',
     'ml-auto': isChecked,
@@ -53,7 +47,7 @@ export function Toggle({
   });
 
   return (
-    <div className={wrapperClasses}>
+    <div className="relative flex flex-[0_0_auto] items-center">
       {label && labelPosition === 'left' && (
         <label htmlFor={id} className={labelClasses}>
           {label}

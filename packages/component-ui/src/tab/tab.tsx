@@ -1,4 +1,3 @@
-import { clsx } from 'clsx';
 import { ReactNode } from 'react';
 
 import { TabItem } from './tab-item';
@@ -8,22 +7,11 @@ type Props = {
 };
 
 export function Tab({ children }: Props) {
-  const classes = clsx(
-    'flex',
-    'px-6',
-    'gap-4',
-    'relative',
-    'before:bg-border-uiBorder01',
-    'before:h-px',
-    'before:bottom-0',
-    'before:left-0',
-    'before:right-0',
-    'before:absolute',
-    {},
-  );
-
   return (
-    <div role="tablist" className={classes}>
+    <div
+      role="tablist"
+      className="relative flex gap-4 px-6 before:absolute before:inset-x-0 before:bottom-0 before:h-px before:bg-border-uiBorder01"
+    >
       {children}
     </div>
   );

@@ -7,13 +7,13 @@ type Props = {
 };
 
 export function Loading({ size = 'medium', position = 'fixed', height = '100%' }: Props) {
-  const wrapperClasses = clsx(position, 'top-0', 'left-0', 'z-20', 'flex', 'items-center', 'justify-center', 'w-full');
+  const wrapperClasses = clsx(position, 'left-0 top-0 z-20 flex w-full items-center justify-center');
 
-  const svgClasses = clsx(
-    size === 'small' && 'h-4 w-4',
-    size === 'medium' && 'h-8 w-8',
-    size === 'large' && 'h-16 w-16',
-  );
+  const svgClasses = clsx({
+    'h-4 w-4': size === 'small',
+    'h-8 w-8': size === 'medium',
+    'h-16 w-16': size === 'large',
+  });
 
   return (
     <>

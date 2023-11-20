@@ -9,29 +9,20 @@ type Props = {
 };
 
 export const TailIcon = (props: Props) => {
-  const tailClasses = clsx(
-    'absolute',
-    props.verticalPosition === 'bottom' ? 'rotate-180' : 'rotate-0',
-    props.verticalPosition === 'bottom'
-      ? props.size === 'small'
-        ? '-top-1'
-        : '-top-2'
-      : props.size === 'small'
-        ? '-bottom-1'
-        : '-bottom-2',
-    props.horizontalAlign === 'right'
-      ? props.size === 'small'
-        ? 'right-2'
-        : 'right-4'
-      : props.horizontalAlign === 'left'
-        ? props.size === 'small'
-          ? 'left-2'
-          : 'left-4'
-        : props.size === 'small'
-          ? 'left-2/4 -translate-x-1'
-          : 'left-2/4 -translate-x-2',
-    'fill-background-uiBackgroundTooltip',
-  );
+  const tailClasses = clsx('absolute fill-background-uiBackgroundTooltip', {
+    'rotate-180': props.verticalPosition === 'bottom',
+    'rotate-0': props.verticalPosition !== 'bottom',
+    '-top-1': props.verticalPosition === 'bottom' && props.size === 'small',
+    '-top-2': props.verticalPosition === 'bottom' && props.size !== 'small',
+    '-bottom-1': props.verticalPosition !== 'bottom' && props.size === 'small',
+    '-bottom-2': props.verticalPosition !== 'bottom' && props.size !== 'small',
+    'right-2': props.horizontalAlign === 'right' && props.size === 'small',
+    'right-4': props.horizontalAlign === 'right' && props.size !== 'small',
+    'left-2': props.horizontalAlign === 'left' && props.size === 'small',
+    'left-4': props.horizontalAlign === 'left' && props.size !== 'small',
+    'left-2/4 -translate-x-1': props.horizontalAlign === 'center' && props.size === 'small',
+    'left-2/4 -translate-x-2': props.horizontalAlign === 'center' && props.size !== 'small',
+  });
 
   if (props.size === 'small') {
     return (

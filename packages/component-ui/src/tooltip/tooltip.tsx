@@ -49,8 +49,6 @@ export function Tooltip({
     setIsVisible(false);
   }, []);
 
-  const targetClasses = clsx('relative', 'flex', 'items-center', 'justify-center');
-
   const tooltipBodyClasses = clsx(
     'absolute z-tooltip inline-block w-max rounded bg-background-uiBackgroundTooltip text-text-textOnColor',
     {
@@ -67,7 +65,7 @@ export function Tooltip({
   return (
     <div
       ref={targetRef}
-      className={targetClasses}
+      className="relative flex items-center justify-center"
       onMouseOver={handleMouseOverWrapper}
       onMouseLeave={handleMouseOutWrapper}
     >
