@@ -7,11 +7,12 @@ type Color = keyof typeof iconColors;
 
 type Props = {
   color?: Color;
+  className?: string;
 };
 
 function IconList(props: Props) {
   return (
-    <div>
+    <div className={props.className}>
       <Icon name="add" color={props.color} />
       <Icon name="ai" color={props.color} />
       <Icon name="angle-down" color={props.color} />
@@ -122,13 +123,20 @@ export function Base() {
 export function Color() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+      <div>icon01:</div>
       <IconList color="icon01" />
-      <IconList color="icon01Dark" />
+      <div>icon02:</div>
       <IconList color="icon02" />
-      <IconList color="icon02Dark" />
+      <div>icon03:</div>
       <IconList color="icon03" />
-      <IconList color="icon03Dark" />
-      <IconList color="iconOnColor" />
+      <div>icon01Dark:</div>
+      <IconList color="icon01Dark" className="bg-background-uiBackground01Dark" />
+      <div>icon02Dark:</div>
+      <IconList color="icon02Dark" className="bg-background-uiBackground01Dark" />
+      <div>icon03Dark:</div>
+      <IconList color="icon03Dark" className="bg-background-uiBackground01Dark" />
+      <div>iconOnColor:</div>
+      <IconList color="iconOnColor" className="bg-interactive-interactive01" />
     </div>
   );
 }
