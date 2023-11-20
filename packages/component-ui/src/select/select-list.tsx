@@ -22,7 +22,7 @@ export function SelectList({ children, maxHeight }: PropsWithChildren<Props>) {
       const element = Array.from(ref.current.children || []).find(
         (item) => item.getAttribute('data-id') === selectedOption?.id,
       );
-      if (element) {
+      if (element && ref.current.scroll) {
         const wrapRect = ref.current.getBoundingClientRect();
         const rect = element.getBoundingClientRect();
         ref.current.scroll(0, rect.top - wrapRect.top - wrapRect.height / 2 + rect.height / 2);
