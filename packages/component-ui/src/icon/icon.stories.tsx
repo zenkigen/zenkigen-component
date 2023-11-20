@@ -1,104 +1,134 @@
-import { Icon } from '.';
+import { iconColors } from '@zenkigen-inc/component-theme';
 
+import { Icon } from '.';
 export default { component: Icon };
+
+type Color = keyof typeof iconColors;
+
+type Props = {
+  color?: Color;
+};
+
+function IconList(props: Props) {
+  return (
+    <div>
+      <Icon name="add" color={props.color} />
+      <Icon name="ai" color={props.color} />
+      <Icon name="angle-down" color={props.color} />
+      <Icon name="angle-left" color={props.color} />
+      <Icon name="angle-right" color={props.color} />
+      <Icon name="angle-small-down" color={props.color} />
+      <Icon name="angle-small-up" color={props.color} />
+      <Icon name="angle-up" color={props.color} />
+      <Icon name="arrow-left" color={props.color} />
+      <Icon name="arrow-down" color={props.color} />
+      <Icon name="arrow-right" color={props.color} />
+      <Icon name="arrow-up" color={props.color} />
+      <Icon name="attachment" color={props.color} />
+      <Icon name="attention" color={props.color} />
+      <Icon name="building" color={props.color} />
+      <Icon name="calendar-check" color={props.color} />
+      <Icon name="calendar-draft" color={props.color} />
+      <Icon name="calendar-minus" color={props.color} />
+      <Icon name="calendar-today" color={props.color} />
+      <Icon name="calendar" color={props.color} />
+      <Icon name="caret-down" color={props.color} />
+      <Icon name="caret-right" color={props.color} />
+      <Icon name="chart-bar" color={props.color} />
+      <Icon name="chart-line" color={props.color} />
+      <Icon name="check" color={props.color} />
+      <Icon name="circle" color={props.color} />
+      <Icon name="close" color={props.color} />
+      <Icon name="comment" color={props.color} />
+      <Icon name="contract" color={props.color} />
+      <Icon name="copy" color={props.color} />
+      <Icon name="delete" color={props.color} />
+      <Icon name="document" color={props.color} />
+      <Icon name="documents" color={props.color} />
+      <Icon name="double circle" color={props.color} />
+      <Icon name="download-document" color={props.color} />
+      <Icon name="download" color={props.color} />
+      <Icon name="edit" color={props.color} />
+      <Icon name="email" color={props.color} />
+      <Icon name="expand" color={props.color} />
+      <Icon name="external-link" color={props.color} />
+      <Icon name="filter" color={props.color} />
+      <Icon name="flag" color={props.color} />
+      <Icon name="global" color={props.color} />
+      <Icon name="graph-line" color={props.color} />
+      <Icon name="hamburger-close" color={props.color} />
+      <Icon name="hamburger" color={props.color} />
+      <Icon name="help" color={props.color} />
+      <Icon name="home" color={props.color} />
+      <Icon name="image" color={props.color} />
+      <Icon name="information-filled" color={props.color} />
+      <Icon name="information" color={props.color} />
+      <Icon name="input-delete" color={props.color} />
+      <Icon name="link" color={props.color} />
+      <Icon name="list" color={props.color} />
+      <Icon name="message-text" color={props.color} />
+      <Icon name="more" color={props.color} />
+      <Icon name="movie" color={props.color} />
+      <Icon name="notification" color={props.color} />
+      <Icon name="pause" color={props.color} />
+      <Icon name="pdf" color={props.color} />
+      <Icon name="picture-in-picture" color={props.color} />
+      <Icon name="play-filled" color={props.color} />
+      <Icon name="play" color={props.color} />
+      <Icon name="presentation" color={props.color} />
+      <Icon name="remove" color={props.color} />
+      <Icon name="score" color={props.color} />
+      <Icon name="search" color={props.color} />
+      <Icon name="send" color={props.color} />
+      <Icon name="share" color={props.color} />
+      <Icon name="shuffle" color={props.color} />
+      <Icon name="sidebar" color={props.color} />
+      <Icon name="slider-editing" color={props.color} />
+      <Icon name="sort" color={props.color} />
+      <Icon name="star-filled" color={props.color} />
+      <Icon name="star" color={props.color} />
+      <Icon name="store" color={props.color} />
+      <Icon name="success-filled" color={props.color} />
+      <Icon name="table-download" color={props.color} />
+      <Icon name="table-upload" color={props.color} />
+      <Icon name="table" color={props.color} />
+      <Icon name="timer" color={props.color} />
+      <Icon name="transcription" color={props.color} />
+      <Icon name="triangle" color={props.color} />
+      <Icon name="upload" color={props.color} />
+      <Icon name="user-add" color={props.color} />
+      <Icon name="user-group" color={props.color} />
+      <Icon name="user-line" color={props.color} />
+      <Icon name="user-multi" color={props.color} />
+      <Icon name="user-photograph" color={props.color} />
+      <Icon name="user-remove" color={props.color} />
+      <Icon name="user" color={props.color} />
+      <Icon name="video" color={props.color} />
+      <Icon name="volume-off" color={props.color} />
+      <Icon name="volume" color={props.color} />
+      <Icon name="warning" color={props.color} />
+    </div>
+  );
+}
+
 export function Base() {
   return (
     <div>
-      <Icon name="add" />
-      <Icon name="ai" />
-      <Icon name="angle-down" />
-      <Icon name="angle-left" />
-      <Icon name="angle-right" />
-      <Icon name="angle-small-down" />
-      <Icon name="angle-small-up" />
-      <Icon name="angle-up" />
-      <Icon name="arrow-left" />
-      <Icon name="arrow-down" />
-      <Icon name="arrow-right" />
-      <Icon name="arrow-up" />
-      <Icon name="attachment" />
-      <Icon name="attention" />
-      <Icon name="building" />
-      <Icon name="calendar-check" />
-      <Icon name="calendar-draft" />
-      <Icon name="calendar-minus" />
-      <Icon name="calendar-today" />
-      <Icon name="calendar" />
-      <Icon name="caret-down" />
-      <Icon name="caret-right" />
-      <Icon name="chart-bar" />
-      <Icon name="chart-line" />
-      <Icon name="check" />
-      <Icon name="circle" />
-      <Icon name="close" />
-      <Icon name="comment" />
-      <Icon name="contract" />
-      <Icon name="copy" />
-      <Icon name="delete" />
-      <Icon name="document" />
-      <Icon name="documents" />
-      <Icon name="double circle" />
-      <Icon name="download-document" />
-      <Icon name="download" />
-      <Icon name="edit" />
-      <Icon name="email" />
-      <Icon name="expand" />
-      <Icon name="external-link" />
-      <Icon name="filter" />
-      <Icon name="flag" />
-      <Icon name="global" />
-      <Icon name="graph-line" />
-      <Icon name="hamburger-close" />
-      <Icon name="hamburger" />
-      <Icon name="help" />
-      <Icon name="home" />
-      <Icon name="image" />
-      <Icon name="information-filled" />
-      <Icon name="information" />
-      <Icon name="input-delete" />
-      <Icon name="link" />
-      <Icon name="list" />
-      <Icon name="message-text" />
-      <Icon name="more" />
-      <Icon name="movie" />
-      <Icon name="notification" />
-      <Icon name="pause" />
-      <Icon name="pdf" />
-      <Icon name="picture-in-picture" />
-      <Icon name="play-filled" />
-      <Icon name="play" />
-      <Icon name="presentation" />
-      <Icon name="remove" />
-      <Icon name="score" />
-      <Icon name="search" />
-      <Icon name="send" />
-      <Icon name="share" />
-      <Icon name="shuffle" />
-      <Icon name="sidebar" />
-      <Icon name="slider-editing" />
-      <Icon name="sort" />
-      <Icon name="star-filled" />
-      <Icon name="star" />
-      <Icon name="store" />
-      <Icon name="success-filled" />
-      <Icon name="table-download" />
-      <Icon name="table-upload" />
-      <Icon name="table" />
-      <Icon name="timer" />
-      <Icon name="transcription" />
-      <Icon name="triangle" />
-      <Icon name="upload" />
-      <Icon name="user-add" />
-      <Icon name="user-group" />
-      <Icon name="user-line" />
-      <Icon name="user-multi" />
-      <Icon name="user-photograph" />
-      <Icon name="user-remove" />
-      <Icon name="user" />
-      <Icon name="video" />
-      <Icon name="volume-off" />
-      <Icon name="volume" />
-      <Icon name="warning" />
+      <IconList />
+    </div>
+  );
+}
+
+export function Color() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+      <IconList color="icon01" />
+      <IconList color="icon01Dark" />
+      <IconList color="icon02" />
+      <IconList color="icon02Dark" />
+      <IconList color="icon03" />
+      <IconList color="icon03Dark" />
+      <IconList color="iconOnColor" />
     </div>
   );
 }

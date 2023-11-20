@@ -10,8 +10,6 @@ type Props = {
 };
 
 export function SelectItem({ children, isSortKey, onClickItem }: PropsWithChildren<Props>) {
-  const listItemClasses = clsx('flex w-full items-center');
-
   const itemClasses = clsx(
     'typography-label2regular flex h-8 w-full items-center px-3 hover:bg-hover-hover02 active:bg-active-active02',
     focusVisible.inset,
@@ -22,7 +20,7 @@ export function SelectItem({ children, isSortKey, onClickItem }: PropsWithChildr
   );
 
   return (
-    <li className={listItemClasses} onClick={onClickItem}>
+    <li className="flex w-full items-center" onClick={onClickItem}>
       <button className={itemClasses} type="button">
         <span className="ml-1 mr-6">{children}</span>
         {isSortKey && (

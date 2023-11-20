@@ -15,7 +15,6 @@ export function DropdownItem({ children, color = 'gray', onClick }: PropsWithChi
     setIsVisible(false);
     onClick && onClick(event);
   };
-  const listItemClasses = clsx('flex w-full items-center');
   const itemClasses = clsx(
     'typography-label2regular flex h-8 w-full items-center px-3 hover:bg-hover-hover02 active:bg-active-active02',
     focusVisible.inset,
@@ -26,7 +25,7 @@ export function DropdownItem({ children, color = 'gray', onClick }: PropsWithChi
   );
 
   return (
-    <li className={listItemClasses}>
+    <li className="flex w-full items-center">
       <button className={itemClasses} type="button" onClick={handleClickItem}>
         {children}
       </button>

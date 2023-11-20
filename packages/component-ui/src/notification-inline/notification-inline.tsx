@@ -27,7 +27,7 @@ export function NotificationInline({ state = 'default', size = 'medium', ...prop
     'p-3': size === 'medium',
   });
 
-  const iconClasses = clsx('flex', 'items-center', {
+  const iconClasses = clsx('flex items-center', {
     'fill-support-supportError': state === 'attention',
     'fill-support-supportWarning': state === 'warning',
     'fill-blue-blue50': state === 'information',

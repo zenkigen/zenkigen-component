@@ -28,11 +28,7 @@ type Props = {
 
 export function Button({ size = 'medium', variant = 'fill', ...props }: PropsWithChildren<Props>) {
   const baseClasses = clsx(
-    'flex',
-    'shrink-0',
-    'gap-1',
-    'items-center',
-    'justify-center',
+    'flex shrink-0 items-center justify-center gap-1',
     buttonColors[variant].base,
     buttonColors[variant].hover,
     buttonColors[variant].active,

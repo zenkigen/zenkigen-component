@@ -66,36 +66,28 @@ export function Dropdown({
     }
   }, [isVisible]);
 
-  const wrapperClasses = clsx(
-    'relative',
-    'flex shrink-0 items-center gap-1',
-    'rounded',
-    isDisabled && 'cursor-not-allowed',
-  );
+  const wrapperClasses = clsx('relative flex shrink-0 items-center gap-1 rounded', {
+    'cursor-not-allowed': isDisabled,
+  });
 
   const childrenButtonClasses = clsx(
-    'flex items-center justify-center',
-    'rounded',
-    'hover:bg-hover-hover02',
-    'active:bg-active-active02',
+    'flex items-center justify-center rounded p-1 hover:bg-hover-hover02 active:bg-active-active02',
     focusVisible.normal,
-    isDisabled && 'pointer-events-none',
-    'p-1',
     {
+      'pointer-events-none': isDisabled,
       'border border-border-uiBorder02': variant === 'outline',
     },
   );
 
   const buttonClasses = clsx(
-    'flex items-center',
-    'rounded',
+    'flex items-center rounded',
     buttonColors[variant].base,
     buttonColors[variant].hover,
     buttonColors[variant].active,
     buttonColors[variant].disabled,
     focusVisible.normal,
-    isDisabled && 'pointer-events-none',
     {
+      'pointer-events-none': isDisabled,
       'h-6 px-2': size === 'x-small' || size === 'small',
       'h-8 px-4': size === 'medium',
       'h-10 px-4': size === 'large',
