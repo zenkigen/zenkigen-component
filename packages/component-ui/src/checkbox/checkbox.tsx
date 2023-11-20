@@ -72,16 +72,16 @@ export function Checkbox({
     isDisabled
       ? 'border-disabled-disabled01'
       : color === 'error'
-      ? isMouseOver
-        ? 'border-hover-hoverError'
-        : 'border-support-supportError'
-      : color === 'gray'
-      ? isMouseOver
-        ? 'border-hover-hoverUiBorder'
-        : 'border-interactive-interactive02'
-      : isMouseOver
-      ? 'border-hover-hoverUiBorder'
-      : 'border-border-uiBorder03',
+        ? isMouseOver
+          ? 'border-hover-hoverError'
+          : 'border-support-supportError'
+        : color === 'gray'
+          ? isMouseOver
+            ? 'border-hover-hoverUiBorder'
+            : 'border-interactive-interactive02'
+          : isMouseOver
+            ? 'border-hover-hoverUiBorder'
+            : 'border-border-uiBorder03',
   );
 
   const indicatorClasses = clsx('h-5', 'w-5', 'relative', 'flex', 'flex-[0_0_auto]', 'items-center', 'justify-center', {
@@ -101,16 +101,16 @@ export function Checkbox({
     isDisabled && isChecked
       ? 'bg-disabled-disabled01'
       : color === 'gray'
-      ? isMouseOver
-        ? 'bg-hover-hover02Dark'
-        : 'bg-interactive-interactive02'
-      : color === 'error'
-      ? isMouseOver
-        ? 'bg-hover-hoverError'
-        : 'bg-support-supportError'
-      : isMouseOver
-      ? 'bg-hover-hover01'
-      : 'bg-interactive-interactive01',
+        ? isMouseOver
+          ? 'bg-hover-hover02Dark'
+          : 'bg-interactive-interactive02'
+        : color === 'error'
+          ? isMouseOver
+            ? 'bg-hover-hoverError'
+            : 'bg-support-supportError'
+          : isMouseOver
+            ? 'bg-hover-hover01'
+            : 'bg-interactive-interactive01',
     {
       'scale-0': !isChecked,
       'scale-100': isChecked,
