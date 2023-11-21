@@ -13,17 +13,17 @@ type Props = {
   width?: CSSProperties['width'];
   height?: CSSProperties['height'];
   isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onClose: () => void;
   portalTargetRef?: MutableRefObject<HTMLElement | null>;
 };
 
-export function Modal({ children, width = 480, height, isOpen, setIsOpen, portalTargetRef }: PropsWithChildren<Props>) {
+export function Modal({ children, width = 480, height, isOpen, onClose, portalTargetRef }: PropsWithChildren<Props>) {
   const renderWidth = typeof width === 'number' ? Math.max(width, LIMIT_WIDTH) : width;
   const renderHeight = typeof height === 'number' ? Math.max(height, LIMIT_HEIGHT) : height;
 
   return createPortal(
     isOpen && (
-      <ModalContext.Provider value={{ setIsOpen }}>
+      <ModalContext.Provider value={{ onClose }}>
         <div className="fixed left-0 top-0 z-overlay flex h-full w-full items-center justify-center bg-background-backgroundOverlayBlack">
           <div
             className="flex shrink-0 flex-col rounded-lg bg-background-uiBackground01 shadow-modalShadow"

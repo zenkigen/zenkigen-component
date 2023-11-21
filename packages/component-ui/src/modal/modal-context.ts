@@ -1,9 +1,9 @@
 import { createContext } from 'react';
 
 type ModalReturnType = {
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onClose: () => void;
 };
 
 export const ModalContext = createContext<ModalReturnType>({
-  setIsOpen: () => false,
+  onClose: () => null,
 });
