@@ -255,7 +255,9 @@ export const Danger: Story = {
           open
         </button>
         <Modal isOpen={isOpen} width={args.width}>
-          <Modal.Header isNoBorder>タイトル</Modal.Header>
+          <Modal.Header isNoBorder>
+            タイトル
+          </Modal.Header>
           <Modal.Body>
             <div className="flex h-16 w-full items-center justify-center">Content</div>
           </Modal.Body>
