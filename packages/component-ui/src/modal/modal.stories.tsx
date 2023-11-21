@@ -20,14 +20,14 @@ export const Base: Story = {
     width: 480,
   },
   render: function MyFunc({ ...args }) {
-    const [, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(true);
 
     return (
       <div>
         <button type="button" onClick={() => setIsOpen(true)}>
           open
         </button>
-        <Modal isOpen setIsOpen={setIsOpen} width={args.width}>
+        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} width={args.width}>
           <Modal.Header>タイトル</Modal.Header>
           <Modal.Body>
             <div className="flex h-[200px] w-full items-center justify-center">Content</div>
@@ -53,7 +53,7 @@ export const WithCheckbox: Story = {
     width: 480,
   },
   render: function MyFunc({ ...args }) {
-    const [, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(true);
     const [isChecked, setIsChecked] = useState(false);
 
     return (
@@ -61,7 +61,7 @@ export const WithCheckbox: Story = {
         <button type="button" onClick={() => setIsOpen(true)}>
           open
         </button>
-        <Modal isOpen setIsOpen={setIsOpen} width={args.width}>
+        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} width={args.width}>
           <Modal.Header>タイトル</Modal.Header>
           <Modal.Body>
             <div className="flex h-[200px] w-full items-center justify-center">Content</div>
@@ -97,14 +97,14 @@ export const WithSubButton: Story = {
     width: 480,
   },
   render: function MyFunc({ ...args }) {
-    const [, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(true);
 
     return (
       <div>
         <button type="button" onClick={() => setIsOpen(true)}>
           open
         </button>
-        <Modal isOpen setIsOpen={setIsOpen} width={args.width}>
+        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} width={args.width}>
           <Modal.Header>タイトル</Modal.Header>
           <Modal.Body>
             <div className="flex h-[200px] w-full items-center justify-center">Content</div>
@@ -137,14 +137,14 @@ export const FixedHeight: Story = {
     width: 480,
   },
   render: function MyFunc({ ...args }) {
-    const [, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(true);
 
     return (
       <div>
         <button type="button" onClick={() => setIsOpen(true)}>
           open
         </button>
-        <Modal isOpen setIsOpen={setIsOpen} width={args.width} height={500}>
+        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} width={args.width} height={500}>
           <Modal.Header>タイトル</Modal.Header>
           <Modal.Body>
             <div className="flex h-[800px] w-full items-center justify-center">Content</div>
@@ -170,7 +170,7 @@ export const WithTabs: Story = {
     width: 480,
   },
   render: function MyFunc({ ...args }) {
-    const [, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(true);
     const [selectedTab, setSelectedTab] = useState('tab1');
     const tabItems = [
       { id: 'tab1', label: 'タブラベル1' },
@@ -183,7 +183,7 @@ export const WithTabs: Story = {
         <button type="button" onClick={() => setIsOpen(true)}>
           open
         </button>
-        <Modal isOpen setIsOpen={setIsOpen} width={args.width}>
+        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} width={args.width}>
           <Modal.Header isNoBorder>タイトル</Modal.Header>
           <Modal.Body>
             <div className="mt-2 flex w-full flex-col">
@@ -224,14 +224,14 @@ export const WithoutButton: Story = {
     width: 480,
   },
   render: function MyFunc({ ...args }) {
-    const [, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(true);
 
     return (
       <div>
         <button type="button" onClick={() => setIsOpen(true)}>
           open
         </button>
-        <Modal isOpen setIsOpen={setIsOpen} width={args.width}>
+        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} width={args.width}>
           <Modal.Header>タイトル</Modal.Header>
           <Modal.Body>
             <div className="flex h-[200px] w-full items-center justify-center">Content</div>
@@ -247,14 +247,14 @@ export const Danger: Story = {
     width: 420,
   },
   render: function MyFunc({ ...args }) {
-    const [, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(true);
 
     return (
       <div>
         <button type="button" onClick={() => setIsOpen(true)}>
           open
         </button>
-        <Modal isOpen setIsOpen={setIsOpen} width={args.width}>
+        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} width={args.width}>
           <Modal.Header isNoBorder isNoCloseButton>
             タイトル
           </Modal.Header>

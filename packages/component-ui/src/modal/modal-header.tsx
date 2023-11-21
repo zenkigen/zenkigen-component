@@ -10,7 +10,7 @@ type Props = {
 };
 
 export function ModalHeader({ children, isNoBorder, isNoCloseButton }: PropsWithChildren<Props>) {
-  const { setIsOpen } = useContext(ModalContext);
+  const { onClose } = useContext(ModalContext);
   const headerClasses = clsx(
     'typography-h5 flex w-full shrink-0 items-center justify-between rounded-t-lg px-6 text-text-text01',
     {
@@ -23,7 +23,7 @@ export function ModalHeader({ children, isNoBorder, isNoCloseButton }: PropsWith
   return (
     <div className={headerClasses}>
       <div>{children}</div>
-      {!isNoCloseButton && <IconButton icon="close" size="small" variant="text" onClick={() => setIsOpen(false)} />}
+      {!isNoCloseButton && <IconButton icon="close" size="small" variant="text" onClick={() => onClose()} />}
     </div>
   );
 }
