@@ -25,7 +25,9 @@ export function Base() {
         <Button before={<Icon name="add" size="small" />}>ボタンラベル</Button>
         <Button after={<Icon name="add" size="small" />}>ボタンラベル</Button>
         <Button isDisabled>ボタンラベル</Button>
-        <Button before={<Icon name="add" size="small" />} isSelected>ボタンラベル</Button>
+        <Button before={<Icon name="add" size="small" />} isSelected>
+          ボタンラベル
+        </Button>
       </div>
       <div className="mt-2 flex items-center gap-2">
         <Button size="large">ボタンラベル</Button>

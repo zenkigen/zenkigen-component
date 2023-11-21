@@ -39,9 +39,10 @@ export function Button({ size = 'medium', variant = 'fill', ...props }: PropsWit
       'h-8 px-3': size === 'medium',
       'h-10 px-4 leading-[24px]': size === 'large',
       'inline-flex': props.isAnchor,
-      [buttonColors[variant].selected]:props.isSelected,
-      [buttonColors[variant].base]:!props.isSelected,
-      'hover:text-text-textOnColor active:text-text-textOnColor [&:hover>*]:fill-icon-iconOnColor [&:active>*]:fill-icon-iconOnColor':props.isSelected && (variant !== 'outline' && variant !== 'text'),
+      [buttonColors[variant].selected]: props.isSelected,
+      [buttonColors[variant].base]: !props.isSelected,
+      'hover:text-text-textOnColor active:text-text-textOnColor [&:hover>*]:fill-icon-iconOnColor [&:active>*]:fill-icon-iconOnColor':
+        props.isSelected && variant !== 'outline' && variant !== 'text',
       'pointer-events-none': props.isDisabled,
       'rounded-button': !props.borderRadius,
       'typography-label1regular': size === 'large',
