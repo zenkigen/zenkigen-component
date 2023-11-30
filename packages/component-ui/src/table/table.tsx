@@ -5,18 +5,29 @@ import { TableRow } from './table-row';
 
 type Props = {
   width?: CSSProperties['width'];
-  rows?: CSSProperties['gridTemplateRows'];
-  columns?: CSSProperties['gridTemplateColumns'];
+  templateRows?: CSSProperties['gridTemplateRows'];
+  templateColumns?: CSSProperties['gridTemplateColumns'];
+  autoColumns?: CSSProperties['gridAutoColumns'];
+  autoRows?: CSSProperties['gridAutoRows'];
 };
 
-export function Table({ width, rows, columns, children }: PropsWithChildren<Props>) {
+export function Table({
+  width,
+  templateRows,
+  templateColumns,
+  autoColumns,
+  autoRows,
+  children,
+}: PropsWithChildren<Props>) {
   return (
     <div
       className="grid"
       style={{
         width,
-        gridTemplateRows: rows,
-        gridTemplateColumns: columns,
+        gridTemplateRows: templateRows,
+        gridTemplateColumns: templateColumns,
+        gridAutoColumns: autoColumns,
+        gridAutoRows: autoRows,
       }}
     >
       {children}
