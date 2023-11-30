@@ -63,7 +63,7 @@ const TableStoryBasic = () => {
 
   return (
     <div className="flex flex-col gap-10">
-      <Table width="100%" rows="40px repeat(3, 48px)" columns="200px 400px 1fr 80px">
+      <Table width="100%" templateRows="40px" autoRows="48px" templateColumns="200px 400px 1fr 80px">
         <Table.Row>
           <Table.Cell className={headingClasses}>
             <SelectSort
@@ -149,7 +149,7 @@ const TableStoryBasic = () => {
         </Table.Row>
       </Table>
 
-      <Table rows="40px repeat(3, 48px)" columns="200px 400px 100px 80px">
+      <Table width="100%" templateRows="40px" autoRows="48px" templateColumns="200px 400px 1fr 80px">
         <Table.Row isHoverBackgroundVisible>
           <Table.Cell className={cellClasses}>
             <Avatar size="x-small" userId={1} lastName="全機現" firstName="太郎" />
