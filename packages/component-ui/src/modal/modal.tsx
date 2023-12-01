@@ -1,4 +1,4 @@
-import { CSSProperties, MutableRefObject, PropsWithChildren } from 'react';
+import { CSSProperties, MutableRefObject, PropsWithChildren, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import { ModalBody } from './modal-body';
@@ -18,24 +18,30 @@ type Props = {
 };
 
 export function Modal({ children, width = 480, height, isOpen, onClose, portalTargetRef }: PropsWithChildren<Props>) {
+  const [isMounted, setIsMounted] = useState(false);
+
   const renderWidth = typeof width === 'number' ? Math.max(width, LIMIT_WIDTH) : width;
   const renderHeight = typeof height === 'number' ? Math.max(height, LIMIT_HEIGHT) : height;
 
-  return createPortal(
-    isOpen && (
-      <ModalContext.Provider value={{ onClose }}>
-        <div className="fixed left-0 top-0 z-overlay flex h-full w-full items-center justify-center bg-background-backgroundOverlayBlack">
-          <div
-            className="flex shrink-0 flex-col rounded-lg bg-background-uiBackground01 shadow-modalShadow"
-            style={{ width: renderWidth, height: renderHeight }}
-          >
-            {children}
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  return isMounted && isOpen
+    ? createPortal(
+        <ModalContext.Provider value={{ onClose }}>
+          <div className="fixed left-0 top-0 z-overlay flex h-full w-full items-center justify-center bg-background-backgroundOverlayBlack">
+            <div
+              className="flex shrink-0 flex-col rounded-lg bg-background-uiBackground01 shadow-modalShadow"
+              style={{ width: renderWidth, height: renderHeight }}
+            >
+              {children}
+            </div>
           </div>
-        </div>
-      </ModalContext.Provider>
-    ),
-    !portalTargetRef || portalTargetRef?.current === null ? document.body : portalTargetRef.current,
-  );
+        </ModalContext.Provider>,
+        portalTargetRef?.current != null ? portalTargetRef.current : document.body,
+      )
+    : null;
 }
 
 Modal.Body = ModalBody;
