@@ -13,7 +13,7 @@ type Props = {
   width?: CSSProperties['width'];
   height?: CSSProperties['height'];
   isOpen: boolean;
-  onClose: () => void;
+  onClose?: () => void;
   portalTargetRef?: MutableRefObject<HTMLElement | null>;
 };
 

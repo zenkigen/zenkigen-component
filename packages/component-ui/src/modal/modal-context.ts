@@ -1,7 +1,7 @@
 import { createContext } from 'react';
 
 type ModalReturnType = {
-  onClose: () => void;
+  onClose?: () => void;
 };
 
 export const ModalContext = createContext<ModalReturnType>({
