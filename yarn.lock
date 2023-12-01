@@ -4764,7 +4764,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zenkigen-inc/component-config@workspace:packages/component-config"
   dependencies:
-    "@zenkigen-inc/component-theme": "npm:1.6.1"
+    "@zenkigen-inc/component-theme": "npm:1.6.2"
     microbundle: "npm:0.15.1"
     style-dictionary: "npm:3.9.0"
     tailwindcss: "npm:3.3.5"
@@ -4773,7 +4773,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zenkigen-inc/component-icons@npm:1.6.1, @zenkigen-inc/component-icons@workspace:packages/component-icons":
+"@zenkigen-inc/component-icons@npm:1.6.2, @zenkigen-inc/component-icons@workspace:packages/component-icons":
   version: 0.0.0-use.local
   resolution: "@zenkigen-inc/component-icons@workspace:packages/component-icons"
   dependencies:
@@ -4784,7 +4784,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zenkigen-inc/component-theme@npm:1.6.1, @zenkigen-inc/component-theme@workspace:packages/component-theme":
+"@zenkigen-inc/component-theme@npm:1.6.2, @zenkigen-inc/component-theme@workspace:packages/component-theme":
   version: 0.0.0-use.local
   resolution: "@zenkigen-inc/component-theme@workspace:packages/component-theme"
   dependencies:
@@ -4798,8 +4798,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zenkigen-inc/component-ui@workspace:packages/component-ui"
   dependencies:
-    "@zenkigen-inc/component-icons": "npm:1.6.1"
-    "@zenkigen-inc/component-theme": "npm:1.6.1"
+    "@zenkigen-inc/component-icons": "npm:1.6.2"
+    "@zenkigen-inc/component-theme": "npm:1.6.2"
     clsx: "npm:2.0.0"
     hygen: "npm:6.2.11"
     microbundle: "npm:0.15.1"
