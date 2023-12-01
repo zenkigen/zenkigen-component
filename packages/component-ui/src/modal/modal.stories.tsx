@@ -254,10 +254,8 @@ export const Danger: Story = {
         <button type="button" onClick={() => setIsOpen(true)}>
           open
         </button>
-        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} width={args.width}>
-          <Modal.Header isNoBorder isNoCloseButton>
-            タイトル
-          </Modal.Header>
+        <Modal isOpen={isOpen} width={args.width}>
+          <Modal.Header isNoBorder>タイトル</Modal.Header>
           <Modal.Body>
             <div className="flex h-16 w-full items-center justify-center">Content</div>
           </Modal.Body>
