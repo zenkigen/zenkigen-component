@@ -28,7 +28,7 @@
     "no-console": "error",
     "no-alert": "error",
     "no-undefined": "error",
-    "eqeqeq": "error",
+    "eqeqeq": ["error", "always", { "null": "ignore" }],
     "prefer-template": "error",
     "camelcase": "error",
     "newline-before-return": "error",
