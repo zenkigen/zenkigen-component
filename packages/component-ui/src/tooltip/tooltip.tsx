@@ -23,31 +23,29 @@ export function Tooltip({
   isDisabledHover = false,
 }: PropsWithChildren<Props>) {
   const [isVisible, setIsVisible] = useState(false);
-  const [targetDimensions, setTargetDimensions] = useState({
-    width: 0,
-    height: 0,
-  });
 
   const targetRef = useRef<HTMLDivElement>(null);
 
   const handleMouseOverWrapper = useCallback(() => {
-    if (targetRef.current === null || isDisabledHover) {
+    if (isDisabledHover) {
       return;
     }
-
-    const dimensions = targetRef.current.getBoundingClientRect();
-    const calculatedDimensions = {
-      width: dimensions.right - dimensions.left,
-      height: dimensions.bottom - dimensions.top,
-    };
-
-    setTargetDimensions(calculatedDimensions);
     setIsVisible(true);
   }, [isDisabledHover]);
 
   const handleMouseOutWrapper = useCallback(() => {
     setIsVisible(false);
   }, []);
+
+  const tooltipWrapClasses = clsx('absolute inset-x-0 z-tooltip m-auto flex', {
+    'top-0': verticalPosition !== 'bottom',
+    'bottom-0': verticalPosition === 'bottom',
+    'justify-start': horizontalAlign === 'left',
+    'justify-center': horizontalAlign === 'center',
+    'justify-end': horizontalAlign === 'right',
+    'w-[24px]': size === 'small',
+    'w-[46px]': size !== 'small',
+  });
 
   const tooltipBodyClasses = clsx(
     'absolute z-tooltip inline-block w-max rounded bg-background-uiBackgroundTooltip text-text-textOnColor',
@@ -56,9 +54,10 @@ export function Tooltip({
       'typography-body2regular': size === 'medium',
       'px-2 pb-1 pt-1.5': size === 'small',
       'px-4 py-3': size === 'medium',
-      'left-0': horizontalAlign === 'left',
-      'right-0': horizontalAlign === 'right',
-      'left-auto': horizontalAlign === 'center',
+      'bottom-2': verticalPosition !== 'bottom' && size === 'small',
+      'bottom-3': verticalPosition !== 'bottom' && size === 'medium',
+      'top-2': verticalPosition === 'bottom' && size === 'small',
+      'top-3': verticalPosition === 'bottom' && size === 'medium',
     },
   );
 
@@ -71,26 +70,16 @@ export function Tooltip({
     >
       {children}
       {isVisible && (
-        <div
-          className={tooltipBodyClasses}
-          style={{
-            maxWidth,
-            top:
-              verticalPosition === 'bottom'
-                ? size === 'small'
-                  ? `${targetDimensions.height + 8}px`
-                  : `${targetDimensions.height + 12}px`
-                : 'unset',
-            bottom:
-              verticalPosition === 'top'
-                ? size === 'small'
-                  ? `${targetDimensions.height + 8}px`
-                  : `${targetDimensions.height + 12}px`
-                : 'unset',
-          }}
-        >
-          {content}
-          <TailIcon size={size} verticalPosition={verticalPosition} horizontalAlign={horizontalAlign} />
+        <div className={tooltipWrapClasses}>
+          <div
+            className={tooltipBodyClasses}
+            style={{
+              maxWidth,
+            }}
+          >
+            {content}
+            <TailIcon size={size} verticalPosition={verticalPosition} horizontalAlign={horizontalAlign} />
+          </div>
         </div>
       )}
     </div>
