@@ -5,6 +5,7 @@ export * from './checkbox';
 export * from './dropdown';
 export * from './evaluation-star';
 export * from './heading';
+export * from './hooks';
 export * from './icon';
 export * from './icon-button';
 export * from './loading';
