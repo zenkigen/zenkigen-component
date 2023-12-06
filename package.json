@@ -48,7 +48,7 @@
     "storybook": "7.6.3",
     "tailwindcss": "3.3.5",
     "typescript": "5.3.2",
-    "vite": "5.0.4",
+    "vite": "5.0.5",
     "vite-plugin-turbosnap": "1.0.3"
   }
 }
