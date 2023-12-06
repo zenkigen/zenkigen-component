@@ -1,6 +1,6 @@
 {
   "name": "@zenkigen-inc/component-theme",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "repository": "https://github.com/zenkigen/zenkigen-component",
   "license": "MIT",
   "publishConfig": {
