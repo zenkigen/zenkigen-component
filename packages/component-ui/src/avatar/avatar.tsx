@@ -25,8 +25,8 @@ export function Avatar({ size = 'medium', ...props }: Props) {
     [userColors[(props.userId ?? 0) % userColors.length] as string]: props.userId && !props.isDisabled,
   });
 
-  const trimmedFirstName = props.firstName.trim();
-  const trimmedLastName = props.lastName.trim();
+  const trimmedFirstName = props.firstName.replace('　', ' ').trim();
+  const trimmedLastName = props.lastName.replace('　', ' ').trim().trim();
   const nameOnIcon = isAsciiString(trimmedLastName)
     ? trimmedFirstName.slice(0, 1).toUpperCase() + trimmedLastName.slice(0, 1).toUpperCase()
     : (trimmedLastName + trimmedFirstName).slice(0, 2);
