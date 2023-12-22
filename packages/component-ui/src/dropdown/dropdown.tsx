@@ -35,7 +35,7 @@ export function Dropdown({
   variant = target ? 'text' : 'outline',
   title,
   isDisabled = false,
-  isArrowHidden = false,
+  isArrowHidden = target ? true : false,
   portalTargetRef,
 }: PropsWithChildren<Props>) {
   const [isVisible, setIsVisible] = useState(false);
@@ -116,6 +116,14 @@ export function Dropdown({
             disabled={isDisabled}
           >
             {target}
+            {!isArrowHidden && (
+              <div className="ml-2 flex items-center fill-icon-icon01">
+                <Icon
+                  name={isVisible ? 'angle-small-up' : 'angle-small-down'}
+                  size={size === 'large' ? 'medium' : 'small'}
+                />
+              </div>
+            )}
           </button>
         ) : (
           <button type="button" title={title} className={buttonClasses} onClick={handleToggle} disabled={isDisabled}>
