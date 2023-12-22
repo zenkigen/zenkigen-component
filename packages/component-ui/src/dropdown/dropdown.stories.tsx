@@ -6,6 +6,7 @@ import { forwardRef, PropsWithChildren, useRef, useState } from 'react';
 
 import { Avatar } from '../avatar';
 import { Button } from '../button';
+import { Heading } from '../heading';
 import { Icon } from '../icon';
 import { Toggle } from '../toggle';
 import { Dropdown } from './dropdown';
@@ -185,6 +186,53 @@ const DropdownBasic = () => {
         <Dropdown size="medium" isDisabled target={<Icon name="more" size="large" color="icon01" />}>
           <Dropdown.Menu horizontalAlign="right">
             {items.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', columnGap: '100px', marginBottom: '150px' }}>
+        <Dropdown target={<Heading level={5}>タイトル</Heading>} isArrowHidden={false}>
+          <Dropdown.Menu horizontalAlign="right" maxHeight={120}>
+            {items2.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+        <Dropdown target={<Heading level={4}>タイトル</Heading>} isArrowHidden={false}>
+          <Dropdown.Menu horizontalAlign="right" maxHeight={120}>
+            {items2.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+        <Dropdown target={<Heading level={3}>タイトル</Heading>} isArrowHidden={false}>
+          <Dropdown.Menu horizontalAlign="right" maxHeight={120}>
+            {items2.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+        <Dropdown size="large" target={<Heading level={2}>タイトル</Heading>} isArrowHidden={false}>
+          <Dropdown.Menu horizontalAlign="right" maxHeight={120}>
+            {items2.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+        <Dropdown size="large" target={<Heading level={1}>タイトル</Heading>} isArrowHidden={false}>
+          <Dropdown.Menu horizontalAlign="right" maxHeight={120}>
+            {items2.map((item) => (
               <Dropdown.Item key={item.id} onClick={item.onClick}>
                 {item.content}
               </Dropdown.Item>
