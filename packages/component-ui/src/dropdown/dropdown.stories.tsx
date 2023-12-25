@@ -376,7 +376,7 @@ const DropdownBasic = () => {
         </Dropdown>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', columnGap: '60px', marginBottom: '150px' }}>
-        <Dropdown size="x-small" label="選択" icon="add">
+        <Dropdown size="x-small" label="選択" icon="add" isArrowHidden>
           <Dropdown.Menu horizontalAlign="left" maxHeight={120}>
             {items2.map((item) => (
               <Dropdown.Item key={item.id} onClick={item.onClick}>
@@ -566,6 +566,7 @@ const DropdownWithPortal = () => {
               size="large"
               target={<Avatar size="medium" userId={1} lastName="全機現" firstName="太郎" />}
               portalTargetRef={containerRef}
+              isArrowHidden
             >
               <Dropdown.Menu>
                 {items.map((item) => (
@@ -581,6 +582,7 @@ const DropdownWithPortal = () => {
               size="medium"
               target={<Icon name="more" size="large" color="icon01" />}
               portalTargetRef={containerRef}
+              isArrowHidden
             >
               <Dropdown.Menu>
                 {items.map((item) => (
