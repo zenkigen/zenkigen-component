@@ -32,10 +32,10 @@ export function Dropdown({
   label,
   icon,
   size = 'medium',
-  variant = target ? 'text' : 'outline',
+  variant = 'outline',
   title,
   isDisabled = false,
-  isArrowHidden = target ? true : false,
+  isArrowHidden = false,
   portalTargetRef,
 }: PropsWithChildren<Props>) {
   const [isVisible, setIsVisible] = useState(false);
