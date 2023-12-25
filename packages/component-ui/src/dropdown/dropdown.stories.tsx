@@ -567,6 +567,7 @@ const DropdownWithPortal = () => {
               target={<Avatar size="medium" userId={1} lastName="全機現" firstName="太郎" />}
               portalTargetRef={containerRef}
               isArrowHidden
+              variant="text"
             >
               <Dropdown.Menu>
                 {items.map((item) => (
@@ -583,6 +584,7 @@ const DropdownWithPortal = () => {
               target={<Icon name="more" size="large" color="icon01" />}
               portalTargetRef={containerRef}
               isArrowHidden
+              variant="text"
             >
               <Dropdown.Menu>
                 {items.map((item) => (

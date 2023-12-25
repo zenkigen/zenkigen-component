@@ -98,7 +98,12 @@ const TableStoryBasic = () => {
           <Table.Cell className={cellClasses}>taro.zenkigen@zk-creative.jp</Table.Cell>
           <Table.Cell className={cellClasses}>管理者</Table.Cell>
           <Table.Cell className={`${cellClasses} flex justify-end`}>
-            <Dropdown size="x-small" target={<Icon name="more" size="small" color="icon01" />}>
+            <Dropdown
+              size="x-small"
+              target={<Icon name="more" size="small" color="icon01" />}
+              isArrowHidden
+              variant="text"
+            >
               <Dropdown.Menu horizontalAlign="right">
                 {items.map((item) => (
                   <Dropdown.Item key={item.id} color={item.color} onClick={item.onClick}>
@@ -117,7 +122,12 @@ const TableStoryBasic = () => {
           <Table.Cell className={cellClasses}>taro.zenkigen@zk-creative.jp</Table.Cell>
           <Table.Cell className={cellClasses}>管理者</Table.Cell>
           <Table.Cell className={`${cellClasses} flex justify-end`}>
-            <Dropdown size="x-small" target={<Icon name="more" size="small" color="icon01" />}>
+            <Dropdown
+              size="x-small"
+              target={<Icon name="more" size="small" color="icon01" />}
+              isArrowHidden
+              variant="text"
+            >
               <Dropdown.Menu horizontalAlign="right">
                 {items.map((item) => (
                   <Dropdown.Item key={item.id} color={item.color} onClick={item.onClick}>
@@ -136,7 +146,12 @@ const TableStoryBasic = () => {
           <Table.Cell className={cellClasses}>taro.zenkigen@zk-creative.jp</Table.Cell>
           <Table.Cell className={cellClasses}>管理者</Table.Cell>
           <Table.Cell className={`${cellClasses} flex justify-end`}>
-            <Dropdown size="x-small" target={<Icon name="more" size="small" color="icon01" />}>
+            <Dropdown
+              size="x-small"
+              target={<Icon name="more" size="small" color="icon01" />}
+              isArrowHidden
+              variant="text"
+            >
               <Dropdown.Menu horizontalAlign="right">
                 {items.map((item) => (
                   <Dropdown.Item key={item.id} color={item.color} onClick={item.onClick}>
@@ -158,7 +173,12 @@ const TableStoryBasic = () => {
           <Table.Cell className={cellClasses}>taro.zenkigen@zk-creative.jp</Table.Cell>
           <Table.Cell className={cellClasses}>管理者</Table.Cell>
           <Table.Cell className={`${cellClasses} flex justify-end`}>
-            <Dropdown size="x-small" target={<Icon name="more" size="small" color="icon01" />}>
+            <Dropdown
+              size="x-small"
+              target={<Icon name="more" size="small" color="icon01" />}
+              isArrowHidden
+              variant="text"
+            >
               <Dropdown.Menu horizontalAlign="right">
                 {items.map((item) => (
                   <Dropdown.Item key={item.id} color={item.color} onClick={item.onClick}>
@@ -177,7 +197,12 @@ const TableStoryBasic = () => {
           <Table.Cell className={cellClasses}>taro.zenkigen@zk-creative.jp</Table.Cell>
           <Table.Cell className={cellClasses}>管理者</Table.Cell>
           <Table.Cell className={`${cellClasses} flex justify-end`}>
-            <Dropdown size="x-small" target={<Icon name="more" size="small" color="icon01" />}>
+            <Dropdown
+              size="x-small"
+              target={<Icon name="more" size="small" color="icon01" />}
+              isArrowHidden
+              variant="text"
+            >
               <Dropdown.Menu horizontalAlign="right">
                 {items.map((item) => (
                   <Dropdown.Item key={item.id} color={item.color} onClick={item.onClick}>
