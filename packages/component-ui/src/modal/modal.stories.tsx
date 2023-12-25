@@ -135,6 +135,7 @@ export const WithSubButton: Story = {
 export const FixedHeight: Story = {
   args: {
     width: 480,
+    height: 500,
   },
   render: function MyFunc({ ...args }) {
     const [isOpen, setIsOpen] = useState(true);
@@ -144,10 +145,10 @@ export const FixedHeight: Story = {
         <button type="button" onClick={() => setIsOpen(true)}>
           open
         </button>
-        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} width={args.width} height={500}>
+        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} width={args.width} height={args.height}>
           <Modal.Header>タイトル</Modal.Header>
           <Modal.Body>
-            <div className="flex h-[800px] w-full items-center justify-center">Content</div>
+            <div className="flex h-[200px] w-full items-center justify-center">Content</div>
           </Modal.Body>
           <Modal.Footer>
             <div className="flex w-full flex-wrap items-center justify-end gap-4">
