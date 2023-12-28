@@ -1,8 +1,9 @@
-import clsx from 'clsx';
-import { CSSProperties, PropsWithChildren, useCallback, useRef, useState } from 'react';
+import { CSSProperties, MutableRefObject, PropsWithChildren, useCallback, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 
-import { TailIcon } from './tail-icon';
-import { TooltipHorizontalAlign, TooltipSize, TooltipVerticalPosition } from './type';
+import { useTooltip } from './tooltip.hook';
+import { TooltipContent } from './tooltip-content';
+import { TooltipHorizontalAlign, TooltipPosition, TooltipSize, TooltipVerticalPosition } from './type';
 
 type Props = {
   content: string;
@@ -11,6 +12,7 @@ type Props = {
   verticalPosition?: TooltipVerticalPosition;
   horizontalAlign?: TooltipHorizontalAlign;
   isDisabledHover?: boolean;
+  portalTargetRef?: MutableRefObject<HTMLElement | null>;
 };
 
 export function Tooltip({
@@ -21,8 +23,20 @@ export function Tooltip({
   verticalPosition = 'bottom',
   horizontalAlign = 'center',
   isDisabledHover = false,
+  portalTargetRef,
 }: PropsWithChildren<Props>) {
+  const { calculatePosition } = useTooltip();
+
   const [isVisible, setIsVisible] = useState(false);
+  const [tooltipPosition, setTooltipPosition] = useState<TooltipPosition>({
+    maxWidth: 'none',
+    width: 'auto',
+    left: '0px',
+    top: '0px',
+    bottom: '0px',
+    translateX: '0',
+    translateY: '0',
+  });
 
   const targetRef = useRef<HTMLDivElement>(null);
 
@@ -37,29 +51,14 @@ export function Tooltip({
     setIsVisible(false);
   }, []);
 
-  const tooltipWrapClasses = clsx('absolute inset-x-0 z-tooltip m-auto flex', {
-    'top-0': verticalPosition !== 'bottom',
-    'bottom-0': verticalPosition === 'bottom',
-    'justify-start': horizontalAlign === 'left',
-    'justify-center': horizontalAlign === 'center',
-    'justify-end': horizontalAlign === 'right',
-    'w-[24px]': size === 'small',
-    'w-[46px]': size !== 'small',
-  });
+  useEffect(() => {
+    if (targetRef.current === null) return;
 
-  const tooltipBodyClasses = clsx(
-    'absolute z-tooltip inline-block w-max rounded bg-background-uiBackgroundTooltip text-text-textOnColor',
-    {
-      'typography-body3regular': size === 'small',
-      'typography-body2regular': size === 'medium',
-      'px-2 pb-1 pt-1.5': size === 'small',
-      'px-4 py-3': size === 'medium',
-      'bottom-2': verticalPosition !== 'bottom' && size === 'small',
-      'bottom-3': verticalPosition !== 'bottom' && size === 'medium',
-      'top-2': verticalPosition === 'bottom' && size === 'small',
-      'top-3': verticalPosition === 'bottom' && size === 'medium',
-    },
-  );
+    const dimensions = targetRef.current?.getBoundingClientRect();
+    const position = calculatePosition({ dimensions, maxWidth, verticalPosition, horizontalAlign, tooltipSize: size });
+
+    setTooltipPosition(position);
+  }, [calculatePosition, horizontalAlign, maxWidth, size, verticalPosition]);
 
   return (
     <div
@@ -69,19 +68,30 @@ export function Tooltip({
       onMouseLeave={handleMouseOutWrapper}
     >
       {children}
-      {isVisible && (
-        <div className={tooltipWrapClasses}>
-          <div
-            className={tooltipBodyClasses}
-            style={{
-              maxWidth,
-            }}
-          >
-            {content}
-            <TailIcon size={size} verticalPosition={verticalPosition} horizontalAlign={horizontalAlign} />
-          </div>
-        </div>
-      )}
+      {isVisible &&
+        (portalTargetRef?.current == null ? (
+          <TooltipContent
+            content={content}
+            size={size}
+            maxWidth={maxWidth}
+            verticalPosition={verticalPosition}
+            horizontalAlign={horizontalAlign}
+            tooltipPosition={tooltipPosition}
+          />
+        ) : (
+          createPortal(
+            <TooltipContent
+              isPortal
+              content={content}
+              size={size}
+              maxWidth={maxWidth}
+              verticalPosition={verticalPosition}
+              horizontalAlign={horizontalAlign}
+              tooltipPosition={tooltipPosition}
+            />,
+            portalTargetRef?.current != null ? portalTargetRef.current : document.body,
+          )
+        ))}
     </div>
   );
 }
