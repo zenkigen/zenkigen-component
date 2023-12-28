@@ -1,4 +1,4 @@
-import { CSSProperties, MutableRefObject, PropsWithChildren, useCallback, useEffect, useRef, useState } from 'react';
+import { CSSProperties, PropsWithChildren, useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import { useTooltip } from './tooltip.hook';
@@ -12,7 +12,7 @@ type Props = {
   verticalPosition?: TooltipVerticalPosition;
   horizontalAlign?: TooltipHorizontalAlign;
   isDisabledHover?: boolean;
-  portalTargetRef?: MutableRefObject<HTMLElement | null>;
+  portalTarget?: HTMLElement;
 };
 
 export function Tooltip({
@@ -23,7 +23,7 @@ export function Tooltip({
   verticalPosition = 'bottom',
   horizontalAlign = 'center',
   isDisabledHover = false,
-  portalTargetRef,
+  portalTarget,
 }: PropsWithChildren<Props>) {
   const { calculatePosition } = useTooltip();
 
@@ -69,7 +69,7 @@ export function Tooltip({
     >
       {children}
       {isVisible &&
-        (portalTargetRef?.current == null ? (
+        (portalTarget == null ? (
           <TooltipContent
             content={content}
             size={size}
@@ -89,7 +89,7 @@ export function Tooltip({
               horizontalAlign={horizontalAlign}
               tooltipPosition={tooltipPosition}
             />,
-            portalTargetRef?.current != null ? portalTargetRef.current : document.body,
+            portalTarget,
           )
         ))}
     </div>
