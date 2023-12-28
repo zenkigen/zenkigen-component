@@ -15,7 +15,7 @@ export const TooltipContent = ({
 }: {
   content: string;
   size: TooltipSize;
-  maxWidth: CSSProperties['width'];
+  maxWidth: CSSProperties['maxWidth'];
   verticalPosition: TooltipVerticalPosition;
   horizontalAlign: TooltipHorizontalAlign;
   tooltipPosition: TooltipPosition;
