@@ -46,7 +46,7 @@ export const Base: Story = {
 
 export const Portal: Story = {
   args: {
-    portalTargetRef: { current: document.body },
+    portalTarget: document.body,
     content: '内容説明テキスト',
   },
   render: (args) => (
