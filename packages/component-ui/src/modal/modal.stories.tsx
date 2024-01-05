@@ -30,7 +30,7 @@ export const Base: Story = {
         <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} width={args.width}>
           <Modal.Header>タイトル</Modal.Header>
           <Modal.Body>
-            <div className="flex h-[200px] w-full items-center justify-center">Content</div>
+            <div className="flex w-full items-center justify-center py-20">Content</div>
           </Modal.Body>
           <Modal.Footer>
             <div className="flex w-full flex-wrap items-center justify-end gap-4">
@@ -64,7 +64,7 @@ export const WithCheckbox: Story = {
         <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} width={args.width}>
           <Modal.Header>タイトル</Modal.Header>
           <Modal.Body>
-            <div className="flex h-[200px] w-full items-center justify-center">Content</div>
+            <div className="flex w-full items-center justify-center py-20">Content</div>
           </Modal.Body>
           <Modal.Footer>
             <div className="flex w-full justify-between gap-4">
@@ -107,7 +107,7 @@ export const WithSubButton: Story = {
         <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} width={args.width}>
           <Modal.Header>タイトル</Modal.Header>
           <Modal.Body>
-            <div className="flex h-[200px] w-full items-center justify-center">Content</div>
+            <div className="flex w-full items-center justify-center py-20">Content</div>
           </Modal.Body>
           <Modal.Footer>
             <div className="flex w-full items-center justify-between">
@@ -148,7 +148,7 @@ export const FixedHeight: Story = {
         <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} width={args.width} height={args.height}>
           <Modal.Header>タイトル</Modal.Header>
           <Modal.Body>
-            <div className="flex h-[200px] w-full items-center justify-center">Content</div>
+            <div className="flex w-full items-center justify-center py-20">Content</div>
           </Modal.Body>
           <Modal.Footer>
             <div className="flex w-full flex-wrap items-center justify-end gap-4">
@@ -197,7 +197,7 @@ export const WithTabs: Story = {
                   ))}
                 </Tab>
               </div>
-              <div className="flex h-[200px] w-full items-center justify-center">
+              <div className="flex w-full items-center justify-center py-20">
                 {selectedTab === 'tab1' && <div>Content 1</div>}
                 {selectedTab === 'tab2' && <div>Content 2</div>}
                 {selectedTab === 'tab3' && <div>Content 3</div>}
@@ -235,7 +235,7 @@ export const WithoutButton: Story = {
         <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} width={args.width}>
           <Modal.Header>タイトル</Modal.Header>
           <Modal.Body>
-            <div className="flex h-[200px] w-full items-center justify-center">Content</div>
+            <div className="flex w-full items-center justify-center py-20">Content</div>
           </Modal.Body>
         </Modal>
       </div>
