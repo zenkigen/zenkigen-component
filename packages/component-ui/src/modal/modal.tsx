@@ -30,9 +30,9 @@ export function Modal({ children, width = 480, height, isOpen, onClose, portalTa
   return isMounted && isOpen
     ? createPortal(
         <ModalContext.Provider value={{ onClose }}>
-          <div className="fixed left-0 top-0 z-overlay flex h-full w-full items-center justify-center bg-background-backgroundOverlayBlack">
+          <div className="fixed left-0 top-0 z-overlay flex h-full w-full items-center justify-center bg-background-backgroundOverlayBlack py-4">
             <div
-              className="grid grid-rows-[max-content_1fr_max-content] flex-col rounded-lg bg-background-uiBackground01 shadow-modalShadow"
+              className="grid max-h-full min-h-[120px] grid-rows-[max-content_1fr_max-content] flex-col rounded-lg bg-background-uiBackground01 shadow-modalShadow"
               style={{ width: renderWidth, height: renderHeight }}
             >
               {children}
