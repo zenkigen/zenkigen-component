@@ -12,7 +12,7 @@ type Props = Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> & {
 
 export const TextInput = forwardRef<HTMLInputElement, Props>(
   ({ size = 'medium', isError, onClickClearButton, ...props }: Props, ref) => {
-    const inputWrapClasses = clsx('flex items-center gap-2 overflow-hidden rounded border', {
+    const inputWrapClasses = clsx('relative flex items-center gap-2 overflow-hidden rounded border', {
       'border-border-uiBorder01': !isError,
       'border-support-supportError': isError && !props.disabled,
       'hover:border-hover-hoverInput': !props.disabled && !isError,
@@ -35,7 +35,9 @@ export const TextInput = forwardRef<HTMLInputElement, Props>(
       <div className={inputWrapClasses}>
         <input ref={ref} size={1} className={inputClasses} onChange={props.onChange} {...props} />
         {onClickClearButton && props.value && props.value.length !== 0 && !props.disabled && (
-          <IconButton variant="text" icon="close" size="small" isNoPadding onClick={onClickClearButton} />
+          <div className="absolute right-2">
+            <IconButton variant="text" icon="close" size="small" isNoPadding onClick={onClickClearButton} />
+          </div>
         )}
       </div>
     );
