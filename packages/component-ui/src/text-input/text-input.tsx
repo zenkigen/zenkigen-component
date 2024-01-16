@@ -12,7 +12,7 @@ type Props = Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> & {
 
 export const TextInput = forwardRef<HTMLInputElement, Props>(
   ({ size = 'medium', isError, onClickClearButton, ...props }: Props, ref) => {
-    const inputWrapClasses = clsx('flex items-center gap-2 overflow-hidden rounded border pl-2 pr-3', {
+    const inputWrapClasses = clsx('flex items-center gap-2 overflow-hidden rounded border', {
       'border-border-uiBorder01': !isError,
       'border-support-supportError': isError && !props.disabled,
       'hover:border-hover-hoverInput': !props.disabled && !isError,
@@ -22,7 +22,7 @@ export const TextInput = forwardRef<HTMLInputElement, Props>(
     });
 
     const inputClasses = clsx(
-      'flex-1 outline-0 placeholder:text-text-textPlaceholder disabled:text-text-textPlaceholder',
+      'flex-1 pl-2 pr-3 outline-0 placeholder:text-text-textPlaceholder disabled:text-text-textPlaceholder',
       {
         ['typography-label2regular pt-1.5 pb-2']: size === 'medium',
         ['typography-label1regular py-2.5']: size === 'large',
