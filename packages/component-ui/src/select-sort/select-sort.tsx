@@ -51,7 +51,7 @@ export function SelectSort({
   });
 
   const buttonClasses = clsx(
-    'flex h-full w-full items-center rounded',
+    'flex size-full items-center rounded',
     buttonColors[variant].hover,
     buttonColors[variant].active,
     buttonColors[variant].disabled,

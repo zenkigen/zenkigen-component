@@ -48,7 +48,7 @@ export function Select({
   });
 
   const buttonClasses = clsx(
-    'flex h-full w-full items-center rounded',
+    'flex size-full items-center rounded',
     buttonColors[variant].base,
     buttonColors[variant].hover,
     buttonColors[variant].active,
