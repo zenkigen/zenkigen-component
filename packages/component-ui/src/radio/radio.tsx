@@ -28,13 +28,13 @@ export function Radio({ name, value, id, label, isChecked = false, isDisabled = 
     [isDisabled, onChange],
   );
 
-  const inputClasses = clsx('peer absolute z-[1] h-6 w-6 opacity-0', {
+  const inputClasses = clsx('peer absolute z-[1] size-6 opacity-0', {
     'cursor-not-allowed': isDisabled,
     'cursor-pointer': !isDisabled,
   });
 
   const boxClasses = clsx(
-    'inline-flex h-5 w-5 items-center justify-center rounded-full border border-solid bg-white',
+    'inline-flex size-5 items-center justify-center rounded-full border border-solid bg-white',
     focusVisible.normalPeer,
     {
       'border-disabled-disabled01 hover:border-disabled-disabled01': isDisabled && !isMouseOver,
@@ -45,14 +45,14 @@ export function Radio({ name, value, id, label, isChecked = false, isDisabled = 
     },
   );
 
-  const afterClasses = clsx('absolute inset-0 m-auto block h-3 w-3 rounded-full', {
+  const afterClasses = clsx('absolute inset-0 m-auto block size-3 rounded-full', {
     'bg-disabled-disabled01': isDisabled && isChecked,
     'bg-active-activeSelectedUi': !isDisabled && isChecked,
     'scale-0': !isChecked,
     'scale-100': isChecked,
   });
 
-  const hoverIndicatorClasses = clsx('inline-block h-3 w-3 rounded-full', {
+  const hoverIndicatorClasses = clsx('inline-block size-3 rounded-full', {
     'bg-hover-hoverUi': !isDisabled && !isChecked && isMouseOver,
   });
 
@@ -63,7 +63,7 @@ export function Radio({ name, value, id, label, isChecked = false, isDisabled = 
 
   return (
     <div className="flex items-center">
-      <div className="flex h-6 w-6 items-center justify-center">
+      <div className="flex size-6 items-center justify-center">
         <input
           type="checkbox"
           value={value}
@@ -77,7 +77,7 @@ export function Radio({ name, value, id, label, isChecked = false, isDisabled = 
           className={inputClasses}
         />
         <div className={boxClasses}>
-          <div className="relative flex h-5 w-5 flex-[0_0_auto] items-center justify-center">
+          <div className="relative flex size-5 flex-[0_0_auto] items-center justify-center">
             <span className={afterClasses} />
             <span className={hoverIndicatorClasses} />
           </div>

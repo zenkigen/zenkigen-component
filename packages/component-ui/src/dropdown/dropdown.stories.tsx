@@ -514,7 +514,7 @@ const DropdownWithCustomMenu = () => {
                 {item.icon ? (
                   <Icon name={item.icon} size="small" />
                 ) : (
-                  <svg className="h-4 w-4">
+                  <svg className="size-4">
                     <circle r="6" cx="8" cy="8" className={clsx(item.color)} />
                   </svg>
                 )}

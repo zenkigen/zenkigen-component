@@ -11,7 +11,7 @@ type Props = {
 
 export const DeleteIcon = ({ color, variant, onClick }: Props) => {
   const deleteButtonClasses = clsx(
-    'group ml-2 h-[14px] w-[14px] rounded-full p-0.5 hover:cursor-pointer hover:bg-icon-iconOnColor focus-visible:bg-icon-iconOnColor',
+    'group ml-2 size-[14px] rounded-full p-0.5 hover:cursor-pointer hover:bg-icon-iconOnColor focus-visible:bg-icon-iconOnColor',
     focusVisible.normal,
   );
 

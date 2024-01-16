@@ -45,13 +45,13 @@ export function Checkbox({
     [isDisabled, onChange],
   );
 
-  const baseInputClasses = clsx('peer absolute z-[1] h-5 w-5 opacity-0', {
+  const baseInputClasses = clsx('peer absolute z-[1] size-5 opacity-0', {
     'cursor-not-allowed': isDisabled,
     'cursor-pointer': !isDisabled,
   });
 
   const boxClasses = clsx(
-    'inline-flex h-5 w-5 items-center justify-center rounded-sm border bg-white',
+    'inline-flex size-5 items-center justify-center rounded-sm border bg-white',
     focusVisible.normalPeer,
     {
       'border-disabled-disabled01': isDisabled,
@@ -63,7 +63,7 @@ export function Checkbox({
     },
   );
 
-  const indicatorClasses = clsx('relative flex h-5 w-5 flex-[0_0_auto] items-center justify-center', {
+  const indicatorClasses = clsx('relative flex size-5 flex-[0_0_auto] items-center justify-center', {
     'bg-disabled-disabled01': isDisabled && isChecked,
     'border-disabled-disabled01': isDisabled,
   });
@@ -80,7 +80,7 @@ export function Checkbox({
     'scale-100': isChecked,
   });
 
-  const hoverIndicatorClasses = clsx('inline-block h-3 w-3 rounded-[1px]', {
+  const hoverIndicatorClasses = clsx('inline-block size-3 rounded-[1px]', {
     'bg-hover-hoverUi': !isDisabled && !isChecked && isMouseOver,
   });
 
@@ -91,7 +91,7 @@ export function Checkbox({
 
   return (
     <div className="flex items-center">
-      <div className="flex h-6 w-6 items-center justify-center">
+      <div className="flex size-6 items-center justify-center">
         <input
           type="checkbox"
           value={value}
