@@ -17,17 +17,34 @@ type Props = {
   borderRadius?: CSSProperties['borderRadius'];
 } & (
   | {
-      isAnchor: true;
+      type?: 'anchor';
       href: string;
       target?: HTMLAnchorElement['target'];
+      onClick?: never;
     }
   | {
-      isAnchor?: false;
+      type?: 'button';
+      href?: never;
+      target?: never;
+      onClick?: () => void;
+    }
+  | {
+      type?: 'submit';
+      href?: never;
+      target?: never;
       onClick?: () => void;
     }
 );
 
-export function Button({ size = 'medium', variant = 'fill', ...props }: PropsWithChildren<Props>) {
+export function Button({
+  size = 'medium',
+  variant = 'fill',
+  type = 'button',
+  href,
+  target,
+  onClick,
+  ...props
+}: PropsWithChildren<Props>) {
   const baseClasses = clsx(
     'flex shrink-0 items-center justify-center gap-1',
     buttonColors[variant].hover,
@@ -38,7 +55,7 @@ export function Button({ size = 'medium', variant = 'fill', ...props }: PropsWit
       'h-6 px-2.5': size === 'small',
       'h-8 px-3': size === 'medium',
       'h-10 px-4 leading-[24px]': size === 'large',
-      'inline-flex': props.isAnchor,
+      'inline-flex': type === 'anchor',
       [buttonColors[variant].selected]: props.isSelected,
       [buttonColors[variant].base]: !props.isSelected,
       'hover:text-text-textOnColor active:text-text-textOnColor [&:hover>*]:fill-icon-iconOnColor [&:active>*]:fill-icon-iconOnColor':
@@ -50,9 +67,9 @@ export function Button({ size = 'medium', variant = 'fill', ...props }: PropsWit
     },
   );
 
-  if (props.isAnchor) {
+  if (type === 'anchor') {
     return (
-      <a className={baseClasses} href={props.href} target={props.target} style={{ borderRadius: props.borderRadius }}>
+      <a className={baseClasses} href={href} target={target} style={{ borderRadius: props.borderRadius }}>
         {props.before}
         {props.children}
         {props.after}
@@ -61,10 +78,10 @@ export function Button({ size = 'medium', variant = 'fill', ...props }: PropsWit
   } else {
     return (
       <button
-        type="button"
+        type={type === 'submit' ? 'submit' : 'button'}
         className={baseClasses}
         disabled={props.isDisabled}
-        onClick={props.onClick}
+        onClick={onClick}
         style={{ width: props.width, borderRadius: props.borderRadius }}
       >
         {props.before}
