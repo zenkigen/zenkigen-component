@@ -35,7 +35,7 @@ export const TextInput = forwardRef<HTMLInputElement, Props>(
       <div className={inputWrapClasses}>
         <input ref={ref} size={1} className={inputClasses} onChange={props.onChange} {...props} />
         {onClickClearButton && props.value && props.value.length !== 0 && !props.disabled && (
-          <div className="absolute right-2">
+          <div className="absolute right-3">
             <IconButton variant="text" icon="close" size="small" isNoPadding onClick={onClickClearButton} />
           </div>
         )}
