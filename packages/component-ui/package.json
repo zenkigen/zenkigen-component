@@ -1,6 +1,6 @@
 {
   "name": "@zenkigen-inc/component-ui",
-  "version": "1.8.1",
+  "version": "1.8.2",
   "repository": "https://github.com/zenkigen/zenkigen-component",
   "license": "MIT",
   "publishConfig": {
@@ -26,8 +26,8 @@
     "react": "^18.0.0"
   },
   "dependencies": {
-    "@zenkigen-inc/component-icons": "1.8.1",
-    "@zenkigen-inc/component-theme": "1.8.1",
+    "@zenkigen-inc/component-icons": "1.8.2",
+    "@zenkigen-inc/component-theme": "1.8.2",
     "clsx": "2.1.0"
   }
 }
