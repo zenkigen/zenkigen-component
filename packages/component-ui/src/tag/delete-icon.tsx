@@ -11,14 +11,13 @@ type Props = {
 
 export const DeleteIcon = ({ color, variant, onClick }: Props) => {
   const deleteButtonClasses = clsx(
-    'group ml-2 size-[14px] rounded-full p-0.5 hover:cursor-pointer hover:bg-icon-iconOnColor focus-visible:bg-icon-iconOnColor',
+    'group ml-2 size-[14px] rounded-full p-0.5 hover:cursor-pointer hover:bg-iconOnColor focus-visible:bg-iconOnColor',
     focusVisible.normal,
   );
 
   const deletePathClasses = clsx({
-    'fill-interactive-interactive02': color === 'gray' || variant === 'light',
-    'group-hover:fill-interactive-interactive02 group-focus-visible:fill-interactive-interactive02 fill-icon-iconOnColor':
-      color !== 'gray',
+    'fill-interactive02': color === 'gray' || variant === 'light',
+    'group-hover:fill-interactive02 group-focus-visible:fill-interactive02 fill-iconOnColor': color !== 'gray',
   });
 
   return (

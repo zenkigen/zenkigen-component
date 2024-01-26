@@ -54,39 +54,39 @@ export function Checkbox({
     'inline-flex size-5 items-center justify-center rounded-sm border bg-white',
     focusVisible.normalPeer,
     {
-      'border-disabled-disabled01': isDisabled,
-      'border-hover-hoverUiBorder': !isDisabled && isMouseOver,
-      'border-border-uiBorder03': !isDisabled && !isMouseOver,
-      'border-interactive-interactive02': !isDisabled && !isMouseOver && color === 'gray',
-      'border-hover-hoverError': !isDisabled && isMouseOver && color === 'error',
-      'border-support-supportError': !isDisabled && !isMouseOver && color === 'error',
+      'border-disabled01': isDisabled,
+      'border-hoverUiBorder': !isDisabled && isMouseOver && color === 'default',
+      'border-uiBorder03': !isDisabled && !isMouseOver && color === 'default',
+      'border-interactive02': !isDisabled && !isMouseOver && color === 'gray',
+      'border-hoverError': !isDisabled && isMouseOver && color === 'error',
+      'border-supportError': !isDisabled && !isMouseOver && color === 'error',
     },
   );
 
   const indicatorClasses = clsx('relative flex size-5 flex-[0_0_auto] items-center justify-center', {
-    'bg-disabled-disabled01': isDisabled && isChecked,
-    'border-disabled-disabled01': isDisabled,
+    'bg-disabled01': isDisabled && isChecked,
+    'border-disabled01': isDisabled,
   });
 
   const afterClasses = clsx('absolute inset-0 m-auto block rounded-sm', {
-    'bg-disabled-disabled01': isDisabled && isChecked,
-    'bg-hover-hover01': !(isDisabled && isChecked) && isMouseOver,
-    'bg-interactive-interactive01': !(isDisabled && isChecked) && !isMouseOver,
-    'bg-hover-hover02Dark': !(isDisabled && isChecked) && isMouseOver && color === 'gray',
-    'bg-interactive-interactive02': !(isDisabled && isChecked) && !isMouseOver && color === 'gray',
-    'bg-hover-hoverError': !(isDisabled && isChecked) && isMouseOver && color === 'error',
-    'bg-support-supportError': !(isDisabled && isChecked) && !isMouseOver && color === 'error',
+    'bg-disabled01': isDisabled && isChecked,
+    'bg-hover01': !(isDisabled && isChecked) && isMouseOver,
+    'bg-interactive01': !(isDisabled && isChecked) && !isMouseOver,
+    'bg-hover02Dark': !(isDisabled && isChecked) && isMouseOver && color === 'gray',
+    'bg-interactive02': !(isDisabled && isChecked) && !isMouseOver && color === 'gray',
+    'bg-hoverError': !(isDisabled && isChecked) && isMouseOver && color === 'error',
+    'bg-supportError': !(isDisabled && isChecked) && !isMouseOver && color === 'error',
     'scale-0': !isChecked,
     'scale-100': isChecked,
   });
 
   const hoverIndicatorClasses = clsx('inline-block size-3 rounded-[1px]', {
-    'bg-hover-hoverUi': !isDisabled && !isChecked && isMouseOver,
+    'bg-hoverUi': !isDisabled && !isChecked && isMouseOver,
   });
 
   const labelClasses = clsx('typography-label2regular ml-2 flex-[1_0_0] break-all', {
-    'pointer-events-none cursor-not-allowed text-disabled-disabled01': isDisabled,
-    'cursor-pointer text-text-text01': !isDisabled,
+    'pointer-events-none cursor-not-allowed text-disabled01': isDisabled,
+    'cursor-pointer text-text01': !isDisabled,
   });
 
   return (

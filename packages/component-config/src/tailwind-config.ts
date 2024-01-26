@@ -4,6 +4,25 @@ import plugin from 'tailwindcss/plugin';
 
 import { tokens } from './tokens/tokens';
 
+const {
+  tokens: {
+    text,
+    link,
+    border,
+    background,
+    icon,
+    interactive,
+    field,
+    focus,
+    hover,
+    active,
+    selected,
+    disabled,
+    support,
+  },
+  colors,
+} = tokens;
+
 module.exports = {
   theme: {
     extend: {
@@ -12,8 +31,20 @@ module.exports = {
       },
       colors: {
         user: tokens.user,
-        ...tokens.tokens,
-        ...tokens.colors,
+        ...text,
+        ...link,
+        ...border,
+        ...background,
+        ...icon,
+        ...interactive,
+        ...field,
+        ...focus,
+        ...hover,
+        ...active,
+        ...selected,
+        ...disabled,
+        ...support,
+        ...colors,
       },
       fontSize: tokens.fontSize,
       lineHeight: tokens.lineHeights,

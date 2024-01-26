@@ -58,7 +58,7 @@ export function Button({
       'inline-flex': type === 'anchor',
       [buttonColors[variant].selected]: props.isSelected,
       [buttonColors[variant].base]: !props.isSelected,
-      'hover:text-text-textOnColor active:text-text-textOnColor [&:hover>*]:fill-icon-iconOnColor [&:active>*]:fill-icon-iconOnColor':
+      'hover:text-textOnColor active:text-textOnColor [&:hover>*]:fill-iconOnColor [&:active>*]:fill-iconOnColor':
         props.isSelected && variant !== 'outline' && variant !== 'text',
       'pointer-events-none': props.isDisabled,
       'rounded-button': !props.borderRadius,

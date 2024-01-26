@@ -16,11 +16,11 @@ export function DropdownItem({ children, color = 'gray', onClick }: PropsWithChi
     onClick && onClick(event);
   };
   const itemClasses = clsx(
-    'typography-label2regular flex h-8 w-full items-center px-3 hover:bg-hover-hover02 active:bg-active-active02',
+    'typography-label2regular flex h-8 w-full items-center px-3 hover:bg-hover02 active:bg-active02',
     focusVisible.inset,
     {
-      'bg-background-uiBackground01 fill-icon-icon01 text-interactive-interactive02': color === 'gray',
-      'fill-support-supportDanger text-support-supportDanger': color === 'red',
+      'bg-uiBackground01 fill-icon01 text-interactive02': color === 'gray',
+      'fill-supportDanger text-supportDanger': color === 'red',
     },
   );
 

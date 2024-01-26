@@ -71,11 +71,11 @@ export function Dropdown({
   });
 
   const childrenButtonClasses = clsx(
-    'flex items-center justify-center rounded p-1 hover:bg-hover-hover02 active:bg-active-active02',
+    'flex items-center justify-center rounded p-1 hover:bg-hover02 active:bg-active02',
     focusVisible.normal,
     {
       'pointer-events-none': isDisabled,
-      'border border-border-uiBorder02': variant === 'outline',
+      'border border-uiBorder02': variant === 'outline',
     },
   );
 
@@ -117,7 +117,7 @@ export function Dropdown({
           >
             {target}
             {!isArrowHidden && (
-              <div className="ml-2 flex items-center fill-icon-icon01">
+              <div className="ml-2 flex items-center fill-icon01">
                 <Icon
                   name={isVisible ? 'angle-small-up' : 'angle-small-down'}
                   size={size === 'large' ? 'medium' : 'small'}

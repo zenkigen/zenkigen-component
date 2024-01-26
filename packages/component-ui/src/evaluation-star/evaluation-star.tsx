@@ -29,7 +29,7 @@ export function EvaluationStar({ value, isEditable = false, onChangeRating, size
   const starClasses = clsx(focusVisible.inset, { 'w-6 h-6': size === 'large', 'w-4 h-4': size === 'medium' });
   const ratingStars = [];
   for (let i = 1; i < maxRating + 1; i++) {
-    const color = i <= currentRating ? 'fill-yellow-yellow50' : 'fill-icon-icon03';
+    const color = i <= currentRating ? 'fill-yellow-yellow50' : 'fill-icon03';
     ratingStars.push(
       <button
         type="button"

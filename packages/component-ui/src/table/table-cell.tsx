@@ -7,5 +7,5 @@ type Props = {
 };
 
 export function TableCell({ children, className }: Props) {
-  return <div className={clsx('border-b-[1px] border-border-uiBorder01', className)}>{children}</div>;
+  return <div className={clsx('border-b-[1px] border-uiBorder01', className)}>{children}</div>;
 }
