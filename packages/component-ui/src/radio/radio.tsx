@@ -37,28 +37,28 @@ export function Radio({ name, value, id, label, isChecked = false, isDisabled = 
     'inline-flex size-5 items-center justify-center rounded-full border border-solid bg-white',
     focusVisible.normalPeer,
     {
-      'border-disabled-disabled01 hover:border-disabled-disabled01': isDisabled && !isMouseOver,
-      'border-hover-hoverUiBorder': !isDisabled && isMouseOver,
-      'border-border-uiBorder03': !isDisabled,
+      'border-disabled01 hover:border-disabled01': isDisabled && !isMouseOver,
+      'border-hoverUiBorder': !isDisabled && isMouseOver,
+      'border-uiBorder03': !isDisabled,
       'cursor-not-allowed': isDisabled,
       'cursor-pointer': !isDisabled,
     },
   );
 
   const afterClasses = clsx('absolute inset-0 m-auto block size-3 rounded-full', {
-    'bg-disabled-disabled01': isDisabled && isChecked,
-    'bg-active-activeSelectedUi': !isDisabled && isChecked,
+    'bg-disabled01': isDisabled && isChecked,
+    'bg-activeSelectedUi': !isDisabled && isChecked,
     'scale-0': !isChecked,
     'scale-100': isChecked,
   });
 
   const hoverIndicatorClasses = clsx('inline-block size-3 rounded-full', {
-    'bg-hover-hoverUi': !isDisabled && !isChecked && isMouseOver,
+    'bg-hoverUi': !isDisabled && !isChecked && isMouseOver,
   });
 
   const labelClasses = clsx('typography-label2regular ml-2 flex-[1_0_0] select-none break-all', {
-    'pointer-events-none cursor-not-allowed text-disabled-disabled01': isDisabled,
-    'cursor-pointer text-text-text01': !isDisabled,
+    'pointer-events-none cursor-not-allowed text-disabled01': isDisabled,
+    'cursor-pointer text-text01': !isDisabled,
   });
 
   return (

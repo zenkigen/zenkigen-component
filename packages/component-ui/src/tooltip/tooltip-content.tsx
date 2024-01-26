@@ -32,7 +32,7 @@ export const TooltipContent = ({
   });
 
   const tooltipBodyClasses = clsx(
-    'absolute z-tooltip inline-block w-max rounded bg-background-uiBackgroundTooltip text-text-textOnColor',
+    'absolute z-tooltip inline-block w-max rounded bg-uiBackgroundTooltip text-textOnColor',
     {
       'typography-body3regular': size === 'small',
       'typography-body2regular': size === 'medium',

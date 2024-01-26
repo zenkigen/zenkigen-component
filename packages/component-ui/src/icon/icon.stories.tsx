@@ -130,13 +130,13 @@ export function Color() {
       <div>icon03:</div>
       <IconList color="icon03" />
       <div>icon01Dark:</div>
-      <IconList color="icon01Dark" className="bg-background-uiBackground01Dark" />
+      <IconList color="icon01Dark" className="bg-uiBackground01Dark" />
       <div>icon02Dark:</div>
-      <IconList color="icon02Dark" className="bg-background-uiBackground01Dark" />
+      <IconList color="icon02Dark" className="bg-uiBackground01Dark" />
       <div>icon03Dark:</div>
-      <IconList color="icon03Dark" className="bg-background-uiBackground01Dark" />
+      <IconList color="icon03Dark" className="bg-uiBackground01Dark" />
       <div>iconOnColor:</div>
-      <IconList color="iconOnColor" className="bg-interactive-interactive01" />
+      <IconList color="iconOnColor" className="bg-interactive01" />
     </div>
   );
 }

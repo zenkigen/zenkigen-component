@@ -32,17 +32,17 @@ export function SelectList({ children, maxHeight }: PropsWithChildren<Props>) {
   }, []);
 
   const listClasses = clsx(
-    'absolute z-dropdown w-max overflow-y-auto rounded bg-background-uiBackground01 py-2 shadow-floatingShadow',
+    'absolute z-dropdown w-max overflow-y-auto rounded bg-uiBackground01 py-2 shadow-floatingShadow',
     {
       'top-7': size === 'x-small' || size === 'small',
       'top-9': size === 'medium',
       'top-11': size === 'large',
-      'border-solid border border-border-uiBorder01': variant === 'outline',
+      'border-solid border border-uiBorder01': variant === 'outline',
     },
   );
 
   const deselectButtonClasses = clsx(
-    'typography-label2regular flex h-8 w-full items-center px-3 text-interactive-interactive02 hover:bg-hover-hover02 active:bg-active-active02',
+    'typography-label2regular flex h-8 w-full items-center px-3 text-interactive02 hover:bg-hover02 active:bg-active02',
     focusVisible.inset,
   );
 

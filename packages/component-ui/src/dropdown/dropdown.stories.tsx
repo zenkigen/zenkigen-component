@@ -491,14 +491,14 @@ const DropdownWithCustomMenu = () => {
     {
       id: '4',
       label: '相づち',
-      color: 'fill-support-supportSuccess',
+      color: 'fill-supportSuccess',
       isChecked: isOn4,
       onChange: () => setIsOn4((prev) => !prev),
     },
     {
       id: '5',
       label: 'NGワード',
-      color: 'fill-support-supportError',
+      color: 'fill-supportError',
       isChecked: isOn5,
       onChange: () => setIsOn5((prev) => !prev),
     },
@@ -518,7 +518,7 @@ const DropdownWithCustomMenu = () => {
                     <circle r="6" cx="8" cy="8" className={clsx(item.color)} />
                   </svg>
                 )}
-                <span className="typography-label2regular ml-2 flex-1 text-text-text01">{item.label}</span>
+                <span className="typography-label2regular ml-2 flex-1 text-text01">{item.label}</span>
                 <Toggle id="1" size="small" isChecked={item.isChecked} onChange={item.onChange} />
               </li>
             ))}

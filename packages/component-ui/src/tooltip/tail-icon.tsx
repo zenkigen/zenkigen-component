@@ -9,7 +9,7 @@ type Props = {
 };
 
 export const TailIcon = (props: Props) => {
-  const tailClasses = clsx('absolute fill-background-uiBackgroundTooltip', {
+  const tailClasses = clsx('absolute fill-uiBackgroundTooltip', {
     'rotate-180': props.verticalPosition === 'bottom',
     'rotate-0': props.verticalPosition !== 'bottom',
     '-top-1': props.verticalPosition === 'bottom' && props.size === 'small',

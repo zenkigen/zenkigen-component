@@ -15,7 +15,7 @@ type Props = {
 
 export const Icon = ({ size = 'medium', ...props }: Props) => {
   const classes = clsx('inline-block shrink-0', {
-    'fill-disabled-disabled01': props.isDisabled,
+    'fill-disabled01': props.isDisabled,
     [iconColors.icon01]: !props.isDisabled && props.color === 'icon01',
     [iconColors.icon01Dark]: !props.isDisabled && props.color === 'icon01Dark',
     [iconColors.icon02]: !props.isDisabled && props.color === 'icon02',
