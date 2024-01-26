@@ -18,7 +18,7 @@ export const TextInput = forwardRef<HTMLInputElement, Props>(
       'hover:border-hoverInput': !props.disabled && !isError,
       'hover:focus-within:border-activeInput': !isError,
       'focus-within:border-activeInput': !isError,
-      'bg-disabled02 border-disabled02': props.disabled,
+      'bg-disabled02 border-disabled01': props.disabled,
     });
 
     const inputClasses = clsx(
