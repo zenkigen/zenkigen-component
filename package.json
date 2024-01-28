@@ -18,7 +18,7 @@
     "clean": "rimraf node_modules"
   },
   "devDependencies": {
-    "@babel/core": "7.23.7",
+    "@babel/core": "7.23.9",
     "@storybook/addon-essentials": "7.6.10",
     "@storybook/addon-interactions": "7.6.10",
     "@storybook/addon-links": "7.6.10",
@@ -27,7 +27,7 @@
     "@storybook/react": "7.6.10",
     "@storybook/react-vite": "7.6.10",
     "@storybook/testing-library": "0.2.2",
-    "@types/node": "20.11.6",
+    "@types/node": "20.11.10",
     "@types/react-dom": "18.2.18",
     "@typescript-eslint/eslint-plugin": "6.19.1",
     "@typescript-eslint/parser": "6.19.1",
@@ -39,7 +39,7 @@
     "eslint-plugin-react-hooks": "4.6.0",
     "eslint-plugin-simple-import-sort": "10.0.0",
     "eslint-plugin-storybook": "0.6.15",
-    "eslint-plugin-tailwindcss": "3.14.0",
+    "eslint-plugin-tailwindcss": "3.14.1",
     "postcss": "8.4.33",
     "prettier": "3.2.4",
     "react": "18.2.0",
