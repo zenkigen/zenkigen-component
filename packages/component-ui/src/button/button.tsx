@@ -36,7 +36,7 @@ type Props = {
     }
 );
 
-export const Button = forwardRef<HTMLAnchorElement & HTMLButtonElement, Props>(
+export const Button = forwardRef<HTMLAnchorElement & HTMLButtonElement, PropsWithChildren<Props>>(
   (
     { size = 'medium', variant = 'fill', type = 'button', href, target, onClick, ...props }: PropsWithChildren<Props>,
     ref,
