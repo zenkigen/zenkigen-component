@@ -65,7 +65,13 @@ export const Button = forwardRef<HTMLAnchorElement & HTMLButtonElement, PropsWit
 
     if (type === 'anchor') {
       return (
-        <a className={baseClasses} href={href} target={target} style={{ borderRadius: props.borderRadius }} ref={ref}>
+        <a
+          className={baseClasses}
+          href={href}
+          target={target}
+          style={{ width: props.width, borderRadius: props.borderRadius }}
+          ref={ref}
+        >
           {props.before}
           {props.children}
           {props.after}
