@@ -192,13 +192,13 @@ export function Base() {
         </Button>
       </div>
       <div className="mt-2 flex items-center gap-2">
-        <Button type="button" width={300} borderRadius={9999}>
+        <Button elementAs="button" width={300} borderRadius={9999}>
           ボタンラベル
         </Button>
-        <Button type="submit" width={300} borderRadius={9999}>
+        <Button elementAs="button" type="submit" width={300} borderRadius={9999}>
           ボタンラベル
         </Button>
-        <Button type="anchor" width={300} borderRadius={9999}>
+        <Button elementAs="a" width={300} borderRadius={9999} href="">
           ボタンラベル
         </Button>
       </div>
