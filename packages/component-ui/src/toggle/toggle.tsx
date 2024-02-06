@@ -21,10 +21,10 @@ export function Toggle({
   isDisabled,
 }: Props) {
   const baseClasses = clsx('relative flex items-center rounded-full', {
-    'bg-disabled-disabledOn': isDisabled && isChecked,
-    'bg-disabled-disabled01': isDisabled && !isChecked,
-    'bg-interactive-interactive01 peer-hover:bg-hover-hover01': !isDisabled && isChecked,
-    'bg-interactive-interactive02 peer-hover:bg-hover-hover02Dark': !isDisabled && !isChecked,
+    'bg-disabledOn': isDisabled && isChecked,
+    'bg-disabled01': isDisabled && !isChecked,
+    'bg-interactive01 peer-hover:bg-hover01': !isDisabled && isChecked,
+    'bg-interactive02 peer-hover:bg-hover02Dark': !isDisabled && !isChecked,
     'w-8 h-4 px-[3px]': size === 'small',
     'w-12 h-6 px-1': size === 'medium',
   });
@@ -32,7 +32,7 @@ export function Toggle({
     'peer absolute inset-0 z-[1] opacity-0',
     isDisabled ? 'cursor-not-allowed' : 'cursor-pointer',
   );
-  const indicatorClasses = clsx('rounded-full bg-icon-iconOnColor', {
+  const indicatorClasses = clsx('rounded-full bg-iconOnColor', {
     'w-2.5 h-2.5': size === 'small',
     'w-4 h-4': size === 'medium',
     'ml-auto': isChecked,
@@ -42,8 +42,8 @@ export function Toggle({
     'ml-2': labelPosition === 'right',
     'typography-label3regular': size === 'small',
     'typography-label1regular': size === 'medium',
-    'pointer-events-none cursor-not-allowed text-disabled-disabled01': isDisabled,
-    'cursor-pointer text-text-text01': !isDisabled,
+    'pointer-events-none cursor-not-allowed text-disabled01': isDisabled,
+    'cursor-pointer text-text01': !isDisabled,
   });
 
   return (

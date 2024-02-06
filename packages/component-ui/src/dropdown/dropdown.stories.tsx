@@ -6,6 +6,7 @@ import { forwardRef, PropsWithChildren, useRef, useState } from 'react';
 
 import { Avatar } from '../avatar';
 import { Button } from '../button';
+import { Heading } from '../heading';
 import { Icon } from '../icon';
 import { Toggle } from '../toggle';
 import { Dropdown } from './dropdown';
@@ -91,7 +92,12 @@ const DropdownBasic = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', margin: '0 100px' }}>
       <div style={{ display: 'flex', alignItems: 'center', columnGap: '100px', marginBottom: '150px' }}>
-        <Dropdown size="small" target={<Avatar size="x-small" userId={1} lastName="全機現" firstName="太郎" />}>
+        <Dropdown
+          variant="text"
+          size="small"
+          target={<Avatar size="x-small" userId={1} lastName="全機現" firstName="太郎" />}
+          isArrowHidden
+        >
           <Dropdown.Menu horizontalAlign="right" maxHeight={120}>
             {items2.map((item) => (
               <Dropdown.Item key={item.id} onClick={item.onClick}>
@@ -100,16 +106,12 @@ const DropdownBasic = () => {
             ))}
           </Dropdown.Menu>
         </Dropdown>
-        <Dropdown size="medium" target={<Avatar size="small" userId={1} lastName="全機現" firstName="太郎" />}>
-          <Dropdown.Menu horizontalAlign="right">
-            {items.map((item) => (
-              <Dropdown.Item key={item.id} onClick={item.onClick}>
-                {item.content}
-              </Dropdown.Item>
-            ))}
-          </Dropdown.Menu>
-        </Dropdown>
-        <Dropdown size="large" target={<Avatar size="medium" userId={1} lastName="全機現" firstName="太郎" />}>
+        <Dropdown
+          variant="text"
+          size="medium"
+          target={<Avatar size="small" userId={1} lastName="全機現" firstName="太郎" />}
+          isArrowHidden
+        >
           <Dropdown.Menu horizontalAlign="right">
             {items.map((item) => (
               <Dropdown.Item key={item.id} onClick={item.onClick}>
@@ -119,9 +121,10 @@ const DropdownBasic = () => {
           </Dropdown.Menu>
         </Dropdown>
         <Dropdown
+          variant="text"
           size="large"
-          variant="outline"
           target={<Avatar size="medium" userId={1} lastName="全機現" firstName="太郎" />}
+          isArrowHidden
         >
           <Dropdown.Menu horizontalAlign="right">
             {items.map((item) => (
@@ -133,8 +136,23 @@ const DropdownBasic = () => {
         </Dropdown>
         <Dropdown
           size="large"
+          target={<Avatar size="medium" userId={1} lastName="全機現" firstName="太郎" />}
+          isArrowHidden
+        >
+          <Dropdown.Menu horizontalAlign="right">
+            {items.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+        <Dropdown
+          variant="text"
+          size="large"
           isDisabled
           target={<Avatar size="medium" userId={1} lastName="全機現" firstName="太郎" />}
+          isArrowHidden
         >
           <Dropdown.Menu horizontalAlign="right">
             {items.map((item) => (
@@ -146,7 +164,7 @@ const DropdownBasic = () => {
         </Dropdown>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', columnGap: '100px', marginBottom: '150px' }}>
-        <Dropdown size="x-small" target={<Icon name="more" size="small" color="icon01" />}>
+        <Dropdown variant="text" size="x-small" target={<Icon name="more" size="small" color="icon01" />} isArrowHidden>
           <Dropdown.Menu horizontalAlign="right" maxHeight={120}>
             {items2.map((item) => (
               <Dropdown.Item key={item.id} onClick={item.onClick}>
@@ -155,7 +173,7 @@ const DropdownBasic = () => {
             ))}
           </Dropdown.Menu>
         </Dropdown>
-        <Dropdown size="small" target={<Icon name="more" size="medium" color="icon01" />}>
+        <Dropdown variant="text" size="small" target={<Icon name="more" size="medium" color="icon01" />} isArrowHidden>
           <Dropdown.Menu horizontalAlign="right">
             {items.map((item) => (
               <Dropdown.Item key={item.id} onClick={item.onClick}>
@@ -164,7 +182,7 @@ const DropdownBasic = () => {
             ))}
           </Dropdown.Menu>
         </Dropdown>
-        <Dropdown size="medium" target={<Icon name="more" size="large" color="icon01" />}>
+        <Dropdown variant="text" size="medium" target={<Icon name="more" size="large" color="icon01" />} isArrowHidden>
           <Dropdown.Menu horizontalAlign="right">
             {items.map((item) => (
               <Dropdown.Item key={item.id} onClick={item.onClick}>
@@ -173,7 +191,7 @@ const DropdownBasic = () => {
             ))}
           </Dropdown.Menu>
         </Dropdown>
-        <Dropdown size="medium" variant="outline" target={<Icon name="more" size="large" color="icon01" />}>
+        <Dropdown size="medium" target={<Icon name="more" size="large" color="icon01" />} isArrowHidden>
           <Dropdown.Menu horizontalAlign="right">
             {items.map((item) => (
               <Dropdown.Item key={item.id} onClick={item.onClick}>
@@ -182,9 +200,62 @@ const DropdownBasic = () => {
             ))}
           </Dropdown.Menu>
         </Dropdown>
-        <Dropdown size="medium" isDisabled target={<Icon name="more" size="large" color="icon01" />}>
+        <Dropdown
+          variant="text"
+          size="medium"
+          isDisabled
+          target={<Icon name="more" size="large" color="icon01" />}
+          isArrowHidden
+        >
           <Dropdown.Menu horizontalAlign="right">
             {items.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', columnGap: '100px', marginBottom: '150px' }}>
+        <Dropdown variant="text" target={<Heading level={5}>タイトル</Heading>}>
+          <Dropdown.Menu horizontalAlign="right" maxHeight={120}>
+            {items2.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+        <Dropdown variant="text" target={<Heading level={4}>タイトル</Heading>}>
+          <Dropdown.Menu horizontalAlign="right" maxHeight={120}>
+            {items2.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+        <Dropdown variant="text" target={<Heading level={3}>タイトル</Heading>}>
+          <Dropdown.Menu horizontalAlign="right" maxHeight={120}>
+            {items2.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+        <Dropdown size="large" target={<Heading level={2}>タイトル</Heading>}>
+          <Dropdown.Menu horizontalAlign="right" maxHeight={120}>
+            {items2.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+        <Dropdown variant="text" size="large" isDisabled target={<Heading level={1}>タイトル</Heading>}>
+          <Dropdown.Menu horizontalAlign="right" maxHeight={120}>
+            {items2.map((item) => (
               <Dropdown.Item key={item.id} onClick={item.onClick}>
                 {item.content}
               </Dropdown.Item>
@@ -420,14 +491,14 @@ const DropdownWithCustomMenu = () => {
     {
       id: '4',
       label: '相づち',
-      color: 'fill-support-supportSuccess',
+      color: 'fill-supportSuccess',
       isChecked: isOn4,
       onChange: () => setIsOn4((prev) => !prev),
     },
     {
       id: '5',
       label: 'NGワード',
-      color: 'fill-support-supportError',
+      color: 'fill-supportError',
       isChecked: isOn5,
       onChange: () => setIsOn5((prev) => !prev),
     },
@@ -443,11 +514,11 @@ const DropdownWithCustomMenu = () => {
                 {item.icon ? (
                   <Icon name={item.icon} size="small" />
                 ) : (
-                  <svg className="h-4 w-4">
+                  <svg className="size-4">
                     <circle r="6" cx="8" cy="8" className={clsx(item.color)} />
                   </svg>
                 )}
-                <span className="typography-label2regular ml-2 flex-1 text-text-text01">{item.label}</span>
+                <span className="typography-label2regular ml-2 flex-1 text-text01">{item.label}</span>
                 <Toggle id="1" size="small" isChecked={item.isChecked} onChange={item.onChange} />
               </li>
             ))}
@@ -495,6 +566,8 @@ const DropdownWithPortal = () => {
               size="large"
               target={<Avatar size="medium" userId={1} lastName="全機現" firstName="太郎" />}
               portalTargetRef={containerRef}
+              isArrowHidden
+              variant="text"
             >
               <Dropdown.Menu>
                 {items.map((item) => (
@@ -510,6 +583,8 @@ const DropdownWithPortal = () => {
               size="medium"
               target={<Icon name="more" size="large" color="icon01" />}
               portalTargetRef={containerRef}
+              isArrowHidden
+              variant="text"
             >
               <Dropdown.Menu>
                 {items.map((item) => (

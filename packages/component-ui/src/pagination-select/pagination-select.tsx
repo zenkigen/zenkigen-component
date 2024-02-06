@@ -49,7 +49,7 @@ export function PaginationSelect({
   return (
     <nav aria-label="pagination" className="flex items-center gap-x-1">
       <div className="flex items-center gap-x-2">
-        <div className="typography-label2regular text-text-text01">
+        <div className="typography-label2regular text-text01">
           {(currentPage - 1) * sizePerPage + 1} -{' '}
           {currentPage * sizePerPage > totalSize ? totalSize : currentPage * sizePerPage}
           {countLabel}
@@ -63,7 +63,7 @@ export function PaginationSelect({
         >
           {optionsList && optionsList.map((option) => <Select.Option key={option.id} option={option} />)}
         </Select>
-        <div className="typography-label2regular text-text-text03">
+        <div className="typography-label2regular text-text03">
           / {pageMax}
           {pageLabel}
         </div>
