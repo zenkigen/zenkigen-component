@@ -12,7 +12,7 @@ type Props = TextareaHTMLAttributes<HTMLTextAreaElement> & {
 export const TextArea = forwardRef<HTMLTextAreaElement, Props>(
   ({ size = 'medium', isResizable = false, isError, ...props }: Props, ref) => {
     const classes = clsx(
-      'placeholder:text-textPlaceholder disabled:text-textPlaceholder w-full rounded border outline-0',
+      'w-full rounded border outline-0 placeholder:text-textPlaceholder disabled:text-textPlaceholder',
       {
         'border-supportError': isError && !props.disabled,
         'hover:border-hoverInput': !props.disabled && !isError,
