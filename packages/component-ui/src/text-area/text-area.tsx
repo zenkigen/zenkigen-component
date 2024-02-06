@@ -16,7 +16,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, Props>(
       {
         'border-support-supportError': isError && !props.disabled,
         'hover:border-hover-hoverInput': !props.disabled && !isError,
-        'border-border-uiBorder01 hover:focus-within:border-active-activeInput focus-within:border-active-activeInput text-text-text01':
+        'border-border-uiBorder03 hover:focus-within:border-active-activeInput focus-within:border-active-activeInput text-text-text01':
           !isError,
         'bg-disabled-disabled02 border-disabled-disabled02': props.disabled,
         ['typography-body1regular px-2 pt-1.5 pb-2']: size === 'medium',
