@@ -7,7 +7,7 @@ type Props = {
 
 export function ModalFooter({ children, isNoBorder }: PropsWithChildren<Props>) {
   const wrapperClasses = clsx('flex w-full shrink-0 items-center rounded-b-lg px-6 py-4', {
-    'border-t-[1px] border-border-uiBorder01': !isNoBorder,
+    'border-t-[1px] border-uiBorder01': !isNoBorder,
   });
 
   return <div className={wrapperClasses}>{children}</div>;

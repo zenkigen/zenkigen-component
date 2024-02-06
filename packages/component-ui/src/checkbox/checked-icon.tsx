@@ -3,7 +3,7 @@ export const CheckedIcon = () => {
     <svg
       viewBox="0 0 20 20"
       xmlns="http://www.w3.org/2000/svg"
-      className="absolute z-10 h-5 w-5 rounded-sm fill-icon-iconOnColor hover:rounded-sm"
+      className="absolute z-10 size-5 rounded-sm fill-iconOnColor hover:rounded-sm"
     >
       <path
         fillRule="evenodd"

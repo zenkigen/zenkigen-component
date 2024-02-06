@@ -43,14 +43,14 @@ export function Toast({
     ['animate-toast-out opacity-0']: isAnimation && isRemoving,
   });
   const iconClasses = clsx('flex items-center', {
-    'fill-support-supportSuccess': state === 'success',
-    'fill-support-supportError': state === 'error',
-    'fill-support-supportWarning': state === 'warning',
-    'fill-support-supportInfo': state === 'information',
+    'fill-supportSuccess': state === 'success',
+    'fill-supportError': state === 'error',
+    'fill-supportWarning': state === 'warning',
+    'fill-supportInfo': state === 'information',
   });
   const textClasses = clsx('typography-body2regular flex-1 pt-[3px]', {
-    'text-support-supportError': state === 'error',
-    'text-text-text01': state === 'success' || state === 'warning' || state === 'information',
+    'text-supportError': state === 'error',
+    'text-text01': state === 'success' || state === 'warning' || state === 'information',
   });
 
   const iconName = {

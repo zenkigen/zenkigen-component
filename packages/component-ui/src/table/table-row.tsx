@@ -6,7 +6,7 @@ type Props = {
   isHoverBackgroundVisible?: boolean;
 };
 export function TableRow({ children, isHoverBackgroundVisible }: Props) {
-  const rowClasses = clsx('contents', isHoverBackgroundVisible && '[&:hover>div]:bg-hover-hoverUi02');
+  const rowClasses = clsx('contents', isHoverBackgroundVisible && '[&:hover>div]:bg-hoverUi02');
 
   return <div className={rowClasses}>{children}</div>;
 }

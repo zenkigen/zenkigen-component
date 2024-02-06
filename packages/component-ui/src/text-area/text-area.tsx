@@ -12,16 +12,15 @@ type Props = TextareaHTMLAttributes<HTMLTextAreaElement> & {
 export const TextArea = forwardRef<HTMLTextAreaElement, Props>(
   ({ size = 'medium', isResizable = false, isError, ...props }: Props, ref) => {
     const classes = clsx(
-      'w-full rounded border outline-0 placeholder:text-text-textPlaceholder disabled:text-text-textPlaceholder',
+      'w-full rounded border outline-0 placeholder:text-textPlaceholder disabled:text-textPlaceholder',
       {
-        'border-support-supportError': isError && !props.disabled,
-        'hover:border-hover-hoverInput': !props.disabled && !isError,
-        'border-border-uiBorder01 hover:focus-within:border-active-activeInput focus-within:border-active-activeInput text-text-text01':
-          !isError,
-        'bg-disabled-disabled02 border-disabled-disabled02': props.disabled,
+        'border-supportError': isError && !props.disabled,
+        'hover:border-hoverInput': !props.disabled && !isError,
+        'border-uiBorder01 hover:focus-within:border-activeInput focus-within:border-activeInput text-text01': !isError,
+        'bg-disabled02 border-disabled01': props.disabled,
         ['typography-body1regular px-2 pt-1.5 pb-2']: size === 'medium',
         ['text-4 px-3.5 py-2.5']: size === 'large',
-        'text-support-supportError': isError,
+        'text-supportError': isError,
         'resize-none': !isResizable,
       },
     );
