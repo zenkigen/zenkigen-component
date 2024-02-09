@@ -53,7 +53,7 @@ export function PaginationSelect({
     <nav aria-label="pagination" className="flex items-center gap-x-1">
       <div className="flex items-center gap-x-2">
         <div className="typography-label2regular text-text01">
-          {minCount > 0 && `${minCount} -`}
+          {minCount > 0 && `${minCount} - `}
           {maxCount}
           {countLabel}
         </div>
