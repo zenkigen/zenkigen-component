@@ -58,3 +58,35 @@ export const Base: Story = {
     );
   },
 };
+
+export const Empty: Story = {
+  args: {
+    totalSize: 0,
+    currentPage: 1,
+    sizePerPage: 25,
+  },
+  render: function MyFunc({ ...args }) {
+    const [_, updateArgs] = useArgs();
+
+    return (
+      <PaginationSelect
+        {...args}
+        onChange={(value) => {
+          updateArgs({
+            currentPage: value,
+          });
+        }}
+        onClickPrevButton={() => {
+          updateArgs({
+            currentPage: args.currentPage - 1,
+          });
+        }}
+        onClickNextButton={() => {
+          updateArgs({
+            currentPage: args.currentPage + 1,
+          });
+        }}
+      ></PaginationSelect>
+    );
+  },
+};
