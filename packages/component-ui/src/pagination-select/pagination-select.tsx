@@ -46,12 +46,15 @@ export function PaginationSelect({
     };
   });
 
+  const minCount = totalSize ? (currentPage - 1) * sizePerPage + 1 : 0;
+  const maxCount = currentPage * sizePerPage > totalSize ? totalSize : currentPage * sizePerPage;
+
   return (
     <nav aria-label="pagination" className="flex items-center gap-x-1">
       <div className="flex items-center gap-x-2">
-        <div className="typography-label2regular text-text-text01">
-          {(currentPage - 1) * sizePerPage + 1} -{' '}
-          {currentPage * sizePerPage > totalSize ? totalSize : currentPage * sizePerPage}
+        <div className="typography-label2regular text-text01">
+          {minCount > 0 && `${minCount} - `}
+          {maxCount}
           {countLabel}
         </div>
         <Select
@@ -60,10 +63,11 @@ export function PaginationSelect({
           selectedOption={optionsList.find((option) => option.value === currentPage.toString())}
           optionListMaxHeight={optionListMaxHeight}
           onChange={(option) => option && onChange(Number(option.value))}
+          isDisabled={pageMax === 0}
         >
           {optionsList && optionsList.map((option) => <Select.Option key={option.id} option={option} />)}
         </Select>
-        <div className="typography-label2regular text-text-text03">
+        <div className="typography-label2regular text-text03">
           / {pageMax}
           {pageLabel}
         </div>
@@ -80,7 +84,7 @@ export function PaginationSelect({
           variant="text"
           icon="angle-right"
           size="small"
-          isDisabled={currentPage === pageMax}
+          isDisabled={currentPage === pageMax || pageMax === 0}
           onClick={onClickNextButton}
         />
       </div>

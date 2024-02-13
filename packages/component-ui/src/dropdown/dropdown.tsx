@@ -32,7 +32,7 @@ export function Dropdown({
   label,
   icon,
   size = 'medium',
-  variant = target ? 'text' : 'outline',
+  variant = 'outline',
   title,
   isDisabled = false,
   isArrowHidden = false,
@@ -71,11 +71,11 @@ export function Dropdown({
   });
 
   const childrenButtonClasses = clsx(
-    'flex items-center justify-center rounded p-1 hover:bg-hover-hover02 active:bg-active-active02',
+    'flex items-center justify-center rounded p-1 hover:bg-hover02 active:bg-active02',
     focusVisible.normal,
     {
       'pointer-events-none': isDisabled,
-      'border border-border-uiBorder02': variant === 'outline',
+      'border border-uiBorder02': variant === 'outline',
     },
   );
 
@@ -116,6 +116,14 @@ export function Dropdown({
             disabled={isDisabled}
           >
             {target}
+            {!isArrowHidden && (
+              <div className="ml-2 flex items-center fill-icon01">
+                <Icon
+                  name={isVisible ? 'angle-small-up' : 'angle-small-down'}
+                  size={size === 'large' ? 'medium' : 'small'}
+                />
+              </div>
+            )}
           </button>
         ) : (
           <button type="button" title={title} className={buttonClasses} onClick={handleToggle} disabled={isDisabled}>

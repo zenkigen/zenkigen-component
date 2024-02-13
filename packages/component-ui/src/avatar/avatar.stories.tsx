@@ -32,6 +32,13 @@ export function Base() {
         <Avatar size="medium" lastName="全機現" firstName="太郎" />
         <Avatar size="medium" userId={1} isDisabled lastName="全機現" firstName="太郎" />
       </div>
+      {/* 特殊パターン */}
+      <div className="flex gap-2">
+        <Avatar size="medium" userId={1} lastName="全機現 太郎" firstName="" />
+        <Avatar size="medium" userId={1} lastName="Smith John" firstName="" />
+        <Avatar size="medium" userId={1} lastName="全 優" firstName="" />
+        <Avatar size="medium" userId={1} lastName="全　優" firstName="" />
+      </div>
     </div>
   );
 }

@@ -11,11 +11,11 @@ type Props = {
 
 export function SelectItem({ children, isSortKey, onClickItem }: PropsWithChildren<Props>) {
   const itemClasses = clsx(
-    'typography-label2regular flex h-8 w-full items-center px-3 hover:bg-hover-hover02 active:bg-active-active02',
+    'typography-label2regular flex h-8 w-full items-center px-3 hover:bg-hover02 active:bg-active02',
     focusVisible.inset,
     {
-      'bg-selected-selectedUi fill-interactive-interactive01 text-interactive-interactive01': isSortKey,
-      'bg-background-uiBackground01 fill-icon-icon01 text-interactive-interactive02': !isSortKey,
+      'bg-selectedUi fill-interactive01 text-interactive01': isSortKey,
+      'bg-uiBackground01 fill-icon01 text-interactive02': !isSortKey,
     },
   );
 

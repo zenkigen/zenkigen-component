@@ -19,12 +19,11 @@ export function SelectItem({ option }: Props) {
   };
 
   const itemClasses = clsx(
-    'typography-label2regular flex h-8 w-full items-center px-3 hover:bg-hover-hover02 active:bg-active-active02',
+    'typography-label2regular flex h-8 w-full items-center px-3 hover:bg-hover02 active:bg-active02',
     focusVisible.inset,
     {
-      'text-interactive-interactive01 fill-interactive-interactive01 bg-selected-selectedUi':
-        option.id === selectedOption?.id,
-      'text-interactive-interactive02 fill-icon-icon01 bg-background-uiBackground01': option.id !== selectedOption?.id,
+      'text-interactive01 fill-interactive01 bg-selectedUi': option.id === selectedOption?.id,
+      'text-interactive02 fill-icon01 bg-uiBackground01': option.id !== selectedOption?.id,
     },
   );
 

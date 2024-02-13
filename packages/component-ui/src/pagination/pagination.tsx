@@ -30,7 +30,7 @@ export function Pagination({ currentPage, totalPage, sideNumPagesToShow = 3, onC
     pageList.push(i);
   }
 
-  const threeDotIconClasses = 'flex h-8 w-8 items-center justify-center gap-1 fill-icon-icon01';
+  const threeDotIconClasses = 'flex h-8 w-8 items-center justify-center gap-1 fill-icon01';
 
   return (
     <PaginationContext.Provider

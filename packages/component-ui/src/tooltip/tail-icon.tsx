@@ -9,7 +9,7 @@ type Props = {
 };
 
 export const TailIcon = (props: Props) => {
-  const tailClasses = clsx('absolute fill-background-uiBackgroundTooltip', {
+  const tailClasses = clsx('absolute fill-uiBackgroundTooltip', {
     'rotate-180': props.verticalPosition === 'bottom',
     'rotate-0': props.verticalPosition !== 'bottom',
     '-top-1': props.verticalPosition === 'bottom' && props.size === 'small',
@@ -20,8 +20,8 @@ export const TailIcon = (props: Props) => {
     'right-4': props.horizontalAlign === 'right' && props.size !== 'small',
     'left-2': props.horizontalAlign === 'left' && props.size === 'small',
     'left-4': props.horizontalAlign === 'left' && props.size !== 'small',
-    'left-2/4 -translate-x-1': props.horizontalAlign === 'center' && props.size === 'small',
-    'left-2/4 -translate-x-2': props.horizontalAlign === 'center' && props.size !== 'small',
+    'left-1/2 -translate-x-1': props.horizontalAlign === 'center' && props.size === 'small',
+    'left-1/2 -translate-x-2': props.horizontalAlign === 'center' && props.size !== 'small',
   });
 
   if (props.size === 'small') {
