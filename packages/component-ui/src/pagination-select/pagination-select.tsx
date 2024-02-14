@@ -1,5 +1,5 @@
 import { IconButton } from '../icon-button';
-import { SelectOption } from '../select';
+import type { SelectOption } from '../select';
 import { Select } from '../select';
 
 type Props = {
@@ -65,7 +65,9 @@ export function PaginationSelect({
           onChange={(option) => option && onChange(Number(option.value))}
           isDisabled={pageMax === 0}
         >
-          {optionsList && optionsList.map((option) => <Select.Option key={option.id} option={option} />)}
+          {optionsList.map((option) => (
+            <Select.Option key={option.id} option={option} />
+          ))}
         </Select>
         <div className="typography-label2regular text-text03">
           / {pageMax}

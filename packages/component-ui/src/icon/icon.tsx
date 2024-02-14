@@ -1,4 +1,5 @@
-import { iconElements, IconName } from '@zenkigen-inc/component-icons';
+import type { IconName } from '@zenkigen-inc/component-icons';
+import { iconElements } from '@zenkigen-inc/component-icons';
 import { iconColors } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
 
@@ -13,16 +14,16 @@ type Props = {
   isDisabled?: boolean;
 };
 
-export const Icon = ({ size = 'medium', ...props }: Props) => {
+export const Icon = ({ size = 'medium', isDisabled = false, ...props }: Props) => {
   const classes = clsx('inline-block shrink-0', {
-    'fill-disabled01': props.isDisabled,
-    [iconColors.icon01]: !props.isDisabled && props.color === 'icon01',
-    [iconColors.icon01Dark]: !props.isDisabled && props.color === 'icon01Dark',
-    [iconColors.icon02]: !props.isDisabled && props.color === 'icon02',
-    [iconColors.icon02Dark]: !props.isDisabled && props.color === 'icon02Dark',
-    [iconColors.icon03]: !props.isDisabled && props.color === 'icon03',
-    [iconColors.icon03Dark]: !props.isDisabled && props.color === 'icon03Dark',
-    [iconColors.iconOnColor]: !props.isDisabled && props.color === 'iconOnColor',
+    'fill-disabled01': isDisabled,
+    [iconColors.icon01]: !isDisabled && props.color === 'icon01',
+    [iconColors.icon01Dark]: !isDisabled && props.color === 'icon01Dark',
+    [iconColors.icon02]: !isDisabled && props.color === 'icon02',
+    [iconColors.icon02Dark]: !isDisabled && props.color === 'icon02Dark',
+    [iconColors.icon03]: !isDisabled && props.color === 'icon03',
+    [iconColors.icon03Dark]: !isDisabled && props.color === 'icon03Dark',
+    [iconColors.iconOnColor]: !isDisabled && props.color === 'iconOnColor',
     'w-3 h-3': size === 'x-small',
     'w-4 h-4': size === 'small',
     'w-6 h-6': size === 'medium',

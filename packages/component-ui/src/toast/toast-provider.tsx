@@ -1,8 +1,9 @@
-import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useState } from 'react';
+import type { PropsWithChildren } from 'react';
+import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import { Toast } from './toast';
-import { ToastState } from './type';
+import type { ToastState } from './type';
 
 type AddToastArgs = { message: string; state: ToastState };
 

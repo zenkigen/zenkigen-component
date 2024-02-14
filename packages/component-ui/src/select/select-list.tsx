@@ -1,6 +1,7 @@
 import { focusVisible } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
-import { CSSProperties, PropsWithChildren, useContext, useLayoutEffect, useRef } from 'react';
+import type { CSSProperties, PropsWithChildren } from 'react';
+import { useContext, useLayoutEffect, useRef } from 'react';
 
 import { SelectContext } from './select-context';
 
@@ -18,11 +19,11 @@ export function SelectList({ children, maxHeight }: PropsWithChildren<Props>) {
   };
 
   useLayoutEffect(() => {
-    if (maxHeight && ref.current) {
-      const element = Array.from(ref.current.children || []).find(
+    if (maxHeight != null && ref.current) {
+      const element = Array.from(ref.current.children ?? []).find(
         (item) => item.getAttribute('data-id') === selectedOption?.id,
       );
-      if (element && ref.current.scroll) {
+      if (element != null && ref.current.scroll != null) {
         const wrapRect = ref.current.getBoundingClientRect();
         const rect = element.getBoundingClientRect();
         ref.current.scroll(0, rect.top - wrapRect.top - wrapRect.height / 2 + rect.height / 2);
@@ -49,7 +50,7 @@ export function SelectList({ children, maxHeight }: PropsWithChildren<Props>) {
   return (
     <ul className={listClasses} style={{ maxHeight }} ref={ref}>
       {children}
-      {placeholder && selectedOption !== null && (
+      {placeholder != null && selectedOption !== null && (
         <li>
           <button className={deselectButtonClasses} type="button" onClick={handleClickDeselect}>
             選択解除

@@ -1,7 +1,8 @@
-import { IconName } from '@zenkigen-inc/component-icons';
+import type { IconName } from '@zenkigen-inc/component-icons';
 import { buttonColors, focusVisible } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
-import { MutableRefObject, PropsWithChildren, ReactElement, useCallback, useRef, useState } from 'react';
+import type { MutableRefObject, PropsWithChildren, ReactElement } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import { useOutsideClick } from '../hooks/use-outside-click';
@@ -142,7 +143,7 @@ export function Dropdown({
         )}
         {!portalTargetRef
           ? children
-          : portalTargetRef && portalTargetRef.current && createPortal(children, portalTargetRef.current)}
+          : portalTargetRef != null && portalTargetRef.current && createPortal(children, portalTargetRef.current)}
       </div>
     </DropdownContext.Provider>
   );

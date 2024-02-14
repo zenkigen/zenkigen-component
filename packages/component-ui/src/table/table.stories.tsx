@@ -4,10 +4,10 @@ import { useCallback, useState } from 'react';
 
 import { Avatar } from '../avatar';
 import { Dropdown } from '../dropdown';
-import { DropdownItemType } from '../dropdown/type';
+import type { DropdownItemType } from '../dropdown/type';
 import { Icon } from '../icon';
 import { SelectSort } from '../select-sort';
-import { SortOrder } from '../select-sort/type';
+import type { SortOrder } from '../select-sort/type';
 import { Table } from '.';
 
 const meta: Meta<typeof Table> = {

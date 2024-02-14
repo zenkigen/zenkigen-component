@@ -1,7 +1,7 @@
 import { focusVisible } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
 
-import { ColorVariant, TagColor } from './type';
+import type { ColorVariant, TagColor } from './type';
 
 type Props = {
   color?: TagColor;

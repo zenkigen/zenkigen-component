@@ -1,6 +1,6 @@
 import { focusVisible } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
-import { PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
 
 import { Icon } from '../icon';
 

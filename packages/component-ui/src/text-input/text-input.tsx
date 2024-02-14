@@ -1,5 +1,6 @@
 import { clsx } from 'clsx';
-import { forwardRef, InputHTMLAttributes } from 'react';
+import type { InputHTMLAttributes } from 'react';
+import { forwardRef } from 'react';
 
 import { IconButton } from '../icon-button';
 
@@ -11,14 +12,14 @@ type Props = Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> & {
 };
 
 export const TextInput = forwardRef<HTMLInputElement, Props>(
-  ({ size = 'medium', isError, onClickClearButton, ...props }: Props, ref) => {
+  ({ size = 'medium', isError = false, disabled = false, onClickClearButton, ...props }: Props, ref) => {
     const inputWrapClasses = clsx('relative flex items-center gap-2 overflow-hidden rounded border', {
       'border-uiBorder01': !isError,
-      'border-supportError': isError && !props.disabled,
-      'hover:border-hoverInput': !props.disabled && !isError,
+      'border-supportError': isError && !disabled,
+      'hover:border-hoverInput': !disabled && !isError,
       'hover:focus-within:border-activeInput': !isError,
       'focus-within:border-activeInput': !isError,
-      'bg-disabled02 border-disabled01': props.disabled,
+      'bg-disabled02 border-disabled01': disabled,
     });
 
     const inputClasses = clsx(
@@ -33,8 +34,8 @@ export const TextInput = forwardRef<HTMLInputElement, Props>(
 
     return (
       <div className={inputWrapClasses}>
-        <input ref={ref} size={1} className={inputClasses} onChange={props.onChange} {...props} />
-        {onClickClearButton && props.value && props.value.length !== 0 && !props.disabled && (
+        <input ref={ref} size={1} className={inputClasses} disabled={disabled} onChange={props.onChange} {...props} />
+        {onClickClearButton && props.value.length !== 0 && !disabled && (
           <div className="absolute right-3">
             <IconButton variant="text" icon="close" size="small" isNoPadding onClick={onClickClearButton} />
           </div>

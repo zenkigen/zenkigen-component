@@ -1,5 +1,6 @@
 import { action } from '@storybook/addon-actions';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import type { ChangeEvent, FormEvent } from 'react';
+import { useState } from 'react';
 
 import { Search } from '.';
 

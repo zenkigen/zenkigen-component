@@ -1,9 +1,10 @@
 import clsx from 'clsx';
-import { AnimationEvent, CSSProperties, ReactNode, useCallback, useEffect, useState } from 'react';
+import type { AnimationEvent, CSSProperties, ReactNode } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { Icon } from '../icon';
 import { IconButton } from '../icon-button';
-import { ToastState } from './type';
+import type { ToastState } from './type';
 
 const CLOSE_TIME_MSEC = 5000;
 
@@ -19,8 +20,8 @@ type Props = {
 export function Toast({
   state = 'information',
   width = 'auto',
-  isAutoClose,
-  isAnimation,
+  isAutoClose = false,
+  isAnimation = false,
   children,
   onClickClose,
 }: Props) {

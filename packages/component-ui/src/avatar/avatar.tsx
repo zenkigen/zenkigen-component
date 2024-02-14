@@ -21,8 +21,9 @@ export function Avatar({ size = 'medium', ...props }: Props) {
     'w-8 h-8 typography-label4regular': size === 'small',
     'w-6 h-6 typography-label4regular': size === 'x-small',
     'bg-disabled01': props.isDisabled,
-    'bg-icon01': !props.userId,
-    [userColors[(props.userId ?? 0) % userColors.length] as string]: props.userId && !props.isDisabled,
+    'bg-icon01': props.userId == null,
+    [userColors[(props.userId ?? 0) % userColors.length] as string]:
+      props.userId != null && !(props.isDisabled ?? false),
   });
 
   const trimmedFirstName = props.firstName.replace('　', ' ').trim();

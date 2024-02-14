@@ -1,6 +1,7 @@
 import { focusVisible } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
-import { MouseEvent, PropsWithChildren, useContext } from 'react';
+import type { MouseEvent, PropsWithChildren } from 'react';
+import { useContext } from 'react';
 
 import { DropdownContext } from './dropdown-context';
 

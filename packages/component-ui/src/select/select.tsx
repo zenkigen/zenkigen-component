@@ -1,7 +1,8 @@
-import { IconName } from '@zenkigen-inc/component-icons';
+import type { IconName } from '@zenkigen-inc/component-icons';
 import { buttonColors, focusVisible } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
-import { CSSProperties, PropsWithChildren, useRef, useState } from 'react';
+import type { CSSProperties, PropsWithChildren } from 'react';
+import { useRef, useState } from 'react';
 
 import { useOutsideClick } from '../hooks/use-outside-click';
 import { Icon } from '../icon';
@@ -87,7 +88,7 @@ export function Select({
               <Icon name={selectedOption.icon} size={size === 'large' ? 'medium' : 'small'} />
             </div>
           ) : (
-            placeholder &&
+            placeholder != null &&
             placeholderIcon && (
               <div className="mr-1 flex">
                 <Icon name={placeholderIcon} size={size === 'large' ? 'medium' : 'small'} />
@@ -95,7 +96,7 @@ export function Select({
             )
           )}
           <div className={labelClasses}>
-            <div className="truncate">{selectedOption ? selectedOption.label : placeholder && placeholder}</div>
+            <div className="truncate">{selectedOption ? selectedOption.label : placeholder != null && placeholder}</div>
           </div>
           <div className="ml-auto flex items-center">
             <Icon

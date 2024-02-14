@@ -1,4 +1,4 @@
-import { CSSProperties, PropsWithChildren } from 'react';
+import type { CSSProperties, PropsWithChildren } from 'react';
 
 import { TableCell } from './table-cell';
 import { TableRow } from './table-row';
