@@ -29,7 +29,9 @@ const ErrorText = ({ isError = false, ...props }: ErrorTextProps) => {
 };
 
 export const Base: Story = {
-  args: {},
+  args: {
+    value: '',
+  },
   render: function MyFunc({ ...args }) {
     const [value, setValue] = useState<string>(args.value);
     const [value2, setValue2] = useState<string>('入力した文字列。');
