@@ -198,7 +198,6 @@ export const Base: Story = {
               placeholder="入力してください"
               size="large"
               height={120}
-              isError
               disabled
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                 action('onChange')(e);

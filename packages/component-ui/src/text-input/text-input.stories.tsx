@@ -108,7 +108,6 @@ export const Base: Story = {
               value={value2}
               placeholder="入力してください"
               size="medium"
-              isError
               disabled
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 action('onChange')(e);
