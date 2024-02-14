@@ -1,6 +1,7 @@
 import { focusVisible } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
-import { ChangeEvent, useCallback, useState } from 'react';
+import type { ChangeEvent } from 'react';
+import { useCallback, useState } from 'react';
 
 import { CheckedIcon } from './checked-icon';
 import { MinusIcon } from './minus-icon';

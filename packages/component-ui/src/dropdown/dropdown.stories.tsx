@@ -1,8 +1,9 @@
 import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
-import { IconName } from '@zenkigen-inc/component-icons';
+import type { IconName } from '@zenkigen-inc/component-icons';
 import clsx from 'clsx';
-import { forwardRef, PropsWithChildren, useRef, useState } from 'react';
+import type { PropsWithChildren } from 'react';
+import { forwardRef, useRef, useState } from 'react';
 
 import { Avatar } from '../avatar';
 import { Button } from '../button';
@@ -10,7 +11,7 @@ import { Heading } from '../heading';
 import { Icon } from '../icon';
 import { Toggle } from '../toggle';
 import { Dropdown } from './dropdown';
-import { DropdownItemType } from './type';
+import type { DropdownItemType } from './type';
 
 const meta: Meta<typeof Dropdown> = {
   component: Dropdown,

@@ -1,7 +1,8 @@
 import { action } from '@storybook/addon-actions';
-import { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import clsx from 'clsx';
-import { ChangeEvent, ReactNode, useState } from 'react';
+import type { ChangeEvent, ReactNode } from 'react';
+import { useState } from 'react';
 
 import { TextArea } from '.';
 
@@ -18,10 +19,10 @@ type ErrorTextProps = {
   isError?: boolean;
 };
 
-const ErrorText = ({ ...props }: ErrorTextProps) => {
+const ErrorText = ({ isError = false, ...props }: ErrorTextProps) => {
   const classes = clsx('typography-label4regular mt-1 px-2', {
-    'text-text02': !props.isError,
-    'text-supportError': props.isError,
+    'text-text02': !isError,
+    'text-supportError': isError,
   });
 
   return <div className={classes}>{props.children}</div>;

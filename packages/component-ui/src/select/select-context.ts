@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 
-import { SelectOption } from './type';
+import type { SelectOption } from './type';
 
 type UseSelectReturnType = {
   size?: 'x-small' | 'small' | 'medium' | 'large';

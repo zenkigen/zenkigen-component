@@ -1,9 +1,10 @@
 import type { Meta } from '@storybook/react';
-import { iconElements, IconName } from '@zenkigen-inc/component-icons';
+import type { IconName } from '@zenkigen-inc/component-icons';
+import { iconElements } from '@zenkigen-inc/component-icons';
 import { useState } from 'react';
 
 import { Select } from './select';
-import { SelectOption } from './type';
+import type { SelectOption } from './type';
 
 const meta: Meta<typeof Select> = {
   component: Select,

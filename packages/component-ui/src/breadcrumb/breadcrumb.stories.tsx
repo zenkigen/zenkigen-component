@@ -13,7 +13,7 @@ export function Base() {
     <Breadcrumb>
       {breadcrumbList.map((item) => (
         <Breadcrumb.Item key={item.key}>
-          {item.href ? <a href={item.href}>{item.label}</a> : item.label}
+          {item.href != null ? <a href={item.href}>{item.label}</a> : item.label}
         </Breadcrumb.Item>
       ))}
     </Breadcrumb>

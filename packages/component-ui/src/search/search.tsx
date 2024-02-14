@@ -1,5 +1,6 @@
 import { clsx } from 'clsx';
-import { ChangeEvent, FormEvent, forwardRef } from 'react';
+import type { ChangeEvent, FormEvent } from 'react';
+import { forwardRef } from 'react';
 
 import { Icon } from '../icon';
 import { IconButton } from '../icon-button';

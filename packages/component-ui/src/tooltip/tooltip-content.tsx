@@ -1,8 +1,8 @@
 import clsx from 'clsx';
-import { CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
 
 import { TailIcon } from './tail-icon';
-import { TooltipHorizontalAlign, TooltipPosition, TooltipSize, TooltipVerticalPosition } from './type';
+import type { TooltipHorizontalAlign, TooltipPosition, TooltipSize, TooltipVerticalPosition } from './type';
 
 export const TooltipContent = ({
   content,
@@ -11,7 +11,7 @@ export const TooltipContent = ({
   size,
   tooltipPosition,
   maxWidth,
-  isPortal,
+  isPortal = false,
 }: {
   content: string;
   size: TooltipSize;

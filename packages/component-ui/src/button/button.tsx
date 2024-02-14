@@ -1,6 +1,6 @@
 import { buttonColors, focusVisible } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
-import { ComponentPropsWithoutRef, CSSProperties, ElementType, PropsWithChildren, ReactNode } from 'react';
+import type { ComponentPropsWithoutRef, CSSProperties, ElementType, PropsWithChildren, ReactNode } from 'react';
 
 type Size = 'small' | 'medium' | 'large';
 
@@ -34,7 +34,7 @@ export const Button = <T extends ElementAs = 'button'>({
   size = 'medium',
   variant = 'fill',
   isDisabled,
-  isSelected,
+  isSelected = false,
   width,
   borderRadius,
   before,
@@ -57,15 +57,15 @@ export const Button = <T extends ElementAs = 'button'>({
       [buttonColors[variant].selected]: isSelected,
       [buttonColors[variant].base]: !isSelected,
       'hover:text-textOnColor active:text-textOnColor [&:hover>*]:fill-iconOnColor [&:active>*]:fill-iconOnColor':
-        props.isSelected && variant !== 'outline' && variant !== 'text',
+        isSelected && variant !== 'outline' && variant !== 'text',
       'pointer-events-none': isDisabled,
-      'rounded-button': !borderRadius,
+      'rounded-button': borderRadius == null,
       'typography-label1regular': size === 'large',
       'typography-label2regular': size !== 'large',
     },
   );
 
-  const Component = elementAs || 'button';
+  const Component = elementAs ?? 'button';
 
   return (
     <Component className={baseClasses} style={{ width, borderRadius }} disabled={isDisabled} {...props}>

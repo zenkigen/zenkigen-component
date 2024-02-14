@@ -1,4 +1,4 @@
-import { iconColors } from '@zenkigen-inc/component-theme';
+import type { iconColors } from '@zenkigen-inc/component-theme';
 
 import { Icon } from '.';
 export default { component: Icon };

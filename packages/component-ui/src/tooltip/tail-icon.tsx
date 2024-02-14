@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 
-import { TooltipHorizontalAlign, TooltipSize, TooltipVerticalPosition } from './type';
+import type { TooltipHorizontalAlign, TooltipSize, TooltipVerticalPosition } from './type';
 
 type Props = {
   size: TooltipSize;

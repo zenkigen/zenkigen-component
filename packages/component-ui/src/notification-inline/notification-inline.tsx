@@ -1,5 +1,5 @@
 import { clsx } from 'clsx';
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 import { Icon } from '../icon';
 import { IconButton } from '../icon-button';
@@ -54,7 +54,7 @@ export function NotificationInline({ state = 'default', size = 'medium', ...prop
         </div>
       )}
       <p className="flex-1">{props.children}</p>
-      {props.showClose && (
+      {props.showClose === true && (
         <div className="flex items-center">
           <IconButton icon="close" size="small" variant="text" />
         </div>
