@@ -2,7 +2,8 @@ import type { PropsWithChildren } from 'react';
 import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import { useViewTransition, ViewTransitionReducerAction } from '../view-transition/view-transition-provider';
+import type { ViewTransitionReducerAction } from '../view-transition/view-transition-provider';
+import { useViewTransition } from '../view-transition/view-transition-provider';
 import { Toast } from './toast';
 import type { ToastState } from './type';
 

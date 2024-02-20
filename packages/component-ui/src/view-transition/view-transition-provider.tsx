@@ -1,7 +1,8 @@
-import { createContext, PropsWithChildren, useContext, useReducer, useState } from 'react';
+import type { PropsWithChildren } from 'react';
+import { createContext, useContext, useReducer } from 'react';
 import { createPortal } from 'react-dom';
 
-import { SelectOption } from '../select';
+import type { SelectOption } from '../select';
 import { Form } from './Form/form';
 
 type State = {
@@ -103,7 +104,7 @@ export const ViewTransitionProvider = ({ children }: PropsWithChildren<Props>) =
       {state.list.length !== 0 &&
         createPortal(
           <div className="z-Transition fixed right-0 top-[0] mb-4 ml-4 flex w-[400px] flex-col p-10">
-            {state.list &&
+            {state.list.length !== 0 &&
               state.list.map((item, i) => {
                 return (
                   <>

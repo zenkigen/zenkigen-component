@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-import { Select, SelectOption } from '../../select';
+import type { SelectOption } from '../../select';
+import { Select } from '../../select';
 import { TextInput } from '../../text-input';
 
 type KeyValue = { [key: string]: string };
@@ -62,7 +63,7 @@ export function Form({ valueLabel, value, option, onChangeValue, onChangeSelectO
       <div className="flex w-full">
         <div className="basis-1/2">{valueLabel}</div>
         <div className="basis-1/2">
-          <TextInput onChange={(event) => onChangeValue(event.target.value)} value={value ? value : ''}></TextInput>
+          <TextInput onChange={(event) => onChangeValue(event.target.value)} value={value ?? ''}></TextInput>
         </div>
       </div>
       <div>
