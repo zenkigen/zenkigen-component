@@ -82,7 +82,8 @@ export const Button = <T extends ElementAs = 'button'>({
       style={{
         width,
         borderRadius,
-        ...(state.list.length !== 0
+        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+        ...(state && state.list.length !== 0
           ? {
               transitionDuration: !isHover ? `${state.list[0]?.value}ms` : `${state.list[1]?.value}ms`,
               transitionTimingFunction: !isHover
