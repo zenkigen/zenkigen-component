@@ -105,6 +105,42 @@ module.exports = {
             transform: 'rotate(360deg)',
           },
         },
+        'fade-in': {
+          from: {
+            opacity: 0,
+          },
+          to: {
+            opacity: 1,
+          },
+        },
+        'fade-out': {
+          from: {
+            opacity: 1,
+          },
+          to: {
+            opacity: 0,
+          },
+        },
+        'rise-up': {
+          from: {
+            opacity: 0,
+            transform: 'translate3d(0, 30px, 0)',
+          },
+          to: {
+            opacity: 1,
+            transform: 'translate3d(0, 0, 0)',
+          },
+        },
+        'rise-down': {
+          from: {
+            opacity: 1,
+            transform: 'translate3d(0, 0, 0)',
+          },
+          to: {
+            opacity: 0,
+            transform: 'translate3d(0, 30px, 0)',
+          },
+        },
         'toast-in': {
           from: {
             opacity: 0,
@@ -132,6 +168,10 @@ module.exports = {
         'circular-large-move': 'circular-large-move 1.4s ease-in-out infinite',
         'toast-in': 'toast-in 0.25s cubic-bezier(.11, .57, .14, 1)',
         'toast-out': 'toast-out 0.25s cubic-bezier(0, .14, .75, 1)',
+        'fade-in': 'fade-in 0.25s cubic-bezier(.11, .57, .14, 1)',
+        'fade-out': 'fade-out 0.25s cubic-bezier(0, .14, .75, 1)',
+        'rise-up': 'rise-up 0.25s cubic-bezier(.11, .57, .14, 1)',
+        'rise-down': 'rise-down 0.25s cubic-bezier(0, .14, .75, 1)',
       },
       zIndex: {
         hide: -1,

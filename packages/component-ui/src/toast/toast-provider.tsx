@@ -1,6 +1,7 @@
 import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
+import { useViewTransition, ViewTransitionReducerAction } from '../view-transition/view-transition-provider';
 import { Toast } from './toast';
 import { ToastState } from './type';
 
@@ -9,11 +10,14 @@ type AddToastArgs = { message: string; state: ToastState };
 type ToastProviderProps = {
   addToast: (args: AddToastArgs) => void;
   removeToast: (id: number) => void;
+  debugDispatch: React.Dispatch<ViewTransitionReducerAction>;
 };
 
 const ToastContext = createContext<ToastProviderProps>({} as ToastProviderProps);
 
 export const ToastProvider = ({ children }: PropsWithChildren) => {
+  const { dispatch } = useViewTransition();
+
   const [isClientRender, setIsClientRender] = useState(false);
   const [toasts, setToasts] = useState<{ id: number; message: string; state: ToastState }[]>([]);
 
@@ -30,7 +34,7 @@ export const ToastProvider = ({ children }: PropsWithChildren) => {
   }, []);
 
   return (
-    <ToastContext.Provider value={{ addToast, removeToast }}>
+    <ToastContext.Provider value={{ addToast, removeToast, debugDispatch: dispatch }}>
       {children}
       {isClientRender &&
         createPortal(
