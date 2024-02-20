@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 type Props = {
   id: string;
@@ -18,7 +18,7 @@ export function Toggle({
   onChange,
   label,
   labelPosition = 'right',
-  isDisabled,
+  isDisabled = false,
 }: Props) {
   const baseClasses = clsx('relative flex items-center rounded-full', {
     'bg-disabledOn': isDisabled && isChecked,
@@ -48,7 +48,7 @@ export function Toggle({
 
   return (
     <div className="relative flex flex-[0_0_auto] items-center">
-      {label && labelPosition === 'left' && (
+      {label != null && labelPosition === 'left' && (
         <label htmlFor={id} className={labelClasses}>
           {label}
         </label>
@@ -65,7 +65,7 @@ export function Toggle({
       <div className={baseClasses}>
         <span className={indicatorClasses} />
       </div>
-      {label && labelPosition === 'right' && (
+      {label != null && labelPosition === 'right' && (
         <label htmlFor={id} className={labelClasses}>
           {label}
         </label>

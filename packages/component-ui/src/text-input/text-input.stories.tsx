@@ -1,7 +1,8 @@
 import { action } from '@storybook/addon-actions';
-import { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import clsx from 'clsx';
-import { ChangeEvent, ReactNode, useState } from 'react';
+import type { ChangeEvent, ReactNode } from 'react';
+import { useState } from 'react';
 
 import { TextInput } from '.';
 
@@ -18,17 +19,19 @@ type ErrorTextProps = {
   isError?: boolean;
 };
 
-const ErrorText = ({ ...props }: ErrorTextProps) => {
+const ErrorText = ({ isError = false, ...props }: ErrorTextProps) => {
   const classes = clsx('typography-label4regular mt-1 px-2', {
-    'text-text02': !props.isError,
-    'text-supportError': props.isError,
+    'text-text02': !isError,
+    'text-supportError': isError,
   });
 
   return <div className={classes}>{props.children}</div>;
 };
 
 export const Base: Story = {
-  args: {},
+  args: {
+    value: '',
+  },
   render: function MyFunc({ ...args }) {
     const [value, setValue] = useState<string>(args.value);
     const [value2, setValue2] = useState<string>('入力した文字列。');
@@ -105,7 +108,6 @@ export const Base: Story = {
               value={value2}
               placeholder="入力してください"
               size="medium"
-              isError
               disabled
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 action('onChange')(e);

@@ -1,8 +1,9 @@
 import clsx from 'clsx';
-import { CSSProperties, PropsWithChildren, useContext } from 'react';
+import type { CSSProperties, PropsWithChildren } from 'react';
+import { useContext } from 'react';
 
 import { DropdownContext } from './dropdown-context';
-import { DropdownHorizontalAlign, DropdownVerticalPosition } from './type';
+import type { DropdownHorizontalAlign, DropdownVerticalPosition } from './type';
 
 type Props = {
   maxHeight?: CSSProperties['height'];
@@ -14,7 +15,7 @@ type Props = {
 export function DropdownMenu({
   children,
   maxHeight,
-  isNoPadding,
+  isNoPadding = false,
   verticalPosition = 'bottom',
   horizontalAlign = 'left',
 }: PropsWithChildren<Props>) {

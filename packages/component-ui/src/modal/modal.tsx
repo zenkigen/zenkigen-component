@@ -1,13 +1,6 @@
 import clsx from 'clsx';
-import {
-  AnimationEvent,
-  CSSProperties,
-  MutableRefObject,
-  PropsWithChildren,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import type { AnimationEvent, CSSProperties, MutableRefObject, PropsWithChildren } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import { useViewTransition } from '../view-transition/view-transition-provider';

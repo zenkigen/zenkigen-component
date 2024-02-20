@@ -1,6 +1,7 @@
 import { buttonColors, focusVisible } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
-import { CSSProperties, useCallback, useRef, useState } from 'react';
+import type { CSSProperties } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 import { useOutsideClick } from '../hooks/use-outside-click';
 import { Icon } from '../icon';
@@ -26,7 +27,7 @@ export function SelectSort({
   label,
   sortOrder,
   isDisabled = false,
-  isSortKey,
+  isSortKey = false,
   onChange,
   onClickDeselect,
 }: Props) {

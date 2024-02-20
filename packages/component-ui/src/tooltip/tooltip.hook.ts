@@ -1,6 +1,7 @@
-import { CSSProperties, useCallback } from 'react';
+import type { CSSProperties } from 'react';
+import { useCallback } from 'react';
 
-import { TooltipHorizontalAlign, TooltipPosition, TooltipSize, TooltipVerticalPosition } from './type';
+import type { TooltipHorizontalAlign, TooltipPosition, TooltipSize, TooltipVerticalPosition } from './type';
 
 export const useTooltip = () => {
   const calculatePosition = useCallback(

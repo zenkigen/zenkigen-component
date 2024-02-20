@@ -1,5 +1,6 @@
 import clsx from 'clsx';
-import { PropsWithChildren, useContext } from 'react';
+import type { PropsWithChildren } from 'react';
+import { useContext } from 'react';
 
 import { IconButton } from '../icon-button';
 import { ModalContext } from './modal-context';
@@ -8,7 +9,7 @@ type Props = {
   isNoBorder?: boolean;
 };
 
-export function ModalHeader({ children, isNoBorder }: PropsWithChildren<Props>) {
+export function ModalHeader({ children, isNoBorder = false }: PropsWithChildren<Props>) {
   const { onClose } = useContext(ModalContext);
 
   const headerClasses = clsx(
