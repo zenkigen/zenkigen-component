@@ -92,7 +92,7 @@ export const ViewTransitionProvider = ({ children }: PropsWithChildren<Props>) =
       {children}
       {state.list.length !== 0 &&
         createPortal(
-          <div className="z-Transition fixed right-0 top-[0] mb-4 ml-4 flex w-[400px] flex-col p-10">
+          <div className="fixed right-0 top-[0] mb-4 ml-4 flex w-[400px] flex-col p-10">
             {state.list.length !== 0 &&
               state.list.map((item, i) => {
                 return (

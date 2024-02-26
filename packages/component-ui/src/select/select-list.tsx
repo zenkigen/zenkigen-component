@@ -1,7 +1,7 @@
 import { focusVisible } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
-import type { AnimationEvent, CSSProperties, MutableRefObject, PropsWithChildren } from 'react';
-import { useContext, useLayoutEffect, useRef, useState } from 'react';
+import type { AnimationEvent, CSSProperties, PropsWithChildren } from 'react';
+import { useContext, useLayoutEffect, useRef } from 'react';
 
 import { useViewTransition } from '../view-transition/view-transition-provider';
 import { SelectContext } from './select-context';
