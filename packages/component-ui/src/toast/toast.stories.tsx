@@ -2,6 +2,7 @@ import { action } from '@storybook/addon-actions';
 import { useCallback, useEffect } from 'react';
 
 import { Button } from '../button';
+import { easeTypesOptionsList } from '../view-transition/Form/form';
 import { ViewTransitionProvider } from '../view-transition/view-transition-provider';
 import { Toast, ToastProvider, useToast } from '.';
 
@@ -76,11 +77,13 @@ export function TransitionTest() {
         list: [
           {
             valueLabel: '表示：単位ms',
-            value: '250',
+            value: '150',
+            option: easeTypesOptionsList[8],
           },
           {
             valueLabel: '非表示：単位ms',
-            value: '250',
+            value: '150',
+            option: easeTypesOptionsList[16],
           },
         ],
       },

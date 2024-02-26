@@ -65,14 +65,6 @@ export function Modal({
     },
   );
 
-  const mainClasses = clsx(
-    'grid max-h-full min-h-[120px] grid-rows-[max-content_1fr_max-content] flex-col rounded-lg bg-uiBackground01 shadow-modalShadow',
-    {
-      [`animate-rise-up`]: isAnimation && !isRemoving,
-      ['animate-rise-down opacity-0']: isAnimation && isRemoving,
-    },
-  );
-
   return isMounted && isOpen
     ? createPortal(
         <ModalContext.Provider value={{ onClose: handleClose }}>
@@ -98,7 +90,7 @@ export function Modal({
               }}
             >
               <div
-                className={mainClasses}
+                className="grid max-h-full min-h-[120px] grid-rows-[max-content_1fr_max-content] flex-col rounded-lg bg-uiBackground01 shadow-modalShadow"
                 style={{
                   width: renderWidth,
                   height: renderHeight,

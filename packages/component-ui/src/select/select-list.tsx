@@ -1,8 +1,9 @@
 import { focusVisible } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
-import type { CSSProperties, PropsWithChildren } from 'react';
-import { useContext, useLayoutEffect, useRef } from 'react';
+import type { AnimationEvent, CSSProperties, MutableRefObject, PropsWithChildren } from 'react';
+import { useContext, useLayoutEffect, useRef, useState } from 'react';
 
+import { useViewTransition } from '../view-transition/view-transition-provider';
 import { SelectContext } from './select-context';
 
 type Props = {
@@ -11,11 +12,31 @@ type Props = {
 
 export function SelectList({ children, maxHeight }: PropsWithChildren<Props>) {
   const ref = useRef<HTMLUListElement>(null);
-  const { size, selectedOption, setIsOptionListOpen, variant, placeholder, onChange } = useContext(SelectContext);
+  const { state } = useViewTransition();
+
+  const {
+    size,
+    selectedOption,
+    setIsOptionListOpen,
+    variant,
+    placeholder,
+    onChange,
+    isAnimation = false,
+    isRemoving = false,
+    setIsRemoving,
+  } = useContext(SelectContext);
 
   const handleClickDeselect = () => {
     onChange?.(null);
-    setIsOptionListOpen(false);
+    !isAnimation && setIsOptionListOpen(false);
+    isAnimation && setIsRemoving(true);
+  };
+
+  const handleAnimationEnd = (e: AnimationEvent<HTMLElement>) => {
+    if (isAnimation && window.getComputedStyle(e.currentTarget).opacity === '0') {
+      setIsRemoving(false);
+      setIsOptionListOpen(false);
+    }
   };
 
   useLayoutEffect(() => {
@@ -39,6 +60,8 @@ export function SelectList({ children, maxHeight }: PropsWithChildren<Props>) {
       'top-9': size === 'medium',
       'top-11': size === 'large',
       'border-solid border border-uiBorder01': variant === 'outline',
+      [`animate-fade-in`]: isAnimation && !isRemoving,
+      ['animate-fade-out opacity-0']: isAnimation && isRemoving,
     },
   );
 
@@ -48,7 +71,28 @@ export function SelectList({ children, maxHeight }: PropsWithChildren<Props>) {
   );
 
   return (
-    <ul className={listClasses} style={{ maxHeight }} ref={ref}>
+    <ul
+      className={listClasses}
+      ref={ref}
+      onAnimationEnd={handleAnimationEnd}
+      style={{
+        maxHeight,
+        ...(isAnimation
+          ? {
+              animationDuration: !isRemoving
+                ? `${state.list[0]?.value}ms`
+                : isRemoving
+                  ? `${state.list[1]?.value}ms`
+                  : '0',
+              animationTimingFunction: !isRemoving
+                ? `${state.list[0]?.option?.value}`
+                : isRemoving
+                  ? `${state.list[1]?.option?.value}`
+                  : '',
+            }
+          : {}),
+      }}
+    >
       {children}
       {placeholder != null && selectedOption !== null && (
         <li>

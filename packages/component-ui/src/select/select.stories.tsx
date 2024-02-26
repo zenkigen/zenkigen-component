@@ -1,8 +1,10 @@
 import type { Meta } from '@storybook/react';
 import type { IconName } from '@zenkigen-inc/component-icons';
 import { iconElements } from '@zenkigen-inc/component-icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
+import { easeTypesOptionsList } from '../view-transition/Form/form';
+import { useViewTransition, ViewTransitionProvider } from '../view-transition/view-transition-provider';
 import { Select } from './select';
 import type { SelectOption } from './type';
 
@@ -25,6 +27,14 @@ const meta: Meta<typeof Select> = {
       type: 'string',
     },
   },
+  decorators: [
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (Story: any) => (
+      <ViewTransitionProvider>
+        <Story />
+      </ViewTransitionProvider>
+    ),
+  ],
 };
 export default meta;
 
@@ -44,6 +54,50 @@ const optionsList2 = [
 ];
 
 export function Base() {
+  return (
+    <div>
+      <SelectList />
+    </div>
+  );
+}
+
+export function TransitionTest() {
+  const { dispatch } = useViewTransition();
+
+  useEffect(() => {
+    dispatch({
+      type: 'Reset',
+      payload: {
+        count: 2,
+        list: [
+          {
+            valueLabel: '開く：単位ms',
+            value: '150',
+            option: easeTypesOptionsList[8],
+          },
+          {
+            valueLabel: '閉じる：単位ms',
+            value: '150',
+            option: easeTypesOptionsList[8],
+          },
+        ],
+      },
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <div>
+      <SelectList isAnimation />
+    </div>
+  );
+}
+
+type Props = {
+  isAnimation?: boolean;
+};
+
+function SelectList({ isAnimation = false }: Props) {
   const [selectedOption1, setSelectedOption1] = useState<SelectOption | null>(null);
   const [selectedOption2, setSelectedOption2] = useState<SelectOption | null>(null);
   const [selectedOption3, setSelectedOption3] = useState<SelectOption | null>(null);
@@ -60,6 +114,7 @@ export function Base() {
             selectedOption={selectedOption1}
             onChange={(option) => setSelectedOption1(option)}
             optionListMaxHeight={120}
+            isAnimation={isAnimation}
           >
             {optionsList2.map((option) => (
               <Select.Option key={option.id} option={option} />
@@ -71,6 +126,7 @@ export function Base() {
             placeholder="選択"
             selectedOption={selectedOption2}
             onChange={(option) => setSelectedOption2(option)}
+            isAnimation={isAnimation}
           >
             {optionsList.map((option) => (
               <Select.Option key={option.id} option={option} />
@@ -82,6 +138,7 @@ export function Base() {
             placeholder="選択"
             selectedOption={selectedOption3}
             onChange={(option) => setSelectedOption3(option)}
+            isAnimation={isAnimation}
           >
             {optionsList.map((option) => (
               <Select.Option key={option.id} option={option} />
@@ -93,6 +150,7 @@ export function Base() {
             placeholder="選択"
             selectedOption={selectedOption4}
             onChange={(option) => setSelectedOption4(option)}
+            isAnimation={isAnimation}
           >
             {optionsList.map((option) => (
               <Select.Option key={option.id} option={option} />
@@ -104,6 +162,7 @@ export function Base() {
             placeholder="選択"
             selectedOption={selectedOption4}
             onChange={(option) => setSelectedOption4(option)}
+            isAnimation={isAnimation}
             isDisabled
           >
             {optionsList.map((option) => (
@@ -119,6 +178,7 @@ export function Base() {
             selectedOption={selectedOption1}
             onChange={(option) => setSelectedOption1(option)}
             optionListMaxHeight={120}
+            isAnimation={isAnimation}
           >
             {optionsList2.map((option) => (
               <Select.Option key={option.id} option={option} />
@@ -130,6 +190,7 @@ export function Base() {
             placeholder="選択"
             selectedOption={selectedOption2}
             onChange={(option) => setSelectedOption2(option)}
+            isAnimation={isAnimation}
           >
             {optionsList.map((option) => (
               <Select.Option key={option.id} option={option} />
@@ -141,6 +202,7 @@ export function Base() {
             placeholder="選択"
             selectedOption={selectedOption3}
             onChange={(option) => setSelectedOption3(option)}
+            isAnimation={isAnimation}
           >
             {optionsList.map((option) => (
               <Select.Option key={option.id} option={option} />
@@ -152,6 +214,7 @@ export function Base() {
             placeholder="選択"
             selectedOption={selectedOption4}
             onChange={(option) => setSelectedOption4(option)}
+            isAnimation={isAnimation}
           >
             {optionsList.map((option) => (
               <Select.Option key={option.id} option={option} />
@@ -163,6 +226,7 @@ export function Base() {
             placeholder="選択"
             selectedOption={selectedOption4}
             onChange={(option) => setSelectedOption4(option)}
+            isAnimation={isAnimation}
             isDisabled
           >
             {optionsList.map((option) => (
@@ -179,6 +243,7 @@ export function Base() {
             onChange={(option) => setSelectedOption1(option)}
             width={140}
             optionListMaxHeight={120}
+            isAnimation={isAnimation}
           >
             {optionsList2.map((option) => (
               <Select.Option key={option.id} option={option} />
@@ -191,6 +256,7 @@ export function Base() {
             selectedOption={selectedOption2}
             onChange={(option) => setSelectedOption2(option)}
             width={140}
+            isAnimation={isAnimation}
           >
             {optionsList.map((option) => (
               <Select.Option key={option.id} option={option} />
@@ -203,6 +269,7 @@ export function Base() {
             selectedOption={selectedOption3}
             onChange={(option) => setSelectedOption3(option)}
             width={140}
+            isAnimation={isAnimation}
           >
             {optionsList.map((option) => (
               <Select.Option key={option.id} option={option} />
@@ -215,6 +282,7 @@ export function Base() {
             selectedOption={selectedOption4}
             onChange={(option) => setSelectedOption4(option)}
             width={140}
+            isAnimation={isAnimation}
           >
             {optionsList.map((option) => (
               <Select.Option key={option.id} option={option} />
@@ -227,6 +295,7 @@ export function Base() {
             selectedOption={selectedOption4}
             onChange={(option) => setSelectedOption4(option)}
             width={140}
+            isAnimation={isAnimation}
             isDisabled
           >
             {optionsList.map((option) => (

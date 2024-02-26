@@ -61,17 +61,6 @@ function reducer(state: State, action: ViewTransitionReducerAction) {
     case 'Reset': {
       return { ...action.payload };
     }
-    case 'UpdateCount':
-      state.list;
-      state.list.splice(action.payload);
-      if (state.list.length < action.payload) {
-        const count = state.list.length - action.payload;
-        for (let i = 0; i < count; i++) {
-          state.list.push({});
-        }
-      }
-
-      return { ...state, count: action.payload, list: state.list };
     case 'UpdateValue': {
       const item = state.list[action.payload.index];
       if (item) item.value = action.payload.value;

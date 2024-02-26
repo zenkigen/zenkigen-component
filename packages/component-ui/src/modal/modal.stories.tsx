@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { Button } from '../button';
 import { Checkbox } from '../checkbox';
 import { Tab } from '../tab';
+import { easeTypesOptionsList } from '../view-transition/Form/form';
 import { useViewTransition, ViewTransitionProvider } from '../view-transition/view-transition-provider';
 import { Modal } from '.';
 
@@ -300,20 +301,14 @@ export const TransitionTest: Story = {
           count: 2,
           list: [
             {
-              valueLabel: '背景表示：単位ms',
-              value: '250',
-            },
-            {
-              valueLabel: '背景非表示：単位ms',
-              value: '250',
-            },
-            {
               valueLabel: '表示：単位ms',
-              value: '600',
+              value: '150',
+              option: easeTypesOptionsList[8],
             },
             {
               valueLabel: '非表示：単位ms',
-              value: '250',
+              value: '150',
+              option: easeTypesOptionsList[8],
             },
           ],
         },

@@ -37,6 +37,13 @@ const easeTypes: KeyValue = {
   easeInOutBack: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
 };
 
+export const easeTypesOptionsList: SelectOption[] = [];
+let i = 0;
+for (const key in easeTypes) {
+  const value = easeTypes[key]!;
+  easeTypesOptionsList.push({ id: (i++).toString(), label: key, value: value });
+}
+
 type Props = {
   valueLabel?: string;
   value?: string;
@@ -49,13 +56,7 @@ export function Form({ valueLabel, value, option, onChangeValue, onChangeSelectO
   const [optionList, setOptionList] = useState<SelectOption[]>([]);
 
   useEffect(() => {
-    const optionsList: SelectOption[] = [];
-    let i = 0;
-    for (const key in easeTypes) {
-      const value = easeTypes[key]!;
-      optionsList.push({ id: (i++).toString(), label: key, value: value });
-    }
-    setOptionList(optionsList);
+    setOptionList(easeTypesOptionsList);
   }, []);
 
   return (

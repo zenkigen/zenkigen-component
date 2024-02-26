@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
 import { Icon } from '../icon';
+import { easeTypesOptionsList } from '../view-transition/Form/form';
 import { useViewTransition, ViewTransitionProvider } from '../view-transition/view-transition-provider';
 import { Button } from '.';
 
@@ -35,11 +36,13 @@ export function TransitionTest() {
         list: [
           {
             valueLabel: 'MouseOn：単位ms',
-            value: '250',
+            value: '70',
+            option: easeTypesOptionsList[8],
           },
           {
             valueLabel: 'MouseOut：単位ms',
-            value: '250',
+            value: '70',
+            option: easeTypesOptionsList[8],
           },
         ],
       },
