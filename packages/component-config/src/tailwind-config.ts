@@ -56,6 +56,10 @@ module.exports = {
         floatingShadow: tokens.shadow.floatingShadow,
         layoutShadow: tokens.shadow.layoutShadow,
       },
+      transitionDuration: {
+        'hover-over': '150ms',
+        'hover-out': '150ms',
+      },
       keyframes: {
         'circular-small-move': {
           '0%': {
@@ -125,13 +129,31 @@ module.exports = {
             transform: 'translate3d(-50%, 0, 0)',
           },
         },
+        'appear-in': {
+          from: {
+            opacity: 0,
+          },
+          to: {
+            opacity: 1,
+          },
+        },
+        'appear-out': {
+          from: {
+            opacity: 1,
+          },
+          to: {
+            opacity: 0,
+          },
+        },
       },
       animation: {
         'circular-small-move': 'circular-small-move 1.4s ease-in-out infinite',
         'circular-medium-move': 'circular-medium-move 1.4s ease-in-out infinite',
         'circular-large-move': 'circular-large-move 1.4s ease-in-out infinite',
-        'toast-in': 'toast-in 0.25s cubic-bezier(.11, .57, .14, 1)',
-        'toast-out': 'toast-out 0.25s cubic-bezier(0, .14, .75, 1)',
+        'toast-in': 'toast-in 1500ms cubic-bezier(0.075, 0.82, 0.165, 1)', // easeOutCirc
+        'toast-out': 'toast-out 1500ms cubic-bezier(0.6, 0.04, 0.98, 0.335)', // easeInCirc
+        'appear-in': 'appear-in 1500ms cubic-bezier(0.075, 0.82, 0.165, 1)', // easeOutCirc
+        'appear-out': 'appear-out 1500ms cubic-bezier(0.075, 0.82, 0.165, 1)', // easeOutCirc
       },
       zIndex: {
         hide: -1,

@@ -40,39 +40,40 @@ export function Dropdown({
   portalTargetRef,
 }: PropsWithChildren<Props>) {
   const [isVisible, setIsVisible] = useState(false);
+  const [isRemoving, setIsRemoving] = useState(false);
   const [targetDimensions, setTargetDimensions] = useState({
     width: 0,
     height: 0,
   });
 
   const targetRef = useRef<HTMLDivElement>(null);
-  useOutsideClick(targetRef, () => setIsVisible(false));
+  useOutsideClick(targetRef, () => setIsRemoving(true));
 
   const handleToggle = useCallback(() => {
     if (targetRef.current === null) {
       return;
     }
 
-    if (isVisible) {
-      setIsVisible(false);
+    if (!isRemoving) {
+      setIsRemoving(true);
     } else {
       const dimensions = targetRef.current.getBoundingClientRect();
       const calculatedDimensions = {
         width: dimensions.right - dimensions.left,
         height: dimensions.bottom - dimensions.top,
       };
-
       setTargetDimensions(calculatedDimensions);
       setIsVisible(true);
+      setIsRemoving(false);
     }
-  }, [isVisible]);
+  }, [isRemoving]);
 
   const wrapperClasses = clsx('relative flex shrink-0 items-center gap-1 rounded', {
     'cursor-not-allowed': isDisabled,
   });
 
   const childrenButtonClasses = clsx(
-    'flex items-center justify-center rounded p-1 hover:bg-hover02 active:bg-active02',
+    'flex items-center justify-center rounded p-1 transition-colors duration-hover-out hover:bg-hover02 hover:transition-colors hover:duration-hover-over active:bg-active02',
     focusVisible.normal,
     {
       'pointer-events-none': isDisabled,
@@ -81,7 +82,7 @@ export function Dropdown({
   );
 
   const buttonClasses = clsx(
-    'flex items-center rounded',
+    'flex items-center rounded transition-colors duration-hover-out hover:transition-colors hover:duration-hover-over',
     buttonColors[variant].base,
     buttonColors[variant].hover,
     buttonColors[variant].active,
@@ -105,7 +106,16 @@ export function Dropdown({
 
   return (
     <DropdownContext.Provider
-      value={{ isVisible, setIsVisible, isDisabled, targetDimensions, variant, portalTargetRef }}
+      value={{
+        isVisible,
+        setIsVisible,
+        isDisabled,
+        targetDimensions,
+        variant,
+        portalTargetRef,
+        isRemoving,
+        setIsRemoving,
+      }}
     >
       <div ref={targetRef} className={wrapperClasses}>
         {target ? (

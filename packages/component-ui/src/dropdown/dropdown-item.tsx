@@ -11,9 +11,9 @@ type Props = {
 };
 
 export function DropdownItem({ children, color = 'gray', onClick }: PropsWithChildren<Props>) {
-  const { setIsVisible } = useContext(DropdownContext);
+  const { setIsRemoving } = useContext(DropdownContext);
   const handleClickItem = (event: MouseEvent<HTMLButtonElement>) => {
-    setIsVisible(false);
+    setIsRemoving(true);
     onClick && onClick(event);
   };
   const itemClasses = clsx(

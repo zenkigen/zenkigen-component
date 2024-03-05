@@ -1,6 +1,6 @@
 import { focusVisible } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
-import type { CSSProperties, PropsWithChildren } from 'react';
+import type { AnimationEvent, CSSProperties, PropsWithChildren } from 'react';
 import { useContext, useLayoutEffect, useRef } from 'react';
 
 import { SelectContext } from './select-context';
@@ -11,11 +11,27 @@ type Props = {
 
 export function SelectList({ children, maxHeight }: PropsWithChildren<Props>) {
   const ref = useRef<HTMLUListElement>(null);
-  const { size, selectedOption, setIsOptionListOpen, variant, placeholder, onChange } = useContext(SelectContext);
+  const {
+    size,
+    selectedOption,
+    setIsOptionListOpen,
+    variant,
+    placeholder,
+    onChange,
+    isRemoving = false,
+    setIsRemoving,
+  } = useContext(SelectContext);
+
+  const handleAnimationEnd = (e: AnimationEvent<HTMLElement>) => {
+    if (window.getComputedStyle(e.currentTarget).opacity === '0') {
+      setIsRemoving(false);
+      setIsOptionListOpen(false);
+    }
+  };
 
   const handleClickDeselect = () => {
     onChange?.(null);
-    setIsOptionListOpen(false);
+    setIsRemoving(true);
   };
 
   useLayoutEffect(() => {
@@ -39,6 +55,8 @@ export function SelectList({ children, maxHeight }: PropsWithChildren<Props>) {
       'top-9': size === 'medium',
       'top-11': size === 'large',
       'border-solid border border-uiBorder01': variant === 'outline',
+      [`animate-appear-in`]: !isRemoving,
+      ['animate-appear-out opacity-0']: isRemoving,
     },
   );
 
@@ -48,7 +66,7 @@ export function SelectList({ children, maxHeight }: PropsWithChildren<Props>) {
   );
 
   return (
-    <ul className={listClasses} style={{ maxHeight }} ref={ref}>
+    <ul className={listClasses} style={{ maxHeight }} ref={ref} onAnimationEnd={handleAnimationEnd}>
       {children}
       {placeholder != null && selectedOption !== null && (
         <li>
