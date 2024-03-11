@@ -73,7 +73,7 @@ export function Dropdown({
   });
 
   const childrenButtonClasses = clsx(
-    'flex items-center justify-center rounded p-1 transition-colors duration-hover-out hover:bg-hover02 hover:transition-colors hover:duration-hover-over active:bg-active02',
+    'flex items-center justify-center rounded p-1 transition-colors duration-hover-out ease-hover-out hover:bg-hover02 hover:duration-hover-over hover:ease-hover-over active:bg-active02',
     focusVisible.normal,
     {
       'pointer-events-none': isDisabled,
@@ -82,7 +82,7 @@ export function Dropdown({
   );
 
   const buttonClasses = clsx(
-    'flex items-center rounded transition-colors duration-hover-out hover:transition-colors hover:duration-hover-over',
+    'flex items-center rounded transition-colors duration-hover-out ease-hover-out hover:duration-hover-over hover:ease-hover-over',
     buttonColors[variant].base,
     buttonColors[variant].hover,
     buttonColors[variant].active,

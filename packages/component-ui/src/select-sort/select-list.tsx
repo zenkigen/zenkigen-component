@@ -38,7 +38,7 @@ export function SelectList({ size, variant, sortOrder, onClickItem, onClickDesel
   );
 
   const deselectButtonClasses = clsx(
-    'typography-label2regular flex h-8 w-full items-center px-3 text-interactive02 transition-colors duration-hover-out hover:bg-hover02 hover:transition-colors hover:duration-hover-over active:bg-active02',
+    'typography-label2regular flex h-8 w-full items-center px-3 text-interactive02 transition-colors duration-hover-out ease-hover-out hover:bg-hover02 hover:duration-hover-over hover:ease-hover-over active:bg-active02',
     focusVisible.inset,
   );
 

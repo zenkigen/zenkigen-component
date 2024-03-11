@@ -49,18 +49,15 @@ export function Select({
     }
   };
 
-  const wrapperClasses = clsx(
-    'relative flex shrink-0 items-center gap-1 rounded transition-colors duration-hover-out hover:transition-colors hover:duration-hover-over [&:hover>*]:transition-colors [&:hover>*]:duration-hover-over [&>*]:transition-colors [&>*]:duration-hover-out',
-    {
-      'h-6': size === 'x-small' || size === 'small',
-      'h-8': size === 'medium',
-      'h-10': size === 'large',
-      'cursor-not-allowed': isDisabled,
-    },
-  );
+  const wrapperClasses = clsx('relative flex shrink-0 items-center gap-1 rounded', {
+    'h-6': size === 'x-small' || size === 'small',
+    'h-8': size === 'medium',
+    'h-10': size === 'large',
+    'cursor-not-allowed': isDisabled,
+  });
 
   const buttonClasses = clsx(
-    'flex size-full items-center rounded',
+    'flex size-full items-center rounded transition-colors duration-hover-out ease-hover-out hover:duration-hover-over hover:ease-hover-over',
     buttonColors[variant].base,
     buttonColors[variant].hover,
     buttonColors[variant].active,

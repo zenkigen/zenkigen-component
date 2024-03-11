@@ -62,7 +62,7 @@ export function SelectSort({
   });
 
   const buttonClasses = clsx(
-    'flex size-full items-center rounded transition-colors duration-hover-out hover:transition-colors hover:duration-hover-over',
+    'flex size-full items-center rounded transition-colors duration-hover-out ease-hover-out hover:duration-hover-over hover:ease-hover-over',
     buttonColors[variant].hover,
     buttonColors[variant].active,
     buttonColors[variant].disabled,

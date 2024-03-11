@@ -44,7 +44,7 @@ export const Button = <T extends ElementAs = 'button'>({
   ...props
 }: Props<T>) => {
   const baseClasses = clsx(
-    'flex shrink-0 items-center justify-center gap-1 transition-colors duration-hover-out hover:transition-colors hover:duration-hover-over [&:hover>*]:transition-colors [&:hover>*]:duration-hover-over [&>*]:transition-colors [&>*]:duration-hover-out',
+    'flex shrink-0 items-center justify-center gap-1 transition-colors duration-hover-out ease-hover-out hover:duration-hover-over hover:ease-hover-over [&:hover>*]:duration-hover-over [&:hover>*]:ease-hover-over [&>*]:transition-colors [&>*]:duration-hover-out [&>*]:ease-hover-out',
     buttonColors[variant].hover,
     buttonColors[variant].active,
     buttonColors[variant].disabled,
