@@ -57,8 +57,8 @@ module.exports = {
         layoutShadow: tokens.shadow.layoutShadow,
       },
       transitionDuration: {
-        'hover-over': '300ms',
-        'hover-out': '300ms',
+        'hover-over': '70ms',
+        'hover-out': '70ms',
       },
       transitionTimingFunction: {
         'hover-over': 'ease-out',
