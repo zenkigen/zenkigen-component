@@ -57,8 +57,12 @@ module.exports = {
         layoutShadow: tokens.shadow.layoutShadow,
       },
       transitionDuration: {
-        'hover-over': '70ms',
-        'hover-out': '70ms',
+        'hover-over': '300ms',
+        'hover-out': '300ms',
+      },
+      transitionTimingFunction: {
+        'hover-over': 'ease-out',
+        'hover-out': 'ease-out',
       },
       keyframes: {
         'circular-small-move': {
@@ -129,6 +133,22 @@ module.exports = {
             transform: 'translate3d(-50%, 0, 0)',
           },
         },
+        'modal-in': {
+          from: {
+            opacity: 0,
+          },
+          to: {
+            opacity: 1,
+          },
+        },
+        'modal-out': {
+          from: {
+            opacity: 1,
+          },
+          to: {
+            opacity: 0,
+          },
+        },
         'appear-in': {
           from: {
             opacity: 0,
@@ -150,12 +170,12 @@ module.exports = {
         'circular-small-move': 'circular-small-move 1.4s ease-in-out infinite',
         'circular-medium-move': 'circular-medium-move 1.4s ease-in-out infinite',
         'circular-large-move': 'circular-large-move 1.4s ease-in-out infinite',
-        'toast-in': 'toast-in 150ms cubic-bezier(0.075, 0.82, 0.165, 1)', // easeOutCirc
-        'toast-out': 'toast-out 150ms cubic-bezier(0.6, 0.04, 0.98, 0.335)', // easeInCirc
-        'appear-in': 'appear-in 20ms cubic-bezier(0.075, 0.82, 0.165, 1)', // easeOutCirc
-        'appear-out': 'appear-out 20ms cubic-bezier(0.075, 0.82, 0.165, 1)', // easeOutCirc
-        'modal-in': 'appear-in 150ms cubic-bezier(0.075, 0.82, 0.165, 1)', // easeOutCirc
-        'modal-out': 'appear-out 150ms cubic-bezier(0.075, 0.82, 0.165, 1)', // easeOutCirc
+        'toast-in': 'toast-in 150ms ease-out',
+        'toast-out': 'toast-out 150ms ease-in',
+        'modal-in': 'modal-in 150ms ease-out',
+        'modal-out': 'modal-out 150ms ease-out',
+        'appear-in': 'appear-in 20ms ease-out',
+        'appear-out': 'appear-out 20ms ease-out',
       },
       zIndex: {
         hide: -1,
