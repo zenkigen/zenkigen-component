@@ -40,8 +40,8 @@ export function Modal({ children, width = 480, height, isOpen, onClose, portalTa
   const wrapperClasses = clsx(
     'fixed left-0 top-0 z-overlay flex size-full items-center justify-center bg-backgroundOverlayBlack py-4',
     {
-      ['animate-appear-in']: !isRemoving,
-      ['animate-appear-out opacity-0']: isRemoving,
+      ['animate-modal-in']: !isRemoving,
+      ['animate-modal-out opacity-0']: isRemoving,
     },
   );
 
