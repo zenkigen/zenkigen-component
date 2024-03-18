@@ -4,6 +4,7 @@ import { createPortal } from 'react-dom';
 
 import { useTooltip } from './tooltip.hook';
 import { TooltipContent } from './tooltip-content';
+import { TooltipContext } from './tooltip-context';
 import type { TooltipHorizontalAlign, TooltipPosition, TooltipSize, TooltipVerticalPosition } from './type';
 
 type Props = {
@@ -29,6 +30,7 @@ export function Tooltip({
   const { calculatePosition } = useTooltip();
 
   const [isVisible, setIsVisible] = useState(false);
+  const [isRemoving, setIsRemoving] = useState(false);
   const [tooltipPosition, setTooltipPosition] = useState<TooltipPosition>({
     maxWidth: 'none',
     width: 'auto',
@@ -45,11 +47,12 @@ export function Tooltip({
     if (isDisabledHover) {
       return;
     }
+    setIsRemoving(false);
     setIsVisible(true);
   }, [isDisabledHover]);
 
   const handleMouseOutWrapper = useCallback(() => {
-    setIsVisible(false);
+    setIsRemoving(true);
   }, []);
 
   useEffect(() => {
@@ -62,37 +65,45 @@ export function Tooltip({
   }, [calculatePosition, horizontalAlign, maxWidth, size, verticalPosition]);
 
   return (
-    <div
-      ref={targetRef}
-      className="relative flex items-center justify-center"
-      onMouseOver={handleMouseOverWrapper}
-      onMouseLeave={handleMouseOutWrapper}
+    <TooltipContext.Provider
+      value={{
+        setIsVisible,
+        isRemoving,
+        setIsRemoving,
+      }}
     >
-      {children}
-      {isVisible &&
-        (portalTarget == null ? (
-          <TooltipContent
-            content={content}
-            size={size}
-            maxWidth={maxWidth}
-            verticalPosition={verticalPosition}
-            horizontalAlign={horizontalAlign}
-            tooltipPosition={tooltipPosition}
-          />
-        ) : (
-          createPortal(
+      <div
+        ref={targetRef}
+        className="relative flex items-center justify-center"
+        onMouseOver={handleMouseOverWrapper}
+        onMouseLeave={handleMouseOutWrapper}
+      >
+        {children}
+        {isVisible &&
+          (portalTarget == null ? (
             <TooltipContent
-              isPortal
               content={content}
               size={size}
               maxWidth={maxWidth}
               verticalPosition={verticalPosition}
               horizontalAlign={horizontalAlign}
               tooltipPosition={tooltipPosition}
-            />,
-            portalTarget,
-          )
-        ))}
-    </div>
+            />
+          ) : (
+            createPortal(
+              <TooltipContent
+                isPortal
+                content={content}
+                size={size}
+                maxWidth={maxWidth}
+                verticalPosition={verticalPosition}
+                horizontalAlign={horizontalAlign}
+                tooltipPosition={tooltipPosition}
+              />,
+              portalTarget,
+            )
+          ))}
+      </div>
+    </TooltipContext.Provider>
   );
 }

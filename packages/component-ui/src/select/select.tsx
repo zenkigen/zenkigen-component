@@ -36,10 +36,18 @@ export function Select({
   optionListMaxHeight,
 }: PropsWithChildren<Props>) {
   const [isOptionListOpen, setIsOptionListOpen] = useState(false);
+  const [isRemoving, setIsRemoving] = useState(false);
   const targetRef = useRef<HTMLDivElement>(null);
-  useOutsideClick(targetRef, () => setIsOptionListOpen(false));
+  useOutsideClick(targetRef, () => setIsRemoving(true));
 
-  const handleClickToggle = () => setIsOptionListOpen((prev) => !prev);
+  const handleClickToggle = () => {
+    if (isRemoving || !isOptionListOpen) {
+      setIsRemoving(false);
+      setIsOptionListOpen(true);
+    } else {
+      setIsRemoving(true);
+    }
+  };
 
   const wrapperClasses = clsx('relative flex shrink-0 items-center gap-1 rounded', {
     'h-6': size === 'x-small' || size === 'small',
@@ -49,7 +57,7 @@ export function Select({
   });
 
   const buttonClasses = clsx(
-    'flex size-full items-center rounded',
+    'flex size-full items-center rounded transition-colors duration-hover-out ease-hover-out hover:duration-hover-over hover:ease-hover-over',
     buttonColors[variant].base,
     buttonColors[variant].hover,
     buttonColors[variant].active,
@@ -79,6 +87,8 @@ export function Select({
         setIsOptionListOpen,
         selectedOption,
         onChange,
+        isRemoving,
+        setIsRemoving,
       }}
     >
       <div className={wrapperClasses} style={{ width }} ref={targetRef}>

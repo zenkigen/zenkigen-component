@@ -6,6 +6,7 @@ import { useCallback, useRef, useState } from 'react';
 import { useOutsideClick } from '../hooks/use-outside-click';
 import { Icon } from '../icon';
 import { SelectList } from './select-list';
+import { SelectSortContext } from './select-sort-context';
 import type { SortOrder } from './type';
 
 type Props = {
@@ -32,14 +33,23 @@ export function SelectSort({
   onClickDeselect,
 }: Props) {
   const [isOptionListOpen, setIsOptionListOpen] = useState(false);
+  const [isRemoving, setIsRemoving] = useState(false);
   const targetRef = useRef<HTMLDivElement>(null);
-  useOutsideClick(targetRef, () => setIsOptionListOpen(false));
+  useOutsideClick(targetRef, () => setIsRemoving(true));
 
-  const handleClickToggle = () => setIsOptionListOpen((prev) => !prev);
+  const handleClickToggle = () => {
+    if (isRemoving || !isOptionListOpen) {
+      setIsRemoving(false);
+      setIsOptionListOpen(true);
+    } else {
+      setIsRemoving(true);
+    }
+  };
+
   const handleClickItem = useCallback(
     (value: SortOrder) => {
       onChange?.(value);
-      setIsOptionListOpen(false);
+      setIsRemoving(true);
     },
     [onChange],
   );
@@ -52,7 +62,7 @@ export function SelectSort({
   });
 
   const buttonClasses = clsx(
-    'flex size-full items-center rounded',
+    'flex size-full items-center rounded transition-colors duration-hover-out ease-hover-out hover:duration-hover-over hover:ease-hover-over',
     buttonColors[variant].hover,
     buttonColors[variant].active,
     buttonColors[variant].disabled,
@@ -75,32 +85,34 @@ export function SelectSort({
   });
 
   return (
-    <div className={wrapperClasses} style={{ width }} ref={targetRef}>
-      <button className={buttonClasses} type="button" onClick={handleClickToggle} disabled={isDisabled}>
-        <div className={labelClasses}>{label}</div>
-        <div className="ml-auto flex items-center">
-          {isSortKey ? (
-            <Icon
-              name={sortOrder === 'ascend' ? 'arrow-up' : 'arrow-down'}
-              size={size === 'large' ? 'medium' : 'small'}
-            />
-          ) : (
-            <Icon
-              name={isOptionListOpen ? 'angle-small-up' : 'angle-small-down'}
-              size={size === 'large' ? 'medium' : 'small'}
-            />
-          )}
-        </div>
-      </button>
-      {isOptionListOpen && !isDisabled && (
-        <SelectList
-          size={size}
-          variant={variant}
-          sortOrder={sortOrder}
-          onClickItem={handleClickItem}
-          onClickDeselect={onClickDeselect}
-        />
-      )}
-    </div>
+    <SelectSortContext.Provider value={{ setIsOptionListOpen, isRemoving, setIsRemoving }}>
+      <div className={wrapperClasses} style={{ width }} ref={targetRef}>
+        <button className={buttonClasses} type="button" onClick={handleClickToggle} disabled={isDisabled}>
+          <div className={labelClasses}>{label}</div>
+          <div className="ml-auto flex items-center">
+            {isSortKey ? (
+              <Icon
+                name={sortOrder === 'ascend' ? 'arrow-up' : 'arrow-down'}
+                size={size === 'large' ? 'medium' : 'small'}
+              />
+            ) : (
+              <Icon
+                name={isOptionListOpen ? 'angle-small-up' : 'angle-small-down'}
+                size={size === 'large' ? 'medium' : 'small'}
+              />
+            )}
+          </div>
+        </button>
+        {isOptionListOpen && !isDisabled && (
+          <SelectList
+            size={size}
+            variant={variant}
+            sortOrder={sortOrder}
+            onClickItem={handleClickItem}
+            onClickDeselect={onClickDeselect}
+          />
+        )}
+      </div>
+    </SelectSortContext.Provider>
   );
 }

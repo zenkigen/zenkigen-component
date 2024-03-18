@@ -1,7 +1,8 @@
 import clsx from 'clsx';
-import type { CSSProperties } from 'react';
+import { type AnimationEvent, type CSSProperties, useContext } from 'react';
 
 import { TailIcon } from './tail-icon';
+import { TooltipContext } from './tooltip-context';
 import type { TooltipHorizontalAlign, TooltipPosition, TooltipSize, TooltipVerticalPosition } from './type';
 
 export const TooltipContent = ({
@@ -21,6 +22,15 @@ export const TooltipContent = ({
   tooltipPosition: TooltipPosition;
   isPortal?: boolean;
 }) => {
+  const { setIsVisible, isRemoving = false, setIsRemoving } = useContext(TooltipContext);
+
+  const handleAnimationEnd = (e: AnimationEvent<HTMLElement>) => {
+    if (window.getComputedStyle(e.currentTarget).opacity === '0') {
+      setIsRemoving(false);
+      setIsVisible(false);
+    }
+  };
+
   const tooltipWrapperClasses = clsx('absolute z-tooltip m-auto flex', {
     'top-0': !isPortal && verticalPosition === 'top',
     'bottom-0': !isPortal && verticalPosition === 'bottom',
@@ -29,6 +39,8 @@ export const TooltipContent = ({
     'justify-end': horizontalAlign === 'right',
     'w-[24px]': size === 'small',
     'w-[46px]': size !== 'small',
+    [`animate-appear-in`]: !isRemoving,
+    ['animate-appear-out opacity-0']: isRemoving,
   });
 
   const tooltipBodyClasses = clsx(
@@ -53,7 +65,7 @@ export const TooltipContent = ({
     : {};
 
   return (
-    <div className={tooltipWrapperClasses} style={tooltipWrapperStyle}>
+    <div className={tooltipWrapperClasses} style={tooltipWrapperStyle} onAnimationEnd={handleAnimationEnd}>
       <div
         className={tooltipBodyClasses}
         style={{

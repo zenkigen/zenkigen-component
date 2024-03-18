@@ -10,6 +10,8 @@ type UseDropdownReturnType = {
     width: number;
     height: number;
   };
+  isRemoving?: boolean;
+  setIsRemoving: React.Dispatch<React.SetStateAction<boolean>>;
   variant: 'text' | 'outline';
 };
 
@@ -18,5 +20,7 @@ export const DropdownContext = createContext<UseDropdownReturnType>({
   setIsVisible: () => false,
   isDisabled: false,
   targetDimensions: { width: 0, height: 0 },
+  isRemoving: false,
+  setIsRemoving: () => false,
   variant: 'outline',
 });
