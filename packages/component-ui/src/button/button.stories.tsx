@@ -1,8 +1,63 @@
+import { useEffect } from 'react';
+
 import { Icon } from '../icon';
+import { easeTypesOptionsList } from '../view-transition/Form/form';
+import { useViewTransition, ViewTransitionProvider } from '../view-transition/view-transition-provider';
 import { Button } from '.';
 
-export default { component: Button };
+export default {
+  component: Button,
+  decorators: [
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (Story: any) => (
+      <ViewTransitionProvider>
+        <Story />
+      </ViewTransitionProvider>
+    ),
+  ],
+};
+
 export function Base() {
+  return (
+    <div>
+      <ButtonList />
+    </div>
+  );
+}
+
+export function TransitionTest() {
+  const { dispatch } = useViewTransition();
+
+  useEffect(() => {
+    dispatch({
+      type: 'Reset',
+      payload: {
+        count: 2,
+        list: [
+          {
+            valueLabel: 'MouseOn：単位ms',
+            value: '70',
+            option: easeTypesOptionsList[8],
+          },
+          {
+            valueLabel: 'MouseOut：単位ms',
+            value: '70',
+            option: easeTypesOptionsList[8],
+          },
+        ],
+      },
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <div>
+      <ButtonList />
+    </div>
+  );
+}
+
+function ButtonList() {
   return (
     <div>
       <div className="mt-2 flex items-center gap-2">

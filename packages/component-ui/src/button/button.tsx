@@ -1,6 +1,9 @@
 import { buttonColors, focusVisible } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
 import type { ComponentPropsWithoutRef, CSSProperties, ElementType, PropsWithChildren, ReactNode } from 'react';
+import { useState } from 'react';
+
+import { useViewTransition } from '../view-transition/view-transition-provider';
 
 type Size = 'small' | 'medium' | 'large';
 
@@ -43,6 +46,8 @@ export const Button = <T extends ElementAs = 'button'>({
   children,
   ...props
 }: Props<T>) => {
+  const [isHover, setIsHover] = useState(false);
+  const { state } = useViewTransition();
   const baseClasses = clsx(
     'flex shrink-0 items-center justify-center gap-1',
     buttonColors[variant].hover,
@@ -68,7 +73,26 @@ export const Button = <T extends ElementAs = 'button'>({
   const Component = elementAs ?? 'button';
 
   return (
-    <Component className={baseClasses} style={{ width, borderRadius }} disabled={isDisabled} {...props}>
+    <Component
+      className={baseClasses}
+      disabled={isDisabled}
+      {...props}
+      onMouseEnter={() => setIsHover(true)}
+      onMouseLeave={() => setIsHover(false)}
+      style={{
+        width,
+        borderRadius,
+        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+        ...(state && state.list.length !== 0
+          ? {
+              transitionDuration: !isHover ? `${state.list[0]?.value}ms` : `${state.list[1]?.value}ms`,
+              transitionTimingFunction: !isHover
+                ? `${state.list[0]?.option?.value}`
+                : `${state.list[1]?.option?.value}`,
+            }
+          : {}),
+      }}
+    >
       {before}
       {children}
       {after}

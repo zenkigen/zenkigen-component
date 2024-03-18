@@ -105,6 +105,22 @@ module.exports = {
             transform: 'rotate(360deg)',
           },
         },
+        'fade-in': {
+          from: {
+            opacity: 0,
+          },
+          to: {
+            opacity: 1,
+          },
+        },
+        'fade-out': {
+          from: {
+            opacity: 1,
+          },
+          to: {
+            opacity: 0,
+          },
+        },
         'toast-in': {
           from: {
             opacity: 0,
@@ -130,8 +146,10 @@ module.exports = {
         'circular-small-move': 'circular-small-move 1.4s ease-in-out infinite',
         'circular-medium-move': 'circular-medium-move 1.4s ease-in-out infinite',
         'circular-large-move': 'circular-large-move 1.4s ease-in-out infinite',
-        'toast-in': 'toast-in 0.25s cubic-bezier(.11, .57, .14, 1)',
-        'toast-out': 'toast-out 0.25s cubic-bezier(0, .14, .75, 1)',
+        'toast-in': 'toast-in 0.15s cubic-bezier(0, 0.55, 0.45, 1)',
+        'toast-out': 'toast-out 0.15s cubic-bezier(0.55, 0, 1, 0.45)',
+        'fade-in': 'fade-in 0.25s cubic-bezier(0, 0.55, 0.45, 1)',
+        'fade-out': 'fade-out 0.25s cubic-bezier(0.55, 0, 1, 0.45)',
       },
       zIndex: {
         hide: -1,

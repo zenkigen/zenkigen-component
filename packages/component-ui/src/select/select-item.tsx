@@ -11,11 +11,18 @@ type Props = {
 };
 
 export function SelectItem({ option }: Props) {
-  const { setIsOptionListOpen, selectedOption, onChange } = useContext(SelectContext);
+  const {
+    setIsOptionListOpen,
+    selectedOption,
+    onChange,
+    isAnimation = false,
+    setIsRemoving,
+  } = useContext(SelectContext);
 
   const handleClickItem = (option: SelectOption) => {
     onChange?.(option);
-    setIsOptionListOpen(false);
+    !isAnimation && setIsOptionListOpen(false);
+    isAnimation && setIsRemoving(true);
   };
 
   const itemClasses = clsx(
