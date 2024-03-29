@@ -115,9 +115,11 @@ export function Checkbox({
           </div>
         </div>
       </div>
-      <label htmlFor={id} className={labelClasses}>
-        {label}
-      </label>
+      {label != null && (
+        <label htmlFor={id} className={labelClasses}>
+          {label}
+        </label>
+      )}
     </div>
   );
 }
