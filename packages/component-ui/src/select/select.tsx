@@ -41,7 +41,7 @@ export function Select({
 
   const handleClickToggle = () => setIsOptionListOpen((prev) => !prev);
 
-  const wrapperClasses = clsx('relative flex shrink-0 items-center gap-1 rounded', {
+  const wrapperClasses = clsx('relative flex shrink-0 items-center gap-1 rounded bg-uiBackground01', {
     'h-6': size === 'x-small' || size === 'small',
     'h-8': size === 'medium',
     'h-10': size === 'large',
