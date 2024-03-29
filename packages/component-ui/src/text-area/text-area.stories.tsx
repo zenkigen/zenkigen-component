@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import type { ChangeEvent, ReactNode } from 'react';
 import { useState } from 'react';
 
+import { Button } from '../button';
 import { TextArea } from '.';
 
 const meta: Meta<typeof TextArea> = {
@@ -205,6 +206,49 @@ export const Base: Story = {
               }}
             />
             <ErrorText>入力済み ＋ disabled</ErrorText>
+          </div>
+        </div>
+      </div>
+    );
+  },
+};
+
+export const Test: Story = {
+  args: {},
+  render: function MyFunc({ ...args }) {
+    const [value, setValue] = useState<string>(args.value);
+    const [hasError, setHasError] = useState<boolean>(false);
+
+    const handleEnter = () => {
+      if (value === 'abcde') {
+        setHasError(false);
+      } else {
+        setHasError(true);
+      }
+    };
+
+    return (
+      <div className="flex gap-10">
+        <div style={{ width: 400 }} className="flex flex-col gap-12">
+          <div>
+            <TextArea
+              value={value}
+              placeholder="入力してください"
+              size="large"
+              height={120}
+              isResizable
+              onFocus={() => setHasError(false)}
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+              isError={hasError}
+            />
+            <ErrorText>abcdeと入力されるまでエラーになります。</ErrorText>
+          </div>
+          <div className="flex flex-col gap-2">
+            <Button onClick={handleEnter}>確認</Button>
+            <Button onClick={() => setHasError(false)}>エラーをクリア</Button>
           </div>
         </div>
       </div>

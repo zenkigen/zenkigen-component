@@ -11,13 +11,13 @@ type Props = {
 };
 
 export function DropdownItem({ children, color = 'gray', onClick }: PropsWithChildren<Props>) {
-  const { setIsVisible } = useContext(DropdownContext);
+  const { setIsRemoving } = useContext(DropdownContext);
   const handleClickItem = (event: MouseEvent<HTMLButtonElement>) => {
-    setIsVisible(false);
+    setIsRemoving(true);
     onClick && onClick(event);
   };
   const itemClasses = clsx(
-    'typography-label2regular flex h-8 w-full items-center px-3 hover:bg-hover02 active:bg-active02',
+    'typography-label2regular flex h-8 w-full items-center px-3 transition-colors duration-hover-out ease-hover-out hover:bg-hover02 hover:duration-hover-over hover:ease-hover-over active:bg-active02',
     focusVisible.inset,
     {
       'bg-uiBackground01 fill-icon01 text-interactive02': color === 'gray',

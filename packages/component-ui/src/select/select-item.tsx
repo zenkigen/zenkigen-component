@@ -11,15 +11,15 @@ type Props = {
 };
 
 export function SelectItem({ option }: Props) {
-  const { setIsOptionListOpen, selectedOption, onChange } = useContext(SelectContext);
+  const { selectedOption, onChange, setIsRemoving } = useContext(SelectContext);
 
   const handleClickItem = (option: SelectOption) => {
     onChange?.(option);
-    setIsOptionListOpen(false);
+    setIsRemoving(true);
   };
 
   const itemClasses = clsx(
-    'typography-label2regular flex h-8 w-full items-center px-3 hover:bg-hover02 active:bg-active02',
+    'typography-label2regular flex h-8 w-full items-center px-3 transition-colors duration-hover-out ease-hover-out hover:bg-hover02 hover:duration-hover-over hover:ease-hover-over active:bg-active02',
     focusVisible.inset,
     {
       'text-interactive01 fill-interactive01 bg-selectedUi': option.id === selectedOption?.id,
