@@ -72,7 +72,7 @@ export function Dropdown({
   });
 
   const childrenButtonClasses = clsx(
-    'flex items-center justify-center rounded p-1 hover:bg-hover02 active:bg-active02',
+    'flex items-center justify-center rounded bg-uiBackground01 p-1 hover:bg-hover02 active:bg-active02',
     focusVisible.normal,
     {
       'pointer-events-none': isDisabled,
@@ -81,7 +81,7 @@ export function Dropdown({
   );
 
   const buttonClasses = clsx(
-    'flex items-center rounded',
+    'flex items-center rounded bg-uiBackground01',
     buttonColors[variant].base,
     buttonColors[variant].hover,
     buttonColors[variant].active,
