@@ -5,4 +5,8 @@ export type SelectOption = {
   value: string;
   label: string;
   icon?: IconName;
-};
+  selectedIconPosition?: 'left' | 'right';
+} & (
+  | { icon: IconName; selectedIconPosition?: never | 'right' }
+  | { icon?: never; selectedIconPosition?: 'left' | 'right' }
+);

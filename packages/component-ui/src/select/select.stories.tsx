@@ -238,3 +238,290 @@ export function Base() {
     </>
   );
 }
+
+export function SelectedIconPosition() {
+  const [selectedOption1, setSelectedOption1] = useState<SelectOption | null>(null);
+  const [selectedOption2, setSelectedOption2] = useState<SelectOption | null>(null);
+  const [selectedOption3, setSelectedOption3] = useState<SelectOption | null>(null);
+
+  const optionsList: SelectOption[] = [
+    { id: '1', label: '選択項目1', value: 'A', selectedIconPosition: 'left' },
+    { id: '2', label: '選択項目2', value: 'B', selectedIconPosition: 'left' },
+    { id: '3', label: '選択項目3', value: 'C', selectedIconPosition: 'left' },
+    { id: '4', label: '選択項目4', value: 'D', selectedIconPosition: 'left' },
+    { id: '5', label: '選択項目5', value: 'E', selectedIconPosition: 'left' },
+  ];
+
+  const optionsList2: SelectOption[] = [
+    { id: '1', label: '選択項目1', value: 'A' },
+    { id: '2', label: '選択項目2', value: 'B', selectedIconPosition: 'left' },
+    { id: '3', label: '選択項目3', value: 'C', icon: 'add' as IconName },
+  ];
+
+  const optionsList3: SelectOption[] = [
+    { id: '1', label: '選択項目1', value: 'A' },
+    { id: '2', label: '選択項目2', value: 'B' },
+    { id: '3', label: '選択項目3', value: 'C' },
+    { id: '4', label: '選択項目4', value: 'D' },
+    { id: '5', label: '選択項目5', value: 'E' },
+  ];
+
+  return (
+    <>
+      <div>
+        <div className="flex flex-col items-start gap-6">
+          <div className="font-bold">選択時アイコン位置：</div>
+          <div className="flex gap-4">
+            <div>
+              <div className="text-center">左</div>
+              <Select
+                size="medium"
+                variant="outline"
+                placeholder="選択"
+                selectedOption={selectedOption1}
+                onChange={(option) => setSelectedOption1(option)}
+              >
+                {optionsList.map((option) => (
+                  <Select.Option key={option.id} option={option} />
+                ))}
+              </Select>
+            </div>
+            <div>
+              <div className="text-center">右</div>
+              <Select
+                size="medium"
+                variant="outline"
+                placeholder="選択"
+                selectedOption={selectedOption3}
+                onChange={(option) => setSelectedOption3(option)}
+              >
+                {optionsList3.map((option) => (
+                  <Select.Option key={option.id} option={option} />
+                ))}
+              </Select>
+            </div>
+          </div>
+          <div className="font-bold">パターン混在（アイコン有・無 / 選択時アイコン位置左・右）</div>
+          <Select
+            size="medium"
+            variant="outline"
+            placeholder="選択"
+            selectedOption={selectedOption2}
+            onChange={(option) => setSelectedOption2(option)}
+          >
+            {optionsList2.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
+        </div>
+      </div>
+    </>
+  );
+}
+
+export function IsSelectedForColor() {
+  const [selectedOption1, setSelectedOption1] = useState<SelectOption | null>(null);
+  const [selectedOption2, setSelectedOption2] = useState<SelectOption | null>(null);
+  const [selectedOption3, setSelectedOption3] = useState<SelectOption | null>(null);
+  const [selectedOption4, setSelectedOption4] = useState<SelectOption | null>(null);
+
+  return (
+    <>
+      <div style={{ display: 'grid', rowGap: '180px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '80px' }}>
+          <Select
+            size="x-small"
+            variant="outline"
+            placeholder="選択"
+            selectedOption={selectedOption1}
+            onChange={(option) => setSelectedOption1(option)}
+            optionListMaxHeight={120}
+            isSelectedForBaseColor
+          >
+            {optionsList2.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
+          <Select
+            size="small"
+            variant="outline"
+            placeholder="選択"
+            selectedOption={selectedOption2}
+            onChange={(option) => setSelectedOption2(option)}
+            isSelectedForBaseColor
+          >
+            {optionsList.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
+          <Select
+            size="medium"
+            variant="outline"
+            placeholder="選択"
+            selectedOption={selectedOption3}
+            onChange={(option) => setSelectedOption3(option)}
+            isSelectedForBaseColor
+          >
+            {optionsList.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
+          <Select
+            size="large"
+            variant="outline"
+            placeholder="選択"
+            selectedOption={selectedOption4}
+            onChange={(option) => setSelectedOption4(option)}
+            isSelectedForBaseColor
+          >
+            {optionsList.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
+          <Select
+            size="large"
+            variant="outline"
+            placeholder="選択"
+            selectedOption={selectedOption4}
+            onChange={(option) => setSelectedOption4(option)}
+            isSelectedForBaseColor
+            isDisabled
+          >
+            {optionsList.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '80px' }}>
+          <Select
+            size="x-small"
+            variant="text"
+            placeholder="選択"
+            selectedOption={selectedOption1}
+            onChange={(option) => setSelectedOption1(option)}
+            optionListMaxHeight={120}
+            isSelectedForBaseColor
+          >
+            {optionsList2.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
+          <Select
+            size="small"
+            variant="text"
+            placeholder="選択"
+            selectedOption={selectedOption2}
+            onChange={(option) => setSelectedOption2(option)}
+            isSelectedForBaseColor
+          >
+            {optionsList.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
+          <Select
+            size="medium"
+            variant="text"
+            placeholder="選択"
+            selectedOption={selectedOption3}
+            onChange={(option) => setSelectedOption3(option)}
+            isSelectedForBaseColor
+          >
+            {optionsList.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
+          <Select
+            size="large"
+            variant="text"
+            placeholder="選択"
+            selectedOption={selectedOption4}
+            onChange={(option) => setSelectedOption4(option)}
+            isSelectedForBaseColor
+          >
+            {optionsList.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
+          <Select
+            size="large"
+            variant="text"
+            placeholder="選択"
+            selectedOption={selectedOption4}
+            onChange={(option) => setSelectedOption4(option)}
+            isSelectedForBaseColor
+            isDisabled
+          >
+            {optionsList.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
+        </div>
+      </div>
+    </>
+  );
+}
+
+export function MaxWidth() {
+  const [selectedOption1, setSelectedOption1] = useState<SelectOption | null>(null);
+  const [selectedOption2, setSelectedOption2] = useState<SelectOption | null>(null);
+  const [selectedOption3, setSelectedOption3] = useState<SelectOption | null>(null);
+  const [selectedOption4, setSelectedOption4] = useState<SelectOption | null>(null);
+  const maxWidth = 190;
+
+  return (
+    <>
+      <div>
+        <div className="flex flex-col items-start gap-4">
+          <Select
+            size="x-small"
+            variant="outline"
+            placeholder="選択選"
+            selectedOption={selectedOption1}
+            onChange={(option) => setSelectedOption1(option)}
+            maxWidth={maxWidth}
+          >
+            {optionsList2.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
+          <Select
+            size="small"
+            variant="outline"
+            placeholder="選択選択選択選択"
+            selectedOption={selectedOption2}
+            onChange={(option) => setSelectedOption2(option)}
+            maxWidth={maxWidth}
+          >
+            {optionsList.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
+          <Select
+            size="medium"
+            variant="outline"
+            placeholder="選択選択選択選択選択"
+            selectedOption={selectedOption3}
+            onChange={(option) => setSelectedOption3(option)}
+            maxWidth={maxWidth}
+          >
+            {optionsList.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
+          <Select
+            size="large"
+            variant="outline"
+            placeholder="選択選択選択選択選択"
+            selectedOption={selectedOption4}
+            onChange={(option) => setSelectedOption4(option)}
+            maxWidth={maxWidth}
+          >
+            {optionsList.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
+        </div>
+      </div>
+    </>
+  );
+}

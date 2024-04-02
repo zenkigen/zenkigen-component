@@ -24,6 +24,7 @@ export function SelectItem({ option }: Props) {
     {
       'text-interactive01 fill-interactive01 bg-selectedUi': option.id === selectedOption?.id,
       'text-interactive02 fill-icon01 bg-uiBackground01': option.id !== selectedOption?.id,
+      'flex-row-reverse': !option.icon && option.selectedIconPosition === 'left',
     },
   );
 
