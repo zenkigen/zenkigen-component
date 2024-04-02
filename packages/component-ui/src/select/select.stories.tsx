@@ -319,7 +319,7 @@ export function SelectedIconPosition() {
   );
 }
 
-export function IsSelectedForColor() {
+export function IsSelectedForBaseColor() {
   const [selectedOption1, setSelectedOption1] = useState<SelectOption | null>(null);
   const [selectedOption2, setSelectedOption2] = useState<SelectOption | null>(null);
   const [selectedOption3, setSelectedOption3] = useState<SelectOption | null>(null);
