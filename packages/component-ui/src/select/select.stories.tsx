@@ -266,7 +266,7 @@ export function SelectedIconPosition() {
           <div className="font-bold">選択アイコン ✔ の位置：</div>
           <div className="flex gap-4">
             <div>
-              <div className="text-center">左</div>
+              <div className="text-center">左指定</div>
               <Select
                 size="medium"
                 variant="outline"
@@ -281,7 +281,7 @@ export function SelectedIconPosition() {
               </Select>
             </div>
             <div>
-              <div className="text-center">右</div>
+              <div className="text-center">右指定</div>
               <Select
                 size="medium"
                 variant="outline"
@@ -296,10 +296,13 @@ export function SelectedIconPosition() {
             </div>
           </div>
 
-          <div className="font-bold">選択アイコン ✔ の位置（optionに、icon有り）：</div>
+          <div>
+            <div className="font-bold">選択アイコン ✔ の位置（optionにicon有り）：</div>
+            <div>※ 左指定＋icon有りの場合は、右位置となる</div>
+          </div>
           <div className="flex gap-4">
             <div>
-              <div className="text-center">左</div>
+              <div className="text-center">左指定</div>
               <Select
                 size="medium"
                 variant="outline"
@@ -314,7 +317,7 @@ export function SelectedIconPosition() {
               </Select>
             </div>
             <div>
-              <div className="text-center">右</div>
+              <div className="text-center">右指定</div>
               <Select
                 size="medium"
                 variant="outline"
