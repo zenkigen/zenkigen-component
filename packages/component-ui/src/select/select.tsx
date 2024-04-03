@@ -20,6 +20,7 @@ type Props = {
   placeholderIcon?: IconName;
   selectedOption?: SelectOption | null;
   optionListMaxHeight?: CSSProperties['height'];
+  selectedIconPosition?: 'left' | 'right';
   isDisabled?: boolean;
   isSelectedForBaseColor?: boolean;
   onChange?: (option: SelectOption | null) => void;
@@ -34,6 +35,7 @@ export function Select({
   placeholder,
   placeholderIcon,
   selectedOption = null,
+  selectedIconPosition = 'right',
   isDisabled = false,
   isSelectedForBaseColor = false,
   onChange,
@@ -83,6 +85,7 @@ export function Select({
         placeholder,
         setIsOptionListOpen,
         selectedOption,
+        selectedIconPosition,
         onChange,
       }}
     >

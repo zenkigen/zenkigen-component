@@ -241,27 +241,20 @@ export function Base() {
 
 export function SelectedIconPosition() {
   const [selectedOption1, setSelectedOption1] = useState<SelectOption | null>(null);
-  const [selectedOption2, setSelectedOption2] = useState<SelectOption | null>(null);
   const [selectedOption3, setSelectedOption3] = useState<SelectOption | null>(null);
 
   const optionsList: SelectOption[] = [
-    { id: '1', label: '選択項目1', value: 'A', selectedIconPosition: 'left' },
-    { id: '2', label: '選択項目2', value: 'B', selectedIconPosition: 'left' },
-    { id: '3', label: '選択項目3', value: 'C', selectedIconPosition: 'left' },
-    { id: '4', label: '選択項目4', value: 'D', selectedIconPosition: 'left' },
-    { id: '5', label: '選択項目5', value: 'E', selectedIconPosition: 'left' },
+    { id: '1', label: '選択項目1', value: 'A' },
+    { id: '2', label: '選択項目2', value: 'B' },
+    { id: '3', label: '選択項目3', value: 'C' },
+    { id: '4', label: '選択項目4', value: 'D' },
+    { id: '5', label: '選択項目5', value: 'E' },
   ];
 
   const optionsList2: SelectOption[] = [
     { id: '1', label: '選択項目1', value: 'A' },
-    { id: '2', label: '選択項目2', value: 'B', selectedIconPosition: 'left' },
-    { id: '3', label: '選択項目3', value: 'C', icon: 'add' as IconName },
-  ];
-
-  const optionsList3: SelectOption[] = [
-    { id: '1', label: '選択項目1', value: 'A' },
     { id: '2', label: '選択項目2', value: 'B' },
-    { id: '3', label: '選択項目3', value: 'C' },
+    { id: '3', label: '選択項目3', value: 'C', icon: 'add' as IconName },
     { id: '4', label: '選択項目4', value: 'D' },
     { id: '5', label: '選択項目5', value: 'E' },
   ];
@@ -270,7 +263,7 @@ export function SelectedIconPosition() {
     <>
       <div>
         <div className="flex flex-col items-start gap-6">
-          <div className="font-bold">選択時アイコン位置：</div>
+          <div className="font-bold">選択アイコン ✔ の位置：</div>
           <div className="flex gap-4">
             <div>
               <div className="text-center">左</div>
@@ -279,6 +272,7 @@ export function SelectedIconPosition() {
                 variant="outline"
                 placeholder="選択"
                 selectedOption={selectedOption1}
+                selectedIconPosition="left"
                 onChange={(option) => setSelectedOption1(option)}
               >
                 {optionsList.map((option) => (
@@ -295,24 +289,45 @@ export function SelectedIconPosition() {
                 selectedOption={selectedOption3}
                 onChange={(option) => setSelectedOption3(option)}
               >
-                {optionsList3.map((option) => (
+                {optionsList.map((option) => (
                   <Select.Option key={option.id} option={option} />
                 ))}
               </Select>
             </div>
           </div>
-          <div className="font-bold">パターン混在（アイコン有・無 / 選択時アイコン位置左・右）</div>
-          <Select
-            size="medium"
-            variant="outline"
-            placeholder="選択"
-            selectedOption={selectedOption2}
-            onChange={(option) => setSelectedOption2(option)}
-          >
-            {optionsList2.map((option) => (
-              <Select.Option key={option.id} option={option} />
-            ))}
-          </Select>
+
+          <div className="font-bold">選択アイコン ✔ の位置（optionに、icon有り）：</div>
+          <div className="flex gap-4">
+            <div>
+              <div className="text-center">左</div>
+              <Select
+                size="medium"
+                variant="outline"
+                placeholder="選択"
+                selectedOption={selectedOption1}
+                selectedIconPosition="left"
+                onChange={(option) => setSelectedOption1(option)}
+              >
+                {optionsList2.map((option) => (
+                  <Select.Option key={option.id} option={option} />
+                ))}
+              </Select>
+            </div>
+            <div>
+              <div className="text-center">右</div>
+              <Select
+                size="medium"
+                variant="outline"
+                placeholder="選択"
+                selectedOption={selectedOption3}
+                onChange={(option) => setSelectedOption3(option)}
+              >
+                {optionsList2.map((option) => (
+                  <Select.Option key={option.id} option={option} />
+                ))}
+              </Select>
+            </div>
+          </div>
         </div>
       </div>
     </>
