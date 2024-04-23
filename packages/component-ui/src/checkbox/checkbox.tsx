@@ -92,7 +92,7 @@ export function Checkbox({
 
   return (
     <div className="flex items-center">
-      <div className="flex size-6 items-center justify-center">
+      <div className="relative flex size-6 items-center justify-center">
         <input
           type="checkbox"
           value={value}
