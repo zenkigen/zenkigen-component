@@ -19,7 +19,7 @@
   "devDependencies": {
     "hygen": "6.2.11",
     "microbundle": "0.15.1",
-    "typescript": "5.4.3"
+    "typescript": "5.4.5"
   },
   "peerDependencies": {
     "@types/react": "^18.0.0",
@@ -28,6 +28,6 @@
   "dependencies": {
     "@zenkigen-inc/component-icons": "1.9.8",
     "@zenkigen-inc/component-theme": "1.9.8",
-    "clsx": "2.1.0"
+    "clsx": "2.1.1"
   }
 }
