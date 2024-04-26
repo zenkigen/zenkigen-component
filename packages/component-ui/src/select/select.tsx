@@ -15,11 +15,13 @@ type Props = {
   size?: 'x-small' | 'small' | 'medium' | 'large';
   variant?: 'outline' | 'text';
   width?: CSSProperties['width'];
+  maxWidth?: CSSProperties['maxWidth'];
   placeholder?: string;
   placeholderIcon?: IconName;
   selectedOption?: SelectOption | null;
   optionListMaxHeight?: CSSProperties['height'];
   isDisabled?: boolean;
+  isOptionSelected?: boolean;
   onChange?: (option: SelectOption | null) => void;
 };
 
@@ -28,10 +30,12 @@ export function Select({
   size = 'medium',
   variant = 'outline',
   width,
+  maxWidth,
   placeholder,
   placeholderIcon,
   selectedOption = null,
   isDisabled = false,
+  isOptionSelected = false,
   onChange,
   optionListMaxHeight,
 }: PropsWithChildren<Props>) {
@@ -50,12 +54,13 @@ export function Select({
 
   const buttonClasses = clsx(
     'flex size-full items-center rounded',
-    buttonColors[variant].base,
     buttonColors[variant].hover,
     buttonColors[variant].active,
     buttonColors[variant].disabled,
     focusVisible.normal,
     {
+      [buttonColors[variant].selected]: isOptionSelected && !isDisabled && selectedOption,
+      [buttonColors[variant].base]: !(isOptionSelected && !isDisabled && selectedOption),
       'px-2': size === 'x-small' || size === 'small',
       'px-4': size === 'medium' || size === 'large',
       'pointer-events-none': isDisabled,
@@ -81,7 +86,7 @@ export function Select({
         onChange,
       }}
     >
-      <div className={wrapperClasses} style={{ width }} ref={targetRef}>
+      <div className={wrapperClasses} style={{ width, maxWidth }} ref={targetRef}>
         <button className={buttonClasses} type="button" onClick={handleClickToggle} disabled={isDisabled}>
           {selectedOption?.icon ? (
             <div className="mr-1 flex">
