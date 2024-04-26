@@ -21,7 +21,7 @@ type Props = {
   selectedOption?: SelectOption | null;
   optionListMaxHeight?: CSSProperties['height'];
   isDisabled?: boolean;
-  isSelectedForBaseColor?: boolean;
+  isOptionSelected?: boolean;
   onChange?: (option: SelectOption | null) => void;
 };
 
@@ -35,7 +35,7 @@ export function Select({
   placeholderIcon,
   selectedOption = null,
   isDisabled = false,
-  isSelectedForBaseColor = false,
+  isOptionSelected = false,
   onChange,
   optionListMaxHeight,
 }: PropsWithChildren<Props>) {
@@ -59,8 +59,8 @@ export function Select({
     buttonColors[variant].disabled,
     focusVisible.normal,
     {
-      [buttonColors[variant].selected]: isSelectedForBaseColor && !isDisabled && selectedOption,
-      [buttonColors[variant].base]: !(isSelectedForBaseColor && !isDisabled && selectedOption),
+      [buttonColors[variant].selected]: isOptionSelected && !isDisabled && selectedOption,
+      [buttonColors[variant].base]: !(isOptionSelected && !isDisabled && selectedOption),
       'px-2': size === 'x-small' || size === 'small',
       'px-4': size === 'medium' || size === 'large',
       'pointer-events-none': isDisabled,

@@ -239,7 +239,7 @@ export function Base() {
   );
 }
 
-export function IsSelectedForBaseColor() {
+export function IsOptionSelected() {
   const [selectedOption1, setSelectedOption1] = useState<SelectOption | null>(null);
   const [selectedOption2, setSelectedOption2] = useState<SelectOption | null>(null);
   const [selectedOption3, setSelectedOption3] = useState<SelectOption | null>(null);
@@ -256,7 +256,7 @@ export function IsSelectedForBaseColor() {
             selectedOption={selectedOption1}
             onChange={(option) => setSelectedOption1(option)}
             optionListMaxHeight={120}
-            isSelectedForBaseColor
+            isOptionSelected
           >
             {optionsList2.map((option) => (
               <Select.Option key={option.id} option={option} />
@@ -268,7 +268,7 @@ export function IsSelectedForBaseColor() {
             placeholder="選択"
             selectedOption={selectedOption2}
             onChange={(option) => setSelectedOption2(option)}
-            isSelectedForBaseColor
+            isOptionSelected
           >
             {optionsList.map((option) => (
               <Select.Option key={option.id} option={option} />
@@ -280,7 +280,7 @@ export function IsSelectedForBaseColor() {
             placeholder="選択"
             selectedOption={selectedOption3}
             onChange={(option) => setSelectedOption3(option)}
-            isSelectedForBaseColor
+            isOptionSelected
           >
             {optionsList.map((option) => (
               <Select.Option key={option.id} option={option} />
@@ -292,7 +292,7 @@ export function IsSelectedForBaseColor() {
             placeholder="選択"
             selectedOption={selectedOption4}
             onChange={(option) => setSelectedOption4(option)}
-            isSelectedForBaseColor
+            isOptionSelected
           >
             {optionsList.map((option) => (
               <Select.Option key={option.id} option={option} />
@@ -304,7 +304,7 @@ export function IsSelectedForBaseColor() {
             placeholder="選択"
             selectedOption={selectedOption4}
             onChange={(option) => setSelectedOption4(option)}
-            isSelectedForBaseColor
+            isOptionSelected
             isDisabled
           >
             {optionsList.map((option) => (
@@ -320,7 +320,7 @@ export function IsSelectedForBaseColor() {
             selectedOption={selectedOption1}
             onChange={(option) => setSelectedOption1(option)}
             optionListMaxHeight={120}
-            isSelectedForBaseColor
+            isOptionSelected
           >
             {optionsList2.map((option) => (
               <Select.Option key={option.id} option={option} />
@@ -332,7 +332,7 @@ export function IsSelectedForBaseColor() {
             placeholder="選択"
             selectedOption={selectedOption2}
             onChange={(option) => setSelectedOption2(option)}
-            isSelectedForBaseColor
+            isOptionSelected
           >
             {optionsList.map((option) => (
               <Select.Option key={option.id} option={option} />
@@ -344,7 +344,7 @@ export function IsSelectedForBaseColor() {
             placeholder="選択"
             selectedOption={selectedOption3}
             onChange={(option) => setSelectedOption3(option)}
-            isSelectedForBaseColor
+            isOptionSelected
           >
             {optionsList.map((option) => (
               <Select.Option key={option.id} option={option} />
@@ -356,7 +356,7 @@ export function IsSelectedForBaseColor() {
             placeholder="選択"
             selectedOption={selectedOption4}
             onChange={(option) => setSelectedOption4(option)}
-            isSelectedForBaseColor
+            isOptionSelected
           >
             {optionsList.map((option) => (
               <Select.Option key={option.id} option={option} />
@@ -368,7 +368,7 @@ export function IsSelectedForBaseColor() {
             placeholder="選択"
             selectedOption={selectedOption4}
             onChange={(option) => setSelectedOption4(option)}
-            isSelectedForBaseColor
+            isOptionSelected
             isDisabled
           >
             {optionsList.map((option) => (
