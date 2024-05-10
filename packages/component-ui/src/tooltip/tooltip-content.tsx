@@ -58,6 +58,7 @@ export const TooltipContent = ({
         className={tooltipBodyClasses}
         style={{
           maxWidth,
+          whiteSpace: 'pre-wrap',
         }}
       >
         {content}
