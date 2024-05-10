@@ -1,4 +1,4 @@
-import type { CSSProperties, PropsWithChildren } from 'react';
+import type { CSSProperties, PropsWithChildren, ReactNode } from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
@@ -7,7 +7,7 @@ import { TooltipContent } from './tooltip-content';
 import type { TooltipHorizontalAlign, TooltipPosition, TooltipSize, TooltipVerticalPosition } from './type';
 
 type Props = {
-  content: string;
+  content: ReactNode;
   size?: TooltipSize;
   maxWidth?: CSSProperties['maxWidth'];
   verticalPosition?: TooltipVerticalPosition;

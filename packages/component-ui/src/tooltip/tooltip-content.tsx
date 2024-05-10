@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import type { CSSProperties } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 
 import { TailIcon } from './tail-icon';
 import type { TooltipHorizontalAlign, TooltipPosition, TooltipSize, TooltipVerticalPosition } from './type';
@@ -13,7 +13,7 @@ export const TooltipContent = ({
   maxWidth,
   isPortal = false,
 }: {
-  content: string;
+  content: ReactNode;
   size: TooltipSize;
   maxWidth: CSSProperties['maxWidth'];
   verticalPosition: TooltipVerticalPosition;
@@ -58,7 +58,6 @@ export const TooltipContent = ({
         className={tooltipBodyClasses}
         style={{
           maxWidth,
-          whiteSpace: 'pre-wrap',
         }}
       >
         {content}
