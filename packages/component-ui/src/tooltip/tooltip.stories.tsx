@@ -26,7 +26,13 @@ type Story = StoryObj<typeof Tooltip>;
 
 export const Base: Story = {
   args: {
-    content: '内容説明テキスト',
+    content: (
+      <>
+        内容説明テキスト1
+        <br />
+        内容説明テキスト2
+      </>
+    ),
   },
   render: (args) => (
     <div className="grid gap-10 px-20 py-10">
@@ -48,32 +54,6 @@ export const Portal: Story = {
   args: {
     portalTarget: document.body,
     content: '内容説明テキスト',
-  },
-  render: (args) => (
-    <div className="grid gap-10 px-20 py-10">
-      <div className="flex items-center gap-20">
-        <Tooltip {...args}>
-          <div className="flex h-10 w-24 items-center justify-center rounded border border-gray-400">target</div>
-        </Tooltip>
-      </div>
-      <div className="flex items-center gap-20">
-        <Tooltip {...args}>
-          <div className="flex h-10 w-[240px] items-center justify-center rounded border border-gray-400">target</div>
-        </Tooltip>
-      </div>
-    </div>
-  ),
-};
-
-export const WithLineBreak: Story = {
-  args: {
-    content: (
-      <>
-        行1
-        <br />
-        行2
-      </>
-    ),
   },
   render: (args) => (
     <div className="grid gap-10 px-20 py-10">
