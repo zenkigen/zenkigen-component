@@ -69,10 +69,11 @@ export const WithLineBreak: Story = {
   args: {
     content: (
       <>
-        行1<br />
+        行1
+        <br />
         行2
       </>
-    )
+    ),
   },
   render: (args) => (
     <div className="grid gap-10 px-20 py-10">
