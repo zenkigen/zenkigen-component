@@ -26,7 +26,13 @@ type Story = StoryObj<typeof Tooltip>;
 
 export const Base: Story = {
   args: {
-    content: '内容説明テキスト',
+    content: (
+      <>
+        内容説明テキスト1
+        <br />
+        内容説明テキスト2
+      </>
+    ),
   },
   render: (args) => (
     <div className="grid gap-10 px-20 py-10">
