@@ -38,7 +38,7 @@ export function Pagination({ currentPage, totalPage, sideNumPagesToShow = 3, onC
         currentPage,
       }}
     >
-      <ul className="flex gap-2">
+      <ul className="flex gap-1">
         <li>
           <IconButton
             isDisabled={currentPage === START_PAGE}
