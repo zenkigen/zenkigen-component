@@ -14,7 +14,7 @@ type Props = Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> & {
 export const TextInput = forwardRef<HTMLInputElement, Props>(
   ({ size = 'medium', isError = false, disabled = false, onClickClearButton, ...props }: Props, ref) => {
     const inputWrapClasses = clsx('relative flex items-center gap-2 overflow-hidden rounded border', {
-      'border-uiBorder01': !isError,
+      'border-uiBorder02': !isError && !disabled,
       'border-supportError': isError && !disabled,
       'hover:border-hoverInput': !disabled && !isError,
       'hover:focus-within:border-activeInput': !isError,
