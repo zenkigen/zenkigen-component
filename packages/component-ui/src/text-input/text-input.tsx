@@ -25,8 +25,8 @@ export const TextInput = forwardRef<HTMLInputElement, Props>(
     const inputClasses = clsx(
       'flex-1 pl-2 pr-3 outline-0 placeholder:text-textPlaceholder disabled:text-textPlaceholder',
       {
-        ['typography-label2regular pt-1.5 pb-2']: size === 'medium',
-        ['typography-label1regular py-2.5']: size === 'large',
+        ['typography-label2regular h-8']: size === 'medium',
+        ['typography-label1regular h-10']: size === 'large',
         'text-text01': !isError,
         'text-supportError': isError,
       },
