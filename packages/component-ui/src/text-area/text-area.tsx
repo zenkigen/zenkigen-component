@@ -17,10 +17,10 @@ export const TextArea = forwardRef<HTMLTextAreaElement, Props>(
       {
         'border-supportError': isError && !disabled,
         'hover:border-hoverInput': !disabled && !isError,
-        'border-uiBorder01 hover:focus-within:border-activeInput focus-within:border-activeInput text-text01': !isError,
+        'border-uiBorder02 hover:focus-within:border-activeInput focus-within:border-activeInput text-text01': !isError,
         'bg-disabled02 border-disabled01': disabled,
         ['typography-body1regular px-2 pt-1.5 pb-2']: size === 'medium',
-        ['text-4 px-3.5 py-2.5']: size === 'large',
+        ['text-4 leading-normal px-3.5 py-2.5']: size === 'large',
         'text-supportError': isError,
         'resize-none': !isResizable,
       },
