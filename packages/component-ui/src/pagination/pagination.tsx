@@ -38,13 +38,13 @@ export function Pagination({ currentPage, totalPage, sideNumPagesToShow = 3, onC
         currentPage,
       }}
     >
-      <ul className="flex gap-2">
-        <li>
+      <ul className="flex gap-1">
+        <li className="flex items-center">
           <IconButton
             isDisabled={currentPage === START_PAGE}
             variant="text"
             icon="angle-left"
-            size="medium"
+            size="small"
             onClick={() => onClick(currentPage - 1)}
           />
         </li>
@@ -69,12 +69,12 @@ export function Pagination({ currentPage, totalPage, sideNumPagesToShow = 3, onC
         <li>
           <PaginationButton onClick={() => onClick(totalPage)} page={totalPage} />
         </li>
-        <li>
+        <li className="flex items-center">
           <IconButton
             isDisabled={currentPage === totalPage}
             variant="text"
             icon="angle-right"
-            size="medium"
+            size="small"
             onClick={() => onClick(currentPage + 1)}
           />
         </li>

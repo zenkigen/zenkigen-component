@@ -24,7 +24,7 @@ type Story = StoryObj<typeof Pagination>;
 export const Base: Story = {
   args: {
     currentPage: 1,
-    totalPage: 20,
+    totalPage: 200,
     sideNumPagesToShow: 4,
   },
   render: function MyFunc({ ...args }) {
