@@ -137,6 +137,150 @@ export function Color() {
       <IconList color="icon03Dark" className="bg-uiBackground01Dark" />
       <div>iconOnColor:</div>
       <IconList color="iconOnColor" className="bg-interactive01" />
+      <div>black:</div>
+      <IconList color="black" />
+      <div>white:</div>
+      <IconList color="white" className="bg-uiBackground01Dark" />
+      <div>blue10:</div>
+      <IconList color="blue10" />
+      <div>blue20:</div>
+      <IconList color="blue20" />
+      <div>blue30:</div>
+      <IconList color="blue30" />
+      <div>blue40:</div>
+      <IconList color="blue40" />
+      <div>blue50:</div>
+      <IconList color="blue50" />
+      <div>blue60:</div>
+      <IconList color="blue60" />
+      <div>blue70:</div>
+      <IconList color="blue70" />
+      <div>blue80:</div>
+      <IconList color="blue80" />
+      <div>blue90:</div>
+      <IconList color="blue90" />
+      <div>blue100:</div>
+      <IconList color="blue100" />
+      <div>gray10:</div>
+      <IconList color="gray10" />
+      <div>gray20:</div>
+      <IconList color="gray20" />
+      <div>gray30:</div>
+      <IconList color="gray30" />
+      <div>gray40:</div>
+      <IconList color="gray40" />
+      <div>gray50:</div>
+      <IconList color="gray50" />
+      <div>gray60:</div>
+      <IconList color="gray60" />
+      <div>gray70:</div>
+      <IconList color="gray70" />
+      <div>gray80:</div>
+      <IconList color="gray80" />
+      <div>gray90:</div>
+      <IconList color="gray90" />
+      <div>gray100:</div>
+      <IconList color="gray100" />
+      <div>red10:</div>
+      <IconList color="red10" />
+      <div>red20:</div>
+      <IconList color="red20" />
+      <div>red30:</div>
+      <IconList color="red30" />
+      <div>red40:</div>
+      <IconList color="red40" />
+      <div>red50:</div>
+      <IconList color="red50" />
+      <div>red60:</div>
+      <IconList color="red60" />
+      <div>red70:</div>
+      <IconList color="red70" />
+      <div>red80:</div>
+      <IconList color="red80" />
+      <div>red90:</div>
+      <IconList color="red90" />
+      <div>red100:</div>
+      <IconList color="red100" />
+      <div>yellow10:</div>
+      <IconList color="yellow10" />
+      <div>yellow20:</div>
+      <IconList color="yellow20" />
+      <div>yellow30:</div>
+      <IconList color="yellow30" />
+      <div>yellow40:</div>
+      <IconList color="yellow40" />
+      <div>yellow50:</div>
+      <IconList color="yellow50" />
+      <div>yellow60:</div>
+      <IconList color="yellow60" />
+      <div>yellow70:</div>
+      <IconList color="yellow70" />
+      <div>yellow80:</div>
+      <IconList color="yellow80" />
+      <div>yellow90:</div>
+      <IconList color="yellow90" />
+      <div>yellow100:</div>
+      <IconList color="yellow100" />
+      <div>green10:</div>
+      <IconList color="green10" />
+      <div>green20:</div>
+      <IconList color="green20" />
+      <div>green30:</div>
+      <IconList color="green30" />
+      <div>green40:</div>
+      <IconList color="green40" />
+      <div>green50:</div>
+      <IconList color="green50" />
+      <div>green60:</div>
+      <IconList color="green60" />
+      <div>green70:</div>
+      <IconList color="green70" />
+      <div>green80:</div>
+      <IconList color="green80" />
+      <div>green90:</div>
+      <IconList color="green90" />
+      <div>green100:</div>
+      <IconList color="green100" />
+      <div>purple10:</div>
+      <IconList color="purple10" />
+      <div>purple20:</div>
+      <IconList color="purple20" />
+      <div>purple30:</div>
+      <IconList color="purple30" />
+      <div>purple40:</div>
+      <IconList color="purple40" />
+      <div>purple50:</div>
+      <IconList color="purple50" />
+      <div>purple60:</div>
+      <IconList color="purple60" />
+      <div>purple70:</div>
+      <IconList color="purple70" />
+      <div>purple80:</div>
+      <IconList color="purple80" />
+      <div>purple90:</div>
+      <IconList color="purple90" />
+      <div>purple100:</div>
+      <IconList color="purple100" />
+      <div>blueGreen10:</div>
+      <IconList color="blueGreen10" />
+      <div>blueGreen20:</div>
+      <IconList color="blueGreen20" />
+      <div>blueGreen30:</div>
+      <IconList color="blueGreen30" />
+      <div>blueGreen40:</div>
+      <IconList color="blueGreen40" />
+      <div>blueGreen50:</div>
+      <IconList color="blueGreen50" />
+      <div>blueGreen60:</div>
+      <IconList color="blueGreen60" />
+      <div>blueGreen70:</div>
+      <IconList color="blueGreen70" />
+      <div>blueGreen80:</div>
+      <IconList color="blueGreen80" />
+      <div>blueGreen90:</div>
+      <IconList color="blueGreen90" />
+      <div>blueGreen100:</div>
+      <IconList color="blueGreen100" />
     </div>
   );
 }
