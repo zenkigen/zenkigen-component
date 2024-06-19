@@ -11,7 +11,7 @@ type Props = {
 
 export function SelectItem({ children, isSortKey, onClickItem }: PropsWithChildren<Props>) {
   const itemClasses = clsx(
-    'typography-label2regular flex h-8 w-full items-center px-3 hover:bg-hover02 active:bg-active02',
+    'typography-label14regular flex h-8 w-full items-center px-3 hover:bg-hover02 active:bg-active02',
     focusVisible.inset,
     {
       'bg-selectedUi fill-interactive01 text-interactive01': isSortKey,

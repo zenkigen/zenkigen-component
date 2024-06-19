@@ -17,7 +17,7 @@ type Props = {
 );
 
 export function NotificationInline({ state = 'default', size = 'medium', ...props }: Props) {
-  const wrapperClasses = clsx('typography-body2regular flex items-center gap-1 rounded text-text01', {
+  const wrapperClasses = clsx('typography-body13regular flex items-center gap-1 rounded text-text01', {
     'bg-uiBackgroundError': state === 'attention',
     'bg-uiBackgroundWarning': state === 'warning',
     'bg-uiBackgroundBlue': state === 'information',

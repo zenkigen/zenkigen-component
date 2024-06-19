@@ -34,7 +34,7 @@ export function IconButton({
   ...props
 }: Props) {
   const baseClasses = clsx(
-    'typography-label1regular flex items-center justify-center gap-1 rounded',
+    'typography-label16regular flex items-center justify-center gap-1 rounded',
     buttonColors[variant].base,
     buttonColors[variant].hover,
     buttonColors[variant].active,
