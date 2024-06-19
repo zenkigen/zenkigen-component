@@ -58,8 +58,8 @@ const TableStoryBasic = () => {
     setSortOrderName(null);
     setSortOrderEmail(null);
   }, []);
-  const headingClasses = 'typography-label2regular flex items-center text-text02';
-  const cellClasses = 'typography-label1regular text-text01 flex items-center gap-2';
+  const headingClasses = 'typography-label14regular flex items-center text-text02';
+  const cellClasses = 'typography-label16regular text-text01 flex items-center gap-2';
 
   return (
     <div className="flex flex-col gap-10">

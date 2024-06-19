@@ -98,9 +98,9 @@ export function Dropdown({
   const labelClasses = clsx('flex items-center', {
     'mr-1': !isArrowHidden && size === 'x-small',
     'mr-2': !isArrowHidden && size !== 'x-small',
-    'typography-label3regular': size === 'x-small',
-    'typography-label2regular': size === 'small' || size === 'medium',
-    'typography-label1regular': size === 'large',
+    'typography-label12regular': size === 'x-small',
+    'typography-label14regular': size === 'small' || size === 'medium',
+    'typography-label16regular': size === 'large',
   });
 
   return (
