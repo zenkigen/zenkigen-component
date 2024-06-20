@@ -12,24 +12,29 @@ type Props = {
   size?: Size;
   color?: Color;
   isDisabled?: boolean;
+  className?: string;
 };
 
 export const Icon = ({ size = 'medium', isDisabled = false, ...props }: Props) => {
-  const classes = clsx('inline-block shrink-0', {
-    'fill-disabled01': isDisabled,
-    [iconColors.icon01]: !isDisabled && props.color === 'icon01',
-    [iconColors.icon01Dark]: !isDisabled && props.color === 'icon01Dark',
-    [iconColors.icon02]: !isDisabled && props.color === 'icon02',
-    [iconColors.icon02Dark]: !isDisabled && props.color === 'icon02Dark',
-    [iconColors.icon03]: !isDisabled && props.color === 'icon03',
-    [iconColors.icon03Dark]: !isDisabled && props.color === 'icon03Dark',
-    [iconColors.iconOnColor]: !isDisabled && props.color === 'iconOnColor',
-    'w-3 h-3': size === 'x-small',
-    'w-4 h-4': size === 'small',
-    'w-6 h-6': size === 'medium',
-    'w-8 h-8': size === 'large',
-    'w-10 h-10': size === 'x-large',
-  });
+  const classes = clsx(
+    'inline-block shrink-0',
+    {
+      'fill-disabled01': isDisabled,
+      [iconColors.icon01]: !isDisabled && props.color === 'icon01',
+      [iconColors.icon01Dark]: !isDisabled && props.color === 'icon01Dark',
+      [iconColors.icon02]: !isDisabled && props.color === 'icon02',
+      [iconColors.icon02Dark]: !isDisabled && props.color === 'icon02Dark',
+      [iconColors.icon03]: !isDisabled && props.color === 'icon03',
+      [iconColors.icon03Dark]: !isDisabled && props.color === 'icon03Dark',
+      [iconColors.iconOnColor]: !isDisabled && props.color === 'iconOnColor',
+      'w-3 h-3': size === 'x-small',
+      'w-4 h-4': size === 'small',
+      'w-6 h-6': size === 'medium',
+      'w-8 h-8': size === 'large',
+      'w-10 h-10': size === 'x-large',
+    },
+    props.className,
+  );
 
   return <span className={classes}>{iconElements[props.name]}</span>;
 };
