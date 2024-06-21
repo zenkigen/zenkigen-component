@@ -1,22 +1,17 @@
-import { mergeConfig } from 'vite';
 import path from 'path';
 import turbosnap from 'vite-plugin-turbosnap';
+import { StorybookConfig } from '@storybook/react-vite';
 
-const config = {
+const config: StorybookConfig = {
   stories: ['../packages/**/*.stories.@(ts|tsx)'],
-  addons: [
-    '@storybook/addon-essentials',
-    '@storybook/addon-interactions',
-    '@storybook/addon-actions',
-    '@storybook/addon-styling',
-  ],
+  addons: ['@storybook/addon-essentials', '@storybook/addon-interactions', '@storybook/addon-actions'],
   framework: {
     name: '@storybook/react-vite',
-  },
-  features: {
-    storyStoreV7: true,
+    options: {},
   },
   viteFinal: async (config) => {
+    const { mergeConfig } = await import('vite');
+
     return mergeConfig(config, {
       plugins: [turbosnap({ rootDir: config.root ?? process.cwd() })],
       resolve: {
@@ -28,4 +23,3 @@ const config = {
   },
 };
 export default config;
-export const framework = '@storybook/react';
