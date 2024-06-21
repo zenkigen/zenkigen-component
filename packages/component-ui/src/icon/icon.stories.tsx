@@ -67,6 +67,7 @@ function IconList(props: Props) {
       <Icon name="input-delete" color={props.color} />
       <Icon name="link" color={props.color} />
       <Icon name="list" color={props.color} />
+      <Icon name="logout" color={props.color} />
       <Icon name="message-text" color={props.color} />
       <Icon name="more" color={props.color} />
       <Icon name="movie" color={props.color} />
@@ -101,6 +102,7 @@ function IconList(props: Props) {
       <Icon name="user-group" color={props.color} />
       <Icon name="user-line" color={props.color} />
       <Icon name="user-multi" color={props.color} />
+      <Icon name="user-one" color={props.color} />
       <Icon name="user-photograph" color={props.color} />
       <Icon name="user-remove" color={props.color} />
       <Icon name="user" color={props.color} />
