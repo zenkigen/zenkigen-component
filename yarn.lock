@@ -2731,7 +2731,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-essentials@npm:^8.1.10":
+"@storybook/addon-essentials@npm:8.1.10":
   version: 8.1.10
   resolution: "@storybook/addon-essentials@npm:8.1.10"
   dependencies:
@@ -2762,7 +2762,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-interactions@npm:^8.1.10":
+"@storybook/addon-interactions@npm:8.1.10":
   version: 8.1.10
   resolution: "@storybook/addon-interactions@npm:8.1.10"
   dependencies:
@@ -2776,7 +2776,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-links@npm:^8.1.10":
+"@storybook/addon-links@npm:8.1.10":
   version: 8.1.10
   resolution: "@storybook/addon-links@npm:8.1.10"
   dependencies:
@@ -3282,7 +3282,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/preview-api@npm:8.1.10, @storybook/preview-api@npm:^8.1.10":
+"@storybook/preview-api@npm:8.1.10":
   version: 8.1.10
   resolution: "@storybook/preview-api@npm:8.1.10"
   dependencies:
@@ -3321,7 +3321,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/react-vite@npm:^8.1.10":
+"@storybook/react-vite@npm:8.1.10":
   version: 8.1.10
   resolution: "@storybook/react-vite@npm:8.1.10"
   dependencies:
@@ -3344,7 +3344,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/react@npm:8.1.10, @storybook/react@npm:^8.1.10":
+"@storybook/react@npm:8.1.10":
   version: 8.1.10
   resolution: "@storybook/react@npm:8.1.10"
   dependencies:
@@ -3407,7 +3407,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/test@npm:8.1.10, @storybook/test@npm:^8.1.10":
+"@storybook/test@npm:8.1.10":
   version: 8.1.10
   resolution: "@storybook/test@npm:8.1.10"
   dependencies:
@@ -4103,7 +4103,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitejs/plugin-react@npm:^4.3.1":
+"@vitejs/plugin-react@npm:4.3.1":
   version: 4.3.1
   resolution: "@vitejs/plugin-react@npm:4.3.1"
   dependencies:
@@ -13441,18 +13441,17 @@ __metadata:
   resolution: "zenkigen-component@workspace:."
   dependencies:
     "@babel/core": "npm:7.24.7"
-    "@storybook/addon-essentials": "npm:^8.1.10"
-    "@storybook/addon-interactions": "npm:^8.1.10"
-    "@storybook/addon-links": "npm:^8.1.10"
-    "@storybook/preview-api": "npm:^8.1.10"
-    "@storybook/react": "npm:^8.1.10"
-    "@storybook/react-vite": "npm:^8.1.10"
-    "@storybook/test": "npm:^8.1.10"
+    "@storybook/addon-essentials": "npm:8.1.10"
+    "@storybook/addon-interactions": "npm:8.1.10"
+    "@storybook/addon-links": "npm:8.1.10"
+    "@storybook/preview-api": "npm:8.1.10"
+    "@storybook/react": "npm:8.1.10"
+    "@storybook/react-vite": "npm:8.1.10"
     "@types/node": "npm:20.14.6"
     "@types/react-dom": "npm:18.3.0"
     "@typescript-eslint/eslint-plugin": "npm:7.13.1"
     "@typescript-eslint/parser": "npm:7.13.1"
-    "@vitejs/plugin-react": "npm:^4.3.1"
+    "@vitejs/plugin-react": "npm:4.3.1"
     autoprefixer: "npm:10.4.19"
     babel-loader: "npm:9.1.3"
     eslint: "npm:8.57.0"
