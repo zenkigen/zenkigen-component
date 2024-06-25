@@ -368,7 +368,7 @@ export const tokens = {
     "body16_Bold": {
       "fontFamily": "Helvetica",
       "fontWeight": "Bold",
-      "lineHeight": "150%",
+      "lineHeight": "180%",
       "fontSize": 16,
       "letterSpacing": 0,
       "paragraphSpacing": 0,
