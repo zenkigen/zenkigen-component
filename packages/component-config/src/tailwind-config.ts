@@ -1,5 +1,4 @@
 import { typography } from '@zenkigen-inc/component-theme';
-/* eslint-disable @typescript-eslint/no-var-requires */
 import plugin from 'tailwindcss/plugin';
 
 import { tokens } from './tokens/tokens';
