@@ -1205,6 +1205,10 @@
     "6": {
       "value": "100%",
       "type": "lineHeights"
+    },
+    "7": {
+      "value": "180%",
+      "type": "lineHeights"
     }
   },
   "fontWeights": {
@@ -1323,7 +1327,7 @@
       "value": {
         "fontFamily": "Helvetica",
         "fontWeight": "Regular",
-        "lineHeight": "150%",
+        "lineHeight": "180%",
         "fontSize": 16,
         "letterSpacing": 0,
         "paragraphSpacing": 0,

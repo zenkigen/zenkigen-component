@@ -285,7 +285,8 @@ export const tokens = {
     "3": "150%",
     "4": "171%",
     "5": "153%",
-    "6": "100%"
+    "6": "100%",
+    "7": "180%"
   },
   "fontWeights": {
     "helvetica-0": "Bold",
@@ -357,7 +358,7 @@ export const tokens = {
     "body16_Regular": {
       "fontFamily": "Helvetica",
       "fontWeight": "Regular",
-      "lineHeight": "150%",
+      "lineHeight": "180%",
       "fontSize": 16,
       "letterSpacing": 0,
       "paragraphSpacing": 0,
