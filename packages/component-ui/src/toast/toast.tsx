@@ -49,7 +49,7 @@ export function Toast({
     'fill-supportWarning': state === 'warning',
     'fill-supportInfo': state === 'information',
   });
-  const textClasses = clsx('typography-body2regular flex-1 pt-[3px]', {
+  const textClasses = clsx('typography-body13regular flex-1 pt-[3px]', {
     'text-supportError': state === 'error',
     'text-text01': state === 'success' || state === 'warning' || state === 'information',
   });

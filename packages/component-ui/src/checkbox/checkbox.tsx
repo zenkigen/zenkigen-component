@@ -85,7 +85,7 @@ export function Checkbox({
     'bg-hoverUi': !isDisabled && !isChecked && isMouseOver,
   });
 
-  const labelClasses = clsx('typography-label2regular ml-2 flex-[1_0_0] break-all', {
+  const labelClasses = clsx('typography-label14regular ml-2 flex-[1_0_0] break-all', {
     'pointer-events-none cursor-not-allowed text-disabled01': isDisabled,
     'cursor-pointer text-text01': !isDisabled,
   });

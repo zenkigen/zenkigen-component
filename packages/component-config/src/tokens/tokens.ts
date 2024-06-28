@@ -285,7 +285,8 @@ export const tokens = {
     "3": "150%",
     "4": "171%",
     "5": "153%",
-    "6": "100%"
+    "6": "100%",
+    "7": "180%"
   },
   "fontWeights": {
     "helvetica-0": "Bold",
@@ -354,7 +355,27 @@ export const tokens = {
     }
   },
   "body": {
-    "body1_Regular": {
+    "body16_Regular": {
+      "fontFamily": "Helvetica",
+      "fontWeight": "Regular",
+      "lineHeight": "180%",
+      "fontSize": 16,
+      "letterSpacing": 0,
+      "paragraphSpacing": 0,
+      "textCase": "none",
+      "textDecoration": "none"
+    },
+    "body16_Bold": {
+      "fontFamily": "Helvetica",
+      "fontWeight": "Bold",
+      "lineHeight": "180%",
+      "fontSize": 16,
+      "letterSpacing": 0,
+      "paragraphSpacing": 0,
+      "textCase": "none",
+      "textDecoration": "none"
+    },
+    "body14_Regular": {
       "fontFamily": "Helvetica",
       "fontWeight": "Regular",
       "lineHeight": "171%",
@@ -364,7 +385,7 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "body1_Bold": {
+    "body14_Bold": {
       "fontFamily": "Helvetica",
       "fontWeight": "Bold",
       "lineHeight": "171%",
@@ -374,7 +395,7 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "body2_Regular": {
+    "body13_Regular": {
       "fontFamily": "Helvetica",
       "fontWeight": "Regular",
       "lineHeight": "153%",
@@ -384,7 +405,7 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "body2_Bold": {
+    "body13_Bold": {
       "fontFamily": "Helvetica",
       "fontWeight": "Bold",
       "lineHeight": "153%",
@@ -394,7 +415,7 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "body3_Regular": {
+    "body12_Regular": {
       "fontFamily": "Helvetica",
       "fontWeight": "Regular",
       "lineHeight": "133%",
@@ -404,7 +425,7 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "body3_Bold": {
+    "body12_Bold": {
       "fontFamily": "Helvetica",
       "fontWeight": "Bold",
       "lineHeight": "133%",
@@ -416,7 +437,7 @@ export const tokens = {
     }
   },
   "label": {
-    "label1_Bold": {
+    "label16_Bold": {
       "fontFamily": "Helvetica",
       "fontWeight": "Bold",
       "lineHeight": "100%",
@@ -426,7 +447,7 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "label1_Regular": {
+    "label16_Regular": {
       "fontFamily": "Helvetica",
       "fontWeight": "Regular",
       "lineHeight": "100%",
@@ -436,7 +457,7 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "label2_Bold": {
+    "label14_Bold": {
       "fontFamily": "Helvetica",
       "fontWeight": "Bold",
       "lineHeight": "100%",
@@ -446,7 +467,7 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "label2_Regular": {
+    "label14_Regular": {
       "fontFamily": "Helvetica",
       "fontWeight": "Regular",
       "lineHeight": "100%",
@@ -456,7 +477,7 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "label3_Bold": {
+    "label12_Bold": {
       "fontFamily": "Helvetica",
       "fontWeight": "Bold",
       "lineHeight": "100%",
@@ -466,7 +487,7 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "label3_Regular": {
+    "label12_Regular": {
       "fontFamily": "Helvetica",
       "fontWeight": "Regular",
       "lineHeight": "100%",
@@ -476,7 +497,7 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "label4_Bold": {
+    "label11_Bold": {
       "fontFamily": "Helvetica",
       "fontWeight": "Bold",
       "lineHeight": "100%",
@@ -486,7 +507,7 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "label4_Regular": {
+    "label11_Regular": {
       "fontFamily": "Helvetica",
       "fontWeight": "Regular",
       "lineHeight": "100%",

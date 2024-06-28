@@ -57,7 +57,7 @@ export function Radio({ name, value, id, label, isChecked = false, isDisabled = 
     'bg-hoverUi': !isDisabled && !isChecked && isMouseOver,
   });
 
-  const labelClasses = clsx('typography-label2regular ml-2 flex-[1_0_0] select-none break-all', {
+  const labelClasses = clsx('typography-label14regular ml-2 flex-[1_0_0] select-none break-all', {
     'pointer-events-none cursor-not-allowed text-disabled01': isDisabled,
     'cursor-pointer text-text01': !isDisabled,
   });

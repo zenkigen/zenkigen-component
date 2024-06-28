@@ -13,7 +13,7 @@ export function PaginationButton({ page, onClick }: Props) {
 
   const buttonClasses = clsx(
     'flex h-8 min-w-8 items-center justify-center rounded fill-icon01 px-1',
-    'typography-label2regular',
+    'typography-label14regular',
     'text-interactive02',
     'hover:bg-hover02',
     { 'border border-uiBorder02': page === currentPage },

@@ -34,8 +34,8 @@ export const TooltipContent = ({
   const tooltipBodyClasses = clsx(
     'absolute z-tooltip inline-block w-max rounded bg-uiBackgroundTooltip text-textOnColor',
     {
-      'typography-body3regular': size === 'small',
-      'typography-body2regular': size === 'medium',
+      'typography-body12regular': size === 'small',
+      'typography-body13regular': size === 'medium',
       'px-2 pb-1 pt-1.5': size === 'small',
       'px-4 py-3': size === 'medium',
       'bottom-2': verticalPosition !== 'bottom' && size === 'small',

@@ -60,8 +60,8 @@ export const Button = <T extends ElementAs = 'button'>({
         isSelected && variant !== 'outline' && variant !== 'text',
       'pointer-events-none': isDisabled,
       'rounded-button': borderRadius == null,
-      'typography-label1regular': size === 'large',
-      'typography-label2regular': size !== 'large',
+      'typography-label16regular': size === 'large',
+      'typography-label14regular': size !== 'large',
     },
   );
 

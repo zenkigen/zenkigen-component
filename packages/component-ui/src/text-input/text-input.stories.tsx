@@ -20,7 +20,7 @@ type ErrorTextProps = {
 };
 
 const ErrorText = ({ isError = false, ...props }: ErrorTextProps) => {
-  const classes = clsx('typography-label4regular mt-1 px-2', {
+  const classes = clsx('typography-label11regular mt-1 px-2', {
     'text-text02': !isError,
     'text-supportError': isError,
   });

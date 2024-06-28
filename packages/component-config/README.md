@@ -4,11 +4,11 @@
 
 ### カラートークンを更新する
 
-Figma Tokens から export された tokens.json を token-transformer と Style Dictionary を用いてライブラリで使用できるよう変換しています。
+Tokens Studio for Figma (旧 Figma Tokens) から export された tokens.json を token-transformer と Style Dictionary を用いてライブラリで使用できるよう変換しています。
 
-1. Figma Tokens で `Include parent key` の チェックを ON で export する
+1. Tokens Studio で `Include parent key` の チェックを ON で export する
 1. `style-dictionary/tokens.json` に上書きする
-1. `yarn build:token` を実行する
+1. `yarn build:tokens` を実行する
 
 ## ライセンス
 

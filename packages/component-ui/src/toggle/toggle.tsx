@@ -40,8 +40,8 @@ export function Toggle({
   const labelClasses = clsx('break-all', {
     'mr-2': labelPosition === 'left',
     'ml-2': labelPosition === 'right',
-    'typography-label3regular': size === 'small',
-    'typography-label1regular': size === 'medium',
+    'typography-label12regular': size === 'small',
+    'typography-label16regular': size === 'medium',
     'pointer-events-none cursor-not-allowed text-disabled01': isDisabled,
     'cursor-pointer text-text01': !isDisabled,
   });

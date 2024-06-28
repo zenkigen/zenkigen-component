@@ -70,9 +70,9 @@ export function Select({
   const labelClasses = clsx('overflow-hidden', {
     'mr-1': size === 'x-small',
     'mr-2': size !== 'x-small',
-    'typography-label3regular': size === 'x-small',
-    'typography-label2regular': size === 'small' || size === 'medium',
-    'typography-label1regular': size === 'large',
+    'typography-label12regular': size === 'x-small',
+    'typography-label14regular': size === 'small' || size === 'medium',
+    'typography-label16regular': size === 'large',
   });
 
   return (

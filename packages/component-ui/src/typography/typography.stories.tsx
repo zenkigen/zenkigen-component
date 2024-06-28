@@ -26,16 +26,20 @@ export function Body() {
   return (
     <div className="flex flex-col">
       <div className={classes} style={{ width: WIDTH }}>
-        <SampleText label="body3regular" className="typography-body3regular" />
-        <SampleText label="body3bold" className="typography-body3bold" />
+        <SampleText label="body12regular" className="typography-body12regular" />
+        <SampleText label="body12bold" className="typography-body12bold" />
       </div>
       <div className={classes} style={{ width: WIDTH }}>
-        <SampleText label="body2regular" className="typography-body2regular" />
-        <SampleText label="body2bold" className="typography-body2bold" />
+        <SampleText label="body13regular" className="typography-body13regular" />
+        <SampleText label="body13bold" className="typography-body13bold" />
       </div>
       <div className={classes} style={{ width: WIDTH }}>
-        <SampleText label="body1regular" className="typography-body1regular" />
-        <SampleText label="body1bold" className="typography-body1bold" />
+        <SampleText label="body14regular" className="typography-body14regular" />
+        <SampleText label="body14bold" className="typography-body14bold" />
+      </div>
+      <div className={classes} style={{ width: WIDTH }}>
+        <SampleText label="body16regular" className="typography-body16regular" />
+        <SampleText label="body16bold" className="typography-body16bold" />
       </div>
     </div>
   );
@@ -47,20 +51,20 @@ export function Label() {
   return (
     <div className="flex flex-col">
       <div className={classes} style={{ width: WIDTH }}>
-        <SampleText label="label4regular" className="typography-label4regular" />
-        <SampleText label="label4bold" className="typography-label4bold" />
+        <SampleText label="label11regular" className="typography-label11regular" />
+        <SampleText label="label11bold" className="typography-label11bold" />
       </div>
       <div className={classes} style={{ width: WIDTH }}>
-        <SampleText label="label3regular" className="typography-label3regular" />
-        <SampleText label="label3bold" className="typography-label3bold" />
+        <SampleText label="label12regular" className="typography-label12regular" />
+        <SampleText label="label12bold" className="typography-label12bold" />
       </div>
       <div className={classes} style={{ width: WIDTH }}>
-        <SampleText label="label2regular" className="typography-label2regular" />
-        <SampleText label="label2bold" className="typography-label2bold" />
+        <SampleText label="label14regular" className="typography-label14regular" />
+        <SampleText label="label14bold" className="typography-label14bold" />
       </div>
       <div className={classes} style={{ width: WIDTH }}>
-        <SampleText label="label1regular" className="typography-label1regular" />
-        <SampleText label="label1bold" className="typography-label1bold" />
+        <SampleText label="label16regular" className="typography-label16regular" />
+        <SampleText label="label16bold" className="typography-label16bold" />
       </div>
     </div>
   );
