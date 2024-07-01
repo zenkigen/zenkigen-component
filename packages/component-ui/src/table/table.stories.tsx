@@ -65,7 +65,7 @@ const TableStoryBasic = () => {
     <div className="flex flex-col gap-10">
       <Table width="100%" templateRows="40px" autoRows="48px" templateColumns="200px 400px 1fr 80px">
         <Table.Row>
-          <Table.Cell className={headingClasses} isHeader={true}>
+          <Table.Cell className={headingClasses} isHeader>
             <SelectSort
               size="small"
               variant="text"
@@ -76,7 +76,7 @@ const TableStoryBasic = () => {
               onClickDeselect={handleClickDeselect}
             />
           </Table.Cell>
-          <Table.Cell className={headingClasses} isHeader={true}>
+          <Table.Cell className={headingClasses} isHeader>
             <SelectSort
               size="small"
               variant="text"
@@ -87,7 +87,7 @@ const TableStoryBasic = () => {
               onClickDeselect={handleClickDeselect}
             />
           </Table.Cell>
-          <Table.Cell className={headingClasses} isHeader={true}>
+          <Table.Cell className={headingClasses} isHeader>
             権限
           </Table.Cell>
           <Table.Cell />

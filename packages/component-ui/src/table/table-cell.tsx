@@ -9,7 +9,9 @@ type Props = {
 
 export function TableCell({ children, className, isHeader }: Props) {
   return (
-    <div className={clsx('border-b border-uiBorder01', isHeader ? 'sticky top-0 bg-white z-10' : '', className)}>
+    <div
+      className={clsx('border-b border-uiBorder01', isHeader === true ? 'sticky top-0 bg-white z-10' : '', className)}
+    >
       {children}
     </div>
   );
