@@ -55,6 +55,7 @@ function IconList(props: Props) {
       <Icon name="external-link" color={props.color} />
       <Icon name="filter" color={props.color} />
       <Icon name="flag" color={props.color} />
+      <Icon name="generativeai" color={props.color} />
       <Icon name="global" color={props.color} />
       <Icon name="graph-line" color={props.color} />
       <Icon name="hamburger-close" color={props.color} />
