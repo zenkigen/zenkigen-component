@@ -272,7 +272,7 @@ const TableStoryWithManyRows = () => {
           <Table.Cell className={headingClasses} isHeader>
             権限
           </Table.Cell>
-          <Table.Cell />
+          <Table.Cell isHeader />
         </Table.Row>
         {[...Array(20)].map((_, index) => (
           <Table.Row key={index} isHoverBackgroundVisible>
