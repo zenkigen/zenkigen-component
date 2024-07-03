@@ -274,79 +274,32 @@ const TableStoryWithManyRows = () => {
           </Table.Cell>
           <Table.Cell />
         </Table.Row>
-        <Table.Row isHoverBackgroundVisible>
-          <Table.Cell className={cellClasses}>
-            <Avatar size="x-small" userId={1} lastName="全機現" firstName="太郎" />
-            全機現太郎
-          </Table.Cell>
-          <Table.Cell className={cellClasses}>taro.zenkigen@zk-creative.jp</Table.Cell>
-          <Table.Cell className={cellClasses}>管理者</Table.Cell>
-          <Table.Cell className={`${cellClasses} flex justify-end`}>
-            <Dropdown
-              size="x-small"
-              target={<Icon name="more" size="small" color="icon01" />}
-              isArrowHidden
-              variant="text"
-            >
-              <Dropdown.Menu horizontalAlign="right">
-                {items.map((item) => (
-                  <Dropdown.Item key={item.id} color={item.color} onClick={item.onClick}>
-                    {item.content}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
-          </Table.Cell>
-        </Table.Row>
-
-        <Table.Row isHoverBackgroundVisible>
-          <Table.Cell className={cellClasses}>
-            <Avatar size="x-small" userId={1} lastName="全機現" firstName="太郎" />
-            全機現太郎
-          </Table.Cell>
-          <Table.Cell className={cellClasses}>taro.zenkigen@zk-creative.jp</Table.Cell>
-          <Table.Cell className={cellClasses}>管理者</Table.Cell>
-          <Table.Cell className={`${cellClasses} flex justify-end`}>
-            <Dropdown
-              size="x-small"
-              target={<Icon name="more" size="small" color="icon01" />}
-              isArrowHidden
-              variant="text"
-            >
-              <Dropdown.Menu horizontalAlign="right">
-                {items.map((item) => (
-                  <Dropdown.Item key={item.id} color={item.color} onClick={item.onClick}>
-                    {item.content}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
-          </Table.Cell>
-        </Table.Row>
-        <Table.Row isHoverBackgroundVisible>
-          <Table.Cell className={cellClasses}>
-            <Avatar size="x-small" userId={1} lastName="全機現" firstName="太郎" />
-            全機現太郎
-          </Table.Cell>
-          <Table.Cell className={cellClasses}>taro.zenkigen@zk-creative.jp</Table.Cell>
-          <Table.Cell className={cellClasses}>管理者</Table.Cell>
-          <Table.Cell className={`${cellClasses} flex justify-end`}>
-            <Dropdown
-              size="x-small"
-              target={<Icon name="more" size="small" color="icon01" />}
-              isArrowHidden
-              variant="text"
-            >
-              <Dropdown.Menu horizontalAlign="right">
-                {items.map((item) => (
-                  <Dropdown.Item key={item.id} color={item.color} onClick={item.onClick}>
-                    {item.content}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
-          </Table.Cell>
-        </Table.Row>
+        {[...Array(20)].map((_, index) => (
+          <Table.Row key={index} isHoverBackgroundVisible>
+            <Table.Cell className={cellClasses}>
+              <Avatar size="x-small" userId={index + 1} lastName="全機現" firstName="太郎" />
+              全機現太郎
+            </Table.Cell>
+            <Table.Cell className={cellClasses}>taro.zenkigen@zk-creative.jp</Table.Cell>
+            <Table.Cell className={cellClasses}>管理者</Table.Cell>
+            <Table.Cell className={`${cellClasses} flex justify-end`}>
+              <Dropdown
+                size="x-small"
+                target={<Icon name="more" size="small" color="icon01" />}
+                isArrowHidden
+                variant="text"
+              >
+                <Dropdown.Menu horizontalAlign="right">
+                  {items.map((item) => (
+                    <Dropdown.Item key={item.id} color={item.color} onClick={item.onClick}>
+                      {item.content}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
+            </Table.Cell>
+          </Table.Row>
+        ))}
       </Table>
     </div>
   );
