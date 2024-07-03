@@ -43,12 +43,12 @@ const TableStoryBasic = () => {
   const [sortOrderName, setSortOrderName] = useState<SortOrder>(null);
   const [sortOrderEmail, setSortOrderEmail] = useState<SortOrder>(null);
 
-  const handleSortName = useCallback((direction: SortOrder) => {
+  const handleClickSortName = useCallback((direction: SortOrder) => {
     setSortOrderName(direction);
     setSortOrderEmail(null);
     setSortKey('name');
   }, []);
-  const handleSortEmail = useCallback((direction: SortOrder) => {
+  const handleClickSortEmail = useCallback((direction: SortOrder) => {
     setSortOrderEmail(direction);
     setSortOrderName(null);
     setSortKey('email');
@@ -72,7 +72,7 @@ const TableStoryBasic = () => {
               label="氏名"
               sortOrder={sortOrderName}
               isSortKey={sortKey === 'name'}
-              onChange={handleSortName}
+              onChange={handleClickSortName}
               onClickDeselect={handleClickDeselect}
             />
           </Table.Cell>
@@ -83,7 +83,7 @@ const TableStoryBasic = () => {
               label="メールアドレス"
               sortOrder={sortOrderEmail}
               isSortKey={sortKey === 'email'}
-              onChange={handleSortEmail}
+              onChange={handleClickSortEmail}
               onClickDeselect={handleClickDeselect}
             />
           </Table.Cell>
@@ -225,12 +225,12 @@ const TableStoryWithManyRows = () => {
   const [sortOrderName, setSortOrderName] = useState<SortOrder>(null);
   const [sortOrderEmail, setSortOrderEmail] = useState<SortOrder>(null);
 
-  const handleSortName = useCallback((direction: SortOrder) => {
+  const handleClickSortName = useCallback((direction: SortOrder) => {
     setSortOrderName(direction);
     setSortOrderEmail(null);
     setSortKey('name');
   }, []);
-  const handleSortEmail = useCallback((direction: SortOrder) => {
+  const handleClickSortEmail = useCallback((direction: SortOrder) => {
     setSortOrderEmail(direction);
     setSortOrderName(null);
     setSortKey('email');
@@ -254,7 +254,7 @@ const TableStoryWithManyRows = () => {
               label="氏名"
               sortOrder={sortOrderName}
               isSortKey={sortKey === 'name'}
-              onChange={handleSortName}
+              onChange={handleClickSortName}
               onClickDeselect={handleClickDeselect}
             />
           </Table.Cell>
@@ -265,7 +265,7 @@ const TableStoryWithManyRows = () => {
               label="メールアドレス"
               sortOrder={sortOrderEmail}
               isSortKey={sortKey === 'email'}
-              onChange={handleSortEmail}
+              onChange={handleClickSortEmail}
               onClickDeselect={handleClickDeselect}
             />
           </Table.Cell>
