@@ -55,7 +55,6 @@ function IconList(props: Props) {
       <Icon name="external-link" color={props.color} />
       <Icon name="filter" color={props.color} />
       <Icon name="flag" color={props.color} />
-      <Icon name="generativeai" color={props.color} />
       <Icon name="global" color={props.color} />
       <Icon name="graph-line" color={props.color} />
       <Icon name="hamburger-close" color={props.color} />
@@ -88,6 +87,7 @@ function IconList(props: Props) {
       <Icon name="sidebar" color={props.color} />
       <Icon name="slider-editing" color={props.color} />
       <Icon name="sort" color={props.color} />
+      <Icon name="sparkle" color={props.color} />
       <Icon name="star-filled" color={props.color} />
       <Icon name="star" color={props.color} />
       <Icon name="store" color={props.color} />

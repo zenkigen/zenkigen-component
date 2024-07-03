@@ -4,7 +4,7 @@
 */
 import React from 'react';
 
-export type IconName = 'add' | 'ai' | 'angle-down' | 'angle-left' | 'angle-right' | 'angle-small-down' | 'angle-small-up' | 'angle-up' | 'arrow-down' | 'arrow-left' | 'arrow-right' | 'arrow-up' | 'attachment' | 'attention' | 'building' | 'calendar-check' | 'calendar-draft' | 'calendar-minus' | 'calendar-today' | 'calendar' | 'caret-down' | 'caret-right' | 'chart-bar' | 'chart-line' | 'check' | 'circle' | 'close' | 'comment' | 'contract' | 'copy' | 'delete' | 'document' | 'documents' | 'double circle' | 'download-document' | 'download' | 'edit' | 'email' | 'expand' | 'external-link' | 'filter' | 'flag' | 'generativeai' | 'global' | 'graph-line' | 'hamburger-close' | 'hamburger' | 'help' | 'home' | 'image' | 'information-filled' | 'information' | 'input-delete' | 'link' | 'list' | 'logout' | 'message-text' | 'more' | 'movie' | 'notification' | 'pause' | 'pdf' | 'picture-in-picture' | 'play-filled' | 'play' | 'presentation' | 'remove' | 'score' | 'search' | 'send' | 'share' | 'shuffle' | 'sidebar' | 'slider-editing' | 'sort' | 'star-filled' | 'star' | 'store' | 'success-filled' | 'table-download' | 'table-upload' | 'table' | 'timer' | 'transcription' | 'triangle' | 'upload' | 'user-add' | 'user-group' | 'user-line' | 'user-multi' | 'user-one' | 'user-photograph' | 'user-remove' | 'user' | 'video' | 'volume-off' | 'volume' | 'warning';
+export type IconName = 'add' | 'ai' | 'angle-down' | 'angle-left' | 'angle-right' | 'angle-small-down' | 'angle-small-up' | 'angle-up' | 'arrow-down' | 'arrow-left' | 'arrow-right' | 'arrow-up' | 'attachment' | 'attention' | 'building' | 'calendar-check' | 'calendar-draft' | 'calendar-minus' | 'calendar-today' | 'calendar' | 'caret-down' | 'caret-right' | 'chart-bar' | 'chart-line' | 'check' | 'circle' | 'close' | 'comment' | 'contract' | 'copy' | 'delete' | 'document' | 'documents' | 'double circle' | 'download-document' | 'download' | 'edit' | 'email' | 'expand' | 'external-link' | 'filter' | 'flag' | 'global' | 'graph-line' | 'hamburger-close' | 'hamburger' | 'help' | 'home' | 'image' | 'information-filled' | 'information' | 'input-delete' | 'link' | 'list' | 'logout' | 'message-text' | 'more' | 'movie' | 'notification' | 'pause' | 'pdf' | 'picture-in-picture' | 'play-filled' | 'play' | 'presentation' | 'remove' | 'score' | 'search' | 'send' | 'share' | 'shuffle' | 'sidebar' | 'slider-editing' | 'sort' | 'sparkle' | 'star-filled' | 'star' | 'store' | 'success-filled' | 'table-download' | 'table-upload' | 'table' | 'timer' | 'transcription' | 'triangle' | 'upload' | 'user-add' | 'user-group' | 'user-line' | 'user-multi' | 'user-one' | 'user-photograph' | 'user-remove' | 'user' | 'video' | 'volume-off' | 'volume' | 'warning';
 
 export type IconElements = Readonly<{ [name in IconName]: JSX.Element }>;
 
@@ -345,14 +345,6 @@ export const iconElements: IconElements = {
 </svg>
     ),
   
-    'generativeai': (
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img">
-<title>generativeai</title>
-<path d="M11.1825 17.0825C7.83 16.255 7.75 16.175 6.91 12.8025C6.85999 12.6025 6.69249 12.47 6.49 12.47C6.2875 12.47 6.12 12.605 6.07 12.8025C5.23 16.175 5.15 16.255 1.7975 17.0825C1.6175 17.1275 1.495 17.28 1.495 17.4625C1.495 17.645 1.615 17.7975 1.7975 17.8425C5.15 18.67 5.23 18.75 6.07 22.1225C6.12 22.3225 6.2875 22.455 6.49 22.455C6.69249 22.455 6.85999 22.32 6.91 22.1225C7.75 18.75 7.83 18.67 11.1825 17.8425C11.3625 17.7975 11.485 17.645 11.485 17.4625C11.485 17.28 11.3625 17.1275 11.1825 17.0825Z"></path>
-<path d="M21.915 8.49252C16.8275 7.23751 16.765 7.17751 15.49 2.05501C15.4 1.69501 15.095 1.45251 14.73 1.45251C14.365 1.45251 14.06 1.69501 13.97 2.05501C12.695 7.17751 12.635 7.23751 7.545 8.49252C7.22 8.57252 6.99 8.86001 6.99 9.19251C6.99 9.52501 7.2175 9.81251 7.545 9.89251C12.635 11.1475 12.695 11.2075 13.97 16.33C14.06 16.69 14.365 16.9325 14.73 16.9325C15.095 16.9325 15.4 16.69 15.49 16.33C16.765 11.2075 16.825 11.1475 21.915 9.89251C22.24 9.81251 22.47 9.52501 22.47 9.19251C22.47 8.86001 22.2425 8.57252 21.915 8.49252Z"></path>
-</svg>
-    ),
-  
     'global': (
       <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img">
 <title>global</title>
@@ -600,6 +592,14 @@ export const iconElements: IconElements = {
       <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img">
 <title>sort</title>
 <path fillRule="evenodd" clipRule="evenodd" d="M12.8999 5.70006C12.7499 5.70006 12.5899 5.64006 12.4799 5.52006L10.5 3.54792V14.9C10.5 15.23 10.23 15.5 9.90005 15.5C9.57005 15.5 9.30005 15.23 9.30005 14.9V3.54755L7.31986 5.52006C7.08986 5.75006 6.70986 5.75006 6.46986 5.52006C6.23986 5.29006 6.23986 4.91006 6.46986 4.67006L9.46986 1.67006C9.69986 1.44006 10.0799 1.44006 10.3199 1.67006L13.3199 4.67006C13.5499 4.90006 13.5499 5.28006 13.3199 5.52006C13.2099 5.64006 13.0499 5.70006 12.8999 5.70006ZM14.1001 22.5001C14.1172 22.5001 14.1344 22.4993 14.1517 22.4978C14.2073 22.493 14.2608 22.4805 14.3111 22.4614C14.392 22.4316 14.4703 22.3845 14.5401 22.3201L17.5401 19.3201C17.7701 19.0801 17.7701 18.7001 17.5401 18.4701C17.3001 18.2401 16.9201 18.2401 16.6901 18.4701L14.7 20.4602V9.1C14.7 8.77 14.43 8.5 14.1 8.5C13.77 8.5 13.5 8.77 13.5 9.1V20.44L11.5301 18.4701C11.2901 18.2401 10.9101 18.2401 10.6801 18.4701C10.4501 18.7101 10.4501 19.0901 10.6801 19.3201L13.6235 22.2635C13.7243 22.3951 13.8781 22.4842 14.0523 22.4981C14.0683 22.4994 14.0842 22.5001 14.1001 22.5001Z"></path>
+</svg>
+    ),
+  
+    'sparkle': (
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>sparkle</title>
+<path d="M11.1825 17.0825C7.83 16.255 7.75 16.175 6.91 12.8025C6.85999 12.6025 6.69249 12.47 6.49 12.47C6.2875 12.47 6.12 12.605 6.07 12.8025C5.23 16.175 5.15 16.255 1.7975 17.0825C1.6175 17.1275 1.495 17.28 1.495 17.4625C1.495 17.645 1.615 17.7975 1.7975 17.8425C5.15 18.67 5.23 18.75 6.07 22.1225C6.12 22.3225 6.2875 22.455 6.49 22.455C6.69249 22.455 6.85999 22.32 6.91 22.1225C7.75 18.75 7.83 18.67 11.1825 17.8425C11.3625 17.7975 11.485 17.645 11.485 17.4625C11.485 17.28 11.3625 17.1275 11.1825 17.0825Z"></path>
+<path d="M21.915 8.49252C16.8275 7.23751 16.765 7.17751 15.49 2.05501C15.4 1.69501 15.095 1.45251 14.73 1.45251C14.365 1.45251 14.06 1.69501 13.97 2.05501C12.695 7.17751 12.635 7.23751 7.545 8.49252C7.22 8.57252 6.99 8.86001 6.99 9.19251C6.99 9.52501 7.2175 9.81251 7.545 9.89251C12.635 11.1475 12.695 11.2075 13.97 16.33C14.06 16.69 14.365 16.9325 14.73 16.9325C15.095 16.9325 15.4 16.69 15.49 16.33C16.765 11.2075 16.825 11.1475 21.915 9.89251C22.24 9.81251 22.47 9.52501 22.47 9.19251C22.47 8.86001 22.2425 8.57252 21.915 8.49252Z"></path>
 </svg>
     ),
   
