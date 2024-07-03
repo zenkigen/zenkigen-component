@@ -275,9 +275,9 @@ const TableStoryWithManyRows = () => {
           <Table.Cell />
         </Table.Row>
         {[...Array(20)].map((_, index) => (
-          <Table.Row key={index} isHoverBackgroundVisible>
+          <Table.Row isHoverBackgroundVisible>
             <Table.Cell className={cellClasses}>
-              <Avatar size="x-small" userId={index + 1} lastName="全機現" firstName="太郎" />
+              <Avatar size="x-small" userId={1} lastName="全機現" firstName="太郎" />
               全機現太郎
             </Table.Cell>
             <Table.Cell className={cellClasses}>taro.zenkigen@zk-creative.jp</Table.Cell>
