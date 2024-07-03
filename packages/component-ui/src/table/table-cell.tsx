@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 type Props = {
   children?: ReactNode;
   className?: string;
-  isHeader?: boolean | null;
+  isHeader?: boolean;
 };
 
 export function TableCell({ children, className, isHeader }: Props) {
