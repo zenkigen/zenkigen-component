@@ -7,8 +7,8 @@ type Props = {
   isHeader?: boolean;
 };
 
-export function TableCell({ children, className, isHeader }: Props) {
-  const classes = clsx('border-b border-uiBorder01', { 'sticky top-0 z-10 bg-white': isHeader ?? false }, className);
+export function TableCell({ children, className, isHeader = false }: Props) {
+  const classes = clsx('border-b border-uiBorder01', { 'sticky top-0 z-10 bg-white': isHeader }, className);
 
   return <div className={classes}>{children}</div>;
 }
