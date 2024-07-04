@@ -19,7 +19,7 @@
   "devDependencies": {
     "hygen": "6.2.11",
     "microbundle": "0.15.1",
-    "typescript": "5.4.5"
+    "typescript": "5.5.3"
   },
   "peerDependencies": {
     "@types/react": "^18.0.0",
