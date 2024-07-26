@@ -1775,6 +1775,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@eslint/js@npm:10.0.0":
+  version: 10.0.0
+  resolution: "@eslint/js@npm:10.0.0"
+  checksum: 10c0/4e209a56b9813d5a198f48bbf012e8f9c5103b0e2abd09a47a8915f06954921be6aad2ed0e1d0940b81aa750c3d5f141fc81581b022a74318c08d37c3db79a1e
+  languageName: node
+  linkType: hard
+
 "@eslint/js@npm:9.7.0":
   version: 9.7.0
   resolution: "@eslint/js@npm:9.7.0"
@@ -11731,7 +11738,7 @@ __metadata:
     "@babel/core": "npm:7.24.9"
     "@eslint/compat": "npm:1.1.1"
     "@eslint/eslintrc": "npm:3.1.0"
-    "@eslint/js": "npm:9.7.0"
+    "@eslint/js": "npm:10.0.0"
     "@storybook/addon-essentials": "npm:8.2.4"
     "@storybook/addon-interactions": "npm:8.2.4"
     "@storybook/addon-links": "npm:8.2.4"
