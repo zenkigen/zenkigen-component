@@ -16,9 +16,9 @@
     "build": "rimraf dist && yarn generate && microbundle --no-compress -f modern,esm,cjs --jsx React.createElement --jsxFragment React.Fragment --jsxImportSource react --globals react/jsx-runtime=jsx"
   },
   "devDependencies": {
-    "cheerio": "1.0.0-rc.12",
+    "cheerio": "1.0.0",
     "ejs": "3.1.10",
     "microbundle": "0.15.1",
-    "typescript": "5.5.3"
+    "typescript": "5.5.4"
   }
 }
