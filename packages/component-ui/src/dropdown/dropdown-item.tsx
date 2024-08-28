@@ -14,7 +14,7 @@ export function DropdownItem({ children, color = 'gray', onClick }: PropsWithChi
   const { setIsVisible } = useContext(DropdownContext);
   const handleClickItem = (event: MouseEvent<HTMLButtonElement>) => {
     setIsVisible(false);
-    onClick && onClick(event);
+    onClick?.(event);
   };
   const itemClasses = clsx(
     'typography-label14regular flex h-8 w-full items-center px-3 hover:bg-hover02 active:bg-active02',

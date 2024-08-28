@@ -35,9 +35,8 @@ export function Toast({
     }
   }, [isAnimation, onClickClose]);
 
-  const handleAnimationEnd = (e: AnimationEvent<HTMLDivElement>) => {
+  const handleAnimationEnd = (e: AnimationEvent<HTMLDivElement>) =>
     window.getComputedStyle(e.currentTarget).opacity === '0' && onClickClose();
-  };
 
   const wrapperClasses = clsx('pointer-events-auto flex items-start gap-1 bg-white p-4 shadow-floatingShadow', {
     ['animate-toast-in']: isAnimation && !isRemoving,

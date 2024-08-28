@@ -40,9 +40,7 @@ export function Checkbox({
   }, []);
 
   const handleChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      !isDisabled && onChange?.(e);
-    },
+    (e: ChangeEvent<HTMLInputElement>) => !isDisabled && onChange?.(e),
     [isDisabled, onChange],
   );
 
