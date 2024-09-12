@@ -2,4 +2,6 @@ node_modules/
 src/
 .npmrc
 .npmignore
+build.cjs
+style-dictionary.json
 tsconfig.json
