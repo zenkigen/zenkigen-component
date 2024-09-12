@@ -1,0 +1,1582 @@
+{
+  "User": {
+    "Red": {
+      "value": "#f88282",
+      "type": "color"
+    },
+    "Pink": {
+      "value": "#f191dd",
+      "type": "color"
+    },
+    "Purple": {
+      "value": "#c88ae5",
+      "type": "color"
+    },
+    "Turquoise": {
+      "value": "#86cee5",
+      "type": "color"
+    },
+    "RoyalBlue": {
+      "value": "#93b3f2",
+      "type": "color"
+    },
+    "Blue": {
+      "value": "#7ecaf5",
+      "type": "color"
+    },
+    "Aquamarine": {
+      "value": "#79ebda",
+      "type": "color"
+    },
+    "YellowGreen": {
+      "value": "#8ae58b",
+      "type": "color"
+    },
+    "Yellow": {
+      "value": "#f3c90a",
+      "type": "color"
+    },
+    "Orange": {
+      "value": "#f9b12c",
+      "type": "color"
+    },
+    "RedLight": {
+      "value": "#FDDADA",
+      "type": "color"
+    },
+    "PinkLight": {
+      "value": "#FBDEF5",
+      "type": "color"
+    },
+    "PurpleLight": {
+      "value": "#EFDCF7",
+      "type": "color"
+    },
+    "TurquoiseLight": {
+      "value": "#DBF0F7",
+      "type": "color"
+    },
+    "RoyalBlueLight": {
+      "value": "#DFE8FB",
+      "type": "color"
+    },
+    "BlueLight": {
+      "value": "#D8EFFC",
+      "type": "color"
+    },
+    "AquamarineLight": {
+      "value": "#D7F9F4",
+      "type": "color"
+    },
+    "YellowGreenLight": {
+      "value": "#DCF7DC",
+      "type": "color"
+    },
+    "YellowLight": {
+      "value": "#FCEFB6",
+      "type": "color"
+    },
+    "OrangeLight": {
+      "value": "#FDE8C0",
+      "type": "color"
+    }
+  },
+  "Tokens": {
+    "Text": {
+      "Text01": {
+        "value": "#2F3233",
+        "type": "color",
+        "description": "Primary text, Body copy, Headers"
+      },
+      "Text02": {
+        "value": "#6F7476",
+        "type": "color",
+        "description": "Secondary text, Input labels"
+      },
+      "Text03": {
+        "value": "#838789",
+        "type": "color",
+        "description": "Tertiary text"
+      },
+      "TextPlaceholder": {
+        "value": "#CACCCD",
+        "type": "color",
+        "description": "Placeholder text"
+      },
+      "TextOnColor": {
+        "value": "#FFFFFF",
+        "type": "color",
+        "description": "Text on interactive colors"
+      },
+      "TextBlack": {
+        "value": "#000000",
+        "type": "color",
+        "description": "Title text"
+      },
+      "Text01Dark": {
+        "value": "#FFFFFF",
+        "type": "color",
+        "description": "Primary text, Body copy, Headers - Dark"
+      },
+      "Text02Dark": {
+        "value": "#CACCCD",
+        "type": "color",
+        "description": "Secondary text, Input labels - Dark"
+      },
+      "Text03Dark": {
+        "value": "#A4A5A6",
+        "type": "color",
+        "description": "Tertiary text - Dark"
+      },
+      "TextPlaceholderDark": {
+        "value": "#838789",
+        "type": "color",
+        "description": "Placeholder text - Dark"
+      }
+    },
+    "Link": {
+      "Link01": {
+        "value": "#177EE5",
+        "type": "color",
+        "description": "Primary links"
+      },
+      "Link01Dark": {
+        "value": "#177EE5",
+        "type": "color",
+        "description": "Primary links - Dark"
+      },
+      "Link02": {
+        "value": "#A4A5A6",
+        "type": "color",
+        "description": "Secondary links"
+      },
+      "Link02Dark": {
+        "value": "#A4A5A6",
+        "type": "color",
+        "description": "Secondary links - Dark"
+      }
+    },
+    "Border": {
+      "UiBorder01": {
+        "value": "#DEDFE0",
+        "type": "color",
+        "description": "List border color, Container border"
+      },
+      "UiBorder01Dark": {
+        "value": "#5C6366",
+        "type": "color",
+        "description": "List border color, Container border - Dark"
+      },
+      "UiBorder02": {
+        "value": "#CACCCD",
+        "type": "color",
+        "description": "Button border, Input border"
+      },
+      "UiBorder02Dark": {
+        "value": "#838789",
+        "type": "color",
+        "description": "Button border, Input border - Dark"
+      },
+      "UiBorder03": {
+        "value": "#A4A5A6",
+        "type": "color",
+        "description": "Checkbox border, Input border"
+      },
+      "UiBorder03Dark": {
+        "value": "#838789",
+        "type": "color",
+        "description": "Checkbox border, Input border - Dark"
+      }
+    },
+    "Background": {
+      "UiBackground01": {
+        "value": "#FFFFFF",
+        "type": "color",
+        "description": "Default page background"
+      },
+      "UiBackground02": {
+        "value": "#F3F4F5",
+        "type": "color",
+        "description": "Side navigation background"
+      },
+      "UiBackground02Light": {
+        "value": "#FAFAFA",
+        "type": "color",
+        "description": "Side navigation background in lighter hue"
+      },
+      "UiBackground01Dark": {
+        "value": "#2F3233",
+        "type": "color",
+        "description": "Default page background - Dark"
+      },
+      "UiBackground02Dark": {
+        "value": "#454A4D",
+        "type": "color",
+        "description": "Side navigation background - Dark"
+      },
+      "UiBackground02Blue": {
+        "value": "#F1F7FD",
+        "type": "color",
+        "description": "Side navigation background, checked background - Blue"
+      },
+      "UiBackgroundBlue": {
+        "value": "#F1F7FD",
+        "type": "color",
+        "description": "info message background"
+      },
+      "UiBackgroundBlueDark": {
+        "value": "#115CA7",
+        "type": "color",
+        "description": "info message background - Dark"
+      },
+      "UiBackgroundGray": {
+        "value": "#F3F4F5",
+        "type": "color",
+        "description": "message background"
+      },
+      "UiBackgroundGrayDark": {
+        "value": "#838789",
+        "type": "color",
+        "description": "message background - Dark"
+      },
+      "UiBackgroundSuccess": {
+        "value": "#ECFBF4",
+        "type": "color",
+        "description": "Success message background"
+      },
+      "UiBackgroundSuccessDark": {
+        "value": "#1E8353",
+        "type": "color",
+        "description": "Success message background - Dark"
+      },
+      "UiBackgroundError": {
+        "value": "#FCEFF3",
+        "type": "color",
+        "description": "Error message background"
+      },
+      "UiBackgroundErrorDark": {
+        "value": "#A01D3E",
+        "type": "color",
+        "description": "Error message background - Dark"
+      },
+      "UiBackgroundWarning": {
+        "value": "#FFFADC",
+        "type": "color",
+        "description": "Warning message background"
+      },
+      "UiBackgroundWarningDark": {
+        "value": "#A68A00",
+        "type": "color",
+        "description": "Warning message background - Dark"
+      },
+      "UiBackgroundTooltip": {
+        "value": "#2F3233",
+        "type": "color",
+        "description": "ToolTip background"
+      },
+      "UiBackgroundTooltipDark": {
+        "value": "#F3F4F5",
+        "type": "color",
+        "description": "ToolTip background - Dark"
+      },
+      "BackgroundOverlayGray": {
+        "value": "#2f323380",
+        "type": "color",
+        "description": "Background overlay"
+      },
+      "BackgroundOverlayBlack": {
+        "value": "#00000099",
+        "type": "color",
+        "description": "Background overlay"
+      }
+    },
+    "Icon": {
+      "Icon01": {
+        "value": "#6F7476",
+        "type": "color",
+        "description": "Primary icons"
+      },
+      "Icon01Dark": {
+        "value": "#CACCCD",
+        "type": "color",
+        "description": "Primary icons - Dark"
+      },
+      "Icon02": {
+        "value": "#A4A5A6",
+        "type": "color",
+        "description": "Secondary icons"
+      },
+      "Icon02Dark": {
+        "value": "#838789",
+        "type": "color",
+        "description": "Secondary icons - Dark"
+      },
+      "Icon03": {
+        "value": "#CACCCD",
+        "type": "color",
+        "description": "Tertiary icons, icon button default state"
+      },
+      "Icon03Dark": {
+        "value": "#5C6366",
+        "type": "color",
+        "description": "Tertiary icons, icon button default state - Dark"
+      },
+      "IconOnColor": {
+        "value": "#FFFFFF",
+        "type": "color",
+        "description": "Icons on interactive colors"
+      }
+    },
+    "Interactive": {
+      "Interactive01": {
+        "value": "#177EE5",
+        "type": "color",
+        "description": "Primary Interactive color, Primary buttons"
+      },
+      "InteractiveBg01": {
+        "value": "#177EE5",
+        "type": "color",
+        "description": "Primary Interactive color on background, Primary fill buttons"
+      },
+      "Interactive01Dark": {
+        "value": "#9FCBF5",
+        "type": "color",
+        "description": "Primary Interactive color, Primary buttons - Dark"
+      },
+      "InteractiveBg01Dark": {
+        "value": "#177EE5",
+        "type": "color",
+        "description": "Primary Interactive color on background, Primary fill buttons - Dark"
+      },
+      "Interactive02": {
+        "value": "#6F7476",
+        "type": "color",
+        "description": "Secondary Interactive color, Secondary buttons"
+      },
+      "Interactive02Dark": {
+        "value": "#CACCCD",
+        "type": "color",
+        "description": "Secondary Interactive color, Secondary buttons -Dark"
+      },
+      "Interactive03": {
+        "value": "#177EE5",
+        "type": "color",
+        "description": "Tertiary button, Selected elements, Active elements, Accent icon"
+      },
+      "Interactive03Dark": {
+        "value": "#838789",
+        "type": "color",
+        "description": "Tertiary button, Selected elements, Active elements, Accent icon -Dark"
+      }
+    },
+    "Field": {
+      "FieldInput": {
+        "value": "#FFFFFF",
+        "type": "color",
+        "description": "Default input fields"
+      },
+      "FieldInputDark": {
+        "value": "#2F3233",
+        "type": "color",
+        "description": "Default input fields - Dark"
+      },
+      "FieldSearch": {
+        "value": "#FFFFFF",
+        "type": "color",
+        "description": "Search input fields"
+      },
+      "FieldSearchDark": {
+        "value": "#5C6366",
+        "type": "color",
+        "description": "Search input fields - Dark"
+      }
+    },
+    "Focus": {
+      "Focus": {
+        "value": "#177EE5",
+        "type": "color",
+        "description": "Focus border, Focus underline"
+      },
+      "FocusDark": {
+        "value": "#177EE5",
+        "type": "color",
+        "description": "Focus border, Focus underline - Dark"
+      }
+    },
+    "Hover": {
+      "Hover01": {
+        "value": "#1366B9",
+        "type": "color",
+        "description": "$interactive-01 hover"
+      },
+      "Hover01Dark": {
+        "value": "#1366B9",
+        "type": "color",
+        "description": "$interactive-01 hover - Dark"
+      },
+      "Hover02": {
+        "value": "#E9EAEB",
+        "type": "color",
+        "description": "$interactive-02 hover"
+      },
+      "Hover02Dark": {
+        "value": "#5C6366",
+        "type": "color",
+        "description": "$interactive-02 hover - Dark"
+      },
+      "Hover02Background": {
+        "value": "#E9EAEB",
+        "type": "color",
+        "description": "$interactive-02 hover on background"
+      },
+      "Hover02BackgroundDark": {
+        "value": "#454A4D",
+        "type": "color",
+        "description": "$interactive-02 hover on background - Dark"
+      },
+      "HoverUi": {
+        "value": "#E9EAEB",
+        "type": "color",
+        "description": "hover ui background"
+      },
+      "HoverUiDark": {
+        "value": "#5C6366",
+        "type": "color",
+        "description": "hover ui background - Dark"
+      },
+      "HoverUi02": {
+        "value": "#F3F4F5",
+        "type": "color",
+        "description": "hover ui background with lighter color"
+      },
+      "HoverUi02Dark": {
+        "value": "#454A4D",
+        "type": "color",
+        "description": "hover ui background with darker color"
+      },
+      "HoverUiBorder": {
+        "value": "#6F7476",
+        "type": "color",
+        "description": "hover ui background - Dark"
+      },
+      "HoverUiBorderDark": {
+        "value": "#CACCCD",
+        "type": "color",
+        "description": "hover ui background - Dark"
+      },
+      "HoverSelectedUi": {
+        "value": "#CACCCD",
+        "type": "color",
+        "description": "Checkbox border color"
+      },
+      "HoverSelectedUiDark": {
+        "value": "#838789",
+        "type": "color",
+        "description": "Checkbox border color - Dark"
+      },
+      "HoverDanger": {
+        "value": "#B22045",
+        "type": "color",
+        "description": "Danger hover"
+      },
+      "HoverDangerDark": {
+        "value": "#B22045",
+        "type": "color",
+        "description": "Danger hover - Dark"
+      },
+      "HoverError": {
+        "value": "#B22045",
+        "type": "color",
+        "description": "Error hover"
+      },
+      "HoverErrorDark": {
+        "value": "#F9E0E6",
+        "type": "color",
+        "description": "Error hover - Dark"
+      },
+      "HoverInput": {
+        "value": "#6F7476",
+        "type": "color",
+        "description": "hover input"
+      },
+      "HoverInputDark": {
+        "value": "#A4A5A6",
+        "type": "color",
+        "description": "hover input - Dark"
+      },
+      "HoverLink01": {
+        "value": "#1366B9",
+        "type": "color",
+        "description": "hover primary link"
+      },
+      "HoverLink01Dark": {
+        "value": "#9FCBF5",
+        "type": "color",
+        "description": "hover primary link - Dark"
+      },
+      "HoverLink02": {
+        "value": "#6F7476",
+        "type": "color",
+        "description": "hover secondary link"
+      },
+      "HoverLink02Dark": {
+        "value": "#DEDFE0",
+        "type": "color",
+        "description": "hover secondary link - Dark"
+      }
+    },
+    "Active": {
+      "Active01": {
+        "value": "#0E4B87",
+        "type": "color",
+        "description": "$interactive-01 active"
+      },
+      "Active01Dark": {
+        "value": "#0E4B87",
+        "type": "color",
+        "description": "$interactive-01 active - Dark"
+      },
+      "Active02": {
+        "value": "#CACCCD",
+        "type": "color",
+        "description": "$interactive-02 active"
+      },
+      "Active02Dark": {
+        "value": "#838789",
+        "type": "color",
+        "description": "$interactive-02 active - Dark"
+      },
+      "Active02Background": {
+        "value": "#DEDFE0",
+        "type": "color",
+        "description": "$interactive-02 active on background"
+      },
+      "Active02BackgroundDark": {
+        "value": "#5C6366",
+        "type": "color",
+        "description": "$interactive-02 active on background - Dark"
+      },
+      "ActiveUi": {
+        "value": "#D9EAFB",
+        "type": "color",
+        "description": "Active List background color"
+      },
+      "ActiveUiDark": {
+        "value": "#838789",
+        "type": "color",
+        "description": "Active List background color - Dark"
+      },
+      "ActiveSelectedUi": {
+        "value": "#177EE5",
+        "type": "color",
+        "description": "Checkbox background color, Select border color"
+      },
+      "ActiveSelectedUiDark": {
+        "value": "#177EE5",
+        "type": "color",
+        "description": "Checkbox background color, Select border color - Dark"
+      },
+      "ActiveDanger": {
+        "value": "#821732",
+        "type": "color",
+        "description": "Danger active"
+      },
+      "ActiveDangerDark": {
+        "value": "#821732",
+        "type": "color",
+        "description": "Danger active - Dark"
+      },
+      "ActiveInput": {
+        "value": "#1366B9",
+        "type": "color",
+        "description": "Active input"
+      },
+      "ActiveInputDark": {
+        "value": "#CACCCD",
+        "type": "color",
+        "description": "Active input - Dark"
+      },
+      "ActiveLink01": {
+        "value": "#0E4B87",
+        "type": "color",
+        "description": "active primary link"
+      },
+      "ActiveLink01Dark": {
+        "value": "#D9EAFB",
+        "type": "color",
+        "description": "active primary link - Dark"
+      },
+      "ActiveLink02": {
+        "value": "#2F3233",
+        "type": "color",
+        "description": "active secondary link"
+      },
+      "ActiveLink02Dark": {
+        "value": "#E9EAEB",
+        "type": "color",
+        "description": "active secondary link - Dark"
+      }
+    },
+    "Selected": {
+      "SelectedUi": {
+        "value": "#D9EAFB",
+        "type": "color",
+        "description": "Selected List Navigation"
+      },
+      "SelectedUiDark": {
+        "value": "#1366B9",
+        "type": "color",
+        "description": "Selected List Navigation - Dark"
+      },
+      "SelectedUiGray": {
+        "value": "#DEDFE0",
+        "type": "color",
+        "description": "Selected List Navigation Gray"
+      },
+      "SelectedUiGrayDark": {
+        "value": "#838789",
+        "type": "color",
+        "description": "Selected List Navigation Gray - Dark"
+      },
+      "SelectedUiOnColor": {
+        "value": "#FFFFFF",
+        "type": "color"
+      },
+      "SelectedUiBorder": {
+        "value": "#177EE5",
+        "type": "color",
+        "description": "Selected Button Border"
+      },
+      "SelectedUiBorderDark": {
+        "value": "#9FCBF5",
+        "type": "color",
+        "description": "Selected Button Border - Dark"
+      }
+    },
+    "Disabled": {
+      "Disabled01": {
+        "value": "#DEDFE0",
+        "type": "color",
+        "description": "Disabled text, Disabled border"
+      },
+      "Disabled01Dark": {
+        "value": "#5C6366",
+        "type": "color",
+        "description": "Disabled text, Disabled border - Dark"
+      },
+      "Disabled02": {
+        "value": "#F3F4F5",
+        "type": "color",
+        "description": "Text on disabled button"
+      },
+      "Disabled02Dark": {
+        "value": "#838789",
+        "type": "color",
+        "description": "Text on disabled button - Dark"
+      },
+      "Disabled03": {
+        "value": "#454A4D",
+        "type": "color",
+        "description": "Inverse Disabled fields"
+      },
+      "Disabled04": {
+        "value": "#0E4B87",
+        "type": "color",
+        "description": "Inverse Disabled primary button"
+      },
+      "DisabledLink01": {
+        "value": "#DEDFE0",
+        "type": "color",
+        "description": "Disabled primary links"
+      },
+      "DisabledLink02": {
+        "value": "#DEDFE0",
+        "type": "color",
+        "description": "Disabled secondary links"
+      },
+      "DisabledLink01Dark": {
+        "value": "#115CA7",
+        "type": "color",
+        "description": "Disabled primary links - Dark"
+      },
+      "DisabledLink02Dark": {
+        "value": "#5C6366",
+        "type": "color",
+        "description": "Disabled secondary links - Dark"
+      },
+      "DisabledOn": {
+        "value": "#D9EAFB",
+        "type": "color",
+        "description": "Disabled on state"
+      },
+      "DisabledOnDark": {
+        "value": "#9FCBF5",
+        "type": "color",
+        "description": "Disabled on state - Dark"
+      }
+    },
+    "Support": {
+      "SupportError": {
+        "value": "#D92B57",
+        "type": "color",
+        "description": "Error text, Icon with error, error element border"
+      },
+      "SupportErrorLight": {
+        "value": "#F4BFCD",
+        "type": "color",
+        "description": "Error light color"
+      },
+      "SupportErrorDark": {
+        "value": "#E67490",
+        "type": "color",
+        "description": "Error text, Icon with error, error element border - Dark"
+      },
+      "SupportSuccess": {
+        "value": "#2DC87D",
+        "type": "color",
+        "description": "Success text, button background, button border"
+      },
+      "SupportSuccessLight": {
+        "value": "#CCF4E1",
+        "type": "color",
+        "description": "Success light color"
+      },
+      "SupportSuccessDark": {
+        "value": "#69DDA5",
+        "type": "color",
+        "description": "Success text, button background, button border - Dark"
+      },
+      "SupportInfo": {
+        "value": "#177EE5",
+        "type": "color",
+        "description": "Information text, button background, button border"
+      },
+      "SupportInfoLight": {
+        "value": "#B9D8F7",
+        "type": "color",
+        "description": "Information light color"
+      },
+      "SupportInfoDark": {
+        "value": "#177EE5",
+        "type": "color",
+        "description": "Information text, button background, button border - Dark"
+      },
+      "SupportWarning": {
+        "value": "#FCD200",
+        "type": "color",
+        "description": "Warning text, Icon with error, error element border"
+      },
+      "SupportWarningLight": {
+        "value": "#FFF4BA",
+        "type": "color",
+        "description": "Warning light color"
+      },
+      "SupportWarningDark": {
+        "value": "#FFE976",
+        "type": "color",
+        "description": "Warning text, Icon with error, error element border - Dark"
+      },
+      "SupportDanger": {
+        "value": "#D92B57",
+        "type": "color",
+        "description": "Danger text, button background, button border"
+      },
+      "SupportDangerLight": {
+        "value": "#F4BFCD",
+        "type": "color",
+        "description": "Danger light color"
+      },
+      "SupportDangerDark": {
+        "value": "#E67490",
+        "type": "color",
+        "description": "Danger text, button background, button border - Dark"
+      }
+    }
+  },
+  "Colors": {
+    "Black": {
+      "value": "#000000",
+      "type": "color"
+    },
+    "White": {
+      "value": "#FFFFFF",
+      "type": "color",
+      "description": ""
+    },
+    "Blue": {
+      "Blue10": {
+        "value": "#F1F7FD",
+        "type": "color",
+        "description": ""
+      },
+      "Blue20": {
+        "value": "#D9EAFB",
+        "type": "color",
+        "description": ""
+      },
+      "Blue30": {
+        "value": "#9FCBF5",
+        "type": "color",
+        "description": ""
+      },
+      "Blue40": {
+        "value": "#60A8EF",
+        "type": "color",
+        "description": ""
+      },
+      "Blue50": {
+        "value": "#177EE5",
+        "type": "color",
+        "description": ""
+      },
+      "Blue60": {
+        "value": "#1571CE",
+        "type": "color",
+        "description": ""
+      },
+      "Blue70": {
+        "value": "#1366B9",
+        "type": "color",
+        "description": ""
+      },
+      "Blue80": {
+        "value": "#115CA7",
+        "type": "color",
+        "description": ""
+      },
+      "Blue90": {
+        "value": "#0F5396",
+        "type": "color",
+        "description": ""
+      },
+      "Blue100": {
+        "value": "#0E4B87",
+        "type": "color",
+        "description": ""
+      }
+    },
+    "Gray": {
+      "Gray05": {
+        "value": "#FAFAFA",
+        "type": "color",
+        "description": ""
+      },
+      "Gray10": {
+        "value": "#F3F4F5",
+        "type": "color",
+        "description": ""
+      },
+      "Gray20": {
+        "value": "#E9EAEB",
+        "type": "color",
+        "description": ""
+      },
+      "Gray30": {
+        "value": "#DEDFE0",
+        "type": "color",
+        "description": ""
+      },
+      "Gray40": {
+        "value": "#CACCCD",
+        "type": "color",
+        "description": ""
+      },
+      "Gray50": {
+        "value": "#A4A5A6",
+        "type": "color",
+        "description": ""
+      },
+      "Gray60": {
+        "value": "#838789",
+        "type": "color",
+        "description": ""
+      },
+      "Gray70": {
+        "value": "#6F7476",
+        "type": "color",
+        "description": ""
+      },
+      "Gray80": {
+        "value": "#5C6366",
+        "type": "color",
+        "description": ""
+      },
+      "Gray90": {
+        "value": "#454A4D",
+        "type": "color",
+        "description": ""
+      },
+      "Gray100": {
+        "value": "#2F3233",
+        "type": "color",
+        "description": ""
+      }
+    },
+    "Red": {
+      "Red10": {
+        "value": "#FCEFF3",
+        "type": "color",
+        "description": ""
+      },
+      "Red20": {
+        "value": "#F9E0E6",
+        "type": "color",
+        "description": ""
+      },
+      "Red30": {
+        "value": "#F1B1C1",
+        "type": "color"
+      },
+      "Red40": {
+        "value": "#E67490",
+        "type": "color"
+      },
+      "Red50": {
+        "value": "#D92B57",
+        "type": "color",
+        "description": ""
+      },
+      "Red60": {
+        "value": "#C6244D",
+        "type": "color",
+        "description": ""
+      },
+      "Red70": {
+        "value": "#B22045",
+        "type": "color",
+        "description": ""
+      },
+      "Red80": {
+        "value": "#A01D3E",
+        "type": "color",
+        "description": ""
+      },
+      "Red90": {
+        "value": "#901A38",
+        "type": "color",
+        "description": ""
+      },
+      "Red100": {
+        "value": "#821732",
+        "type": "color",
+        "description": ""
+      }
+    },
+    "Yellow": {
+      "Yellow10": {
+        "value": "#FFFADC",
+        "type": "color",
+        "description": ""
+      },
+      "Yellow20": {
+        "value": "#FFF6C4",
+        "type": "color",
+        "description": ""
+      },
+      "Yellow30": {
+        "value": "#FFEF9B",
+        "type": "color",
+        "description": ""
+      },
+      "Yellow40": {
+        "value": "#FFE976",
+        "type": "color",
+        "description": ""
+      },
+      "Yellow50": {
+        "value": "#FFD919",
+        "type": "color",
+        "description": ""
+      },
+      "Yellow60": {
+        "value": "#FCD200",
+        "type": "color",
+        "description": ""
+      },
+      "Yellow70": {
+        "value": "#E3BD00",
+        "type": "color",
+        "description": ""
+      },
+      "Yellow80": {
+        "value": "#CCAA00",
+        "type": "color",
+        "description": ""
+      },
+      "Yellow90": {
+        "value": "#B89900",
+        "type": "color",
+        "description": ""
+      },
+      "Yellow100": {
+        "value": "#A68A00",
+        "type": "color",
+        "description": ""
+      }
+    },
+    "Green": {
+      "Green10": {
+        "value": "#ECFBF4",
+        "type": "color",
+        "description": ""
+      },
+      "Green20": {
+        "value": "#D0F4E3",
+        "type": "color",
+        "description": ""
+      },
+      "Green30": {
+        "value": "#A1EAC7",
+        "type": "color",
+        "description": ""
+      },
+      "Green40": {
+        "value": "#69DDA5",
+        "type": "color",
+        "description": ""
+      },
+      "Green50": {
+        "value": "#2DC87D",
+        "type": "color",
+        "description": ""
+      },
+      "Green60": {
+        "value": "#29B471",
+        "type": "color",
+        "description": ""
+      },
+      "Green70": {
+        "value": "#25A266",
+        "type": "color",
+        "description": ""
+      },
+      "Green80": {
+        "value": "#21925C",
+        "type": "color",
+        "description": ""
+      },
+      "Green90": {
+        "value": "#1E8353",
+        "type": "color",
+        "description": ""
+      },
+      "Green100": {
+        "value": "#1B764B",
+        "type": "color",
+        "description": ""
+      }
+    },
+    "Purple": {
+      "Purple10": {
+        "value": "#F3F3FF",
+        "type": "color",
+        "description": ""
+      },
+      "Purple20": {
+        "value": "#E0E1FF",
+        "type": "color",
+        "description": ""
+      },
+      "Purple30": {
+        "value": "#C1C3FF",
+        "type": "color",
+        "description": ""
+      },
+      "Purple40": {
+        "value": "#989CFF",
+        "type": "color",
+        "description": ""
+      },
+      "Purple50": {
+        "value": "#7379FF",
+        "type": "color",
+        "description": ""
+      },
+      "Purple60": {
+        "value": "#4E56FF",
+        "type": "color",
+        "description": ""
+      },
+      "Purple70": {
+        "value": "#3F46DF",
+        "type": "color",
+        "description": ""
+      },
+      "Purple80": {
+        "value": "#3338BE",
+        "type": "color",
+        "description": ""
+      },
+      "Purple90": {
+        "value": "#2B30AA",
+        "type": "color",
+        "description": ""
+      },
+      "Purple100": {
+        "value": "#22278E",
+        "type": "color",
+        "description": ""
+      }
+    },
+    "BlueGreen": {
+      "BlueGreen10": {
+        "value": "#ECFCFD",
+        "type": "color",
+        "description": ""
+      },
+      "BlueGreen20": {
+        "value": "#CFF6FA",
+        "type": "color",
+        "description": ""
+      },
+      "BlueGreen30": {
+        "value": "#9FEEF5",
+        "type": "color",
+        "description": ""
+      },
+      "BlueGreen40": {
+        "value": "#60E3EF",
+        "type": "color",
+        "description": ""
+      },
+      "BlueGreen50": {
+        "value": "#17D4E5",
+        "type": "color",
+        "description": ""
+      },
+      "BlueGreen60": {
+        "value": "#15BFCE",
+        "type": "color",
+        "description": ""
+      },
+      "BlueGreen70": {
+        "value": "#13ACB9",
+        "type": "color",
+        "description": ""
+      },
+      "BlueGreen80": {
+        "value": "#119BA7",
+        "type": "color",
+        "description": ""
+      },
+      "BlueGreen90": {
+        "value": "#0F8C96",
+        "type": "color",
+        "description": ""
+      },
+      "BlueGreen100": {
+        "value": "#0E7E87",
+        "type": "color",
+        "description": ""
+      }
+    }
+  },
+  "fontFamilies": {
+    "helvetica": {
+      "value": "Helvetica",
+      "type": "fontFamilies"
+    }
+  },
+  "lineHeights": {
+    "0": {
+      "value": "125%",
+      "type": "lineHeights"
+    },
+    "1": {
+      "value": "133%",
+      "type": "lineHeights"
+    },
+    "2": {
+      "value": "160%",
+      "type": "lineHeights"
+    },
+    "3": {
+      "value": "150%",
+      "type": "lineHeights"
+    },
+    "4": {
+      "value": "171%",
+      "type": "lineHeights"
+    },
+    "5": {
+      "value": "153%",
+      "type": "lineHeights"
+    },
+    "6": {
+      "value": "100%",
+      "type": "lineHeights"
+    },
+    "7": {
+      "value": "180%",
+      "type": "lineHeights"
+    }
+  },
+  "fontWeights": {
+    "helvetica-0": {
+      "value": "Bold",
+      "type": "fontWeights"
+    },
+    "helvetica-1": {
+      "value": "Regular",
+      "type": "fontWeights"
+    }
+  },
+  "fontSize": {
+    "0": {
+      "value": 11,
+      "type": "fontSizes"
+    },
+    "1": {
+      "value": 12,
+      "type": "fontSizes"
+    },
+    "2": {
+      "value": 13,
+      "type": "fontSizes"
+    },
+    "3": {
+      "value": 14,
+      "type": "fontSizes"
+    },
+    "4": {
+      "value": 16,
+      "type": "fontSizes"
+    },
+    "5": {
+      "value": 20,
+      "type": "fontSizes"
+    },
+    "6": {
+      "value": 24,
+      "type": "fontSizes"
+    },
+    "7": {
+      "value": 32,
+      "type": "fontSizes"
+    }
+  },
+  "Heading": {
+    "H1": {
+      "value": {
+        "fontFamily": "Helvetica",
+        "fontWeight": "Bold",
+        "lineHeight": "125%",
+        "fontSize": 32,
+        "letterSpacing": 0,
+        "paragraphSpacing": 0,
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    },
+    "H2": {
+      "value": {
+        "fontFamily": "Helvetica",
+        "fontWeight": "Bold",
+        "lineHeight": "133%",
+        "fontSize": 24,
+        "letterSpacing": 0,
+        "paragraphSpacing": 0,
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    },
+    "H3": {
+      "value": {
+        "fontFamily": "Helvetica",
+        "fontWeight": "Bold",
+        "lineHeight": "160%",
+        "fontSize": 20,
+        "letterSpacing": "0%",
+        "paragraphSpacing": 0,
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    },
+    "H4": {
+      "value": {
+        "fontFamily": "Helvetica",
+        "fontWeight": "Bold",
+        "lineHeight": "150%",
+        "fontSize": 16,
+        "letterSpacing": 0,
+        "paragraphSpacing": 0,
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    },
+    "H5": {
+      "value": {
+        "fontFamily": "Helvetica",
+        "fontWeight": "Bold",
+        "lineHeight": "171%",
+        "fontSize": 14,
+        "letterSpacing": 0,
+        "paragraphSpacing": 0,
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    }
+  },
+  "Body": {
+    "Body16_Regular": {
+      "value": {
+        "fontFamily": "Helvetica",
+        "fontWeight": "Regular",
+        "lineHeight": "180%",
+        "fontSize": 16,
+        "letterSpacing": 0,
+        "paragraphSpacing": 0,
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    },
+    "Body16_Bold": {
+      "value": {
+        "fontFamily": "Helvetica",
+        "fontWeight": "Bold",
+        "lineHeight": "180%",
+        "fontSize": 16,
+        "letterSpacing": 0,
+        "paragraphSpacing": 0,
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    },
+    "Body14_Regular": {
+      "value": {
+        "fontFamily": "Helvetica",
+        "fontWeight": "Regular",
+        "lineHeight": "171%",
+        "fontSize": 14,
+        "letterSpacing": 0,
+        "paragraphSpacing": 0,
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    },
+    "Body14_Bold": {
+      "value": {
+        "fontFamily": "Helvetica",
+        "fontWeight": "Bold",
+        "lineHeight": "171%",
+        "fontSize": 14,
+        "letterSpacing": 0,
+        "paragraphSpacing": 0,
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    },
+    "Body13_Regular": {
+      "value": {
+        "fontFamily": "Helvetica",
+        "fontWeight": "Regular",
+        "lineHeight": "153%",
+        "fontSize": 13,
+        "letterSpacing": "0%",
+        "paragraphSpacing": 0,
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    },
+    "Body13_Bold": {
+      "value": {
+        "fontFamily": "Helvetica",
+        "fontWeight": "Bold",
+        "lineHeight": "153%",
+        "fontSize": 13,
+        "letterSpacing": "0%",
+        "paragraphSpacing": 0,
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    },
+    "Body12_Regular": {
+      "value": {
+        "fontFamily": "Helvetica",
+        "fontWeight": "Regular",
+        "lineHeight": "133%",
+        "fontSize": 12,
+        "letterSpacing": "0%",
+        "paragraphSpacing": 0,
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    },
+    "Body12_Bold": {
+      "value": {
+        "fontFamily": "Helvetica",
+        "fontWeight": "Bold",
+        "lineHeight": "133%",
+        "fontSize": 12,
+        "letterSpacing": "0%",
+        "paragraphSpacing": 0,
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    }
+  },
+  "Label": {
+    "Label16_Bold": {
+      "value": {
+        "fontFamily": "Helvetica",
+        "fontWeight": "Bold",
+        "lineHeight": "100%",
+        "fontSize": 16,
+        "letterSpacing": 0,
+        "paragraphSpacing": 0,
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    },
+    "Label16_Regular": {
+      "value": {
+        "fontFamily": "Helvetica",
+        "fontWeight": "Regular",
+        "lineHeight": "100%",
+        "fontSize": 16,
+        "letterSpacing": 0,
+        "paragraphSpacing": 0,
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    },
+    "Label14_Bold": {
+      "value": {
+        "fontFamily": "Helvetica",
+        "fontWeight": "Bold",
+        "lineHeight": "100%",
+        "fontSize": 14,
+        "letterSpacing": 0,
+        "paragraphSpacing": 0,
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    },
+    "Label14_Regular": {
+      "value": {
+        "fontFamily": "Helvetica",
+        "fontWeight": "Regular",
+        "lineHeight": "100%",
+        "fontSize": 14,
+        "letterSpacing": 0,
+        "paragraphSpacing": 0,
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    },
+    "Label12_Bold": {
+      "value": {
+        "fontFamily": "Helvetica",
+        "fontWeight": "Bold",
+        "lineHeight": "100%",
+        "fontSize": 12,
+        "letterSpacing": 0,
+        "paragraphSpacing": 0,
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    },
+    "Label12_Regular": {
+      "value": {
+        "fontFamily": "Helvetica",
+        "fontWeight": "Regular",
+        "lineHeight": "100%",
+        "fontSize": 12,
+        "letterSpacing": 0,
+        "paragraphSpacing": 0,
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    },
+    "Label11_Bold": {
+      "value": {
+        "fontFamily": "Helvetica",
+        "fontWeight": "Bold",
+        "lineHeight": "100%",
+        "fontSize": 11,
+        "letterSpacing": 0,
+        "paragraphSpacing": 0,
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    },
+    "Label11_Regular": {
+      "value": {
+        "fontFamily": "Helvetica",
+        "fontWeight": "Regular",
+        "lineHeight": "100%",
+        "fontSize": 11,
+        "letterSpacing": 0,
+        "paragraphSpacing": 0,
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    }
+  },
+  "letterSpacing": {
+    "0": {
+      "value": 0,
+      "type": "letterSpacing"
+    },
+    "1": {
+      "value": "0%",
+      "type": "letterSpacing"
+    }
+  },
+  "paragraphSpacing": {
+    "0": {
+      "value": 0,
+      "type": "paragraphSpacing"
+    }
+  },
+  "textCase": {
+    "none": {
+      "value": "none",
+      "type": "textCase"
+    }
+  },
+  "textDecoration": {
+    "none": {
+      "value": "none",
+      "type": "textDecoration"
+    }
+  },
+  "Shadow": {
+    "ModalShadow": {
+      "value": "0 0 0 0 #0000001a, 0 9px 20px 0 #0000001a, 0 37px 37px 0 #00000017, 0 84px 50px 0 #0000000d, 0 149px 60px 0 #00000003, 0 232px 65px 0 #00000000",
+      "type": "boxShadow",
+      "description": "Modalで使用"
+    },
+    "FloatingShadow": {
+      "value": "0 4px 20px 0 #00000014",
+      "type": "boxShadow",
+      "description": "Toast/Popup/Popover/Accordion/List/SliderなどUI上に重ねて表示する要素に使用"
+    },
+    "LayoutShadow": {
+      "value": "0 4px 10px 0 #00000014",
+      "type": "boxShadow",
+      "description": "FixedMenuなどレイアウト用に使用"
+    }
+  }
+}
