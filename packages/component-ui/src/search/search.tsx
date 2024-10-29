@@ -17,7 +17,7 @@ type Props = {
 
 export const Search = forwardRef<HTMLDivElement, Props>(({ width = '100%', size = 'medium', ...props }: Props, ref) => {
   const classes = clsx(
-    'flex items-center rounded-full border border-uiBorder02 focus-within:border-activeInput',
+    'flex items-center rounded-full border border-uiBorder02 bg-uiBackground01 focus-within:border-activeInput',
     { 'h-8 px-3': size === 'medium' },
     { 'h-10 px-4': size === 'large' },
   );
