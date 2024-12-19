@@ -22,7 +22,7 @@ const {
   colors,
 } = tokens;
 
-export default {
+export const tailwindConfig = {
   theme: {
     extend: {
       fontFamily: {
