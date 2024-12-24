@@ -27,7 +27,7 @@ jobs:
         run: yarn install
 
       - name: Build npm package
-        run: yarn build:all
+        run: yarn build-lib:all
 
       - name: Publish npm package
         run: yarn publish:all
