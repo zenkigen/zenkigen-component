@@ -14,7 +14,8 @@
   "scripts": {
     "type-check": "tsc --noEmit",
     "generate-component": "hygen generator components",
-    "build": "rimraf dist && microbundle --no-compress -f modern,esm,cjs --jsx React.createElement --jsxFragment React.Fragment --jsxImportSource react --globals react/jsx-runtime=jsx --tsconfig tsconfig.build.json"
+    "build": "rimraf dist && microbundle --no-compress -f modern,esm,cjs --jsx React.createElement --jsxFragment React.Fragment --jsxImportSource react --globals react/jsx-runtime=jsx --tsconfig tsconfig.build.json --external none",
+    "build-lib": "rimraf dist && microbundle --no-compress -f modern,esm,cjs --jsx React.createElement --jsxFragment React.Fragment --jsxImportSource react --globals react/jsx-runtime=jsx --tsconfig tsconfig.build.json"
   },
   "devDependencies": {
     "hygen": "6.2.11",
@@ -22,8 +23,8 @@
     "typescript": "5.5.4"
   },
   "peerDependencies": {
-    "@types/react": "^18.0.0",
-    "react": "^18.0.0"
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
   },
   "dependencies": {
     "@zenkigen-inc/component-icons": "1.10.2",
