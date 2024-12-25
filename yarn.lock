@@ -3338,6 +3338,9 @@ __metadata:
     ejs: "npm:3.1.10"
     microbundle: "npm:0.15.1"
     typescript: "npm:5.5.4"
+  peerDependencies:
+    react: ^18.0.0
+    react-dom: ^18.0.0
   languageName: unknown
   linkType: soft
 
@@ -3362,8 +3365,8 @@ __metadata:
     microbundle: "npm:0.15.1"
     typescript: "npm:5.5.4"
   peerDependencies:
-    "@types/react": ^18.0.0
     react: ^18.0.0
+    react-dom: ^18.0.0
   languageName: unknown
   linkType: soft
 

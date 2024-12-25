@@ -10,6 +10,7 @@
     "lint:fix": "eslint './packages/**/*.ts{,x}' --fix && prettier --write .",
     "type-check": "yarn workspaces foreach --all --exclude zenkigen-component run type-check",
     "build:all": "yarn workspaces foreach --all -pt --exclude zenkigen-component run build",
+    "build-lib:all": "yarn workspaces foreach --all -pt --exclude zenkigen-component run build-lib",
     "publish:all": "yarn workspaces foreach --all --exclude zenkigen-component npm publish",
     "storybook": "storybook dev",
     "create-component": "yarn workspace @zenkigen-inc/component-ui hygen generator components",
