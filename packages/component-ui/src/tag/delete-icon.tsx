@@ -6,7 +6,7 @@ import type { ColorVariant, TagColor } from './type';
 type Props = {
   color?: TagColor;
   variant?: ColorVariant;
-  onClick?: () => void;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 };
 
 export const DeleteIcon = ({ color, variant, onClick }: Props) => {

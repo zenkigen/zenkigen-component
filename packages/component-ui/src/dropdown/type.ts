@@ -4,7 +4,7 @@ export type DropdownItemType = {
   id: string;
   content: ReactNode;
   color?: 'gray' | 'red';
-  onClick?: () => void;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 };
 
 export type DropdownVerticalPosition = 'top' | 'bottom';

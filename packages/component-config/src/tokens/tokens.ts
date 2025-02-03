@@ -87,7 +87,8 @@ export const tokens = {
       "interactive02": "#6F7476",
       "interactive02Dark": "#CACCCD",
       "interactive03": "#177EE5",
-      "interactive03Dark": "#838789"
+      "interactive03Dark": "#838789",
+      "interactive04": "#CACCCD",
     },
     "field": {
       "fieldInput": "#FFFFFF",

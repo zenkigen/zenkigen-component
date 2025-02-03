@@ -22,7 +22,7 @@ type Props = {
     }
   | {
       isAnchor?: false;
-      onClick?: () => void;
+      onClick?: React.MouseEventHandler<HTMLButtonElement>;
     }
 );
 
