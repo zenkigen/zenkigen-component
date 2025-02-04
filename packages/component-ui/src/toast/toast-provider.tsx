@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from 'react';
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import { Toast } from './toast';
