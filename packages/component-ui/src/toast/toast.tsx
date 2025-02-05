@@ -6,6 +6,8 @@ import { Icon } from '../icon';
 import { IconButton } from '../icon-button';
 import type { ToastState } from './type';
 
+const CLOSE_TIME_MSEC = 5000;
+
 type Props = {
   state?: ToastState;
   width?: CSSProperties['width'];
@@ -13,7 +15,6 @@ type Props = {
   isAnimation?: boolean;
   children?: ReactNode;
   onClickClose: () => void;
-  closeTimeMsec?: number;
 };
 
 export function Toast({
@@ -23,7 +24,6 @@ export function Toast({
   isAnimation = false,
   children,
   onClickClose,
-  closeTimeMsec = 5000,
 }: Props) {
   const [isRemoving, setIsRemoving] = useState(false);
 
@@ -65,10 +65,9 @@ export function Toast({
       if (isAutoClose) {
         setIsRemoving(true);
       }
-    }, closeTimeMsec);
+    }, CLOSE_TIME_MSEC);
 
     return () => window.clearTimeout(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAutoClose]);
 
   return (

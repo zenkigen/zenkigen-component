@@ -20,7 +20,7 @@ export function Base() {
   const { addToast } = useToast();
 
   const handleClick = useCallback(() => {
-    addToast({ message: 'テキスト', state: 'information', closeTimeMsec: 5000 });
+    addToast({ message: 'テキスト', state: 'information' });
   }, [addToast]);
 
   return (
