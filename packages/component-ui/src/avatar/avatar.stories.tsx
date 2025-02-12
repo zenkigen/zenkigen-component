@@ -1,7 +1,22 @@
+import type { Meta, StoryObj } from '@storybook/react';
+
 import { Avatar } from '.';
 
-export default {
+const meta: Meta<typeof Avatar> = {
   component: Avatar,
+};
+
+export default meta;
+type Story = StoryObj<typeof Avatar>;
+
+export const Component: Story = {
+  args: {
+    size: 'medium',
+    userId: 1,
+    lastName: '全機現',
+    firstName: '太郎',
+    isDisabled: false,
+  },
 };
 
 export function Base() {
