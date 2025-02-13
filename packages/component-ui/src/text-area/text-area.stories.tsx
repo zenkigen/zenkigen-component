@@ -10,9 +10,27 @@ const meta: Meta<typeof TextArea> = {
   component: TextArea,
 };
 
+export default meta;
 type Story = StoryObj<typeof TextArea>;
 
-export default meta;
+export const Component: Story = {
+  args: {
+    size: 'medium',
+    placeholder: 'placeholder',
+    height: 'auto',
+    isResizable: false,
+    isError: false,
+    disabled: false,
+  },
+  render: (args) => (
+    <div className="flex items-center gap-4">
+      <div style={{ flex: 1 }}>
+        <TextArea {...args} />
+      </div>
+      <div style={{ flex: 1 }}></div>
+    </div>
+  ),
+};
 
 type ErrorTextProps = {
   children?: ReactNode;
