@@ -1,7 +1,20 @@
+import type { Meta, StoryObj } from '@storybook/react';
+
 import { Loading } from '.';
 
-export default {
+const meta: Meta<typeof Loading> = {
   component: Loading,
+};
+
+export default meta;
+type Story = StoryObj<typeof Loading>;
+
+export const Component: Story = {
+  args: {
+    size: 'medium',
+    position: 'static',
+    height: '100%',
+  },
 };
 
 export const Base = { args: {} };
