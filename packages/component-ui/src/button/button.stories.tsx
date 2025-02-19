@@ -1,7 +1,43 @@
+import type { Meta, StoryObj } from '@storybook/react';
+
 import { Icon } from '../icon';
 import { Button } from '.';
 
-export default { component: Button };
+const meta: Meta<typeof Button> = {
+  component: Button,
+  argTypes: {
+    size: {
+      options: ['small', 'medium', 'large'],
+      control: { type: 'radio' },
+    },
+    variant: {
+      options: ['fill', 'fillDanger', 'outline', 'text'],
+      control: { type: 'radio' },
+    },
+    borderRadius: {
+      control: { type: 'text' },
+    },
+  },
+};
+
+export default meta;
+type Story = StoryObj<typeof Button>;
+
+export const Component: Story = {
+  args: {
+    children: 'ボタンラベル',
+    size: 'medium',
+    width: '',
+    isSelected: false,
+    isDisabled: false,
+    variant: 'fill',
+    bofore: '',
+    after: '',
+    // eslint-disable-next-line no-undefined
+    borderRadius: undefined,
+  },
+};
+
 export function Base() {
   return (
     <div>
