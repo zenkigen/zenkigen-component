@@ -4,6 +4,7 @@ import { iconElements } from '@zenkigen-inc/component-icons';
 import { IconButton } from '.';
 
 const meta: Meta<typeof IconButton> = {
+  title: 'Components/IconButton',
   component: IconButton,
   argTypes: {
     icon: {

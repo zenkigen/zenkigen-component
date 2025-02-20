@@ -6,6 +6,7 @@ import { Icon } from '.';
 type Color = keyof typeof iconColors;
 
 const meta: Meta<typeof Icon> = {
+  title: 'Components/Icon',
   component: Icon,
 };
 

@@ -15,6 +15,7 @@ import { Dropdown } from './dropdown';
 import type { DropdownItemType } from './type';
 
 const meta: Meta<typeof Dropdown> = {
+  title: 'Components/Dropdown',
   component: Dropdown,
   argTypes: {
     icon: {

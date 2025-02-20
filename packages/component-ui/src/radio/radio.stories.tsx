@@ -5,6 +5,7 @@ import { useCallback, useState } from 'react';
 import { Radio } from '.';
 
 const meta: Meta<typeof Radio> = {
+  title: 'Components/Radio',
   component: Radio,
 };
 export default meta;

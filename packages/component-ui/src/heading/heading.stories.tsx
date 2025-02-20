@@ -6,6 +6,7 @@ import { Icon } from '../icon';
 import { Heading } from '.';
 
 const meta: Meta<typeof Heading> = {
+  title: 'Components/Heading',
   component: Heading,
 };
 

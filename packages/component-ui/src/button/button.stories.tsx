@@ -4,6 +4,7 @@ import { Icon } from '../icon';
 import { Button } from '.';
 
 const meta: Meta<typeof Button> = {
+  title: 'Components/Button',
   component: Button,
   argTypes: {
     size: {

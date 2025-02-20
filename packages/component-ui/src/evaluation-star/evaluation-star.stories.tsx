@@ -4,6 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { EvaluationStar } from './evaluation-star';
 
 const meta: Meta<typeof EvaluationStar> = {
+  title: 'Components/EvaluationStar',
   component: EvaluationStar,
 };
 export default meta;

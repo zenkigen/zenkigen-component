@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { Search } from '.';
 
 const meta: Meta<typeof Search> = {
+  title: 'Components/Search',
   component: Search,
 };
 export default meta;

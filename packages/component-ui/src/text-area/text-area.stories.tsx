@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { TextArea } from '.';
 
 const meta: Meta<typeof TextArea> = {
+  title: 'Components/TextArea',
   component: TextArea,
 };
 

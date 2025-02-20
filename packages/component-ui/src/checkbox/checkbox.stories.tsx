@@ -4,6 +4,7 @@ import { useCallback, useState } from 'react';
 import { Checkbox } from './checkbox';
 
 const meta: Meta<typeof Checkbox> = {
+  title: 'Components/Checkbox',
   component: Checkbox,
 };
 

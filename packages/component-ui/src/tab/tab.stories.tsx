@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Tab } from '.';
 
 const meta: Meta<typeof Tab.Item> = {
+  title: 'Components/Tabs',
   component: Tab.Item,
 };
 

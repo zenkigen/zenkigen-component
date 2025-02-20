@@ -4,6 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { NotificationInline } from '.';
 
 const meta: Meta<typeof NotificationInline> = {
+  title: 'Components/NotificationInline',
   component: NotificationInline,
 };
 

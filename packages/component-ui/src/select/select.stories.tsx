@@ -7,6 +7,7 @@ import { Select } from './select';
 import type { SelectOption } from './type';
 
 const meta: Meta<typeof Select> = {
+  title: 'Components/Select',
   component: Select,
   argTypes: {
     width: {
