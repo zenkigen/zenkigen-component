@@ -27,7 +27,7 @@ export const buttonColors = {
     selected: 'border border-transparent bg-supportDangerLight text-supportDanger fill-supportDanger',
   },
   outline: {
-    base: 'border border-uiBorder02 text-interactive02 fill-interactive02',
+    base: 'border border-uiBorder02 bg-uiBackground01 text-interactive02 fill-interactive02',
     hover: 'hover:bg-hover02',
     active: 'active:bg-active02',
     disabled: 'disabled:border-uiBorder01 disabled:text-disabled01 disabled:fill-disabled01',
