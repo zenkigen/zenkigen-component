@@ -5,10 +5,64 @@ import { SelectSort } from './select-sort';
 import type { SortOrder } from './type';
 
 const meta: Meta<typeof SelectSort> = {
+  title: 'Components/SelectSort',
   component: SelectSort,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          'このButtonコンポーネントは、クリックイベントをハンドルするシンプルな例です。カスタムメモや補足情報をここに記載できます。',
+      },
+    },
+  },
 };
 export default meta;
 type Story = StoryObj<typeof SelectSort>;
+
+const ComponentRender = (args: React.ComponentProps<typeof SelectSort>) => {
+  const [sortKey, setSortKey] = useState<'day' | 'member' | null>(null);
+  const [sortOrderDay, setSortOrderDay] = useState<SortOrder>(null);
+
+  const handleSortDay = useCallback((direction: SortOrder) => {
+    setSortOrderDay(direction);
+    setSortKey('day');
+  }, []);
+
+  const handleClickDeselect = useCallback(() => {
+    setSortKey(null);
+    setSortOrderDay(null);
+  }, []);
+
+  return (
+    <div style={{ height: '200px', display: 'flex' }}>
+      <SelectSort
+        {...args}
+        sortOrder={sortOrderDay}
+        isSortKey={sortKey === 'day'}
+        onChange={handleSortDay}
+        onClickDeselect={handleClickDeselect}
+      />
+    </div>
+  );
+};
+
+export const Component: Story = {
+  args: {
+    size: 'medium',
+    variant: 'outline',
+    label: 'label',
+    // eslint-disable-next-line no-undefined
+    width: undefined,
+  },
+  argTypes: {
+    width: {
+      control: { type: 'text' },
+      // eslint-disable-next-line no-undefined
+      defaultValue: undefined,
+    },
+  },
+  render: (args) => <ComponentRender {...args} />,
+};
 
 const SelectSortBasic = () => {
   const [sortKey, setSortKey] = useState<'day' | 'member' | null>(null);
