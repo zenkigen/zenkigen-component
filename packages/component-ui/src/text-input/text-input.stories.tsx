@@ -7,12 +7,45 @@ import { useState } from 'react';
 import { TextInput } from '.';
 
 const meta: Meta<typeof TextInput> = {
+  title: 'Components/TextInput',
   component: TextInput,
 };
 
+export default meta;
 type Story = StoryObj<typeof TextInput>;
 
-export default meta;
+export const Component: Story = {
+  args: {
+    // eslint-disable-next-line no-undefined
+    value: undefined,
+    size: 'medium',
+    placeholder: 'placeholder',
+    isError: false,
+    disabled: false,
+  },
+  argTypes: {},
+  render: function MyFunc({ ...args }) {
+    const [value, setValue] = useState<string>('');
+
+    return (
+      <div className="flex w-full flex-col">
+        <div>
+          <TextInput
+            {...args}
+            value={value}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              action('onChange')(e);
+              setValue(e.target.value);
+            }}
+            onClickClearButton={() => {
+              setValue('');
+            }}
+          />
+        </div>
+      </div>
+    );
+  },
+};
 
 type ErrorTextProps = {
   children?: ReactNode;
