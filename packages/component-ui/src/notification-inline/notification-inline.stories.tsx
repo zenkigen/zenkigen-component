@@ -1,9 +1,23 @@
 import { action } from '@storybook/addon-actions';
+import type { Meta, StoryObj } from '@storybook/react';
 
 import { NotificationInline } from '.';
 
-export default {
+const meta: Meta<typeof NotificationInline> = {
+  title: 'Components/NotificationInline',
   component: NotificationInline,
+};
+
+export default meta;
+type Story = StoryObj<typeof NotificationInline>;
+
+export const Component: Story = {
+  args: {
+    children: 'Message',
+    size: 'medium',
+    state: 'success',
+    showClose: false,
+  },
 };
 
 export function Base() {
