@@ -4,6 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { PaginationSelect } from '.';
 
 const meta: Meta<typeof PaginationSelect> = {
+  title: 'Components/PaginationSelect',
   component: PaginationSelect,
   argTypes: {
     totalSize: {

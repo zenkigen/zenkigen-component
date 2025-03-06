@@ -1,6 +1,13 @@
+import type { Meta } from '@storybook/react';
+
 import { Breadcrumb } from '.';
 
-export default { component: Breadcrumb };
+const meta: Meta<typeof Breadcrumb> = {
+  title: 'Components/Breadcrumb',
+  component: Breadcrumb,
+};
+
+export default meta;
 
 const breadcrumbList = [
   { key: 1, label: 'ホーム', href: '/' },
