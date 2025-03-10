@@ -11,6 +11,7 @@ import type { SortOrder } from '../select-sort/type';
 import { Table } from '.';
 
 const meta: Meta<typeof Table> = {
+  title: 'Components/Table',
   component: Table,
 };
 

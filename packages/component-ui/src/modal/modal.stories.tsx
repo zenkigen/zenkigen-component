@@ -8,6 +8,7 @@ import { Tab } from '../tab';
 import { Modal } from '.';
 
 const meta: Meta<typeof Modal> = {
+  title: 'Components/Modal',
   component: Modal,
 };
 

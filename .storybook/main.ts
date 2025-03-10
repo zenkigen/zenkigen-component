@@ -3,7 +3,7 @@ import turbosnap from 'vite-plugin-turbosnap';
 import { StorybookConfig } from '@storybook/react-vite';
 
 const config: StorybookConfig = {
-  stories: ['../packages/**/*.stories.@(ts|tsx)'],
+  stories: ['../packages/**/*.stories.@(ts|tsx)', '../packages/**/*.mdx'],
   addons: ['@storybook/addon-essentials', '@storybook/addon-interactions', '@storybook/addon-actions'],
   framework: {
     name: '@storybook/react-vite',
