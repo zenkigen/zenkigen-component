@@ -21,7 +21,7 @@ export const TextInput = forwardRef<HTMLInputElement, Props>(
       'hover:focus-within:border-activeInput': !isError,
       'focus-within:border-activeInput': !isError,
       'bg-disabled02 border-disabled01': disabled,
-      'pr-2': isShowClearButton,
+      'pr-1.5': isShowClearButton,
     });
 
     const inputClasses = clsx('flex-1 pl-2 outline-0 placeholder:text-textPlaceholder disabled:text-textPlaceholder', {
@@ -29,7 +29,7 @@ export const TextInput = forwardRef<HTMLInputElement, Props>(
       ['typography-label16regular min-h-10']: size === 'large',
       'text-text01': !isError,
       'text-supportError': isError,
-      'pr-3': !isShowClearButton,
+      'pr-2': !isShowClearButton,
     });
 
     return (
