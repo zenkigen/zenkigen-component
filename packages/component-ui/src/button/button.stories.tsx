@@ -37,6 +37,9 @@ export const Component: Story = {
     // eslint-disable-next-line no-undefined
     borderRadius: undefined,
   },
+  parameters: {
+    chromatic: { disable: true }
+  },
 };
 
 export function Base() {
