@@ -34,7 +34,7 @@ export const Base: Story = {
   },
   render: function MyFunc({ ...args }) {
     const [value, setValue] = useState<string>(args.value);
-    const [value2, setValue2] = useState<string>('入力した文字列。');
+    const [value2, setValue2] = useState<string>('入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列');
     const [valueNumber, setValueNumber] = useState<string>('123');
     const [valuePassword, setValuePassword] = useState<string>('abcdefg');
 
