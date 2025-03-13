@@ -367,6 +367,11 @@
         "value": "#838789",
         "type": "color",
         "description": "Tertiary button, Selected elements, Active elements, Accent icon -Dark"
+      },
+      "Interactive04": {
+        "value": "#CACCCD",
+        "type": "color",
+        "description": "Tertiary Interactive color"
       }
     },
     "Field": {
