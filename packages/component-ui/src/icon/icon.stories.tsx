@@ -77,6 +77,7 @@ function IconList(props: Props) {
       <Icon name="hamburger-close" color={props.color} />
       <Icon name="hamburger" color={props.color} />
       <Icon name="help" color={props.color} />
+      <Icon name="hint" color={props.color} />
       <Icon name="home" color={props.color} />
       <Icon name="image" color={props.color} />
       <Icon name="information-filled" color={props.color} />
