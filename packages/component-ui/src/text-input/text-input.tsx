@@ -26,11 +26,11 @@ export const TextInput = forwardRef<HTMLInputElement, Props>(
     });
 
     const inputClasses = clsx('flex-1 outline-0 placeholder:text-textPlaceholder disabled:text-textPlaceholder', {
-      ['typography-label14regular min-h-8 pl-2']: size === 'medium',
-      ['typography-label16regular min-h-10 pl-3']: size === 'large',
+      ['typography-label14regular min-h-8 px-2']: size === 'medium',
+      ['typography-label16regular min-h-10 px-3']: size === 'large',
       'text-text01': !isError,
       'text-supportError': isError,
-      'pr-2': !isShowClearButton,
+      'pr-0': isShowClearButton,
     });
 
     return (
