@@ -27,21 +27,26 @@ export function EvaluationStar({ value, isEditable = false, onChangeRating, size
   );
 
   const starClasses = clsx(focusVisible.inset, { 'w-6 h-6': size === 'large', 'w-4 h-4': size === 'medium' });
-  const ratingStars = [];
-  for (let i = 1; i < maxRating + 1; i++) {
-    const color = i <= currentRating ? 'fill-yellow-yellow50' : 'fill-icon03';
-    ratingStars.push(
+
+  // 各評価のレンダリングロジックを分離（React Hooksのルールに準拠）
+  const renderStar = (rating: number) => {
+    const color = rating <= currentRating ? 'fill-yellow-yellow50' : 'fill-icon03';
+
+    return (
       <button
         type="button"
-        key={i}
-        onClick={() => handleChangeRating(i)}
+        key={rating}
+        onClick={() => handleChangeRating(rating)}
         className={clsx(color, starClasses)}
         disabled={!isEditable}
       >
         {iconElements['star-filled']}
-      </button>,
+      </button>
     );
-  }
+  };
+
+  // 宣言的な方法で評価の配列を生成
+  const ratingStars = Array.from({ length: maxRating }, (_, index) => renderStar(index + 1));
 
   return <span className="flex flex-row">{ratingStars}</span>;
 }
