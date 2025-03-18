@@ -42,6 +42,7 @@ export const Base: Story = {
 
     return (
       <div className="flex gap-10">
+        {/* サイズ：medium */}
         <div style={{ width: 300 }} className="flex flex-col gap-12">
           <div>
             <TextInput
@@ -147,7 +148,20 @@ export const Base: Story = {
               type="password"
             />
           </div>
+          <div>
+            <TextInput
+              value={value}
+              placeholder="入力してください"
+              size="medium"
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+            />
+            <ErrorText>クリアボタンなし</ErrorText>
+          </div>
         </div>
+        {/* サイズ：large */}
         <div style={{ width: 300 }} className="flex flex-col gap-10">
           <div>
             <TextInput
@@ -253,6 +267,18 @@ export const Base: Story = {
               }}
               type="password"
             />
+          </div>
+          <div>
+            <TextInput
+              value={value}
+              placeholder="入力してください"
+              size="large"
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+            />
+            <ErrorText>クリアボタンなし</ErrorText>
           </div>
         </div>
       </div>
