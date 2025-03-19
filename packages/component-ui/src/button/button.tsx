@@ -38,7 +38,7 @@ export const Button = <T extends ElementAs = 'button'>({
   isSelected = false,
   width,
   borderRadius,
-  justifyContent = 'center',
+  justifyContent = 'start',
   before,
   after,
   elementAs,
