@@ -67,6 +67,8 @@ export const Button = <T extends ElementAs = 'button'>({
 
   const Component = elementAs ?? 'button';
 
+  // MEMO: chromatic の publishテスト用にコメントアウト
+
   return (
     <Component className={baseClasses} style={{ width, borderRadius }} disabled={isDisabled} {...props}>
       {before}
