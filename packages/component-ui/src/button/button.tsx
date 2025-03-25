@@ -67,6 +67,8 @@ export const Button = <T extends ElementAs = 'button'>({
 
   const Component = elementAs ?? 'button';
 
+  // TEST: chromaticのテスト
+
   return (
     <Component className={baseClasses} style={{ width, borderRadius }} disabled={isDisabled} {...props}>
       {before}
