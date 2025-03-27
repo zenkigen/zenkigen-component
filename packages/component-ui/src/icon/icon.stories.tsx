@@ -88,6 +88,8 @@ function IconList(props: Props) {
       <Icon name="sidebar" color={props.color} />
       <Icon name="slider-editing" color={props.color} />
       <Icon name="sort" color={props.color} />
+      <Icon name="sort-down" color={props.color} />
+      <Icon name="sort-up" color={props.color} />
       <Icon name="sparkle" color={props.color} />
       <Icon name="star-filled" color={props.color} />
       <Icon name="star" color={props.color} />
