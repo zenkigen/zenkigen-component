@@ -4,7 +4,7 @@
 */
 import React from 'react';
 
-export type IconName = 'add' | 'ai' | 'angle-down' | 'angle-left' | 'angle-right' | 'angle-small-down' | 'angle-small-up' | 'angle-up' | 'arrow-down' | 'arrow-left' | 'arrow-right' | 'arrow-up' | 'attachment' | 'attention' | 'building' | 'calendar-check' | 'calendar-draft' | 'calendar-minus' | 'calendar-today' | 'calendar' | 'caret-down' | 'caret-right' | 'chart-bar' | 'chart-line' | 'check' | 'circle' | 'close' | 'comment' | 'contract' | 'copy' | 'delete' | 'document' | 'documents' | 'double circle' | 'download-document' | 'download' | 'edit' | 'email' | 'expand' | 'external-link' | 'filter' | 'flag' | 'global' | 'graph-line' | 'hamburger-close' | 'hamburger' | 'help' | 'hint' | 'home' | 'image' | 'information-filled' | 'information' | 'input-delete' | 'link' | 'list' | 'logout' | 'message-text' | 'more' | 'movie' | 'notification' | 'pause' | 'pdf' | 'picture-in-picture' | 'play-filled' | 'play' | 'presentation' | 'remove' | 'score' | 'search' | 'send' | 'share' | 'shuffle' | 'sidebar' | 'slider-editing' | 'sort' | 'sparkle' | 'star-filled' | 'star' | 'store' | 'success-filled' | 'table-download' | 'table-upload' | 'table' | 'timer' | 'transcription' | 'triangle' | 'upload' | 'user-add' | 'user-group' | 'user-line' | 'user-multi' | 'user-one' | 'user-photograph' | 'user-remove' | 'user' | 'video' | 'volume-off' | 'volume' | 'warning';
+export type IconName = 'add' | 'ai' | 'angle-down' | 'angle-left' | 'angle-right' | 'angle-small-down' | 'angle-small-up' | 'angle-up' | 'arrow-down' | 'arrow-left' | 'arrow-right' | 'arrow-up' | 'attachment' | 'attention' | 'building' | 'calendar-check' | 'calendar-draft' | 'calendar-minus' | 'calendar-today' | 'calendar' | 'caret-down' | 'caret-right' | 'chart-bar' | 'chart-line' | 'check' | 'circle' | 'close' | 'comment' | 'contract' | 'copy' | 'delete' | 'document' | 'documents' | 'double circle' | 'download-document' | 'download' | 'edit' | 'email' | 'expand' | 'external-link' | 'filter' | 'flag' | 'global' | 'graph-line' | 'hamburger-close' | 'hamburger' | 'help' | 'hint' | 'home' | 'image' | 'information-filled' | 'information' | 'input-delete' | 'link' | 'list' | 'logout' | 'message-text' | 'more' | 'movie' | 'notification' | 'pause' | 'pdf' | 'picture-in-picture' | 'play-filled' | 'play' | 'presentation' | 'remove' | 'score' | 'search' | 'send' | 'share' | 'shuffle' | 'sidebar' | 'slider-editing' | 'sort-down' | 'sort-up' | 'sort' | 'sparkle' | 'star-filled' | 'star' | 'store' | 'success-filled' | 'table-download' | 'table-upload' | 'table' | 'timer' | 'transcription' | 'triangle' | 'upload' | 'user-add' | 'user-group' | 'user-line' | 'user-multi' | 'user-one' | 'user-photograph' | 'user-remove' | 'user' | 'video' | 'volume-off' | 'volume' | 'warning';
 
 export type IconElements = Readonly<{ [name in IconName]: JSX.Element }>;
 
@@ -597,6 +597,28 @@ export const iconElements: IconElements = {
 <path fillRule="evenodd" clipRule="evenodd" d="M2 5.5H5.55001C5.78164 6.64112 6.79052 7.5 8 7.5C9.20948 7.5 10.2184 6.64112 10.45 5.5H22C22.2761 5.5 22.5 5.27614 22.5 5C22.5 4.72386 22.2761 4.5 22 4.5H10.45C10.2184 3.35888 9.20948 2.5 8 2.5C6.79052 2.5 5.78164 3.35888 5.55001 4.5H2C1.72386 4.5 1.5 4.72386 1.5 5C1.5 5.27614 1.72386 5.5 2 5.5ZM8 3.5C8.82843 3.5 9.5 4.17157 9.5 5C9.5 5.82843 8.82843 6.5 8 6.5C7.17157 6.5 6.5 5.82843 6.5 5C6.5 4.17157 7.17157 3.5 8 3.5Z"></path>
 <path fillRule="evenodd" clipRule="evenodd" d="M13.55 12.5H2C1.72386 12.5 1.5 12.2761 1.5 12C1.5 11.7239 1.72386 11.5 2 11.5H13.55C13.7816 10.3589 14.7905 9.5 16 9.5C17.2095 9.5 18.2184 10.3589 18.45 11.5H22C22.2761 11.5 22.5 11.7239 22.5 12C22.5 12.2761 22.2761 12.5 22 12.5H18.45C18.2184 13.6411 17.2095 14.5 16 14.5C14.7905 14.5 13.7816 13.6411 13.55 12.5ZM17.5 12C17.5 11.1715 16.8285 10.5 16 10.5C15.1715 10.5 14.5 11.1715 14.5 12C14.5 12.8285 15.1715 13.5 16 13.5C16.8285 13.5 17.5 12.8285 17.5 12Z"></path>
 <path fillRule="evenodd" clipRule="evenodd" d="M5.55001 18.5H2C1.72386 18.5 1.5 18.7239 1.5 19C1.5 19.2761 1.72386 19.5 2 19.5H5.55001C5.78164 20.6411 6.79052 21.5 8 21.5C9.20948 21.5 10.2184 20.6411 10.45 19.5H22C22.2761 19.5 22.5 19.2761 22.5 19C22.5 18.7239 22.2761 18.5 22 18.5H10.45C10.2184 17.3589 9.20948 16.5 8 16.5C6.79052 16.5 5.78164 17.3589 5.55001 18.5ZM9.5 19C9.5 18.1715 8.82843 17.5 8 17.5C7.17157 17.5 6.5 18.1715 6.5 19C6.5 19.8285 7.17157 20.5 8 20.5C8.82843 20.5 9.5 19.8285 9.5 19Z"></path>
+</svg>
+    ),
+  
+    'sort-down': (
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>sortDown</title>
+<path fillRule="evenodd" clipRule="evenodd" d="M6 1.5C6.27614 1.5 6.5 1.72386 6.5 2V22C6.5 22.2761 6.27614 22.5 6 22.5C5.72386 22.5 5.5 22.2761 5.5 22V2C5.5 1.72386 5.72386 1.5 6 1.5Z"></path>
+<path fillRule="evenodd" clipRule="evenodd" d="M1.64645 17.6464C1.84171 17.4512 2.15829 17.4512 2.35355 17.6464L6 21.2929L9.64645 17.6464C9.84171 17.4512 10.1583 17.4512 10.3536 17.6464C10.5488 17.8417 10.5488 18.1583 10.3536 18.3536L6.35355 22.3536C6.15829 22.5488 5.84171 22.5488 5.64645 22.3536L1.64645 18.3536C1.45118 18.1583 1.45118 17.8417 1.64645 17.6464Z"></path>
+<path fillRule="evenodd" clipRule="evenodd" d="M9.5 2C9.5 1.72386 9.72386 1.5 10 1.5H14C14.2761 1.5 14.5 1.72386 14.5 2C14.5 2.27614 14.2761 2.5 14 2.5H10C9.72386 2.5 9.5 2.27614 9.5 2Z"></path>
+<path fillRule="evenodd" clipRule="evenodd" d="M9.5 7C9.5 6.72386 9.72386 6.5 10 6.5H18C18.2761 6.5 18.5 6.72386 18.5 7C18.5 7.27614 18.2761 7.5 18 7.5H10C9.72386 7.5 9.5 7.27614 9.5 7Z"></path>
+<path fillRule="evenodd" clipRule="evenodd" d="M9.5 12C9.5 11.7239 9.72386 11.5 10 11.5H22C22.2761 11.5 22.5 11.7239 22.5 12C22.5 12.2761 22.2761 12.5 22 12.5H10C9.72386 12.5 9.5 12.2761 9.5 12Z"></path>
+</svg>
+    ),
+  
+    'sort-up': (
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>sortUp</title>
+<path fillRule="evenodd" clipRule="evenodd" d="M6 1.5C6.27614 1.5 6.5 1.72386 6.5 2V22C6.5 22.2761 6.27614 22.5 6 22.5C5.72386 22.5 5.5 22.2761 5.5 22V2C5.5 1.72386 5.72386 1.5 6 1.5Z"></path>
+<path fillRule="evenodd" clipRule="evenodd" d="M5.64645 1.64645C5.84171 1.45118 6.15829 1.45118 6.35355 1.64645L10.3536 5.64645C10.5488 5.84171 10.5488 6.15829 10.3536 6.35355C10.1583 6.54882 9.84171 6.54882 9.64645 6.35355L6 2.70711L2.35355 6.35355C2.15829 6.54882 1.84171 6.54882 1.64645 6.35355C1.45118 6.15829 1.45118 5.84171 1.64645 5.64645L5.64645 1.64645Z"></path>
+<path fillRule="evenodd" clipRule="evenodd" d="M9.5 22C9.5 21.7239 9.72386 21.5 10 21.5H14C14.2761 21.5 14.5 21.7239 14.5 22C14.5 22.2761 14.2761 22.5 14 22.5H10C9.72386 22.5 9.5 22.2761 9.5 22Z"></path>
+<path fillRule="evenodd" clipRule="evenodd" d="M9.5 17C9.5 16.7239 9.72386 16.5 10 16.5H18C18.2761 16.5 18.5 16.7239 18.5 17C18.5 17.2761 18.2761 17.5 18 17.5H10C9.72386 17.5 9.5 17.2761 9.5 17Z"></path>
+<path fillRule="evenodd" clipRule="evenodd" d="M9.5 12C9.5 11.7239 9.72386 11.5 10 11.5H22C22.2761 11.5 22.5 11.7239 22.5 12C22.5 12.2761 22.2761 12.5 22 12.5H10C9.72386 12.5 9.5 12.2761 9.5 12Z"></path>
 </svg>
     ),
   
