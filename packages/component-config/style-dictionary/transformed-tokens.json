@@ -186,6 +186,11 @@
         "value": "#838789",
         "type": "color",
         "description": "Checkbox border, Input border - Dark"
+      },
+      "UiBorder04": {
+        "value": "#838789",
+        "type": "color",
+        "description": "Button border, Checkbox border, Input border"
       }
     },
     "Background": {
@@ -367,6 +372,11 @@
         "value": "#838789",
         "type": "color",
         "description": "Tertiary button, Selected elements, Active elements, Accent icon -Dark"
+      },
+      "Interactive04": {
+        "value": "#CACCCD",
+        "type": "color",
+        "description": "Quaternary Interactive color, Quaternary buttons"
       }
     },
     "Field": {
@@ -640,7 +650,8 @@
       },
       "SelectedUiOnColor": {
         "value": "#FFFFFF",
-        "type": "color"
+        "type": "color",
+        "description": "Selected List Navigation on Color"
       },
       "SelectedUiBorder": {
         "value": "#177EE5",
