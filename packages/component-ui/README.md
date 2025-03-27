@@ -3,7 +3,21 @@
 ## インストール
 
 ```bash
-yarn add @zenkigen-inc/component-ui
+yarn add @zenkigen-inc/component-ui @zenkigen-inc/component-config
+```
+
+Tailwind CSSの設定に以下を追加する。
+
+```diff
+{
+
+  content: [
++ './node_modules/@zenkigen-inc/**/*.{js,ts,tsx}',
+  ],
+  presets: [
++    require('@zenkigen-inc/component-config')
+  ],
+}
 ```
 
 ## 利用方法

@@ -3,7 +3,7 @@
   "timezone": "Asia/Tokyo",
   "schedule": "on saturday",
   "labels": ["renovate"],
-  "reviewers": ["yutakam80"],
+  "reviewers": ["Syunki0403"],
   "lockFileMaintenance": {
     "enabled": true
   },

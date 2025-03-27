@@ -1,6 +1,6 @@
 {
   "name": "@zenkigen-inc/component-theme",
-  "version": "1.10.1",
+  "version": "1.13.0",
   "repository": "https://github.com/zenkigen/zenkigen-component",
   "license": "MIT",
   "publishConfig": {
@@ -13,7 +13,8 @@
   "exports": "./dist/index.js",
   "scripts": {
     "type-check": "tsc --noEmit",
-    "build": "rimraf dist && microbundle --no-compress -f modern,esm,cjs"
+    "build": "rimraf dist && microbundle --no-compress -f modern,esm,cjs",
+    "build-lib": "rimraf dist && microbundle --no-compress -f modern,esm,cjs"
   },
   "devDependencies": {
     "microbundle": "0.15.1",

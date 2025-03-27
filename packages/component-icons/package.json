@@ -1,6 +1,6 @@
 {
   "name": "@zenkigen-inc/component-icons",
-  "version": "1.10.1",
+  "version": "1.13.0",
   "repository": "https://github.com/zenkigen/zenkigen-component",
   "license": "MIT",
   "publishConfig": {
@@ -13,12 +13,17 @@
   "exports": "./dist/index.js",
   "scripts": {
     "generate": "node ./codegen.cjs",
-    "build": "rimraf dist && yarn generate && microbundle --no-compress -f modern,esm,cjs --jsx React.createElement --jsxFragment React.Fragment --jsxImportSource react --globals react/jsx-runtime=jsx"
+    "build": "rimraf dist && yarn generate && microbundle --no-compress -f modern,esm,cjs --jsx React.createElement --jsxFragment React.Fragment --jsxImportSource react --globals react/jsx-runtime=jsx  --external none",
+    "build-lib": "rimraf dist && yarn generate && microbundle --no-compress -f modern,esm,cjs --jsx React.createElement --jsxFragment React.Fragment --jsxImportSource react --globals react/jsx-runtime=jsx"
   },
   "devDependencies": {
     "cheerio": "1.0.0",
     "ejs": "3.1.10",
     "microbundle": "0.15.1",
     "typescript": "5.5.4"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
   }
 }

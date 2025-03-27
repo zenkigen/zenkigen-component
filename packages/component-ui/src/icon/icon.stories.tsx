@@ -60,6 +60,7 @@ function IconList(props: Props) {
       <Icon name="hamburger-close" color={props.color} />
       <Icon name="hamburger" color={props.color} />
       <Icon name="help" color={props.color} />
+      <Icon name="hint" color={props.color} />
       <Icon name="home" color={props.color} />
       <Icon name="image" color={props.color} />
       <Icon name="information-filled" color={props.color} />
@@ -87,6 +88,8 @@ function IconList(props: Props) {
       <Icon name="sidebar" color={props.color} />
       <Icon name="slider-editing" color={props.color} />
       <Icon name="sort" color={props.color} />
+      <Icon name="sort-down" color={props.color} />
+      <Icon name="sort-up" color={props.color} />
       <Icon name="sparkle" color={props.color} />
       <Icon name="star-filled" color={props.color} />
       <Icon name="star" color={props.color} />
