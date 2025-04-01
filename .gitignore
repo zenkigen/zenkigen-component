@@ -111,6 +111,3 @@ storybook-static
 
 # macOS
 .DS_Store*
-
-# Cursor
-.cursor/
