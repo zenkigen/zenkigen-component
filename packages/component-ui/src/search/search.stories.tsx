@@ -1,11 +1,28 @@
 import { action } from '@storybook/addon-actions';
+import type { Meta, StoryObj } from '@storybook/react';
 import type { ChangeEvent, FormEvent } from 'react';
 import { useState } from 'react';
 
 import { Search } from '.';
 
-export default {
+const meta: Meta<typeof Search> = {
+  title: 'Components/Search',
   component: Search,
+};
+export default meta;
+
+type Story = StoryObj<typeof Search>;
+
+export const Component: Story = {
+  args: {
+    size: 'medium',
+    placeholder: 'placeholder',
+    width: '100%',
+    value: '',
+  },
+  parameters: {
+    chromatic: { disable: true },
+  },
 };
 
 export function Base() {

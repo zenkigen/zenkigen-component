@@ -1,6 +1,10 @@
-export default {
-  component: null,
+import type { Meta } from '@storybook/react';
+
+const meta: Meta = {
+  title: 'Tokens/Typography',
 };
+
+export default meta;
 
 type SampleTextProps = {
   label: string;

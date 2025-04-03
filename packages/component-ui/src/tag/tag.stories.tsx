@@ -1,9 +1,32 @@
 import { action } from '@storybook/addon-actions';
+import type { Meta, StoryObj } from '@storybook/react';
 
 import { Tag } from './tag';
 
-export default {
+const meta: Meta<typeof Tag> = {
+  title: 'Components/Tag',
   component: Tag,
+};
+export default meta;
+type Story = StoryObj<typeof Tag>;
+
+export const Component: Story = {
+  args: {
+    size: 'medium',
+    variant: 'normal',
+    children: 'タグラベル',
+    color: 'default',
+    id: '1',
+  },
+  parameters: {
+    chromatic: { disable: true },
+  },
+  render: (args) => (
+    <div className="flex items-center justify-center gap-x-4">
+      <Tag {...args} id="1" />
+      <Tag {...args} id="2" isEditable onDelete={() => {}} />
+    </div>
+  ),
 };
 
 export function Basic() {

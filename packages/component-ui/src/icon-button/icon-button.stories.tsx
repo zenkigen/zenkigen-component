@@ -1,6 +1,34 @@
+import type { Meta, StoryObj } from '@storybook/react';
+import { iconElements } from '@zenkigen-inc/component-icons';
+
 import { IconButton } from '.';
 
-export default { component: IconButton };
+const meta: Meta<typeof IconButton> = {
+  title: 'Components/IconButton',
+  component: IconButton,
+  argTypes: {
+    icon: {
+      options: [...Object.keys(iconElements).map((iconName) => iconName)],
+      control: 'select',
+    },
+  },
+};
+export default meta;
+type Story = StoryObj<typeof IconButton>;
+
+export const Component: Story = {
+  args: {
+    icon: 'add',
+    size: 'medium',
+    variant: 'outline',
+    isDisabled: false,
+    isNoPadding: false,
+  },
+  parameters: {
+    chromatic: { disable: true },
+  },
+};
+
 export function Base() {
   return (
     <div>
