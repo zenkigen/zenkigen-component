@@ -38,7 +38,7 @@ export const Component: Story = {
     borderRadius: undefined,
   },
   parameters: {
-    chromatic: { disable: true }
+    chromatic: { disable: true },
   },
 };
 

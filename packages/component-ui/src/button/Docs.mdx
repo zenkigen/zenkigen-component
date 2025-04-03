@@ -1,9 +1,13 @@
-import { Canvas, Meta, ArgTypes, Story, Controls } from '@storybook/blocks';
-import ButtonStories, { Component } from './button.stories';
+import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/blocks';
+import ButtonStories, { Component, Base } from './button.stories';
 
-<Meta title="Button" of={ButtonStories} />
+<Meta title="Buttonx" of={ButtonStories} />
 
 # Button
+
+ボタンコンポーネントは、ユーザーのアクションを促すためのUIコンポーネントです。
+サイズ、スタイルバリエーション、およびアイコンの配置などをカスタマイズできます。
+
 <Canvas>
   <Story of={Component} />
 </Canvas>
@@ -30,12 +34,11 @@ import ButtonStories, { Component } from './button.stories';
 
 ラベルの目的は、ユーザーがボタンを押したときにシステムが実行する動作を明確に伝えることです。ユーザーがラベルの内容に疑問がある場合は、アプリの信頼を失う、間違ったボタンを押されてしまう、あるいはボタンがまったく押されなくなることにつながってしまいます。ラベルに同じような言葉や含みを持たせないようにし、常に文脈を念頭に置いてください。言葉の類似性が低いほど、明瞭さが増します。これは並列している、ボタンすべてに適用されます。
 
-
 ---
 
 # 見出し1
 
-これは一般的な **Markdown** のサンプルです。*イタリック*、**太字**、などの書式が利用できます。
+これは一般的な **Markdown** のサンプルです。_イタリック_、**太字**、などの書式が利用できます。
 
 ---
 
@@ -59,7 +62,7 @@ import ButtonStories, { Component } from './button.stories';
 ```javascript
 // これはコードブロックの例です
 function greet() {
-  console.log("Hello, Markdown!");
+  console.log('Hello, Markdown!');
 }
 greet();
 ```
@@ -71,7 +74,7 @@ greet();
 
 ### リンクと画像
 
-- [OpenAIのウェブサイト](https://openai.com)
+- [ZENKIGEN](https://zenkigen.co.jp/)
 
 ![サンプル画像](https://placehold.jp/150x150.png)
 
@@ -80,6 +83,3 @@ greet();
 ここに脚注の例を示します。これは脚注です[^1].
 
 [^1]: これは脚注の定義です。
-
-
-
