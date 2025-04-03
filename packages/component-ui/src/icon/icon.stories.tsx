@@ -20,6 +20,9 @@ export const Component: Story = {
     color: 'icon01',
     isDisabled: false,
   },
+  parameters: {
+    chromatic: { disable: true },
+  },
 };
 
 type Props = {

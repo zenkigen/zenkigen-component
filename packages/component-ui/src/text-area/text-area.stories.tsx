@@ -23,6 +23,9 @@ export const Component: Story = {
     isError: false,
     disabled: false,
   },
+  parameters: {
+    chromatic: { disable: true },
+  },
   render: (args) => (
     <div className="flex items-center gap-4">
       <div style={{ flex: 1 }}>

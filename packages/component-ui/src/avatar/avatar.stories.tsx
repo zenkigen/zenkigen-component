@@ -18,6 +18,9 @@ export const Component: Story = {
     firstName: '太郎',
     isDisabled: false,
   },
+  parameters: {
+    chromatic: { disable: true },
+  },
 };
 
 export function Base() {

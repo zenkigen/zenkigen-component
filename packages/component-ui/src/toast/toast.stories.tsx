@@ -32,6 +32,9 @@ export const Component: Story = {
       control: { type: 'radio' },
     },
   },
+  parameters: {
+    chromatic: { disable: true },
+  },
   render: function MyFunc({ ...args }) {
     const [value, setValue] = useState<string>('');
     const { addToast } = useToast();

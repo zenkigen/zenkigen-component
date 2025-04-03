@@ -16,6 +16,9 @@ export const Component: Story = {
     position: 'static',
     height: '100%',
   },
+  parameters: {
+    chromatic: { disable: true },
+  },
 };
 
 export const Base = { args: {} };

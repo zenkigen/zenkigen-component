@@ -18,6 +18,9 @@ export const Component: Story = {
     color: 'default',
     id: '1',
   },
+  parameters: {
+    chromatic: { disable: true },
+  },
   render: (args) => (
     <div className="flex items-center justify-center gap-x-4">
       <Tag {...args} id="1" />

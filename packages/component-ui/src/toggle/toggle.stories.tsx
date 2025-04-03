@@ -19,6 +19,9 @@ export const Component: Story = {
     isChecked: false,
     isDisabled: false,
   },
+  parameters: {
+    chromatic: { disable: true },
+  },
 };
 
 const ToggleStoryBasic = () => {

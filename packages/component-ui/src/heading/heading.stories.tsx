@@ -20,6 +20,9 @@ export const Component: Story = {
     before: '',
     after: '',
   },
+  parameters: {
+    chromatic: { disable: true },
+  },
 };
 
 export function Base() {

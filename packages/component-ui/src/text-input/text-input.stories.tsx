@@ -23,6 +23,9 @@ export const Component: Story = {
     isError: false,
     disabled: false,
   },
+  parameters: {
+    chromatic: { disable: true },
+  },
   argTypes: {},
   render: function MyFunc({ ...args }) {
     const [value, setValue] = useState<string>('');

@@ -54,6 +54,9 @@ export const Component: Story = {
     // eslint-disable-next-line no-undefined
     width: undefined,
   },
+  parameters: {
+    chromatic: { disable: true },
+  },
   argTypes: {
     width: {
       control: { type: 'text' },

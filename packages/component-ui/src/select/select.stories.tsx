@@ -63,6 +63,9 @@ export const Component: Story = {
       </>
     ),
   },
+  parameters: {
+    chromatic: { disable: true },
+  },
   render: (args) => (
     <div style={{ height: '200px' }}>
       <Select {...args} />

@@ -16,6 +16,9 @@ export const Component: Story = {
     value: 3,
     isEditable: true,
   },
+  parameters: {
+    chromatic: { disable: true },
+  },
   render: (args) => (
     <div className="grid gap-y-8">
       <EvaluationStar {...args} />

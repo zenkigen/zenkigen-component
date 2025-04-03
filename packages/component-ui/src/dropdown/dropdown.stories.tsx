@@ -108,6 +108,9 @@ export const Component: Story = {
     icon: undefined,
     title: 'title',
   },
+  parameters: {
+    chromatic: { disable: true },
+  },
   render: (args) => (
     <div style={{ height: '200px' }}>
       <Dropdown {...args}>

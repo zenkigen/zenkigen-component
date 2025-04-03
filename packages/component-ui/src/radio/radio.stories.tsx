@@ -21,6 +21,9 @@ export const Component: Story = {
     value: 'value',
     id: 'id',
   },
+  parameters: {
+    chromatic: { disable: true },
+  },
 };
 
 export function Base() {

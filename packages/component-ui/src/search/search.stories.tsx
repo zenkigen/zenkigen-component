@@ -20,6 +20,9 @@ export const Component: Story = {
     width: '100%',
     value: '',
   },
+  parameters: {
+    chromatic: { disable: true },
+  },
 };
 
 export function Base() {

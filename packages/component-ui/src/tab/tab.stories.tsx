@@ -18,6 +18,9 @@ export const Component: Story = {
     isSelected: true,
     isDisabled: false,
   },
+  parameters: {
+    chromatic: { disable: true },
+  },
   render: (args) => (
     <Tab>
       <Tab.Item {...args} />

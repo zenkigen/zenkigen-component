@@ -18,6 +18,9 @@ export const Component: Story = {
     state: 'success',
     showClose: false,
   },
+  parameters: {
+    chromatic: { disable: true },
+  },
 };
 
 export function Base() {

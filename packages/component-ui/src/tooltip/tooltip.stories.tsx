@@ -35,6 +35,9 @@ export const Component: Story = {
       </>
     ),
   },
+  parameters: {
+    chromatic: { disable: true },
+  },
   render: (args) => (
     <div className="grid gap-10 px-20 py-10">
       <div className="flex items-center gap-20">

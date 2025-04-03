@@ -24,6 +24,9 @@ export const Component: Story = {
     isDisabled: false,
     isNoPadding: false,
   },
+  parameters: {
+    chromatic: { disable: true },
+  },
 };
 
 export function Base() {
