@@ -11,7 +11,11 @@ const preview: Preview = {
         date: /Date$/,
       },
     },
+    a11y: {
+      config: {},
+    },
   },
   tags: ['autodocs'],
 };
+
 export default preview;
