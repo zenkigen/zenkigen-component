@@ -32,6 +32,8 @@ jobs:
 
       - name: Build
         run: yarn build:all
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
 
       - name: TypeScript type check
         run: yarn type-check
@@ -56,6 +58,8 @@ jobs:
 
       - name: Build
         run: yarn build:all
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
 
       - name: Lint
         run: yarn lint
