@@ -32,7 +32,7 @@ export const Component: Story = {
     isSelected: false,
     isDisabled: false,
     variant: 'fill',
-    bofore: '',
+    before: '',
     after: '',
     // eslint-disable-next-line no-undefined
     borderRadius: undefined,
