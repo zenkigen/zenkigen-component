@@ -1,10 +1,28 @@
+import type { Meta, StoryObj } from '@storybook/react';
+
 import { Avatar } from '../avatar';
 import { Button } from '../button';
 import { Icon } from '../icon';
 import { Heading } from '.';
 
-export default {
+const meta: Meta<typeof Heading> = {
+  title: 'Components/Heading',
   component: Heading,
+};
+
+export default meta;
+type Story = StoryObj<typeof Heading>;
+
+export const Component: Story = {
+  args: {
+    level: 3,
+    children: 'タイトル',
+    before: '',
+    after: '',
+  },
+  parameters: {
+    chromatic: { disable: true },
+  },
 };
 
 export function Base() {
