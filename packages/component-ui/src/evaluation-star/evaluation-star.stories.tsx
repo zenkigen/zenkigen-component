@@ -1,9 +1,29 @@
 import { action } from '@storybook/addon-actions';
+import type { Meta, StoryObj } from '@storybook/react';
 
 import { EvaluationStar } from './evaluation-star';
 
-export default {
+const meta: Meta<typeof EvaluationStar> = {
+  title: 'Components/EvaluationStar',
   component: EvaluationStar,
+};
+export default meta;
+type Story = StoryObj<typeof EvaluationStar>;
+
+export const Component: Story = {
+  args: {
+    size: 'medium',
+    value: 3,
+    isEditable: true,
+  },
+  parameters: {
+    chromatic: { disable: true },
+  },
+  render: (args) => (
+    <div className="grid gap-y-8">
+      <EvaluationStar {...args} />
+    </div>
+  ),
 };
 
 export const Base = {

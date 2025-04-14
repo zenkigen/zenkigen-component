@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import type { IconName } from '@zenkigen-inc/component-icons';
 import { iconElements } from '@zenkigen-inc/component-icons';
 import { useState } from 'react';
@@ -7,6 +7,7 @@ import { Select } from './select';
 import type { SelectOption } from './type';
 
 const meta: Meta<typeof Select> = {
+  title: 'Components/Select',
   component: Select,
   argTypes: {
     width: {
@@ -21,12 +22,10 @@ const meta: Meta<typeof Select> = {
         .concat(['']),
       control: 'select',
     },
-    selectedOption: {
-      type: 'string',
-    },
   },
 };
 export default meta;
+type Story = StoryObj<typeof Select>;
 
 const optionsList = [
   { id: '1', label: '選択肢A', value: 'A', icon: 'add' as IconName },
@@ -42,6 +41,37 @@ const optionsList2 = [
   { id: '5', label: '選択肢E', value: 'E', icon: 'add' as IconName },
   { id: '6', label: '選択肢F', value: 'F', icon: 'add' as IconName },
 ];
+
+export const Component: Story = {
+  args: {
+    // eslint-disable-next-line no-undefined
+    placeholderIcon: undefined,
+    placeholder: '選択',
+    size: 'medium',
+    variant: 'outline',
+    width: '100%',
+    maxWidth: '',
+    optionListMaxHeight: '130px',
+    selectedOption: { id: '2', label: '選択肢B', value: 'B', icon: 'add' as IconName },
+    isOptionSelected: false,
+    isDisabled: false,
+    children: (
+      <>
+        {optionsList2.map((option) => (
+          <Select.Option key={option.id} option={option} />
+        ))}
+      </>
+    ),
+  },
+  parameters: {
+    chromatic: { disable: true },
+  },
+  render: (args) => (
+    <div style={{ height: '200px' }}>
+      <Select {...args} />
+    </div>
+  ),
+};
 
 export function Base() {
   const [selectedOption1, setSelectedOption1] = useState<SelectOption | null>(null);
