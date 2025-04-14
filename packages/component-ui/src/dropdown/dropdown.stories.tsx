@@ -1,6 +1,7 @@
 import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
 import type { IconName } from '@zenkigen-inc/component-icons';
+import { iconElements } from '@zenkigen-inc/component-icons';
 import clsx from 'clsx';
 import type { PropsWithChildren } from 'react';
 import { forwardRef, useRef, useState } from 'react';
@@ -14,7 +15,14 @@ import { Dropdown } from './dropdown';
 import type { DropdownItemType } from './type';
 
 const meta: Meta<typeof Dropdown> = {
+  title: 'Components/Dropdown',
   component: Dropdown,
+  argTypes: {
+    icon: {
+      options: [...Object.keys(iconElements).map((iconName) => iconName)],
+      control: 'select',
+    },
+  },
 };
 export default meta;
 type Story = StoryObj<typeof Dropdown>;
@@ -88,6 +96,35 @@ const items2: DropdownItemType[] = [
     onClick: action('選択項目6'),
   },
 ];
+
+export const Component: Story = {
+  args: {
+    size: 'medium',
+    variant: 'outline',
+    label: '選択',
+    isArrowHidden: false,
+    isDisabled: false,
+    // eslint-disable-next-line no-undefined
+    icon: undefined,
+    title: 'title',
+  },
+  parameters: {
+    chromatic: { disable: true },
+  },
+  render: (args) => (
+    <div style={{ height: '200px' }}>
+      <Dropdown {...args}>
+        <Dropdown.Menu horizontalAlign="left" maxHeight={120}>
+          {items2.map((item) => (
+            <Dropdown.Item key={item.id} onClick={item.onClick}>
+              {item.content}
+            </Dropdown.Item>
+          ))}
+        </Dropdown.Menu>
+      </Dropdown>
+    </div>
+  ),
+};
 
 const DropdownBasic = () => {
   return (
