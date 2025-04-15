@@ -11,7 +11,7 @@ const meta: Meta<typeof Heading> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof Button>;
+type Story = StoryObj<typeof Heading>;
 
 export const Component: Story = {
   args: {
