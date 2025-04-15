@@ -46,7 +46,8 @@ export const tokens = {
       "uiBorder02": "#CACCCD",
       "uiBorder02Dark": "#838789",
       "uiBorder03": "#A4A5A6",
-      "uiBorder03Dark": "#838789"
+      "uiBorder03Dark": "#838789",
+      "uiBorder04": "#838789"
     },
     "background": {
       "uiBackground01": "#FFFFFF",
@@ -87,7 +88,8 @@ export const tokens = {
       "interactive02": "#6F7476",
       "interactive02Dark": "#CACCCD",
       "interactive03": "#177EE5",
-      "interactive03Dark": "#838789"
+      "interactive03Dark": "#838789",
+      "interactive04": "#CACCCD"
     },
     "field": {
       "fieldInput": "#FFFFFF",
