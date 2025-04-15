@@ -24,7 +24,9 @@ export const Component: Story = {
   render: (args) => (
     <div className="flex items-center justify-center gap-x-4">
       <Tag {...args} id="1" />
-      <Tag variant={args.variant} children={args.children} color={args.color} id="2" isEditable onDelete={() => {}} />
+      <Tag variant={args.variant} color={args.color} id="2" isEditable onDelete={() => {}}>
+        {args.children}
+      </Tag>
     </div>
   ),
 };
