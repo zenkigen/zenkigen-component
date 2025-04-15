@@ -44,11 +44,8 @@ export const buttonColors = {
 
 export const iconColors = {
   icon01: 'fill-icon01',
-  icon01Dark: 'fill-icon01Dark',
   icon02: 'fill-icon02',
-  icon02Dark: 'fill-icon02Dark',
   icon03: 'fill-icon03',
-  icon03Dark: 'fill-icon03Dark',
   iconOnColor: 'fill-iconOnColor',
 } as const;
 
