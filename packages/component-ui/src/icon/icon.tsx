@@ -21,11 +21,8 @@ export const Icon = ({ size = 'medium', isDisabled = false, ...props }: Props) =
     {
       'fill-disabled01': isDisabled,
       [iconColors.icon01]: !isDisabled && props.color === 'icon01',
-      [iconColors.icon01Dark]: !isDisabled && props.color === 'icon01Dark',
       [iconColors.icon02]: !isDisabled && props.color === 'icon02',
-      [iconColors.icon02Dark]: !isDisabled && props.color === 'icon02Dark',
       [iconColors.icon03]: !isDisabled && props.color === 'icon03',
-      [iconColors.icon03Dark]: !isDisabled && props.color === 'icon03Dark',
       [iconColors.iconOnColor]: !isDisabled && props.color === 'iconOnColor',
       'w-3 h-3': size === 'x-small',
       'w-4 h-4': size === 'small',
