@@ -41,9 +41,10 @@ server.tool(
   '指定された ZENKIGEN Component (ZDC) のコンポーネント詳細情報を取得する',
   { name: z.string() },
   async ({ name }) => {
+    const componentName = name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
     // コンポーネントが実装されているファイルを取得する
     const componentsDir = path.join(rootDir, 'packages/component-ui/src');
-    const componentPath = path.join(componentsDir, name);
+    const componentPath = path.join(componentsDir, componentName);
 
     try {
       // コンポーネントディレクトリの存在確認
@@ -73,7 +74,7 @@ server.tool(
           {
             type: 'text',
             text: [
-              `Component: ${name}`,
+              `Component: ${componentName}`,
               `Directory: ${componentPath}`,
               `\nFiles:\n${files.join('\n')}\n`,
               `File contents:\n`,
@@ -87,27 +88,13 @@ server.tool(
         content: [
           {
             type: 'text',
-            text: `Component "${name}" not found. Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+            text: `Component "${componentName}" not found. Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
           },
         ],
       };
     }
   },
 );
-
-// get_component_detail を実行する際の prompt
-server.prompt('get_component_detail', {}, () => ({
-  messages: [
-    {
-      role: 'user', // user が assistant へ向けてのメッセージを渡している
-      content: {
-        type: 'text',
-        text: 'tool の get_component_detail を実行する際の引数は kebab-case で指定してください',
-        required: true,
-      },
-    },
-  ],
-}));
 
 // Start receiving messages on stdin and sending messages on stdout
 const transport = new StdioServerTransport();
