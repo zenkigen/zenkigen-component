@@ -15,11 +15,6 @@ ZENKIGEN Component で実装できるコンポーネントの一覧・詳細を�
   - 指定されたコンポーネント名のディレクトリ配下のファイルの中身を、読みやすく整形して返している
   - 複雑なコンポーネントになるとファイル容量が多くなり、レスポンスが重くなる可能性がある
 
-### Prompts
-
-- `get_component_detail` - Tools の `get_component_detail` を使用する際のプロンプト
-  - `get_component_list` で返されるコンポーネント名は `PascalCase` の為、 `get_component_detail` に Props として渡す値を `kebab-case` へ変換するように指示
-
 ## How to Use
 
 Install dependencies:
