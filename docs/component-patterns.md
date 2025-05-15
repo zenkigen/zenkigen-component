@@ -122,29 +122,6 @@ yarn storybook
 export * from './new-component';
 ```
 
-## 共通パターン
-
-### アクセシビリティ対応
-
-コンポーネントはアクセシビリティを考慮して設計されています。具体的には：
-
-- 適切なARIA属性の使用
-- キーボードナビゲーションのサポート
-- 十分なコントラスト比の確保
-
-### レスポンシブ対応
-
-コンポーネントは、様々な画面サイズに対応するレスポンシブな設計を採用しています。
-
-### バリエーションとプロパティ
-
-多くのコンポーネントは、以下のような共通プロパティを持っています：
-
-- **size**: サイズバリエーション（small、medium、large）
-- **variant**: 見た目のバリエーション（fill、outline、text）
-- **isDisabled**: 無効状態
-- **isSelected**: 選択状態
-
 ## コンポーネントの例
 
 ### Button
@@ -164,30 +141,5 @@ export * from './new-component';
   onChange={handleChange}
   isError={hasError}
   errorMessage="エラーメッセージ"
-/>
-```
-
-## 発展的な実装例
-
-より高度なコンポーネントは、内部状態を管理し、複雑なインタラクションをサポートしています：
-
-### Modal
-
-```tsx
-<Modal isOpen={isModalOpen} onClose={handleModalClose} title="モーダルタイトル">
-  <div>モーダルコンテンツ</div>
-</Modal>
-```
-
-### Select
-
-```tsx
-<Select
-  options={[
-    { value: '1', label: 'オプション1' },
-    { value: '2', label: 'オプション2' },
-  ]}
-  value={selectedValue}
-  onChange={handleSelectChange}
 />
 ```
