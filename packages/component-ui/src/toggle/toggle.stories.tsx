@@ -102,6 +102,43 @@ const ToggleStoryBasic = () => {
           isDisabled
         />
       </div>
+      <hr />
+      <div style={{ display: 'flex', columnGap: '30px' }}>
+        <Toggle
+          id="switch-02"
+          size="large"
+          label="ラベル2"
+          isChecked={isOn2}
+          onChange={() => setIsOn2((prev) => !prev)}
+        />
+        <Toggle
+          id="switch-02"
+          size="large"
+          label="ラベル2"
+          isChecked={isOn2}
+          onChange={() => setIsOn2((prev) => !prev)}
+          isDisabled
+        />
+      </div>
+      <div style={{ display: 'flex', columnGap: '30px' }}>
+        <Toggle
+          id="switch-02"
+          size="large"
+          label="ラベル2"
+          labelPosition="left"
+          isChecked={isOn2}
+          onChange={() => setIsOn2((prev) => !prev)}
+        />
+        <Toggle
+          id="switch-02"
+          size="large"
+          label="ラベル2"
+          labelPosition="left"
+          isChecked={isOn2}
+          onChange={() => setIsOn2((prev) => !prev)}
+          isDisabled
+        />
+      </div>
     </div>
   );
 };
