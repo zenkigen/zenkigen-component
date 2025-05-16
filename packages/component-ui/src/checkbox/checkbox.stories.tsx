@@ -1,9 +1,28 @@
+import type { Meta, StoryObj } from '@storybook/react';
 import { useCallback, useState } from 'react';
 
 import { Checkbox } from './checkbox';
 
-export default {
+const meta: Meta<typeof Checkbox> = {
+  title: 'Components/Checkbox',
   component: Checkbox,
+};
+
+export default meta;
+type Story = StoryObj<typeof Checkbox>;
+
+export const Component: Story = {
+  args: {
+    label: 'label',
+    color: 'default',
+    isChecked: false,
+    isIndeterminate: false,
+    isDisabled: false,
+    id: '1',
+  },
+  parameters: {
+    chromatic: { disable: true },
+  },
 };
 
 export function Base() {

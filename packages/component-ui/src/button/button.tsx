@@ -3,8 +3,8 @@ import { clsx } from 'clsx';
 import type { ComponentPropsWithoutRef, CSSProperties, ElementType, PropsWithChildren, ReactNode } from 'react';
 
 type Size = 'small' | 'medium' | 'large';
-
 type Variant = 'fill' | 'fillDanger' | 'outline' | 'text';
+type JustifyContent = 'start' | 'center';
 
 export type ElementAs = ElementType;
 
@@ -27,6 +27,7 @@ type Props<T extends ElementAs> = PolymorphicPropsWithoutRef<
     before?: ReactNode;
     after?: ReactNode;
     borderRadius?: CSSProperties['borderRadius'];
+    justifyContent?: JustifyContent;
   }
 >;
 
@@ -37,6 +38,7 @@ export const Button = <T extends ElementAs = 'button'>({
   isSelected = false,
   width,
   borderRadius,
+  justifyContent = 'center',
   before,
   after,
   elementAs,
@@ -44,7 +46,7 @@ export const Button = <T extends ElementAs = 'button'>({
   ...props
 }: Props<T>) => {
   const baseClasses = clsx(
-    'flex shrink-0 items-center justify-center gap-1',
+    'flex shrink-0 items-center gap-1',
     buttonColors[variant].hover,
     buttonColors[variant].active,
     buttonColors[variant].disabled,
@@ -60,6 +62,8 @@ export const Button = <T extends ElementAs = 'button'>({
         isSelected && variant !== 'outline' && variant !== 'text',
       'pointer-events-none': isDisabled,
       'rounded-button': borderRadius == null,
+      'justify-start': justifyContent === 'start',
+      'justify-center': justifyContent === 'center',
       'typography-label16regular': size === 'large',
       'typography-label14regular': size !== 'large',
     },

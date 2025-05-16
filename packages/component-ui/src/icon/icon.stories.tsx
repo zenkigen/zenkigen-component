@@ -1,9 +1,29 @@
+import type { Meta, StoryObj } from '@storybook/react';
 import type { iconColors } from '@zenkigen-inc/component-theme';
 
 import { Icon } from '.';
-export default { component: Icon };
 
 type Color = keyof typeof iconColors;
+
+const meta: Meta<typeof Icon> = {
+  title: 'Components/Icon',
+  component: Icon,
+};
+
+export default meta;
+type Story = StoryObj<typeof Icon>;
+
+export const Component: Story = {
+  args: {
+    size: 'medium',
+    name: 'information-filled',
+    color: 'icon01',
+    isDisabled: false,
+  },
+  parameters: {
+    chromatic: { disable: true },
+  },
+};
 
 type Props = {
   color?: Color;
@@ -135,12 +155,6 @@ export function Color() {
       <IconList color="icon02" />
       <div>icon03:</div>
       <IconList color="icon03" />
-      <div>icon01Dark:</div>
-      <IconList color="icon01Dark" className="bg-uiBackground01Dark" />
-      <div>icon02Dark:</div>
-      <IconList color="icon02Dark" className="bg-uiBackground01Dark" />
-      <div>icon03Dark:</div>
-      <IconList color="icon03Dark" className="bg-uiBackground01Dark" />
       <div>iconOnColor:</div>
       <IconList color="iconOnColor" className="bg-interactive01" />
     </div>
