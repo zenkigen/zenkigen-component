@@ -16,7 +16,7 @@ jobs:
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     env:
-      NODE_OPTIONS: --max_old_space_size=8192
+      NODE_OPTIONS: '--max-old-space-size=8192'
       RPT2_CLEAN: '1'
     steps:
       - uses: actions/checkout@main
@@ -43,7 +43,7 @@ jobs:
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     env:
-      NODE_OPTIONS: --max_old_space_size=8192
+      NODE_OPTIONS: '--max-old-space-size=8192'
       RPT2_CLEAN: '1'
     steps:
       - uses: actions/checkout@main
