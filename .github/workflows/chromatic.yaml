@@ -32,6 +32,8 @@ jobs:
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           onlyChanged: true
+        env:
+          IS_CHROMATIC: 'true'
 
       - name: Find Comment
         uses: peter-evans/find-comment@v3
