@@ -17,6 +17,22 @@ const preview: Preview = {
         locale: AXE_LOCALE_JA,
       },
     },
+    viewport: {
+      viewports: {
+        chromatic: {
+          name: 'Chromatic',
+          styles: {
+            width: '1200px',
+            height: '800px',
+          },
+        },
+      },
+      defaultViewport: 'chromatic',
+    },
+    chromatic: {
+      disableSnapshot: false,
+      delay: 300,
+    },
   },
   tags: ['autodocs'],
 };
