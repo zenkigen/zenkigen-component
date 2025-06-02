@@ -17,6 +17,18 @@ const config: StorybookConfig = {
   viteFinal: async (config) => {
     const { mergeConfig } = await import('vite');
 
+    if (process.env.IS_CHROMATIC === 'true') {
+      config.build ??= {};
+      config.build.minify = 'terser';
+      config.build.terserOptions = {
+        ...config.build.terserOptions,
+        // eslint-disable-next-line camelcase
+        keep_fnames: true,
+        // eslint-disable-next-line camelcase
+        mangle: { keep_fnames: true, keep_classnames: true },
+      };
+    }
+
     return mergeConfig(config, {
       plugins: [turbosnap({ rootDir: config.root ?? process.cwd() })],
       resolve: {
