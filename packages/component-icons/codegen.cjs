@@ -41,7 +41,7 @@ function generateIconFile(key, value) {
 * NOTE: This file is auto generated
 * Do not edit manually.
 */
-import React from 'react';
+import type React from 'react';
 
 export const ${componentName}: React.ReactElement = (
   ${value}
