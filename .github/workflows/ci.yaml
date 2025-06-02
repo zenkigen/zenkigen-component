@@ -15,9 +15,6 @@ jobs:
   type-check:
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
-    env:
-      NODE_OPTIONS: '--max-old-space-size=8192'
-      RPT2_CLEAN: '1'
     steps:
       - uses: actions/checkout@main
 
@@ -42,9 +39,6 @@ jobs:
   lint:
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
-    env:
-      NODE_OPTIONS: '--max-old-space-size=8192'
-      RPT2_CLEAN: '1'
     steps:
       - uses: actions/checkout@main
 
