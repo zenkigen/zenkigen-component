@@ -20,7 +20,14 @@ const compat = new FlatCompat({
 
 export default [
   {
-    ignores: ['packages/component-ui/dist', 'packages/component-config/dist'],
+    ignores: [
+      // 自動生成されるファイルは無視
+      'packages/component-ui/dist',
+      'packages/component-config/dist',
+      'packages/component-icons/dist',
+      'packages/component-icons/src/icon.tsx',
+      'packages/component-icons/src/icons/*.tsx',
+    ],
   },
   ...fixupConfigRules(
     compat.extends(
