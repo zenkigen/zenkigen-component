@@ -20,7 +20,7 @@ const compat = new FlatCompat({
 
 export default [
   {
-    ignores: ['packages/component-ui/dist', 'packages/component-config/dist'],
+    ignores: ['packages/component-ui/dist', 'packages/component-config/dist', 'packages/component-icons/dist'],
   },
   ...fixupConfigRules(
     compat.extends(
