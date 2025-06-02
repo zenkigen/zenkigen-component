@@ -24,7 +24,7 @@ async function processSvgFile(file) {
   $('[width]').removeAttr('width');
   $('[height]').removeAttr('height');
 
-  $('svg').attr('role', 'img').prepend(`\n<title>${key}</title>`);
+  $('svg').attr('role', 'img').prepend($('<title>').text(key));
 
   const value = $.xml('svg')
     .replaceAll('"{', '{')
