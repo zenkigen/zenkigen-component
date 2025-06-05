@@ -1,6 +1,10 @@
 import './globals.css';
 
 import type { Preview } from '@storybook/react';
+import AXE_LOCALE_JA from 'axe-core/locales/ja.json';
+import React from 'react';
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(globalThis as any).React = React;
 
 const preview: Preview = {
   parameters: {
@@ -9,6 +13,11 @@ const preview: Preview = {
       matchers: {
         color: /(background|color)$/i,
         date: /Date$/,
+      },
+    },
+    a11y: {
+      config: {
+        locale: AXE_LOCALE_JA,
       },
     },
   },
