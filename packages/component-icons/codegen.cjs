@@ -24,12 +24,14 @@ async function processSvgFile(file) {
   $('[width]').removeAttr('width');
   $('[height]').removeAttr('height');
 
-  $('svg').attr('role', 'img').prepend($('<title>').text(key));
+  // Create a dummy element to safely escape the text
+  const escapedKey = $('<div>').text(key).html();
+  $('svg').attr('role', 'img').attr('aria-label', escapedKey);
 
   const value = $.xml('svg')
     .replaceAll('"{', '{')
     .replaceAll('}"', '}')
-    .replaceAll(/[-]([a-z])/g, (_, x) => x.toUpperCase());
+    .replaceAll(/(?<!aria)[-]([a-z])/g, (_, x) => x.toUpperCase());
 
   return { key, value };
 }

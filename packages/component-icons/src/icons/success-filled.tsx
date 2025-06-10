@@ -5,7 +5,7 @@
 import type React from 'react';
 
 export const successfilledIcon: React.ReactElement = (
-  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img"><title>successFilled</title>
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="successFilled">
 <path fillRule="evenodd" clipRule="evenodd" d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22ZM16.7701 7.21131C17.0518 6.92956 17.5069 6.92956 17.7887 7.21131C18.0704 7.49305 18.0704 7.95541 17.7887 8.23715L9.57475 16.4511C9.43027 16.5884 9.24966 16.6606 9.06183 16.6606C8.874 16.6606 8.6934 16.5956 8.54891 16.4511L5.21131 13.1135C4.92956 12.8318 4.92956 12.3766 5.21131 12.0949C5.49305 11.8132 5.94818 11.8132 6.22993 12.0949L9.05461 14.9196L16.7701 7.21131Z"></path>
 </svg>
 );
