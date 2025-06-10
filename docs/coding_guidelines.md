@@ -218,24 +218,139 @@ const buttonClasses = clsx(
 
 ## 命名規約
 
+### 基本原則
+
+**直感的でわかりやすい名前を使用する**
+
+ディレクトリ名、ファイル名、変数名は以下の原則に従って命名します：
+
+```typescript
+// ✅ 良い例: 目的が明確で理解しやすい
+const userAccountBalance = 1000;
+const calculateTotalPrice = () => {};
+const isEmailValidationEnabled = true;
+
+// ❌ 悪い例: 略語や曖昧な名前
+const bal = 1000;
+const calc = () => {};
+const flag = true;
+```
+
 ### ファイル・ディレクトリ
 
-- **コンポーネントファイル**: PascalCase (`Button.tsx`)
-- **ユーティリティファイル**: camelCase (`formatDate.ts`)
-- **ディレクトリ**: kebab-case (`component-ui/`)
+**すべてkebab-caseで統一**
+
+- **コンポーネントファイル**: kebab-case (`button.tsx`, `user-profile.tsx`)
+- **ユーティリティファイル**: kebab-case (`format-date.ts`, `validate-email.ts`)
+- **ストーリーファイル**: kebab-case (`button.stories.tsx`)
+- **ディレクトリ**: kebab-case (`component-ui/`, `user-settings/`)
+
+```typescript
+// ✅ 良い例: kebab-caseで統一された分かりやすいファイル名
+user-account-modal.tsx
+email-validation-utils.ts
+shopping-cart/
+use-outside-click.ts
+
+// ❌ 悪い例: 他の命名規約や略語・曖昧な名前
+UserAccountModal.tsx  // PascalCase
+emailValidationUtils.ts  // camelCase
+UAM.tsx  // 略語
+utils.ts  // 曖昧
+cart/  // 略語
+```
 
 ### 変数・関数
+
+**基本的な命名規則**
 
 ```typescript
 // ✅ 良い例: camelCase
 const userName = 'john';
-const handleSubmit = () => {};
+const currentUserRole = 'admin';
+const maxRetryAttempts = 3;
+```
 
-// ✅ 良い例: Boolean変数のプレフィックス
-const isLoading = false;
-const hasError = true;
-const canEdit = true;
-const shouldRender = false;
+**関数名は「動詞＋目的語」の形式**
+
+```typescript
+// ✅ 良い例: 動詞＋目的語
+const calculateTotalPrice = () => {};
+const validateEmailAddress = () => {};
+const fetchUserData = () => {};
+const updateUserProfile = () => {};
+const deleteShoppingCartItem = () => {};
+
+// ❌ 悪い例: 動詞のみ、または曖昧な名前
+const calculate = () => {};
+const validate = () => {};
+const process = () => {};
+const handle = () => {};
+```
+
+**イベントハンドラーの命名**
+
+イベントハンドラーのcallback関数は `handle[イベント名]` の形式を使用：
+
+```typescript
+// ✅ 良い例: handleイベント名
+const handleClick = () => {};
+const handleSubmit = () => {};
+const handleChange = () => {};
+const handleMouseEnter = () => {};
+const handleFormSubmit = () => {};
+const handleButtonClick = () => {};
+
+// ❌ 悪い例: handleプレフィックスなし
+const onClick = () => {};
+const onSubmit = () => {};
+const clickHandler = () => {};
+```
+
+**React コンポーネントでの使用例**
+
+```typescript
+// ✅ 良い例
+const LoginForm = () => {
+  const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
+    // メール入力の処理
+  };
+
+  const handleFormSubmit = (event: FormEvent) => {
+    // フォーム送信の処理
+  };
+
+  const handlePasswordVisibilityToggle = () => {
+    // パスワード表示切り替えの処理
+  };
+
+  return (
+    <form onSubmit={handleFormSubmit}>
+      <input onChange={handleEmailChange} />
+      <button type="button" onClick={handlePasswordVisibilityToggle}>
+        Toggle Password
+      </button>
+    </form>
+  );
+};
+```
+
+**Boolean型変数のプレフィックス**
+
+Boolean型の変数は以下のプレフィックスを使用：
+
+```typescript
+// ✅ 良い例
+const isUserLoggedIn = true;
+const shouldShowErrorMessage = false;
+const hasValidationErrors = true;
+const canSubmitForm = false;
+const isEmailNotificationEnabled = true;
+
+// ❌ 悪い例
+const loggedIn = true;
+const showError = false;
+const errors = true;
 ```
 
 ### 定数
