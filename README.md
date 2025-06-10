@@ -84,6 +84,7 @@ const MyComponent = () => {
 - [プロジェクト構造](./docs/project-structure.md) - パッケージ構成と相互関係
 - [コンポーネント実装パターン](./docs/component-patterns.md) - 設計パターンと実装方針
 - [テーマシステム](./docs/theme-system.md) - テーマとTailwind CSS設定
+- [コーディングガイドライン](./docs/coding_guidelines.md) - 開発時のコーディング標準と規約
 
 ## Storybookでのコンポーネント確認
 
