@@ -11,7 +11,7 @@ export function SelectList({ children, maxHeight }: PropsWithChildren<Props>) {
   const ref = useRef<HTMLUListElement>(null);
   const { size, selectedOption, setIsOptionListOpen, variant, placeholder, onChange } = useContext(SelectContext);
   const [computedMaxHeight, setComputedMaxHeight] = useState<CSSProperties['height']>(maxHeight);
-  const [showAbove, setShowAbove] = useState(false);
+  const [isShowingAbove, setIsShowingAbove] = useState(false);
 
   const handleClickDeselect = () => {
     onChange?.(null);
@@ -19,10 +19,10 @@ export function SelectList({ children, maxHeight }: PropsWithChildren<Props>) {
   };
 
   useLayoutEffect(() => {
-    if (ref.current) {
+    if (ref.current !== null) {
       // Select要素（親要素）を取得
       const selectButton = ref.current.parentElement;
-      if (!selectButton) return;
+      if (selectButton === null) return;
 
       const buttonRect = selectButton.getBoundingClientRect();
       const viewportHeight = window.innerHeight;
@@ -36,26 +36,26 @@ export function SelectList({ children, maxHeight }: PropsWithChildren<Props>) {
       // 基本は下に表示、下側に十分なスペースがない場合のみ上に表示
       const minRequiredSpace = 150; // 下側に最低限必要なスペース
       const shouldShowAbove = spaceBelow < minRequiredSpace && spaceAbove > 100;
-      setShowAbove(shouldShowAbove);
+      setIsShowingAbove(shouldShowAbove);
 
       // 利用可能スペースに基づいてmaxHeightを計算
-      const availableHeight = shouldShowAbove ? spaceAbove : spaceBelow;
+      const availableHeight = shouldShowAbove === true ? spaceAbove : spaceBelow;
       let finalMaxHeight = availableHeight;
 
       // propsでmaxHeightが指定されている場合は、小さい方を使用
-      if (maxHeight != null) {
+      if (maxHeight !== null) {
         const maxHeightValue = typeof maxHeight === 'string' ? parseInt(maxHeight, 10) : maxHeight;
-        finalMaxHeight = Math.min(availableHeight, maxHeightValue);
+        finalMaxHeight = Math.min(availableHeight, maxHeightValue ?? 0);
       }
 
       setComputedMaxHeight(finalMaxHeight);
 
       // 選択されたオプションへのスクロール処理
-      if (computedMaxHeight != null) {
+      if (computedMaxHeight !== null) {
         const element = Array.from(ref.current.children ?? []).find(
           (item) => item.getAttribute('data-id') === selectedOption?.id,
         );
-        if (element != null && ref.current.scroll != null) {
+        if (ref.current.scroll !== null && element instanceof Element) {
           const wrapRect = ref.current.getBoundingClientRect();
           const rect = element.getBoundingClientRect();
           ref.current.scroll(0, rect.top - wrapRect.top - wrapRect.height / 2 + rect.height / 2);
@@ -69,13 +69,13 @@ export function SelectList({ children, maxHeight }: PropsWithChildren<Props>) {
     'absolute z-dropdown w-max min-w-full overflow-y-auto rounded bg-uiBackground01 py-2 shadow-floatingShadow',
     {
       // 下に表示する場合のtop位置
-      'top-7': !showAbove && (size === 'x-small' || size === 'small'),
-      'top-9': !showAbove && size === 'medium',
-      'top-11': !showAbove && size === 'large',
+      'top-7': isShowingAbove === false && (size === 'x-small' || size === 'small'),
+      'top-9': isShowingAbove === false && size === 'medium',
+      'top-11': isShowingAbove === false && size === 'large',
       // 上に表示する場合のbottom位置
-      'bottom-7': showAbove && (size === 'x-small' || size === 'small'),
-      'bottom-9': showAbove && size === 'medium',
-      'bottom-11': showAbove && size === 'large',
+      'bottom-7': isShowingAbove === true && (size === 'x-small' || size === 'small'),
+      'bottom-9': isShowingAbove === true && size === 'medium',
+      'bottom-11': isShowingAbove === true && size === 'large',
       'border-solid border border-uiBorder01': variant === 'outline',
     },
   );
