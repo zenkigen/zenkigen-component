@@ -57,5 +57,5 @@ jobs:
       - name: Build
         run: yarn build:all
 
-      - name: Lint
-        run: yarn lint
+      - name: Lint and filename check
+        run: yarn lint:all
