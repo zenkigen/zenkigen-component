@@ -1,9 +1,11 @@
+import type { IconName } from '@zenkigen-inc/component-icons';
 import { clsx } from 'clsx';
-import type { ComponentPropsWithoutRef, ReactNode } from 'react';
+import type { ComponentPropsWithoutRef } from 'react';
 import { useState } from 'react';
+
 import { SegmentedControlItem } from './segmented-control-item';
 
-export type SegmentedOption = { id: string; label?: string; value: string; icon?: ReactNode; isDisabled?: boolean };
+export type SegmentedOption = { id: string; label?: string; value: string; icon?: IconName; isDisabled?: boolean };
 
 export type SegmentedControlsProps = ComponentPropsWithoutRef<'div'> & {
   options: SegmentedOption[];
@@ -28,7 +30,11 @@ export const SegmentedControls = ({
 }: SegmentedControlsProps) => {
   const [hoveredValue, setHoveredValue] = useState<string | null>(null);
 
-  const containerClasses = clsx('inline-flex rounded-lg bg-uiBackground02 p-1', { 'w-full': fullWidth }, className);
+  const containerClasses = clsx(
+    'inline-flex gap-1 rounded-lg bg-uiBackground02 p-1',
+    { 'w-full': fullWidth },
+    className,
+  );
 
   const handleOptionClick = (value: string) => {
     if (!isDisabled) {
@@ -56,7 +62,6 @@ export const SegmentedControls = ({
         return (
           <SegmentedControlItem
             key={option.id}
-            id={option.id}
             label={option.label}
             value={option.value}
             icon={option.icon}
@@ -68,7 +73,7 @@ export const SegmentedControls = ({
             onMouseEnter={() => handleOptionMouseEnter(option.value)}
             onMouseLeave={handleOptionMouseLeave}
             onClick={handleOptionClick}
-            className={fullWidth ? 'flex-1' : undefined}
+            className={fullWidth ? 'flex-1' : ''}
           />
         );
       })}

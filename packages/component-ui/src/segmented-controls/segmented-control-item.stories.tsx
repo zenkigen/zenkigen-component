@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react';
+
 import { SegmentedControlItem } from './segmented-control-item';
 
 const meta = {
-  title: 'UI/SegmentedControlItem',
+  title: 'Components/SegmentedControlItem',
   component: SegmentedControlItem,
   parameters: { layout: 'centered' },
   tags: ['autodocs'],
   argTypes: {
-    id: { control: 'text', description: 'Unique identifier for the item' },
     label: { control: 'text', description: 'Text label for the item' },
     value: { control: 'text', description: 'Value associated with the item' },
     icon: { control: 'text', description: 'Icon to display' },
@@ -25,7 +25,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    id: 'item1',
     label: 'ボタンラベル',
     value: 'item1',
     isSelected: false,
@@ -38,7 +37,6 @@ export const Default: Story = {
 
 export const Selected: Story = {
   args: {
-    id: 'item1',
     label: 'ボタンラベル',
     value: 'item1',
     isSelected: true,
@@ -51,7 +49,6 @@ export const Selected: Story = {
 
 export const Hovered: Story = {
   args: {
-    id: 'item1',
     label: 'ボタンラベル',
     value: 'item1',
     isSelected: false,
@@ -64,7 +61,6 @@ export const Hovered: Story = {
 
 export const Disabled: Story = {
   args: {
-    id: 'item1',
     label: 'ボタンラベル',
     value: 'item1',
     isSelected: false,
@@ -77,7 +73,6 @@ export const Disabled: Story = {
 
 export const Small: Story = {
   args: {
-    id: 'item1',
     label: 'ボタンラベル',
     value: 'item1',
     isSelected: false,
@@ -90,10 +85,9 @@ export const Small: Story = {
 
 export const WithIcon: Story = {
   args: {
-    id: 'item1',
     label: 'リスト',
     value: 'item1',
-    icon: '📋',
+    icon: 'list' as const,
     isSelected: false,
     isDisabled: false,
     isHovered: false,
@@ -104,9 +98,8 @@ export const WithIcon: Story = {
 
 export const IconOnly: Story = {
   args: {
-    id: 'item1',
     value: 'item1',
-    icon: '+',
+    icon: 'add' as const,
     isSelected: false,
     isDisabled: false,
     isHovered: false,
@@ -117,9 +110,8 @@ export const IconOnly: Story = {
 
 export const IconOnlySelected: Story = {
   args: {
-    id: 'item1',
     value: 'item1',
-    icon: '+',
+    icon: 'add' as const,
     isSelected: true,
     isDisabled: false,
     isHovered: false,

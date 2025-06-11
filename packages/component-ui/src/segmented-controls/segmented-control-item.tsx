@@ -1,12 +1,14 @@
+import type { IconName } from '@zenkigen-inc/component-icons';
 import { focusVisible } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
-import type { ComponentPropsWithoutRef, ReactNode } from 'react';
+import type { ComponentPropsWithoutRef } from 'react';
+
+import { Icon } from '../icon';
 
 export type SegmentedControlItemProps = Omit<ComponentPropsWithoutRef<'button'>, 'onClick'> & {
-  id: string;
   label?: string;
   value: string;
-  icon?: ReactNode;
+  icon?: IconName;
   isSelected?: boolean;
   isDisabled?: boolean;
   isHovered?: boolean;
@@ -18,7 +20,6 @@ export type SegmentedControlItemProps = Omit<ComponentPropsWithoutRef<'button'>,
 };
 
 export const SegmentedControlItem = ({
-  id,
   label,
   value,
   icon,
@@ -46,7 +47,7 @@ export const SegmentedControlItem = ({
       'px-2 w-9': variant === 'iconOnly' && size === 'medium', // spacing/2 = 8px (px-2), width 36px
 
       // States - Selected (Figmaの"Select"状態)
-      'bg-interactive01 text-textOnColor': isSelected && !isDisabled,
+      'bg-uiBackground01 text-interactive01': isSelected && !isDisabled,
 
       // States - Hover (Figmaの"Hover"状態)
       'bg-hover02': isHovered && !isSelected && !isDisabled,
@@ -82,19 +83,19 @@ export const SegmentedControlItem = ({
       onMouseLeave={onMouseLeave}
       {...props}
     >
-      {icon && (
+      {Boolean(icon) && icon && (
         <span
           className={clsx('flex items-center', {
-            'text-textOnColor': isSelected && !isDisabled,
-            'text-icon01': !isSelected && !isDisabled,
-            'text-disabled01': isDisabled,
-            'mr-1.5': variant === 'default' && label,
+            'mr-1.5': variant === 'default' && Boolean(label),
+            'fill-disabled01': isDisabled,
+            'fill-interactive01': isSelected && !isDisabled,
+            'fill-icon01': !isSelected && !isDisabled,
           })}
         >
-          {icon}
+          <Icon name={icon} size={size === 'small' ? 'small' : 'medium'} />
         </span>
       )}
-      {variant === 'default' && label && <span>{label}</span>}
+      {variant === 'default' && Boolean(label) && <span>{label}</span>}
     </button>
   );
 };
