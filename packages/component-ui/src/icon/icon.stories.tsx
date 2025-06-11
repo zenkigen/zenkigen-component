@@ -266,6 +266,18 @@ export function ColorFill() {
       <div>Monochrome:</div>
       <IconList className="fill-black" />
       <IconList className="bg-gray-gray100 fill-white" />
+
+      {/* style fill */}
+      <div>style fill:</div>
+      <div style={{ fill: 'red' }}>
+        <IconList />
+      </div>
+      <div style={{ fill: 'blue' }}>
+        <IconList />
+      </div>
+      <div style={{ fill: 'green' }}>
+        <IconList />
+      </div>
     </div>
   );
 }
