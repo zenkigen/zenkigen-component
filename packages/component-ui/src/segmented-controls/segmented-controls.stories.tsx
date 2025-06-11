@@ -9,7 +9,6 @@ const meta = {
   parameters: { layout: 'centered' },
   tags: ['autodocs'],
   argTypes: {
-    options: { control: 'object', description: 'Array of segmented control options' },
     selectedValue: { control: 'text', description: 'Currently selected value' },
     size: { control: 'radio', options: ['small', 'medium'], description: 'Size of the segmented controls' },
     isDisabled: { control: 'boolean', description: 'Whether the segmented controls are disabled' },
@@ -21,98 +20,112 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// Figmaのデザインに合わせた日本語ラベル
-const defaultOptions = [
-  { id: 'option1', label: 'ボタンラベル', value: 'option1' },
-  { id: 'option2', label: 'ボタンラベル', value: 'option2' },
-  { id: 'option3', label: 'ボタンラベル', value: 'option3' },
-];
+// Component for reusable story logic
+const SegmentedControlsExample = ({
+  initialValue = 'option1',
+  size = 'medium' as const,
+  variant = 'default' as const,
+  isDisabled = false,
+  fullWidth = false,
+  children,
+}: {
+  initialValue?: string;
+  size?: 'small' | 'medium';
+  variant?: 'default' | 'iconOnly';
+  isDisabled?: boolean;
+  fullWidth?: boolean;
+  children: React.ReactNode;
+}) => {
+  const [selectedValue, setSelectedValue] = useState(initialValue);
 
-// addアイコンを使用したアイコンオンリーオプション
-const iconOnlyOptions = [
-  { id: 'add1', icon: 'add' as const, value: 'add1' },
-  { id: 'add2', icon: 'add' as const, value: 'add2' },
-  { id: 'add3', icon: 'add' as const, value: 'add3' },
-];
-
-export const Default: Story = {
-  render: (args) => {
-    const [selectedValue, setSelectedValue] = useState('option1');
-
-    return <SegmentedControls {...args} selectedValue={selectedValue} onChange={setSelectedValue as any} />;
-  },
-  args: { options: defaultOptions, size: 'small', isDisabled: false, fullWidth: false, variant: 'default' },
+  return (
+    <SegmentedControls
+      selectedValue={selectedValue}
+      onChange={(value: string) => setSelectedValue(value)}
+      size={size}
+      variant={variant}
+      isDisabled={isDisabled}
+      fullWidth={fullWidth}
+    >
+      {children}
+    </SegmentedControls>
+  );
 };
 
-export const Small: Story = {
-  render: (args) => {
-    const [selectedValue, setSelectedValue] = useState('option2');
-
-    return <SegmentedControls {...args} selectedValue={selectedValue} onChange={setSelectedValue as any} />;
-  },
-  args: { options: defaultOptions, size: 'small', isDisabled: false, fullWidth: false, variant: 'default' },
+// Compound Component Pattern Examples
+export const CompoundDefault: Story = {
+  render: () => (
+    <SegmentedControlsExample>
+      <SegmentedControls.Item label="ボタンラベル" value="option1" />
+      <SegmentedControls.Item label="ボタンラベル" value="option2" />
+      <SegmentedControls.Item label="ボタンラベル" value="option3" />
+    </SegmentedControlsExample>
+  ),
+  args: {},
 };
 
-export const Medium: Story = {
-  render: (args) => {
-    const [selectedValue, setSelectedValue] = useState('option1');
-
-    return <SegmentedControls {...args} selectedValue={selectedValue} onChange={setSelectedValue as any} />;
-  },
-  args: { options: defaultOptions, size: 'medium', isDisabled: false, fullWidth: false, variant: 'default' },
+export const CompoundSmall: Story = {
+  render: () => (
+    <SegmentedControlsExample initialValue="option2" size="small">
+      <SegmentedControls.Item label="ボタンラベル" value="option1" />
+      <SegmentedControls.Item label="ボタンラベル" value="option2" />
+      <SegmentedControls.Item label="ボタンラベル" value="option3" />
+    </SegmentedControlsExample>
+  ),
+  args: {},
 };
 
-export const IconOnly: Story = {
-  render: (args) => {
-    const [selectedValue, setSelectedValue] = useState('add1');
-
-    return <SegmentedControls {...args} selectedValue={selectedValue} onChange={setSelectedValue as any} />;
-  },
-  args: { options: iconOnlyOptions, size: 'medium', isDisabled: false, fullWidth: false, variant: 'iconOnly' },
+export const CompoundIconOnly: Story = {
+  render: () => (
+    <SegmentedControlsExample initialValue="add1" variant="iconOnly">
+      <SegmentedControls.Item icon="add" value="add1" />
+      <SegmentedControls.Item icon="add" value="add2" />
+      <SegmentedControls.Item icon="add" value="add3" />
+    </SegmentedControlsExample>
+  ),
+  args: {},
 };
 
-export const IconOnlySmall: Story = {
-  render: (args) => {
-    const [selectedValue, setSelectedValue] = useState('add2');
-
-    return <SegmentedControls {...args} selectedValue={selectedValue} onChange={setSelectedValue as any} />;
-  },
-  args: { options: iconOnlyOptions, size: 'small', isDisabled: false, fullWidth: false, variant: 'iconOnly' },
+export const CompoundWithIcons: Story = {
+  render: () => (
+    <SegmentedControlsExample initialValue="list">
+      <SegmentedControls.Item label="リスト" value="list" icon="list" />
+      <SegmentedControls.Item label="グリッド" value="grid" icon="table" />
+      <SegmentedControls.Item label="カード" value="card" icon="documents" />
+    </SegmentedControlsExample>
+  ),
+  args: {},
 };
 
-export const FullWidth: Story = {
-  render: (args) => {
-    const [selectedValue, setSelectedValue] = useState('option1');
-
-    return <SegmentedControls {...args} selectedValue={selectedValue} onChange={setSelectedValue as any} />;
-  },
-  args: { options: defaultOptions, size: 'medium', isDisabled: false, fullWidth: true, variant: 'default' },
+export const CompoundFullWidth: Story = {
+  render: () => (
+    <SegmentedControlsExample fullWidth>
+      <SegmentedControls.Item label="ボタンラベル" value="option1" />
+      <SegmentedControls.Item label="ボタンラベル" value="option2" />
+      <SegmentedControls.Item label="ボタンラベル" value="option3" />
+    </SegmentedControlsExample>
+  ),
+  args: {},
 };
 
-export const Disabled: Story = {
-  render: (args) => {
-    const [selectedValue, setSelectedValue] = useState('option1');
-
-    return <SegmentedControls {...args} selectedValue={selectedValue} onChange={setSelectedValue as any} />;
-  },
-  args: { options: defaultOptions, size: 'medium', isDisabled: true, fullWidth: false, variant: 'default' },
+export const CompoundDisabled: Story = {
+  render: () => (
+    <SegmentedControlsExample isDisabled>
+      <SegmentedControls.Item label="ボタンラベル" value="option1" />
+      <SegmentedControls.Item label="ボタンラベル" value="option2" />
+      <SegmentedControls.Item label="ボタンラベル" value="option3" />
+    </SegmentedControlsExample>
+  ),
+  args: {},
 };
 
-export const WithIcons: Story = {
-  render: (args) => {
-    const [selectedValue, setSelectedValue] = useState('list');
-
-    return <SegmentedControls {...args} selectedValue={selectedValue} onChange={setSelectedValue as any} />;
-  },
-  args: {
-    options: [
-      { id: 'list', label: 'リスト', value: 'list', icon: 'list' as const },
-      { id: 'grid', label: 'グリッド', value: 'grid', icon: 'table' as const },
-      { id: 'card', label: 'カード', value: 'card', icon: 'documents' as const },
-    ],
-    size: 'medium',
-    isDisabled: false,
-    fullWidth: false,
-    variant: 'default',
-  },
+export const CompoundPartiallyDisabled: Story = {
+  render: () => (
+    <SegmentedControlsExample>
+      <SegmentedControls.Item label="ボタンラベル" value="option1" />
+      <SegmentedControls.Item label="ボタンラベル" value="option2" isDisabled />
+      <SegmentedControls.Item label="ボタンラベル" value="option3" />
+    </SegmentedControlsExample>
+  ),
+  args: {},
 };

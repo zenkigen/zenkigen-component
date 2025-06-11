@@ -1,14 +1,36 @@
 import type { IconName } from '@zenkigen-inc/component-icons';
 import { clsx } from 'clsx';
-import type { ComponentPropsWithoutRef } from 'react';
-import { useState } from 'react';
+import type { ComponentPropsWithoutRef, ReactNode } from 'react';
+import { createContext, useContext, useState } from 'react';
 
 import { SegmentedControlItem } from './segmented-control-item';
 
-export type SegmentedOption = { id: string; label?: string; value: string; icon?: IconName; isDisabled?: boolean };
+// Context for managing segmented controls state
+type SegmentedControlsContextValue = {
+  selectedValue?: string;
+  onChange?: (value: string) => void;
+  size: 'small' | 'medium';
+  isDisabled: boolean;
+  variant: 'default' | 'iconOnly';
+  fullWidth: boolean;
+  hoveredValue: string | null;
+  setHoveredValue: (value: string | null) => void;
+};
 
-export type SegmentedControlsProps = ComponentPropsWithoutRef<'div'> & {
-  options: SegmentedOption[];
+const SegmentedControlsContext = createContext<SegmentedControlsContextValue | null>(null);
+
+const useSegmentedControlsContext = () => {
+  const context = useContext(SegmentedControlsContext);
+  if (context === null) {
+    throw new Error('SegmentedControls.Item must be used within SegmentedControls');
+  }
+
+  return context;
+};
+
+// Types
+export type SegmentedControlsProps = Omit<ComponentPropsWithoutRef<'div'>, 'onChange'> & {
+  children: ReactNode;
   selectedValue?: string;
   onChange?: (value: string) => void;
   size?: 'small' | 'medium';
@@ -17,8 +39,16 @@ export type SegmentedControlsProps = ComponentPropsWithoutRef<'div'> & {
   variant?: 'default' | 'iconOnly';
 };
 
+export type SegmentedControlsItemProps = Omit<ComponentPropsWithoutRef<'button'>, 'onClick'> & {
+  label?: string;
+  value: string;
+  icon?: IconName;
+  isDisabled?: boolean;
+};
+
+// Main Component
 export const SegmentedControls = ({
-  options,
+  children,
   selectedValue,
   onChange,
   size = 'medium',
@@ -36,47 +66,80 @@ export const SegmentedControls = ({
     className,
   );
 
-  const handleOptionClick = (value: string) => {
-    if (!isDisabled) {
-      onChange?.(value);
+  const contextValue: SegmentedControlsContextValue = {
+    selectedValue,
+    onChange,
+    size,
+    isDisabled,
+    variant,
+    fullWidth,
+    hoveredValue,
+    setHoveredValue,
+  };
+
+  return (
+    <SegmentedControlsContext.Provider value={contextValue}>
+      <div className={containerClasses} role="tablist" {...props}>
+        {children}
+      </div>
+    </SegmentedControlsContext.Provider>
+  );
+};
+
+// Item Component
+const Item = ({ label, value, icon, isDisabled: itemDisabled, className, ...props }: SegmentedControlsItemProps) => {
+  const {
+    selectedValue,
+    onChange,
+    size,
+    isDisabled: isContextDisabled,
+    variant,
+    fullWidth: isFullWidth,
+    hoveredValue,
+    setHoveredValue,
+  } = useSegmentedControlsContext();
+
+  const isSelected = selectedValue === value;
+  const isHovered = hoveredValue === value;
+  const isOptionDisabled = isContextDisabled || itemDisabled === true;
+
+  const handleClick = (clickedValue: string) => {
+    if (!isOptionDisabled) {
+      onChange?.(clickedValue);
     }
   };
 
-  const handleOptionMouseEnter = (value: string) => {
-    if (!isDisabled) {
+  const handleMouseEnter = () => {
+    if (!isOptionDisabled) {
       setHoveredValue(value);
     }
   };
 
-  const handleOptionMouseLeave = () => {
+  const handleMouseLeave = () => {
     setHoveredValue(null);
   };
 
   return (
-    <div className={containerClasses} role="tablist" {...props}>
-      {options.map((option) => {
-        const isSelected = selectedValue === option.value;
-        const isHovered = hoveredValue === option.value;
-        const isOptionDisabled = isDisabled || option.isDisabled;
-
-        return (
-          <SegmentedControlItem
-            key={option.id}
-            label={option.label}
-            value={option.value}
-            icon={option.icon}
-            isSelected={isSelected}
-            isDisabled={isOptionDisabled}
-            isHovered={isHovered}
-            size={size}
-            variant={variant}
-            onMouseEnter={() => handleOptionMouseEnter(option.value)}
-            onMouseLeave={handleOptionMouseLeave}
-            onClick={handleOptionClick}
-            className={fullWidth ? 'flex-1' : ''}
-          />
-        );
-      })}
-    </div>
+    <SegmentedControlItem
+      label={label}
+      value={value}
+      icon={icon}
+      isSelected={isSelected}
+      isDisabled={isOptionDisabled}
+      isHovered={isHovered}
+      size={size}
+      variant={variant}
+      onMouseEnter={handleMouseEnter as () => void}
+      onMouseLeave={handleMouseLeave as () => void}
+      onClick={handleClick}
+      className={clsx(isFullWidth && 'flex-1', className)}
+      {...props}
+    />
   );
 };
+
+// Attach Item to SegmentedControls
+SegmentedControls.Item = Item;
+
+// Legacy support - Keep original types for backward compatibility
+export type SegmentedOption = { id: string; label?: string; value: string; icon?: IconName; isDisabled?: boolean };
