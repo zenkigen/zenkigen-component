@@ -6,7 +6,7 @@ type Props = TextareaHTMLAttributes<HTMLTextAreaElement> & {
   size?: 'medium' | 'large';
   value: string;
   height?: CSSProperties['height'];
-  autoResize?: boolean;
+  autoHeight?: boolean;
   isResizable?: boolean;
   isError?: boolean;
 };
@@ -16,7 +16,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, Props>(
     {
       size = 'medium',
       isResizable = false,
-      autoResize = false,
+      autoHeight = false,
       isError = false,
       disabled = false,
       height,
@@ -34,15 +34,15 @@ export const TextArea = forwardRef<HTMLTextAreaElement, Props>(
     };
 
     useEffect(() => {
-      if ((typeof height !== 'undefined' && height !== null && !autoResize) || !internalRef.current) return;
+      if ((typeof height !== 'undefined' && height !== null && !autoHeight) || !internalRef.current) return;
       const textarea = internalRef.current;
       textarea.style.height = 'auto';
-      if (autoResize) {
+      if (autoHeight) {
         textarea.style.minHeight = `${height}px`;
       } else {
         textarea.style.height = `${textarea.scrollHeight}px`;
       }
-    }, [value, height, autoResize]);
+    }, [value, height, autoHeight]);
 
     const classes = clsx(
       'min-h-0 w-full rounded border outline-0 placeholder:text-textPlaceholder disabled:text-textPlaceholder',
@@ -64,7 +64,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, Props>(
           ref={setRefs}
           className={classes}
           {...props}
-          style={{ ...(autoResize ? { ['fieldSizing' as unknown as keyof CSSProperties]: 'content' } : {}) }}
+          style={{ ...(autoHeight ? { ['fieldSizing' as unknown as keyof CSSProperties]: 'content' } : {}) }}
           value={value}
           disabled={disabled}
         />
