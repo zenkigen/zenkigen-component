@@ -282,7 +282,7 @@ export const Base: Story = {
                 setValue4(e.target.value);
               }}
             />
-            <ErrorText>自動リサイズ</ErrorText>
+            <ErrorText>自動リサイズ + 高さ指定あり</ErrorText>
           </div>
         </div>
       </div>

@@ -45,7 +45,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, Props>(
     }, [value, height, autoHeight]);
 
     const classes = clsx(
-      'min-h-0 w-full rounded border outline-0 placeholder:text-textPlaceholder disabled:text-textPlaceholder',
+      'w-full rounded border outline-0 placeholder:text-textPlaceholder disabled:text-textPlaceholder',
       {
         'border-supportError': isError && !disabled,
         'hover:border-hoverInput': !disabled && !isError,
