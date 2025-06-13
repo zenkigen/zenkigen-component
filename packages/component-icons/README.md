@@ -66,13 +66,13 @@ yarn build:all
 
 ### 4. アイコンの利用
 
-ビルド後、追加したアイコンは `iconElements` オブジェクトから使用できます:
+ビルド後、追加したアイコンは Icon コンポーネントで利用できます:
 
 ```tsx
-import { iconElements } from '@zenkigen-inc/component-icons';
+import { Icon } from '@zenkigen-inc/component-ui';
 
 // 追加したアイコンを表示
-<div>{iconElements['new-icon-name']}</div>;
+<Icon name="new-icon-name" />;
 ```
 
 アイコン名は、ファイル名から拡張子を除いたものになります (例: `arrow-right.svg` → `'arrow-right'`)
