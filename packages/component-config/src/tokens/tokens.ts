@@ -125,7 +125,8 @@ export const tokens = {
       "hoverLink01": "#1366B9",
       "hoverLink01Dark": "#9FCBF5",
       "hoverLink02": "#6F7476",
-      "hoverLink02Dark": "#DEDFE0"
+      "hoverLink02Dark": "#DEDFE0",
+      "hoverGray": "#454A4D"
     },
     "active": {
       "active01": "#0E4B87",
