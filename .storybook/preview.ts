@@ -8,6 +8,9 @@ import React from 'react';
 
 const preview: Preview = {
   parameters: {
+    chromatic: {
+      diffThreshold: 0.1,
+    },
     actions: { argTypesRegex: '^on[A-Z].*' },
     controls: {
       matchers: {
