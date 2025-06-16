@@ -8,6 +8,10 @@ import React from 'react';
 
 const preview: Preview = {
   parameters: {
+    chromatic: {
+      // プロジェクト全体の既定値（まずはデフォルト）
+      diffThreshold: 0.1,
+    },
     actions: { argTypesRegex: '^on[A-Z].*' },
     controls: {
       matchers: {
