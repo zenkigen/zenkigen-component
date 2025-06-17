@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { userEvent } from '@storybook/test';
 import { useState } from 'react';
 
 import { Toggle } from '.';
@@ -145,4 +146,24 @@ const ToggleStoryBasic = () => {
 
 export const Base: Story = {
   render: () => <ToggleStoryBasic />,
+};
+
+export const StateHover: Story = {
+  args: {
+    id: 'switch-01',
+    size: 'medium',
+    label: 'label',
+    isChecked: false,
+    isDisabled: false,
+  },
+  play: async ({ canvasElement }) => {
+    const toggleElement = canvasElement.querySelector('#switch-01');
+
+    if (toggleElement == null) {
+      throw new Error('Toggle element not found');
+    }
+
+    // hover時の状態をキャプチャ
+    await userEvent.hover(toggleElement);
+  },
 };
