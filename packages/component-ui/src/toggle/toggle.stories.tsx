@@ -157,13 +157,7 @@ export const StateHover: Story = {
     isDisabled: false,
   },
   play: async ({ canvasElement }) => {
-    const toggleElement = canvasElement.querySelector('#switch-01');
-
-    if (toggleElement == null) {
-      throw new Error('Toggle element not found');
-    }
-
     // hover時の状態をキャプチャ
-    await userEvent.hover(toggleElement);
+    await userEvent.hover(canvasElement);
   },
 };
