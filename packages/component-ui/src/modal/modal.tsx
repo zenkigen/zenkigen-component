@@ -2,6 +2,7 @@ import type { CSSProperties, MutableRefObject, PropsWithChildren } from 'react';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
+import { BodyScrollLock } from './body-scroll-lock';
 import { ModalBody } from './modal-body';
 import { ModalContext } from './modal-context';
 import { ModalFooter } from './modal-footer';
@@ -28,8 +29,10 @@ export function Modal({ children, width = 480, height, isOpen, onClose, portalTa
     setIsMounted(true);
   }, []);
 
-  return isMounted && isOpen
-    ? createPortal(
+  return isMounted && isOpen ? (
+    <>
+      <BodyScrollLock />
+      {createPortal(
         <ModalContext.Provider value={{ onClose }}>
           <div className="fixed left-0 top-0 z-overlay flex size-full items-center justify-center bg-backgroundOverlayBlack py-4">
             <div
@@ -41,8 +44,9 @@ export function Modal({ children, width = 480, height, isOpen, onClose, portalTa
           </div>
         </ModalContext.Provider>,
         portalTargetRef?.current != null ? portalTargetRef.current : document.body,
-      )
-    : null;
+      )}
+    </>
+  ) : null;
 }
 
 Modal.Body = ModalBody;

@@ -24,7 +24,7 @@ export function Toggle({
     'bg-disabledOn': isDisabled && isChecked,
     'bg-disabled01': isDisabled && !isChecked,
     'bg-interactive01 peer-hover:bg-hover01': !isDisabled && isChecked,
-    'bg-interactive02 peer-hover:bg-hover02Dark': !isDisabled && !isChecked,
+    'bg-interactive02 peer-hover:bg-hoverGray': !isDisabled && !isChecked,
     'w-8 h-4 px-[3px]': size === 'small',
     'w-12 h-6 px-1': size === 'medium' || size === 'large',
   });
