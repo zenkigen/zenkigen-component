@@ -4,12 +4,12 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { Icon } from '../icon';
 import { IconButton } from '../icon-button';
-import type { ToastState } from './type';
+import type { SnackbarState } from './type';
 
 const CLOSE_TIME_MSEC = 5000;
 
 type Props = {
-  state?: ToastState;
+  state?: SnackbarState;
   width?: CSSProperties['width'];
   isAutoClose?: boolean;
   isAnimation?: boolean;
@@ -17,11 +17,7 @@ type Props = {
   onClickClose: () => void;
 };
 
-/**
- * @deprecated Toast コンポーネントは非推奨です。代わりに Snackbar を使用してください。
- * Toast component is deprecated. Use Snackbar instead.
- */
-export function Toast({
+export function Snackbar({
   state = 'information',
   width = 'auto',
   isAutoClose = false,
@@ -43,8 +39,8 @@ export function Toast({
     window.getComputedStyle(e.currentTarget).opacity === '0' && onClickClose();
 
   const wrapperClasses = clsx('pointer-events-auto flex items-start gap-1 bg-white p-4 shadow-floatingShadow', {
-    ['animate-toast-in']: isAnimation && !isRemoving,
-    ['animate-toast-out opacity-0']: isAnimation && isRemoving,
+    ['animate-snackbar-in']: isAnimation && !isRemoving,
+    ['animate-snackbar-out opacity-0']: isAnimation && isRemoving,
   });
   const iconClasses = clsx('flex items-center', {
     'fill-supportSuccess': state === 'success',
