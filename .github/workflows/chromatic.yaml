@@ -32,6 +32,7 @@ jobs:
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           onlyChanged: true
+          interactionTests: true
         env:
           IS_CHROMATIC: 'true'
 
