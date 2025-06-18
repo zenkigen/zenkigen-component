@@ -17,6 +17,10 @@ type Props = {
   onClickClose: () => void;
 };
 
+/**
+ * @deprecated Toast コンポーネントは非推奨です。代わりに Snackbar を使用してください。
+ * Toast component is deprecated. Use Snackbar instead.
+ */
 export function Toast({
   state = 'information',
   width = 'auto',

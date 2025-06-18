@@ -124,6 +124,26 @@ export const tailwindConfig = {
             transform: 'translate3d(-50%, 0, 0)',
           },
         },
+        'snackbar-in': {
+          from: {
+            opacity: 0,
+            transform: 'translate3d(-10%, 0, 0)',
+          },
+          to: {
+            opacity: 1,
+            transform: 'translate3d(0, 0, 0)',
+          },
+        },
+        'snackbar-out': {
+          from: {
+            opacity: 1,
+            transform: 'translate3d(0, 0, 0)',
+          },
+          to: {
+            opacity: 0,
+            transform: 'translate3d(-50%, 0, 0)',
+          },
+        },
       },
       animation: {
         'circular-small-move': 'circular-small-move 1.4s ease-in-out infinite',
@@ -131,6 +151,8 @@ export const tailwindConfig = {
         'circular-large-move': 'circular-large-move 1.4s ease-in-out infinite',
         'toast-in': 'toast-in 0.25s cubic-bezier(.11, .57, .14, 1)',
         'toast-out': 'toast-out 0.25s cubic-bezier(0, .14, .75, 1)',
+        'snackbar-in': 'snackbar-in 0.25s cubic-bezier(.11, .57, .14, 1)',
+        'snackbar-out': 'snackbar-out 0.25s cubic-bezier(0, .14, .75, 1)',
       },
       zIndex: {
         hide: -1,
@@ -144,6 +166,7 @@ export const tailwindConfig = {
         modal: 1100,
         preloader: 1200,
         toast: 1300,
+        snackbar: 1300,
         tooltip: 1400,
       },
     },

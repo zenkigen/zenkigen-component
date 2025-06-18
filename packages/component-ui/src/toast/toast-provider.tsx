@@ -14,6 +14,10 @@ type ToastProviderProps = {
 
 const ToastContext = createContext<ToastProviderProps>({} as ToastProviderProps);
 
+/**
+ * @deprecated ToastProvider は非推奨です。代わりに SnackbarProvider を使用してください。
+ * ToastProvider is deprecated. Use SnackbarProvider instead.
+ */
 export const ToastProvider = ({ children }: PropsWithChildren) => {
   const [isClientRender, setIsClientRender] = useState(false);
   const [toasts, setToasts] = useState<{ id: number; message: string; state: ToastState }[]>([]);
@@ -48,6 +52,10 @@ export const ToastProvider = ({ children }: PropsWithChildren) => {
   );
 };
 
+/**
+ * @deprecated useToast は非推奨です。代わりに useSnackbar を使用してください。
+ * useToast is deprecated. Use useSnackbar instead.
+ */
 export const useToast = () => {
   return useContext(ToastContext);
 };
