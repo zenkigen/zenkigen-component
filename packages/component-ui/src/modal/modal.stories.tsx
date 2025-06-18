@@ -16,6 +16,42 @@ type Story = StoryObj<typeof Modal>;
 
 export default meta;
 
+export const Component: Story = {
+  args: {
+    width: 480,
+  },
+  parameters: {
+    chromatic: { disable: true },
+  },
+  render: function MyFunc({ ...args }) {
+    const [isOpen, setIsOpen] = useState(true);
+
+    return (
+      <div>
+        <button type="button" onClick={() => setIsOpen(true)}>
+          open
+        </button>
+        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} width={args.width}>
+          <Modal.Header>タイトル</Modal.Header>
+          <Modal.Body>
+            <div className="flex w-full items-center justify-center py-20">Content</div>
+          </Modal.Body>
+          <Modal.Footer>
+            <div className="flex w-full flex-wrap items-center justify-end gap-4">
+              <Button variant="outline" size="large" onClick={action('キャンセル')}>
+                キャンセル
+              </Button>
+              <Button variant="fill" size="large" onClick={action('保存する')}>
+                保存する
+              </Button>
+            </div>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    );
+  },
+};
+
 export const Base: Story = {
   args: {
     width: 480,
@@ -28,6 +64,9 @@ export const Base: Story = {
         <button type="button" onClick={() => setIsOpen(true)}>
           open
         </button>
+        {Array.from({ length: 41 }, (_, i) => (
+          <br key={i} />
+        ))}
         <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} width={args.width}>
           <Modal.Header>タイトル</Modal.Header>
           <Modal.Body>
