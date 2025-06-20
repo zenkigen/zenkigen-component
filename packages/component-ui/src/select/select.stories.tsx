@@ -51,7 +51,8 @@ export const Component: Story = {
     variant: 'outline',
     width: '100%',
     maxWidth: '',
-    optionListMaxHeight: '130px',
+    // eslint-disable-next-line no-undefined
+    optionListMaxHeight: undefined,
     selectedOption: { id: '2', label: '選択肢B', value: 'B', icon: 'add' as IconName },
     isOptionSelected: false,
     isDisabled: false,
