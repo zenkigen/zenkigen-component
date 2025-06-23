@@ -14,6 +14,7 @@ const config: StorybookConfig = {
     name: '@storybook/react-vite',
     options: {},
   },
+  staticDirs: [{ from: '../node_modules/@fontsource-variable/noto-sans-jp', to: '/fonts' }],
   viteFinal: async (config) => {
     const { mergeConfig } = await import('vite');
 
