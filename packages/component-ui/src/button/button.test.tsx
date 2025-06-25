@@ -81,6 +81,6 @@ describe('Button', () => {
     render(<Button>フォーカスボタン</Button>);
     (document.activeElement as HTMLElement)?.blur();
     await user.tab();
-    expect(screen.getByRole('button', { name: 'フォーカスボタンx' })).toHaveFocus();
+    expect(screen.getByRole('button', { name: 'フォーカスボタン' })).toHaveFocus();
   });
 });
