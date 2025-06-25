@@ -3416,12 +3416,16 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zenkigen-inc/component-ui@workspace:packages/component-ui"
   dependencies:
+    "@testing-library/jest-dom": "npm:6.4.0"
+    "@testing-library/react": "npm:15.0.0"
+    "@testing-library/user-event": "npm:14.6.1"
     "@zenkigen-inc/component-icons": "npm:1.15.0"
     "@zenkigen-inc/component-theme": "npm:1.15.0"
     clsx: "npm:2.1.1"
     hygen: "npm:6.2.11"
     microbundle: "npm:0.15.1"
     typescript: "npm:5.8.3"
+    vitest: "npm:3.2.4"
   peerDependencies:
     react: ^18.0.0 || ^19.0.0
     react-dom: ^18.0.0 || ^19.0.0
