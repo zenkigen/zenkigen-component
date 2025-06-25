@@ -6,6 +6,7 @@
   "publishConfig": {
     "access": "public"
   },
+  "type": "module",
   "source": "./src/index.ts",
   "main": "./dist/index.js",
   "module": "./dist/index.esm.js",
@@ -15,7 +16,8 @@
     "type-check": "tsc --noEmit",
     "generate-component": "hygen generator components",
     "build": "rimraf dist && microbundle --no-compress -f modern,esm,cjs --jsx React.createElement --jsxFragment React.Fragment --jsxImportSource react --globals react/jsx-runtime=jsx --tsconfig tsconfig.build.json --external none",
-    "build-lib": "rimraf dist && microbundle --no-compress -f modern,esm,cjs --jsx React.createElement --jsxFragment React.Fragment --jsxImportSource react --globals react/jsx-runtime=jsx --tsconfig tsconfig.build.json"
+    "build-lib": "rimraf dist && microbundle --no-compress -f modern,esm,cjs --jsx React.createElement --jsxFragment React.Fragment --jsxImportSource react --globals react/jsx-runtime=jsx --tsconfig tsconfig.build.json",
+    "test": "vitest"
   },
   "devDependencies": {
     "hygen": "6.2.11",

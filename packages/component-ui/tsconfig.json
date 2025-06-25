@@ -4,5 +4,5 @@
     "lib": ["dom", "esnext"],
     "jsx": "preserve"
   },
-  "include": ["./src"]
+  "include": ["./src", "./test-setup.ts", "./vitest.config.ts"]
 }
