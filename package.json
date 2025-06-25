@@ -16,8 +16,12 @@
     "create-component": "yarn workspace @zenkigen-inc/component-ui hygen generator components",
     "update-tokens": "yarn workspace @zenkigen-inc/component-config run build:tokens",
     "test": "yarn workspace @zenkigen-inc/component-ui run test",
+    "test:ci": "yarn workspace @zenkigen-inc/component-ui run test:ci",
     "build-storybook": "storybook build",
     "clean": "rimraf node_modules"
+  },
+  "resolutions": {
+    "vite": "5.4.19"
   },
   "devDependencies": {
     "@babel/core": "7.27.1",
