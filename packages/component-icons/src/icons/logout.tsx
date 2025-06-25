@@ -2,7 +2,7 @@
 * NOTE: This file is auto generated
 * Do not edit manually.
 */
-import type React from 'react';
+import React from 'react';
 
 export const logoutIcon: React.ReactElement = (
   <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="logout">
