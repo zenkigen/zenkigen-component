@@ -51,7 +51,9 @@ export function Base() {
   return (
     <div>
       <div className="mt-2 flex items-center gap-2">
-        <Button size="small">ボタンラベル</Button>
+        <Button size="small" className="border-2 border-black bg-yellow-500">
+          ボタンラベル
+        </Button>
         <Button size="small" before={<Icon name="add" size="small" />}>
           ボタンラベル
         </Button>
