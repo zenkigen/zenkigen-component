@@ -20,6 +20,9 @@
     "build-storybook": "storybook build",
     "clean": "rimraf node_modules"
   },
+  "resolutions": {
+    "vite": "5.4.19"
+  },
   "devDependencies": {
     "@babel/core": "7.27.1",
     "@babel/preset-env": "7.27.2",
