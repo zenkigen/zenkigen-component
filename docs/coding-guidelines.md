@@ -106,11 +106,12 @@ const render = false;
 
 ```typescript
 // ✅ 良い例
-if (value !== undefined) { ... }
+if (typeof value !== 'undefined') { ... }
 if (array.length > 0) { ... }
 if (user?.isActive === true) { ... }
 
 // ❌ 悪い例
+if (value !== undefined) { ... }
 if (value) { ... }
 if (array.length) { ... }
 if (user?.isActive) { ... }
