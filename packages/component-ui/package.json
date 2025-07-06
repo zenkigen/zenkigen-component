@@ -3,7 +3,6 @@
   "version": "1.15.1",
   "repository": "https://github.com/zenkigen/zenkigen-component",
   "license": "MIT",
-  "type": "module",
   "publishConfig": {
     "access": "public"
   },
