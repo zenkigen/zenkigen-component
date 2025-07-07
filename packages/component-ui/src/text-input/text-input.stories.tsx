@@ -43,6 +43,7 @@ export const Component: Story = {
             onClickClearButton={() => {
               setValue('');
             }}
+            className="border-2 border-black bg-yellow-500"
           />
         </div>
       </div>

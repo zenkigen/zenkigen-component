@@ -33,7 +33,7 @@ type Props = {
 function IconList(props: Props) {
   return (
     <div className={props.className}>
-      <Icon name="add" color={props.color} />
+      <Icon name="add" color={props.color} className="border-2 border-black bg-yellow-500" />
       <Icon name="ai" color={props.color} />
       <Icon name="angle-down" color={props.color} />
       <Icon name="angle-left" color={props.color} />
