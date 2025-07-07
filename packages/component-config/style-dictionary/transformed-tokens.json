@@ -533,6 +533,11 @@
         "value": "#DEDFE0",
         "type": "color",
         "description": "hover secondary link - Dark"
+      },
+      "HoverGray": {
+        "value": "#454A4D",
+        "type": "color",
+        "description": "Hover Checkbox, Toggle"
       }
     },
     "Active": {
