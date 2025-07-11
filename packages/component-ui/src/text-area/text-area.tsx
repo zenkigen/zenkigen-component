@@ -1,6 +1,6 @@
 import { clsx } from 'clsx';
 import type { CSSProperties, TextareaHTMLAttributes } from 'react';
-import { forwardRef, useEffect, useRef } from 'react';
+import { forwardRef, useRef } from 'react';
 
 type Props = TextareaHTMLAttributes<HTMLTextAreaElement> & {
   size?: 'medium' | 'large';
@@ -35,8 +35,6 @@ export const TextArea = forwardRef<HTMLTextAreaElement, Props>(
     }: Props,
     ref,
   ) => {
-    const shouldSetFixedHeight = !autoHeight && typeof height !== 'undefined' && height !== null;
-
     const internalRef = useRef<HTMLTextAreaElement>(null);
     // refの統合
     const setRefs = (el: HTMLTextAreaElement) => {
@@ -44,19 +42,6 @@ export const TextArea = forwardRef<HTMLTextAreaElement, Props>(
       else if (ref) (ref as React.MutableRefObject<HTMLTextAreaElement | null>).current = el;
       internalRef.current = el;
     };
-
-    useEffect(() => {
-      if (!internalRef.current) return;
-      const textarea = internalRef.current;
-
-      if (autoHeight) {
-        textarea.style.minHeight = `${height}px`;
-      }
-
-      if (shouldSetFixedHeight) {
-        textarea.style.height = `${height}px`;
-      }
-    }, [height, autoHeight, shouldSetFixedHeight]);
 
     const classes = clsx(
       'w-full rounded border outline-0 placeholder:text-textPlaceholder disabled:text-textPlaceholder',
@@ -81,6 +66,10 @@ export const TextArea = forwardRef<HTMLTextAreaElement, Props>(
           {...props}
           style={{
             ...{ maxHeight },
+            // 自動高さではない場合で、height 指定がある場合は設定する
+            ...(!autoHeight && height !== null ? { height } : {}),
+            // 自動高さの場合で、height が指定されている場合は、height を minHeight に設定する
+            ...(autoHeight && height !== null ? { minHeight: height } : {}),
           }}
           value={value}
           disabled={disabled}
