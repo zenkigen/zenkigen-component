@@ -34,12 +34,12 @@ type Story = StoryObj<typeof TextArea>;
 export const Component: Story = {
   args: {
     size: 'medium',
+    placeholder: 'placeholder',
     height: 'auto',
     autoHeight: false,
     isResizable: false,
     isError: false,
     disabled: false,
-    placeholder: 'placeholder',
   },
   parameters: {
     chromatic: { disable: true },
