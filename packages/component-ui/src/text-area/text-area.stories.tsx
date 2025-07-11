@@ -73,7 +73,6 @@ export const Base: Story = {
   render: function MyFunc({ ...args }) {
     const [value, setValue] = useState<string>(args.value);
     const [value2, setValue2] = useState<string>('入力した文字列。');
-    const [value3, setValue3] = useState<string>('入力した文字列。');
 
     return (
       <div className="flex gap-10">
@@ -149,7 +148,7 @@ export const Base: Story = {
           </div>
           <div>
             <TextArea
-              value={value3}
+              value={value2}
               placeholder="入力してください"
               size="medium"
               height={120}
@@ -157,7 +156,7 @@ export const Base: Story = {
               disabled
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                 action('onChange')(e);
-                setValue3(e.target.value);
+                setValue2(e.target.value);
               }}
             />
             <ErrorText>入力済み ＋ disabled</ErrorText>
