@@ -9,6 +9,23 @@ import { TextArea } from '.';
 const meta: Meta<typeof TextArea> = {
   title: 'Components/TextArea',
   component: TextArea,
+  parameters: {
+    docs: {
+      source: {
+        code: ``,
+      },
+    },
+  },
+  argTypes: {
+    size: { control: 'select', options: ['medium', 'large'], description: 'サイズ' },
+    value: { control: 'text', description: '値' },
+    height: { control: 'text', description: '高さ' },
+    autoHeight: { control: 'boolean', description: '自動リサイズ' },
+    maxHeight: { control: 'text', description: '最大高さ（autoHeightがtrueの場合のみ有効）' },
+    isResizable: { control: 'boolean', description: 'リサイズ可能かどうか（autoHeightがtrueの場合は無効）' },
+    isError: { control: 'boolean', description: 'エラーかどうか' },
+    disabled: { control: 'boolean', description: '無効かどうか' },
+  },
 };
 
 export default meta;
@@ -17,11 +34,12 @@ type Story = StoryObj<typeof TextArea>;
 export const Component: Story = {
   args: {
     size: 'medium',
-    placeholder: 'placeholder',
     height: 'auto',
+    autoHeight: false,
     isResizable: false,
     isError: false,
     disabled: false,
+    placeholder: 'placeholder',
   },
   parameters: {
     chromatic: { disable: true },
@@ -56,7 +74,6 @@ export const Base: Story = {
     const [value, setValue] = useState<string>(args.value);
     const [value2, setValue2] = useState<string>('入力した文字列。');
     const [value3, setValue3] = useState<string>('入力した文字列。');
-    const [value4, setValue4] = useState<string>('入力した文字列。');
 
     return (
       <div className="flex gap-10">
@@ -145,33 +162,6 @@ export const Base: Story = {
             />
             <ErrorText>入力済み ＋ disabled</ErrorText>
           </div>
-          <div>
-            <TextArea
-              value={value2}
-              placeholder="入力してください"
-              size="medium"
-              autoHeight
-              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
-                action('onChange')(e);
-                setValue2(e.target.value);
-              }}
-            />
-            <ErrorText>自動リサイズ</ErrorText>
-          </div>
-          <div>
-            <TextArea
-              value={value4}
-              placeholder="入力してください"
-              size="medium"
-              height={120}
-              autoHeight
-              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
-                action('onChange')(e);
-                setValue4(e.target.value);
-              }}
-            />
-            <ErrorText>自動リサイズ + 高さ指定あり</ErrorText>
-          </div>
         </div>
         <div style={{ width: 400 }} className="flex flex-col gap-12">
           <div>
@@ -257,34 +247,35 @@ export const Base: Story = {
             />
             <ErrorText>入力済み ＋ disabled</ErrorText>
           </div>
-          <div>
-            <TextArea
-              value={value3}
-              placeholder="入力してください"
-              size="large"
-              autoHeight
-              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
-                action('onChange')(e);
-                setValue3(e.target.value);
-              }}
-            />
-            <ErrorText>自動リサイズ</ErrorText>
-          </div>
-          <div>
-            <TextArea
-              value={value4}
-              placeholder="入力してください"
-              size="large"
-              height={120}
-              autoHeight
-              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
-                action('onChange')(e);
-                setValue4(e.target.value);
-              }}
-            />
-            <ErrorText>自動リサイズ + 高さ指定あり</ErrorText>
-          </div>
         </div>
+      </div>
+    );
+  },
+};
+
+export const AutoHeight: Story = {
+  args: {
+    size: 'large',
+    autoHeight: true,
+    placeholder: '入力してください',
+    height: '',
+    maxHeight: '120px',
+    isError: false,
+    disabled: false,
+  },
+  render: function MyFunc({ ...args }) {
+    const [value, setValue] = useState<string>(args.value);
+
+    return (
+      <div style={{ width: 400 }} className="flex flex-col">
+        <TextArea
+          {...args}
+          value={value}
+          onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+            action('onChange')(e);
+            setValue(e.target.value);
+          }}
+        />
       </div>
     );
   },

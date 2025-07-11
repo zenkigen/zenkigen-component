@@ -6,10 +6,19 @@ type Props = TextareaHTMLAttributes<HTMLTextAreaElement> & {
   size?: 'medium' | 'large';
   value: string;
   height?: CSSProperties['height'];
-  autoHeight?: boolean;
-  isResizable?: boolean;
   isError?: boolean;
-};
+} & (
+    | {
+        autoHeight: true;
+        maxHeight?: CSSProperties['maxHeight'];
+        isResizable?: never;
+      }
+    | {
+        autoHeight?: false;
+        maxHeight?: never;
+        isResizable?: boolean;
+      }
+  );
 
 export const TextArea = forwardRef<HTMLTextAreaElement, Props>(
   (
@@ -17,6 +26,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, Props>(
       size = 'medium',
       isResizable = false,
       autoHeight = false,
+      maxHeight,
       isError = false,
       disabled = false,
       height,
@@ -25,6 +35,8 @@ export const TextArea = forwardRef<HTMLTextAreaElement, Props>(
     }: Props,
     ref,
   ) => {
+    const shouldSetFixedHeight = !autoHeight && typeof height !== 'undefined' && height !== null;
+
     const internalRef = useRef<HTMLTextAreaElement>(null);
     // refの統合
     const setRefs = (el: HTMLTextAreaElement) => {
@@ -34,15 +46,17 @@ export const TextArea = forwardRef<HTMLTextAreaElement, Props>(
     };
 
     useEffect(() => {
-      if ((typeof height !== 'undefined' && height !== null && !autoHeight) || !internalRef.current) return;
+      if (!internalRef.current) return;
       const textarea = internalRef.current;
-      textarea.style.height = 'auto';
+
       if (autoHeight) {
         textarea.style.minHeight = `${height}px`;
-      } else {
-        textarea.style.height = `${textarea.scrollHeight}px`;
       }
-    }, [value, height, autoHeight]);
+
+      if (shouldSetFixedHeight) {
+        textarea.style.height = `${height}px`;
+      }
+    }, [height, autoHeight, shouldSetFixedHeight]);
 
     const classes = clsx(
       'w-full rounded border outline-0 placeholder:text-textPlaceholder disabled:text-textPlaceholder',
@@ -53,6 +67,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, Props>(
         'bg-disabled02 border-disabled01': disabled,
         'typography-body14regular px-2 pt-1.5 pb-2': size === 'medium',
         'text-4 leading-normal px-3.5 py-2.5': size === 'large',
+        'field-sizing-content': autoHeight,
         'text-supportError': isError,
         'resize-none': !isResizable,
       },
@@ -64,7 +79,9 @@ export const TextArea = forwardRef<HTMLTextAreaElement, Props>(
           ref={setRefs}
           className={classes}
           {...props}
-          style={{ ...(autoHeight ? { ['fieldSizing' as unknown as keyof CSSProperties]: 'content' } : {}) }}
+          style={{
+            ...{ maxHeight },
+          }}
           value={value}
           disabled={disabled}
         />
