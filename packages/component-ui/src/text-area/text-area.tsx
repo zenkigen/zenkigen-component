@@ -35,14 +35,6 @@ export const TextArea = forwardRef<HTMLTextAreaElement, Props>(
     }: Props,
     ref,
   ) => {
-    const internalRef = useRef<HTMLTextAreaElement>(null);
-    // refの統合
-    const setRefs = (el: HTMLTextAreaElement) => {
-      if (typeof ref === 'function') ref(el);
-      else if (ref) (ref as React.MutableRefObject<HTMLTextAreaElement | null>).current = el;
-      internalRef.current = el;
-    };
-
     const classes = clsx(
       'w-full rounded border outline-0 placeholder:text-textPlaceholder disabled:text-textPlaceholder',
       {
@@ -61,7 +53,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, Props>(
     return (
       <div className="flex">
         <textarea
-          ref={setRefs}
+          ref={ref}
           className={classes}
           {...props}
           style={{
