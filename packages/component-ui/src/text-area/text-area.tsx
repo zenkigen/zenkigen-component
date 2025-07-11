@@ -1,6 +1,6 @@
 import { clsx } from 'clsx';
 import type { CSSProperties, TextareaHTMLAttributes } from 'react';
-import { forwardRef, useRef } from 'react';
+import { forwardRef } from 'react';
 
 type Props = TextareaHTMLAttributes<HTMLTextAreaElement> & {
   size?: 'medium' | 'large';
