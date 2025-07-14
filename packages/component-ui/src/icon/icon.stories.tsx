@@ -66,7 +66,7 @@ function IconList(props: Props) {
       <Icon name="delete" color={props.color} />
       <Icon name="document" color={props.color} />
       <Icon name="documents" color={props.color} />
-      <Icon name="double circle" color={props.color} />
+      <Icon name="double-circle" color={props.color} />
       <Icon name="download-document" color={props.color} />
       <Icon name="download" color={props.color} />
       <Icon name="edit" color={props.color} />
