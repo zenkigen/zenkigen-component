@@ -30,7 +30,6 @@ export const TextArea = forwardRef<HTMLTextAreaElement, Props>(
       isError = false,
       disabled = false,
       height,
-      value,
       ...props
     }: Props,
     ref,
