@@ -63,8 +63,6 @@ export const TextArea = forwardRef<HTMLTextAreaElement, Props>(
             // 自動高さの場合で、height が指定されている場合は、height を minHeight に設定する
             ...(autoHeight && height !== null ? { minHeight: height } : {}),
           }}
-          value={value}
-          disabled={disabled}
         />
       </div>
     );
