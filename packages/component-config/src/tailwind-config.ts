@@ -149,7 +149,12 @@ export const tailwindConfig = {
     },
   },
   plugins: [
-    plugin(({ addComponents }) => {
+    plugin(({ addUtilities, addComponents }) => {
+      addUtilities({
+        '.field-sizing-content': {
+          fieldSizing: 'content',
+        },
+      });
       addComponents(
         Object.entries(typography).reduce(
           (acc, [, innerObj]) => (
