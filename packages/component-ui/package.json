@@ -1,6 +1,6 @@
 {
   "name": "@zenkigen-inc/component-ui",
-  "version": "1.14.5",
+  "version": "1.15.1",
   "repository": "https://github.com/zenkigen/zenkigen-component",
   "license": "MIT",
   "publishConfig": {
@@ -8,18 +8,28 @@
   },
   "source": "./src/index.ts",
   "main": "./dist/index.js",
-  "module": "./dist/index.esm.js",
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-  "exports": "./dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
   "scripts": {
     "type-check": "tsc --noEmit",
     "generate-component": "hygen generator components",
-    "build": "rimraf dist && microbundle --no-compress -f modern,esm,cjs --jsx React.createElement --jsxFragment React.Fragment --jsxImportSource react --globals react/jsx-runtime=jsx --tsconfig tsconfig.build.json --external none",
-    "build-lib": "rimraf dist && microbundle --no-compress -f modern,esm,cjs --jsx React.createElement --jsxFragment React.Fragment --jsxImportSource react --globals react/jsx-runtime=jsx --tsconfig tsconfig.build.json"
+    "build": "rimraf dist && tsup",
+    "build-lib": "rimraf dist && tsup",
+    "test": "vitest",
+    "test:ci": "vitest run"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "6.4.0",
+    "@testing-library/react": "15.0.0",
+    "@testing-library/user-event": "14.6.1",
     "hygen": "6.2.11",
-    "microbundle": "0.15.1",
+    "tsup": "8.5.0",
     "typescript": "5.8.3"
   },
   "peerDependencies": {
@@ -27,8 +37,8 @@
     "react-dom": "^18.0.0 || ^19.0.0"
   },
   "dependencies": {
-    "@zenkigen-inc/component-icons": "1.14.5",
-    "@zenkigen-inc/component-theme": "1.14.5",
+    "@zenkigen-inc/component-icons": "1.15.1",
+    "@zenkigen-inc/component-theme": "1.15.1",
     "clsx": "2.1.1"
   }
 }
