@@ -1,5 +1,5 @@
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
-import React, { Children } from 'react';
+import React, { Children, useRef } from 'react';
 
 import { useRovingFocus } from '../hooks/use-roving-focus';
 import type { SegmentedControlContextValue } from './segmented-control-context';
@@ -24,6 +24,8 @@ export const SegmentedControl = ({
   'aria-label': ariaLabel,
   ...rest
 }: SegmentedControlProps) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
   // 子要素からidのリストを抽出（isDisabled: trueの要素は除外）
   const itemIds = Children.toArray(children)
     .filter((child): child is React.ReactElement<{ value: string; isDisabled?: boolean }> => {
@@ -44,7 +46,12 @@ export const SegmentedControl = ({
   const childrenCount = Children.count(children);
   const containerStyle = { gridTemplateColumns: `repeat(${childrenCount}, minmax(0,1fr))` };
 
-  const { focusedValue, handleFocusChange, handleKeyDown, handleBlur } = useRovingFocus({
+  const {
+    focusedValue,
+    handleFocusChange,
+    handleKeyDown,
+    handleBlur: handleBlurRovingFocus,
+  } = useRovingFocus({
     values: itemIds,
     isDisabled,
   });
@@ -63,23 +70,26 @@ export const SegmentedControl = ({
     isDisabled,
     focusedValue,
     onFocusChange: handleFocusAndChange,
+    onBlur: handleBlurRovingFocus,
     values: itemIds,
   };
 
   return (
-    <SegmentedControlContext.Provider value={contextValue}>
-      <div
-        className="inline-grid gap-1 rounded-lg bg-uiBackground02 p-1"
-        style={containerStyle}
-        role="tablist"
-        aria-label={ariaLabel}
-        onKeyDown={handleKeyDown}
-        onBlur={handleBlur}
-        {...rest}
-      >
-        {children}
-      </div>
-    </SegmentedControlContext.Provider>
+    <>
+      <SegmentedControlContext.Provider value={contextValue}>
+        <div
+          ref={containerRef}
+          className="inline-grid gap-1 rounded-lg bg-uiBackground02 p-1"
+          style={containerStyle}
+          role="tablist"
+          aria-label={ariaLabel}
+          onKeyDown={handleKeyDown}
+          {...rest}
+        >
+          {children}
+        </div>
+      </SegmentedControlContext.Provider>
+    </>
   );
 };
 

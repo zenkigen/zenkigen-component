@@ -52,7 +52,15 @@ export const SegmentedControlItem = ({
     throw new Error('SegmentedControl.Item must be used within SegmentedControl');
   }
 
-  const { value: selectedValue, onChange, size, isDisabled: isContextDisabled, focusedValue, onFocusChange } = context;
+  const {
+    value: selectedValue,
+    onChange,
+    size,
+    isDisabled: isContextDisabled,
+    focusedValue,
+    onFocusChange,
+    onBlur,
+  } = context;
 
   const isSelected = value === selectedValue;
   const isFocused = value === focusedValue;
@@ -66,20 +74,25 @@ export const SegmentedControlItem = ({
   }, [isFocused]);
 
   const handleClick = () => {
-    if (!isOptionDisabled && typeof onChange !== 'undefined') {
-      onChange(value);
+    if (!isOptionDisabled) {
+      onChange?.(value);
     }
   };
 
   const handleFocus = () => {
     // 直前の操作がマウスでなければ（=キーボード操作）、onFocusChangeを呼ぶ
-    if (!lastInteractionWasMouse.current && !isOptionDisabled && typeof onFocusChange !== 'undefined') {
-      onFocusChange(value);
+    if (!lastInteractionWasMouse.current && !isOptionDisabled) {
+      onFocusChange?.(value);
     }
   };
 
   const handleMouseDown = () => {
     lastInteractionWasMouse.current = true;
+  };
+
+  const handleBlur = () => {
+    lastInteractionWasMouse.current = false;
+    onBlur?.();
   };
 
   const buttonClasses = clsx('relative flex items-center justify-center gap-1 rounded', focusVisible.normal, {
@@ -105,6 +118,7 @@ export const SegmentedControlItem = ({
       className={buttonClasses}
       onClick={handleClick}
       onFocus={handleFocus}
+      onBlur={handleBlur}
       onMouseDown={handleMouseDown}
       {...rest}
     >

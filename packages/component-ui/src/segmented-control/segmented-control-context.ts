@@ -7,6 +7,7 @@ export type SegmentedControlContextValue = {
   isDisabled: boolean;
   focusedValue: string | null;
   onFocusChange?: (value: string) => void;
+  onBlur?: () => void;
   values: string[];
 };
 

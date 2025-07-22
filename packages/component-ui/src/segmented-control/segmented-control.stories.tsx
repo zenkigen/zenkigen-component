@@ -2,6 +2,7 @@ import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 
+import { Button } from '../button';
 import { SegmentedControl } from './segmented-control';
 
 const meta = {
@@ -76,14 +77,87 @@ export const Component: Story = {
   parameters: {
     chromatic: { disable: true },
   },
-  render: (args) => (
-    <SegmentedControlExample {...args}>
-      <SegmentedControl.Item label="短い" value="short" icon="list" />
-      <SegmentedControl.Item label="中くらいのラベル" value="medium" icon="table" />
-      <SegmentedControl.Item label="ボタンラベル" value="normal" icon="table" isDisabled />
-      <SegmentedControl.Item label="とても長いラベルのボタン" value="long" icon="documents" />
-    </SegmentedControlExample>
-  ),
+  render: function MyFunc(args) {
+    const [selectedValue, setSelectedValue] = useState(args.value);
+    const [disabledValue, setDisabledValue] = useState('normal');
+
+    return (
+      <div className="flex flex-col gap-5">
+        <SegmentedControl
+          {...args}
+          value={selectedValue}
+          onChange={(value: string) => {
+            setSelectedValue(value);
+          }}
+        >
+          <SegmentedControl.Item label="短い" value="short" icon="list" isDisabled={disabledValue === 'short'} />
+          <SegmentedControl.Item
+            label="中くらいのラベル"
+            value="medium"
+            icon="table"
+            isDisabled={disabledValue === 'medium'}
+          />
+          <SegmentedControl.Item
+            label="ボタンラベル"
+            value="normal"
+            icon="table"
+            isDisabled={disabledValue === 'normal'}
+          />
+          <SegmentedControl.Item
+            label="とても長いラベルのボタン"
+            value="long"
+            icon="documents"
+            isDisabled={disabledValue === 'long'}
+          />
+        </SegmentedControl>
+        <div>
+          <hr />
+        </div>
+        <div className="flex flex-col gap-5">
+          <div className="typography-label12regular">
+            {selectedValue === 'short' && '「短い」が選択された'}
+            {selectedValue === 'medium' && '「中くらいのラベル」が選択された'}
+            {selectedValue === 'normal' && '「ボタンラベル」が選択された'}
+            {selectedValue === 'long' && '「とても長いラベルのボタン」が選択された'}
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Button
+              onClick={() => {
+                setDisabledValue('short');
+                if (selectedValue === 'short') setSelectedValue('medium');
+              }}
+            >
+              「短い」を非アクティブに変更
+            </Button>
+            <Button
+              onClick={() => {
+                setDisabledValue('medium');
+                if (selectedValue === 'medium') setSelectedValue('short');
+              }}
+            >
+              「中くらいのラベル」を非アクティブに変更
+            </Button>
+            <Button
+              onClick={() => {
+                setDisabledValue('normal');
+                if (selectedValue === 'normal') setSelectedValue('short');
+              }}
+            >
+              「ボタンラベル」を非アクティブに変更
+            </Button>
+            <Button
+              onClick={() => {
+                setDisabledValue('long');
+                if (selectedValue === 'long') setSelectedValue('short');
+              }}
+            >
+              「とても長いラベルのボタン」を非アクティブに変更
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  },
 };
 
 export const LabelWithIconMediumSize: Story = {
