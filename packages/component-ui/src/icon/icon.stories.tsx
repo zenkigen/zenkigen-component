@@ -186,86 +186,15 @@ export function ColorFill() {
       <IconList className="fill-disabled03" />
       <IconList className="fill-disabled04" />
 
-      {/* Blue Variants */}
-      {/* <div>Blue Variants:</div>
-      <IconList className="fill-blue-blue30" />
-      <IconList className="fill-blue-blue50" />
-      <IconList className="fill-blue-blue70" />
-      <IconList className="fill-blue-blue100" /> */}
-
-      {/* Gray Variants */}
-      {/* <div>Gray Variants:</div>
-      <IconList className="fill-gray-gray30" />
-      <IconList className="fill-gray-gray50" />
-      <IconList className="fill-gray-gray70" />
-      <IconList className="fill-gray-gray100" /> */}
-
-      {/* BlueGreen Variants */}
-      {/* <div>BlueGreen Variants:</div>
-      <IconList className="fill-blueGreen-blueGreen30" />
-      <IconList className="fill-blueGreen-blueGreen50" />
-      <IconList className="fill-blueGreen-blueGreen70" />
-      <IconList className="fill-blueGreen-blueGreen100" /> */}
-
-      {/* Red Variants */}
-      {/* <div>Red Variants:</div>
-      <IconList className="fill-red-red30" />
-      <IconList className="fill-red-red50" />
-      <IconList className="fill-red-red70" />
-      <IconList className="fill-red-red100" /> */}
-
-      {/* Green Variants */}
-      {/* <div>Green Variants:</div>
-      <IconList className="fill-green-green30" />
-      <IconList className="fill-green-green50" />
-      <IconList className="fill-green-green70" />
-      <IconList className="fill-green-green100" /> */}
-
-      {/* Purple Variants */}
-      {/* <div>Purple Variants:</div>
-      <IconList className="fill-purple-purple30" />
-      <IconList className="fill-purple-purple50" />
-      <IconList className="fill-purple-purple70" />
-      <IconList className="fill-purple-purple100" /> */}
-
-      {/* Yellow Variants */}
-      {/* <div>Yellow Variants:</div>
-      <IconList className="fill-yellow-yellow30" />
-      <IconList className="fill-yellow-yellow50" />
-      <IconList className="fill-yellow-yellow70" />
-      <IconList className="fill-yellow-yellow100" /> */}
-
-      {/* User Colors */}
-      <div>User Colors:</div>
-      <IconList className="fill-user-red" />
-      <IconList className="fill-user-blue" />
-      <IconList className="fill-user-yellow" />
-      <IconList className="fill-user-purple" />
-      <IconList className="fill-user-orange" />
-
-      {/* Text Colors */}
-      {/* <div>Text Colors:</div>
-      <IconList className="fill-text01" />
-      <IconList className="fill-text02" />
-      <IconList className="fill-text03" />
-      <IconList className="fill-textBlack" /> */}
-
-      {/* Icon Colors */}
-      {/* <div>Icon Colors:</div>
-      <IconList className="fill-icon01" />
-      <IconList className="fill-icon02" />
-      <IconList className="fill-icon03" />
-      <IconList className="bg-interactive01 fill-iconOnColor" /> */}
-
-      {/* Link Colors */}
-      {/* <div>Link Colors:</div>
-      <IconList className="fill-link01" />
-      <IconList className="fill-link02" /> */}
-
-      {/* Monochrome */}
-      {/* <div>Monochrome:</div>
-      <IconList className="fill-black" />
-      <IconList className="bg-gray-gray100 fill-white" /> */}
+      {/* Color Variants */}
+      <div>Color Variants:</div>
+      <IconList className="fill-blue-blue100" />
+      <IconList className="fill-gray-gray100" />
+      <IconList className="fill-red-red100" />
+      <IconList className="fill-yellow-yellow100" />
+      <IconList className="fill-green-green100" />
+      <IconList className="fill-purple-purple100" />
+      <IconList className="fill-blueGreen-blueGreen100" />
     </div>
   );
 }
