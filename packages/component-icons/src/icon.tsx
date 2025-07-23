@@ -4,11 +4,13 @@
 */
 import type React from 'react';
 
-export type IconName = 'warning' | 'volume' | 'volume-off' | 'video' | 'user' | 'user-remove' | 'user-photograph' | 'user-one' | 'user-multi' | 'user-line' | 'user-group' | 'user-add' | 'upload' | 'triangle' | 'transcription' | 'timer' | 'table' | 'table-upload' | 'table-download' | 'success-filled' | 'store' | 'star' | 'star-filled' | 'sparkle' | 'sort' | 'sort-up' | 'sort-down' | 'slider-editing' | 'sidebar' | 'shuffle' | 'share' | 'send' | 'search' | 'score' | 'remove' | 'presentation' | 'play' | 'play-filled' | 'picture-in-picture' | 'pdf' | 'pause' | 'notification' | 'movie' | 'more' | 'message-text' | 'logout' | 'list' | 'link' | 'input-delete' | 'information' | 'information-filled' | 'image' | 'home' | 'hint' | 'help' | 'hamburger' | 'hamburger-close' | 'graph-line' | 'global' | 'flag' | 'filter' | 'external-link' | 'expand' | 'email' | 'edit' | 'download' | 'download-document' | 'double circle' | 'documents' | 'document' | 'delete' | 'copy' | 'contract' | 'comment' | 'close' | 'circle' | 'check' | 'chart-line' | 'chart-bar' | 'caret-right' | 'caret-down' | 'calendar' | 'calendar-today' | 'calendar-minus' | 'calendar-draft' | 'calendar-check' | 'building' | 'attention' | 'attachment' | 'arrow-up' | 'arrow-right' | 'arrow-left' | 'arrow-down' | 'angle-up' | 'angle-small-up' | 'angle-small-down' | 'angle-right' | 'angle-left' | 'angle-down' | 'ai' | 'add';
+export type IconName = '初心者' | 'warning' | 'volume' | 'volume-off' | 'video' | 'video-off' | 'user' | 'user-remove' | 'user-one' | 'user-multi' | 'user-line' | 'user-group' | 'user-add' | 'upload' | 'triangle' | 'transcription' | 'timer' | 'table' | 'table-upload' | 'table-download' | 'success-filled' | 'star' | 'star-filled' | 'star-filled-color' | 'sort' | 'sort-up' | 'sort-down' | 'slider-editing' | 'sidebar' | 'shuffle' | 'share' | 'send' | 'search' | 'score' | 'repeat' | 'remove' | 'presentation' | 'play' | 'play-filled' | 'picture_in_picture' | 'pdf' | 'pause' | 'notification' | 'network' | 'movie' | 'more' | 'minus' | 'mic' | 'mic-off' | 'message-text' | 'logout' | 'list' | 'link' | 'input-delete' | 'information' | 'information-filled' | 'image' | 'home' | 'hint' | 'help' | 'handle' | 'hamburger' | 'hamburger-open' | 'hamburger-close' | 'graph-line' | 'global' | 'generativeai' | 'flag' | 'filter' | 'external-link' | 'expand' | 'email' | 'edit' | 'download' | 'download-document' | 'double-circle' | 'documents' | 'document' | 'delete' | 'copy' | 'contract' | 'comment' | 'close' | 'circle' | 'check' | 'chart-line' | 'chart-bar' | 'catch' | 'caret-right' | 'caret-down' | 'calendar' | 'calendar-today' | 'calendar-minus' | 'calendar-draft' | 'calendar-check' | 'calendar-attention' | 'building' | 'bookmark' | 'attention' | 'attachment' | 'arrow-up' | 'arrow-right' | 'arrow-left' | 'arrow-down' | 'angle-up' | 'angle-small-up' | 'angle-small-down' | 'angle-right' | 'angle-left' | 'angle-down' | 'ai' | 'add';
 
 export type IconElements = Readonly<{ [name in IconName]: React.ReactElement }>;
 
 // Import all icon components
+
+import { 初心者Icon } from './icons/初心者';
 
 import { warningIcon } from './icons/warning';
 
@@ -18,11 +20,11 @@ import { volumeoffIcon } from './icons/volume-off';
 
 import { videoIcon } from './icons/video';
 
+import { videooffIcon } from './icons/video-off';
+
 import { userIcon } from './icons/user';
 
 import { userremoveIcon } from './icons/user-remove';
-
-import { userphotographIcon } from './icons/user-photograph';
 
 import { useroneIcon } from './icons/user-one';
 
@@ -50,13 +52,11 @@ import { tabledownloadIcon } from './icons/table-download';
 
 import { successfilledIcon } from './icons/success-filled';
 
-import { storeIcon } from './icons/store';
-
 import { starIcon } from './icons/star';
 
 import { starfilledIcon } from './icons/star-filled';
 
-import { sparkleIcon } from './icons/sparkle';
+import { starfilledcolorIcon } from './icons/star-filled-color';
 
 import { sortIcon } from './icons/sort';
 
@@ -78,6 +78,8 @@ import { searchIcon } from './icons/search';
 
 import { scoreIcon } from './icons/score';
 
+import { repeatIcon } from './icons/repeat';
+
 import { removeIcon } from './icons/remove';
 
 import { presentationIcon } from './icons/presentation';
@@ -86,7 +88,7 @@ import { playIcon } from './icons/play';
 
 import { playfilledIcon } from './icons/play-filled';
 
-import { pictureinpictureIcon } from './icons/picture-in-picture';
+import { picture_in_pictureIcon } from './icons/picture_in_picture';
 
 import { pdfIcon } from './icons/pdf';
 
@@ -94,9 +96,17 @@ import { pauseIcon } from './icons/pause';
 
 import { notificationIcon } from './icons/notification';
 
+import { networkIcon } from './icons/network';
+
 import { movieIcon } from './icons/movie';
 
 import { moreIcon } from './icons/more';
+
+import { minusIcon } from './icons/minus';
+
+import { micIcon } from './icons/mic';
+
+import { micoffIcon } from './icons/mic-off';
 
 import { messagetextIcon } from './icons/message-text';
 
@@ -120,13 +130,19 @@ import { hintIcon } from './icons/hint';
 
 import { helpIcon } from './icons/help';
 
+import { handleIcon } from './icons/handle';
+
 import { hamburgerIcon } from './icons/hamburger';
+
+import { hamburgeropenIcon } from './icons/hamburger-open';
 
 import { hamburgercloseIcon } from './icons/hamburger-close';
 
 import { graphlineIcon } from './icons/graph-line';
 
 import { globalIcon } from './icons/global';
+
+import { generativeaiIcon } from './icons/generativeai';
 
 import { flagIcon } from './icons/flag';
 
@@ -144,7 +160,7 @@ import { downloadIcon } from './icons/download';
 
 import { downloaddocumentIcon } from './icons/download-document';
 
-import { doublecircleIcon } from './icons/double circle';
+import { doublecircleIcon } from './icons/double-circle';
 
 import { documentsIcon } from './icons/documents';
 
@@ -168,6 +184,8 @@ import { chartlineIcon } from './icons/chart-line';
 
 import { chartbarIcon } from './icons/chart-bar';
 
+import { catchIcon } from './icons/catch';
+
 import { caretrightIcon } from './icons/caret-right';
 
 import { caretdownIcon } from './icons/caret-down';
@@ -182,7 +200,11 @@ import { calendardraftIcon } from './icons/calendar-draft';
 
 import { calendarcheckIcon } from './icons/calendar-check';
 
+import { calendarattentionIcon } from './icons/calendar-attention';
+
 import { buildingIcon } from './icons/building';
+
+import { bookmarkIcon } from './icons/bookmark';
 
 import { attentionIcon } from './icons/attention';
 
@@ -216,6 +238,8 @@ import { addIcon } from './icons/add';
 // Icon elements mapping
 export const iconElements: IconElements = {
   
+    '初心者': 初心者Icon,
+  
     'warning': warningIcon,
   
     'volume': volumeIcon,
@@ -224,11 +248,11 @@ export const iconElements: IconElements = {
   
     'video': videoIcon,
   
+    'video-off': videooffIcon,
+  
     'user': userIcon,
   
     'user-remove': userremoveIcon,
-  
-    'user-photograph': userphotographIcon,
   
     'user-one': useroneIcon,
   
@@ -256,13 +280,11 @@ export const iconElements: IconElements = {
   
     'success-filled': successfilledIcon,
   
-    'store': storeIcon,
-  
     'star': starIcon,
   
     'star-filled': starfilledIcon,
   
-    'sparkle': sparkleIcon,
+    'star-filled-color': starfilledcolorIcon,
   
     'sort': sortIcon,
   
@@ -284,6 +306,8 @@ export const iconElements: IconElements = {
   
     'score': scoreIcon,
   
+    'repeat': repeatIcon,
+  
     'remove': removeIcon,
   
     'presentation': presentationIcon,
@@ -292,7 +316,7 @@ export const iconElements: IconElements = {
   
     'play-filled': playfilledIcon,
   
-    'picture-in-picture': pictureinpictureIcon,
+    'picture_in_picture': picture_in_pictureIcon,
   
     'pdf': pdfIcon,
   
@@ -300,9 +324,17 @@ export const iconElements: IconElements = {
   
     'notification': notificationIcon,
   
+    'network': networkIcon,
+  
     'movie': movieIcon,
   
     'more': moreIcon,
+  
+    'minus': minusIcon,
+  
+    'mic': micIcon,
+  
+    'mic-off': micoffIcon,
   
     'message-text': messagetextIcon,
   
@@ -326,13 +358,19 @@ export const iconElements: IconElements = {
   
     'help': helpIcon,
   
+    'handle': handleIcon,
+  
     'hamburger': hamburgerIcon,
+  
+    'hamburger-open': hamburgeropenIcon,
   
     'hamburger-close': hamburgercloseIcon,
   
     'graph-line': graphlineIcon,
   
     'global': globalIcon,
+  
+    'generativeai': generativeaiIcon,
   
     'flag': flagIcon,
   
@@ -350,7 +388,7 @@ export const iconElements: IconElements = {
   
     'download-document': downloaddocumentIcon,
   
-    'double circle': doublecircleIcon,
+    'double-circle': doublecircleIcon,
   
     'documents': documentsIcon,
   
@@ -374,6 +412,8 @@ export const iconElements: IconElements = {
   
     'chart-bar': chartbarIcon,
   
+    'catch': catchIcon,
+  
     'caret-right': caretrightIcon,
   
     'caret-down': caretdownIcon,
@@ -388,7 +428,11 @@ export const iconElements: IconElements = {
   
     'calendar-check': calendarcheckIcon,
   
+    'calendar-attention': calendarattentionIcon,
+  
     'building': buildingIcon,
+  
+    'bookmark': bookmarkIcon,
   
     'attention': attentionIcon,
   
