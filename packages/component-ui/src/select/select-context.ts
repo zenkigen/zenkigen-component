@@ -9,10 +9,12 @@ type UseSelectReturnType = {
   setIsOptionListOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onChange?: (option: SelectOption | null) => void;
   variant?: 'text' | 'outline';
+  isError?: boolean;
 };
 
 export const SelectContext = createContext<UseSelectReturnType>({
   size: 'medium',
   setIsOptionListOpen: () => false,
   variant: 'outline',
+  isError: false,
 });

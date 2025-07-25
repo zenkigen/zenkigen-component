@@ -22,6 +22,9 @@ const meta: Meta<typeof Select> = {
         .concat(['']),
       control: 'select',
     },
+    isError: {
+      type: 'boolean',
+    },
   },
 };
 export default meta;
@@ -35,11 +38,11 @@ const optionsList = [
 
 const optionsList2 = [
   { id: '1', label: '選択肢A', value: 'A', icon: 'add' as IconName },
-  { id: '2', label: '選択肢B', value: 'B', icon: 'add' as IconName },
-  { id: '3', label: '選択肢C', value: 'C', icon: 'add' as IconName },
-  { id: '4', label: '選択肢D', value: 'D', icon: 'add' as IconName },
-  { id: '5', label: '選択肢E', value: 'E', icon: 'add' as IconName },
-  { id: '6', label: '選択肢F', value: 'F', icon: 'add' as IconName },
+  { id: '2', label: '選択肢B', value: 'B', icon: 'warning' as IconName },
+  { id: '3', label: '選択肢C', value: 'C', icon: 'volume' as IconName },
+  { id: '4', label: '選択肢D', value: 'D', icon: 'video' as IconName },
+  { id: '5', label: '選択肢E', value: 'E', icon: 'user' as IconName },
+  { id: '6', label: '選択肢F', value: 'F', icon: 'upload' as IconName },
 ];
 
 export const Component: Story = {
@@ -52,9 +55,10 @@ export const Component: Story = {
     width: '100%',
     maxWidth: '',
     optionListMaxHeight: '130px',
-    selectedOption: { id: '2', label: '選択肢B', value: 'B', icon: 'add' as IconName },
+    selectedOption: { id: '2', label: '選択肢B', value: 'B', icon: 'warning' as IconName },
     isOptionSelected: false,
     isDisabled: false,
+    isError: false,
     children: (
       <>
         {optionsList2.map((option) => (
