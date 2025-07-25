@@ -18,6 +18,10 @@ const meta: Meta<typeof Button> = {
     borderRadius: {
       control: { type: 'text' },
     },
+    justifyContent: {
+      options: ['start', 'center'],
+      control: { type: 'radio' },
+    },
   },
 };
 
@@ -32,10 +36,11 @@ export const Component: Story = {
     isSelected: false,
     isDisabled: false,
     variant: 'fill',
-    bofore: '',
+    before: '',
     after: '',
     // eslint-disable-next-line no-undefined
     borderRadius: undefined,
+    justifyContent: 'center',
   },
   parameters: {
     chromatic: { disable: true },

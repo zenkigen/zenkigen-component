@@ -10,11 +10,79 @@ import { Modal } from '.';
 const meta: Meta<typeof Modal> = {
   title: 'Components/Modal',
   component: Modal,
+  parameters: {
+    docs: {
+      source: {
+        code: ``,
+      },
+    },
+  },
+  argTypes: {
+    width: { control: 'text', description: '幅（320px以上が指定できる）' },
+    height: { control: 'text', description: '高さ（184px以上が指定できる）' },
+    maxWidth: { control: 'text', description: '最大幅' },
+    isOpen: { control: 'boolean', description: '開いているかどうか' },
+    onClose: { action: 'onClose', description: '閉じる操作が発生したときのコールバック' },
+    portalTargetRef: {
+      control: 'text',
+      description: 'ポータルのターゲット要素（指定がない場合は、document.body が使用される）',
+    },
+  },
 };
 
 type Story = StoryObj<typeof Modal>;
 
 export default meta;
+
+export const Component: Story = {
+  args: {
+    width: 480,
+  },
+  parameters: {
+    chromatic: { disable: true },
+  },
+  render: function MyFunc({ ...args }) {
+    const [isOpen, setIsOpen] = useState(true);
+
+    return (
+      <div>
+        <Button variant="fill" size="large" onClick={() => setIsOpen(true)}>
+          open
+        </Button>
+        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} width={args.width}>
+          <Modal.Header>タイトル</Modal.Header>
+          <Modal.Body>
+            <div className="flex w-full items-center justify-center py-20">Content</div>
+          </Modal.Body>
+          <Modal.Footer>
+            <div className="flex w-full flex-wrap items-center justify-end gap-4">
+              <Button
+                variant="outline"
+                size="large"
+                onClick={(evt) => {
+                  setIsOpen(false);
+                  action('キャンセル')(evt);
+                }}
+              >
+                キャンセル
+              </Button>
+              <Button
+                variant="fill"
+                size="large"
+                onClick={(evt) => {
+                  setIsOpen(false);
+                  action('保存する')(evt);
+                }}
+              >
+                保存する
+              </Button>
+            </div>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    );
+  },
+};
 
 export const Base: Story = {
   args: {
@@ -25,9 +93,12 @@ export const Base: Story = {
 
     return (
       <div>
-        <button type="button" onClick={() => setIsOpen(true)}>
+        <Button variant="fill" size="large" onClick={() => setIsOpen(true)}>
           open
-        </button>
+        </Button>
+        {Array.from({ length: 41 }, (_, i) => (
+          <br key={i} />
+        ))}
         <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} width={args.width}>
           <Modal.Header>タイトル</Modal.Header>
           <Modal.Body>
@@ -35,10 +106,24 @@ export const Base: Story = {
           </Modal.Body>
           <Modal.Footer>
             <div className="flex w-full flex-wrap items-center justify-end gap-4">
-              <Button variant="outline" size="large" onClick={action('キャンセル')}>
+              <Button
+                variant="outline"
+                size="large"
+                onClick={(evt) => {
+                  setIsOpen(false);
+                  action('キャンセル')(evt);
+                }}
+              >
                 キャンセル
               </Button>
-              <Button variant="fill" size="large" onClick={action('保存する')}>
+              <Button
+                variant="fill"
+                size="large"
+                onClick={(evt) => {
+                  setIsOpen(false);
+                  action('保存する')(evt);
+                }}
+              >
                 保存する
               </Button>
             </div>
@@ -59,9 +144,9 @@ export const WithCheckbox: Story = {
 
     return (
       <div>
-        <button type="button" onClick={() => setIsOpen(true)}>
+        <Button variant="fill" size="large" onClick={() => setIsOpen(true)}>
           open
-        </button>
+        </Button>
         <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} width={args.width}>
           <Modal.Header>タイトル</Modal.Header>
           <Modal.Body>
@@ -78,10 +163,24 @@ export const WithCheckbox: Story = {
                 />
               </div>
               <div className="flex flex-wrap items-center justify-end gap-4">
-                <Button variant="outline" size="large" onClick={action('キャンセル')}>
+                <Button
+                  variant="outline"
+                  size="large"
+                  onClick={(evt) => {
+                    setIsOpen(false);
+                    action('キャンセル')(evt);
+                  }}
+                >
                   キャンセル
                 </Button>
-                <Button variant="fill" size="large" onClick={action('保存する')}>
+                <Button
+                  variant="fill"
+                  size="large"
+                  onClick={(evt) => {
+                    setIsOpen(false);
+                    action('保存する')(evt);
+                  }}
+                >
                   保存する
                 </Button>
               </div>
@@ -102,9 +201,9 @@ export const WithSubButton: Story = {
 
     return (
       <div>
-        <button type="button" onClick={() => setIsOpen(true)}>
+        <Button variant="fill" size="large" onClick={() => setIsOpen(true)}>
           open
-        </button>
+        </Button>
         <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} width={args.width}>
           <Modal.Header>タイトル</Modal.Header>
           <Modal.Body>
@@ -118,10 +217,24 @@ export const WithSubButton: Story = {
                 </Button>
               </div>
               <div className="flex flex-wrap items-center justify-end gap-4">
-                <Button variant="outline" size="large" onClick={action('キャンセル')}>
+                <Button
+                  variant="outline"
+                  size="large"
+                  onClick={(evt) => {
+                    setIsOpen(false);
+                    action('キャンセル')(evt);
+                  }}
+                >
                   キャンセル
                 </Button>
-                <Button variant="fill" size="large" onClick={action('保存する')}>
+                <Button
+                  variant="fill"
+                  size="large"
+                  onClick={(evt) => {
+                    setIsOpen(false);
+                    action('保存する')(evt);
+                  }}
+                >
                   保存する
                 </Button>
               </div>
@@ -143,9 +256,9 @@ export const FixedHeight: Story = {
 
     return (
       <div>
-        <button type="button" onClick={() => setIsOpen(true)}>
+        <Button variant="fill" size="large" onClick={() => setIsOpen(true)}>
           open
-        </button>
+        </Button>
         <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} width={args.width} height={args.height}>
           <Modal.Header>タイトル</Modal.Header>
           <Modal.Body>
@@ -153,10 +266,24 @@ export const FixedHeight: Story = {
           </Modal.Body>
           <Modal.Footer>
             <div className="flex w-full flex-wrap items-center justify-end gap-4">
-              <Button variant="outline" size="large" onClick={action('キャンセル')}>
+              <Button
+                variant="outline"
+                size="large"
+                onClick={(evt) => {
+                  setIsOpen(false);
+                  action('キャンセル')(evt);
+                }}
+              >
                 キャンセル
               </Button>
-              <Button variant="fill" size="large" onClick={action('保存する')}>
+              <Button
+                variant="fill"
+                size="large"
+                onClick={(evt) => {
+                  setIsOpen(false);
+                  action('保存する')(evt);
+                }}
+              >
                 保存する
               </Button>
             </div>
@@ -182,9 +309,9 @@ export const WithTabs: Story = {
 
     return (
       <div>
-        <button type="button" onClick={() => setIsOpen(true)}>
+        <Button variant="fill" size="large" onClick={() => setIsOpen(true)}>
           open
-        </button>
+        </Button>
         <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} width={args.width}>
           <Modal.Header isNoBorder>タイトル</Modal.Header>
           <Modal.Body>
@@ -207,10 +334,24 @@ export const WithTabs: Story = {
           </Modal.Body>
           <Modal.Footer>
             <div className="flex w-full flex-wrap items-center justify-end gap-4">
-              <Button variant="outline" size="large" onClick={action('キャンセル')}>
+              <Button
+                variant="outline"
+                size="large"
+                onClick={(evt) => {
+                  setIsOpen(false);
+                  action('キャンセル')(evt);
+                }}
+              >
                 キャンセル
               </Button>
-              <Button variant="fill" size="large" onClick={action('保存する')}>
+              <Button
+                variant="fill"
+                size="large"
+                onClick={(evt) => {
+                  setIsOpen(false);
+                  action('保存する')(evt);
+                }}
+              >
                 保存する
               </Button>
             </div>
@@ -230,9 +371,9 @@ export const WithoutButton: Story = {
 
     return (
       <div>
-        <button type="button" onClick={() => setIsOpen(true)}>
+        <Button variant="fill" size="large" onClick={() => setIsOpen(true)}>
           open
-        </button>
+        </Button>
         <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} width={args.width}>
           <Modal.Header>タイトル</Modal.Header>
           <Modal.Body>
@@ -253,9 +394,9 @@ export const Danger: Story = {
 
     return (
       <div>
-        <button type="button" onClick={() => setIsOpen(true)}>
+        <Button variant="fill" size="large" onClick={() => setIsOpen(true)}>
           open
-        </button>
+        </Button>
         <Modal isOpen={isOpen} width={args.width}>
           <Modal.Header isNoBorder>タイトル</Modal.Header>
           <Modal.Body>
@@ -263,10 +404,24 @@ export const Danger: Story = {
           </Modal.Body>
           <Modal.Footer isNoBorder>
             <div className="flex w-full flex-wrap items-center justify-end gap-4">
-              <Button variant="outline" size="large" onClick={action('キャンセル')}>
+              <Button
+                variant="outline"
+                size="large"
+                onClick={(evt) => {
+                  setIsOpen(false);
+                  action('キャンセル')(evt);
+                }}
+              >
                 キャンセル
               </Button>
-              <Button variant="fillDanger" size="large" onClick={action('削除する')}>
+              <Button
+                variant="fillDanger"
+                size="large"
+                onClick={(evt) => {
+                  setIsOpen(false);
+                  action('削除する')(evt);
+                }}
+              >
                 削除する
               </Button>
             </div>

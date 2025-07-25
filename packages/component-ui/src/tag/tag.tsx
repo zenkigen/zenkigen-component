@@ -9,8 +9,10 @@ type Props = {
   children: string;
   color: TagColor;
   variant?: ColorVariant;
-  size?: 'x-small' | 'small' | 'medium';
-} & ({ isEditable: true; onDelete: (id: string) => void } | { isEditable?: undefined; onDelete?: never });
+} & (
+  | { isEditable: true; onDelete: (id: string) => void; size?: 'medium' }
+  | { isEditable?: undefined; onDelete?: never; size?: 'x-small' | 'small' | 'medium' }
+);
 
 export function Tag({ id, children, color, variant = 'normal', size = 'medium', isEditable, onDelete }: Props) {
   const wrapperClasses = clsx('flex', 'items-center', 'justify-center', {

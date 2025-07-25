@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 
 type Props = {
   id: string;
-  size: 'small' | 'medium';
+  size: 'small' | 'medium' | 'large';
   isChecked: boolean;
   onChange: () => void;
   label?: ReactNode;
@@ -24,9 +24,9 @@ export function Toggle({
     'bg-disabledOn': isDisabled && isChecked,
     'bg-disabled01': isDisabled && !isChecked,
     'bg-interactive01 peer-hover:bg-hover01': !isDisabled && isChecked,
-    'bg-interactive02 peer-hover:bg-hover02Dark': !isDisabled && !isChecked,
+    'bg-interactive02 peer-hover:bg-hoverGray': !isDisabled && !isChecked,
     'w-8 h-4 px-[3px]': size === 'small',
-    'w-12 h-6 px-1': size === 'medium',
+    'w-12 h-6 px-1': size === 'medium' || size === 'large',
   });
   const inputClasses = clsx(
     'peer absolute inset-0 z-[1] opacity-0',
@@ -34,14 +34,14 @@ export function Toggle({
   );
   const indicatorClasses = clsx('rounded-full bg-iconOnColor', {
     'w-2.5 h-2.5': size === 'small',
-    'w-4 h-4': size === 'medium',
+    'w-4 h-4': size === 'medium' || size === 'large',
     'ml-auto': isChecked,
   });
   const labelClasses = clsx('break-all', {
     'mr-2': labelPosition === 'left',
     'ml-2': labelPosition === 'right',
-    'typography-label12regular': size === 'small',
-    'typography-label16regular': size === 'medium',
+    'typography-label14regular': size === 'small' || size === 'medium',
+    'typography-label16regular': size === 'large',
     'pointer-events-none cursor-not-allowed text-disabled01': isDisabled,
     'cursor-pointer text-text01': !isDisabled,
   });
