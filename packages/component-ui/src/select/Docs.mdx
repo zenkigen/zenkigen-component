@@ -5,8 +5,35 @@ import SelectStories, { Component } from './select.stories';
 
 # Select
 
-<Canvas>
-  <Story of={Component} />
-</Canvas>
+<Canvas />
 
 <Controls of={Component} />
+
+### Code Example
+
+```tsx
+const optionsList = [
+  { id: '1', label: '選択肢A', value: 'A', icon: 'add' as IconName },
+  { id: '2', label: '選択肢B', value: 'B', icon: 'add' as IconName },
+  { id: '3', label: '選択肢C', value: 'C', icon: 'add' as IconName },
+];
+
+const [selectedOption, setSelectedOption] = useState<SelectOption | null>(null);
+
+return (
+  <Select
+    placeholder="選択"
+    size="medium"
+    variant="outline"
+    selectedOption={selectedOption}
+    onChange={(option) => setSelectedOption(option)}
+    isOptionSelected
+    isError={false}
+    isDisabled={false}
+  >
+    {optionsList.map((option) => (
+      <Select.Option key={option.id} option={option} />
+    ))}
+  </Select>
+);
+```

@@ -47,9 +47,10 @@ export function Select({
 
   const handleClickToggle = () => setIsOptionListOpen((prev) => !prev);
 
-  const buttonVariant: 'outline' | 'text' | 'outlineError' | 'textError' = isError
-    ? (`${variant}Error` as 'outlineError' | 'textError')
-    : variant;
+  const buttonVariant: 'outline' | 'text' | 'outlineError' | 'textError' =
+    isError && !isDisabled ? (`${variant}Error` as 'outlineError' | 'textError') : variant;
+
+  const isSelected = isOptionSelected && !isDisabled && selectedOption && !isError;
 
   const wrapperClasses = clsx('relative flex shrink-0 items-center gap-1 rounded bg-uiBackground01', {
     'h-6': size === 'x-small' || size === 'small',
@@ -65,8 +66,8 @@ export function Select({
     selectColors[buttonVariant].disabled,
     focusVisible.normal,
     {
-      [selectColors[buttonVariant].selected]: isOptionSelected && !isDisabled && selectedOption,
-      [selectColors[buttonVariant].base]: !(isOptionSelected && !isDisabled && selectedOption),
+      [selectColors[buttonVariant].selected]: isSelected,
+      [selectColors[buttonVariant].base]: !isSelected,
       'px-2': size === 'x-small' || size === 'small',
       'px-4': size === 'medium' || size === 'large',
       'pointer-events-none': isDisabled,
