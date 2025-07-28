@@ -50,7 +50,7 @@ export function Select({
   const buttonVariant: 'outline' | 'text' | 'outlineError' | 'textError' =
     isError && !isDisabled ? (`${variant}Error` as 'outlineError' | 'textError') : variant;
 
-  const isSelected = isOptionSelected && !isDisabled && selectedOption && !isError;
+  const isSelected = isOptionSelected && !isDisabled && selectedOption !== null && !isError;
 
   const wrapperClasses = clsx('relative flex shrink-0 items-center gap-1 rounded bg-uiBackground01', {
     'h-6': size === 'x-small' || size === 'small',
