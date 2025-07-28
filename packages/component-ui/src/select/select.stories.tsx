@@ -316,167 +316,205 @@ export function Base() {
   );
 }
 
-export function IsOptionSelected() {
-  const [selectedOption1, setSelectedOption1] = useState<SelectOption | null>({
-    id: '3',
-    label: '選択肢C',
-    value: 'C',
-    icon: 'volume' as IconName,
-  });
-  const [selectedOption2, setSelectedOption2] = useState<SelectOption | null>({
-    id: '2',
-    label: '選択肢B',
-    value: 'B',
-    icon: 'add' as IconName,
-  });
-  const [selectedOption3, setSelectedOption3] = useState<SelectOption | null>({
-    id: '2',
-    label: '選択肢B',
-    value: 'B',
-    icon: 'add' as IconName,
-  });
-  const [selectedOption4, setSelectedOption4] = useState<SelectOption | null>({
-    id: '2',
-    label: '選択肢B',
-    value: 'B',
-    icon: 'add' as IconName,
-  });
+export const IsOptionSelected: Story = {
+  args: {
+    isOptionSelected: true,
+    isError: false,
+  },
+  argTypes: {
+    size: {
+      table: { disable: true },
+    },
+    variant: {
+      table: { disable: true },
+    },
+    width: {
+      table: { disable: true },
+    },
+    maxWidth: {
+      table: { disable: true },
+    },
+    optionListMaxHeight: {
+      table: { disable: true },
+    },
+    placeholder: {
+      table: { disable: true },
+    },
+    placeholderIcon: {
+      table: { disable: true },
+    },
+    isDisabled: {
+      table: { disable: true },
+    },
+    selectedOption: {
+      table: { disable: true },
+    },
+    onChange: {
+      table: { disable: true },
+    },
+  },
+  render: function MyFunc(args) {
+    const [selectedOption1, setSelectedOption1] = useState<SelectOption | null>({
+      id: '3',
+      label: '選択肢C',
+      value: 'C',
+      icon: 'volume' as IconName,
+    });
+    const [selectedOption2, setSelectedOption2] = useState<SelectOption | null>({
+      id: '2',
+      label: '選択肢B',
+      value: 'B',
+      icon: 'add' as IconName,
+    });
+    const [selectedOption3, setSelectedOption3] = useState<SelectOption | null>({
+      id: '2',
+      label: '選択肢B',
+      value: 'B',
+      icon: 'add' as IconName,
+    });
+    const [selectedOption4, setSelectedOption4] = useState<SelectOption | null>({
+      id: '2',
+      label: '選択肢B',
+      value: 'B',
+      icon: 'add' as IconName,
+    });
 
-  return (
-    <>
-      <div style={{ display: 'grid', rowGap: '180px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '80px' }}>
-          <Select
-            size="x-small"
-            variant="outline"
-            placeholder="選択"
-            selectedOption={selectedOption1}
-            onChange={(option) => setSelectedOption1(option)}
-            optionListMaxHeight={120}
-            isOptionSelected
-          >
-            {optionsList2.map((option) => (
-              <Select.Option key={option.id} option={option} />
-            ))}
-          </Select>
-          <Select
-            size="small"
-            variant="outline"
-            placeholder="選択"
-            selectedOption={selectedOption2}
-            onChange={(option) => setSelectedOption2(option)}
-            isOptionSelected
-          >
-            {optionsList.map((option) => (
-              <Select.Option key={option.id} option={option} />
-            ))}
-          </Select>
-          <Select
-            size="medium"
-            variant="outline"
-            placeholder="選択"
-            selectedOption={selectedOption3}
-            onChange={(option) => setSelectedOption3(option)}
-            isOptionSelected
-          >
-            {optionsList.map((option) => (
-              <Select.Option key={option.id} option={option} />
-            ))}
-          </Select>
-          <Select
-            size="large"
-            variant="outline"
-            placeholder="選択"
-            selectedOption={selectedOption4}
-            onChange={(option) => setSelectedOption4(option)}
-            isOptionSelected
-          >
-            {optionsList.map((option) => (
-              <Select.Option key={option.id} option={option} />
-            ))}
-          </Select>
-          <Select
-            size="large"
-            variant="outline"
-            placeholder="選択"
-            selectedOption={selectedOption4}
-            onChange={(option) => setSelectedOption4(option)}
-            isOptionSelected
-            isDisabled
-          >
-            {optionsList.map((option) => (
-              <Select.Option key={option.id} option={option} />
-            ))}
-          </Select>
+    return (
+      <>
+        <div style={{ display: 'grid', rowGap: '180px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '80px' }}>
+            <Select
+              {...args}
+              size="x-small"
+              variant="outline"
+              placeholder="選択"
+              selectedOption={selectedOption1}
+              onChange={(option) => setSelectedOption1(option)}
+              optionListMaxHeight={120}
+            >
+              {optionsList2.map((option) => (
+                <Select.Option key={option.id} option={option} />
+              ))}
+            </Select>
+            <Select
+              {...args}
+              size="small"
+              variant="outline"
+              placeholder="選択"
+              selectedOption={selectedOption2}
+              onChange={(option) => setSelectedOption2(option)}
+            >
+              {optionsList.map((option) => (
+                <Select.Option key={option.id} option={option} />
+              ))}
+            </Select>
+            <Select
+              {...args}
+              size="medium"
+              variant="outline"
+              placeholder="選択"
+              selectedOption={selectedOption3}
+              onChange={(option) => setSelectedOption3(option)}
+            >
+              {optionsList.map((option) => (
+                <Select.Option key={option.id} option={option} />
+              ))}
+            </Select>
+            <Select
+              {...args}
+              size="large"
+              variant="outline"
+              placeholder="選択"
+              selectedOption={selectedOption4}
+              onChange={(option) => setSelectedOption4(option)}
+            >
+              {optionsList.map((option) => (
+                <Select.Option key={option.id} option={option} />
+              ))}
+            </Select>
+            <Select
+              {...args}
+              size="large"
+              variant="outline"
+              placeholder="選択"
+              selectedOption={selectedOption4}
+              onChange={(option) => setSelectedOption4(option)}
+              isDisabled
+            >
+              {optionsList.map((option) => (
+                <Select.Option key={option.id} option={option} />
+              ))}
+            </Select>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '80px' }}>
+            <Select
+              {...args}
+              size="x-small"
+              variant="text"
+              placeholder="選択"
+              selectedOption={selectedOption1}
+              onChange={(option) => setSelectedOption1(option)}
+              optionListMaxHeight={120}
+            >
+              {optionsList2.map((option) => (
+                <Select.Option key={option.id} option={option} />
+              ))}
+            </Select>
+            <Select
+              {...args}
+              size="small"
+              variant="text"
+              placeholder="選択"
+              selectedOption={selectedOption2}
+              onChange={(option) => setSelectedOption2(option)}
+            >
+              {optionsList.map((option) => (
+                <Select.Option key={option.id} option={option} />
+              ))}
+            </Select>
+            <Select
+              {...args}
+              size="medium"
+              variant="text"
+              placeholder="選択"
+              selectedOption={selectedOption3}
+              onChange={(option) => setSelectedOption3(option)}
+            >
+              {optionsList.map((option) => (
+                <Select.Option key={option.id} option={option} />
+              ))}
+            </Select>
+            <Select
+              {...args}
+              size="large"
+              variant="text"
+              placeholder="選択"
+              selectedOption={selectedOption4}
+              onChange={(option) => setSelectedOption4(option)}
+            >
+              {optionsList.map((option) => (
+                <Select.Option key={option.id} option={option} />
+              ))}
+            </Select>
+            <Select
+              {...args}
+              size="large"
+              variant="text"
+              placeholder="選択"
+              selectedOption={selectedOption4}
+              onChange={(option) => setSelectedOption4(option)}
+              isDisabled
+            >
+              {optionsList.map((option) => (
+                <Select.Option key={option.id} option={option} />
+              ))}
+            </Select>
+          </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '80px' }}>
-          <Select
-            size="x-small"
-            variant="text"
-            placeholder="選択"
-            selectedOption={selectedOption1}
-            onChange={(option) => setSelectedOption1(option)}
-            optionListMaxHeight={120}
-            isOptionSelected
-          >
-            {optionsList2.map((option) => (
-              <Select.Option key={option.id} option={option} />
-            ))}
-          </Select>
-          <Select
-            size="small"
-            variant="text"
-            placeholder="選択"
-            selectedOption={selectedOption2}
-            onChange={(option) => setSelectedOption2(option)}
-            isOptionSelected
-          >
-            {optionsList.map((option) => (
-              <Select.Option key={option.id} option={option} />
-            ))}
-          </Select>
-          <Select
-            size="medium"
-            variant="text"
-            placeholder="選択"
-            selectedOption={selectedOption3}
-            onChange={(option) => setSelectedOption3(option)}
-            isOptionSelected
-          >
-            {optionsList.map((option) => (
-              <Select.Option key={option.id} option={option} />
-            ))}
-          </Select>
-          <Select
-            size="large"
-            variant="text"
-            placeholder="選択"
-            selectedOption={selectedOption4}
-            onChange={(option) => setSelectedOption4(option)}
-            isOptionSelected
-          >
-            {optionsList.map((option) => (
-              <Select.Option key={option.id} option={option} />
-            ))}
-          </Select>
-          <Select
-            size="large"
-            variant="text"
-            placeholder="選択"
-            selectedOption={selectedOption4}
-            onChange={(option) => setSelectedOption4(option)}
-            isOptionSelected
-            isDisabled
-          >
-            {optionsList.map((option) => (
-              <Select.Option key={option.id} option={option} />
-            ))}
-          </Select>
-        </div>
-      </div>
-    </>
-  );
-}
+      </>
+    );
+  },
+};
 
 export const IsError: Story = {
   args: {
