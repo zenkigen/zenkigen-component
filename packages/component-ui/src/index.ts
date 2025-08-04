@@ -17,6 +17,7 @@ export * from './radio';
 export * from './search';
 export * from './select';
 export * from './select-sort';
+export * from './sort-button';
 export * from './tab';
 export * from './table';
 export * from './tag';
