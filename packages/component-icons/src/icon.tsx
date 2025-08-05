@@ -4,13 +4,11 @@
 */
 import type React from 'react';
 
-export type IconName = '初心者' | 'warning' | 'volume' | 'volume-off' | 'video' | 'video-off' | 'user' | 'user-remove' | 'user-one' | 'user-multi' | 'user-line' | 'user-group' | 'user-add' | 'upload' | 'triangle' | 'transcription' | 'timer' | 'table' | 'table-upload' | 'table-download' | 'success-filled' | 'star' | 'star-filled' | 'star-filled-color' | 'sort' | 'sort-up' | 'sort-down' | 'slider-editing' | 'sidebar' | 'shuffle' | 'share' | 'send' | 'search' | 'score' | 'repeat' | 'remove' | 'presentation' | 'play' | 'play-filled' | 'picture_in_picture' | 'pdf' | 'pause' | 'notification' | 'network' | 'movie' | 'more' | 'minus' | 'mic' | 'mic-off' | 'message-text' | 'logout' | 'list' | 'link' | 'input-delete' | 'information' | 'information-filled' | 'image' | 'home' | 'hint' | 'help' | 'handle' | 'hamburger' | 'hamburger-open' | 'hamburger-close' | 'graph-line' | 'global' | 'generativeai' | 'flag' | 'filter' | 'external-link' | 'expand' | 'email' | 'edit' | 'download' | 'download-document' | 'double-circle' | 'documents' | 'document' | 'delete' | 'copy' | 'contract' | 'comment' | 'close' | 'circle' | 'check' | 'chart-line' | 'chart-bar' | 'catch' | 'caret-right' | 'caret-down' | 'calendar' | 'calendar-today' | 'calendar-minus' | 'calendar-draft' | 'calendar-check' | 'calendar-attention' | 'building' | 'bookmark' | 'attention' | 'attachment' | 'arrow-up' | 'arrow-right' | 'arrow-left' | 'arrow-down' | 'angle-up' | 'angle-small-up' | 'angle-small-down' | 'angle-right' | 'angle-left' | 'angle-down' | 'ai' | 'add';
+export type IconName = 'warning' | 'volume' | 'volume-off' | 'video' | 'video-off' | 'user' | 'user-remove' | 'user-one' | 'user-multi' | 'user-line' | 'user-group' | 'user-add' | 'upload' | 'triangle' | 'transcription' | 'timer' | 'table' | 'table-upload' | 'table-download' | 'success-filled' | 'star' | 'star-filled' | 'sort' | 'sort-up' | 'sort-down' | 'slider-editing' | 'sidebar' | 'shuffle' | 'share' | 'send' | 'search' | 'score' | 'repeat' | 'remove' | 'presentation' | 'play' | 'play-filled' | 'picture-in-picture' | 'pdf' | 'pause' | 'notification' | 'network' | 'movie' | 'more' | 'minus' | 'mic' | 'mic-off' | 'message-text' | 'logout' | 'list' | 'link' | 'input-delete' | 'information' | 'information-filled' | 'image' | 'home' | 'hint' | 'help' | 'handle' | 'hamburger' | 'hamburger-open' | 'hamburger-close' | 'graph-line' | 'global' | 'generativeai' | 'flag' | 'filter' | 'external-link' | 'expand' | 'email' | 'edit' | 'download' | 'download-document' | 'double-circle' | 'documents' | 'document' | 'delete' | 'copy' | 'contract' | 'comment' | 'close' | 'circle' | 'check' | 'chart-line' | 'chart-bar' | 'catch' | 'caret-right' | 'caret-down' | 'calendar' | 'calendar-today' | 'calendar-minus' | 'calendar-draft' | 'calendar-check' | 'calendar-attention' | 'building' | 'bookmark' | 'beginner' | 'attention' | 'attachment' | 'arrow-up' | 'arrow-right' | 'arrow-left' | 'arrow-down' | 'angle-up' | 'angle-small-up' | 'angle-small-down' | 'angle-right' | 'angle-left' | 'angle-down' | 'ai' | 'add';
 
 export type IconElements = Readonly<{ [name in IconName]: React.ReactElement }>;
 
 // Import all icon components
-
-import { 初心者Icon } from './icons/初心者';
 
 import { warningIcon } from './icons/warning';
 
@@ -56,8 +54,6 @@ import { starIcon } from './icons/star';
 
 import { starfilledIcon } from './icons/star-filled';
 
-import { starfilledcolorIcon } from './icons/star-filled-color';
-
 import { sortIcon } from './icons/sort';
 
 import { sortupIcon } from './icons/sort-up';
@@ -88,7 +84,7 @@ import { playIcon } from './icons/play';
 
 import { playfilledIcon } from './icons/play-filled';
 
-import { picture_in_pictureIcon } from './icons/picture_in_picture';
+import { pictureinpictureIcon } from './icons/picture-in-picture';
 
 import { pdfIcon } from './icons/pdf';
 
@@ -206,6 +202,8 @@ import { buildingIcon } from './icons/building';
 
 import { bookmarkIcon } from './icons/bookmark';
 
+import { beginnerIcon } from './icons/beginner';
+
 import { attentionIcon } from './icons/attention';
 
 import { attachmentIcon } from './icons/attachment';
@@ -237,8 +235,6 @@ import { addIcon } from './icons/add';
 
 // Icon elements mapping
 export const iconElements: IconElements = {
-  
-    '初心者': 初心者Icon,
   
     'warning': warningIcon,
   
@@ -284,8 +280,6 @@ export const iconElements: IconElements = {
   
     'star-filled': starfilledIcon,
   
-    'star-filled-color': starfilledcolorIcon,
-  
     'sort': sortIcon,
   
     'sort-up': sortupIcon,
@@ -316,7 +310,7 @@ export const iconElements: IconElements = {
   
     'play-filled': playfilledIcon,
   
-    'picture_in_picture': picture_in_pictureIcon,
+    'picture-in-picture': pictureinpictureIcon,
   
     'pdf': pdfIcon,
   
@@ -433,6 +427,8 @@ export const iconElements: IconElements = {
     'building': buildingIcon,
   
     'bookmark': bookmarkIcon,
+  
+    'beginner': beginnerIcon,
   
     'attention': attentionIcon,
   
