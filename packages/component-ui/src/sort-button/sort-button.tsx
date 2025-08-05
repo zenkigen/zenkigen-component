@@ -11,7 +11,6 @@ type Props = Omit<
   'className' | 'type' | 'disabled' | 'onClick' | 'aria-disabled'
 > & {
   size?: 'x-small' | 'small' | 'medium' | 'large';
-  variant?: 'outline' | 'text';
   width?: CSSProperties['width'];
   label: string;
   sortOrder: SortOrder;
@@ -19,16 +18,7 @@ type Props = Omit<
   onClick?: () => void;
 };
 
-export function SortButton({
-  size = 'medium',
-  variant = 'outline',
-  width,
-  label,
-  sortOrder,
-  isDisabled = false,
-  onClick,
-  ...rest
-}: Props) {
+export function SortButton({ size = 'medium', width, label, sortOrder, isDisabled = false, onClick, ...rest }: Props) {
   const handleClick = useCallback(() => {
     if (isDisabled || !onClick) return;
 
@@ -52,13 +42,13 @@ export function SortButton({
 
   const buttonClasses = clsx(
     'flex size-full items-center rounded',
-    buttonColors[variant].hover,
-    buttonColors[variant].active,
-    buttonColors[variant].disabled,
+    buttonColors.text.hover,
+    buttonColors.text.active,
+    buttonColors.text.disabled,
     focusVisible.normal,
     {
-      [buttonColors[variant].selected]: sortOrder !== null, // ソート状態時は選択状態のスタイル
-      [buttonColors[variant].base]: sortOrder === null, // ソートなし時は通常のスタイル
+      [buttonColors.text.selected]: !isDisabled && sortOrder !== null, // ソート状態時は選択状態のスタイル
+      [buttonColors.text.base]: sortOrder === null, // ソートなし時は通常のスタイル
       'px-2': size === 'x-small' || size === 'small',
       'px-4': size === 'medium' || size === 'large',
       'pointer-events-none': isDisabled,

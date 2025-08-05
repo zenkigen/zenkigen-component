@@ -14,10 +14,6 @@ const meta: Meta<typeof SortButton> = {
       control: { type: 'radio' },
       options: ['x-small', 'small', 'medium', 'large'],
     },
-    variant: {
-      control: { type: 'radio' },
-      options: ['outline', 'text'],
-    },
     sortOrder: {
       options: [null, 'ascend', 'descend'],
       control: false,
@@ -53,7 +49,12 @@ const ComponentRender = (args: React.ComponentProps<typeof SortButton>) => {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex">
-        <SortButton {...args} sortOrder={sortOrder} onClick={handleClick} />
+        <SortButton
+          {...args}
+          sortOrder={sortOrder}
+          onClick={handleClick}
+          aria-label={`検出回数 ${sortOrder === null ? 'ソートなし' : sortOrder === 'ascend' ? '昇順' : '降順'}`}
+        />
       </div>
       <hr />
       <div>
@@ -80,96 +81,47 @@ export const Component: Story = {
   args: {
     label: '項目A',
     size: 'medium',
-    variant: 'outline',
     sortOrder: null,
     isDisabled: false,
   },
   render: ComponentRender,
 };
 
-export const Variants: Story = {
+export const SizesAndStates: Story = {
   render: () => (
-    <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-      <div>
-        <h4 style={{ marginBottom: '8px' }}>Outline Variant</h4>
-        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-          <SortButton label="ソートなし" sortOrder={null} variant="outline" onClick={() => {}} />
-          <SortButton label="昇順" sortOrder="ascend" variant="outline" onClick={() => {}} />
-          <SortButton label="降順" sortOrder="descend" variant="outline" onClick={() => {}} />
-        </div>
+    <div className="flex flex-col gap-8">
+      <div className="flex items-center gap-8">
+        <SortButton label="項目A" size="x-small" sortOrder={null} onClick={() => {}} />
+        <SortButton label="項目A" size="small" sortOrder={null} onClick={() => {}} />
+        <SortButton label="項目A" size="medium" sortOrder={null} onClick={() => {}} />
+        <SortButton label="項目A" size="large" sortOrder={null} onClick={() => {}} />
       </div>
-      <div>
-        <h4 style={{ marginBottom: '8px' }}>Text Variant</h4>
-        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-          <SortButton label="ソートなし" sortOrder={null} variant="text" onClick={() => {}} />
-          <SortButton label="昇順" sortOrder="ascend" variant="text" onClick={() => {}} />
-          <SortButton label="降順" sortOrder="descend" variant="text" onClick={() => {}} />
-        </div>
+      <div className="flex items-center gap-8">
+        <SortButton label="項目A" size="x-small" sortOrder={null} onClick={() => {}} isDisabled />
+        <SortButton label="項目A" size="small" sortOrder={null} onClick={() => {}} isDisabled />
+        <SortButton label="項目A" size="medium" sortOrder={null} onClick={() => {}} isDisabled />
+        <SortButton label="項目A" size="large" sortOrder={null} onClick={() => {}} isDisabled />
+      </div>
+      <div className="flex items-center gap-8">
+        <SortButton label="項目A" size="x-small" sortOrder="descend" onClick={() => {}} />
+        <SortButton label="項目A" size="small" sortOrder="descend" onClick={() => {}} />
+        <SortButton label="項目A" size="medium" sortOrder="descend" onClick={() => {}} />
+        <SortButton label="項目A" size="large" sortOrder="descend" onClick={() => {}} />
+      </div>
+      <div className="flex items-center gap-8">
+        <SortButton label="項目A" size="x-small" sortOrder="ascend" onClick={() => {}} />
+        <SortButton label="項目A" size="small" sortOrder="ascend" onClick={() => {}} />
+        <SortButton label="項目A" size="medium" sortOrder="ascend" onClick={() => {}} />
+        <SortButton label="項目A" size="large" sortOrder="ascend" onClick={() => {}} />
+      </div>
+      <div className="flex items-center gap-8">
+        <SortButton label="項目A" size="x-small" sortOrder="ascend" onClick={() => {}} isDisabled />
+        <SortButton label="項目A" size="small" sortOrder="ascend" onClick={() => {}} isDisabled />
+        <SortButton label="項目A" size="medium" sortOrder="ascend" onClick={() => {}} isDisabled />
+        <SortButton label="項目A" size="large" sortOrder="ascend" onClick={() => {}} isDisabled />
       </div>
     </div>
   ),
-};
-
-export const Sizes: Story = {
-  render: () => (
-    <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-      <SortButton label="x-small" size="x-small" sortOrder="ascend" onClick={() => {}} />
-      <SortButton label="small" size="small" sortOrder="ascend" onClick={() => {}} />
-      <SortButton label="medium" size="medium" sortOrder="ascend" onClick={() => {}} />
-      <SortButton label="large" size="large" sortOrder="ascend" onClick={() => {}} />
-    </div>
-  ),
-};
-
-export const States: Story = {
-  render: () => (
-    <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-      <div>
-        <h4 style={{ marginBottom: '8px' }}>ソート状態</h4>
-        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-          <SortButton label="ソートなし" sortOrder={null} onClick={() => {}} />
-          <SortButton label="昇順" sortOrder="ascend" onClick={() => {}} />
-          <SortButton label="降順" sortOrder="descend" onClick={() => {}} />
-        </div>
-      </div>
-      <div>
-        <h4 style={{ marginBottom: '8px' }}>無効状態</h4>
-        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-          <SortButton label="無効" sortOrder={null} isDisabled onClick={() => {}} />
-          <SortButton label="無効(昇順)" sortOrder="ascend" isDisabled onClick={() => {}} />
-          <SortButton label="無効(降順)" sortOrder="descend" isDisabled onClick={() => {}} />
-        </div>
-      </div>
-    </div>
-  ),
-};
-
-const InteractiveRender = () => {
-  const [sortOrder, setSortOrder] = useState<SortOrder>(null);
-
-  const handleClick = () => {
-    if (sortOrder === null) {
-      setSortOrder('ascend');
-    } else if (sortOrder === 'ascend') {
-      setSortOrder('descend');
-    } else {
-      setSortOrder('ascend');
-    }
-  };
-
-  return (
-    <div style={{ padding: '16px' }}>
-      <h4 style={{ marginBottom: '16px' }}>インタラクティブな例</h4>
-      <div style={{ marginBottom: '16px' }}>
-        <p>現在のソート状態: {sortOrder || 'なし'}</p>
-      </div>
-      <SortButton label="クリックしてソート状態を変更" sortOrder={sortOrder} onClick={handleClick} />
-    </div>
-  );
-};
-
-export const Interactive: Story = {
-  render: () => <InteractiveRender />,
 };
 
 const LayoutExampleRender = () => {
@@ -204,7 +156,6 @@ const LayoutExampleRender = () => {
             label="作成日"
             sortOrder={sortKey === 'date' ? sortOrder : null}
             onClick={handleSort('date')}
-            variant="text"
             size="small"
           />
         </Table.Cell>
@@ -213,7 +164,6 @@ const LayoutExampleRender = () => {
             label="名前"
             sortOrder={sortKey === 'name' ? sortOrder : null}
             onClick={handleSort('name')}
-            variant="text"
             size="small"
           />
         </Table.Cell>
@@ -222,7 +172,6 @@ const LayoutExampleRender = () => {
             label="ステータス"
             sortOrder={sortKey === 'status' ? sortOrder : null}
             onClick={handleSort('status')}
-            variant="text"
             size="small"
           />
         </Table.Cell>
@@ -252,7 +201,7 @@ const LayoutExampleRender = () => {
 export const LayoutExamples: Story = {
   render: () => (
     <div className="flex flex-col gap-10">
-      <div className="grid w-full gap-4" style={{ gridTemplateColumns: '200px 1fr' }}>
+      {/* <div className="grid w-full gap-4" style={{ gridTemplateColumns: '200px 1fr' }}>
         <div className="contents">
           <div className="typography-body12regular flex flex-col items-start justify-center text-text02">
             サイズ：成り行き
@@ -279,7 +228,7 @@ export const LayoutExamples: Story = {
         </div>
       </div>
 
-      <hr />
+      <hr /> */}
       <LayoutExampleRender />
     </div>
   ),
