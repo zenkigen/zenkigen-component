@@ -10,22 +10,31 @@ const meta: Meta<typeof SortButton> = {
   title: 'Components/SortButton',
   component: SortButton,
   argTypes: {
+    label: {
+      control: { type: 'text' },
+      description: 'ラベル',
+    },
     size: {
       control: { type: 'radio' },
       options: ['x-small', 'small', 'medium', 'large'],
+      description: 'サイズ',
     },
     sortOrder: {
+      control: { type: 'radio' },
       options: [null, 'ascend', 'descend'],
-      control: false,
+      description: 'ソート順序',
     },
     isDisabled: {
       control: { type: 'boolean' },
+      description: '無効化',
     },
     width: {
       control: { type: 'text' },
+      description: '幅',
     },
     onClick: {
       control: false,
+      description: 'クリックイベント',
     },
   },
 };
@@ -201,34 +210,6 @@ const LayoutExampleRender = () => {
 export const LayoutExamples: Story = {
   render: () => (
     <div className="flex flex-col gap-10">
-      {/* <div className="grid w-full gap-4" style={{ gridTemplateColumns: '200px 1fr' }}>
-        <div className="contents">
-          <div className="typography-body12regular flex flex-col items-start justify-center text-text02">
-            サイズ：成り行き
-          </div>
-          <div className="flex">
-            <SortButton label="成り行き" sortOrder="ascend" onClick={() => {}} />
-          </div>
-        </div>
-        <div className="contents">
-          <div className="typography-body12regular flex flex-col items-start justify-center text-text02">
-            サイズ：固定
-          </div>
-          <div>
-            <SortButton label="固定（360px）" sortOrder="ascend" width="360px" onClick={() => {}} />
-          </div>
-        </div>
-        <div className="contents">
-          <div className="typography-body12regular flex flex-col items-start justify-center text-text02">
-            サイズ：親のサイズにフィット
-          </div>
-          <div className="flex flex-col">
-            <SortButton label="親のサイズにフィット" sortOrder="ascend" onClick={() => {}} />
-          </div>
-        </div>
-      </div>
-
-      <hr /> */}
       <LayoutExampleRender />
     </div>
   ),
