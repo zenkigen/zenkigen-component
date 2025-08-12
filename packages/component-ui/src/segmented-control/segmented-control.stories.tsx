@@ -19,6 +19,7 @@ const meta = {
     value: { control: 'text', description: '現在選択されている値' },
     size: { control: 'radio', options: ['small', 'medium'], description: 'サイズ' },
     isDisabled: { control: 'boolean', description: '無効化するかどうか' },
+    'aria-label': { control: 'text', description: '「このコントロール群が何のためのものか」を説明' },
   },
 } satisfies Meta<typeof SegmentedControl>;
 
