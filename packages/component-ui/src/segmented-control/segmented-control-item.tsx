@@ -96,8 +96,8 @@ export const SegmentedControlItem = ({
   };
 
   const buttonClasses = clsx('relative flex items-center justify-center gap-1 rounded', focusVisible.normal, {
-    'px-2 py-1 min-h-[32px] typography-label12regular': size === 'small',
-    'px-4 py-2 min-h-[36px] typography-label14regular': size === 'medium',
+    'px-2 min-h-[24px] typography-label12regular': size === 'small',
+    'px-4 min-h-[32px] typography-label14regular': size === 'medium',
     // States - Default with hover
     'bg-transparent text-text01 hover:bg-hover02': isSelected === false && isOptionDisabled === false,
     // States - Selected
