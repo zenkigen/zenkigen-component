@@ -101,34 +101,34 @@ export const SizesAndStates: Story = {
   render: () => (
     <div className="flex flex-col gap-8">
       <div className="flex items-center gap-8">
-        <SortButton label="項目A" size="x-small" sortOrder={null} onClick={() => {}} />
-        <SortButton label="項目A" size="small" sortOrder={null} onClick={() => {}} />
-        <SortButton label="項目A" size="medium" sortOrder={null} onClick={() => {}} />
-        <SortButton label="項目A" size="large" sortOrder={null} onClick={() => {}} />
+        <SortButton label="項目A" size="x-small" sortOrder={null} onClick={() => {}} aria-label="項目A" />
+        <SortButton label="項目A" size="small" sortOrder={null} onClick={() => {}} aria-label="項目A" />
+        <SortButton label="項目A" size="medium" sortOrder={null} onClick={() => {}} aria-label="項目A" />
+        <SortButton label="項目A" size="large" sortOrder={null} onClick={() => {}} aria-label="項目A" />
       </div>
       <div className="flex items-center gap-8">
-        <SortButton label="項目A" size="x-small" sortOrder={null} onClick={() => {}} isDisabled />
-        <SortButton label="項目A" size="small" sortOrder={null} onClick={() => {}} isDisabled />
-        <SortButton label="項目A" size="medium" sortOrder={null} onClick={() => {}} isDisabled />
-        <SortButton label="項目A" size="large" sortOrder={null} onClick={() => {}} isDisabled />
+        <SortButton label="項目A" size="x-small" sortOrder={null} onClick={() => {}} isDisabled aria-label="項目A" />
+        <SortButton label="項目A" size="small" sortOrder={null} onClick={() => {}} isDisabled aria-label="項目A" />
+        <SortButton label="項目A" size="medium" sortOrder={null} onClick={() => {}} isDisabled aria-label="項目A" />
+        <SortButton label="項目A" size="large" sortOrder={null} onClick={() => {}} isDisabled aria-label="項目A" />
       </div>
       <div className="flex items-center gap-8">
-        <SortButton label="項目A" size="x-small" sortOrder="descend" onClick={() => {}} />
-        <SortButton label="項目A" size="small" sortOrder="descend" onClick={() => {}} />
-        <SortButton label="項目A" size="medium" sortOrder="descend" onClick={() => {}} />
-        <SortButton label="項目A" size="large" sortOrder="descend" onClick={() => {}} />
+        <SortButton label="項目A" size="x-small" sortOrder="descend" onClick={() => {}} aria-label="項目A" />
+        <SortButton label="項目A" size="small" sortOrder="descend" onClick={() => {}} aria-label="項目A" />
+        <SortButton label="項目A" size="medium" sortOrder="descend" onClick={() => {}} aria-label="項目A" />
+        <SortButton label="項目A" size="large" sortOrder="descend" onClick={() => {}} aria-label="項目A" />
       </div>
       <div className="flex items-center gap-8">
-        <SortButton label="項目A" size="x-small" sortOrder="ascend" onClick={() => {}} />
-        <SortButton label="項目A" size="small" sortOrder="ascend" onClick={() => {}} />
-        <SortButton label="項目A" size="medium" sortOrder="ascend" onClick={() => {}} />
-        <SortButton label="項目A" size="large" sortOrder="ascend" onClick={() => {}} />
+        <SortButton label="項目A" size="x-small" sortOrder="ascend" onClick={() => {}} aria-label="項目A" />
+        <SortButton label="項目A" size="small" sortOrder="ascend" onClick={() => {}} aria-label="項目A" />
+        <SortButton label="項目A" size="medium" sortOrder="ascend" onClick={() => {}} aria-label="項目A" />
+        <SortButton label="項目A" size="large" sortOrder="ascend" onClick={() => {}} aria-label="項目A" />
       </div>
       <div className="flex items-center gap-8">
-        <SortButton label="項目A" size="x-small" sortOrder="ascend" onClick={() => {}} isDisabled />
-        <SortButton label="項目A" size="small" sortOrder="ascend" onClick={() => {}} isDisabled />
-        <SortButton label="項目A" size="medium" sortOrder="ascend" onClick={() => {}} isDisabled />
-        <SortButton label="項目A" size="large" sortOrder="ascend" onClick={() => {}} isDisabled />
+        <SortButton label="項目A" size="x-small" sortOrder="ascend" onClick={() => {}} isDisabled aria-label="項目A" />
+        <SortButton label="項目A" size="small" sortOrder="ascend" onClick={() => {}} isDisabled aria-label="項目A" />
+        <SortButton label="項目A" size="medium" sortOrder="ascend" onClick={() => {}} isDisabled aria-label="項目A" />
+        <SortButton label="項目A" size="large" sortOrder="ascend" onClick={() => {}} isDisabled aria-label="項目A" />
       </div>
     </div>
   ),
@@ -167,6 +167,7 @@ const LayoutExampleRender = () => {
             sortOrder={sortKey === 'date' ? sortOrder : null}
             onClick={handleSort('date')}
             size="small"
+            aria-label="作成日"
           />
         </Table.Cell>
         <Table.Cell className={headingClasses} isHeader>
@@ -175,6 +176,7 @@ const LayoutExampleRender = () => {
             sortOrder={sortKey === 'name' ? sortOrder : null}
             onClick={handleSort('name')}
             size="small"
+            aria-label="名前"
           />
         </Table.Cell>
         <Table.Cell className={headingClasses} isHeader>
@@ -183,6 +185,7 @@ const LayoutExampleRender = () => {
             sortOrder={sortKey === 'status' ? sortOrder : null}
             onClick={handleSort('status')}
             size="small"
+            aria-label="ステータス"
           />
         </Table.Cell>
       </Table.Row>
