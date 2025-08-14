@@ -32,6 +32,7 @@ const meta: Meta<typeof SortButton> = {
       control: { type: 'text' },
       description: '幅',
     },
+    'aria-label': { control: 'text', description: 'このボタンの説明' },
     onClick: {
       control: false,
       description: 'クリックイベント',
@@ -62,7 +63,7 @@ const ComponentRender = (args: React.ComponentProps<typeof SortButton>) => {
           {...args}
           sortOrder={sortOrder}
           onClick={handleClick}
-          aria-label={`検出回数 ${sortOrder === null ? 'ソートなし' : sortOrder === 'ascend' ? '昇順' : '降順'}`}
+          aria-label={`項目A ${sortOrder === null ? 'ソートなし' : sortOrder === 'ascend' ? '昇順' : '降順'}`}
         />
       </div>
       <hr />

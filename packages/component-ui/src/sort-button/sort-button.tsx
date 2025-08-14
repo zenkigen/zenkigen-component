@@ -8,17 +8,27 @@ import type { SortOrder } from './type';
 
 type Props = Omit<
   ButtonHTMLAttributes<HTMLButtonElement>,
-  'className' | 'type' | 'disabled' | 'onClick' | 'aria-disabled'
+  'className' | 'type' | 'disabled' | 'onClick' | 'aria-disabled' | 'aria-label'
 > & {
   size?: 'x-small' | 'small' | 'medium' | 'large';
   width?: CSSProperties['width'];
   label: string;
   sortOrder: SortOrder;
   isDisabled?: boolean;
+  'aria-label': string;
   onClick?: () => void;
 };
 
-export function SortButton({ size = 'medium', width, label, sortOrder, isDisabled = false, onClick, ...rest }: Props) {
+export function SortButton({
+  size = 'medium',
+  width,
+  label,
+  sortOrder,
+  isDisabled = false,
+  onClick,
+  'aria-label': ariaLabel,
+  ...rest
+}: Props) {
   const handleClick = useCallback(() => {
     if (isDisabled || !onClick) return;
 
@@ -71,6 +81,7 @@ export function SortButton({ size = 'medium', width, label, sortOrder, isDisable
         type="button"
         onClick={handleClick}
         disabled={isDisabled}
+        aria-label={ariaLabel}
         aria-disabled={isDisabled}
       >
         <div className={labelClasses}>{label}</div>
