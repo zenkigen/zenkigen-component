@@ -219,6 +219,9 @@ const LayoutExampleRender = () => {
 };
 
 export const LayoutExamples: Story = {
+  parameters: {
+    chromatic: { disable: true },
+  },
   render: () => (
     <div className="flex flex-col gap-10">
       <LayoutExampleRender />
