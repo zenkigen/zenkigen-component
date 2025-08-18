@@ -54,6 +54,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, Props>(
         <textarea
           ref={ref}
           className={classes}
+          disabled={disabled}
           {...props}
           style={{
             ...{ maxHeight },
