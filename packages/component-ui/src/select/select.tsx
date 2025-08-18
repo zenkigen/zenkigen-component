@@ -71,7 +71,7 @@ export function Select({
       'px-2': size === 'x-small' || size === 'small',
       'px-4': size === 'medium' || size === 'large',
       'pointer-events-none': isDisabled,
-      'border-supportError': isError,
+      'border-supportError': !isSelected && !isDisabled && isError,
     },
   );
 
