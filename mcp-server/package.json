@@ -17,7 +17,7 @@
     "inspector": "npx @modelcontextprotocol/inspector node build/index.js"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "1.15.1",
+    "@modelcontextprotocol/sdk": "1.15.3",
     "zod": "3.25.76"
   },
   "devDependencies": {
