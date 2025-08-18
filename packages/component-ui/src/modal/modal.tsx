@@ -14,12 +14,21 @@ const LIMIT_HEIGHT = 184;
 type Props = {
   width?: CSSProperties['width'];
   height?: CSSProperties['height'];
+  maxWidth?: CSSProperties['maxWidth'];
   isOpen: boolean;
   onClose?: () => void;
   portalTargetRef?: MutableRefObject<HTMLElement | null>;
 };
 
-export function Modal({ children, width = 480, height, isOpen, onClose, portalTargetRef }: PropsWithChildren<Props>) {
+export function Modal({
+  children,
+  width = 480,
+  height,
+  maxWidth = 'calc(100vw - 40px)',
+  isOpen,
+  onClose,
+  portalTargetRef,
+}: PropsWithChildren<Props>) {
   const [isMounted, setIsMounted] = useState(false);
 
   const renderWidth = typeof width === 'number' ? Math.max(width, LIMIT_WIDTH) : width;
@@ -37,7 +46,7 @@ export function Modal({ children, width = 480, height, isOpen, onClose, portalTa
           <div className="fixed left-0 top-0 z-overlay flex size-full items-center justify-center bg-backgroundOverlayBlack py-4">
             <div
               className="grid max-h-full min-h-[120px] grid-rows-[max-content_1fr_max-content] flex-col rounded-lg bg-uiBackground01 shadow-modalShadow"
-              style={{ width: renderWidth, height: renderHeight }}
+              style={{ width: renderWidth, height: renderHeight, maxWidth }}
             >
               {children}
             </div>
