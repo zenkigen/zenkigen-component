@@ -3217,7 +3217,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zenkigen-inc/component-config@workspace:packages/component-config"
   dependencies:
-    "@zenkigen-inc/component-theme": "npm:1.15.2"
+    "@zenkigen-inc/component-theme": "npm:1.15.3"
     style-dictionary: "npm:3.9.2"
     tailwindcss: "npm:3.4.17"
     token-transformer: "npm:0.0.33"
@@ -3226,7 +3226,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zenkigen-inc/component-icons@npm:1.15.2, @zenkigen-inc/component-icons@workspace:packages/component-icons":
+"@zenkigen-inc/component-icons@npm:1.15.3, @zenkigen-inc/component-icons@workspace:packages/component-icons":
   version: 0.0.0-use.local
   resolution: "@zenkigen-inc/component-icons@workspace:packages/component-icons"
   dependencies:
@@ -3240,7 +3240,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zenkigen-inc/component-theme@npm:1.15.2, @zenkigen-inc/component-theme@workspace:packages/component-theme":
+"@zenkigen-inc/component-theme@npm:1.15.3, @zenkigen-inc/component-theme@workspace:packages/component-theme":
   version: 0.0.0-use.local
   resolution: "@zenkigen-inc/component-theme@workspace:packages/component-theme"
   dependencies:
@@ -3257,8 +3257,8 @@ __metadata:
     "@testing-library/jest-dom": "npm:6.4.0"
     "@testing-library/react": "npm:15.0.0"
     "@testing-library/user-event": "npm:14.6.1"
-    "@zenkigen-inc/component-icons": "npm:1.15.2"
-    "@zenkigen-inc/component-theme": "npm:1.15.2"
+    "@zenkigen-inc/component-icons": "npm:1.15.3"
+    "@zenkigen-inc/component-theme": "npm:1.15.3"
     clsx: "npm:2.1.1"
     hygen: "npm:6.2.11"
     tsup: "npm:8.5.0"
