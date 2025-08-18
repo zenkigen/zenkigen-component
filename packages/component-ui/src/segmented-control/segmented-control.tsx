@@ -79,7 +79,7 @@ export const SegmentedControl = ({
       <SegmentedControlContext.Provider value={contextValue}>
         <div
           ref={containerRef}
-          className="inline-grid gap-1 rounded-lg bg-uiBackground02 p-1"
+          className="grid gap-1 rounded-lg bg-uiBackground02 p-1"
           style={containerStyle}
           role="tablist"
           aria-label={ariaLabel}
