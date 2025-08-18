@@ -9,6 +9,13 @@ import type { SortOrder } from './type';
 const meta: Meta<typeof SortButton> = {
   title: 'Components/SortButton',
   component: SortButton,
+  parameters: {
+    docs: {
+      source: {
+        code: ``,
+      },
+    },
+  },
   argTypes: {
     label: {
       control: { type: 'text' },
