@@ -15,6 +15,7 @@ export * from './pagination';
 export * from './pagination-select';
 export * from './radio';
 export * from './search';
+export * from './segmented-control';
 export * from './select';
 export * from './select-sort';
 export * from './tab';

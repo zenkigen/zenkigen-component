@@ -71,7 +71,7 @@ export function Checkbox({
     'bg-disabled01': isDisabled && isChecked,
     'bg-hover01': !(isDisabled && isChecked) && isMouseOver,
     'bg-interactive01': !(isDisabled && isChecked) && !isMouseOver,
-    'bg-hover02Dark': !(isDisabled && isChecked) && isMouseOver && color === 'gray',
+    'bg-hoverGray': !(isDisabled && isChecked) && isMouseOver && color === 'gray',
     'bg-interactive02': !(isDisabled && isChecked) && !isMouseOver && color === 'gray',
     'bg-hoverError': !(isDisabled && isChecked) && isMouseOver && color === 'error',
     'bg-supportError': !(isDisabled && isChecked) && !isMouseOver && color === 'error',

@@ -66,7 +66,7 @@ function IconList(props: Props) {
       <Icon name="delete" color={props.color} />
       <Icon name="document" color={props.color} />
       <Icon name="documents" color={props.color} />
-      <Icon name="double circle" color={props.color} />
+      <Icon name="double-circle" color={props.color} />
       <Icon name="download-document" color={props.color} />
       <Icon name="download" color={props.color} />
       <Icon name="edit" color={props.color} />
@@ -157,6 +157,44 @@ export function Color() {
       <IconList color="icon03" />
       <div>iconOnColor:</div>
       <IconList color="iconOnColor" className="bg-interactive01" />
+    </div>
+  );
+}
+
+export function ColorFill() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+      {/* Interactive Colors */}
+      <div>Interactive Colors:</div>
+      <IconList className="fill-interactive01" />
+      <IconList className="fill-interactive02" />
+      <IconList className="fill-interactive03" />
+      <IconList className="fill-interactive04" />
+
+      {/* Support Colors */}
+      <div>Support Colors:</div>
+      <IconList className="fill-supportError" />
+      <IconList className="fill-supportSuccess" />
+      <IconList className="fill-supportInfo" />
+      <IconList className="fill-supportWarning" />
+      <IconList className="fill-supportDanger" />
+
+      {/* Disabled Colors */}
+      <div>Disabled Colors:</div>
+      <IconList className="fill-disabled01" />
+      <IconList className="fill-disabled02" />
+      <IconList className="fill-disabled03" />
+      <IconList className="fill-disabled04" />
+
+      {/* Color Variants */}
+      <div>Color Variants:</div>
+      <IconList className="fill-blue-blue100" />
+      <IconList className="fill-gray-gray100" />
+      <IconList className="fill-red-red100" />
+      <IconList className="fill-yellow-yellow100" />
+      <IconList className="fill-green-green100" />
+      <IconList className="fill-purple-purple100" />
+      <IconList className="fill-blueGreen-blueGreen100" />
     </div>
   );
 }
