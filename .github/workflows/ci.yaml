@@ -60,7 +60,7 @@ jobs:
       - name: Build
         run: yarn build:all
 
-      - name: Lint
+      - name: Lint and filename check
         run: yarn lint
 
   test:
