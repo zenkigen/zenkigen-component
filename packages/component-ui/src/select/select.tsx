@@ -1,5 +1,5 @@
 import type { IconName } from '@zenkigen-inc/component-icons';
-import { buttonColors, focusVisible } from '@zenkigen-inc/component-theme';
+import { focusVisible, selectColors } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
 import type { CSSProperties, PropsWithChildren } from 'react';
 import { useRef, useState } from 'react';
@@ -21,6 +21,7 @@ type Props = {
   selectedOption?: SelectOption | null;
   optionListMaxHeight?: CSSProperties['height'];
   isDisabled?: boolean;
+  isError?: boolean;
   isOptionSelected?: boolean;
   onChange?: (option: SelectOption | null) => void;
 };
@@ -35,6 +36,7 @@ export function Select({
   placeholderIcon,
   selectedOption = null,
   isDisabled = false,
+  isError = false,
   isOptionSelected = false,
   onChange,
   optionListMaxHeight,
@@ -45,6 +47,11 @@ export function Select({
 
   const handleClickToggle = () => setIsOptionListOpen((prev) => !prev);
 
+  const buttonVariant: 'outline' | 'text' | 'outlineError' | 'textError' =
+    isError && !isDisabled ? (`${variant}Error` as 'outlineError' | 'textError') : variant;
+
+  const isSelected = isOptionSelected && !isDisabled && selectedOption !== null && !isError;
+
   const wrapperClasses = clsx('relative flex shrink-0 items-center gap-1 rounded bg-uiBackground01', {
     'h-6': size === 'x-small' || size === 'small',
     'h-8': size === 'medium',
@@ -54,16 +61,17 @@ export function Select({
 
   const buttonClasses = clsx(
     'flex size-full items-center rounded',
-    buttonColors[variant].hover,
-    buttonColors[variant].active,
-    buttonColors[variant].disabled,
+    selectColors[buttonVariant].hover,
+    selectColors[buttonVariant].active,
+    selectColors[buttonVariant].disabled,
     focusVisible.normal,
     {
-      [buttonColors[variant].selected]: isOptionSelected && !isDisabled && selectedOption,
-      [buttonColors[variant].base]: !(isOptionSelected && !isDisabled && selectedOption),
+      [selectColors[buttonVariant].selected]: isSelected,
+      [selectColors[buttonVariant].base]: !isSelected,
       'px-2': size === 'x-small' || size === 'small',
       'px-4': size === 'medium' || size === 'large',
       'pointer-events-none': isDisabled,
+      'border-supportError': !isSelected && !isDisabled && isError,
     },
   );
 
@@ -84,6 +92,7 @@ export function Select({
         setIsOptionListOpen,
         selectedOption,
         onChange,
+        isError,
       }}
     >
       <div className={wrapperClasses} style={{ width, maxWidth }} ref={targetRef}>
