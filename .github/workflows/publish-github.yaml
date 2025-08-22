@@ -1,0 +1,46 @@
+name: Publish to GitHub Packages
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  publish-github:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read Node version from .node-version
+        run: echo "node_version=$(cat .node-version)" >> $GITHUB_OUTPUT
+        id: node-version
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ steps.node-version.outputs.node_version }}
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@zenkigen-inc'
+          always-auth: true
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build packages
+        run: yarn build-lib:all
+
+      - name: Publish to GitHub Packages
+        run: |
+          for package in packages/*/package.json; do
+            dir=$(dirname "$package")
+            cd "$dir"
+            npm publish
+            cd "../.."
+          done
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_OPTIONS: --max_old_space_size=8192
