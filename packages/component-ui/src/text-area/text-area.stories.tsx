@@ -87,6 +87,7 @@ export const Base: Story = {
                 action('onChange')(e);
                 setValue(e.target.value);
               }}
+              className="border-2 border-black bg-yellow-500"
             />
             <ErrorText></ErrorText>
           </div>
