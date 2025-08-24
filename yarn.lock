@@ -83,7 +83,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:^7.18.9, @babel/core@npm:^7.27.4":
+"@babel/core@npm:^7.18.9, @babel/core@npm:^7.28.3":
   version: 7.28.3
   resolution: "@babel/core@npm:7.28.3"
   dependencies:
@@ -2002,10 +2002,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rolldown/pluginutils@npm:1.0.0-beta.19":
-  version: 1.0.0-beta.19
-  resolution: "@rolldown/pluginutils@npm:1.0.0-beta.19"
-  checksum: 10c0/e4205df56e6231a347ac601d044af365639741d51b5bea4e91ecc37e19e9777cb79d1daa924b8709ddf1f743ed6922e4e68e2445126434c4d420d9f4416f4feb
+"@rolldown/pluginutils@npm:1.0.0-beta.32":
+  version: 1.0.0-beta.32
+  resolution: "@rolldown/pluginutils@npm:1.0.0-beta.32"
+  checksum: 10c0/ba3582fc3c35c8eb57b0df2d22d0733b1be83d37edcc258203364773f094f58fc0cb7a056d604603573a69dd0105a466506cad467f59074e1e53d0dc26191f06
   languageName: node
   linkType: hard
 
@@ -3052,19 +3052,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitejs/plugin-react@npm:4.6.0":
-  version: 4.6.0
-  resolution: "@vitejs/plugin-react@npm:4.6.0"
+"@vitejs/plugin-react@npm:5.0.1":
+  version: 5.0.1
+  resolution: "@vitejs/plugin-react@npm:5.0.1"
   dependencies:
-    "@babel/core": "npm:^7.27.4"
+    "@babel/core": "npm:^7.28.3"
     "@babel/plugin-transform-react-jsx-self": "npm:^7.27.1"
     "@babel/plugin-transform-react-jsx-source": "npm:^7.27.1"
-    "@rolldown/pluginutils": "npm:1.0.0-beta.19"
+    "@rolldown/pluginutils": "npm:1.0.0-beta.32"
     "@types/babel__core": "npm:^7.20.5"
     react-refresh: "npm:^0.17.0"
   peerDependencies:
-    vite: ^4.2.0 || ^5.0.0 || ^6.0.0 || ^7.0.0-beta.0
-  checksum: 10c0/73b8f271978a0337debb255afd1667f49c2018c118962a8613120383375c4038255a5315cee2ef210dc7fd07cd30d5b12271077ad47db29980f8156b8a49be2c
+    vite: ^4.2.0 || ^5.0.0 || ^6.0.0 || ^7.0.0
+  checksum: 10c0/2641171beedfc38edc5671abb47706906f9af2a79a6dfff4e946106c9550de4f83ccae41c164f3ee26a3edf07127ecc0e415fe5cddbf7abc71fbb2540016c27d
   languageName: node
   linkType: hard
 
@@ -9737,7 +9737,7 @@ __metadata:
     "@types/react-dom": "npm:19.1.6"
     "@typescript-eslint/eslint-plugin": "npm:8.36.0"
     "@typescript-eslint/parser": "npm:8.36.0"
-    "@vitejs/plugin-react": "npm:4.6.0"
+    "@vitejs/plugin-react": "npm:5.0.1"
     autoprefixer: "npm:10.4.21"
     babel-loader: "npm:9.2.1"
     eslint: "npm:9.31.0"
