@@ -1,5 +1,5 @@
 import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/blocks';
-import TabStories, { Component } from './tab.stories';
+import TabStories, { Component, ComponentItem, LayoutExamples } from './tab.stories';
 
 <Meta title="Tab" of={TabStories} />
 
@@ -9,4 +9,12 @@ import TabStories, { Component } from './tab.stories';
   <Story of={Component} />
 </Canvas>
 
-<Controls of={Component} />
+## Tab.Item
+
+<Canvas of={ComponentItem} />
+
+<Controls of={ComponentItem} />
+
+## Layout examples
+
+<Canvas of={LayoutExamples} />
