@@ -1,6 +1,6 @@
 {
   "name": "@zenkigen-inc/component-config",
-  "version": "1.15.3",
+  "version": "1.16.0",
   "repository": "https://github.com/zenkigen/zenkigen-component",
   "license": "MIT",
   "publishConfig": {
@@ -30,6 +30,6 @@
     "typescript": "5.8.3"
   },
   "dependencies": {
-    "@zenkigen-inc/component-theme": "1.15.3"
+    "@zenkigen-inc/component-theme": "1.16.0"
   }
 }
