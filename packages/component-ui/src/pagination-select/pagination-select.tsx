@@ -69,7 +69,7 @@ export function PaginationSelect({
             <Select.Option key={option.id} option={option} />
           ))}
         </Select>
-        <div className="typography-label14regular text-text03">
+        <div className="typography-label14regular text-text02">
           / {pageMax}
           {pageLabel}
         </div>
