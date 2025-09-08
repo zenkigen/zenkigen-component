@@ -2,8 +2,8 @@ import type { CSSProperties, PropsWithChildren, ReactNode } from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import { useTooltip } from './tooltip.hook';
 import { TooltipContent } from './tooltip-content';
+import { useTooltip } from './tooltip-hook';
 import type { TooltipHorizontalAlign, TooltipPosition, TooltipSize, TooltipVerticalPosition } from './type';
 
 type Props = {
