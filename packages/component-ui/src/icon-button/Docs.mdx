@@ -5,8 +5,25 @@ import IconButtonStories, { Component } from './icon-button.stories';
 
 # IconButton
 
-<Canvas>
-  <Story of={Component} />
-</Canvas>
+<Canvas />
 
 <Controls of={Component} />
+
+### Code Example
+
+```tsx
+import { IconButton } from '@zenkigen-inc/component-ui';
+import { useState } from 'react';
+
+const [isSelected, setIsSelected] = useState(false);
+
+return (
+  <IconButton
+    icon="add"
+    size="medium"
+    variant="outline"
+    isSelected={isSelected}
+    onClick={() => setIsSelected(!isSelected)}
+  />
+);
+```
