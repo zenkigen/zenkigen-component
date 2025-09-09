@@ -1,9 +1,8 @@
 import { clsx } from 'clsx';
-import type { CSSProperties, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 type Props = {
   id: string;
-  minWidth?: CSSProperties['minWidth'];
   isSelected?: boolean;
   isDisabled?: boolean;
   children?: ReactNode;
@@ -29,7 +28,6 @@ export const TabItem = ({ isSelected = false, ...props }: Props) => {
       className={classes}
       disabled={props.isDisabled}
       onClick={() => props.onClick(props.id)}
-      style={{ minWidth: props.minWidth }}
     >
       {props.children}
     </button>
