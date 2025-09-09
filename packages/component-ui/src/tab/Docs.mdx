@@ -1,19 +1,43 @@
-import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/blocks';
-import TabStories, { Component, ComponentItem, LayoutExamples } from './tab.stories';
+import { Canvas, Meta, Story, Controls, Source } from '@storybook/blocks';
+import TabStories, { Component, LayoutAutoExample, LayoutEqualExample, LayoutExamples } from './tab.stories';
 
-<Meta title="Tab" of={TabStories} />
+<Meta of={TabStories} />
 
 # Tab
 
-<Canvas>
-  <Story of={Component} />
-</Canvas>
+<Canvas />
 
-## Tab.Item
+<Controls of={Component} />
 
-<Canvas of={ComponentItem} />
+### Code Example
 
-<Controls of={ComponentItem} />
+- 各Tab.Itemには一意の`id`を指定すること。
+
+```tsx
+import { Tab } from '@zenkigen-inc/component-ui';
+import { useState } from 'react';
+
+const [selectedTab, setSelectedTab] = useState('tab1');
+
+return (
+  <Tab>
+    <Tab.Item id="tab1" isSelected={selectedTab === 'tab1'} onClick={setSelectedTab}>
+      短い
+    </Tab.Item>
+    <Tab.Item id="tab2" isSelected={selectedTab === 'tab2'} onClick={setSelectedTab}>
+      中程度のタブ
+    </Tab.Item>
+    <Tab.Item id="tab3" isSelected={selectedTab === 'tab3'} onClick={setSelectedTab} isDisabled>
+      無効なタブ
+    </Tab.Item>
+  </Tab>
+);
+```
+
+## Stories
+
+<Canvas of={LayoutAutoExample} />
+<Canvas of={LayoutEqualExample} />
 
 ## Layout examples
 
