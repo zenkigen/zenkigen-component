@@ -57,8 +57,6 @@ export function IconButton({
       'pointer-events-none': isDisabled,
       [buttonColors[variant].selected]: isSelected,
       [buttonColors[variant].base]: !isSelected,
-      'hover:text-textOnColor active:text-textOnColor [&:hover>*]:fill-iconOnColor [&:active>*]:fill-iconOnColor':
-        isSelected && variant !== 'outline' && variant !== 'text',
     },
   );
 
