@@ -9,33 +9,41 @@ type Size = 'small' | 'medium' | 'large';
 type Variant = 'outline' | 'text';
 
 type Props = {
+  /** 表示するアイコン名 */
   icon: IconName;
+  /** ボタンのサイズ */
   size?: Size;
+  /** ボタンが無効かどうか */
   isDisabled?: boolean;
+  /** ボタンが選択されているかどうか */
+  isSelected?: boolean;
+  /** パディングを無効にするかどうか */
   isNoPadding?: boolean;
+  /** ボタンのバリアント */
   variant?: Variant;
 } & (
-  | {
+  | ({
       isAnchor: true;
       href: string;
       target?: HTMLAnchorElement['target'];
-    }
-  | {
+    } & Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href' | 'target' | 'className'>)
+  | ({
       isAnchor?: false;
       onClick?: () => void;
-    }
+    } & Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onClick' | 'disabled' | 'className'>)
 );
 
 export function IconButton({
+  icon,
   size = 'medium',
   variant = 'outline',
   isNoPadding = false,
   isDisabled = false,
+  isSelected = false,
   ...props
 }: Props) {
   const baseClasses = clsx(
     'typography-label16regular flex items-center justify-center gap-1 rounded',
-    buttonColors[variant].base,
     buttonColors[variant].hover,
     buttonColors[variant].active,
     buttonColors[variant].disabled,
@@ -47,21 +55,31 @@ export function IconButton({
       'h-10 w-10': size === 'large' && !isNoPadding,
       'inline-flex': props.isAnchor,
       'pointer-events-none': isDisabled,
+      [buttonColors[variant].selected]: isSelected,
+      [buttonColors[variant].base]: !isSelected,
+      'hover:text-textOnColor active:text-textOnColor [&:hover>*]:fill-iconOnColor [&:active>*]:fill-iconOnColor':
+        isSelected && variant !== 'outline' && variant !== 'text',
     },
   );
 
   const iconSize = size === 'small' ? 'small' : 'medium';
 
   if (props.isAnchor === true) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { isAnchor, href, target, className, ...anchorProps } = props as any;
+
     return (
-      <a className={baseClasses} href={props.href} target={props.target}>
-        <Icon name={props.icon} size={iconSize} />
+      <a className={baseClasses} href={href} target={target} {...anchorProps}>
+        <Icon name={icon} size={iconSize} />
       </a>
     );
   } else {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { isAnchor, onClick, className, ...buttonProps } = props as any;
+
     return (
-      <button type="button" className={baseClasses} disabled={isDisabled} onClick={props.onClick}>
-        <Icon name={props.icon} size={iconSize} />
+      <button type="button" className={baseClasses} disabled={isDisabled} onClick={onClick} {...buttonProps}>
+        <Icon name={icon} size={iconSize} />
       </button>
     );
   }
