@@ -15,7 +15,7 @@ const meta = {
     },
   },
   argTypes: {
-    layout: { control: 'radio', options: ['auto', 'equal'], description: 'レイアウト' },
+    layout: { control: 'radio', options: ['auto', 'equal'] },
   },
 } satisfies Meta<typeof Tab>;
 

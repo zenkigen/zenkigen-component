@@ -6,6 +6,7 @@ import { TabItem } from './tab-item';
 
 type Props = {
   children?: ReactNode;
+  /** レイアウトタイプ */
   layout?: 'auto' | 'equal';
 };
 
