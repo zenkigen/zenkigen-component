@@ -219,5 +219,37 @@ describe('IconButton', () => {
       expect(normalButton).toHaveFocus();
       expect(disabledButton).not.toHaveFocus();
     });
+
+    describe('aria-label', () => {
+      it('ボタン要素にaria-label属性が指定できること', () => {
+        const ariaLabel = '追加ボタン';
+        render(<IconButton icon="add" aria-label={ariaLabel} data-testid="icon-button" />);
+        const button = screen.getByTestId('icon-button');
+        expect(button).toHaveAttribute('aria-label', ariaLabel);
+      });
+
+      it('アンカー要素にaria-label属性が指定できること', () => {
+        const ariaLabel = '追加リンク';
+        render(<IconButton icon="add" isAnchor href="/test" aria-label={ariaLabel} data-testid="icon-button" />);
+        const link = screen.getByTestId('icon-button');
+        expect(link).toHaveAttribute('aria-label', ariaLabel);
+      });
+
+      it('aria-label属性でボタンを特定できること', () => {
+        const ariaLabel = '項目を追加';
+        render(<IconButton icon="add" aria-label={ariaLabel} />);
+        const button = screen.getByLabelText(ariaLabel);
+        expect(button).toBeInTheDocument();
+        expect(button.tagName).toBe('BUTTON');
+      });
+
+      it('aria-label属性でアンカーを特定できること', () => {
+        const ariaLabel = '新しいページに移動';
+        render(<IconButton icon="add" isAnchor href="/test" aria-label={ariaLabel} />);
+        const link = screen.getByLabelText(ariaLabel);
+        expect(link).toBeInTheDocument();
+        expect(link.tagName).toBe('A');
+      });
+    });
   });
 });
