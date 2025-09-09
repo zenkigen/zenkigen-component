@@ -65,8 +65,7 @@ export function IconButton({
   const iconSize = size === 'small' ? 'small' : 'medium';
 
   if (props.isAnchor === true) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { isAnchor, href, target, className, ...anchorProps } = props as any;
+    const { href, target, ...anchorProps } = props;
 
     return (
       <a className={baseClasses} href={href} target={target} {...anchorProps}>
@@ -74,8 +73,7 @@ export function IconButton({
       </a>
     );
   } else {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { isAnchor, onClick, className, ...buttonProps } = props as any;
+    const { onClick, ...buttonProps } = props;
 
     return (
       <button type="button" className={baseClasses} disabled={isDisabled} onClick={onClick} {...buttonProps}>
