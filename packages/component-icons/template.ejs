@@ -4,18 +4,18 @@
 */
 import type React from 'react';
 
-export type IconName = <%- result.map(({ key }) => `'${key}'`).join(' | ') %>;
+export type IconName = <%- [...result].reverse().map(({ key }) => `'${key}'`).join(' | ') %>;
 
 export type IconComponent = React.FC<{ accentClassName?: string }>;
 
 // Import all icon components
-<% result.forEach(({ key }) => { %>
+<% [...result].reverse().forEach(({ key }) => { %>
 import { <%- key.replace(/[-\s]/g, '') %>Icon } from './icons/<%- key %>';
 <% }) %>
 
 // Icon elements mapping
 export const iconElements = {
-  <% result.forEach(({ key }) => { %>
+  <% [...result].reverse().forEach(({ key }) => { %>
     '<%- key %>': <%- key.replace(/[-\s]/g, '') %>Icon,
   <% }) %>
 };

@@ -4,458 +4,458 @@
 */
 import type React from 'react';
 
-export type IconName = 'warning' | 'volume' | 'volume-off' | 'video' | 'video-off' | 'user' | 'user-remove' | 'user-one' | 'user-multi' | 'user-line' | 'user-group' | 'user-add' | 'upload' | 'triangle' | 'transcription' | 'timer' | 'table' | 'table-upload' | 'table-download' | 'success-filled' | 'star' | 'star-filled' | 'sparkle' | 'sort' | 'sort-up' | 'sort-down' | 'slider-editing' | 'sidebar' | 'shuffle' | 'share' | 'send' | 'search' | 'score' | 'repeat' | 'remove' | 'presentation' | 'play' | 'play-filled' | 'picture-in-picture' | 'pdf' | 'pause' | 'notification' | 'network' | 'movie' | 'more' | 'minus' | 'mic' | 'mic-off' | 'message-text' | 'logout' | 'list' | 'link' | 'input-delete' | 'information' | 'information-filled' | 'image' | 'home' | 'hint' | 'help' | 'handle' | 'hamburger' | 'hamburger-open' | 'hamburger-close' | 'graph-line' | 'global' | 'flag' | 'filter' | 'external-link' | 'expand' | 'email' | 'edit' | 'download' | 'download-document' | 'double-circle' | 'documents' | 'document' | 'delete' | 'copy' | 'contract' | 'comment' | 'close' | 'circle' | 'check' | 'chart-line' | 'chart-bar' | 'catch' | 'caret-right' | 'caret-down' | 'calendar' | 'calendar-today' | 'calendar-minus' | 'calendar-draft' | 'calendar-check' | 'calendar-attention' | 'building' | 'bookmark' | 'beginner' | 'attention' | 'attachment' | 'arrow-up' | 'arrow-right' | 'arrow-left' | 'arrow-down' | 'angle-up' | 'angle-small-up' | 'angle-small-down' | 'angle-right' | 'angle-left' | 'angle-down' | 'ai' | 'add';
+export type IconName = 'add' | 'ai' | 'angle-down' | 'angle-left' | 'angle-right' | 'angle-small-down' | 'angle-small-up' | 'angle-up' | 'arrow-down' | 'arrow-left' | 'arrow-right' | 'arrow-up' | 'attachment' | 'attention' | 'beginner' | 'bookmark' | 'building' | 'calendar-attention' | 'calendar-check' | 'calendar-draft' | 'calendar-minus' | 'calendar-today' | 'calendar' | 'caret-down' | 'caret-right' | 'catch' | 'chart-bar' | 'chart-line' | 'check' | 'circle' | 'close' | 'comment' | 'contract' | 'copy' | 'delete' | 'document' | 'documents' | 'double-circle' | 'download-document' | 'download' | 'edit' | 'email' | 'expand' | 'external-link' | 'filter' | 'flag' | 'global' | 'graph-line' | 'hamburger-close' | 'hamburger-open' | 'hamburger' | 'handle' | 'help' | 'hint' | 'home' | 'image' | 'information-filled' | 'information' | 'input-delete' | 'link' | 'list' | 'logout' | 'message-text' | 'mic-off' | 'mic' | 'minus' | 'more' | 'movie' | 'network' | 'notification' | 'pause' | 'pdf' | 'picture-in-picture' | 'play-filled' | 'play' | 'presentation' | 'remove' | 'repeat' | 'score' | 'search' | 'send' | 'share' | 'shuffle' | 'sidebar' | 'slider-editing' | 'sort-down' | 'sort-up' | 'sort' | 'sparkle' | 'star-filled' | 'star' | 'success-filled' | 'table-download' | 'table-upload' | 'table' | 'timer' | 'transcription' | 'triangle' | 'upload' | 'user-add' | 'user-group' | 'user-line' | 'user-multi' | 'user-one' | 'user-remove' | 'user' | 'video-off' | 'video' | 'volume-off' | 'volume' | 'warning';
 
 export type IconComponent = React.FC<{ accentClassName?: string }>;
 
 // Import all icon components
 
-import { warningIcon } from './icons/warning';
-
-import { volumeIcon } from './icons/volume';
-
-import { volumeoffIcon } from './icons/volume-off';
-
-import { videoIcon } from './icons/video';
-
-import { videooffIcon } from './icons/video-off';
-
-import { userIcon } from './icons/user';
-
-import { userremoveIcon } from './icons/user-remove';
-
-import { useroneIcon } from './icons/user-one';
-
-import { usermultiIcon } from './icons/user-multi';
-
-import { userlineIcon } from './icons/user-line';
-
-import { usergroupIcon } from './icons/user-group';
-
-import { useraddIcon } from './icons/user-add';
-
-import { uploadIcon } from './icons/upload';
-
-import { triangleIcon } from './icons/triangle';
-
-import { transcriptionIcon } from './icons/transcription';
-
-import { timerIcon } from './icons/timer';
-
-import { tableIcon } from './icons/table';
-
-import { tableuploadIcon } from './icons/table-upload';
-
-import { tabledownloadIcon } from './icons/table-download';
-
-import { successfilledIcon } from './icons/success-filled';
-
-import { starIcon } from './icons/star';
-
-import { starfilledIcon } from './icons/star-filled';
-
-import { sparkleIcon } from './icons/sparkle';
-
-import { sortIcon } from './icons/sort';
-
-import { sortupIcon } from './icons/sort-up';
-
-import { sortdownIcon } from './icons/sort-down';
-
-import { slidereditingIcon } from './icons/slider-editing';
-
-import { sidebarIcon } from './icons/sidebar';
-
-import { shuffleIcon } from './icons/shuffle';
-
-import { shareIcon } from './icons/share';
-
-import { sendIcon } from './icons/send';
-
-import { searchIcon } from './icons/search';
-
-import { scoreIcon } from './icons/score';
-
-import { repeatIcon } from './icons/repeat';
-
-import { removeIcon } from './icons/remove';
-
-import { presentationIcon } from './icons/presentation';
-
-import { playIcon } from './icons/play';
-
-import { playfilledIcon } from './icons/play-filled';
-
-import { pictureinpictureIcon } from './icons/picture-in-picture';
-
-import { pdfIcon } from './icons/pdf';
-
-import { pauseIcon } from './icons/pause';
-
-import { notificationIcon } from './icons/notification';
-
-import { networkIcon } from './icons/network';
-
-import { movieIcon } from './icons/movie';
-
-import { moreIcon } from './icons/more';
-
-import { minusIcon } from './icons/minus';
-
-import { micIcon } from './icons/mic';
-
-import { micoffIcon } from './icons/mic-off';
-
-import { messagetextIcon } from './icons/message-text';
-
-import { logoutIcon } from './icons/logout';
-
-import { listIcon } from './icons/list';
-
-import { linkIcon } from './icons/link';
-
-import { inputdeleteIcon } from './icons/input-delete';
-
-import { informationIcon } from './icons/information';
-
-import { informationfilledIcon } from './icons/information-filled';
-
-import { imageIcon } from './icons/image';
-
-import { homeIcon } from './icons/home';
-
-import { hintIcon } from './icons/hint';
-
-import { helpIcon } from './icons/help';
-
-import { handleIcon } from './icons/handle';
-
-import { hamburgerIcon } from './icons/hamburger';
-
-import { hamburgeropenIcon } from './icons/hamburger-open';
-
-import { hamburgercloseIcon } from './icons/hamburger-close';
-
-import { graphlineIcon } from './icons/graph-line';
-
-import { globalIcon } from './icons/global';
-
-import { flagIcon } from './icons/flag';
-
-import { filterIcon } from './icons/filter';
-
-import { externallinkIcon } from './icons/external-link';
-
-import { expandIcon } from './icons/expand';
-
-import { emailIcon } from './icons/email';
-
-import { editIcon } from './icons/edit';
-
-import { downloadIcon } from './icons/download';
-
-import { downloaddocumentIcon } from './icons/download-document';
-
-import { doublecircleIcon } from './icons/double-circle';
-
-import { documentsIcon } from './icons/documents';
-
-import { documentIcon } from './icons/document';
-
-import { deleteIcon } from './icons/delete';
-
-import { copyIcon } from './icons/copy';
-
-import { contractIcon } from './icons/contract';
-
-import { commentIcon } from './icons/comment';
-
-import { closeIcon } from './icons/close';
-
-import { circleIcon } from './icons/circle';
-
-import { checkIcon } from './icons/check';
-
-import { chartlineIcon } from './icons/chart-line';
-
-import { chartbarIcon } from './icons/chart-bar';
-
-import { catchIcon } from './icons/catch';
-
-import { caretrightIcon } from './icons/caret-right';
-
-import { caretdownIcon } from './icons/caret-down';
-
-import { calendarIcon } from './icons/calendar';
-
-import { calendartodayIcon } from './icons/calendar-today';
-
-import { calendarminusIcon } from './icons/calendar-minus';
-
-import { calendardraftIcon } from './icons/calendar-draft';
-
-import { calendarcheckIcon } from './icons/calendar-check';
-
-import { calendarattentionIcon } from './icons/calendar-attention';
-
-import { buildingIcon } from './icons/building';
-
-import { bookmarkIcon } from './icons/bookmark';
-
-import { beginnerIcon } from './icons/beginner';
-
-import { attentionIcon } from './icons/attention';
-
-import { attachmentIcon } from './icons/attachment';
-
-import { arrowupIcon } from './icons/arrow-up';
-
-import { arrowrightIcon } from './icons/arrow-right';
-
-import { arrowleftIcon } from './icons/arrow-left';
-
-import { arrowdownIcon } from './icons/arrow-down';
-
-import { angleupIcon } from './icons/angle-up';
-
-import { anglesmallupIcon } from './icons/angle-small-up';
-
-import { anglesmalldownIcon } from './icons/angle-small-down';
-
-import { anglerightIcon } from './icons/angle-right';
-
-import { angleleftIcon } from './icons/angle-left';
-
-import { angledownIcon } from './icons/angle-down';
+import { addIcon } from './icons/add';
 
 import { aiIcon } from './icons/ai';
 
-import { addIcon } from './icons/add';
+import { angledownIcon } from './icons/angle-down';
+
+import { angleleftIcon } from './icons/angle-left';
+
+import { anglerightIcon } from './icons/angle-right';
+
+import { anglesmalldownIcon } from './icons/angle-small-down';
+
+import { anglesmallupIcon } from './icons/angle-small-up';
+
+import { angleupIcon } from './icons/angle-up';
+
+import { arrowdownIcon } from './icons/arrow-down';
+
+import { arrowleftIcon } from './icons/arrow-left';
+
+import { arrowrightIcon } from './icons/arrow-right';
+
+import { arrowupIcon } from './icons/arrow-up';
+
+import { attachmentIcon } from './icons/attachment';
+
+import { attentionIcon } from './icons/attention';
+
+import { beginnerIcon } from './icons/beginner';
+
+import { bookmarkIcon } from './icons/bookmark';
+
+import { buildingIcon } from './icons/building';
+
+import { calendarattentionIcon } from './icons/calendar-attention';
+
+import { calendarcheckIcon } from './icons/calendar-check';
+
+import { calendardraftIcon } from './icons/calendar-draft';
+
+import { calendarminusIcon } from './icons/calendar-minus';
+
+import { calendartodayIcon } from './icons/calendar-today';
+
+import { calendarIcon } from './icons/calendar';
+
+import { caretdownIcon } from './icons/caret-down';
+
+import { caretrightIcon } from './icons/caret-right';
+
+import { catchIcon } from './icons/catch';
+
+import { chartbarIcon } from './icons/chart-bar';
+
+import { chartlineIcon } from './icons/chart-line';
+
+import { checkIcon } from './icons/check';
+
+import { circleIcon } from './icons/circle';
+
+import { closeIcon } from './icons/close';
+
+import { commentIcon } from './icons/comment';
+
+import { contractIcon } from './icons/contract';
+
+import { copyIcon } from './icons/copy';
+
+import { deleteIcon } from './icons/delete';
+
+import { documentIcon } from './icons/document';
+
+import { documentsIcon } from './icons/documents';
+
+import { doublecircleIcon } from './icons/double-circle';
+
+import { downloaddocumentIcon } from './icons/download-document';
+
+import { downloadIcon } from './icons/download';
+
+import { editIcon } from './icons/edit';
+
+import { emailIcon } from './icons/email';
+
+import { expandIcon } from './icons/expand';
+
+import { externallinkIcon } from './icons/external-link';
+
+import { filterIcon } from './icons/filter';
+
+import { flagIcon } from './icons/flag';
+
+import { globalIcon } from './icons/global';
+
+import { graphlineIcon } from './icons/graph-line';
+
+import { hamburgercloseIcon } from './icons/hamburger-close';
+
+import { hamburgeropenIcon } from './icons/hamburger-open';
+
+import { hamburgerIcon } from './icons/hamburger';
+
+import { handleIcon } from './icons/handle';
+
+import { helpIcon } from './icons/help';
+
+import { hintIcon } from './icons/hint';
+
+import { homeIcon } from './icons/home';
+
+import { imageIcon } from './icons/image';
+
+import { informationfilledIcon } from './icons/information-filled';
+
+import { informationIcon } from './icons/information';
+
+import { inputdeleteIcon } from './icons/input-delete';
+
+import { linkIcon } from './icons/link';
+
+import { listIcon } from './icons/list';
+
+import { logoutIcon } from './icons/logout';
+
+import { messagetextIcon } from './icons/message-text';
+
+import { micoffIcon } from './icons/mic-off';
+
+import { micIcon } from './icons/mic';
+
+import { minusIcon } from './icons/minus';
+
+import { moreIcon } from './icons/more';
+
+import { movieIcon } from './icons/movie';
+
+import { networkIcon } from './icons/network';
+
+import { notificationIcon } from './icons/notification';
+
+import { pauseIcon } from './icons/pause';
+
+import { pdfIcon } from './icons/pdf';
+
+import { pictureinpictureIcon } from './icons/picture-in-picture';
+
+import { playfilledIcon } from './icons/play-filled';
+
+import { playIcon } from './icons/play';
+
+import { presentationIcon } from './icons/presentation';
+
+import { removeIcon } from './icons/remove';
+
+import { repeatIcon } from './icons/repeat';
+
+import { scoreIcon } from './icons/score';
+
+import { searchIcon } from './icons/search';
+
+import { sendIcon } from './icons/send';
+
+import { shareIcon } from './icons/share';
+
+import { shuffleIcon } from './icons/shuffle';
+
+import { sidebarIcon } from './icons/sidebar';
+
+import { slidereditingIcon } from './icons/slider-editing';
+
+import { sortdownIcon } from './icons/sort-down';
+
+import { sortupIcon } from './icons/sort-up';
+
+import { sortIcon } from './icons/sort';
+
+import { sparkleIcon } from './icons/sparkle';
+
+import { starfilledIcon } from './icons/star-filled';
+
+import { starIcon } from './icons/star';
+
+import { successfilledIcon } from './icons/success-filled';
+
+import { tabledownloadIcon } from './icons/table-download';
+
+import { tableuploadIcon } from './icons/table-upload';
+
+import { tableIcon } from './icons/table';
+
+import { timerIcon } from './icons/timer';
+
+import { transcriptionIcon } from './icons/transcription';
+
+import { triangleIcon } from './icons/triangle';
+
+import { uploadIcon } from './icons/upload';
+
+import { useraddIcon } from './icons/user-add';
+
+import { usergroupIcon } from './icons/user-group';
+
+import { userlineIcon } from './icons/user-line';
+
+import { usermultiIcon } from './icons/user-multi';
+
+import { useroneIcon } from './icons/user-one';
+
+import { userremoveIcon } from './icons/user-remove';
+
+import { userIcon } from './icons/user';
+
+import { videooffIcon } from './icons/video-off';
+
+import { videoIcon } from './icons/video';
+
+import { volumeoffIcon } from './icons/volume-off';
+
+import { volumeIcon } from './icons/volume';
+
+import { warningIcon } from './icons/warning';
 
 
 // Icon elements mapping
 export const iconElements = {
   
-    'warning': warningIcon,
-  
-    'volume': volumeIcon,
-  
-    'volume-off': volumeoffIcon,
-  
-    'video': videoIcon,
-  
-    'video-off': videooffIcon,
-  
-    'user': userIcon,
-  
-    'user-remove': userremoveIcon,
-  
-    'user-one': useroneIcon,
-  
-    'user-multi': usermultiIcon,
-  
-    'user-line': userlineIcon,
-  
-    'user-group': usergroupIcon,
-  
-    'user-add': useraddIcon,
-  
-    'upload': uploadIcon,
-  
-    'triangle': triangleIcon,
-  
-    'transcription': transcriptionIcon,
-  
-    'timer': timerIcon,
-  
-    'table': tableIcon,
-  
-    'table-upload': tableuploadIcon,
-  
-    'table-download': tabledownloadIcon,
-  
-    'success-filled': successfilledIcon,
-  
-    'star': starIcon,
-  
-    'star-filled': starfilledIcon,
-  
-    'sparkle': sparkleIcon,
-  
-    'sort': sortIcon,
-  
-    'sort-up': sortupIcon,
-  
-    'sort-down': sortdownIcon,
-  
-    'slider-editing': slidereditingIcon,
-  
-    'sidebar': sidebarIcon,
-  
-    'shuffle': shuffleIcon,
-  
-    'share': shareIcon,
-  
-    'send': sendIcon,
-  
-    'search': searchIcon,
-  
-    'score': scoreIcon,
-  
-    'repeat': repeatIcon,
-  
-    'remove': removeIcon,
-  
-    'presentation': presentationIcon,
-  
-    'play': playIcon,
-  
-    'play-filled': playfilledIcon,
-  
-    'picture-in-picture': pictureinpictureIcon,
-  
-    'pdf': pdfIcon,
-  
-    'pause': pauseIcon,
-  
-    'notification': notificationIcon,
-  
-    'network': networkIcon,
-  
-    'movie': movieIcon,
-  
-    'more': moreIcon,
-  
-    'minus': minusIcon,
-  
-    'mic': micIcon,
-  
-    'mic-off': micoffIcon,
-  
-    'message-text': messagetextIcon,
-  
-    'logout': logoutIcon,
-  
-    'list': listIcon,
-  
-    'link': linkIcon,
-  
-    'input-delete': inputdeleteIcon,
-  
-    'information': informationIcon,
-  
-    'information-filled': informationfilledIcon,
-  
-    'image': imageIcon,
-  
-    'home': homeIcon,
-  
-    'hint': hintIcon,
-  
-    'help': helpIcon,
-  
-    'handle': handleIcon,
-  
-    'hamburger': hamburgerIcon,
-  
-    'hamburger-open': hamburgeropenIcon,
-  
-    'hamburger-close': hamburgercloseIcon,
-  
-    'graph-line': graphlineIcon,
-  
-    'global': globalIcon,
-  
-    'flag': flagIcon,
-  
-    'filter': filterIcon,
-  
-    'external-link': externallinkIcon,
-  
-    'expand': expandIcon,
-  
-    'email': emailIcon,
-  
-    'edit': editIcon,
-  
-    'download': downloadIcon,
-  
-    'download-document': downloaddocumentIcon,
-  
-    'double-circle': doublecircleIcon,
-  
-    'documents': documentsIcon,
-  
-    'document': documentIcon,
-  
-    'delete': deleteIcon,
-  
-    'copy': copyIcon,
-  
-    'contract': contractIcon,
-  
-    'comment': commentIcon,
-  
-    'close': closeIcon,
-  
-    'circle': circleIcon,
-  
-    'check': checkIcon,
-  
-    'chart-line': chartlineIcon,
-  
-    'chart-bar': chartbarIcon,
-  
-    'catch': catchIcon,
-  
-    'caret-right': caretrightIcon,
-  
-    'caret-down': caretdownIcon,
-  
-    'calendar': calendarIcon,
-  
-    'calendar-today': calendartodayIcon,
-  
-    'calendar-minus': calendarminusIcon,
-  
-    'calendar-draft': calendardraftIcon,
-  
-    'calendar-check': calendarcheckIcon,
-  
-    'calendar-attention': calendarattentionIcon,
-  
-    'building': buildingIcon,
-  
-    'bookmark': bookmarkIcon,
-  
-    'beginner': beginnerIcon,
-  
-    'attention': attentionIcon,
-  
-    'attachment': attachmentIcon,
-  
-    'arrow-up': arrowupIcon,
-  
-    'arrow-right': arrowrightIcon,
-  
-    'arrow-left': arrowleftIcon,
-  
-    'arrow-down': arrowdownIcon,
-  
-    'angle-up': angleupIcon,
-  
-    'angle-small-up': anglesmallupIcon,
-  
-    'angle-small-down': anglesmalldownIcon,
-  
-    'angle-right': anglerightIcon,
-  
-    'angle-left': angleleftIcon,
-  
-    'angle-down': angledownIcon,
+    'add': addIcon,
   
     'ai': aiIcon,
   
-    'add': addIcon,
+    'angle-down': angledownIcon,
+  
+    'angle-left': angleleftIcon,
+  
+    'angle-right': anglerightIcon,
+  
+    'angle-small-down': anglesmalldownIcon,
+  
+    'angle-small-up': anglesmallupIcon,
+  
+    'angle-up': angleupIcon,
+  
+    'arrow-down': arrowdownIcon,
+  
+    'arrow-left': arrowleftIcon,
+  
+    'arrow-right': arrowrightIcon,
+  
+    'arrow-up': arrowupIcon,
+  
+    'attachment': attachmentIcon,
+  
+    'attention': attentionIcon,
+  
+    'beginner': beginnerIcon,
+  
+    'bookmark': bookmarkIcon,
+  
+    'building': buildingIcon,
+  
+    'calendar-attention': calendarattentionIcon,
+  
+    'calendar-check': calendarcheckIcon,
+  
+    'calendar-draft': calendardraftIcon,
+  
+    'calendar-minus': calendarminusIcon,
+  
+    'calendar-today': calendartodayIcon,
+  
+    'calendar': calendarIcon,
+  
+    'caret-down': caretdownIcon,
+  
+    'caret-right': caretrightIcon,
+  
+    'catch': catchIcon,
+  
+    'chart-bar': chartbarIcon,
+  
+    'chart-line': chartlineIcon,
+  
+    'check': checkIcon,
+  
+    'circle': circleIcon,
+  
+    'close': closeIcon,
+  
+    'comment': commentIcon,
+  
+    'contract': contractIcon,
+  
+    'copy': copyIcon,
+  
+    'delete': deleteIcon,
+  
+    'document': documentIcon,
+  
+    'documents': documentsIcon,
+  
+    'double-circle': doublecircleIcon,
+  
+    'download-document': downloaddocumentIcon,
+  
+    'download': downloadIcon,
+  
+    'edit': editIcon,
+  
+    'email': emailIcon,
+  
+    'expand': expandIcon,
+  
+    'external-link': externallinkIcon,
+  
+    'filter': filterIcon,
+  
+    'flag': flagIcon,
+  
+    'global': globalIcon,
+  
+    'graph-line': graphlineIcon,
+  
+    'hamburger-close': hamburgercloseIcon,
+  
+    'hamburger-open': hamburgeropenIcon,
+  
+    'hamburger': hamburgerIcon,
+  
+    'handle': handleIcon,
+  
+    'help': helpIcon,
+  
+    'hint': hintIcon,
+  
+    'home': homeIcon,
+  
+    'image': imageIcon,
+  
+    'information-filled': informationfilledIcon,
+  
+    'information': informationIcon,
+  
+    'input-delete': inputdeleteIcon,
+  
+    'link': linkIcon,
+  
+    'list': listIcon,
+  
+    'logout': logoutIcon,
+  
+    'message-text': messagetextIcon,
+  
+    'mic-off': micoffIcon,
+  
+    'mic': micIcon,
+  
+    'minus': minusIcon,
+  
+    'more': moreIcon,
+  
+    'movie': movieIcon,
+  
+    'network': networkIcon,
+  
+    'notification': notificationIcon,
+  
+    'pause': pauseIcon,
+  
+    'pdf': pdfIcon,
+  
+    'picture-in-picture': pictureinpictureIcon,
+  
+    'play-filled': playfilledIcon,
+  
+    'play': playIcon,
+  
+    'presentation': presentationIcon,
+  
+    'remove': removeIcon,
+  
+    'repeat': repeatIcon,
+  
+    'score': scoreIcon,
+  
+    'search': searchIcon,
+  
+    'send': sendIcon,
+  
+    'share': shareIcon,
+  
+    'shuffle': shuffleIcon,
+  
+    'sidebar': sidebarIcon,
+  
+    'slider-editing': slidereditingIcon,
+  
+    'sort-down': sortdownIcon,
+  
+    'sort-up': sortupIcon,
+  
+    'sort': sortIcon,
+  
+    'sparkle': sparkleIcon,
+  
+    'star-filled': starfilledIcon,
+  
+    'star': starIcon,
+  
+    'success-filled': successfilledIcon,
+  
+    'table-download': tabledownloadIcon,
+  
+    'table-upload': tableuploadIcon,
+  
+    'table': tableIcon,
+  
+    'timer': timerIcon,
+  
+    'transcription': transcriptionIcon,
+  
+    'triangle': triangleIcon,
+  
+    'upload': uploadIcon,
+  
+    'user-add': useraddIcon,
+  
+    'user-group': usergroupIcon,
+  
+    'user-line': userlineIcon,
+  
+    'user-multi': usermultiIcon,
+  
+    'user-one': useroneIcon,
+  
+    'user-remove': userremoveIcon,
+  
+    'user': userIcon,
+  
+    'video-off': videooffIcon,
+  
+    'video': videoIcon,
+  
+    'volume-off': volumeoffIcon,
+  
+    'volume': volumeIcon,
+  
+    'warning': warningIcon,
   
 };

@@ -17,7 +17,7 @@ const meta: Meta<typeof Icon> = {
     },
   },
   argTypes: {
-    name: { control: 'select', options: Object.keys(iconElements).reverse() },
+    name: { control: 'select', options: Object.keys(iconElements) },
     size: { control: 'select', options: ['x-small', 'small', 'medium', 'large', 'x-large'] },
     color: { control: 'select', options: ['icon01', 'icon02', 'icon03', 'iconOnColor'] },
     className: {
@@ -51,7 +51,7 @@ export const Component: Story = {
     chromatic: { disable: true },
   },
   render: function MyFunc({ ...args }) {
-    const iconNames = Object.keys(iconElements).reverse();
+    const iconNames = Object.keys(iconElements);
 
     return (
       <div className="flex flex-wrap gap-4">
@@ -79,7 +79,7 @@ type Props = {
 };
 
 function IconList(props: Props) {
-  const iconNames = Object.keys(iconElements).reverse();
+  const iconNames = Object.keys(iconElements);
 
   return (
     <div>
