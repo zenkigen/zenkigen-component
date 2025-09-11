@@ -6,7 +6,8 @@ import type React from 'react';
 
 export type IconName = 'warning' | 'volume' | 'volume-off' | 'video' | 'video-off' | 'user' | 'user-remove' | 'user-one' | 'user-multi' | 'user-line' | 'user-group' | 'user-add' | 'upload' | 'triangle' | 'transcription' | 'timer' | 'table' | 'table-upload' | 'table-download' | 'success-filled' | 'star' | 'star-filled' | 'sparkle' | 'sort' | 'sort-up' | 'sort-down' | 'slider-editing' | 'sidebar' | 'shuffle' | 'share' | 'send' | 'search' | 'score' | 'repeat' | 'remove' | 'presentation' | 'play' | 'play-filled' | 'picture-in-picture' | 'pdf' | 'pause' | 'notification' | 'network' | 'movie' | 'more' | 'minus' | 'mic' | 'mic-off' | 'message-text' | 'logout' | 'list' | 'link' | 'input-delete' | 'information' | 'information-filled' | 'image' | 'home' | 'hint' | 'help' | 'handle' | 'hamburger' | 'hamburger-open' | 'hamburger-close' | 'graph-line' | 'global' | 'flag' | 'filter' | 'external-link' | 'expand' | 'email' | 'edit' | 'download' | 'download-document' | 'double-circle' | 'documents' | 'document' | 'delete' | 'copy' | 'contract' | 'comment' | 'close' | 'circle' | 'check' | 'chart-line' | 'chart-bar' | 'catch' | 'caret-right' | 'caret-down' | 'calendar' | 'calendar-today' | 'calendar-minus' | 'calendar-draft' | 'calendar-check' | 'calendar-attention' | 'building' | 'bookmark' | 'beginner' | 'attention' | 'attachment' | 'arrow-up' | 'arrow-right' | 'arrow-left' | 'arrow-down' | 'angle-up' | 'angle-small-up' | 'angle-small-down' | 'angle-right' | 'angle-left' | 'angle-down' | 'ai' | 'add';
 
-export type IconElements = Readonly<{ [name in IconName]: React.ReactElement }>;
+export type IconComponent = React.FC<{ accentClassName?: string }>;
+export type IconElements = Readonly<{ [name in IconName]: IconComponent }>;
 
 // Import all icon components
 

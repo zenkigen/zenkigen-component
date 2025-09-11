@@ -4,7 +4,11 @@
 */
 import React from 'react';
 
-export const calendardraftIcon: React.ReactElement = (
+export interface calendardraftIconProps {
+  accentClassName?: string;
+}
+
+export const calendardraftIcon: React.FC<calendardraftIconProps> = ({ accentClassName }) => (
   <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="calendarDraft">
 <path d="M18.9674 10.5579L15.1704 14.6075C15.0853 14.6976 15.0228 14.8076 14.9878 14.9277L14.4975 16.6111C14.415 16.8962 14.4975 17.2064 14.7176 17.409C14.8202 17.504 14.9453 17.5691 15.0753 17.5991C15.2229 17.6341 15.3805 17.6266 15.5306 17.5691L17.1639 16.9613C17.279 16.9187 17.3815 16.8512 17.4641 16.7612L21.2761 12.6965L18.9699 10.5554L18.9674 10.5579Z"></path>
 <path d="M22.7768 9.94765L21.6337 8.87209C21.4811 8.72701 21.2785 8.65197 21.0684 8.65697C20.8583 8.66448 20.6607 8.75202 20.5181 8.9071L19.6177 9.8651L21.9239 12.0062L22.8093 11.0607C23.107 10.7431 23.092 10.2453 22.7743 9.94765H22.7768Z"></path>

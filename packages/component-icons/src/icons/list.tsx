@@ -4,7 +4,11 @@
 */
 import React from 'react';
 
-export const listIcon: React.ReactElement = (
+export interface listIconProps {
+  accentClassName?: string;
+}
+
+export const listIcon: React.FC<listIconProps> = ({ accentClassName }) => (
   <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="list">
 <path d="M21.0712 18.625H9.07121C8.72621 18.625 8.44621 18.345 8.44621 18C8.44621 17.655 8.72621 17.375 9.07121 17.375H21.0712C21.4162 17.375 21.6962 17.655 21.6962 18C21.6962 18.345 21.4162 18.625 21.0712 18.625Z"></path>
 <path d="M21.0712 12.625H9.07121C8.72621 12.625 8.44621 12.345 8.44621 12C8.44621 11.655 8.72621 11.375 9.07121 11.375H21.0712C21.4162 11.375 21.6962 11.655 21.6962 12C21.6962 12.345 21.4162 12.625 21.0712 12.625Z"></path>

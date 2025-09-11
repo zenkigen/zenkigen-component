@@ -6,7 +6,8 @@ import type React from 'react';
 
 export type IconName = <%- result.map(({ key }) => `'${key}'`).join(' | ') %>;
 
-export type IconElements = Readonly<{ [name in IconName]: React.ReactElement }>;
+export type IconComponent = React.FC<{ accentClassName?: string }>;
+export type IconElements = Readonly<{ [name in IconName]: IconComponent }>;
 
 // Import all icon components
 <% result.forEach(({ key }) => { %>
