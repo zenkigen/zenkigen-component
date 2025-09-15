@@ -11,7 +11,7 @@ type Props = {
 
 export const TabItem = ({ isSelected = false, ...props }: Props) => {
   const classes = clsx(
-    'relative z-0 flex py-2 leading-[24px] before:absolute before:inset-x-0 before:bottom-0 before:h-px hover:text-text01 disabled:pointer-events-none disabled:text-disabled01',
+    'relative z-0 flex justify-center py-2 leading-[24px] before:absolute before:inset-x-0 before:bottom-0 before:h-px hover:text-text01 disabled:pointer-events-none disabled:text-disabled01',
     {
       'typography-label14regular': !isSelected,
       'text-interactive02 hover:before:bg-uiBorder04': !isSelected,
