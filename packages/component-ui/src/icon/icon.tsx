@@ -11,13 +11,14 @@ type Props = {
   name: IconName;
   size?: Size;
   color?: Color;
+  accentClassName?: string;
   isDisabled?: boolean;
   className?: string;
 };
 
 export const Icon = ({ size = 'medium', isDisabled = false, ...props }: Props) => {
   const classes = clsx(
-    'inline-block shrink-0',
+    'inline-block shrink-0 ',
     {
       'fill-disabled01': isDisabled,
       [iconColors.icon01]: !isDisabled && props.color === 'icon01',
@@ -33,5 +34,13 @@ export const Icon = ({ size = 'medium', isDisabled = false, ...props }: Props) =
     props.className,
   );
 
-  return <span className={classes}>{iconElements[props.name]}</span>;
+  const IconComponent = iconElements[props.name];
+
+  return (
+    <>
+      <span className={classes}>
+        <IconComponent {...(isDisabled !== true && { accentClassName: props.accentClassName })} />
+      </span>
+    </>
+  );
 };

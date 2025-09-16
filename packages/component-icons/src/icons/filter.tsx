@@ -4,7 +4,11 @@
 */
 import React from 'react';
 
-export const filterIcon: React.ReactElement = (
+export interface filterIconProps {
+  accentClassName?: string;
+}
+
+export const filterIcon: React.FC<filterIconProps> = ({ accentClassName }) => (
   <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="filter">
 <path d="M21.1926 6.7875H2.81006C2.36131 6.7875 1.99756 6.42935 1.99756 5.9875C1.99756 5.54565 2.36131 5.1875 2.81006 5.1875H21.1926C21.6413 5.1875 22.0051 5.54565 22.0051 5.9875C22.0051 6.42935 21.6413 6.7875 21.1926 6.7875Z"></path>
 <path d="M17.6913 12.7875H6.30131C5.85256 12.7875 5.48881 12.4293 5.48881 11.9875C5.48881 11.5457 5.85256 11.1875 6.30131 11.1875H17.6901C18.1388 11.1875 18.5026 11.5457 18.5026 11.9875C18.5026 12.4293 18.1388 12.7875 17.6901 12.7875H17.6913Z"></path>
