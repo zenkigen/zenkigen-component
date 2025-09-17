@@ -84,12 +84,12 @@
   "Tokens": {
     "Text": {
       "Text01": {
-        "value": "#2F3233",
+        "value": "#1F2121",
         "type": "color",
         "description": "Primary text, Body copy, Headers"
       },
       "Text02": {
-        "value": "#6F7476",
+        "value": "#5C6366",
         "type": "color",
         "description": "Secondary text, Input labels"
       },
@@ -195,12 +195,12 @@
         "description": "Warning message background"
       },
       "UiBackgroundTooltip": {
-        "value": "#2F3233",
+        "value": "#1F2121",
         "type": "color",
         "description": "ToolTip background"
       },
       "BackgroundOverlayGray": {
-        "value": "#2f323380",
+        "value": "#1f212180",
         "type": "color",
         "description": "Background overlay"
       },
@@ -387,7 +387,7 @@
         "description": "active primary link"
       },
       "ActiveLink02": {
-        "value": "#2F3233",
+        "value": "#1F2121",
         "type": "color",
         "description": "active secondary link"
       }
@@ -618,7 +618,7 @@
         "description": ""
       },
       "Gray100": {
-        "value": "#2F3233",
+        "value": "#1F2121",
         "type": "color",
         "description": ""
       }

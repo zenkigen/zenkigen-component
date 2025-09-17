@@ -23,8 +23,8 @@ export const tokens = {
   },
   "tokens": {
     "text": {
-      "text01": "#2F3233",
-      "text02": "#6F7476",
+      "text01": "#1F2121",
+      "text02": "#5C6366",
       "text03": "#838789",
       "textPlaceholder": "#CACCCD",
       "textOnColor": "#FFFFFF",
@@ -50,8 +50,8 @@ export const tokens = {
       "uiBackgroundSuccess": "#ECFBF4",
       "uiBackgroundError": "#FCEFF3",
       "uiBackgroundWarning": "#FFFADC",
-      "uiBackgroundTooltip": "#2F3233",
-      "backgroundOverlayGray": "#2f323380",
+      "uiBackgroundTooltip": "#1F2121",
+      "backgroundOverlayGray": "#1f212180",
       "backgroundOverlayBlack": "#00000099"
     },
     "icon": {
@@ -98,7 +98,7 @@ export const tokens = {
       "activeDanger": "#821732",
       "activeInput": "#1366B9",
       "activeLink01": "#0E4B87",
-      "activeLink02": "#2F3233"
+      "activeLink02": "#1F2121"
     },
     "selected": {
       "selectedUi": "#D9EAFB",
@@ -154,7 +154,7 @@ export const tokens = {
       "gray70": "#6F7476",
       "gray80": "#5C6366",
       "gray90": "#454A4D",
-      "gray100": "#2F3233"
+      "gray100": "#1F2121"
     },
     "red": {
       "red10": "#FCEFF3",
