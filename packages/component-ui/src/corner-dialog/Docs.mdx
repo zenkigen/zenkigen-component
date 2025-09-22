@@ -1,0 +1,88 @@
+import { Canvas, Meta } from '@storybook/blocks';
+
+import * as CornerDialogStories from './corner-dialog.stories';
+
+<Meta of={CornerDialogStories} />
+
+# CornerDialog
+
+CornerDialogは、画面の四隅にダイアログボックスを表示するコンポーネントです。
+CornerBoxコンポーネントとDialogコンポーネントを組み合わせた統合コンポーネントです。
+
+## 基本的な使用方法
+
+<Canvas of={CornerDialogStories.Component} />
+
+## 設定ダイアログの例
+
+<Canvas of={CornerDialogStories.SettingsExample} />
+
+## 複数のCornerDialogの例
+
+<Canvas of={CornerDialogStories.MultipleDialogsExample} />
+
+## Props
+
+| プロパティ | 型                                                           | デフォルト値         | 説明                                           |
+| ---------- | ------------------------------------------------------------ | -------------------- | ---------------------------------------------- |
+| position   | 'top-left' \| 'top-right' \| 'bottom-left' \| 'bottom-right' | -                    | ダイアログの表示位置                           |
+| isShow     | boolean                                                      | -                    | ダイアログの表示状態                           |
+| width      | CSSProperties['width']                                       | 480                  | ダイアログの幅（320px以上）                    |
+| height     | CSSProperties['height']                                      | -                    | ダイアログの高さ（184px以上）                  |
+| maxWidth   | CSSProperties['maxWidth']                                    | 'calc(100vw - 40px)' | ダイアログの最大幅                             |
+| onClose    | () => void                                                   | -                    | 閉じるボタンがクリックされたときのコールバック |
+
+## サブコンポーネント
+
+### CornerDialog.Header
+
+ダイアログのヘッダー部分を表示します。
+
+| プロパティ | 型      | デフォルト値 | 説明                                   |
+| ---------- | ------- | ------------ | -------------------------------------- |
+| isNoBorder | boolean | false        | ヘッダー下部のボーダーを非表示にするか |
+
+### CornerDialog.Body
+
+ダイアログのボディ部分を表示します。スクロール可能な領域になります。
+
+### CornerDialog.Footer
+
+ダイアログのフッター部分を表示します。通常はボタンを配置します。
+
+| プロパティ | 型      | デフォルト値 | 説明                                   |
+| ---------- | ------- | ------------ | -------------------------------------- |
+| isNoBorder | boolean | false        | フッター上部のボーダーを非表示にするか |
+
+## 使用例
+
+```tsx
+import { CornerDialog } from '@zenkigen-inc/component-ui';
+
+function MyComponent() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div>
+      <button onClick={() => setIsOpen(true)}>ダイアログを開く</button>
+
+      <CornerDialog position="top-right" isShow={isOpen} width={320} onClose={() => setIsOpen(false)}>
+        <CornerDialog.Header>タイトル</CornerDialog.Header>
+        <CornerDialog.Body>
+          <p>ダイアログの内容</p>
+        </CornerDialog.Body>
+        <CornerDialog.Footer>
+          <button onClick={() => setIsOpen(false)}>閉じる</button>
+        </CornerDialog.Footer>
+      </CornerDialog>
+    </div>
+  );
+}
+```
+
+## 注意事項
+
+- CornerDialogは`createPortal`を使用して`document.body`に直接レンダリングされます
+- 複数のCornerDialogを同時に表示することが可能です
+- `isShow={false}`の場合、コンポーネントは何もレンダリングしません
+- 幅と高さには最小値の制限があります（幅: 320px、高さ: 184px）
