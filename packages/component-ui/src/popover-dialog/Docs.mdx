@@ -1,0 +1,87 @@
+import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/blocks';
+import PopoverDialogStories, { Component } from './popover-dialog.stories';
+
+<Meta title="PopoverDialog" of={PopoverDialogStories} />
+
+# PopoverDialog
+
+<Canvas />
+
+<Controls of={Component} />
+
+## Code Example
+
+### 基本的な使用例
+
+```tsx
+import { PopoverDialog } from '@zenkigen-inc/component-ui';
+import { useRef, useState } from 'react';
+
+const PopoverDialogExample = () => {
+  const anchorRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  const handleClose = () => {
+    setIsVisible(false);
+  };
+
+  return (
+    <>
+      {/* 基準となる枠 */}
+      <div
+        ref={anchorRef}
+        className="relative flex h-32 w-80 items-center justify-center border border-gray-300 rounded p-4"
+      >
+        <span>基準要素</span>
+      </div>
+
+      <button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded" onClick={() => setIsVisible(!isVisible)}>
+        {isVisible ? 'ダイアログを閉じる' : 'ダイアログを開く'}
+      </button>
+
+      <PopoverDialog anchorRef={anchorRef} placement="bottom" isVisible={isVisible} width={400} onClose={handleClose}>
+        <PopoverDialog.Header>ダイアログタイトル</PopoverDialog.Header>
+        <PopoverDialog.Body>
+          <p>ここにダイアログの内容を表示します。</p>
+          <p>基準要素の下に表示されます。</p>
+        </PopoverDialog.Body>
+        <PopoverDialog.Footer>
+          <button onClick={handleClose}>閉じる</button>
+        </PopoverDialog.Footer>
+      </PopoverDialog>
+    </>
+  );
+};
+```
+
+### Corner配置の例
+
+```tsx
+import { PopoverDialog } from '@zenkigen-inc/component-ui';
+import { useState } from 'react';
+
+const CornerPopoverDialogExample = () => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  const handleClose = () => {
+    setIsVisible(false);
+  };
+
+  return (
+    <>
+      <button onClick={() => setIsVisible(!isVisible)} className="px-4 py-2 bg-green-500 text-white rounded">
+        右上角にダイアログを表示
+      </button>
+
+      <PopoverDialog placement="top-right" isVisible={isVisible} width={320} height={200} onClose={handleClose}>
+        <PopoverDialog.Header isNoBorder>Corner Dialog</PopoverDialog.Header>
+        <PopoverDialog.Body>
+          <div className="text-center">
+            <p>画面右上角に表示されるダイアログ</p>
+          </div>
+        </PopoverDialog.Body>
+      </PopoverDialog>
+    </>
+  );
+};
+```
