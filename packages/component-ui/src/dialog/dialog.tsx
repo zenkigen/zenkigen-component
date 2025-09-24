@@ -28,7 +28,7 @@ export function Dialog({
   return (
     <DialogContext.Provider value={{ onClose }}>
       <div
-        className="grid max-h-full min-h-[120px] grid-rows-[max-content_1fr_max-content] flex-col rounded-lg bg-uiBackground01 shadow-modalShadow"
+        className="grid max-h-full grid-rows-[max-content_1fr_max-content] flex-col rounded-lg bg-uiBackground01 shadow-modalShadow"
         style={{ width: renderWidth, height: renderHeight, maxWidth }}
       >
         {children}
