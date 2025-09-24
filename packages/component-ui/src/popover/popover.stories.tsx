@@ -216,7 +216,7 @@ const ComponentStory = (args: Story['args']) => {
 
 export const Component: Story = {
   args: {
-    placement: 'bottom',
+    placement: 'top',
     shouldAvoidCollisions: true,
     offset: 8,
   },
