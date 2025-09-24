@@ -31,6 +31,7 @@ export function EvaluationStar({ value, isEditable = false, onChangeRating, size
   // 各評価のレンダリングロジックを分離（React Hooksのルールに準拠）
   const renderStar = (rating: number) => {
     const color = rating <= currentRating ? 'fill-yellow-yellow50' : 'fill-icon03';
+    const IconComponent = iconElements['star-filled'];
 
     return (
       <button
@@ -40,7 +41,7 @@ export function EvaluationStar({ value, isEditable = false, onChangeRating, size
         className={clsx(color, starClasses)}
         disabled={!isEditable}
       >
-        {iconElements['star-filled']}
+        <IconComponent />
       </button>
     );
   };

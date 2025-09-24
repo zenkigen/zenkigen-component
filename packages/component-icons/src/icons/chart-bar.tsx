@@ -4,7 +4,11 @@
 */
 import React from 'react';
 
-export const chartbarIcon: React.ReactElement = (
+export interface chartbarIconProps {
+  accentClassName?: string;
+}
+
+export const chartbarIcon: React.FC<chartbarIconProps> = ({ accentClassName }) => (
   <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="chartBar">
 <path d="M22 22.625H2C1.655 22.625 1.375 22.345 1.375 22V2C1.375 1.655 1.655 1.375 2 1.375C2.345 1.375 2.625 1.655 2.625 2V21.375H22C22.345 21.375 22.625 21.655 22.625 22C22.625 22.345 22.345 22.625 22 22.625Z"></path>
 <path d="M22 22.625H2C1.655 22.625 1.375 22.345 1.375 22V2C1.375 1.655 1.655 1.375 2 1.375C2.345 1.375 2.625 1.655 2.625 2V21.375H22C22.345 21.375 22.625 21.655 22.625 22C22.625 22.345 22.345 22.625 22 22.625Z"></path>
