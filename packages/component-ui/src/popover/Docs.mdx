@@ -1,0 +1,73 @@
+import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/blocks';
+import PopoverStories, { Component } from './popover.stories';
+
+<Meta title="Popover" of={PopoverStories} />
+
+# Popover
+
+<Canvas />
+
+<Controls of={Component} />
+
+## Code Example
+
+### 基本的な使用例
+
+```tsx
+import { Popover } from '@zenkigen-inc/component-ui';
+import { useRef, useState } from 'react';
+
+const PopoverExample = () => {
+  const anchorRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  return (
+    <>
+      {/* 基準となる枠 */}
+      <div
+        ref={anchorRef}
+        className="relative flex h-32 w-80 items-center justify-center border border-gray-300 rounded p-4"
+      >
+        <span>基準要素</span>
+      </div>
+
+      <button
+        className="absolute bottom-2 right-2 px-3 py-1 bg-blue-500 text-white rounded"
+        onClick={() => setIsVisible(!isVisible)}
+      >
+        {isVisible ? '非表示' : '表示'}
+      </button>
+
+      <Popover anchorRef={anchorRef} placement="top" isVisible={isVisible}>
+        <div className="bg-white p-4 shadow-lg rounded border">
+          <p>Popoverのコンテンツ</p>
+          <p className="text-sm text-gray-600 mt-2">基準要素の上に表示されます</p>
+        </div>
+      </Popover>
+    </>
+  );
+};
+```
+
+### Corner配置の例
+
+```tsx
+import { Popover } from '@zenkigen-inc/component-ui';
+import { useState } from 'react';
+
+const CornerPopoverExample = () => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  return (
+    <>
+      <button onClick={() => setIsVisible(!isVisible)}>Corner Popoverを表示</button>
+
+      <Popover placement="bottom-left" isVisible={isVisible}>
+        <div className="bg-white p-4 shadow-lg rounded">
+          <p>左下角の表示要素</p>
+        </div>
+      </Popover>
+    </>
+  );
+};
+```
