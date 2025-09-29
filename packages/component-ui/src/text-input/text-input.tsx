@@ -1,5 +1,5 @@
 import { clsx } from 'clsx';
-import type { InputHTMLAttributes } from 'react';
+import type { InputHTMLAttributes, ReactNode } from 'react';
 import { forwardRef } from 'react';
 
 import { IconButton } from '../icon-button';
@@ -9,11 +9,14 @@ type Props = Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> & {
   value: string;
   isError?: boolean;
   onClickClearButton?: () => void;
+  /** 入力欄の末尾に表示する要素。例: アイコンやテキスト */
+  after?: ReactNode;
 };
 
 export const TextInput = forwardRef<HTMLInputElement, Props>(
-  ({ size = 'medium', isError = false, disabled = false, onClickClearButton, ...props }: Props, ref) => {
+  ({ size = 'medium', isError = false, disabled = false, onClickClearButton, after, ...props }: Props, ref) => {
     const isShowClearButton = !!onClickClearButton && props.value.length !== 0 && !disabled;
+    const hasTrailingElement = isShowClearButton || after != null;
     const inputWrapClasses = clsx('relative flex items-center gap-2 overflow-hidden rounded border', {
       'border-uiBorder02': !isError && !disabled,
       'border-supportError': isError && !disabled,
@@ -21,8 +24,8 @@ export const TextInput = forwardRef<HTMLInputElement, Props>(
       'hover:focus-within:border-activeInput': !isError,
       'focus-within:border-activeInput': !isError,
       'bg-disabled02 border-disabled01': disabled,
-      'pr-2': size === 'medium' && isShowClearButton,
-      'pr-3': size === 'large' && isShowClearButton,
+      'pr-2': size === 'medium' && hasTrailingElement,
+      'pr-3': size === 'large' && hasTrailingElement,
     });
 
     const inputClasses = clsx('flex-1 outline-0 placeholder:text-textPlaceholder disabled:text-textPlaceholder', {
@@ -30,12 +33,13 @@ export const TextInput = forwardRef<HTMLInputElement, Props>(
       ['typography-label16regular min-h-10 px-3']: size === 'large',
       'text-text01': !isError,
       'text-supportError': isError,
-      'pr-0': isShowClearButton,
+      'pr-0': hasTrailingElement,
     });
 
     return (
       <div className={inputWrapClasses}>
         <input ref={ref} size={1} className={inputClasses} disabled={disabled} onChange={props.onChange} {...props} />
+        {after}
         {isShowClearButton && <IconButton variant="text" icon="close" size="small" onClick={onClickClearButton} />}
       </div>
     );
