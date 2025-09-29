@@ -13,6 +13,7 @@ export * from './modal';
 export * from './notification-inline';
 export * from './pagination';
 export * from './pagination-select';
+export * from './password-input';
 export * from './radio';
 export * from './search';
 export * from './segmented-control';
