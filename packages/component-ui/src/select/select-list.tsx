@@ -7,8 +7,16 @@ import { SelectContext } from './select-context';
 
 export function SelectList({ children }: PropsWithChildren) {
   const ref = useRef<HTMLUListElement>(null);
-  const { selectedOption, setIsOptionListOpen, variant, placeholder, onChange, floatingRefs, floatingStyles } =
-    useContext(SelectContext);
+  const {
+    selectedOption,
+    setIsOptionListOpen,
+    variant,
+    placeholder,
+    onChange,
+    floatingRefs,
+    floatingStyles,
+    optionListMaxHeight,
+  } = useContext(SelectContext);
 
   const handleClickDeselect = () => {
     onChange?.(null);
@@ -21,7 +29,7 @@ export function SelectList({ children }: PropsWithChildren) {
       const element = Array.from(ref.current.children ?? []).find(
         (item) => item.getAttribute('data-id') === selectedOption?.id,
       );
-      if (ref.current.scroll !== null && element instanceof Element) {
+      if (typeof ref.current.scroll === 'function' && element instanceof Element) {
         const wrapRect = ref.current.getBoundingClientRect();
         const rect = element.getBoundingClientRect();
         ref.current.scroll(0, rect.top - wrapRect.top - wrapRect.height / 2 + rect.height / 2);
@@ -48,7 +56,10 @@ export function SelectList({ children }: PropsWithChildren) {
         ref.current = node;
         floatingRefs?.setFloating(node);
       }}
-      style={floatingStyles}
+      style={{
+        ...floatingStyles,
+        ...(typeof optionListMaxHeight !== 'undefined' && { maxHeight: optionListMaxHeight }),
+      }}
     >
       {children}
       {placeholder != null && selectedOption !== null && (

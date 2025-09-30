@@ -119,6 +119,7 @@ export function Select({
         floatingRefs: refs,
         floatingStyles: { position: strategy, top: y ?? 0, left: x ?? 0 },
         isError,
+        optionListMaxHeight,
       }}
     >
       <div

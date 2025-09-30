@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import { createContext } from 'react';
 
 import type { SelectOption } from './type';
@@ -19,6 +20,7 @@ type UseSelectReturnType = {
     left: number;
   };
   isError?: boolean;
+  optionListMaxHeight?: CSSProperties['height'];
 };
 
 export const SelectContext = createContext<UseSelectReturnType>({
