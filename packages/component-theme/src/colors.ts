@@ -42,6 +42,25 @@ export const buttonColors = {
   },
 } as const;
 
+export const selectColors = {
+  outline: buttonColors.outline,
+  text: buttonColors.text,
+  outlineError: {
+    base: 'border border-supportError bg-uiBackgroundError text-supportError fill-supportError',
+    hover: 'hover:bg-hover02',
+    active: 'active:bg-active02',
+    disabled: 'disabled:border-uiBorder01 disabled:text-disabled01 disabled:fill-disabled01',
+    selected: 'border border-interactive01 bg-selectedUi text-interactive01 fill-interactive01',
+  },
+  textError: {
+    base: 'border border-transparent bg-uiBackgroundError text-supportError fill-supportError',
+    hover: 'hover:bg-hover02 hover:border-hover02',
+    active: 'active:bg-active02 active:border-active02',
+    disabled: 'disabled:text-disabled01 disabled:fill-disabled01',
+    selected: 'border border-transparent bg-selectedUi text-interactive01 fill-interactive01',
+  },
+} as const;
+
 export const iconColors = {
   icon01: 'fill-icon01',
   icon02: 'fill-icon02',

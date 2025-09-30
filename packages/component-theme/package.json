@@ -1,6 +1,6 @@
 {
   "name": "@zenkigen-inc/component-theme",
-  "version": "1.14.5",
+  "version": "1.16.1",
   "repository": "https://github.com/zenkigen/zenkigen-component",
   "license": "MIT",
   "publishConfig": {
@@ -8,17 +8,22 @@
   },
   "source": "./src/index.ts",
   "main": "./dist/index.js",
-  "module": "./dist/index.esm.js",
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-  "exports": "./dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
   "scripts": {
     "type-check": "tsc --noEmit",
-    "build": "rimraf dist && microbundle --no-compress -f modern,esm,cjs",
-    "build-lib": "rimraf dist && microbundle --no-compress -f modern,esm,cjs"
+    "build": "rimraf dist && tsup src/index.ts --format cjs,esm --dts",
+    "build-lib": "rimraf dist && tsup src/index.ts --format cjs,esm --dts"
   },
   "devDependencies": {
-    "microbundle": "0.15.1",
     "tailwindcss": "3.4.17",
+    "tsup": "8.5.0",
     "typescript": "5.8.3"
   }
 }

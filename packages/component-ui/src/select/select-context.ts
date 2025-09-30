@@ -18,10 +18,12 @@ type UseSelectReturnType = {
     top: number;
     left: number;
   };
+  isError?: boolean;
 };
 
 export const SelectContext = createContext<UseSelectReturnType>({
   size: 'medium',
   setIsOptionListOpen: () => false,
   variant: 'outline',
+  isError: false,
 });
