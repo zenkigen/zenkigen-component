@@ -4,7 +4,11 @@
 */
 import React from 'react';
 
-export const scoreIcon: React.ReactElement = (
+export interface scoreIconProps {
+  accentClassName?: string;
+}
+
+export const scoreIcon: React.FC<scoreIconProps> = ({ accentClassName }) => (
   <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="score">
 <path d="M17 8.11492H7.02753C6.68253 8.11492 6.40253 7.83492 6.40253 7.48992C6.40253 7.14492 6.68253 6.86492 7.02753 6.86492H17C17.345 6.86492 17.625 7.14492 17.625 7.48992C17.625 7.83492 17.345 8.11492 17 8.11492Z"></path>
 <path d="M17 11.6149H7.02753C6.68253 11.6149 6.40253 11.3349 6.40253 10.9899C6.40253 10.6449 6.68253 10.3649 7.02753 10.3649H17C17.345 10.3649 17.625 10.6449 17.625 10.9899C17.625 11.3349 17.345 11.6149 17 11.6149Z"></path>

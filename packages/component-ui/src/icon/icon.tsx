@@ -3,6 +3,8 @@ import { iconElements } from '@zenkigen-inc/component-icons';
 import { iconColors } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
 
+import type { ColorToken } from '../color-types';
+
 type Size = 'x-small' | 'small' | 'medium' | 'large' | 'x-large';
 
 type Color = keyof typeof iconColors;
@@ -11,13 +13,14 @@ type Props = {
   name: IconName;
   size?: Size;
   color?: Color;
+  accentColor?: ColorToken;
   isDisabled?: boolean;
   className?: string;
 };
 
 export const Icon = ({ size = 'medium', isDisabled = false, ...props }: Props) => {
   const classes = clsx(
-    'inline-block shrink-0',
+    'inline-block shrink-0 ',
     {
       'fill-disabled01': isDisabled,
       [iconColors.icon01]: !isDisabled && props.color === 'icon01',
@@ -33,5 +36,15 @@ export const Icon = ({ size = 'medium', isDisabled = false, ...props }: Props) =
     props.className,
   );
 
-  return <span className={classes}>{iconElements[props.name]}</span>;
+  const IconComponent = iconElements[props.name];
+
+  return (
+    <>
+      <span className={classes}>
+        <IconComponent
+          {...(isDisabled !== true && props.accentColor && { accentClassName: `fill-${props.accentColor}` })}
+        />
+      </span>
+    </>
+  );
 };

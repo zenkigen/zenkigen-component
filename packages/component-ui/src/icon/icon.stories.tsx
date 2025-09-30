@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { iconElements } from '@zenkigen-inc/component-icons';
 import type { iconColors } from '@zenkigen-inc/component-theme';
 
+import type { ColorToken } from '../color-types';
 import { Icon } from '.';
 
 type Color = keyof typeof iconColors;
@@ -20,6 +21,13 @@ const meta: Meta<typeof Icon> = {
     name: { control: 'select', options: Object.keys(iconElements) },
     size: { control: 'select', options: ['x-small', 'small', 'medium', 'large', 'x-large'] },
     color: { control: 'select', options: ['icon01', 'icon02', 'icon03', 'iconOnColor'] },
+    className: {
+      control: 'text',
+    },
+    accentColor: {
+      control: 'text',
+      description: 'Color token for .accentColor elements (e.g. "interactive01", "supportError")',
+    },
     isDisabled: { control: 'boolean' },
   },
 };
@@ -35,11 +43,6 @@ export const Component: Story = {
   },
   argTypes: {
     name: {
-      table: {
-        disable: true,
-      },
-    },
-    className: {
       table: {
         disable: true,
       },
@@ -73,15 +76,26 @@ export const Component: Story = {
 type Props = {
   color?: Color;
   className?: string;
+  accentColor?: ColorToken;
 };
 
 function IconList(props: Props) {
   const iconNames = Object.keys(iconElements);
 
   return (
-    <div className={props.className}>
+    <div>
+      <div className="text-1">
+        {props.className}
+        {props.accentColor}
+      </div>
       {iconNames.map((iconName) => (
-        <Icon key={iconName} name={iconName as keyof typeof iconElements} color={props.color} />
+        <Icon
+          key={iconName}
+          name={iconName as keyof typeof iconElements}
+          color={props.color}
+          accentColor={props.accentColor}
+          className={props.className}
+        />
       ))}
     </div>
   );
@@ -144,6 +158,118 @@ export function ColorFill() {
       <IconList className="fill-green-green100" />
       <IconList className="fill-purple-purple100" />
       <IconList className="fill-blueGreen-blueGreen100" />
+    </div>
+  );
+}
+
+export function AccentColorFill() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+      {/* Interactive Colors */}
+      <div>Interactive Colors:</div>
+      <IconList color="icon01" accentColor="interactive01" />
+      <IconList color="icon01" accentColor="interactive02" />
+      <IconList color="icon01" accentColor="interactive03" />
+      <IconList color="icon01" accentColor="interactive04" />
+
+      {/* Support Colors */}
+      <div>Support Colors:</div>
+      <IconList color="icon01" accentColor="supportError" />
+      <IconList color="icon01" accentColor="supportSuccess" />
+      <IconList color="icon01" accentColor="supportInfo" />
+      <IconList color="icon01" accentColor="supportWarning" />
+      <IconList color="icon01" accentColor="supportDanger" />
+
+      {/* Disabled Colors */}
+      <div>Disabled Colors:</div>
+      <IconList color="icon01" accentColor="disabled01" />
+      <IconList color="icon01" accentColor="disabled02" />
+      <IconList color="icon01" accentColor="disabled03" />
+      <IconList color="icon01" accentColor="disabled04" />
+
+      {/* Color Variants */}
+      <div>Color Variants:</div>
+      <IconList color="icon01" accentColor="blue-blue100" />
+      <IconList color="icon01" accentColor="gray-gray100" />
+      <IconList color="icon01" accentColor="red-red100" />
+      <IconList color="icon01" accentColor="yellow-yellow100" />
+      <IconList color="icon01" accentColor="green-green100" />
+      <IconList color="icon01" accentColor="purple-purple100" />
+      <IconList color="icon01" accentColor="blueGreen-blueGreen100" />
+    </div>
+  );
+}
+
+export function AccentColor() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
+      <div>
+        <h3 className="mb-4 text-xl font-semibold">アクセントカラー指定の例</h3>
+        <p className="mb-6 text-base">
+          accentColorプロパティを使用して、アイコン内の.accentColorクラス要素にカラートークンを適用できます。
+          <br />
+          例：micアイコンにはaccentColorクラス付きの要素があります。
+        </p>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <div>アクセントカラーなし:</div>
+          <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+            <Icon name="mic" size="large" color="icon01" />
+            <span>デフォルトの色</span>
+          </div>
+
+          <div>interactive01 アクセントカラー:</div>
+          <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+            <Icon name="mic" size="large" color="icon01" accentColor="interactive01" />
+            <span>アクセント部分がインタラクティブカラーに</span>
+          </div>
+
+          <div>supportError アクセントカラー:</div>
+          <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+            <Icon name="mic" size="large" color="icon01" accentColor="supportError" />
+            <span>アクセント部分がエラーカラーに</span>
+          </div>
+
+          <div>supportSuccess アクセントカラー:</div>
+          <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+            <Icon name="mic" size="large" color="icon01" accentColor="supportSuccess" />
+            <span>アクセント部分がサクセスカラーに</span>
+          </div>
+
+          <div>blue-blue100 アクセントカラー:</div>
+          <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+            <Icon name="mic" size="large" color="icon01" accentColor="blue-blue100" />
+            <span>アクセント部分がブルーカラーに</span>
+          </div>
+
+          <div>無効状態（アクセントカラーも無効化される）:</div>
+          <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+            <Icon name="mic" size="large" color="icon01" accentColor="supportSuccess" isDisabled />
+            <span>無効状態では全体がdisabled01色に</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="mb-4 text-xl font-semibold">様々なアクセントカラー例</h3>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
+          {[
+            { color: 'interactive01', label: 'Interactive01' },
+            { color: 'supportError', label: 'Error' },
+            { color: 'supportSuccess', label: 'Success' },
+            { color: 'supportWarning', label: 'Warning' },
+            { color: 'purple-purple100', label: 'Purple' },
+            { color: 'orange-orange100', label: 'Orange' },
+            { color: 'pink-pink100', label: 'Pink' },
+          ].map(({ color, label }) => (
+            <div key={color} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+              <Icon name="mic" size="x-large" color="icon01" accentColor={color as ColorToken} />
+              <span className="text-sm">{label}</span>
+              <code className="text-xs text-gray-600">{color}</code>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
