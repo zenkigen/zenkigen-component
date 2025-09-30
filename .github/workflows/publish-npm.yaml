@@ -1,4 +1,4 @@
-name: Publish npm package
+name: Publish to npm
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - 'v*'
 
 jobs:
-  publish:
+  publish-npm:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -29,7 +29,7 @@ jobs:
       - name: Build npm package
         run: yarn build-lib:all
 
-      - name: Publish npm package
+      - name: Publish to npm
         run: yarn publish:all
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
