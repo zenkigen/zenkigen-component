@@ -34,12 +34,12 @@ describe('PasswordInput', () => {
 
     // 初期状態: checkアイコン（表示ボタン）
     const showButton = screen.getByRole('button', { name: 'パスワードを表示する' });
-    expect(showButton.querySelector('svg')).toHaveAttribute('aria-label', 'check');
+    expect(showButton.querySelector('svg')).toHaveAttribute('aria-label', 'visibility');
 
     // 表示状態: closeアイコン（非表示ボタン）
     fireEvent.click(showButton);
     const hideButton = screen.getByRole('button', { name: 'パスワードを非表示にする' });
-    expect(hideButton.querySelector('svg')).toHaveAttribute('aria-label', 'close');
+    expect(hideButton.querySelector('svg')).toHaveAttribute('aria-label', 'visibilityOff');
   });
 
   it('disabled状態では表示/非表示ボタンも無効になること', () => {
