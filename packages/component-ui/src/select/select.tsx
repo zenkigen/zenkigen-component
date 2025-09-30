@@ -1,3 +1,4 @@
+import { autoUpdate, flip, offset, size as sizeMiddleware, useFloating } from '@floating-ui/react';
 import type { IconName } from '@zenkigen-inc/component-icons';
 import { focusVisible, selectColors } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
@@ -43,6 +44,29 @@ export function Select({
 }: PropsWithChildren<Props>) {
   const [isOptionListOpen, setIsOptionListOpen] = useState(false);
   const targetRef = useRef<HTMLDivElement>(null);
+
+  const { x, y, refs, strategy } = useFloating({
+    open: isOptionListOpen,
+    onOpenChange: setIsOptionListOpen,
+    placement: 'bottom-start',
+    middleware: [
+      offset(4),
+      flip(),
+      sizeMiddleware({
+        apply({ availableHeight, elements }: { availableHeight: number; elements: { floating: HTMLElement } }) {
+          let finalMaxHeight = availableHeight;
+          if (optionListMaxHeight != null) {
+            const maxHeightValue =
+              typeof optionListMaxHeight === 'string' ? parseInt(optionListMaxHeight, 10) : optionListMaxHeight;
+            finalMaxHeight = Math.min(availableHeight, maxHeightValue ?? 0);
+          }
+          elements.floating.style.maxHeight = `${finalMaxHeight - 16}px`;
+        },
+      }),
+    ],
+    whileElementsMounted: autoUpdate,
+  });
+
   useOutsideClick(targetRef, () => setIsOptionListOpen(false));
 
   const handleClickToggle = () => setIsOptionListOpen((prev) => !prev);
@@ -92,10 +116,20 @@ export function Select({
         setIsOptionListOpen,
         selectedOption,
         onChange,
+        floatingRefs: refs,
+        floatingStyles: { position: strategy, top: y ?? 0, left: x ?? 0 },
         isError,
+        optionListMaxHeight,
       }}
     >
-      <div className={wrapperClasses} style={{ width, maxWidth }} ref={targetRef}>
+      <div
+        className={wrapperClasses}
+        style={{ width, maxWidth }}
+        ref={(node) => {
+          targetRef.current = node;
+          refs.setReference(node);
+        }}
+      >
         <button className={buttonClasses} type="button" onClick={handleClickToggle} disabled={isDisabled}>
           {selectedOption?.icon ? (
             <div className="mr-1 flex">
@@ -119,7 +153,7 @@ export function Select({
             />
           </div>
         </button>
-        {isOptionListOpen && !isDisabled && <SelectList maxHeight={optionListMaxHeight}>{children}</SelectList>}
+        {isOptionListOpen && !isDisabled && <SelectList>{children}</SelectList>}
       </div>
     </SelectContext.Provider>
   );
