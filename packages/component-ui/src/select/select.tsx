@@ -1,3 +1,4 @@
+import { autoUpdate, flip, FloatingPortal, offset, shift, useFloating } from '@floating-ui/react';
 import type { IconName } from '@zenkigen-inc/component-icons';
 import { focusVisible, selectColors } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
@@ -44,6 +45,21 @@ export function Select({
   const [isOptionListOpen, setIsOptionListOpen] = useState(false);
   const targetRef = useRef<HTMLDivElement>(null);
   useOutsideClick(targetRef, () => setIsOptionListOpen(false));
+
+  // Floating UI の設定
+  const { refs, floatingStyles } = useFloating({
+    open: isOptionListOpen,
+    onOpenChange: setIsOptionListOpen,
+    placement: 'bottom-start',
+    middleware: [
+      offset(4),
+      flip({
+        fallbackPlacements: ['top-start', 'bottom-start', 'top-end', 'bottom-end'],
+      }),
+      shift({ padding: 8 }),
+    ],
+    whileElementsMounted: autoUpdate,
+  });
 
   const handleClickToggle = () => setIsOptionListOpen((prev) => !prev);
 
@@ -93,10 +109,18 @@ export function Select({
         selectedOption,
         onChange,
         isError,
+        floatingStyles,
+        floatingRef: refs.floating,
       }}
     >
       <div className={wrapperClasses} style={{ width, maxWidth }} ref={targetRef}>
-        <button className={buttonClasses} type="button" onClick={handleClickToggle} disabled={isDisabled}>
+        <button
+          ref={refs.setReference}
+          className={buttonClasses}
+          type="button"
+          onClick={handleClickToggle}
+          disabled={isDisabled}
+        >
           {selectedOption?.icon ? (
             <div className="mr-1 flex">
               <Icon name={selectedOption.icon} size={size === 'large' ? 'medium' : 'small'} />
@@ -119,7 +143,13 @@ export function Select({
             />
           </div>
         </button>
-        {isOptionListOpen && !isDisabled && <SelectList maxHeight={optionListMaxHeight}>{children}</SelectList>}
+        {isOptionListOpen && !isDisabled && (
+          <FloatingPortal>
+            <SelectList ref={refs.setFloating} maxHeight={optionListMaxHeight}>
+              {children}
+            </SelectList>
+          </FloatingPortal>
+        )}
       </div>
     </SelectContext.Provider>
   );
