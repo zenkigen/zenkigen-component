@@ -1,4 +1,12 @@
-import { autoUpdate, flip, FloatingPortal, offset, shift, useFloating } from '@floating-ui/react';
+import {
+  autoUpdate,
+  flip,
+  FloatingPortal,
+  offset,
+  shift,
+  size as sizeMiddleware,
+  useFloating,
+} from '@floating-ui/react';
 import type { IconName } from '@zenkigen-inc/component-icons';
 import { focusVisible, selectColors } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
@@ -57,6 +65,23 @@ export function Select({
         fallbackPlacements: ['top-start', 'bottom-start', 'top-end', 'bottom-end'],
       }),
       shift({ padding: 8 }),
+      sizeMiddleware({
+        apply({ availableWidth, elements }) {
+          // Selectの幅を取得
+          const referenceWidth = elements.reference.getBoundingClientRect().width;
+
+          // SelectListの自然な幅を取得（内容に応じた幅）
+          const floatingWidth = elements.floating.getBoundingClientRect().width;
+
+          // Selectの幅とSelectListの自然な幅の大きい方を選択
+          // ただし、利用可能な幅を超えないようにする
+          const minWidth = Math.max(referenceWidth, floatingWidth);
+          const finalWidth = Math.min(minWidth, availableWidth);
+
+          elements.floating.style.width = `${finalWidth}px`;
+          elements.floating.style.minWidth = `${referenceWidth}px`;
+        },
+      }),
     ],
     whileElementsMounted: autoUpdate,
   });
