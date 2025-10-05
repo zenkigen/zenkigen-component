@@ -1,0 +1,43 @@
+import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/blocks';
+import SortButtonStories, { Component, SizesAndStates, LayoutExamples } from './sort-button.stories';
+
+<Meta title="SortButton" of={SortButtonStories} />
+
+# SortButton
+
+<Canvas>
+  <Story of={Component} />
+</Canvas>
+
+<Controls of={Component} />
+
+### Code Example
+
+- ソート順序は `降順`→`昇順` を基本とする
+- 必ず`aria-label`を指定すること
+
+```tsx
+import { SortButton } from '@zenkigen-inc/component-ui';
+import type { SortOrder } from '@zenkigen-inc/component-ui';
+
+const [sortOrder, setSortOrder] = useState<SortOrder>(null);
+
+return (
+  <SortButton
+    label="項目A"
+    sortOrder={sortOrder}
+    onClick={() => {
+      setSortOrder(sortOrder === null ? 'descend' : sortOrder === 'descend' ? 'ascend' : 'descend');
+    }}
+    aria-label={`項目A ${sortOrder === null ? 'ソートなし' : sortOrder === 'ascend' ? '昇順' : '降順'}`}
+  />
+);
+```
+
+## Stories
+
+<Canvas of={SizesAndStates} />
+
+## Layout examples
+
+<Canvas of={LayoutExamples} />

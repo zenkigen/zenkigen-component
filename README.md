@@ -43,19 +43,34 @@ module.exports = {
 ## 基本的な使い方
 
 ```tsx
+import { useState } from 'react';
+import type { IconName } from '@zenkigen-inc/component-icons';
 import { Button, TextInput, Select } from '@zenkigen-inc/component-ui';
 
 const MyComponent = () => {
+  const [selectedOption, setSelectedOption] = useState<SelectOption | null>(null);
+  const optionsList = [
+    { id: '1', label: '選択肢A', value: 'A', icon: 'add' as IconName },
+    { id: '2', label: '選択肢B', value: 'B', icon: 'add' as IconName },
+    { id: '3', label: '選択肢C', value: 'C', icon: 'add' as IconName },
+  ];
+
   return (
     <div>
       <TextInput placeholder="入力してください" />
       <Button>送信</Button>
       <Select
-        options={[
-          { value: '1', label: 'オプション1' },
-          { value: '2', label: 'オプション2' },
-        ]}
-      />
+        size="x-small"
+        variant="outline"
+        placeholder="選択"
+        selectedOption={selectedOption}
+        onChange={(option) => setSelectedOption(option)}
+        optionListMaxHeight={120}
+      >
+        {optionsList.map((option) => (
+          <Select.Option key={option.id} option={option} />
+        ))}
+      </Select>
     </div>
   );
 };
@@ -69,6 +84,7 @@ const MyComponent = () => {
 - [プロジェクト構造](./docs/project-structure.md) - パッケージ構成と相互関係
 - [コンポーネント実装パターン](./docs/component-patterns.md) - 設計パターンと実装方針
 - [テーマシステム](./docs/theme-system.md) - テーマとTailwind CSS設定
+- [コーディングガイドライン](./docs/coding_guidelines.md) - 開発時のコーディング標準と規約
 
 ## Storybookでのコンポーネント確認
 
@@ -81,6 +97,9 @@ cd zenkigen-component
 
 # 依存関係のインストール
 yarn install
+
+# build
+yarn build-lib:all
 
 # Storybook起動
 yarn storybook
