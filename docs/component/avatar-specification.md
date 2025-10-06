@@ -52,19 +52,14 @@ const MyComponent = () => {
 
 ## Props
 
-### 必須プロパティ
-
-| プロパティ  | 型       | 説明           |
-| ----------- | -------- | -------------- |
-| `firstName` | `string` | ユーザーの名前 |
-| `lastName`  | `string` | ユーザーの姓   |
-
 ### オプションプロパティ
 
 | プロパティ   | 型                                                         | デフォルト値 | 説明                       |
 | ------------ | ---------------------------------------------------------- | ------------ | -------------------------- |
 | `size`       | `'x-small' \| 'small' \| 'medium' \| 'large' \| 'x-large'` | `'medium'`   | アバターのサイズ           |
 | `userId`     | `number`                                                   | `undefined`  | ユーザーID（色分けに使用） |
+| `firstName`  | `string`                                                   | `undefined`  | ユーザーの名前             |
+| `lastName`   | `string`                                                   | `undefined`  | ユーザーの姓               |
 | `isDisabled` | `boolean`                                                  | `false`      | 無効状態かどうか           |
 
 ## 状態とスタイル
@@ -178,6 +173,28 @@ const MyComponent = () => {
 />
 ```
 
+### 名前なし（アイコン表示）
+
+`firstName` と `lastName` の両方が未定義または空文字の場合、`user-one` アイコンが表示されます：
+
+```typescript
+<div className="flex gap-2">
+  <Avatar size="x-small" userId={1} />
+  <Avatar size="small" userId={1} />
+  <Avatar size="medium" userId={1} />
+  <Avatar size="large" userId={1} />
+  <Avatar size="x-large" userId={1} />
+</div>
+```
+
+```typescript
+<div className="flex gap-2">
+  <Avatar size="medium" />
+  <Avatar size="medium" isDisabled />
+  <Avatar size="medium" userId={1} isDisabled />
+</div>
+```
+
 ### 特殊な名前パターン
 
 #### 英語名（ASCII文字）
@@ -233,18 +250,32 @@ const MyComponent = () => {
 - `isAsciiString`関数による文字コード判定（ASCII文字の判定）
 - 名前の正規化処理（全角スペースの変換、トリム処理）
 - ユーザーカラーの循環選択（モジュロ演算）
+- 名前がない場合のアイコン表示ロジック
 
-### 名前表示ロジック
+### 表示ロジック
 
 ```typescript
+// 名前の有無を判定
+const hasName = (props.firstName != null && props.firstName.trim() !== '') ||
+                (props.lastName != null && props.lastName.trim() !== '');
+
+// 名前がない場合はアイコンを表示
+if (hasName === false) {
+  return (
+    <span className={classes}>
+      <Icon name="user-one" size={iconSizeMap[size]} color="iconOnColor" />
+    </span>
+  );
+}
+
 // ASCII文字判定
 const isAsciiString = (str: string) => {
   return str.charCodeAt(0) < 256;
 };
 
 // 名前の正規化
-const trimmedFirstName = props.firstName.replace('　', ' ').trim();
-const trimmedLastName = props.lastName.replace('　', ' ').trim();
+const trimmedFirstName = (props.firstName ?? '').replace('　', ' ').trim();
+const trimmedLastName = (props.lastName ?? '').replace('　', ' ').trim();
 
 // 表示文字の決定
 const nameOnIcon = isAsciiString(trimmedLastName)
@@ -254,11 +285,12 @@ const nameOnIcon = isAsciiString(trimmedLastName)
 
 ## 注意事項
 
-1. **名前の必須性**: `firstName`と`lastName`は必須プロパティです
+1. **名前のオプション性**: `firstName`と`lastName`はオプションプロパティです。両方が未定義または空文字の場合、`user-one`アイコンが表示されます
 2. **文字数制限**: 表示されるイニシャルは最大2文字です
 3. **色の循環**: ユーザーカラーは10色で循環するため、同じ色が複数のユーザーに割り当てられる可能性があります
 4. **ASCII文字判定**: 姓の最初の文字がASCII文字かどうかで表示ロジックが変わります
 5. **全角スペース処理**: 全角スペース（　）は自動的に半角スペースに変換されます
+6. **アイコン表示**: 名前がない場合は`user-one`アイコンが表示され、Avatarのサイズに応じてアイコンサイズも調整されます
 
 ## スタイルのカスタマイズ
 
@@ -273,6 +305,7 @@ const nameOnIcon = isAsciiString(trimmedLastName)
 
 ## 更新履歴
 
-| 日付       | 内容     | 担当者 |
-| ---------- | -------- | ------ |
-| 2025-10-06 | 新規作成 | -      |
+| 日付       | 内容                                                                                                | 担当者 |
+| ---------- | --------------------------------------------------------------------------------------------------- | ------ |
+| 2025-10-06 | firstName, lastNameを必須からオプションに変更。名前なしの場合はuser-oneアイコンを表示する機能を追加 | -      |
+| 2025-10-06 | 新規作成                                                                                            | -      |
