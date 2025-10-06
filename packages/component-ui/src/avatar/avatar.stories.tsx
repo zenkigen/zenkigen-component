@@ -58,6 +58,19 @@ export function Base() {
         <Avatar size="medium" userId={1} lastName="全 優" firstName="" />
         <Avatar size="medium" userId={1} lastName="全　優" firstName="" />
       </div>
+      {/* 名前なしパターン（アイコン表示） */}
+      <div className="flex gap-2">
+        <Avatar size="x-small" userId={1} />
+        <Avatar size="small" userId={1} />
+        <Avatar size="medium" userId={1} />
+        <Avatar size="large" userId={1} />
+        <Avatar size="x-large" userId={1} />
+      </div>
+      <div className="flex gap-2">
+        <Avatar size="medium" />
+        <Avatar size="medium" isDisabled />
+        <Avatar size="medium" userId={1} isDisabled />
+      </div>
     </div>
   );
 }
