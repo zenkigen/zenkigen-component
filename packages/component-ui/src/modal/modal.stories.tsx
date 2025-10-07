@@ -438,7 +438,7 @@ export const Danger: Story = {
 export const LayoutExample: Story = {
   args: {
     width: 480,
-    height: 100,
+    height: 300,
   },
   render: function MyFunc({ ...args }) {
     const [isOpen, setIsOpen] = useState(true);
@@ -464,7 +464,7 @@ export const LayoutExample: Story = {
         <Button variant="fill" size="large" onClick={() => setIsOpen(true)}>
           open
         </Button>
-        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} width={args.width}>
+        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} width={args.width} height={args.height}>
           <Modal.Header>タスク作成</Modal.Header>
           <Modal.Body>
             <div className="flex w-full flex-col gap-6 p-6">
