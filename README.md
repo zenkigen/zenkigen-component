@@ -76,6 +76,40 @@ const MyComponent = () => {
 };
 ```
 
+## コンポーネント一覧・仕様書
+
+以下は利用可能なコンポーネントの一覧です。リンクがあるコンポーネントは詳細な仕様書が参照できます。
+
+- Avatar
+- Breadcrumb
+- Button
+- Checkbox
+- Dropdown
+- Evaluation Star
+- Heading
+- Icon
+- Icon Button
+- Loading
+- [Modal](./docs/component/modal-specification.md)
+- Notification Inline
+- Pagination
+- Pagination Select
+- Radio
+- Search
+- [Segmented Control](./docs/component/segmented-control-specification.md)
+- [Select](./docs/component/select-specification.md)
+- Select Sort
+- [Sort Button](./docs/component/sort-button-specification.md)
+- Tab
+- Table
+- Tag
+- [Text Area](./docs/component/text-area-specification.md)
+- Text Input
+- Toast
+- Toggle
+- Tooltip
+- Typography
+
 ## プロジェクト詳細ドキュメント
 
 プロジェクトの詳細な技術資料は以下のドキュメントを参照してください：
