@@ -51,13 +51,7 @@ export function Select({
     open: isOptionListOpen,
     onOpenChange: setIsOptionListOpen,
     placement: 'bottom-start',
-    middleware: [
-      offset(4),
-      flip({
-        fallbackPlacements: ['top-start', 'bottom-start', 'top-end', 'bottom-end'],
-      }),
-      shift({ padding: 8 }),
-    ],
+    middleware: [offset(4), shift({ padding: 8 })],
     whileElementsMounted: autoUpdate,
   });
 
@@ -145,9 +139,11 @@ export function Select({
         </button>
         {isOptionListOpen && !isDisabled && (
           <FloatingPortal>
-            <SelectList ref={refs.setFloating} maxHeight={optionListMaxHeight}>
-              {children}
-            </SelectList>
+            <div className="relative z-overlay">
+              <SelectList ref={refs.setFloating} maxHeight={optionListMaxHeight}>
+                {children}
+              </SelectList>
+            </div>
           </FloatingPortal>
         )}
       </div>
