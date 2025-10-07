@@ -4,7 +4,10 @@ import { useState } from 'react';
 
 import { Button } from '../button';
 import { Checkbox } from '../checkbox';
+import type { SelectOption } from '../select';
+import { Select } from '../select';
 import { Tab } from '../tab';
+import { TextInput } from '../text-input';
 import { Modal } from '.';
 
 const meta: Meta<typeof Modal> = {
@@ -423,6 +426,114 @@ export const Danger: Story = {
                 }}
               >
                 削除する
+              </Button>
+            </div>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    );
+  },
+};
+
+export const LayoutExample: Story = {
+  args: {
+    width: 480,
+    height: 100,
+  },
+  render: function MyFunc({ ...args }) {
+    const [isOpen, setIsOpen] = useState(true);
+    const [selectedCategory, setSelectedCategory] = useState<SelectOption | null>(null);
+    const [selectedPriority, setSelectedPriority] = useState<SelectOption | null>(null);
+    const [taskName, setTaskName] = useState('');
+    const [description, setDescription] = useState('');
+
+    const categoryOptions = [
+      { id: 'work', value: 'work', label: '仕事' },
+      { id: 'personal', value: 'personal', label: 'プライベート' },
+      { id: 'study', value: 'study', label: '学習' },
+    ];
+
+    const priorityOptions = [
+      { id: 'high', value: 'high', label: '高' },
+      { id: 'medium', value: 'medium', label: '中' },
+      { id: 'low', value: 'low', label: '低' },
+    ];
+
+    return (
+      <div>
+        <Button variant="fill" size="large" onClick={() => setIsOpen(true)}>
+          open
+        </Button>
+        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} width={args.width}>
+          <Modal.Header>タスク作成</Modal.Header>
+          <Modal.Body>
+            <div className="flex w-full flex-col gap-6 p-6">
+              <div className="flex flex-col gap-2">
+                <label className="typography-label14regular text-text01">タスク名</label>
+                <TextInput
+                  value={taskName}
+                  onChange={(e) => setTaskName(e.target.value)}
+                  placeholder="タスク名を入力してください"
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="typography-label14regular text-text01">カテゴリ</label>
+                <Select
+                  placeholder="カテゴリを選択してください"
+                  selectedOption={selectedCategory}
+                  onChange={setSelectedCategory}
+                  width="100%"
+                >
+                  {categoryOptions.map((option) => (
+                    <Select.Option key={option.id} option={option} />
+                  ))}
+                </Select>
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="typography-label14regular text-text01">優先度</label>
+                <Select
+                  placeholder="優先度を選択してください"
+                  selectedOption={selectedPriority}
+                  onChange={setSelectedPriority}
+                  width="100%"
+                >
+                  {priorityOptions.map((option) => (
+                    <Select.Option key={option.id} option={option} />
+                  ))}
+                </Select>
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="typography-label14regular text-text01">説明</label>
+                <textarea
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  className="typography-label14regular h-20 resize-none rounded border border-uiBorder01 p-3"
+                  placeholder="タスクの説明を入力してください"
+                />
+              </div>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <div className="flex w-full flex-wrap items-center justify-end gap-4">
+              <Button
+                variant="outline"
+                size="large"
+                onClick={(evt) => {
+                  setIsOpen(false);
+                  action('キャンセル')(evt);
+                }}
+              >
+                キャンセル
+              </Button>
+              <Button
+                variant="fill"
+                size="large"
+                onClick={(evt) => {
+                  setIsOpen(false);
+                  action('作成する')(evt);
+                }}
+              >
+                作成する
               </Button>
             </div>
           </Modal.Footer>

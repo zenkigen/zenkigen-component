@@ -1,12 +1,4 @@
-import {
-  autoUpdate,
-  flip,
-  FloatingPortal,
-  offset,
-  shift,
-  size as sizeMiddleware,
-  useFloating,
-} from '@floating-ui/react';
+import { autoUpdate, FloatingPortal, offset, shift, size as sizeMiddleware, useFloating } from '@floating-ui/react';
 import type { IconName } from '@zenkigen-inc/component-icons';
 import { focusVisible, selectColors } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
@@ -61,9 +53,6 @@ export function Select({
     placement: 'bottom-start',
     middleware: [
       offset(4),
-      flip({
-        fallbackPlacements: ['top-start', 'bottom-start', 'top-end', 'bottom-end'],
-      }),
       shift({ padding: 8 }),
       sizeMiddleware({
         apply({ availableWidth, elements }) {
@@ -170,9 +159,11 @@ export function Select({
         </button>
         {isOptionListOpen && !isDisabled && (
           <FloatingPortal>
-            <SelectList ref={refs.setFloating} maxHeight={optionListMaxHeight}>
-              {children}
-            </SelectList>
+            <div className="relative z-overlay">
+              <SelectList ref={refs.setFloating} maxHeight={optionListMaxHeight}>
+                {children}
+              </SelectList>
+            </div>
           </FloatingPortal>
         )}
       </div>
