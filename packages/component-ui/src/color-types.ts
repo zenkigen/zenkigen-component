@@ -1,4 +1,4 @@
-import type { tokens } from '@zenkigen-inc/component-config/src/tokens/tokens';
+import type { tokens } from '@zenkigen-inc/component-config';
 
 // Zenkigenトークンのキー名
 type UserColorToken = keyof typeof tokens.user;
