@@ -39,6 +39,7 @@
   "dependencies": {
     "@zenkigen-inc/component-icons": "1.16.1",
     "@zenkigen-inc/component-theme": "1.16.1",
+    "@zenkigen-inc/component-config": "1.16.1",
     "clsx": "2.1.1"
   }
 }
