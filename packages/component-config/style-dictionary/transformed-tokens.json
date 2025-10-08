@@ -212,7 +212,7 @@
     },
     "Icon": {
       "Icon01": {
-        "value": "#6F7476",
+        "value": "#5C6366",
         "type": "color",
         "description": "Primary icons"
       },
@@ -244,7 +244,7 @@
         "description": "Primary Interactive color on background, Primary fill buttons"
       },
       "Interactive02": {
-        "value": "#6F7476",
+        "value": "#5C6366",
         "type": "color",
         "description": "Secondary Interactive color, Secondary buttons"
       },
@@ -394,7 +394,7 @@
     },
     "Selected": {
       "SelectedUi": {
-        "value": "#D9EAFB",
+        "value": "#F1F7FD",
         "type": "color",
         "description": "Selected List Navigation"
       },
