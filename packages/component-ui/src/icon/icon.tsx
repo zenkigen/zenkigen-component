@@ -42,7 +42,9 @@ export const Icon = ({ size = 'medium', isDisabled = false, ...props }: Props) =
     <>
       <span className={classes}>
         <IconComponent
-          {...(isDisabled !== true && props.accentColor && { accentClassName: `fill-${props.accentColor}` })}
+          {...(isDisabled !== true && typeof props.accentColor === 'string'
+            ? { accentClassName: `fill-${String(props.accentColor)}` }
+            : {})}
         />
       </span>
     </>
