@@ -9,12 +9,18 @@ type Props = Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> & {
   value: string;
   isError?: boolean;
   onClickClearButton?: () => void;
-  /** 入力欄の末尾に表示する要素。例: アイコンやテキスト */
+};
+
+// 内部実装用の型（after propsを含む）
+type InternalProps = Props & {
+  /** 入力欄の末尾に表示する要素。例: アイコンやテキスト（内部実装用） */
   after?: ReactNode;
 };
 
 export const TextInput = forwardRef<HTMLInputElement, Props>(
-  ({ size = 'medium', isError = false, disabled = false, onClickClearButton, after, ...props }: Props, ref) => {
+  ({ size = 'medium', isError = false, disabled = false, onClickClearButton, ...props }: Props, ref) => {
+    // 内部実装用のafter propsを取得（型キャストを使用）
+    const { after } = props as InternalProps;
     const isShowClearButton = !!onClickClearButton && props.value.length !== 0 && !disabled;
     const hasTrailingElement = isShowClearButton || after != null;
     const inputWrapClasses = clsx('relative flex items-center gap-2 overflow-hidden rounded border', {

@@ -4,7 +4,7 @@ import { forwardRef, useState } from 'react';
 import { IconButton } from '../icon-button';
 import { TextInput } from '../text-input';
 
-type Props = Omit<ComponentPropsWithoutRef<typeof TextInput>, 'after' | 'type' | 'onClickClearButton'>;
+type Props = Omit<ComponentPropsWithoutRef<typeof TextInput>, 'type' | 'onClickClearButton'>;
 
 export const PasswordInput = forwardRef<HTMLInputElement, Props>(({ disabled = false, ...props }: Props, ref) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
@@ -28,9 +28,9 @@ export const PasswordInput = forwardRef<HTMLInputElement, Props>(({ disabled = f
     <TextInput
       ref={ref}
       type={isPasswordVisible === true ? 'text' : 'password'}
-      after={passwordToggleButton}
       disabled={disabled}
       {...props}
+      {...({ after: passwordToggleButton } as Record<string, unknown>)}
     />
   );
 });
