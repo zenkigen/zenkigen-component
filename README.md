@@ -80,7 +80,7 @@ const MyComponent = () => {
 
 以下は利用可能なコンポーネントの一覧です。リンクがあるコンポーネントは詳細な仕様書が参照できます。
 
-- Avatar
+- [Avatar](./docs/component/avatar-specification.md)
 - Breadcrumb
 - Button
 - Checkbox
@@ -88,7 +88,7 @@ const MyComponent = () => {
 - Evaluation Star
 - Heading
 - Icon
-- Icon Button
+- [Icon Button](./docs/component/icon-button-specification.md)
 - Loading
 - [Modal](./docs/component/modal-specification.md)
 - Notification Inline
@@ -100,11 +100,12 @@ const MyComponent = () => {
 - [Select](./docs/component/select-specification.md)
 - Select Sort
 - [Sort Button](./docs/component/sort-button-specification.md)
-- Tab
+- [Tab](./docs/component/tab-specification.md)
 - Table
 - Tag
 - [Text Area](./docs/component/text-area-specification.md)
-- Text Input
+- [Text Input](./docs/component/text-input-specification.md)
+- [Password Input](./docs/component/password-input-specification.md)
 - Toast
 - Toggle
 - Tooltip
