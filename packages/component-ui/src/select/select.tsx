@@ -2,7 +2,7 @@ import { autoUpdate, FloatingPortal, offset, shift, size as sizeMiddleware, useF
 import type { IconName } from '@zenkigen-inc/component-icons';
 import { focusVisible, selectColors } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
-import type { CSSProperties, PropsWithChildren } from 'react';
+import type { CSSProperties, PropsWithChildren, RefObject } from 'react';
 import { useRef, useState } from 'react';
 
 import { useOutsideClick } from '../hooks/use-outside-click';
@@ -14,7 +14,6 @@ import type { SelectOption } from './type';
 
 // Floating UI の定数
 const FLOATING_OFFSET = 4;
-const FLOATING_SHIFT_PADDING = 8;
 
 type Props = {
   size?: 'x-small' | 'small' | 'medium' | 'large';
@@ -57,12 +56,10 @@ export function Select({
     placement: 'bottom-start',
     middleware: [
       offset(FLOATING_OFFSET),
-      shift({ padding: FLOATING_SHIFT_PADDING }),
       sizeMiddleware({
         apply({ availableWidth, elements, rects }) {
           const referenceWidth = rects.reference.width;
-
-          // minWidthでSelectの幅を保証し、maxWidthで利用可能幅を制限
+          // トリガーボタンが小さい場合は最小幅を保証し、大きい場合はトリガーボタンに合わせる
           elements.floating.style.minWidth = `${referenceWidth}px`;
           elements.floating.style.maxWidth = `${availableWidth}px`;
         },
@@ -120,7 +117,7 @@ export function Select({
         onChange,
         isError,
         floatingStyles,
-        floatingRef: refs.floating,
+        floatingRef: refs.floating as RefObject<HTMLUListElement | null>,
       }}
     >
       <div className={wrapperClasses} style={{ width, maxWidth }} ref={targetRef}>
