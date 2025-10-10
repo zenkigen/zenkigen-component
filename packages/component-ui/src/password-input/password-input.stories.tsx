@@ -26,7 +26,12 @@ export const Component: Story = {
   parameters: {
     chromatic: { disable: true },
   },
-  argTypes: {},
+  argTypes: {
+    size: {
+      control: 'radio',
+      options: ['medium', 'large'],
+    },
+  },
   render: function MyFunc({ ...args }) {
     const [value, setValue] = useState<string>('');
 
