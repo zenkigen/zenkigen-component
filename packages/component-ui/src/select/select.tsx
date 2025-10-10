@@ -1,4 +1,4 @@
-import { autoUpdate, FloatingPortal, offset, shift, size as sizeMiddleware, useFloating } from '@floating-ui/react';
+import { autoUpdate, FloatingPortal, offset, size as sizeMiddleware, useFloating } from '@floating-ui/react';
 import type { IconName } from '@zenkigen-inc/component-icons';
 import { focusVisible, selectColors } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
