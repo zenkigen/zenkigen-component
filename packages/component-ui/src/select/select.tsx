@@ -59,20 +59,12 @@ export function Select({
       offset(FLOATING_OFFSET),
       shift({ padding: FLOATING_SHIFT_PADDING }),
       sizeMiddleware({
-        apply({ availableWidth, elements }) {
-          // Selectの幅を取得
-          const referenceWidth = elements.reference.getBoundingClientRect().width;
+        apply({ availableWidth, elements, rects }) {
+          const referenceWidth = rects.reference.width;
 
-          // SelectListの自然な幅を取得（内容に応じた幅）
-          const floatingWidth = elements.floating.getBoundingClientRect().width;
-
-          // Selectの幅とSelectListの自然な幅の大きい方を選択
-          // ただし、利用可能な幅を超えないようにする
-          const minWidth = Math.max(referenceWidth, floatingWidth);
-          const finalWidth = Math.min(minWidth, availableWidth);
-
-          elements.floating.style.width = `${finalWidth}px`;
+          // minWidthでSelectの幅を保証し、maxWidthで利用可能幅を制限
           elements.floating.style.minWidth = `${referenceWidth}px`;
+          elements.floating.style.maxWidth = `${availableWidth}px`;
         },
       }),
     ],
