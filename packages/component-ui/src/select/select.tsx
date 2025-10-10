@@ -14,7 +14,6 @@ import type { SelectOption } from './type';
 
 // Floating UI の定数
 const FLOATING_OFFSET = 4;
-const FLOATING_SHIFT_PADDING = 8;
 
 type Props = {
   size?: 'x-small' | 'small' | 'medium' | 'large';
@@ -55,7 +54,7 @@ export function Select({
     open: isOptionListOpen,
     onOpenChange: setIsOptionListOpen,
     placement: 'bottom-start',
-    middleware: [offset(FLOATING_OFFSET), shift({ padding: FLOATING_SHIFT_PADDING })],
+    middleware: [offset(FLOATING_OFFSET)],
     whileElementsMounted: autoUpdate,
   });
 
