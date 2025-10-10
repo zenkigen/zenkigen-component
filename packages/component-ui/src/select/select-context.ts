@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react';
+import type { CSSProperties, RefObject } from 'react';
 import { createContext } from 'react';
 
 import type { SelectOption } from './type';
@@ -12,7 +12,7 @@ type UseSelectReturnType = {
   variant?: 'text' | 'outline';
   isError?: boolean;
   floatingStyles?: CSSProperties;
-  floatingRef?: React.MutableRefObject<HTMLElement | null>;
+  floatingRef?: RefObject<HTMLUListElement | null>;
 };
 
 export const SelectContext = createContext<UseSelectReturnType>({

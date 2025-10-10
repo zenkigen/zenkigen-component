@@ -80,7 +80,12 @@ const optionsList = [
 
 const optionsList2 = [
   { id: '1', label: '選択肢A', value: 'A', icon: 'add' as IconName },
-  { id: '2', label: '選択肢B', value: 'B', icon: 'warning' as IconName },
+  {
+    id: '2',
+    label: '選択肢B',
+    value: 'B',
+    icon: 'warning' as IconName,
+  },
   { id: '3', label: '選択肢C', value: 'C', icon: 'volume' as IconName },
   { id: '4', label: '選択肢D', value: 'D', icon: 'video' as IconName },
   { id: '5', label: '選択肢E', value: 'E', icon: 'user' as IconName },
