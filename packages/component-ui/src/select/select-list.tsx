@@ -19,6 +19,7 @@ export const SelectList = forwardRef<HTMLUListElement, PropsWithChildren<Props>>
   };
 
   useLayoutEffect(() => {
+    // maxHeight（optionListMaxHeight）が指定されてない場合はスクロールしない（リストは全て見えている想定のため場合）
     if (maxHeight != null && selectedOption != null) {
       const container = floatingRef?.current;
       if (container != null) {
