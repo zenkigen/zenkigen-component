@@ -12,6 +12,10 @@ import { SelectItem } from './select-item';
 import { SelectList } from './select-list';
 import type { SelectOption } from './type';
 
+// Floating UI の定数
+const FLOATING_OFFSET = 4;
+const FLOATING_SHIFT_PADDING = 8;
+
 type Props = {
   size?: 'x-small' | 'small' | 'medium' | 'large';
   variant?: 'outline' | 'text';
@@ -52,8 +56,8 @@ export function Select({
     onOpenChange: setIsOptionListOpen,
     placement: 'bottom-start',
     middleware: [
-      offset(4),
-      shift({ padding: 8 }),
+      offset(FLOATING_OFFSET),
+      shift({ padding: FLOATING_SHIFT_PADDING }),
       sizeMiddleware({
         apply({ availableWidth, elements }) {
           // Selectの幅を取得

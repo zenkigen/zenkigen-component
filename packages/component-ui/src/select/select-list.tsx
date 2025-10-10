@@ -19,12 +19,11 @@ export const SelectList = forwardRef<HTMLUListElement, PropsWithChildren<Props>>
   };
 
   useLayoutEffect(() => {
+    // maxHeight（optionListMaxHeight）が指定されてない場合はスクロールしない（リストは全て見えている想定のため場合）
     if (maxHeight != null && selectedOption != null) {
       const container = floatingRef?.current;
       if (container != null) {
-        const element = Array.from(container.children ?? []).find(
-          (item) => item.getAttribute('data-id') === selectedOption.id,
-        );
+        const element = container.querySelector(`[data-id="${selectedOption.id}"]`) as HTMLElement;
 
         if (element != null) {
           // 要素の位置を計算してスクロール
