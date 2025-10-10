@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { iconElements } from '@zenkigen-inc/component-icons';
 import type { iconColors } from '@zenkigen-inc/component-theme';
 
+import type { ColorToken } from '../color-types';
 import { Icon } from '.';
 
 type Color = keyof typeof iconColors;
@@ -20,6 +21,13 @@ const meta: Meta<typeof Icon> = {
     name: { control: 'select', options: Object.keys(iconElements) },
     size: { control: 'select', options: ['x-small', 'small', 'medium', 'large', 'x-large'] },
     color: { control: 'select', options: ['icon01', 'icon02', 'icon03', 'iconOnColor'] },
+    className: {
+      control: 'text',
+    },
+    accentColor: {
+      control: 'text',
+      description: 'Color token for .accentColor elements (e.g. "interactive01", "supportError")',
+    },
     isDisabled: { control: 'boolean' },
   },
 };
@@ -35,11 +43,6 @@ export const Component: Story = {
   },
   argTypes: {
     name: {
-      table: {
-        disable: true,
-      },
-    },
-    className: {
       table: {
         disable: true,
       },
@@ -73,15 +76,26 @@ export const Component: Story = {
 type Props = {
   color?: Color;
   className?: string;
+  accentColor?: ColorToken;
 };
 
 function IconList(props: Props) {
   const iconNames = Object.keys(iconElements);
 
   return (
-    <div className={props.className}>
+    <div>
+      <div className="text-1">
+        {props.className}
+        {props.accentColor}
+      </div>
       {iconNames.map((iconName) => (
-        <Icon key={iconName} name={iconName as keyof typeof iconElements} color={props.color} />
+        <Icon
+          key={iconName}
+          name={iconName as keyof typeof iconElements}
+          color={props.color}
+          accentColor={props.accentColor}
+          className={props.className}
+        />
       ))}
     </div>
   );
@@ -144,6 +158,44 @@ export function ColorFill() {
       <IconList className="fill-green-green100" />
       <IconList className="fill-purple-purple100" />
       <IconList className="fill-blueGreen-blueGreen100" />
+    </div>
+  );
+}
+
+export function AccentColorFill() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+      {/* Interactive Colors */}
+      <div>Interactive Colors:</div>
+      <IconList color="icon01" accentColor="interactive01" />
+      <IconList color="icon01" accentColor="interactive02" />
+      <IconList color="icon01" accentColor="interactive03" />
+      <IconList color="icon01" accentColor="interactive04" />
+
+      {/* Support Colors */}
+      <div>Support Colors:</div>
+      <IconList color="icon01" accentColor="supportError" />
+      <IconList color="icon01" accentColor="supportSuccess" />
+      <IconList color="icon01" accentColor="supportInfo" />
+      <IconList color="icon01" accentColor="supportWarning" />
+      <IconList color="icon01" accentColor="supportDanger" />
+
+      {/* Disabled Colors */}
+      <div>Disabled Colors:</div>
+      <IconList color="icon01" accentColor="disabled01" />
+      <IconList color="icon01" accentColor="disabled02" />
+      <IconList color="icon01" accentColor="disabled03" />
+      <IconList color="icon01" accentColor="disabled04" />
+
+      {/* Color Variants */}
+      <div>Color Variants:</div>
+      <IconList color="icon01" accentColor="blue-blue100" />
+      <IconList color="icon01" accentColor="gray-gray100" />
+      <IconList color="icon01" accentColor="red-red100" />
+      <IconList color="icon01" accentColor="yellow-yellow100" />
+      <IconList color="icon01" accentColor="green-green100" />
+      <IconList color="icon01" accentColor="purple-purple100" />
+      <IconList color="icon01" accentColor="blueGreen-blueGreen100" />
     </div>
   );
 }
