@@ -42,7 +42,18 @@ import { Icon } from '@zenkigen-inc/component-ui';
 
 const MyComponent = () => {
   return (
-    <Icon name="add" size="medium" color="icon01" />
+    <>
+      {/* 基本的な使用 */}
+      <Icon name="add" size="medium" color="icon01" />
+
+      {/* アクセントカラーを使用 */}
+      <Icon
+        name="calendar-today"
+        size="medium"
+        color="icon01"
+        accentColor="interactive01"
+      />
+    </>
   );
 };
 ```
@@ -57,12 +68,21 @@ const MyComponent = () => {
 
 ### オプションプロパティ
 
-| プロパティ   | 型                                                         | デフォルト値 | 説明              |
-| ------------ | ---------------------------------------------------------- | ------------ | ----------------- |
-| `size`       | `'x-small' \| 'small' \| 'medium' \| 'large' \| 'x-large'` | `'medium'`   | アイコンのサイズ  |
-| `color`      | `'icon01' \| 'icon02' \| 'icon03' \| 'iconOnColor'`        | `undefined`  | アイコンの色      |
-| `isDisabled` | `boolean`                                                  | `false`      | 無効状態かどうか  |
-| `className`  | `string`                                                   | `undefined`  | 追加のCSSクラス名 |
+| プロパティ    | 型                                                         | デフォルト値 | 説明                                                       |
+| ------------- | ---------------------------------------------------------- | ------------ | ---------------------------------------------------------- |
+| `size`        | `'x-small' \| 'small' \| 'medium' \| 'large' \| 'x-large'` | `'medium'`   | アイコンのサイズ                                           |
+| `color`       | `'icon01' \| 'icon02' \| 'icon03' \| 'iconOnColor'`        | `undefined`  | アイコンの基本色                                           |
+| `accentColor` | `ColorToken`                                               | `undefined`  | アイコン内の特定要素（`.accentColor`）に適用する色トークン |
+| `isDisabled`  | `boolean`                                                  | `false`      | 無効状態かどうか                                           |
+| `className`   | `string`                                                   | `undefined`  | 追加のCSSクラス名                                          |
+
+#### `ColorToken` について
+
+`accentColor` で指定可能な `ColorToken` は、以下のカテゴリのトークンを含みます：
+
+- **Zenkigenデザイントークン**: `text*`, `link*`, `background*`, `border*`, `icon*`, `interactive*`, `field*`, `focus*`, `hover*`, `active*`, `selected*`, `disabled*`, `support*`
+- **ベースカラー**: `blue-blue100`, `gray-gray100`, `red-red100`, `yellow-yellow100`, `green-green100`, `purple-purple100`, `blueGreen-blueGreen100`, `black`, `white`
+- **Tailwind標準色**: `slate-50`, `gray-100`, `red-500` など（50〜950の範囲）
 
 ## 状態とスタイル
 
@@ -114,6 +134,19 @@ const MyComponent = () => {
 
 - 用途: 色付き背景上でのアイコン表示（通常は白色）
 - 適用クラス: `iconColors.iconOnColor`
+
+#### accentColor（アクセントカラー）
+
+- 用途: アイコン内の特定要素に異なる色を適用（SVG内の`.accentColor`クラスを持つ要素が対象）
+- 適用方法: `fill-${accentColor}`クラスとして動的に生成
+- 利用可能な値: `ColorToken`型（デザイントークン、ベースカラー、Tailwind標準色）
+- 対応アイコン: `calendar-attention`, `calendar-check`, `calendar-minus`, `calendar-today`, `mic`, `volume-off`
+- 例:
+  - `accentColor="interactive01"` → インタラクティブなアクセント（`calendar-today` など）
+  - `accentColor="supportError"` → エラー状態のアクセント（`calendar-attention`, `volume-off` など）
+  - `accentColor="supportSuccess"` → 成功状態のアクセント（`calendar-check`, `mic` など）
+  - `accentColor="blue-blue100"` → 青色のアクセント
+- 注意: `isDisabled={true}` の場合、アクセントカラーは適用されません
 
 ### 状態に応じたスタイル
 
@@ -191,6 +224,38 @@ const MyComponent = () => {
 />
 ```
 
+### アクセントカラー指定
+
+```typescript
+// インタラクティブなアクセントカラー
+<Icon
+  name="calendar-today"
+  color="icon01"
+  accentColor="interactive01"
+/>
+
+// サポートカラーでのアクセント（エラー状態）
+<Icon
+  name="calendar-attention"
+  color="icon01"
+  accentColor="supportError"
+/>
+
+// サポートカラーでのアクセント（成功状態）
+<Icon
+  name="calendar-check"
+  color="icon01"
+  accentColor="supportSuccess"
+/>
+
+// ベースカラーでのアクセント
+<Icon
+  name="mic"
+  color="icon01"
+  accentColor="blue-blue100"
+/>
+```
+
 ### カスタムスタイル
 
 ```typescript
@@ -211,6 +276,14 @@ const MyComponent = () => {
   name="star"
   size="large"
   className="fill-yellow-yellow100"
+/>
+
+// アクセントカラーとカスタムスタイルの組み合わせ
+<Icon
+  name="calendar-today"
+  color="icon01"
+  accentColor="interactive01"
+  className="rotate-45"
 />
 ```
 
@@ -262,6 +335,54 @@ const StatusIcon = ({ status }: { status: 'success' | 'error' | 'warning' }) => 
 };
 ```
 
+#### アクセントカラーを活用した使用例
+
+```typescript
+// カレンダー（今日の日付を強調）
+<Icon
+  name="calendar-today"
+  color="icon01"
+  accentColor="interactive01"
+/>
+
+// カレンダー（注意が必要な日付）
+<Icon
+  name="calendar-attention"
+  color="icon02"
+  accentColor="supportError"
+/>
+
+// カレンダー（完了した予定）
+<Icon
+  name="calendar-check"
+  color="icon01"
+  accentColor="supportSuccess"
+/>
+
+// マイク（アクティブ状態）
+<Icon
+  name="mic"
+  color="icon01"
+  accentColor="supportSuccess"
+/>
+
+// 音量オフ（ミュート状態）
+<Icon
+  name="volume-off"
+  color="icon01"
+  accentColor="supportError"
+/>
+
+// 動的なアクセントカラー（マイクのオン/オフ）
+const MicIcon = ({ isActive }: { isActive: boolean }) => (
+  <Icon
+    name="mic"
+    color="icon01"
+    accentColor={isActive ? 'supportSuccess' : 'supportError'}
+  />
+);
+```
+
 ## アクセシビリティ
 
 - `span`要素として実装されており、装飾的な要素として扱われます
@@ -297,6 +418,9 @@ const StatusIcon = ({ status }: { status: 'success' | 'error' | 'warning' }) => 
 - `@zenkigen-inc/component-icons`から提供される`iconElements`を使用
 - `@zenkigen-inc/component-theme`の`iconColors`を使用した色管理
 - `inline-block`と`shrink-0`による柔軟なレイアウト対応
+- `accentColor`プロパティは、`ColorToken`型の値を受け取り、`fill-${accentColor}`形式でクラス名を生成
+- アクセントカラーは、無効状態でない場合にのみ、アイコンコンポーネントに`accentClassName`として渡される
+- SVG内の`.accentColor`クラスを持つ要素に対してのみアクセントカラーが適用される
 
 ### アイコンの提供元
 
@@ -326,6 +450,10 @@ console.log(availableIcons);
 4. **サイズのカスタマイズ**: `className`で`w-*`や`h-*`クラスを指定した場合、`size`プロパティによるサイズ指定は上書きされます
 5. **fillプロパティ**: Tailwindの`fill-*`クラスを`className`で指定することで、`color`プロパティとは独立した色指定が可能です
 6. **アイコンの追加**: 新しいアイコンを追加する場合は、`@zenkigen-inc/component-icons`パッケージにSVGファイルを追加し、コード生成を実行する必要があります
+7. **accentColorの適用範囲**: `accentColor`プロパティは、SVG内で`.accentColor`クラスを持つ要素にのみ適用されます。現在対応しているアイコンは `calendar-attention`, `calendar-check`, `calendar-minus`, `calendar-today`, `mic`, `volume-off` です。その他のアイコンでは効果がありません
+8. **accentColorと無効状態**: `isDisabled={true}`の場合、`accentColor`プロパティは無視され、アクセントカラーは適用されません
+9. **accentColorの型安全性**: `accentColor`は`ColorToken`型で型付けされており、デザインシステムで定義された色トークンのみ指定可能です
+10. **動的クラス名生成**: `accentColor`は`fill-${accentColor}`の形式でクラス名が生成されるため、Tailwindのセーフリスト設定が必要な場合があります
 
 ## スタイルのカスタマイズ
 
@@ -348,10 +476,32 @@ console.log(availableIcons);
 
 // カラーバリエーションを使用
 <Icon name="star" className="fill-yellow-yellow100" />
+
+// アクセントカラーの使用（SVG内の特定要素に色を適用）
+<Icon
+  name="calendar-today"
+  color="icon01"
+  accentColor="interactive01"
+/>
+
+// 基本色とアクセントカラーの組み合わせ
+<Icon
+  name="calendar-attention"
+  color="icon02"
+  accentColor="supportError"
+/>
+
+// ベースカラーをアクセントに使用
+<Icon
+  name="mic"
+  color="icon01"
+  accentColor="blue-blue100"
+/>
 ```
 
 ## 更新履歴
 
-| 日付       | 内容     | 担当者 |
-| ---------- | -------- | ------ |
-| 2025-10-14 | 新規作成 | -      |
+| 日付       | 内容                                        | 担当者 |
+| ---------- | ------------------------------------------- | ------ |
+| 2025-10-13 | `accentColor`プロパティ追加に伴う仕様書更新 | -      |
+| 2025-10-14 | 新規作成                                    | -      |
