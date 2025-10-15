@@ -194,6 +194,7 @@ import { Icon } from '@zenkigen-inc/component-ui';
 より詳細な情報については、以下のドキュメントを参照してください：
 
 - **[Icon コンポーネント仕様書](../../docs/component/icon-specification.md)** - Icon コンポーネントの詳細な使用方法、Props、アクセシビリティ情報
+- **[アイコン追加ワークフロー](./docs/icon-addition-workflow.md)** - アイコン追加の詳細なプロセス、ビルドフロー、コード生成の仕組み
 
 ## ライセンス
 
