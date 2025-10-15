@@ -4,7 +4,11 @@
 */
 import React from 'react';
 
-export const sortupIcon: React.ReactElement = (
+export interface sortupIconProps {
+  accentClassName?: string;
+}
+
+export const sortupIcon: React.FC<sortupIconProps> = ({ accentClassName }) => (
   <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="sortUp">
 <path fillRule="evenodd" clipRule="evenodd" d="M6 1.5C6.27614 1.5 6.5 1.72386 6.5 2V22C6.5 22.2761 6.27614 22.5 6 22.5C5.72386 22.5 5.5 22.2761 5.5 22V2C5.5 1.72386 5.72386 1.5 6 1.5Z"></path>
 <path fillRule="evenodd" clipRule="evenodd" d="M5.64645 1.64645C5.84171 1.45118 6.15829 1.45118 6.35355 1.64645L10.3536 5.64645C10.5488 5.84171 10.5488 6.15829 10.3536 6.35355C10.1583 6.54882 9.84171 6.54882 9.64645 6.35355L6 2.70711L2.35355 6.35355C2.15829 6.54882 1.84171 6.54882 1.64645 6.35355C1.45118 6.15829 1.45118 5.84171 1.64645 5.64645L5.64645 1.64645Z"></path>

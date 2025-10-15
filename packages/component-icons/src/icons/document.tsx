@@ -4,7 +4,11 @@
 */
 import React from 'react';
 
-export const documentIcon: React.ReactElement = (
+export interface documentIconProps {
+  accentClassName?: string;
+}
+
+export const documentIcon: React.FC<documentIconProps> = ({ accentClassName }) => (
   <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="document">
 <path d="M17.4954 17.6266H6.99739C6.65221 17.6266 6.37207 17.3464 6.37207 17.0013C6.37207 16.6561 6.65221 16.3759 6.99739 16.3759H17.4954C17.8405 16.3759 18.1207 16.6561 18.1207 17.0013C18.1207 17.3464 17.8405 17.6266 17.4954 17.6266Z"></path>
 <path d="M17.0026 12.624H6.99739C6.65221 12.624 6.37207 12.3438 6.37207 11.9987C6.37207 11.6535 6.65221 11.3733 6.99739 11.3733H17.0026C17.3478 11.3733 17.6279 11.6535 17.6279 11.9987C17.6279 12.3438 17.3478 12.624 17.0026 12.624Z"></path>

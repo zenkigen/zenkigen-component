@@ -4,7 +4,11 @@
 */
 import React from 'react';
 
-export const hamburgerIcon: React.ReactElement = (
+export interface hamburgerIconProps {
+  accentClassName?: string;
+}
+
+export const hamburgerIcon: React.FC<hamburgerIconProps> = ({ accentClassName }) => (
   <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="hamburger">
 <path d="M21.75 18.75H2.25C1.84 18.75 1.5 18.41 1.5 18C1.5 17.59 1.84 17.25 2.25 17.25H21.75C22.16 17.25 22.5 17.59 22.5 18C22.5 18.41 22.16 18.75 21.75 18.75Z"></path>
 <path d="M21.75 12.75H2.25C1.84 12.75 1.5 12.41 1.5 12C1.5 11.59 1.84 11.25 2.25 11.25H21.75C22.16 11.25 22.5 11.59 22.5 12C22.5 12.41 22.16 12.75 21.75 12.75Z"></path>
