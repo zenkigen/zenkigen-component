@@ -1,8 +1,8 @@
-import { autoUpdate, FloatingPortal, offset, useFloating } from '@floating-ui/react';
+import { autoUpdate, FloatingPortal, offset, size as sizeMiddleware, useFloating } from '@floating-ui/react';
 import type { IconName } from '@zenkigen-inc/component-icons';
 import { focusVisible, selectColors } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
-import type { CSSProperties, PropsWithChildren } from 'react';
+import type { CSSProperties, PropsWithChildren, RefObject } from 'react';
 import { useRef, useState } from 'react';
 
 import { useOutsideClick } from '../hooks/use-outside-click';
@@ -54,7 +54,17 @@ export function Select({
     open: isOptionListOpen,
     onOpenChange: setIsOptionListOpen,
     placement: 'bottom-start',
-    middleware: [offset(FLOATING_OFFSET)],
+    middleware: [
+      offset(FLOATING_OFFSET),
+      sizeMiddleware({
+        apply({ availableWidth, elements, rects }) {
+          const referenceWidth = rects.reference.width;
+          // トリガーボタンが小さい場合は最小幅を保証し、大きい場合はトリガーボタンに合わせる
+          elements.floating.style.minWidth = `${referenceWidth}px`;
+          elements.floating.style.maxWidth = `${availableWidth}px`;
+        },
+      }),
+    ],
     whileElementsMounted: autoUpdate,
   });
 
@@ -107,7 +117,7 @@ export function Select({
         onChange,
         isError,
         floatingStyles,
-        floatingRef: refs.floating,
+        floatingRef: refs.floating as RefObject<HTMLUListElement | null>,
       }}
     >
       <div className={wrapperClasses} style={{ width, maxWidth }} ref={targetRef}>
