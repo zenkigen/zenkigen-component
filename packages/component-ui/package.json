@@ -37,6 +37,7 @@
     "react-dom": "^18.0.0 || ^19.0.0"
   },
   "dependencies": {
+    "@floating-ui/react": "0.27.16",
     "@zenkigen-inc/component-config": "1.16.3",
     "@zenkigen-inc/component-icons": "1.16.3",
     "@zenkigen-inc/component-theme": "1.16.3",
