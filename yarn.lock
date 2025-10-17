@@ -1815,7 +1815,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@floating-ui/react-dom@npm:2.1.6, @floating-ui/react-dom@npm:^2.1.6":
+"@floating-ui/react-dom@npm:^2.1.6":
   version: 2.1.6
   resolution: "@floating-ui/react-dom@npm:2.1.6"
   dependencies:
@@ -3310,7 +3310,6 @@ __metadata:
   resolution: "@zenkigen-inc/component-ui@workspace:packages/component-ui"
   dependencies:
     "@floating-ui/react": "npm:0.27.16"
-    "@floating-ui/react-dom": "npm:2.1.6"
     "@testing-library/jest-dom": "npm:6.4.0"
     "@testing-library/react": "npm:15.0.0"
     "@testing-library/user-event": "npm:14.6.1"
