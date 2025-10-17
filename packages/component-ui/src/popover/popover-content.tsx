@@ -69,7 +69,18 @@ export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(fu
       const isOutsideFloating = !(floatingEl.contains(target) as boolean);
       const isOutsideReference = !(referenceEl.contains(target) as boolean);
 
-      if (isOutsideFloating === true && isOutsideReference === true) {
+      // クリックされた要素が別のFloating UI要素内にあるかチェック
+      // （Select、Dropdown、Tooltipなどの子コンポーネントのポータル要素）
+      // 自分自身のfloating elementではなく、他のz-overlayやz-dropdown要素内のクリックを除外
+      let isInsideOtherFloatingElement = false;
+      if (target instanceof Element) {
+        const closestOverlay = target.closest('.z-overlay, .z-dropdown');
+        if (closestOverlay !== null && (floatingEl.contains(closestOverlay) as boolean) === false) {
+          isInsideOtherFloatingElement = true;
+        }
+      }
+
+      if (isOutsideFloating === true && isOutsideReference === true && !isInsideOtherFloatingElement) {
         handlePointerDownOutside();
       }
     };

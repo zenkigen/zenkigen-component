@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 import { Button } from '../button';
 import { Popup } from '../popup';
+import { Select } from '../select';
 import { Popover } from '.';
 
 // 定数の抽出
@@ -160,4 +161,79 @@ export const WithPopup: Story = {
     placement: 'top',
   },
   render: PopoverWithPopupStory,
+};
+
+// Popover + Select 連携ストーリー（不具合修正の検証用）
+const PopoverWithSelectStory = (args: Story['args']) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState<{ id: string; value: string; label: string } | null>(null);
+
+  const options = [
+    { id: '1', value: 'option1', label: 'オプション1' },
+    { id: '2', value: 'option2', label: 'オプション2' },
+    { id: '3', value: 'option3', label: 'オプション3' },
+    { id: '4', value: 'option4', label: 'オプション4' },
+    { id: '5', value: 'option5', label: 'オプション5' },
+  ];
+
+  return (
+    <div className="flex min-h-[400px] flex-col items-center justify-center gap-4">
+      <Popover
+        isOpen={isOpen}
+        placement={args?.placement ?? 'bottom'}
+        onOutsideClick={() => setIsOpen(false)}
+        onEscapeKeyDown={() => setIsOpen(false)}
+      >
+        <Popover.Trigger>
+          <Button variant="fill" onClick={() => setIsOpen((value) => !value)}>
+            {isOpen ? 'Popoverを非表示' : 'Popoverを表示'}
+          </Button>
+        </Popover.Trigger>
+        <Popover.Content>
+          <div className="rounded-lg bg-uiBackground01 p-4 shadow-floatingShadow" style={{ width: '320px' }}>
+            <p className="mb-4 font-bold text-text01">Popover内のSelect</p>
+            <div className="mb-4">
+              <p className="typography-label12regular mb-2 text-text02">選択してください</p>
+              <Select
+                size="medium"
+                placeholder="オプションを選択"
+                selectedOption={selectedOption}
+                onChange={setSelectedOption}
+                optionListMaxHeight="200px"
+              >
+                {options.map((option) => (
+                  <Select.Option key={option.id} option={option} />
+                ))}
+              </Select>
+            </div>
+            {selectedOption !== null && (
+              <p className="typography-label12regular text-text02">
+                選択中: <span className="font-semibold">{selectedOption.label}</span>
+              </p>
+            )}
+            <p className="typography-label12regular mt-4 text-text03">
+              Selectのドロップダウンをクリックしても
+              <br />
+              Popoverが閉じないことを確認してください。
+            </p>
+          </div>
+        </Popover.Content>
+      </Popover>
+    </div>
+  );
+};
+
+export const WithSelect: Story = {
+  args: {
+    placement: 'bottom',
+  },
+  render: PopoverWithSelectStory,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Popover内にSelectを配置した例です。Selectのドロップダウンリストからオプションを選択しても、Popoverが閉じないことを確認できます。',
+      },
+    },
+  },
 };
