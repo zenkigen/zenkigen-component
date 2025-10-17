@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import { Button } from '../button';
 import { Checkbox } from '../checkbox';
+import { Popover } from '../popover';
 import { Tab } from '../tab';
 import { Popup } from '.';
 
@@ -281,6 +282,54 @@ export const Danger: Story = {
           </div>
         </Popup.Footer>
       </Popup>
+    );
+  },
+};
+
+// Popover と連動するストーリー
+export const WithPopover: Story = {
+  args: {
+    width: 480,
+  },
+  render: function MyFunc({ ...args }) {
+    const [isOpen, setIsOpen] = useState(false);
+
+    return (
+      <div className="flex min-h-[800px] flex-col items-center justify-center gap-4">
+        <Popover isOpen={isOpen} onOpenChange={setIsOpen} placement="top">
+          <Popover.Trigger>
+            <Button variant="fill" onClick={() => setIsOpen((value) => !value)}>
+              {isOpen ? 'Popover を閉じる' : 'Popover を開く'}
+            </Button>
+          </Popover.Trigger>
+          <Popover.Content>
+            {/* Popup は isOpen を指定しなくても PopoverContext から自動取得 */}
+            <Popup width={args.width} onClose={args.onClose}>
+              <Popup.Header>Popover 内の Popup</Popup.Header>
+              <Popup.Body>
+                <div className="typography-body14regular flex w-full flex-col gap-3 p-4 text-text01">
+                  <p>この Popup は Popover 内で使用されています。</p>
+                  <p>
+                    ヘッダーの ✕ ボタンをクリックすると、
+                    <br />
+                    Popup と Popover の両方が閉じます。
+                  </p>
+                </div>
+              </Popup.Body>
+              <Popup.Footer>
+                <div className="flex w-full flex-wrap items-center justify-end gap-4">
+                  <Button variant="outline" size="large" onClick={() => setIsOpen(false)}>
+                    キャンセル
+                  </Button>
+                  <Button variant="fill" size="large" onClick={action('保存する')}>
+                    保存する
+                  </Button>
+                </div>
+              </Popup.Footer>
+            </Popup>
+          </Popover.Content>
+        </Popover>
+      </div>
     );
   },
 };

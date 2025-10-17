@@ -1,5 +1,7 @@
 import type { CSSProperties, PropsWithChildren } from 'react';
+import { useContext } from 'react';
 
+import { PopoverContext } from '../popover/popover-context';
 import { PopupBody } from './popup-body';
 import { PopupContext } from './popup-context';
 import { PopupFooter } from './popup-footer';
@@ -8,8 +10,15 @@ import { PopupHeader } from './popup-header';
 const LIMIT_WIDTH = 320;
 const LIMIT_HEIGHT = 184;
 
+/**
+ * PopoverContext を optional で取得するカスタムフック
+ */
+function useOptionalPopoverContext() {
+  return useContext(PopoverContext);
+}
+
 type Props = {
-  isOpen: boolean;
+  isOpen?: boolean;
   width?: CSSProperties['width'];
   height?: CSSProperties['height'];
   maxWidth?: CSSProperties['maxWidth'];
@@ -18,7 +27,7 @@ type Props = {
 
 export function Popup({
   children,
-  isOpen,
+  isOpen: controlledIsOpen,
   width = 480,
   height,
   maxWidth = 'calc(100vw - 40px)',
@@ -27,12 +36,25 @@ export function Popup({
   const renderWidth = typeof width === 'number' ? Math.max(width, LIMIT_WIDTH) : width;
   const renderHeight = typeof height === 'number' ? Math.max(height, LIMIT_HEIGHT) : height;
 
+  // PopoverContext が存在する場合はその状態を優先
+  const popoverContext = useOptionalPopoverContext();
+  const isInPopover = popoverContext != null;
+  const isOpen = isInPopover ? popoverContext.isOpen : (controlledIsOpen ?? false);
+  const setOpen = isInPopover ? popoverContext.setOpen : () => null;
+
   if (!isOpen) {
     return null;
   }
 
+  const handleClose = () => {
+    if (isInPopover) {
+      setOpen(false);
+    }
+    onClose?.();
+  };
+
   return (
-    <PopupContext.Provider value={{ isOpen, setOpen: () => null, onClose }}>
+    <PopupContext.Provider value={{ isOpen, setOpen, onClose: handleClose }}>
       <div
         className="grid max-h-full grid-rows-[max-content_1fr_max-content] flex-col rounded-lg bg-uiBackground01 shadow-modalShadow"
         style={{ width: renderWidth, height: renderHeight, maxWidth }}
