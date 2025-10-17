@@ -40,21 +40,17 @@ export function Popup({
   const popoverContext = useOptionalPopoverContext();
   const isInPopover = popoverContext != null;
   const isOpen = isInPopover ? popoverContext.isOpen : (controlledIsOpen ?? false);
-  const setOpen = isInPopover ? popoverContext.setOpen : () => null;
 
   if (!isOpen) {
     return null;
   }
 
   const handleClose = () => {
-    if (isInPopover) {
-      setOpen(false);
-    }
     onClose?.();
   };
 
   return (
-    <PopupContext.Provider value={{ isOpen, setOpen, onClose: handleClose }}>
+    <PopupContext.Provider value={{ isOpen, onClose: handleClose }}>
       <div
         className="grid max-h-full grid-rows-[max-content_1fr_max-content] flex-col rounded-lg bg-uiBackground01 shadow-floatingShadow"
         style={{ width: renderWidth, height: renderHeight, maxWidth }}

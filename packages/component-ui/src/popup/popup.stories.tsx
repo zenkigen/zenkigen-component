@@ -132,7 +132,12 @@ export const WithPopover: Story = {
 
     return (
       <div className="flex min-h-[800px] flex-col items-center justify-center gap-4">
-        <Popover isOpen={isOpen} onOpenChange={setIsOpen} placement="top">
+        <Popover
+          isOpen={isOpen}
+          placement="top"
+          onOutsideClick={() => setIsOpen(false)}
+          onEscapeKeyDown={() => setIsOpen(false)}
+        >
           <Popover.Trigger>
             <Button variant="fill" onClick={() => setIsOpen((value) => !value)}>
               {isOpen ? 'Popover を閉じる' : 'Popover を開く'}
@@ -140,7 +145,7 @@ export const WithPopover: Story = {
           </Popover.Trigger>
           <Popover.Content>
             {/* Popup は isOpen を指定しなくても PopoverContext から自動取得 */}
-            <Popup width={args.width} onClose={args.onClose}>
+            <Popup width={args.width} onClose={() => setIsOpen(false)}>
               <Popup.Header>Popover 内の Popup</Popup.Header>
               <Popup.Body>
                 <div className="typography-body14regular flex w-full flex-col gap-3 p-4 text-text01">
