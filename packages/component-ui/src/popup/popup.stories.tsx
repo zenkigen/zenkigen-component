@@ -19,6 +19,7 @@ const meta: Meta<typeof Popup> = {
     // layout: 'centered',
   },
   argTypes: {
+    isOpen: { control: 'boolean', description: '表示状態' },
     width: { control: 'text', description: '幅（320px以上が指定できる）' },
     height: { control: 'text', description: '高さ（184px以上が指定できる）' },
     maxWidth: { control: 'text', description: '最大幅' },
@@ -32,12 +33,13 @@ export default meta;
 
 export const Component: Story = {
   args: {
+    isOpen: true,
     width: 480,
     onClose: action('onClose'),
   },
   render: function MyFunc({ ...args }) {
     return (
-      <Popup width={args.width} onClose={args.onClose}>
+      <Popup isOpen={args.isOpen} width={args.width} onClose={args.onClose}>
         <Popup.Header>タイトル</Popup.Header>
         <Popup.Body>
           <div className="flex w-full items-center justify-center py-20">Content</div>
@@ -59,12 +61,13 @@ export const Component: Story = {
 
 export const Base: Story = {
   args: {
+    isOpen: true,
     width: 480,
     onClose: action('onClose'),
   },
   render: function MyFunc({ ...args }) {
     return (
-      <Popup width={args.width} onClose={args.onClose}>
+      <Popup isOpen={args.isOpen} width={args.width} onClose={args.onClose}>
         <Popup.Header>タイトル</Popup.Header>
         <Popup.Body>
           <div className="flex w-full items-center justify-center py-20">Content</div>
@@ -86,6 +89,7 @@ export const Base: Story = {
 
 export const WithCheckbox: Story = {
   args: {
+    isOpen: true,
     width: 480,
     onClose: action('onClose'),
   },
@@ -93,7 +97,7 @@ export const WithCheckbox: Story = {
     const [isChecked, setIsChecked] = useState(false);
 
     return (
-      <Popup width={args.width} onClose={args.onClose}>
+      <Popup isOpen={args.isOpen} width={args.width} onClose={args.onClose}>
         <Popup.Header>タイトル</Popup.Header>
         <Popup.Body>
           <div className="flex w-full items-center justify-center py-20">Content</div>
@@ -125,12 +129,13 @@ export const WithCheckbox: Story = {
 
 export const WithSubButton: Story = {
   args: {
+    isOpen: true,
     width: 480,
     onClose: action('onClose'),
   },
   render: function MyFunc({ ...args }) {
     return (
-      <Popup width={args.width} onClose={args.onClose}>
+      <Popup isOpen={args.isOpen} width={args.width} onClose={args.onClose}>
         <Popup.Header>タイトル</Popup.Header>
         <Popup.Body>
           <div className="flex w-full items-center justify-center py-20">Content</div>
@@ -159,13 +164,14 @@ export const WithSubButton: Story = {
 
 export const FixedHeight: Story = {
   args: {
+    isOpen: true,
     width: 480,
     height: 500,
     onClose: action('onClose'),
   },
   render: function MyFunc({ ...args }) {
     return (
-      <Popup width={args.width} height={args.height} onClose={args.onClose}>
+      <Popup isOpen={args.isOpen} width={args.width} height={args.height} onClose={args.onClose}>
         <Popup.Header>タイトル</Popup.Header>
         <Popup.Body>
           <div className="flex w-full items-center justify-center py-20">Content</div>
@@ -187,6 +193,7 @@ export const FixedHeight: Story = {
 
 export const WithTabs: Story = {
   args: {
+    isOpen: true,
     width: 480,
     onClose: action('onClose'),
   },
@@ -199,7 +206,7 @@ export const WithTabs: Story = {
     ];
 
     return (
-      <Popup width={args.width} onClose={args.onClose}>
+      <Popup isOpen={args.isOpen} width={args.width} onClose={args.onClose}>
         <Popup.Header isNoBorder>タイトル</Popup.Header>
         <Popup.Body>
           <div className="mt-2 flex w-full flex-col">
@@ -236,11 +243,12 @@ export const WithTabs: Story = {
 
 export const WithoutButton: Story = {
   args: {
+    isOpen: true,
     width: 480,
   },
   render: function MyFunc({ ...args }) {
     return (
-      <Popup width={args.width} onClose={args.onClose}>
+      <Popup isOpen={args.isOpen} width={args.width} onClose={args.onClose}>
         <Popup.Header>タイトル</Popup.Header>
         <Popup.Body>
           <div className="flex w-full items-center justify-center py-20">Content</div>
@@ -252,11 +260,12 @@ export const WithoutButton: Story = {
 
 export const Danger: Story = {
   args: {
+    isOpen: true,
     width: 420,
   },
   render: function MyFunc({ ...args }) {
     return (
-      <Popup width={args.width} onClose={args.onClose}>
+      <Popup isOpen={args.isOpen} width={args.width} onClose={args.onClose}>
         <Popup.Header isNoBorder>タイトル</Popup.Header>
         <Popup.Body>
           <div className="flex h-16 w-full items-center justify-center">Content</div>
