@@ -8,23 +8,24 @@ import { PopoverTrigger } from './popover-trigger';
 
 type Props = {
   isOpen: boolean;
-  onOpenChange: (open: boolean) => void;
   placement?: PopoverPlacement;
   offset?: number;
+  onOutsideClick?: () => void;
+  onEscapeKeyDown?: () => void;
 };
 
 export function Popover({
   isOpen,
-  onOpenChange,
   children,
   placement = 'top',
   offset: offsetValue = 8,
+  onOutsideClick,
+  onEscapeKeyDown,
 }: PropsWithChildren<Props>) {
   const triggerRef = useRef<HTMLElement>(null);
 
   const floating = useFloating({
     open: isOpen,
-    onOpenChange,
     placement,
     middleware: [offset(offsetValue)],
     whileElementsMounted: autoUpdate,
@@ -35,8 +36,16 @@ export function Popover({
   const panelId = `${contentId}-panel`;
 
   const contextValue = useMemo<PopoverContextValue>(
-    () => ({ isOpen, setOpen: onOpenChange, triggerRef, floating, contentId, panelId }),
-    [isOpen, onOpenChange, floating, contentId, panelId],
+    () => ({
+      isOpen,
+      triggerRef,
+      floating,
+      contentId,
+      panelId,
+      onOutsideClick,
+      onEscapeKeyDown,
+    }),
+    [isOpen, floating, contentId, panelId, onOutsideClick, onEscapeKeyDown],
   );
 
   return <PopoverContext.Provider value={contextValue}>{children}</PopoverContext.Provider>;

@@ -1,6 +1,6 @@
 import { FloatingPortal, useDismiss, useInteractions, useRole } from '@floating-ui/react';
 import * as React from 'react';
-import { forwardRef, useEffect } from 'react';
+import { forwardRef, useCallback, useEffect } from 'react';
 
 import { composeRefs, isElement } from '../utils';
 import { usePopoverContext } from './popover-context';
@@ -13,12 +13,13 @@ export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(fu
   { children },
   ref,
 ) {
-  const { isOpen, setOpen, triggerRef, floating, panelId } = usePopoverContext();
+  const { isOpen, triggerRef, floating, panelId, onOutsideClick, onEscapeKeyDown } = usePopoverContext();
 
-  const interactions = useInteractions([
-    useDismiss(floating.context, { outsidePressEvent: 'pointerdown' }),
-    useRole(floating.context, { role: 'dialog' }),
-  ]);
+  const dismiss = useDismiss(floating.context, {
+    outsidePressEvent: 'pointerdown',
+  });
+
+  const interactions = useInteractions([dismiss, useRole(floating.context, { role: 'dialog' })]);
 
   useEffect(() => {
     if (isOpen) {
@@ -36,9 +37,49 @@ export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(fu
   const onKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === 'Escape') {
       event.stopPropagation();
-      setOpen(false);
+      if (onEscapeKeyDown != null) {
+        onEscapeKeyDown();
+      }
     }
   };
+
+  const handlePointerDownOutside = useCallback(() => {
+    if (onOutsideClick != null) {
+      onOutsideClick();
+    }
+  }, [onOutsideClick]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    const handleOutsideClick = (event: MouseEvent) => {
+      const target = event.target as Node;
+      const floatingElement = floating.refs.floating.current as Element | null;
+      const referenceElement = floating.refs.reference.current as Element | null;
+
+      if (!(floatingElement instanceof Element) || !(referenceElement instanceof Element)) {
+        return;
+      }
+
+      const floatingEl: Element = floatingElement;
+      const referenceEl: Element = referenceElement;
+
+      const isOutsideFloating = !(floatingEl.contains(target) as boolean);
+      const isOutsideReference = !(referenceEl.contains(target) as boolean);
+
+      if (isOutsideFloating === true && isOutsideReference === true) {
+        handlePointerDownOutside();
+      }
+    };
+
+    document.addEventListener('pointerdown', handleOutsideClick);
+
+    return () => {
+      document.removeEventListener('pointerdown', handleOutsideClick);
+    };
+  }, [isOpen, floating.refs.floating, floating.refs.reference, handlePointerDownOutside]);
 
   let wrappedChildren = children;
   if (isElement(children)) {

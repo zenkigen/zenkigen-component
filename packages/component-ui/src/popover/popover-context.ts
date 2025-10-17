@@ -24,11 +24,12 @@ export type PopoverPlacement =
  */
 export type PopoverContextValue = {
   isOpen: boolean;
-  setOpen: (value: boolean) => void;
   triggerRef: React.RefObject<HTMLElement | null>;
   floating: ReturnType<typeof useFloating>;
   contentId: string;
   panelId: string;
+  onOutsideClick?: () => void;
+  onEscapeKeyDown?: () => void;
 };
 
 /**

@@ -65,7 +65,12 @@ const ComponentStory = (args: Story['args']) => {
 
   return (
     <div className="flex min-h-[500px] flex-col items-center justify-center gap-4">
-      <Popover isOpen={isOpen} onOpenChange={setIsOpen} placement={args?.placement ?? 'top'}>
+      <Popover
+        isOpen={isOpen}
+        placement={args?.placement ?? 'top'}
+        onOutsideClick={() => setIsOpen(false)}
+        onEscapeKeyDown={() => setIsOpen(false)}
+      >
         <Popover.Trigger>
           <Button variant="fill" onClick={() => setIsOpen((value) => !value)}>
             {isOpen ? 'Popoverを非表示' : 'Popoverを表示'}
@@ -92,7 +97,12 @@ const PopoverWithPopupStory = (args: Story['args']) => {
 
   return (
     <div className="flex min-h-[500px] flex-col items-center justify-center gap-4">
-      <Popover isOpen={isOpen} onOpenChange={setIsOpen} placement={args?.placement ?? 'bottom'}>
+      <Popover
+        isOpen={isOpen}
+        placement={args?.placement ?? 'bottom'}
+        onOutsideClick={() => setIsOpen(false)}
+        onEscapeKeyDown={() => setIsOpen(false)}
+      >
         <Popover.Trigger>
           <Button variant="fill" onClick={() => setIsOpen((value) => !value)}>
             {isOpen ? 'Popoverを非表示' : 'Popoverを表示'}
@@ -100,7 +110,7 @@ const PopoverWithPopupStory = (args: Story['args']) => {
         </Popover.Trigger>
         <Popover.Content>
           {/* Popup は PopoverContext の状態を自動的に使用 */}
-          <Popup width={400}>
+          <Popup width={400} onClose={() => setIsOpen(false)}>
             <Popup.Header>Popup in Popover</Popup.Header>
             <Popup.Body>
               <div className="flex w-full flex-col gap-2 p-4">
