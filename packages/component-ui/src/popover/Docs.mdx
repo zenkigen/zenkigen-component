@@ -48,26 +48,3 @@ const PopoverExample = () => {
   );
 };
 ```
-
-### Corner配置の例
-
-```tsx
-import { Popover } from '@zenkigen-inc/component-ui';
-import { useState } from 'react';
-
-const CornerPopoverExample = () => {
-  const [isVisible, setIsVisible] = useState(false);
-
-  return (
-    <>
-      <button onClick={() => setIsVisible(!isVisible)}>Corner Popoverを表示</button>
-
-      <Popover placement="bottom-left" isVisible={isVisible}>
-        <div className="bg-white p-4 shadow-lg rounded">
-          <p>左下角の表示要素</p>
-        </div>
-      </Popover>
-    </>
-  );
-};
-```

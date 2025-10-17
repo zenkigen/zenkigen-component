@@ -5,11 +5,11 @@ import { useState } from 'react';
 import { Button } from '../button';
 import { Checkbox } from '../checkbox';
 import { Tab } from '../tab';
-import { Dialog } from '.';
+import { Popup } from '.';
 
-const meta: Meta<typeof Dialog> = {
-  title: 'Components/Dialog',
-  component: Dialog,
+const meta: Meta<typeof Popup> = {
+  title: 'Components/Popup',
+  component: Popup,
   parameters: {
     docs: {
       source: {
@@ -26,7 +26,7 @@ const meta: Meta<typeof Dialog> = {
   },
 };
 
-type Story = StoryObj<typeof Dialog>;
+type Story = StoryObj<typeof Popup>;
 
 export default meta;
 
@@ -37,12 +37,12 @@ export const Component: Story = {
   },
   render: function MyFunc({ ...args }) {
     return (
-      <Dialog width={args.width} onClose={args.onClose}>
-        <Dialog.Header>タイトル</Dialog.Header>
-        <Dialog.Body>
+      <Popup width={args.width} onClose={args.onClose}>
+        <Popup.Header>タイトル</Popup.Header>
+        <Popup.Body>
           <div className="flex w-full items-center justify-center py-20">Content</div>
-        </Dialog.Body>
-        <Dialog.Footer>
+        </Popup.Body>
+        <Popup.Footer>
           <div className="flex w-full flex-wrap items-center justify-end gap-4">
             <Button variant="outline" size="large" onClick={action('キャンセル')}>
               キャンセル
@@ -51,8 +51,8 @@ export const Component: Story = {
               保存する
             </Button>
           </div>
-        </Dialog.Footer>
-      </Dialog>
+        </Popup.Footer>
+      </Popup>
     );
   },
 };
@@ -64,12 +64,12 @@ export const Base: Story = {
   },
   render: function MyFunc({ ...args }) {
     return (
-      <Dialog width={args.width} onClose={args.onClose}>
-        <Dialog.Header>タイトル</Dialog.Header>
-        <Dialog.Body>
+      <Popup width={args.width} onClose={args.onClose}>
+        <Popup.Header>タイトル</Popup.Header>
+        <Popup.Body>
           <div className="flex w-full items-center justify-center py-20">Content</div>
-        </Dialog.Body>
-        <Dialog.Footer>
+        </Popup.Body>
+        <Popup.Footer>
           <div className="flex w-full flex-wrap items-center justify-end gap-4">
             <Button variant="outline" size="large" onClick={action('キャンセル')}>
               キャンセル
@@ -78,8 +78,8 @@ export const Base: Story = {
               保存する
             </Button>
           </div>
-        </Dialog.Footer>
-      </Dialog>
+        </Popup.Footer>
+      </Popup>
     );
   },
 };
@@ -93,12 +93,12 @@ export const WithCheckbox: Story = {
     const [isChecked, setIsChecked] = useState(false);
 
     return (
-      <Dialog width={args.width} onClose={args.onClose}>
-        <Dialog.Header>タイトル</Dialog.Header>
-        <Dialog.Body>
+      <Popup width={args.width} onClose={args.onClose}>
+        <Popup.Header>タイトル</Popup.Header>
+        <Popup.Body>
           <div className="flex w-full items-center justify-center py-20">Content</div>
-        </Dialog.Body>
-        <Dialog.Footer>
+        </Popup.Body>
+        <Popup.Footer>
           <div className="flex w-full justify-between gap-4">
             <div className="flex flex-wrap items-center">
               <Checkbox
@@ -117,8 +117,8 @@ export const WithCheckbox: Story = {
               </Button>
             </div>
           </div>
-        </Dialog.Footer>
-      </Dialog>
+        </Popup.Footer>
+      </Popup>
     );
   },
 };
@@ -130,12 +130,12 @@ export const WithSubButton: Story = {
   },
   render: function MyFunc({ ...args }) {
     return (
-      <Dialog width={args.width} onClose={args.onClose}>
-        <Dialog.Header>タイトル</Dialog.Header>
-        <Dialog.Body>
+      <Popup width={args.width} onClose={args.onClose}>
+        <Popup.Header>タイトル</Popup.Header>
+        <Popup.Body>
           <div className="flex w-full items-center justify-center py-20">Content</div>
-        </Dialog.Body>
-        <Dialog.Footer>
+        </Popup.Body>
+        <Popup.Footer>
           <div className="flex w-full items-center justify-between">
             <div className="flex flex-wrap items-center">
               <Button variant="text" size="large" onClick={action('ボタンラベル')}>
@@ -151,8 +151,8 @@ export const WithSubButton: Story = {
               </Button>
             </div>
           </div>
-        </Dialog.Footer>
-      </Dialog>
+        </Popup.Footer>
+      </Popup>
     );
   },
 };
@@ -165,12 +165,12 @@ export const FixedHeight: Story = {
   },
   render: function MyFunc({ ...args }) {
     return (
-      <Dialog width={args.width} height={args.height} onClose={args.onClose}>
-        <Dialog.Header>タイトル</Dialog.Header>
-        <Dialog.Body>
+      <Popup width={args.width} height={args.height} onClose={args.onClose}>
+        <Popup.Header>タイトル</Popup.Header>
+        <Popup.Body>
           <div className="flex w-full items-center justify-center py-20">Content</div>
-        </Dialog.Body>
-        <Dialog.Footer>
+        </Popup.Body>
+        <Popup.Footer>
           <div className="flex w-full flex-wrap items-center justify-end gap-4">
             <Button variant="outline" size="large" onClick={action('キャンセル')}>
               キャンセル
@@ -179,8 +179,8 @@ export const FixedHeight: Story = {
               保存する
             </Button>
           </div>
-        </Dialog.Footer>
-      </Dialog>
+        </Popup.Footer>
+      </Popup>
     );
   },
 };
@@ -199,9 +199,9 @@ export const WithTabs: Story = {
     ];
 
     return (
-      <Dialog width={args.width} onClose={args.onClose}>
-        <Dialog.Header isNoBorder>タイトル</Dialog.Header>
-        <Dialog.Body>
+      <Popup width={args.width} onClose={args.onClose}>
+        <Popup.Header isNoBorder>タイトル</Popup.Header>
+        <Popup.Body>
           <div className="mt-2 flex w-full flex-col">
             <div className="w-full">
               <Tab>
@@ -218,8 +218,8 @@ export const WithTabs: Story = {
               {selectedTab === 'tab3' && <div>Content 3</div>}
             </div>
           </div>
-        </Dialog.Body>
-        <Dialog.Footer>
+        </Popup.Body>
+        <Popup.Footer>
           <div className="flex w-full flex-wrap items-center justify-end gap-4">
             <Button variant="outline" size="large" onClick={action('キャンセル')}>
               キャンセル
@@ -228,8 +228,8 @@ export const WithTabs: Story = {
               保存する
             </Button>
           </div>
-        </Dialog.Footer>
-      </Dialog>
+        </Popup.Footer>
+      </Popup>
     );
   },
 };
@@ -240,12 +240,12 @@ export const WithoutButton: Story = {
   },
   render: function MyFunc({ ...args }) {
     return (
-      <Dialog width={args.width} onClose={args.onClose}>
-        <Dialog.Header>タイトル</Dialog.Header>
-        <Dialog.Body>
+      <Popup width={args.width} onClose={args.onClose}>
+        <Popup.Header>タイトル</Popup.Header>
+        <Popup.Body>
           <div className="flex w-full items-center justify-center py-20">Content</div>
-        </Dialog.Body>
-      </Dialog>
+        </Popup.Body>
+      </Popup>
     );
   },
 };
@@ -256,12 +256,12 @@ export const Danger: Story = {
   },
   render: function MyFunc({ ...args }) {
     return (
-      <Dialog width={args.width} onClose={args.onClose}>
-        <Dialog.Header isNoBorder>タイトル</Dialog.Header>
-        <Dialog.Body>
+      <Popup width={args.width} onClose={args.onClose}>
+        <Popup.Header isNoBorder>タイトル</Popup.Header>
+        <Popup.Body>
           <div className="flex h-16 w-full items-center justify-center">Content</div>
-        </Dialog.Body>
-        <Dialog.Footer isNoBorder>
+        </Popup.Body>
+        <Popup.Footer isNoBorder>
           <div className="flex w-full flex-wrap items-center justify-end gap-4">
             <Button variant="outline" size="large" onClick={action('キャンセル')}>
               キャンセル
@@ -270,8 +270,8 @@ export const Danger: Story = {
               削除する
             </Button>
           </div>
-        </Dialog.Footer>
-      </Dialog>
+        </Popup.Footer>
+      </Popup>
     );
   },
 };

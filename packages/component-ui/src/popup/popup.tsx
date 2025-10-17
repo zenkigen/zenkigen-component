@@ -1,9 +1,9 @@
 import type { CSSProperties, PropsWithChildren } from 'react';
 
-import { DialogBody } from './dialog-body';
-import { DialogContext } from './dialog-context';
-import { DialogFooter } from './dialog-footer';
-import { DialogHeader } from './dialog-header';
+import { PopupBody } from './popup-body';
+import { PopupContext } from './popup-context';
+import { PopupFooter } from './popup-footer';
+import { PopupHeader } from './popup-header';
 
 const LIMIT_WIDTH = 320;
 const LIMIT_HEIGHT = 184;
@@ -15,7 +15,7 @@ type Props = {
   onClose?: () => void;
 };
 
-export function Dialog({
+export function Popup({
   children,
   width = 480,
   height,
@@ -26,17 +26,17 @@ export function Dialog({
   const renderHeight = typeof height === 'number' ? Math.max(height, LIMIT_HEIGHT) : height;
 
   return (
-    <DialogContext.Provider value={{ onClose }}>
+    <PopupContext.Provider value={{ onClose }}>
       <div
         className="grid max-h-full grid-rows-[max-content_1fr_max-content] flex-col rounded-lg bg-uiBackground01 shadow-modalShadow"
         style={{ width: renderWidth, height: renderHeight, maxWidth }}
       >
         {children}
       </div>
-    </DialogContext.Provider>
+    </PopupContext.Provider>
   );
 }
 
-Dialog.Body = DialogBody;
-Dialog.Header = DialogHeader;
-Dialog.Footer = DialogFooter;
+Popup.Body = PopupBody;
+Popup.Header = PopupHeader;
+Popup.Footer = PopupFooter;

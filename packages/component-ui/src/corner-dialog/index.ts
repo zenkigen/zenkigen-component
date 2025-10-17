@@ -1,4 +1,4 @@
 // Re-export CornerDialog and its dependencies
 export { CornerBox } from '../corner-box';
-export { Dialog } from '../dialog';
+export { Popup } from '../popup';
 export { CornerDialog } from './corner-dialog';

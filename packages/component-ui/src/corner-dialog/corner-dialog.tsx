@@ -1,7 +1,7 @@
 import type { CSSProperties, PropsWithChildren } from 'react';
 
 import { CornerBox } from '../corner-box';
-import { Dialog } from '../dialog';
+import { Popup } from '../popup';
 
 const LIMIT_WIDTH = 320;
 const LIMIT_HEIGHT = 184;
@@ -31,13 +31,13 @@ export function CornerDialog({
 
   return (
     <CornerBox position={position} isShow={isShow}>
-      <Dialog width={renderWidth} height={renderHeight} maxWidth={maxWidth} onClose={onClose}>
+      <Popup width={renderWidth} height={renderHeight} maxWidth={maxWidth} onClose={onClose}>
         {children}
-      </Dialog>
+      </Popup>
     </CornerBox>
   );
 }
 
-CornerDialog.Body = Dialog.Body;
-CornerDialog.Header = Dialog.Header;
-CornerDialog.Footer = Dialog.Footer;
+CornerDialog.Body = Popup.Body;
+CornerDialog.Header = Popup.Header;
+CornerDialog.Footer = Popup.Footer;

@@ -1,13 +1,12 @@
 import type { CSSProperties, PropsWithChildren, RefObject } from 'react';
 
-import { Dialog } from '../dialog';
 import { Popover } from '../popover';
+import { Popup } from '../popup';
 
 const LIMIT_WIDTH = 320;
 const LIMIT_HEIGHT = 184;
 
 type PopoverPlacement =
-  // アンカーベース配置
   | 'top'
   | 'bottom'
   | 'left'
@@ -19,16 +18,13 @@ type PopoverPlacement =
   | 'left-start'
   | 'left-end'
   | 'right-start'
-  | 'right-end'
-  // Corner配置（anchorRefオプショナル）
-  | 'top-left'
-  | 'top-right'
-  | 'bottom-left'
-  | 'bottom-right';
+  | 'right-end';
 
-type Props<T extends PopoverPlacement = PopoverPlacement> = {
+type Props = {
+  /** 配置の基準となる要素のref */
+  anchorRef: RefObject<HTMLElement | null>;
   /** Popoverの配置位置 */
-  placement?: T;
+  placement?: PopoverPlacement;
   /** PopoverDialogの表示/非表示を制御 */
   isVisible: boolean;
   /** Dialogの幅 */
@@ -41,26 +37,16 @@ type Props<T extends PopoverPlacement = PopoverPlacement> = {
   portalTargetRef?: RefObject<HTMLElement | null>;
   /** アンカー要素からのオフセット（ピクセル） */
   offset?: number;
+  /** 衝突回避を有効にするかどうか */
+  shouldAvoidCollisions?: boolean;
   /** 閉じる操作が発生したときのコールバック */
   onClose?: () => void;
-} & (T extends 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
-  ? {
-      /** Corner配置の場合はオプショナル：要素基準またはViewport基準 */
-      anchorRef?: RefObject<HTMLElement | null>;
-      /** Corner配置では衝突回避は無効（固定位置配置のため） */
-      shouldAvoidCollisions?: false;
-    }
-  : {
-      /** 通常配置の場合は必須：配置の基準となる要素のref */
-      anchorRef: RefObject<HTMLElement | null>;
-      /** 衝突回避を有効にするかどうか */
-      shouldAvoidCollisions?: boolean;
-    });
+};
 
-export function PopoverDialog<T extends PopoverPlacement = PopoverPlacement>({
+export function PopoverDialog({
   children,
   anchorRef,
-  placement = 'bottom' as T,
+  placement = 'bottom',
   isVisible,
   width = 480,
   height,
@@ -69,31 +55,26 @@ export function PopoverDialog<T extends PopoverPlacement = PopoverPlacement>({
   offset = 8,
   shouldAvoidCollisions = true,
   onClose,
-}: PropsWithChildren<Props<T>>) {
+}: PropsWithChildren<Props>) {
   const renderWidth = typeof width === 'number' ? Math.max(width, LIMIT_WIDTH) : width;
   const renderHeight = typeof height === 'number' ? Math.max(height, LIMIT_HEIGHT) : height;
 
-  // Corner配置かどうかを判定
-  const isCornerPlacement = ['top-left', 'top-right', 'bottom-left', 'bottom-right'].includes(placement as string);
-
-  const popoverProps = {
-    ...(anchorRef ? { anchorRef } : {}),
-    placement,
-    isVisible,
-    portalTargetRef,
-    offset,
-    shouldAvoidCollisions: isCornerPlacement ? false : shouldAvoidCollisions,
-  } as Parameters<typeof Popover>[0];
-
   return (
-    <Popover {...popoverProps}>
-      <Dialog width={renderWidth} height={renderHeight} maxWidth={maxWidth} onClose={onClose}>
+    <Popover
+      anchorRef={anchorRef}
+      placement={placement}
+      isVisible={isVisible}
+      portalTargetRef={portalTargetRef}
+      offset={offset}
+      shouldAvoidCollisions={shouldAvoidCollisions}
+    >
+      <Popup width={renderWidth} height={renderHeight} maxWidth={maxWidth} onClose={onClose}>
         {children}
-      </Dialog>
+      </Popup>
     </Popover>
   );
 }
 
-PopoverDialog.Body = Dialog.Body;
-PopoverDialog.Header = Dialog.Header;
-PopoverDialog.Footer = Dialog.Footer;
+PopoverDialog.Body = Popup.Body;
+PopoverDialog.Header = Popup.Header;
+PopoverDialog.Footer = Popup.Footer;

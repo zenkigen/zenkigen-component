@@ -3,14 +3,14 @@ import type { PropsWithChildren } from 'react';
 import { useContext } from 'react';
 
 import { IconButton } from '../icon-button';
-import { DialogContext } from './dialog-context';
+import { PopupContext } from './popup-context';
 
 type Props = {
   isNoBorder?: boolean;
 };
 
-export function DialogHeader({ children, isNoBorder = false }: PropsWithChildren<Props>) {
-  const { onClose } = useContext(DialogContext);
+export function PopupHeader({ children, isNoBorder = false }: PropsWithChildren<Props>) {
+  const { onClose } = useContext(PopupContext);
 
   const headerClasses = clsx(
     'typography-h5 flex w-full shrink-0 items-center justify-between rounded-t-lg px-6 text-text01',

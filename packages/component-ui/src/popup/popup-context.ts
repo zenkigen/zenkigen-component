@@ -1,9 +1,9 @@
 import { createContext } from 'react';
 
-type DialogReturnType = {
+type PopupReturnType = {
   onClose?: () => void;
 };
 
-export const DialogContext = createContext<DialogReturnType>({
+export const PopupContext = createContext<PopupReturnType>({
   onClose: () => null,
 });
