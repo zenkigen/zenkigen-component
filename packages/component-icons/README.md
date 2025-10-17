@@ -10,13 +10,85 @@
 yarn add @zenkigen-inc/component-icons
 ```
 
-アイコンのインポート:
+### 直接インポートする方法
+
+アイコン要素を直接インポートして使用できます:
 
 ```tsx
 import { iconElements } from '@zenkigen-inc/component-icons';
 
 // アイコンを表示する
 <div>{iconElements['add']}</div>;
+```
+
+### Icon コンポーネントを使用する方法（推奨）
+
+`@zenkigen-inc/component-ui` の Icon コンポーネントを使用することで、より柔軟にアイコンを扱えます:
+
+```tsx
+import { Icon } from '@zenkigen-inc/component-ui';
+
+// 基本的な使用
+<Icon name="add" size="medium" color="icon01" />
+
+// サイズとカラーの指定
+<Icon name="settings" size="large" color="icon02" />
+
+// アクセントカラーを使用（対応アイコンのみ）
+<Icon
+  name="calendar-today"
+  size="medium"
+  color="icon01"
+  accentColor="interactive01"
+/>
+```
+
+詳細は [Icon コンポーネント仕様書](../../docs/component/icon-specification.md) を参照してください。
+
+## アクセントカラー対応アイコン
+
+一部のアイコンは **アクセントカラー** 機能に対応しています。これにより、アイコン内の特定要素に異なる色を適用して、状態やステータスを視覚的に表現できます。
+
+### 対応アイコン一覧
+
+現在、以下のアイコンがアクセントカラーに対応しています：
+
+| アイコン名           | 用途                         | 推奨アクセントカラー例           |
+| -------------------- | ---------------------------- | -------------------------------- |
+| `calendar-attention` | カレンダー注意状態           | `supportError`                   |
+| `calendar-check`     | カレンダーチェック状態       | `supportSuccess`                 |
+| `calendar-minus`     | カレンダーマイナス状態       | `supportWarning`                 |
+| `calendar-today`     | カレンダー今日表示           | `interactive01`                  |
+| `mic`                | マイク（アクティブ状態表示） | `supportSuccess`, `supportError` |
+| `volume-off`         | 音量オフ（オフライン表示）   | `supportError`                   |
+
+### 使用例
+
+```tsx
+import { Icon } from '@zenkigen-inc/component-ui';
+
+// カレンダー - 今日の日付を強調
+<Icon
+  name="calendar-today"
+  color="icon01"
+  accentColor="interactive01"
+/>
+
+// カレンダー - 注意が必要な日付
+<Icon
+  name="calendar-attention"
+  color="icon01"
+  accentColor="supportError"
+/>
+
+// マイク - アクティブ/ミュート状態の切り替え
+const MicIcon = ({ isActive }: { isActive: boolean }) => (
+  <Icon
+    name="mic"
+    color="icon01"
+    accentColor={isActive ? 'supportSuccess' : 'supportError'}
+  />
+);
 ```
 
 ## SVGアイコンの追加方法
@@ -31,7 +103,9 @@ SVGファイルは以下の条件を満たす必要があります:
 - 命名: キャメルケースまたはケバブケース (例: `arrow-right.svg`、`userAdd.svg`)
 - フォーマット: 基本的なSVG構造を持つこと
 
-以下は適切なSVGファイルの例です:
+#### 通常のSVGアイコン
+
+以下は標準的なSVGファイルの例です:
 
 ```svg
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -40,6 +114,27 @@ SVGファイルは以下の条件を満たす必要があります:
 ```
 
 > **注意**: `fill`属性はコード生成時に削除されるため、アイコン表示時のスタイルに影響しません。
+
+#### アクセントカラー対応SVGアイコン
+
+アクセントカラー機能に対応させたい場合は、異なる色を適用したい要素に `class="accentColor"` を追加します:
+
+```svg
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 基本形状（通常の色） -->
+  <path d="M19 4H5C3.89543 4 3 4.89543 3 6V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V6C21 4.89543 20.1046 4 19 4Z" fill="#7C868A"/>
+
+  <!-- アクセントカラーを適用する要素 -->
+  <circle class="accentColor" cx="12" cy="12" r="3" fill="#FF0000"/>
+</svg>
+```
+
+**ポイント**:
+
+- アクセントカラーを適用したい要素に `class="accentColor"` を追加
+- 複数の要素に適用可能
+- Icon コンポーネントの `accentColor` プロパティで色を動的に変更可能
+- アクセントカラー要素の `fill` 属性も削除されるため、初期値は無視されます
 
 ### 2. SVGファイルの配置
 
@@ -71,11 +166,35 @@ yarn build:all
 ```tsx
 import { Icon } from '@zenkigen-inc/component-ui';
 
-// 追加したアイコンを表示
-<Icon name="new-icon-name" />;
+// 通常のアイコン
+<Icon name="new-icon-name" size="medium" color="icon01" />
+
+// アクセントカラー対応アイコン
+<Icon
+  name="new-icon-name"
+  size="medium"
+  color="icon01"
+  accentColor="interactive01"
+/>
 ```
 
-アイコン名は、ファイル名から拡張子を除いたものになります (例: `arrow-right.svg` → `'arrow-right'`)
+**アイコン名の規則**:
+
+- ファイル名から拡張子を除いたものがアイコン名になります
+- 例: `arrow-right.svg` → `'arrow-right'`
+- 例: `calendar-today.svg` → `'calendar-today'`
+
+**TypeScript型定義**:
+
+- 追加したアイコンは `IconName` 型に自動的に含まれ、型安全に使用できます
+- 存在しないアイコン名を指定するとコンパイルエラーになります
+
+## 関連ドキュメント
+
+より詳細な情報については、以下のドキュメントを参照してください：
+
+- **[Icon コンポーネント仕様書](../../docs/component/icon-specification.md)** - Icon コンポーネントの詳細な使用方法、Props、アクセシビリティ情報
+- **[アイコン追加ワークフロー](./docs/icon-addition-workflow.md)** - アイコン追加の詳細なプロセス、ビルドフロー、コード生成の仕組み
 
 ## ライセンス
 

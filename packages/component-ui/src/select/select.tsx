@@ -1,7 +1,8 @@
+import { autoUpdate, FloatingPortal, offset, size as sizeMiddleware, useFloating } from '@floating-ui/react';
 import type { IconName } from '@zenkigen-inc/component-icons';
 import { focusVisible, selectColors } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
-import type { CSSProperties, PropsWithChildren } from 'react';
+import type { CSSProperties, PropsWithChildren, RefObject } from 'react';
 import { useRef, useState } from 'react';
 
 import { useOutsideClick } from '../hooks/use-outside-click';
@@ -10,6 +11,9 @@ import { SelectContext } from './select-context';
 import { SelectItem } from './select-item';
 import { SelectList } from './select-list';
 import type { SelectOption } from './type';
+
+// Floating UI の定数
+const FLOATING_OFFSET = 4;
 
 type Props = {
   size?: 'x-small' | 'small' | 'medium' | 'large';
@@ -44,6 +48,25 @@ export function Select({
   const [isOptionListOpen, setIsOptionListOpen] = useState(false);
   const targetRef = useRef<HTMLDivElement>(null);
   useOutsideClick(targetRef, () => setIsOptionListOpen(false));
+
+  // Floating UI の設定
+  const { refs, floatingStyles } = useFloating({
+    open: isOptionListOpen,
+    onOpenChange: setIsOptionListOpen,
+    placement: 'bottom-start',
+    middleware: [
+      offset(FLOATING_OFFSET),
+      sizeMiddleware({
+        apply({ availableWidth, elements, rects }) {
+          const referenceWidth = rects.reference.width;
+          // トリガーボタンが小さい場合は最小幅を保証し、大きい場合はトリガーボタンに合わせる
+          elements.floating.style.minWidth = `${referenceWidth}px`;
+          elements.floating.style.maxWidth = `${availableWidth}px`;
+        },
+      }),
+    ],
+    whileElementsMounted: autoUpdate,
+  });
 
   const handleClickToggle = () => setIsOptionListOpen((prev) => !prev);
 
@@ -93,10 +116,18 @@ export function Select({
         selectedOption,
         onChange,
         isError,
+        floatingStyles,
+        floatingRef: refs.floating as RefObject<HTMLUListElement | null>,
       }}
     >
       <div className={wrapperClasses} style={{ width, maxWidth }} ref={targetRef}>
-        <button className={buttonClasses} type="button" onClick={handleClickToggle} disabled={isDisabled}>
+        <button
+          ref={refs.setReference}
+          className={buttonClasses}
+          type="button"
+          onClick={handleClickToggle}
+          disabled={isDisabled}
+        >
           {selectedOption?.icon ? (
             <div className="mr-1 flex">
               <Icon name={selectedOption.icon} size={size === 'large' ? 'medium' : 'small'} />
@@ -119,7 +150,15 @@ export function Select({
             />
           </div>
         </button>
-        {isOptionListOpen && !isDisabled && <SelectList maxHeight={optionListMaxHeight}>{children}</SelectList>}
+        {isOptionListOpen && !isDisabled && (
+          <FloatingPortal>
+            <div className="relative z-overlay">
+              <SelectList ref={refs.setFloating} maxHeight={optionListMaxHeight}>
+                {children}
+              </SelectList>
+            </div>
+          </FloatingPortal>
+        )}
       </div>
     </SelectContext.Provider>
   );

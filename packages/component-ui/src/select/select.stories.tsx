@@ -71,13 +71,21 @@ type Story = StoryObj<typeof Select>;
 
 const optionsList = [
   { id: '1', label: '選択肢A', value: 'A', icon: 'add' as IconName },
-  { id: '2', label: '選択肢B', value: 'B', icon: 'add' as IconName },
-  { id: '3', label: '選択肢C', value: 'C', icon: 'add' as IconName },
+  { id: '2', label: '選択肢B', value: 'B', icon: 'warning' as IconName },
+  { id: '3', label: '選択肢C', value: 'C', icon: 'volume' as IconName },
+  { id: '4', label: '選択肢D', value: 'D', icon: 'video' as IconName },
+  { id: '5', label: '選択肢E', value: 'E', icon: 'user' as IconName },
+  { id: '6', label: '選択肢F', value: 'F', icon: 'upload' as IconName },
 ];
 
 const optionsList2 = [
   { id: '1', label: '選択肢A', value: 'A', icon: 'add' as IconName },
-  { id: '2', label: '選択肢B', value: 'B', icon: 'warning' as IconName },
+  {
+    id: '2',
+    label: '選択肢B',
+    value: 'B',
+    icon: 'warning' as IconName,
+  },
   { id: '3', label: '選択肢C', value: 'C', icon: 'volume' as IconName },
   { id: '4', label: '選択肢D', value: 'D', icon: 'video' as IconName },
   { id: '5', label: '選択肢E', value: 'E', icon: 'user' as IconName },
@@ -113,7 +121,7 @@ export const Component: Story = {
     const [selectedOption, setSelectedOption] = useState<SelectOption | null>(null);
 
     return (
-      <div style={{ height: '200px' }}>
+      <div style={{ height: '100px' }}>
         <Select {...args} selectedOption={selectedOption} onChange={(option) => setSelectedOption(option)} />
       </div>
     );

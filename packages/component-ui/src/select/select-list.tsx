@@ -1,7 +1,7 @@
 import { focusVisible } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
 import type { CSSProperties, PropsWithChildren } from 'react';
-import { useContext, useLayoutEffect, useRef } from 'react';
+import { forwardRef, useContext, useLayoutEffect } from 'react';
 
 import { SelectContext } from './select-context';
 
@@ -9,9 +9,9 @@ type Props = {
   maxHeight?: CSSProperties['height'];
 };
 
-export function SelectList({ children, maxHeight }: PropsWithChildren<Props>) {
-  const ref = useRef<HTMLUListElement>(null);
-  const { size, selectedOption, setIsOptionListOpen, variant, placeholder, onChange } = useContext(SelectContext);
+export const SelectList = forwardRef<HTMLUListElement, PropsWithChildren<Props>>(({ children, maxHeight }, ref) => {
+  const { selectedOption, setIsOptionListOpen, variant, placeholder, onChange, floatingStyles, floatingRef } =
+    useContext(SelectContext);
 
   const handleClickDeselect = () => {
     onChange?.(null);
@@ -19,28 +19,33 @@ export function SelectList({ children, maxHeight }: PropsWithChildren<Props>) {
   };
 
   useLayoutEffect(() => {
-    if (maxHeight != null && ref.current) {
-      const element = Array.from(ref.current.children ?? []).find(
-        (item) => item.getAttribute('data-id') === selectedOption?.id,
-      );
-      if (element != null && ref.current.scroll != null) {
-        const wrapRect = ref.current.getBoundingClientRect();
-        const rect = element.getBoundingClientRect();
-        ref.current.scroll(0, rect.top - wrapRect.top - wrapRect.height / 2 + rect.height / 2);
+    // maxHeight（optionListMaxHeight）が指定されてない場合はスクロールしない（リストは全て見えている想定のため場合）
+    if (maxHeight != null && selectedOption != null) {
+      const container = floatingRef?.current;
+      if (container != null) {
+        const element = container.querySelector(`[data-id="${selectedOption.id}"]`) as HTMLElement;
+
+        if (element != null) {
+          // 要素の位置を計算してスクロール
+          const htmlElement = element as HTMLElement;
+          const elementTop = htmlElement.offsetTop;
+          const elementHeight = htmlElement.offsetHeight;
+          const containerHeight = container.clientHeight;
+
+          // 要素を中央に配置するためのスクロール位置を計算
+          const scrollTop = elementTop - (containerHeight - elementHeight) / 2;
+
+          container.scrollTo({
+            top: Math.max(0, scrollTop),
+          });
+        }
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [selectedOption, maxHeight, floatingRef]);
 
-  const listClasses = clsx(
-    'absolute z-dropdown w-max overflow-y-auto rounded bg-uiBackground01 py-2 shadow-floatingShadow',
-    {
-      'top-7': size === 'x-small' || size === 'small',
-      'top-9': size === 'medium',
-      'top-11': size === 'large',
-      'border-solid border border-uiBorder01': variant === 'outline',
-    },
-  );
+  const listClasses = clsx('z-dropdown overflow-y-auto rounded bg-uiBackground01 py-2 shadow-floatingShadow', {
+    'border-solid border border-uiBorder01': variant === 'outline',
+  });
 
   const deselectButtonClasses = clsx(
     'typography-label14regular flex h-8 w-full items-center px-3 text-interactive02 hover:bg-hover02 active:bg-active02',
@@ -48,7 +53,7 @@ export function SelectList({ children, maxHeight }: PropsWithChildren<Props>) {
   );
 
   return (
-    <ul className={listClasses} style={{ maxHeight }} ref={ref}>
+    <ul className={listClasses} style={{ maxHeight, ...floatingStyles }} ref={ref}>
       {children}
       {placeholder != null && selectedOption !== null && (
         <li>
@@ -59,4 +64,6 @@ export function SelectList({ children, maxHeight }: PropsWithChildren<Props>) {
       )}
     </ul>
   );
-}
+});
+
+SelectList.displayName = 'SelectList';
