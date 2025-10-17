@@ -94,6 +94,8 @@ const MyComponent = () => {
 - Notification Inline
 - Pagination
 - Pagination Select
+- [Popover](./docs/component/popover-specification.md)
+- [Popup](./docs/component/popup-specification.md)
 - Radio
 - Search
 - [Segmented Control](./docs/component/segmented-control-specification.md)
