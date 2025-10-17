@@ -104,7 +104,7 @@ const MyComponent = () => {
 - Table
 - Tag
 - [Text Area](./docs/component/text-area-specification.md)
-- Text Input
+- [Text Input](./docs/component/text-input-specification.md)
 - Toast
 - Toggle
 - Tooltip
