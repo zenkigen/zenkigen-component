@@ -105,6 +105,7 @@ const MyComponent = () => {
 - Tag
 - [Text Area](./docs/component/text-area-specification.md)
 - [Text Input](./docs/component/text-input-specification.md)
+- [Password Input](./docs/component/password-input-specification.md)
 - Toast
 - Toggle
 - Tooltip
