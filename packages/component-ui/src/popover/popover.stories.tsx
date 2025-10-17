@@ -41,6 +41,18 @@ const meta: Meta<typeof Popover> = {
       control: { type: 'boolean' },
       description: 'Popoverの表示/非表示',
     },
+    offset: {
+      control: { type: 'number' },
+      description: 'トリガー要素とPopoverコンテンツとの間隔（ピクセル単位）',
+    },
+    onOutsideClick: {
+      action: 'outsideClicked',
+      description: 'Popoverの外側をクリックした時に呼び出されるコールバック関数',
+    },
+    onEscapeKeyDown: {
+      action: 'escapeKeyPressed',
+      description: 'Escapeキーが押された時に呼び出されるコールバック関数',
+    },
   },
 };
 
@@ -64,7 +76,7 @@ const ComponentStory = (args: Story['args']) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="flex min-h-[500px] flex-col items-center justify-center gap-4">
+    <div className="flex min-h-[300px] flex-col items-center justify-center gap-4">
       <Popover
         isOpen={isOpen}
         placement={args?.placement ?? 'top'}
@@ -96,7 +108,7 @@ const PopoverWithPopupStory = (args: Story['args']) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="flex min-h-[500px] flex-col items-center justify-center gap-4">
+    <div className="flex min-h-[700px] flex-col items-center justify-center gap-4">
       <Popover
         isOpen={isOpen}
         placement={args?.placement ?? 'bottom'}
@@ -145,7 +157,7 @@ const PopoverWithPopupStory = (args: Story['args']) => {
 
 export const WithPopup: Story = {
   args: {
-    placement: 'bottom',
+    placement: 'top',
   },
   render: PopoverWithPopupStory,
 };

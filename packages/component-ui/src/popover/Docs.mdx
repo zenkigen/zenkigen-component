@@ -9,42 +9,81 @@ import PopoverStories, { Component } from './popover.stories';
 
 <Controls of={Component} />
 
-## Code Example
+## Code Examples
 
 ### 基本的な使用例
 
 ```tsx
-import { Popover } from '@zenkigen-inc/component-ui';
-import { useRef, useState } from 'react';
+import { Popover, Button } from '@zenkigen-inc/component-ui';
+import { useState } from 'react';
 
 const PopoverExample = () => {
-  const anchorRef = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <>
-      {/* 基準となる枠 */}
-      <div
-        ref={anchorRef}
-        className="relative flex h-32 w-80 items-center justify-center border border-gray-300 rounded p-4"
-      >
-        <span>基準要素</span>
-      </div>
-
-      <button
-        className="absolute bottom-2 right-2 px-3 py-1 bg-blue-500 text-white rounded"
-        onClick={() => setIsVisible(!isVisible)}
-      >
-        {isVisible ? '非表示' : '表示'}
-      </button>
-
-      <Popover anchorRef={anchorRef} placement="top" isVisible={isVisible}>
-        <div className="bg-white p-4 shadow-lg rounded border">
-          <p>Popoverのコンテンツ</p>
-          <p className="text-sm text-gray-600 mt-2">基準要素の上に表示されます</p>
+    <Popover
+      isOpen={isOpen}
+      placement="top"
+      onOutsideClick={() => setIsOpen(false)}
+      onEscapeKeyDown={() => setIsOpen(false)}
+    >
+      <Popover.Trigger>
+        <Button variant="fill" onClick={() => setIsOpen(!isOpen)}>
+          {isOpen ? 'Popoverを非表示' : 'Popoverを表示'}
+        </Button>
+      </Popover.Trigger>
+      <Popover.Content>
+        <div className="rounded-lg bg-slate-200 p-4">
+          <p className="mb-2 text-sm font-semibold text-text01">Popoverのコンテンツ</p>
+          <p className="text-xs text-text02">ここにPopoverの内容を表示します。</p>
         </div>
-      </Popover>
-    </>
+      </Popover.Content>
+    </Popover>
+  );
+};
+```
+
+### Popup との組み合わせ
+
+Popover 内で Popup を使用することができます。Popup は Popoverの開閉状態を自動的に使用します。
+
+```tsx
+import { Popover, Popup, Button } from '@zenkigen-inc/component-ui';
+import { useState } from 'react';
+
+const PopoverWithPopupExample = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
+  return (
+    <Popover isOpen={isOpen} placement="bottom" onOutsideClick={handleClose} onEscapeKeyDown={handleClose}>
+      <Popover.Trigger>
+        <Button variant="fill" onClick={() => setIsOpen(!isOpen)}>
+          {isOpen ? 'Popoverを非表示' : 'Popoverを表示'}
+        </Button>
+      </Popover.Trigger>
+      <Popover.Content>
+        <Popup width={400} onClose={handleClose} onOutsideClick={handleClose} onEscapeKeyDown={handleClose}>
+          <Popup.Header>Popup in Popover</Popup.Header>
+          <Popup.Body>
+            <div className="flex w-full flex-col gap-2 p-4">コンテンツ</div>
+          </Popup.Body>
+          <Popup.Footer>
+            <div className="flex w-full flex-wrap items-center justify-end gap-4">
+              <Button variant="outline" size="large" onClick={handleClose}>
+                閉じる
+              </Button>
+              <Button variant="fill" size="large">
+                保存する
+              </Button>
+            </div>
+          </Popup.Footer>
+        </Popup>
+      </Popover.Content>
+    </Popover>
   );
 };
 ```
