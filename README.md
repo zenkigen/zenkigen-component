@@ -80,15 +80,15 @@ const MyComponent = () => {
 
 以下は利用可能なコンポーネントの一覧です。リンクがあるコンポーネントは詳細な仕様書が参照できます。
 
-- Avatar
+- [Avatar](./docs/component/avatar-specification.md)
 - Breadcrumb
 - Button
 - Checkbox
 - Dropdown
 - Evaluation Star
 - Heading
-- Icon
-- Icon Button
+- [Icon](./docs/component/icon-specification.md)
+- [Icon Button](./docs/component/icon-button-specification.md)
 - Loading
 - [Modal](./docs/component/modal-specification.md)
 - Notification Inline
@@ -100,11 +100,11 @@ const MyComponent = () => {
 - [Select](./docs/component/select-specification.md)
 - Select Sort
 - [Sort Button](./docs/component/sort-button-specification.md)
-- Tab
+- [Tab](./docs/component/tab-specification.md)
 - Table
 - Tag
 - [Text Area](./docs/component/text-area-specification.md)
-- Text Input
+- [Text Input](./docs/component/text-input-specification.md)
 - Toast
 - Toggle
 - Tooltip
@@ -118,7 +118,7 @@ const MyComponent = () => {
 - [プロジェクト構造](./docs/project-structure.md) - パッケージ構成と相互関係
 - [コンポーネント実装パターン](./docs/component-patterns.md) - 設計パターンと実装方針
 - [テーマシステム](./docs/theme-system.md) - テーマとTailwind CSS設定
-- [コーディングガイドライン](./docs/coding_guidelines.md) - 開発時のコーディング標準と規約
+- [コーディングガイドライン](./docs/coding-guidelines.md) - 開発時のコーディング標準と規約
 
 ## Storybookでのコンポーネント確認
 
