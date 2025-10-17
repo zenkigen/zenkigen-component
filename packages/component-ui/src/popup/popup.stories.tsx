@@ -4,6 +4,9 @@ import { useState } from 'react';
 
 import { Button } from '../button';
 import { Popover } from '../popover';
+import type { SelectOption } from '../select';
+import { Select } from '../select';
+import { TextInput } from '../text-input';
 import { Popup } from '.';
 
 const meta: Meta<typeof Popup> = {
@@ -101,7 +104,7 @@ export const FixedHeight: Story = {
   },
 };
 
-export const WithoutButton: Story = {
+export const WithoutFooter: Story = {
   args: {
     isOpen: true,
     width: 480,
@@ -129,9 +132,28 @@ export const WithPopover: Story = {
   },
   render: function MyFunc({ ...args }) {
     const [isOpen, setIsOpen] = useState(false);
+    const [isOpen2, setIsOpen2] = useState(false);
+    const [isOpen3, setIsOpen3] = useState(false);
+
+    const [selectedCategory, setSelectedCategory] = useState<SelectOption | null>(null);
+    const [selectedPriority, setSelectedPriority] = useState<SelectOption | null>(null);
+    const [taskName, setTaskName] = useState('');
+    const [description, setDescription] = useState('');
+
+    const categoryOptions = [
+      { id: 'work', value: 'work', label: '仕事' },
+      { id: 'personal', value: 'personal', label: 'プライベート' },
+      { id: 'study', value: 'study', label: '学習' },
+    ];
+
+    const priorityOptions = [
+      { id: 'high', value: 'high', label: '高' },
+      { id: 'medium', value: 'medium', label: '中' },
+      { id: 'low', value: 'low', label: '低' },
+    ];
 
     return (
-      <div className="flex min-h-[800px] flex-col items-center justify-center gap-4">
+      <div className="flex min-h-[800px] items-center justify-center">
         <Popover
           isOpen={isOpen}
           placement="top"
@@ -146,11 +168,100 @@ export const WithPopover: Story = {
           <Popover.Content>
             {/* Popup は isOpen を指定しなくても PopoverContext から自動取得 */}
             <Popup width={args.width} onClose={() => setIsOpen(false)}>
-              <Popup.Header>Popover 内の Popup</Popup.Header>
+              <Popup.Header>Popover 内の Popup 1</Popup.Header>
               <Popup.Body>
                 <div className="typography-body14regular flex w-full flex-col gap-3 p-4 text-text01">
                   <p>この Popup は Popover 内で使用されています。</p>
                   <p>ヘッダーの ✕ ボタンをクリックすると、Popup と Popover の両方が閉じます。</p>
+                </div>
+              </Popup.Body>
+            </Popup>
+          </Popover.Content>
+        </Popover>
+        <Popover
+          isOpen={isOpen3}
+          placement="top"
+          onOutsideClick={() => setIsOpen3(false)}
+          onEscapeKeyDown={() => setIsOpen3(false)}
+        >
+          <Popover.Trigger>
+            <Button variant="fill" onClick={() => setIsOpen3((value) => !value)}>
+              {isOpen3 ? 'Popover を閉じる' : 'Popover を開く'}
+            </Button>
+          </Popover.Trigger>
+          <Popover.Content>
+            {/* Popup は isOpen を指定しなくても PopoverContext から自動取得 */}
+            <Popup width={args.width} onClose={() => setIsOpen3(false)}>
+              <Popup.Header>Popover 内の Popup 2</Popup.Header>
+              <Popup.Body>
+                <div className="typography-body14regular flex w-full flex-col gap-3 p-4 text-text01">
+                  <p>この Popup は Popover 内で使用されています。</p>
+                  <p>ヘッダーの ✕ ボタンをクリックすると、Popup と Popover の両方が閉じます。</p>
+                </div>
+              </Popup.Body>
+            </Popup>
+          </Popover.Content>
+        </Popover>
+        <Popover
+          isOpen={isOpen2}
+          placement="top"
+          onOutsideClick={() => setIsOpen2(false)}
+          onEscapeKeyDown={() => setIsOpen2(false)}
+        >
+          <Popover.Trigger>
+            <Button variant="fill" onClick={() => setIsOpen2((value) => !value)}>
+              {isOpen2 ? 'Popover を閉じる' : 'Popover を開く'}
+            </Button>
+          </Popover.Trigger>
+          <Popover.Content>
+            {/* Popup は isOpen を指定しなくても PopoverContext から自動取得 */}
+            <Popup width={args.width} height={300} onClose={() => setIsOpen2(false)}>
+              <Popup.Header>Popover 内の Popup 3</Popup.Header>
+              <Popup.Body>
+                <div className="flex w-full flex-col gap-6 p-6">
+                  <div className="flex flex-col gap-2">
+                    <label className="typography-label14regular text-text01">タスク名</label>
+                    <TextInput
+                      value={taskName}
+                      onChange={(e) => setTaskName(e.target.value)}
+                      placeholder="タスク名を入力してください"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="typography-label14regular text-text01">カテゴリ</label>
+                    <Select
+                      placeholder="カテゴリを選択してください"
+                      selectedOption={selectedCategory}
+                      onChange={setSelectedCategory}
+                      width="100%"
+                    >
+                      {categoryOptions.map((option) => (
+                        <Select.Option key={option.id} option={option} />
+                      ))}
+                    </Select>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="typography-label14regular text-text01">優先度</label>
+                    <Select
+                      placeholder="優先度を選択してください"
+                      selectedOption={selectedPriority}
+                      onChange={setSelectedPriority}
+                      width="100%"
+                    >
+                      {priorityOptions.map((option) => (
+                        <Select.Option key={option.id} option={option} />
+                      ))}
+                    </Select>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="typography-label14regular text-text01">説明</label>
+                    <textarea
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      className="typography-label14regular h-20 resize-none rounded border border-uiBorder01 p-3"
+                      placeholder="タスクの説明を入力してください"
+                    />
+                  </div>
                 </div>
               </Popup.Body>
             </Popup>
