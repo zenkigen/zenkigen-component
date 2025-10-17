@@ -3,9 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 
 import { Button } from '../button';
-import { Checkbox } from '../checkbox';
 import { Popover } from '../popover';
-import { Tab } from '../tab';
 import { Popup } from '.';
 
 const meta: Meta<typeof Popup> = {
@@ -47,115 +45,12 @@ export const Component: Story = {
         </Popup.Body>
         <Popup.Footer>
           <div className="flex w-full flex-wrap items-center justify-end gap-4">
-            <Button variant="outline" size="large" onClick={action('キャンセル')}>
+            <Button variant="outline" size="medium" onClick={action('キャンセル')}>
               キャンセル
             </Button>
-            <Button variant="fill" size="large" onClick={action('保存する')}>
+            <Button variant="fill" size="medium" onClick={action('保存する')}>
               保存する
             </Button>
-          </div>
-        </Popup.Footer>
-      </Popup>
-    );
-  },
-};
-
-export const Base: Story = {
-  args: {
-    isOpen: true,
-    width: 480,
-    onClose: action('onClose'),
-  },
-  render: function MyFunc({ ...args }) {
-    return (
-      <Popup isOpen={args.isOpen} width={args.width} onClose={args.onClose}>
-        <Popup.Header>タイトル</Popup.Header>
-        <Popup.Body>
-          <div className="flex w-full items-center justify-center py-20">Content</div>
-        </Popup.Body>
-        <Popup.Footer>
-          <div className="flex w-full flex-wrap items-center justify-end gap-4">
-            <Button variant="outline" size="large" onClick={action('キャンセル')}>
-              キャンセル
-            </Button>
-            <Button variant="fill" size="large" onClick={action('保存する')}>
-              保存する
-            </Button>
-          </div>
-        </Popup.Footer>
-      </Popup>
-    );
-  },
-};
-
-export const WithCheckbox: Story = {
-  args: {
-    isOpen: true,
-    width: 480,
-    onClose: action('onClose'),
-  },
-  render: function MyFunc({ ...args }) {
-    const [isChecked, setIsChecked] = useState(false);
-
-    return (
-      <Popup isOpen={args.isOpen} width={args.width} onClose={args.onClose}>
-        <Popup.Header>タイトル</Popup.Header>
-        <Popup.Body>
-          <div className="flex w-full items-center justify-center py-20">Content</div>
-        </Popup.Body>
-        <Popup.Footer>
-          <div className="flex w-full justify-between gap-4">
-            <div className="flex flex-wrap items-center">
-              <Checkbox
-                id="dialog-checkbox"
-                label="ラベル"
-                isChecked={isChecked}
-                onChange={() => setIsChecked((prev) => !prev)}
-              />
-            </div>
-            <div className="flex flex-wrap items-center justify-end gap-4">
-              <Button variant="outline" size="large" onClick={action('キャンセル')}>
-                キャンセル
-              </Button>
-              <Button variant="fill" size="large" onClick={action('保存する')}>
-                保存する
-              </Button>
-            </div>
-          </div>
-        </Popup.Footer>
-      </Popup>
-    );
-  },
-};
-
-export const WithSubButton: Story = {
-  args: {
-    isOpen: true,
-    width: 480,
-    onClose: action('onClose'),
-  },
-  render: function MyFunc({ ...args }) {
-    return (
-      <Popup isOpen={args.isOpen} width={args.width} onClose={args.onClose}>
-        <Popup.Header>タイトル</Popup.Header>
-        <Popup.Body>
-          <div className="flex w-full items-center justify-center py-20">Content</div>
-        </Popup.Body>
-        <Popup.Footer>
-          <div className="flex w-full items-center justify-between">
-            <div className="flex flex-wrap items-center">
-              <Button variant="text" size="large" onClick={action('ボタンラベル')}>
-                ボタンラベル
-              </Button>
-            </div>
-            <div className="flex flex-wrap items-center justify-end gap-4">
-              <Button variant="outline" size="large" onClick={action('キャンセル')}>
-                キャンセル
-              </Button>
-              <Button variant="fill" size="large" onClick={action('保存する')}>
-                保存する
-              </Button>
-            </div>
           </div>
         </Popup.Footer>
       </Popup>
@@ -167,7 +62,7 @@ export const FixedHeight: Story = {
   args: {
     isOpen: true,
     width: 480,
-    height: 500,
+    height: 320,
     onClose: action('onClose'),
   },
   render: function MyFunc({ ...args }) {
@@ -175,64 +70,28 @@ export const FixedHeight: Story = {
       <Popup isOpen={args.isOpen} width={args.width} height={args.height} onClose={args.onClose}>
         <Popup.Header>タイトル</Popup.Header>
         <Popup.Body>
-          <div className="flex w-full items-center justify-center py-20">Content</div>
-        </Popup.Body>
-        <Popup.Footer>
-          <div className="flex w-full flex-wrap items-center justify-end gap-4">
-            <Button variant="outline" size="large" onClick={action('キャンセル')}>
-              キャンセル
-            </Button>
-            <Button variant="fill" size="large" onClick={action('保存する')}>
-              保存する
-            </Button>
-          </div>
-        </Popup.Footer>
-      </Popup>
-    );
-  },
-};
-
-export const WithTabs: Story = {
-  args: {
-    isOpen: true,
-    width: 480,
-    onClose: action('onClose'),
-  },
-  render: function MyFunc({ ...args }) {
-    const [selectedTab, setSelectedTab] = useState('tab1');
-    const tabItems = [
-      { id: 'tab1', label: 'タブラベル1' },
-      { id: 'tab2', label: 'タブラベル2' },
-      { id: 'tab3', label: 'タブラベル3' },
-    ];
-
-    return (
-      <Popup isOpen={args.isOpen} width={args.width} onClose={args.onClose}>
-        <Popup.Header isNoBorder>タイトル</Popup.Header>
-        <Popup.Body>
-          <div className="mt-2 flex w-full flex-col">
-            <div className="w-full">
-              <Tab>
-                {tabItems.map((item) => (
-                  <Tab.Item key={item.id} id={item.id} isSelected={selectedTab === item.id} onClick={setSelectedTab}>
-                    {item.label}
-                  </Tab.Item>
-                ))}
-              </Tab>
-            </div>
-            <div className="flex w-full items-center justify-center py-20">
-              {selectedTab === 'tab1' && <div>Content 1</div>}
-              {selectedTab === 'tab2' && <div>Content 2</div>}
-              {selectedTab === 'tab3' && <div>Content 3</div>}
-            </div>
+          <div className="flex w-full flex-col px-4">
+            <p>
+              あのイーハトーヴォのすきとおった風、夏でも底に冷たさをもつ青いそら、うつくしい森で飾られたモリーオ市、郊外のぎらぎらひかる草の波。またそのなかでいっしょになったたくさんのひとたち、ファゼーロとロザーロ、羊飼のミーロや、顔の赤いこどもたち、地主のテーモ、山猫博士のボーガント・デストゥパーゴなど、いまこの暗い巨きな石の建物のなかで考えていると、みんなむかし風のなつかしい青い幻燈のように思われます。
+            </p>
+            <p>
+              五月のしまいの日曜でした。わたくしは賑にぎやかな市の教会の鐘の音で眼をさましました。もう日はよほど登って、まわりはみんなきらきらしていました。時計を見るとちょうど六時でした。わたくしはすぐチョッキだけ着て山羊を見に行きました。すると小屋のなかはしんとして藁わらが凹んでいるだけで、あのみじかい角も白い髯も見えませんでした。「あんまりいい天気なもんだから大将ひとりででかけたな。」
+            </p>
+            <p>
+              わたくしは半分わらうように半分つぶやくようにしながら、向うの信号所からいつも放して遊ばせる輪道の内側の野原、ポプラの中から顔をだしている市はずれの白い教会の塔までぐるっと見まわしました。けれどもどこにもあの白い頭もせなかも見えていませんでした。うまやを一まわりしてみましたがやっぱりどこにも居ませんでした。
+            </p>
+            <p>
+              「いったい山羊は馬だの犬のように前居たところや来る道をおぼえていて、そこへ戻っているということがあるのかなあ。」
+              わたくしはひとりで考えました。さあ、そう思うと早くそれを知りたくてたまらなくなりました。けれども役所のなかとちがって競馬場には物知りの年とった書記も居なければ、そんなことを書いた辞書もそこらにありませんでしたから、わたくしは何ということなしに輪道を半分通って、それからこの前山羊が村の人に連れられて来た路をそのまま野原の方へあるきだしました。
+            </p>
           </div>
         </Popup.Body>
         <Popup.Footer>
           <div className="flex w-full flex-wrap items-center justify-end gap-4">
-            <Button variant="outline" size="large" onClick={action('キャンセル')}>
+            <Button variant="outline" size="medium" onClick={action('キャンセル')}>
               キャンセル
             </Button>
-            <Button variant="fill" size="large" onClick={action('保存する')}>
+            <Button variant="fill" size="medium" onClick={action('保存する')}>
               保存する
             </Button>
           </div>
@@ -252,35 +111,12 @@ export const WithoutButton: Story = {
       <Popup isOpen={args.isOpen} width={args.width} onClose={args.onClose}>
         <Popup.Header>タイトル</Popup.Header>
         <Popup.Body>
-          <div className="flex w-full items-center justify-center py-20">Content</div>
-        </Popup.Body>
-      </Popup>
-    );
-  },
-};
-
-export const Danger: Story = {
-  args: {
-    isOpen: true,
-    width: 420,
-  },
-  render: function MyFunc({ ...args }) {
-    return (
-      <Popup isOpen={args.isOpen} width={args.width} onClose={args.onClose}>
-        <Popup.Header isNoBorder>タイトル</Popup.Header>
-        <Popup.Body>
-          <div className="flex h-16 w-full items-center justify-center">Content</div>
-        </Popup.Body>
-        <Popup.Footer isNoBorder>
-          <div className="flex w-full flex-wrap items-center justify-end gap-4">
-            <Button variant="outline" size="large" onClick={action('キャンセル')}>
-              キャンセル
-            </Button>
-            <Button variant="fillDanger" size="large" onClick={action('削除する')}>
-              削除する
-            </Button>
+          <div className="flex w-full flex-col px-4 pb-4">
+            <p>
+              あのイーハトーヴォのすきとおった風、夏でも底に冷たさをもつ青いそら、うつくしい森で飾られたモリーオ市、郊外のぎらぎらひかる草の波。またそのなかでいっしょになったたくさんのひとたち、ファゼーロとロザーロ、羊飼のミーロや、顔の赤いこどもたち、地主のテーモ、山猫博士のボーガント・デストゥパーゴなど、いまこの暗い巨きな石の建物のなかで考えていると、みんなむかし風のなつかしい青い幻燈のように思われます。
+            </p>
           </div>
-        </Popup.Footer>
+        </Popup.Body>
       </Popup>
     );
   },
@@ -309,23 +145,9 @@ export const WithPopover: Story = {
               <Popup.Body>
                 <div className="typography-body14regular flex w-full flex-col gap-3 p-4 text-text01">
                   <p>この Popup は Popover 内で使用されています。</p>
-                  <p>
-                    ヘッダーの ✕ ボタンをクリックすると、
-                    <br />
-                    Popup と Popover の両方が閉じます。
-                  </p>
+                  <p>ヘッダーの ✕ ボタンをクリックすると、Popup と Popover の両方が閉じます。</p>
                 </div>
               </Popup.Body>
-              <Popup.Footer>
-                <div className="flex w-full flex-wrap items-center justify-end gap-4">
-                  <Button variant="outline" size="large" onClick={() => setIsOpen(false)}>
-                    キャンセル
-                  </Button>
-                  <Button variant="fill" size="large" onClick={action('保存する')}>
-                    保存する
-                  </Button>
-                </div>
-              </Popup.Footer>
             </Popup>
           </Popover.Content>
         </Popover>

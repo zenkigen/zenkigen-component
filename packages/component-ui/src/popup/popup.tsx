@@ -56,7 +56,7 @@ export function Popup({
   return (
     <PopupContext.Provider value={{ isOpen, setOpen, onClose: handleClose }}>
       <div
-        className="grid max-h-full grid-rows-[max-content_1fr_max-content] flex-col rounded-lg bg-uiBackground01 shadow-modalShadow"
+        className="grid max-h-full grid-rows-[max-content_1fr_max-content] flex-col rounded-lg bg-uiBackground01 shadow-floatingShadow"
         style={{ width: renderWidth, height: renderHeight, maxWidth }}
       >
         {children}

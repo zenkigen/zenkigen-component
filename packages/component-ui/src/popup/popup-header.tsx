@@ -5,17 +5,12 @@ import { useContext } from 'react';
 import { IconButton } from '../icon-button';
 import { PopupContext } from './popup-context';
 
-type Props = {
-  isNoBorder?: boolean;
-};
-
-export function PopupHeader({ children, isNoBorder = false }: PropsWithChildren<Props>) {
+export function PopupHeader({ children }: PropsWithChildren) {
   const { onClose } = useContext(PopupContext);
 
   const headerClasses = clsx(
-    'typography-h5 flex w-full shrink-0 items-center justify-between rounded-t-lg px-6 text-text01',
+    'typography-h5 flex w-full shrink-0 items-start justify-between rounded-t-lg px-6 pt-3 text-text01',
     {
-      'border-b border-uiBorder01': !isNoBorder,
       'h-14': !onClose,
       'h-12': onClose,
     },
