@@ -12,17 +12,17 @@
 5. [状態とスタイル](#状態とスタイル)
    - [サイズバリエーション](#サイズバリエーション)
    - [状態に応じたスタイル](#状態に応じたスタイル)
-   - [プレースホルダー](#プレースホルダー)
+   - [その他のスタイル仕様](#その他のスタイル仕様)
 6. [使用例](#使用例)
    - [基本的な使用例](#基本的な使用例)
-   - [クリアボタン付き](#クリアボタン付き)
+   - [サイズバリエーション](#サイズバリエーション-1)
    - [エラー状態](#エラー状態)
    - [無効状態](#無効状態)
-   - [異なる入力タイプ](#異なる入力タイプ)
+   - [数値入力](#数値入力)
+   - [パスワード入力](#パスワード入力)
+   - [クリアボタンなし](#クリアボタンなし)
 7. [アクセシビリティ](#アクセシビリティ)
 8. [技術的な詳細](#技術的な詳細)
-   - [実装について](#実装について)
-   - [型安全性](#型安全性)
 9. [注意事項](#注意事項)
 10. [スタイルのカスタマイズ](#スタイルのカスタマイズ)
 11. [更新履歴](#更新履歴)
@@ -31,7 +31,7 @@
 
 ## 概要
 
-TextInputコンポーネントは、単一行テキスト入力を提供するUIコンポーネントです。クリアボタン、エラー状態の表示、複数のサイズバリエーションなど、様々な機能を持つ高機能なテキスト入力コンポーネントです。
+TextInputコンポーネントは、単一行のテキスト入力を提供するUIコンポーネントである。サイズ指定、エラー表示、クリアボタン表示（任意）などの機能を備える。
 
 ## インポート
 
@@ -42,7 +42,7 @@ import { TextInput } from '@zenkigen-inc/component-ui';
 ## 基本的な使用方法
 
 ```typescript
-import { useState } from 'react';
+import { useState, type ChangeEvent } from 'react';
 import { TextInput } from '@zenkigen-inc/component-ui';
 
 const MyComponent = () => {
@@ -51,8 +51,9 @@ const MyComponent = () => {
   return (
     <TextInput
       value={value}
-      onChange={(e) => setValue(e.target.value)}
+      onChange={(e: ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
       placeholder="入力してください"
+      onClickClearButton={() => setValue('')}
     />
   );
 };
@@ -62,77 +63,64 @@ const MyComponent = () => {
 
 ### 必須プロパティ
 
-| プロパティ | 型       | 説明                   |
-| ---------- | -------- | ---------------------- |
-| `value`    | `string` | テキスト入力の現在の値 |
+| プロパティ | 型       | 説明                 |
+| ---------- | -------- | -------------------- |
+| `value`    | `string` | 入力の現在の値である |
 
 ### オプションプロパティ
 
-| プロパティ           | 型                    | デフォルト値 | 説明                         |
-| -------------------- | --------------------- | ------------ | ---------------------------- |
-| `size`               | `'medium' \| 'large'` | `'medium'`   | コンポーネントのサイズ       |
-| `isError`            | `boolean`             | `false`      | エラー状態かどうか           |
-| `disabled`           | `boolean`             | `false`      | 無効状態かどうか             |
-| `onClickClearButton` | `() => void`          | `undefined`  | クリアボタンクリック時の処理 |
+| プロパティ           | 型                                              | デフォルト値 | 説明                                                                 |
+| -------------------- | ----------------------------------------------- | ------------ | -------------------------------------------------------------------- |
+| `size`               | `'medium' \| 'large'`                           | `'medium'`   | コンポーネントのサイズを指定する                                     |
+| `isError`            | `boolean`                                       | `false`      | エラー状態かどうかを指定する                                         |
+| `disabled`           | `boolean`                                       | `false`      | 入力を無効化するかどうかを指定する（継承）                           |
+| `placeholder`        | `string`                                        | `undefined`  | プレースホルダーテキストを指定する（継承）                           |
+| `type`               | `InputHTMLAttributes<HTMLInputElement>['type']` | `'text'`     | 入力タイプ（例: `'text'`, `'number'`, `'password'` など）（継承）    |
+| `onClickClearButton` | `() => void`                                    | `undefined`  | クリアボタン押下時のハンドラ。指定時かつ値が空でない場合のみ表示する |
 
 ### 継承プロパティ
 
-`InputHTMLAttributes<HTMLInputElement>` のすべてのプロパティが使用可能です（`size`、`value`以外）。
-
-主な継承プロパティ：
-
-- `placeholder` - プレースホルダーテキスト
-- `type` - 入力タイプ（text, password, number, email等）
-- `onChange` - 値変更時のイベントハンドラー
-- `onFocus` - フォーカス時のイベントハンドラー
-- `onBlur` - フォーカス解除時のイベントハンドラー
-- `maxLength` - 最大文字数制限
-- `readOnly` - 読み取り専用モード
+`InputHTMLAttributes<HTMLInputElement>` のすべてのプロパティが使用可能である（ネイティブの `size` は除外）。
 
 ## 状態とスタイル
 
 ### サイズバリエーション
 
-#### Medium（デフォルト）
-
-- 高さ: `min-h-8` (32px)
-- パディング: `px-2`
-- タイポグラフィ: `typography-label14regular`
-- 右パディング（末尾要素あり）: `pr-2`
-
-#### Large
-
-- 高さ: `min-h-10` (40px)
-- パディング: `px-3`
-- タイポグラフィ: `typography-label16regular`
-- 右パディング（末尾要素あり）: `pr-3`
+- `medium`（デフォルト）
+  - タイポグラフィ: `typography-label14regular`
+  - 高さ: `min-h-8`
+  - パディング: `px-2`
+- `large`
+  - タイポグラフィ: `typography-label16regular`
+  - 高さ: `min-h-10`
+  - パディング: `px-3`
 
 ### 状態に応じたスタイル
 
-#### 通常状態
+- 通常状態
+  - ボーダー: `border-uiBorder02`
+  - テキスト色: `text-text01`
+  - ホバー時: `hover:border-hoverInput`
+  - フォーカス（フォーカス内）: `focus-within:border-activeInput`
+- エラー状態（`isError: true`）
+  - ボーダー: `border-supportError`
+  - テキスト色: `text-supportError`
+  - ホバー時/フォーカス時もエラースタイルを維持
+- 無効状態（`disabled: true`）
+  - 背景: `bg-disabled02`
+  - ボーダー: `border-disabled01`
+  - プレースホルダー色: `placeholder:text-textPlaceholder`
+  - エラースタイルは適用されない
 
-- ボーダー: `border-uiBorder02`
-- ホバー時: `hover:border-hoverInput`
-- フォーカス時: `focus-within:border-activeInput`
-- テキスト色: `text-text01`
+### その他のスタイル仕様
 
-#### エラー状態（isError: true）
-
-- ボーダー: `border-supportError`
-- テキスト色: `text-supportError`
-- 無効時はエラースタイルが適用されない
-
-#### 無効状態（disabled: true）
-
-- 背景: `bg-disabled02`
-- ボーダー: `border-disabled01`
-- テキスト色: `text-textPlaceholder`
-
-### プレースホルダー
-
-- 色: `placeholder:text-textPlaceholder`
+- コンテナ: `relative flex items-center gap-2 overflow-hidden rounded border`
+- 入力: `flex-1 outline-0 placeholder:text-textPlaceholder disabled:text-textPlaceholder`
+- クリアボタン表示時、右側パディングを調整する（`pr-2`/`pr-3` 付与、入力側は `pr-0`）
 
 ## 使用例
+
+> すべての例は実在APIで成立する。
 
 ### 基本的な使用例
 
@@ -141,19 +129,18 @@ const MyComponent = () => {
   value={value}
   onChange={(e) => setValue(e.target.value)}
   placeholder="入力してください"
-  size="medium"
+  onClickClearButton={() => setValue('')}
 />
 ```
 
-### クリアボタン付き
+### サイズバリエーション
 
 ```typescript
-<TextInput
-  value={value}
-  onChange={(e) => setValue(e.target.value)}
-  placeholder="クリア可能"
-  onClickClearButton={() => setValue('')}
-/>
+// medium（デフォルト）
+<TextInput value={value} size="medium" onChange={(e) => setValue(e.target.value)} />
+
+// large
+<TextInput value={value} size="large" onChange={(e) => setValue(e.target.value)} />
 ```
 
 ### エラー状態
@@ -161,117 +148,71 @@ const MyComponent = () => {
 ```typescript
 <TextInput
   value={value}
-  onChange={(e) => setValue(e.target.value)}
-  placeholder="エラー状態です"
   isError={true}
+  placeholder="エラー状態です"
+  onChange={(e) => setValue(e.target.value)}
+  onClickClearButton={() => setValue('')}
 />
 ```
 
 ### 無効状態
 
 ```typescript
+<TextInput value={value} disabled={true} placeholder="編集できません" onChange={(e) => setValue(e.target.value)} />
+```
+
+### 数値入力
+
+```typescript
+<TextInput value={value} type="number" onChange={(e) => setValue(e.target.value)} />
+```
+
+### パスワード入力
+
+```typescript
 <TextInput
   value={value}
+  type="password"
   onChange={(e) => setValue(e.target.value)}
-  placeholder="編集できません"
-  disabled={true}
+  onClickClearButton={() => setValue('')}
 />
 ```
 
-### 異なる入力タイプ
+### クリアボタンなし
 
 ```typescript
-// パスワード入力
-<TextInput
-  value={password}
-  onChange={(e) => setPassword(e.target.value)}
-  type="password"
-  placeholder="パスワードを入力"
-/>
-
-// 数値入力
-<TextInput
-  value={number}
-  onChange={(e) => setNumber(e.target.value)}
-  type="number"
-  placeholder="数値を入力"
-/>
-
-// メール入力
-<TextInput
-  value={email}
-  onChange={(e) => setEmail(e.target.value)}
-  type="email"
-  placeholder="メールアドレスを入力"
-/>
+<TextInput value={value} onChange={(e) => setValue(e.target.value)} />
 ```
 
 ## アクセシビリティ
 
-- `forwardRef`を使用してDOM要素への参照をサポート
-- 標準的な`<input>`要素のすべてのアクセシビリティ機能を継承
-- `disabled`属性が適切に設定される
-- フォーカス管理が適切に実装されている
-- クリアボタンは`IconButton`コンポーネントを使用し、適切なアクセシビリティ属性を持つ
+- `forwardRef`によりDOM要素への参照をサポートする。
+- 標準的な`<input>`要素のアクセシビリティ特性を継承する。
+- `disabled`属性が適切に設定される。
+- クリアボタンはボタン要素（`IconButton`）で提供され、キーボード操作でフォーカス可能である（`disabled`時は非表示）。
+- ラベル要素は含まれないため、フォームで使用する場合は外部で`<label>`と関連付けること。
 
 ## 技術的な詳細
 
-### 実装について
-
-- `forwardRef`を使用してref転送をサポート
-- `clsx`を使用した動的クラス名の生成
-- 内部実装用の`after`プロパティをサポート（型キャストを使用）
-- クリアボタンの表示条件：
-  - `onClickClearButton`が提供されている
-  - `value`の長さが0より大きい
-  - `disabled`が`false`
-
-### 型安全性
-
-```typescript
-// ✅ 正しい使用
-<TextInput value={value} onChange={handleChange} />
-<TextInput value={value} isError={true} />
-<TextInput value={value} onClickClearButton={handleClear} />
-
-// ❌ コンパイルエラー
-<TextInput /> // valueは必須
-<TextInput value={value} size="small" /> // sizeは'medium' | 'large'のみ
-```
-
-### クリアボタンの動作
-
-クリアボタンは以下の条件で表示されます：
-
-1. `onClickClearButton`プロパティが提供されている
-2. `value`の長さが0より大きい
-3. `disabled`が`false`
-
-クリアボタンが表示される場合、入力欄の右側に`IconButton`（closeアイコン）が配置され、クリックすると`onClickClearButton`が呼び出されます。
+- `forwardRef<HTMLInputElement, Props>` を使用してref転送をサポートする。
+- クラス名の組み立てに `clsx` を使用する。
+- クリアボタンの表示条件は「`onClickClearButton` が指定され、`value` が空ではなく、かつ `disabled` ではない」場合である。
+- ネイティブ`size`属性は内部で `size={1}` を設定し、見た目の幅はレイアウトクラスで制御する。
+- クリアボタンは `IconButton`（`variant="text"`, `icon="close"`, `size="small"`）で実装され、`@zenkigen-inc/component-icons` の `Icon` を内部で利用する。
 
 ## 注意事項
 
-1. `value`プロパティは必須です
-2. クリアボタンは`onClickClearButton`が提供されている場合のみ表示されます
-3. エラー状態は無効状態よりも優先度が低く、無効時はエラースタイルが適用されません
-4. コンポーネントは`div`要素でラップされており、`relative flex items-center gap-2`クラスが適用されています
-5. 末尾要素（クリアボタンや`after`プロパティ）がある場合、入力欄の右パディングが自動調整されます
-6. `size`プロパティは`InputHTMLAttributes`の`size`属性と競合するため、除外されています
+1. `value` は必須であり、制御コンポーネントとして使用すること。
+2. クリアボタンを表示したい場合は `onClickClearButton` を指定すること。`value` が空、もしくは `disabled` の場合は表示されない。
+3. 本コンポーネントはラベル要素を含まない。アクセシビリティのため外部で適切にラベル付けを行うこと。
+4. `type` はネイティブの入力タイプを使用できる（`'number'`, `'password'` など）。
 
 ## スタイルのカスタマイズ
 
-このコンポーネントは Tailwind CSS のユーティリティクラスを使用しており、`@zenkigen-inc/component-config`で定義されたデザイントークンに依存しています。カスタマイズする場合は、これらの設定を参照してください。
-
-特に以下の要素がカスタマイズ可能：
-
-- ボーダー色（`uiBorder02`, `supportError`, `disabled01`等）
-- ホバー・フォーカス色（`hoverInput`, `activeInput`）
-- テキスト色（`text01`, `supportError`, `textPlaceholder`）
-- 背景色（`disabled02`）
-- タイポグラフィトークンによる文字スタイル
+このコンポーネントは Tailwind CSS のユーティリティクラスを使用しており、`@zenkigen-inc/component-config` で定義されたデザイントークンに依存している。カスタマイズする場合は、当該設定を参照すること。
 
 ## 更新履歴
 
-| 日付       | 内容     | 担当者 |
-| ---------- | -------- | ------ |
-| 2025-10-10 | 新規作成 | -      |
+| 日付                 | 内容     | 担当者 |
+| -------------------- | -------- | ------ |
+| 2025-10-17 09:17 JST | 新規作成 | -      |

@@ -55,7 +55,7 @@ export const tokens = {
       "backgroundOverlayBlack": "#00000099"
     },
     "icon": {
-      "icon01": "#6F7476",
+      "icon01": "#5C6366",
       "icon02": "#A4A5A6",
       "icon03": "#CACCCD",
       "iconOnColor": "#FFFFFF"
@@ -63,7 +63,7 @@ export const tokens = {
     "interactive": {
       "interactive01": "#177EE5",
       "interactiveBg01": "#177EE5",
-      "interactive02": "#6F7476",
+      "interactive02": "#5C6366",
       "interactive03": "#177EE5",
       "interactive04": "#CACCCD"
     },
@@ -101,7 +101,7 @@ export const tokens = {
       "activeLink02": "#1F2121"
     },
     "selected": {
-      "selectedUi": "#D9EAFB",
+      "selectedUi": "#F1F7FD",
       "selectedUiGray": "#DEDFE0",
       "selectedUiOnColor": "#FFFFFF",
       "selectedUiBorder": "#177EE5"

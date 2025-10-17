@@ -80,15 +80,15 @@ const MyComponent = () => {
 
 以下は利用可能なコンポーネントの一覧です。リンクがあるコンポーネントは詳細な仕様書が参照できます。
 
-- [Avatar](./docs/component/avatar-specification.md)
+- [[Avatar](./docs/component/avatar-specification.md)](./docs/component/avatar-specification.md)
 - Breadcrumb
 - Button
 - Checkbox
 - Dropdown
 - Evaluation Star
 - Heading
-- Icon
-- [Icon Button](./docs/component/icon-button-specification.md)
+- [Icon](./docs/component/icon-specification.md)
+- [[Icon Button](./docs/component/icon-button-specification.md)](./docs/component/icon-button-specification.md)
 - Loading
 - [Modal](./docs/component/modal-specification.md)
 - Notification Inline
@@ -104,7 +104,7 @@ const MyComponent = () => {
 - Table
 - Tag
 - [Text Area](./docs/component/text-area-specification.md)
-- [Text Input](./docs/component/text-input-specification.md)
+- [[Text Input](./docs/component/text-input-specification.md)](./docs/component/text-input-specification.md)
 - [Password Input](./docs/component/password-input-specification.md)
 - Toast
 - Toggle
@@ -119,7 +119,7 @@ const MyComponent = () => {
 - [プロジェクト構造](./docs/project-structure.md) - パッケージ構成と相互関係
 - [コンポーネント実装パターン](./docs/component-patterns.md) - 設計パターンと実装方針
 - [テーマシステム](./docs/theme-system.md) - テーマとTailwind CSS設定
-- [コーディングガイドライン](./docs/coding_guidelines.md) - 開発時のコーディング標準と規約
+- [コーディングガイドライン](./docs/coding-guidelines.md) - 開発時のコーディング標準と規約
 
 ## Storybookでのコンポーネント確認
 
