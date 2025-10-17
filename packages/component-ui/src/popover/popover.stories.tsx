@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
 import { Button } from '../button';
+import { Popup } from '../popup';
 import { Popover } from '.';
 
 // 定数の抽出
@@ -36,20 +37,9 @@ const meta: Meta<typeof Popover> = {
       control: { type: 'select' },
       description: 'Popoverの配置位置',
     },
-    isVisible: {
+    isOpen: {
       control: { type: 'boolean' },
       description: 'Popoverの表示/非表示',
-    },
-    shouldAvoidCollisions: {
-      control: { type: 'boolean' },
-      description: '衝突回避を有効にするかどうか',
-    },
-    offset: {
-      control: { type: 'number' },
-      description: 'アンカー要素からのオフセット（ピクセル）',
-    },
-    anchorRef: {
-      description: '配置の基準となる要素のref',
     },
   },
 };
@@ -60,9 +50,9 @@ export default meta;
 
 // 共通のPopoverコンテンツコンポーネント
 const SamplePopoverContent = () => (
-  <div className="bg-slate-100 p-2">
-    <p className="mb-2 font-semibold">Popoverのコンテンツ</p>
-    <p className="text-text02">
+  <div className="rounded-lg bg-slate-200 p-4">
+    <p className="mb-2 text-sm font-semibold text-text01">Popoverのコンテンツ</p>
+    <p className="text-xs text-text02">
       ここにPopoverの内容を表示します。
       <br />
       複数行のテキストも表示可能です。
@@ -71,36 +61,19 @@ const SamplePopoverContent = () => (
 );
 
 const ComponentStory = (args: Story['args']) => {
-  const anchorElementRef = useRef<HTMLDivElement>(null);
-  const [isPopoverVisible, setIsPopoverVisible] = useState(false);
-
-  const handleShowPopover = () => {
-    setIsPopoverVisible(true);
-  };
-
-  const handleHidePopover = () => {
-    setIsPopoverVisible(false);
-  };
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="flex min-h-[500px] flex-col items-center justify-center gap-4">
-      <div
-        ref={anchorElementRef}
-        className="relative flex h-[150px] w-[400px] items-start justify-start border border-gray-300 p-4"
-      >
-        基準要素
-        <div className="absolute left-0 top-0 flex size-full items-center justify-center gap-2">
-          <Button variant="fill" onClick={handleShowPopover}>
-            Popoverを表示
+      <Popover isOpen={isOpen} onOpenChange={setIsOpen} placement={args?.placement ?? 'top'}>
+        <Popover.Trigger>
+          <Button variant="fill" onClick={() => setIsOpen((value) => !value)}>
+            {isOpen ? 'Popoverを非表示' : 'Popoverを表示'}
           </Button>
-          <Button variant="outline" onClick={handleHidePopover}>
-            Popoverを非表示
-          </Button>
-        </div>
-      </div>
-
-      <Popover {...args} anchorRef={anchorElementRef} isVisible={isPopoverVisible}>
-        <SamplePopoverContent />
+        </Popover.Trigger>
+        <Popover.Content>
+          <SamplePopoverContent />
+        </Popover.Content>
       </Popover>
     </div>
   );
@@ -109,8 +82,60 @@ const ComponentStory = (args: Story['args']) => {
 export const Component: Story = {
   args: {
     placement: 'top',
-    shouldAvoidCollisions: true,
-    offset: 8,
   },
   render: ComponentStory,
+};
+
+// Popover + Popup 連携ストーリー
+const PopoverWithPopupStory = (args: Story['args']) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="flex min-h-[500px] flex-col items-center justify-center gap-4">
+      <Popover isOpen={isOpen} onOpenChange={setIsOpen} placement={args?.placement ?? 'bottom'}>
+        <Popover.Trigger>
+          <Button variant="fill" onClick={() => setIsOpen((value) => !value)}>
+            {isOpen ? 'Popoverを非表示' : 'Popoverを表示'}
+          </Button>
+        </Popover.Trigger>
+        <Popover.Content>
+          {/* Popup は PopoverContext の状態を自動的に使用 */}
+          <Popup width={400}>
+            <Popup.Header>Popup in Popover</Popup.Header>
+            <Popup.Body>
+              <div className="flex w-full flex-col gap-2 p-4">
+                <p className="text-sm text-text01">
+                  この Popup は Popover 内で使用されており、
+                  <br />
+                  PopoverContext の開閉状態を自動的に継承しています。
+                </p>
+                <p className="text-xs text-text02">
+                  ヘッダーの閉じるボタンをクリックすると、
+                  <br />
+                  Popover も一緒に閉じます。
+                </p>
+              </div>
+            </Popup.Body>
+            <Popup.Footer>
+              <div className="flex w-full flex-wrap items-center justify-end gap-4">
+                <Button variant="outline" size="large" onClick={() => setIsOpen(false)}>
+                  閉じる
+                </Button>
+                <Button variant="fill" size="large">
+                  保存する
+                </Button>
+              </div>
+            </Popup.Footer>
+          </Popup>
+        </Popover.Content>
+      </Popover>
+    </div>
+  );
+};
+
+export const WithPopup: Story = {
+  args: {
+    placement: 'bottom',
+  },
+  render: PopoverWithPopupStory,
 };
