@@ -1,4 +1,4 @@
-import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/blocks';
+import { Canvas, Meta, ArgTypes, Story, Controls } from '@storybook/blocks';
 import BreadcrumbStories, { Base } from './breadcrumb.stories';
 
 <Meta title="Breadcrumb" of={BreadcrumbStories} />
@@ -8,3 +8,21 @@ import BreadcrumbStories, { Base } from './breadcrumb.stories';
 <Canvas>
   <Story of={Base} />
 </Canvas>
+
+<Controls of={Base} />
+
+## 🛠️ 設計の原則
+
+### パンくずリストは階層間を上下に移動するための、垂直方向のナビゲーションです
+
+パンくずリストはスペースをとらず、ナビゲーション階層におけるユーザーの位置づけを示すコンテキストを提供します。
+
+### スマホのときは右側に揃え、横スクロールにします
+
+スペースによって一部が切れる場合は、右側に揃え、切れている部分を閲覧できる様に横スクロールできるようにします。
+
+## ✋ 推奨しないこと
+
+### 1階層のナビゲーションを持つ場面では、不必要な混乱を招くため使用しない
+
+パンくずリストは常に二次的なものとして扱われ、主要なナビゲーションを完全に置き換えるべきではありません。また、1階層のナビゲーションを持つ製品では、不必要な混乱を招くため、使用すべきではありません。
