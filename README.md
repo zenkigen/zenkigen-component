@@ -82,7 +82,7 @@ const MyComponent = () => {
 
 - [Avatar](./docs/component/avatar-specification.md)
 - Breadcrumb
-- Button
+- [Button](./docs/component/button-specification.md)
 - Checkbox
 - Dropdown
 - Evaluation Star
@@ -122,6 +122,16 @@ const MyComponent = () => {
 - [コーディングガイドライン](./docs/coding-guidelines.md) - 開発時のコーディング標準と規約
 
 ## Storybookでのコンポーネント確認
+
+コンポーネントの確認は以下の方法で行えます：
+
+### オンラインでの確認
+
+最新のコンポーネントは以下のURLで確認できます：
+
+- [https://storybook.zenkigen.co.jp/](https://storybook.zenkigen.co.jp/)
+
+### ローカル環境での確認
 
 開発環境では、Storybookを使用してコンポーネントの確認ができます：
 
