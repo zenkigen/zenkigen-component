@@ -4,7 +4,7 @@
 */
 import type React from 'react';
 
-export type IconName = 'add' | 'ai' | 'angle-down' | 'angle-left' | 'angle-right' | 'angle-small-down' | 'angle-small-up' | 'angle-up' | 'arrow-down' | 'arrow-left' | 'arrow-right' | 'arrow-up' | 'attachment' | 'attention' | 'beginner' | 'bookmark' | 'building' | 'calendar-attention' | 'calendar-check' | 'calendar-draft' | 'calendar-minus' | 'calendar-today' | 'calendar' | 'caret-down' | 'caret-right' | 'catch' | 'chart-bar' | 'chart-line' | 'check' | 'circle' | 'close' | 'comment' | 'contract' | 'copy' | 'delete' | 'document' | 'documents' | 'double-circle' | 'download-document' | 'download' | 'edit' | 'email' | 'expand' | 'external-link' | 'filter' | 'flag' | 'global' | 'graph-line' | 'hamburger-close' | 'hamburger-open' | 'hamburger' | 'handle' | 'help' | 'hint' | 'home' | 'image' | 'information-filled' | 'information' | 'input-delete' | 'link' | 'list' | 'logout' | 'message-text' | 'mic-off' | 'mic' | 'minus' | 'more' | 'movie' | 'network' | 'notification' | 'pause' | 'pdf' | 'picture-in-picture' | 'play-filled' | 'play' | 'presentation' | 'remove' | 'repeat' | 'score' | 'search' | 'send' | 'share' | 'shuffle' | 'sidebar' | 'slider-editing' | 'sort-down' | 'sort-up' | 'sort' | 'sparkle' | 'star-filled' | 'star' | 'success-filled' | 'table-download' | 'table-upload' | 'table' | 'timer' | 'transcription' | 'triangle' | 'upload' | 'user-add' | 'user-group' | 'user-line' | 'user-multi' | 'user-one' | 'user-remove' | 'user' | 'video-off' | 'video' | 'volume-off' | 'volume' | 'warning';
+export type IconName = 'add' | 'ai' | 'angle-down' | 'angle-left' | 'angle-right' | 'angle-small-down' | 'angle-small-up' | 'angle-up' | 'arrow-down' | 'arrow-left' | 'arrow-right' | 'arrow-up' | 'attachment' | 'attention' | 'beginner' | 'bookmark' | 'building' | 'calendar-attention' | 'calendar-check' | 'calendar-draft' | 'calendar-minus' | 'calendar-today' | 'calendar' | 'caret-down' | 'caret-right' | 'catch' | 'chart-bar' | 'chart-line' | 'check' | 'circle' | 'close' | 'comment' | 'contract' | 'copy' | 'delete' | 'document' | 'documents' | 'double-circle' | 'download-document' | 'download' | 'edit' | 'email' | 'expand' | 'external-link' | 'filter' | 'flag' | 'global' | 'graph-line' | 'hamburger-close' | 'hamburger-open' | 'hamburger' | 'handle' | 'help' | 'hint' | 'home' | 'image' | 'information-filled' | 'information' | 'input-delete' | 'link' | 'list' | 'logout' | 'message-text' | 'mic-off' | 'mic' | 'minus' | 'more' | 'movie' | 'network' | 'notification' | 'pause' | 'pdf' | 'picture-in-picture' | 'play-filled' | 'play' | 'presentation' | 'remove' | 'repeat' | 'score' | 'search' | 'send' | 'share' | 'shuffle' | 'sidebar' | 'slider-editing' | 'sort-down' | 'sort-up' | 'sort' | 'sparkle' | 'star-filled' | 'star' | 'success-filled' | 'table-download' | 'table-upload' | 'table' | 'timer' | 'transcription' | 'triangle' | 'upload' | 'user-add' | 'user-group' | 'user-line' | 'user-multi' | 'user-one' | 'user-remove' | 'user' | 'video-off' | 'video' | 'visibility-off' | 'visibility' | 'volume-off' | 'volume' | 'warning';
 
 export type IconComponent = React.FC<{ accentClassName?: string }>;
 
@@ -225,6 +225,10 @@ import { userIcon } from './icons/user';
 import { videooffIcon } from './icons/video-off';
 
 import { videoIcon } from './icons/video';
+
+import { visibilityoffIcon } from './icons/visibility-off';
+
+import { visibilityIcon } from './icons/visibility';
 
 import { volumeoffIcon } from './icons/volume-off';
 
@@ -451,6 +455,10 @@ export const iconElements = {
     'video-off': videooffIcon,
   
     'video': videoIcon,
+  
+    'visibility-off': visibilityoffIcon,
+  
+    'visibility': visibilityIcon,
   
     'volume-off': volumeoffIcon,
   
