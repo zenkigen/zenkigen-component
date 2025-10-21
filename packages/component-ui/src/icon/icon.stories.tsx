@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { iconElements } from '@zenkigen-inc/component-icons';
 import type { iconColors } from '@zenkigen-inc/component-theme';
 
+import type { ColorToken } from '../color-types';
 import { Icon } from '.';
 
 type Color = keyof typeof iconColors;
@@ -8,6 +10,26 @@ type Color = keyof typeof iconColors;
 const meta: Meta<typeof Icon> = {
   title: 'Components/Icon',
   component: Icon,
+  parameters: {
+    docs: {
+      source: {
+        code: ``,
+      },
+    },
+  },
+  argTypes: {
+    name: { control: 'select', options: Object.keys(iconElements) },
+    size: { control: 'select', options: ['x-small', 'small', 'medium', 'large', 'x-large'] },
+    color: { control: 'select', options: ['icon01', 'icon02', 'icon03', 'iconOnColor'] },
+    className: {
+      control: 'text',
+    },
+    accentColor: {
+      control: 'text',
+      description: 'Color token for .accentColor elements (e.g. "interactive01", "supportError")',
+    },
+    isDisabled: { control: 'boolean' },
+  },
 };
 
 export default meta;
@@ -16,124 +38,65 @@ type Story = StoryObj<typeof Icon>;
 export const Component: Story = {
   args: {
     size: 'medium',
-    name: 'information-filled',
     color: 'icon01',
     isDisabled: false,
   },
+  argTypes: {
+    name: {
+      table: {
+        disable: true,
+      },
+    },
+  },
   parameters: {
     chromatic: { disable: true },
+  },
+  render: function MyFunc({ ...args }) {
+    const iconNames = Object.keys(iconElements);
+
+    return (
+      <div className="flex flex-wrap gap-4">
+        {iconNames.map((iconName) => (
+          <div
+            key={iconName}
+            className={[
+              'flex min-h-[100px] w-[140px] flex-col items-center justify-center gap-2 border border-gray-200 py-4',
+              args.color === 'iconOnColor' ? 'bg-interactive01' : '',
+            ].join(' ')}
+          >
+            <Icon {...args} name={iconName as keyof typeof iconElements} />
+            <div className="typography-body12regular">{iconName}</div>
+          </div>
+        ))}
+      </div>
+    );
   },
 };
 
 type Props = {
   color?: Color;
   className?: string;
+  accentColor?: ColorToken;
 };
 
 function IconList(props: Props) {
+  const iconNames = Object.keys(iconElements);
+
   return (
-    <div className={props.className}>
-      <Icon name="add" color={props.color} />
-      <Icon name="ai" color={props.color} />
-      <Icon name="angle-down" color={props.color} />
-      <Icon name="angle-left" color={props.color} />
-      <Icon name="angle-right" color={props.color} />
-      <Icon name="angle-small-down" color={props.color} />
-      <Icon name="angle-small-up" color={props.color} />
-      <Icon name="angle-up" color={props.color} />
-      <Icon name="arrow-left" color={props.color} />
-      <Icon name="arrow-down" color={props.color} />
-      <Icon name="arrow-right" color={props.color} />
-      <Icon name="arrow-up" color={props.color} />
-      <Icon name="attachment" color={props.color} />
-      <Icon name="attention" color={props.color} />
-      <Icon name="building" color={props.color} />
-      <Icon name="calendar-check" color={props.color} />
-      <Icon name="calendar-draft" color={props.color} />
-      <Icon name="calendar-minus" color={props.color} />
-      <Icon name="calendar-today" color={props.color} />
-      <Icon name="calendar" color={props.color} />
-      <Icon name="caret-down" color={props.color} />
-      <Icon name="caret-right" color={props.color} />
-      <Icon name="chart-bar" color={props.color} />
-      <Icon name="chart-line" color={props.color} />
-      <Icon name="check" color={props.color} />
-      <Icon name="circle" color={props.color} />
-      <Icon name="close" color={props.color} />
-      <Icon name="comment" color={props.color} />
-      <Icon name="contract" color={props.color} />
-      <Icon name="copy" color={props.color} />
-      <Icon name="delete" color={props.color} />
-      <Icon name="document" color={props.color} />
-      <Icon name="documents" color={props.color} />
-      <Icon name="double circle" color={props.color} />
-      <Icon name="download-document" color={props.color} />
-      <Icon name="download" color={props.color} />
-      <Icon name="edit" color={props.color} />
-      <Icon name="email" color={props.color} />
-      <Icon name="expand" color={props.color} />
-      <Icon name="external-link" color={props.color} />
-      <Icon name="filter" color={props.color} />
-      <Icon name="flag" color={props.color} />
-      <Icon name="global" color={props.color} />
-      <Icon name="graph-line" color={props.color} />
-      <Icon name="hamburger-close" color={props.color} />
-      <Icon name="hamburger" color={props.color} />
-      <Icon name="help" color={props.color} />
-      <Icon name="hint" color={props.color} />
-      <Icon name="home" color={props.color} />
-      <Icon name="image" color={props.color} />
-      <Icon name="information-filled" color={props.color} />
-      <Icon name="information" color={props.color} />
-      <Icon name="input-delete" color={props.color} />
-      <Icon name="link" color={props.color} />
-      <Icon name="list" color={props.color} />
-      <Icon name="logout" color={props.color} />
-      <Icon name="message-text" color={props.color} />
-      <Icon name="more" color={props.color} />
-      <Icon name="movie" color={props.color} />
-      <Icon name="notification" color={props.color} />
-      <Icon name="pause" color={props.color} />
-      <Icon name="pdf" color={props.color} />
-      <Icon name="picture-in-picture" color={props.color} />
-      <Icon name="play-filled" color={props.color} />
-      <Icon name="play" color={props.color} />
-      <Icon name="presentation" color={props.color} />
-      <Icon name="remove" color={props.color} />
-      <Icon name="score" color={props.color} />
-      <Icon name="search" color={props.color} />
-      <Icon name="send" color={props.color} />
-      <Icon name="share" color={props.color} />
-      <Icon name="shuffle" color={props.color} />
-      <Icon name="sidebar" color={props.color} />
-      <Icon name="slider-editing" color={props.color} />
-      <Icon name="sort" color={props.color} />
-      <Icon name="sort-down" color={props.color} />
-      <Icon name="sort-up" color={props.color} />
-      <Icon name="sparkle" color={props.color} />
-      <Icon name="star-filled" color={props.color} />
-      <Icon name="star" color={props.color} />
-      <Icon name="store" color={props.color} />
-      <Icon name="success-filled" color={props.color} />
-      <Icon name="table-download" color={props.color} />
-      <Icon name="table-upload" color={props.color} />
-      <Icon name="table" color={props.color} />
-      <Icon name="timer" color={props.color} />
-      <Icon name="transcription" color={props.color} />
-      <Icon name="triangle" color={props.color} />
-      <Icon name="upload" color={props.color} />
-      <Icon name="user-add" color={props.color} />
-      <Icon name="user-group" color={props.color} />
-      <Icon name="user-line" color={props.color} />
-      <Icon name="user-multi" color={props.color} />
-      <Icon name="user-one" color={props.color} />
-      <Icon name="user-photograph" color={props.color} />
-      <Icon name="user-remove" color={props.color} />
-      <Icon name="user" color={props.color} />
-      <Icon name="video" color={props.color} />
-      <Icon name="volume-off" color={props.color} />
-      <Icon name="volume" color={props.color} />
-      <Icon name="warning" color={props.color} />
+    <div>
+      <div className="text-1">
+        {props.className}
+        {props.accentColor}
+      </div>
+      {iconNames.map((iconName) => (
+        <Icon
+          key={iconName}
+          name={iconName as keyof typeof iconElements}
+          color={props.color}
+          accentColor={props.accentColor}
+          className={props.className}
+        />
+      ))}
     </div>
   );
 }
@@ -157,6 +120,82 @@ export function Color() {
       <IconList color="icon03" />
       <div>iconOnColor:</div>
       <IconList color="iconOnColor" className="bg-interactive01" />
+    </div>
+  );
+}
+
+export function ColorFill() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+      {/* Interactive Colors */}
+      <div>Interactive Colors:</div>
+      <IconList className="fill-interactive01" />
+      <IconList className="fill-interactive02" />
+      <IconList className="fill-interactive03" />
+      <IconList className="fill-interactive04" />
+
+      {/* Support Colors */}
+      <div>Support Colors:</div>
+      <IconList className="fill-supportError" />
+      <IconList className="fill-supportSuccess" />
+      <IconList className="fill-supportInfo" />
+      <IconList className="fill-supportWarning" />
+      <IconList className="fill-supportDanger" />
+
+      {/* Disabled Colors */}
+      <div>Disabled Colors:</div>
+      <IconList className="fill-disabled01" />
+      <IconList className="fill-disabled02" />
+      <IconList className="fill-disabled03" />
+      <IconList className="fill-disabled04" />
+
+      {/* Color Variants */}
+      <div>Color Variants:</div>
+      <IconList className="fill-blue-blue100" />
+      <IconList className="fill-gray-gray100" />
+      <IconList className="fill-red-red100" />
+      <IconList className="fill-yellow-yellow100" />
+      <IconList className="fill-green-green100" />
+      <IconList className="fill-purple-purple100" />
+      <IconList className="fill-blueGreen-blueGreen100" />
+    </div>
+  );
+}
+
+export function AccentColorFill() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+      {/* Interactive Colors */}
+      <div>Interactive Colors:</div>
+      <IconList color="icon01" accentColor="interactive01" />
+      <IconList color="icon01" accentColor="interactive02" />
+      <IconList color="icon01" accentColor="interactive03" />
+      <IconList color="icon01" accentColor="interactive04" />
+
+      {/* Support Colors */}
+      <div>Support Colors:</div>
+      <IconList color="icon01" accentColor="supportError" />
+      <IconList color="icon01" accentColor="supportSuccess" />
+      <IconList color="icon01" accentColor="supportInfo" />
+      <IconList color="icon01" accentColor="supportWarning" />
+      <IconList color="icon01" accentColor="supportDanger" />
+
+      {/* Disabled Colors */}
+      <div>Disabled Colors:</div>
+      <IconList color="icon01" accentColor="disabled01" />
+      <IconList color="icon01" accentColor="disabled02" />
+      <IconList color="icon01" accentColor="disabled03" />
+      <IconList color="icon01" accentColor="disabled04" />
+
+      {/* Color Variants */}
+      <div>Color Variants:</div>
+      <IconList color="icon01" accentColor="blue-blue100" />
+      <IconList color="icon01" accentColor="gray-gray100" />
+      <IconList color="icon01" accentColor="red-red100" />
+      <IconList color="icon01" accentColor="yellow-yellow100" />
+      <IconList color="icon01" accentColor="green-green100" />
+      <IconList color="icon01" accentColor="purple-purple100" />
+      <IconList color="icon01" accentColor="blueGreen-blueGreen100" />
     </div>
   );
 }
