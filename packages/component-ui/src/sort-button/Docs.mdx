@@ -1,9 +1,19 @@
 import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/blocks';
+import { Markdown } from '@storybook/blocks';
 import SortButtonStories, { Component, SizesAndStates, LayoutExamples } from './sort-button.stories';
+import sortButtonSpec from '../../../../docs/component/sort-button-specification.md?raw';
 
 <Meta title="SortButton" of={SortButtonStories} />
 
 # SortButton
+
+<details>
+  <summary>詳細仕様書</summary>
+  <div style={{ padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{sortButtonSpec}</Markdown>
+  </div>
+</details>
 
 <Canvas>
   <Story of={Component} />
