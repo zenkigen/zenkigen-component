@@ -1,9 +1,19 @@
 import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/blocks';
+import { Markdown } from '@storybook/blocks';
 import AvatarStories, { Component, Base } from './avatar.stories';
+import avatarSpec from '../../../../docs/component/avatar-specification.md?raw';
 
 <Meta title="Avatar" of={AvatarStories} />
 
 # Avatar
+
+<details>
+  <summary>詳細仕様書</summary>
+  <div style={{ padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{avatarSpec}</Markdown>
+  </div>
+</details>
 
 <Canvas>
   <Story of={Component} />
