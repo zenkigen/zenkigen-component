@@ -4,7 +4,7 @@
 */
 import type React from 'react';
 
-export type IconName = 'add' | 'ai' | 'angle-down' | 'angle-left' | 'angle-right' | 'angle-small-down' | 'angle-small-up' | 'angle-up' | 'arrow-down' | 'arrow-left' | 'arrow-right' | 'arrow-up' | 'attachment' | 'attention' | 'beginner' | 'bookmark' | 'building' | 'calendar-attention' | 'calendar-check' | 'calendar-draft' | 'calendar-minus' | 'calendar-today' | 'calendar' | 'caret-down' | 'caret-right' | 'catch' | 'chart-bar' | 'chart-line' | 'check' | 'circle' | 'close' | 'comment' | 'contract' | 'copy' | 'delete' | 'document' | 'documents' | 'double-circle' | 'download-document' | 'download' | 'edit' | 'email' | 'expand' | 'external-link' | 'filter' | 'flag' | 'global' | 'graph-line' | 'hamburger-close' | 'hamburger-open' | 'hamburger' | 'handle' | 'help' | 'hint' | 'home' | 'image' | 'information-filled' | 'information' | 'input-delete' | 'link' | 'list' | 'logout' | 'message-text' | 'mic-off' | 'mic' | 'minus' | 'more' | 'movie' | 'network' | 'notification' | 'pause' | 'pdf' | 'picture-in-picture' | 'play-filled' | 'play' | 'presentation' | 'remove' | 'repeat' | 'score' | 'search' | 'send' | 'share' | 'shuffle' | 'sidebar' | 'slider-editing' | 'sort-down' | 'sort-up' | 'sort' | 'sparkle' | 'star-filled' | 'star' | 'success-filled' | 'table-download' | 'table-upload' | 'table' | 'timer' | 'transcription' | 'triangle' | 'upload' | 'user-add' | 'user-group' | 'user-line' | 'user-multi' | 'user-one' | 'user-remove' | 'user' | 'video-off' | 'video' | 'volume-off' | 'volume' | 'warning';
+export type IconName = 'add' | 'ai' | 'angle-down' | 'angle-left' | 'angle-right' | 'angle-small-down' | 'angle-small-up' | 'angle-up' | 'arrow-down' | 'arrow-left' | 'arrow-right' | 'arrow-up' | 'attachment' | 'attention' | 'beginner' | 'bookmark' | 'building' | 'calendar-attention' | 'calendar-check' | 'calendar-draft' | 'calendar-minus' | 'calendar-today' | 'calendar' | 'caret-down' | 'caret-right' | 'catch' | 'chart-bar' | 'chart-line' | 'check' | 'circle' | 'close' | 'comment' | 'contract' | 'copy' | 'delete' | 'document-edit' | 'document' | 'documents' | 'double-circle' | 'download-document' | 'download' | 'edit' | 'email' | 'expand' | 'external-link' | 'filter' | 'flag' | 'global' | 'graph-line' | 'hamburger-close' | 'hamburger-open' | 'hamburger' | 'handle' | 'help' | 'hint' | 'home' | 'image' | 'information-filled' | 'information' | 'input-delete' | 'link' | 'list' | 'logout' | 'message-text' | 'mic-off' | 'mic' | 'minus' | 'more' | 'movie' | 'network' | 'notification' | 'pause' | 'pdf' | 'picture-in-picture' | 'play-filled' | 'play' | 'plus' | 'presentation' | 'remove' | 'repeat' | 'score' | 'search' | 'send' | 'share' | 'shuffle' | 'sidebar' | 'slider-editing' | 'sort-down' | 'sort-up' | 'sort' | 'sparkle' | 'stamp' | 'star-filled' | 'star' | 'success-filled' | 'table-download' | 'table-upload' | 'table' | 'timer' | 'transcription' | 'triangle' | 'upload' | 'user-add' | 'user-group' | 'user-line' | 'user-multi' | 'user-one' | 'user-remove' | 'user-verified' | 'user' | 'video-off' | 'video' | 'visibility-off' | 'visibility' | 'volume-off' | 'volume' | 'warning';
 
 export type IconComponent = React.FC<{ accentClassName?: string }>;
 
@@ -79,6 +79,8 @@ import { contractIcon } from './icons/contract';
 import { copyIcon } from './icons/copy';
 
 import { deleteIcon } from './icons/delete';
+
+import { documenteditIcon } from './icons/document-edit';
 
 import { documentIcon } from './icons/document';
 
@@ -160,6 +162,8 @@ import { playfilledIcon } from './icons/play-filled';
 
 import { playIcon } from './icons/play';
 
+import { plusIcon } from './icons/plus';
+
 import { presentationIcon } from './icons/presentation';
 
 import { removeIcon } from './icons/remove';
@@ -187,6 +191,8 @@ import { sortupIcon } from './icons/sort-up';
 import { sortIcon } from './icons/sort';
 
 import { sparkleIcon } from './icons/sparkle';
+
+import { stampIcon } from './icons/stamp';
 
 import { starfilledIcon } from './icons/star-filled';
 
@@ -220,11 +226,17 @@ import { useroneIcon } from './icons/user-one';
 
 import { userremoveIcon } from './icons/user-remove';
 
+import { userverifiedIcon } from './icons/user-verified';
+
 import { userIcon } from './icons/user';
 
 import { videooffIcon } from './icons/video-off';
 
 import { videoIcon } from './icons/video';
+
+import { visibilityoffIcon } from './icons/visibility-off';
+
+import { visibilityIcon } from './icons/visibility';
 
 import { volumeoffIcon } from './icons/volume-off';
 
@@ -306,6 +318,8 @@ export const iconElements = {
   
     'delete': deleteIcon,
   
+    'document-edit': documenteditIcon,
+  
     'document': documentIcon,
   
     'documents': documentsIcon,
@@ -386,6 +400,8 @@ export const iconElements = {
   
     'play': playIcon,
   
+    'plus': plusIcon,
+  
     'presentation': presentationIcon,
   
     'remove': removeIcon,
@@ -413,6 +429,8 @@ export const iconElements = {
     'sort': sortIcon,
   
     'sparkle': sparkleIcon,
+  
+    'stamp': stampIcon,
   
     'star-filled': starfilledIcon,
   
@@ -446,11 +464,17 @@ export const iconElements = {
   
     'user-remove': userremoveIcon,
   
+    'user-verified': userverifiedIcon,
+  
     'user': userIcon,
   
     'video-off': videooffIcon,
   
     'video': videoIcon,
+  
+    'visibility-off': visibilityoffIcon,
+  
+    'visibility': visibilityIcon,
   
     'volume-off': volumeoffIcon,
   

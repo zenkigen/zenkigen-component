@@ -1,0 +1,30 @@
+import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/blocks';
+import PasswordInputStories, { Component, Base } from './password-input.stories';
+
+<Meta title="PasswordInput" of={PasswordInputStories} />
+
+# PasswordInput
+
+<Canvas>
+  <Story of={Component} />
+</Canvas>
+
+<Controls of={Component} />
+
+### Code Example
+
+```tsx
+import { PasswordInput } from '@zenkigen-inc/component-ui';
+import { useState } from 'react';
+
+const [password, setPassword] = useState('');
+
+return (
+  <PasswordInput
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+    placeholder="パスワードを入力してください"
+    size="medium"
+  />
+);
+```
