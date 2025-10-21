@@ -45,12 +45,8 @@ export function Popup({
     return null;
   }
 
-  const handleClose = () => {
-    onClose?.();
-  };
-
   return (
-    <PopupContext.Provider value={{ isOpen, onClose: handleClose }}>
+    <PopupContext.Provider value={{ isOpen, onClose }}>
       <div
         className="grid max-h-full grid-rows-[max-content_1fr_max-content] flex-col rounded-lg bg-uiBackground01 shadow-floatingShadow"
         style={{ width: renderWidth, height: renderHeight, maxWidth }}
