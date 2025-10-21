@@ -237,3 +237,55 @@ export const WithSelect: Story = {
     },
   },
 };
+
+// Popover + Popup 連携ストーリー（閉じるボタンなし、外部クリック・Escapeキーで閉じない）
+const PopoverWithPopupNoCloseStory = (args: Story['args']) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="flex min-h-[700px] flex-col items-center justify-center gap-4">
+      <Popover
+        isOpen={isOpen}
+        placement={args?.placement ?? 'bottom'}
+        // onOutsideClick と onEscapeKeyDown を設定しないことで、外部クリック・Escapeキーで閉じない
+      >
+        <Popover.Trigger>
+          <Button variant="fill" onClick={() => setIsOpen((value) => !value)}>
+            {isOpen ? 'Popoverを非表示' : 'Popoverを表示'}
+          </Button>
+        </Popover.Trigger>
+        <Popover.Content>
+          {/* Popup は onClose を渡さないことで閉じるボタンなし */}
+          <Popup width={400}>
+            <Popup.Header>確認ダイアログ（閉じるボタンなし）</Popup.Header>
+            <Popup.Body>
+              <div className="flex w-full flex-col gap-2 p-4">
+                <p className="text-sm text-text01">このダイアログは以下の特徴があります：</p>
+                <ul className="text-xs text-text02">
+                  <li>• ヘッダーに閉じるボタンがありません</li>
+                  <li>• 外部クリックでは閉じません</li>
+                  <li>• Escapeキーでは閉じません</li>
+                </ul>
+              </div>
+            </Popup.Body>
+          </Popup>
+        </Popover.Content>
+      </Popover>
+    </div>
+  );
+};
+
+export const WithPopupNoClose: Story = {
+  args: {
+    placement: 'top',
+  },
+  render: PopoverWithPopupNoCloseStory,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Popover内にPopupを配置し、閉じるボタンなし、外部クリック・Escapeキーで閉じない例です。フッターのボタンでのみ閉じることができます。',
+      },
+    },
+  },
+};

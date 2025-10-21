@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 
 import { Button } from '../button';
+import { Icon } from '../icon';
 import { Popover } from '../popover';
 import type { SelectOption } from '../select';
 import { Select } from '../select';
@@ -120,6 +121,69 @@ export const WithoutFooter: Story = {
             </p>
           </div>
         </Popup.Body>
+      </Popup>
+    );
+  },
+};
+
+export const WithoutCloseButton: Story = {
+  args: {
+    isOpen: true,
+    width: 480,
+  },
+  render: function MyFunc({ ...args }) {
+    return (
+      <Popup isOpen={args.isOpen} width={args.width}>
+        <Popup.Header>タイトル（閉じるボタンなし）</Popup.Header>
+        <Popup.Body>
+          <div className="flex w-full items-center justify-center py-20">
+            <p className="typography-body14regular text-text01">
+              このPopupには閉じるボタンがありません。
+              <br />
+              外部のボタンやロジックで閉じる必要があります。
+            </p>
+          </div>
+        </Popup.Body>
+        <Popup.Footer>
+          <div className="flex w-full flex-wrap items-center justify-end gap-4">
+            <Button variant="fill" size="medium" onClick={action('確認')}>
+              確認
+            </Button>
+          </div>
+        </Popup.Footer>
+      </Popup>
+    );
+  },
+};
+
+export const WithHeaderBefore: Story = {
+  args: {
+    isOpen: true,
+    width: 480,
+    onClose: action('onClose'),
+  },
+  render: function MyFunc({ ...args }) {
+    return (
+      <Popup isOpen={args.isOpen} width={args.width} onClose={args.onClose}>
+        <Popup.Header before={<Icon name="warning" className="fill-supportWarning" />}>警告メッセージ</Popup.Header>
+        <Popup.Body>
+          <div className="flex w-full flex-col gap-4 p-4">
+            <p className="typography-body14regular text-text01">この操作は元に戻すことができません。</p>
+            <p className="typography-body14regular text-text01">
+              続行する前に、すべてのデータがバックアップされていることを確認してください。
+            </p>
+          </div>
+        </Popup.Body>
+        <Popup.Footer>
+          <div className="flex w-full flex-wrap items-center justify-end gap-4">
+            <Button variant="outline" size="medium" onClick={action('キャンセル')}>
+              キャンセル
+            </Button>
+            <Button variant="fillDanger" size="medium" onClick={action('削除する')}>
+              削除する
+            </Button>
+          </div>
+        </Popup.Footer>
       </Popup>
     );
   },
