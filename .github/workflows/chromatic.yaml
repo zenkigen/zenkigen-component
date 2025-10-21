@@ -31,7 +31,7 @@ jobs:
         uses: chromaui/action@v13
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          onlyChanged: true
+          onlyChanged: false
         env:
           IS_CHROMATIC: 'true'
 
