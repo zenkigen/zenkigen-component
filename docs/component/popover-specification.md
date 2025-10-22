@@ -55,8 +55,7 @@ const MyComponent = () => {
     <Popover
       isOpen={isOpen}
       placement="top"
-      onOutsideClick={() => setIsOpen(false)}
-      onEscapeKeyDown={() => setIsOpen(false)}
+      onClose={() => setIsOpen(false)}
     >
       <Popover.Trigger>
         <Button onClick={() => setIsOpen(!isOpen)}>
@@ -84,12 +83,20 @@ const MyComponent = () => {
 
 ### オプションプロパティ
 
-| プロパティ        | 型                 | デフォルト値 | 説明                                                    |
-| ----------------- | ------------------ | ------------ | ------------------------------------------------------- |
-| `placement`       | `PopoverPlacement` | `'top'`      | Popoverの配置位置                                       |
-| `offset`          | `number`           | `8`          | トリガー要素とPopoverコンテンツとの間隔（ピクセル単位） |
-| `onOutsideClick`  | `() => void`       | `undefined`  | Popoverの外側をクリックした時に呼び出されるコールバック |
-| `onEscapeKeyDown` | `() => void`       | `undefined`  | Escapeキーが押された時に呼び出されるコールバック        |
+| プロパティ  | 型                              | デフォルト値 | 説明                                                    |
+| ----------- | ------------------------------- | ------------ | ------------------------------------------------------- |
+| `placement` | `PopoverPlacement`              | `'top'`      | Popoverの配置位置                                       |
+| `offset`    | `number`                        | `8`          | トリガー要素とPopoverコンテンツとの間隔（ピクセル単位） |
+| `onClose`   | `(reason: CloseReason) => void` | `undefined`  | Popoverが閉じられた時に呼び出されるコールバック         |
+
+### CloseReason型
+
+```typescript
+type CloseReason = 'outside-click' | 'escape-key-down';
+```
+
+- `'outside-click'`: Popoverの外側をクリックした時
+- `'escape-key-down'`: Escapeキーが押された時
 
 ### 子コンポーネント
 
@@ -200,8 +207,7 @@ const BasicExample = () => {
   return (
     <Popover
       isOpen={isOpen}
-      onOutsideClick={() => setIsOpen(false)}
-      onEscapeKeyDown={() => setIsOpen(false)}
+      onClose={() => setIsOpen(false)}
     >
       <Popover.Trigger>
         <Button onClick={() => setIsOpen(!isOpen)}>
@@ -231,8 +237,7 @@ const PlacementExample = () => {
     <Popover
       isOpen={isOpen}
       placement="bottom-start"
-      onOutsideClick={() => setIsOpen(false)}
-      onEscapeKeyDown={() => setIsOpen(false)}
+      onClose={() => setIsOpen(false)}
     >
       <Popover.Trigger>
         <Button onClick={() => setIsOpen(!isOpen)}>
@@ -260,8 +265,7 @@ const OffsetExample = () => {
       isOpen={isOpen}
       placement="top"
       offset={16}
-      onOutsideClick={() => setIsOpen(false)}
-      onEscapeKeyDown={() => setIsOpen(false)}
+      onClose={() => setIsOpen(false)}
     >
       <Popover.Trigger>
         <Button onClick={() => setIsOpen(!isOpen)}>
@@ -293,8 +297,7 @@ const PopupIntegrationExample = () => {
     <Popover
       isOpen={isOpen}
       placement="bottom"
-      onOutsideClick={() => setIsOpen(false)}
-      onEscapeKeyDown={() => setIsOpen(false)}
+      onClose={() => setIsOpen(false)}
     >
       <Popover.Trigger>
         <Button onClick={() => setIsOpen(!isOpen)}>
@@ -383,41 +386,30 @@ useEffect(() => {
 }, [isOpen, triggerRef]);
 ```
 
-### 外部クリック検知
+### 外部クリック検知とEscapeキー対応
 
-カスタム実装により、Popoverの外側をクリックした時に`onOutsideClick`コールバックを呼び出します。
+Popoverの外側をクリックした時やEscapeキーが押された時に`onClose`コールバックを呼び出します。
 
 **実装の特徴**
 
-- `pointerdown`イベントをリスン
-- Floating要素とトリガー要素の両方の外側をクリックした時のみ発火
-- `isOpen`が`true`の時のみイベントリスナーを登録
+- **外部クリック検知**: `pointerdown`イベントをリスンし、Floating要素とトリガー要素の両方の外側をクリックした時のみ発火
+- **Escapeキー対応**: `event.stopPropagation()`でイベントの伝播を停止
+- **reasonパラメータ**: 閉じる理由を`'outside-click'`または`'escape-key-down'`で区別
 
 ```typescript
+// 外部クリック検知
 const isOutsideFloating = !(floatingEl.contains(target) as boolean);
 const isOutsideReference = !(referenceEl.contains(target) as boolean);
 
 if (isOutsideFloating === true && isOutsideReference === true) {
-  handlePointerDownOutside();
+  onClose('outside-click');
 }
-```
 
-### Escapeキー対応
-
-Popoverが開いている時にEscapeキーを押すと`onEscapeKeyDown`コールバックを呼び出します。
-
-**実装の特徴**
-
-- `event.stopPropagation()`でイベントの伝播を停止
-- `onEscapeKeyDown`が定義されている場合のみ実行
-
-```typescript
+// Escapeキー対応
 const onKeyDown = (event: React.KeyboardEvent) => {
   if (event.key === 'Escape') {
     event.stopPropagation();
-    if (onEscapeKeyDown != null) {
-      onEscapeKeyDown();
-    }
+    onClose('escape-key-down');
   }
 };
 ```
@@ -447,7 +439,8 @@ const onKeyDown = (event: React.KeyboardEvent) => {
 
 2. **開閉状態の制御**
    - `isOpen`は必須プロパティであり、開閉状態は親コンポーネントで管理する必要があります
-   - `onOutsideClick`と`onEscapeKeyDown`を適切に設定して状態を更新してください
+   - `onClose`を適切に設定して状態を更新してください
+   - `onClose`の`reason`パラメータを使用して、閉じる理由に応じた処理を実装できます
 
 3. **PopoverContextの使用範囲**
    - `Popover.Trigger`と`Popover.Content`は`Popover`コンポーネント内でのみ使用できます
@@ -482,6 +475,7 @@ Popoverコンポーネント自体は最小限のスタイルのみを適用し�
 
 ## 更新履歴
 
-| 日付                 | 内容     | 担当者 |
-| -------------------- | -------- | ------ |
-| 2025-10-17 15:00 JST | 新規作成 | -      |
+| 日付                 | 内容                                              | 担当者 |
+| -------------------- | ------------------------------------------------- | ------ |
+| 2025-10-22 16:30 JST | API統合: onOutsideClick/onEscapeKeyDown → onClose | -      |
+| 2025-10-17 15:00 JST | 新規作成                                          | -      |
