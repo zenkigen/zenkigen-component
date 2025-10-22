@@ -3,7 +3,7 @@ import type { PropsWithChildren } from 'react';
 import { useMemo, useRef } from 'react';
 
 import { PopoverContent } from './popover-content';
-import { PopoverContext, type PopoverContextValue, type PopoverPlacement, type CloseReason } from './popover-context';
+import { type CloseReason, PopoverContext, type PopoverContextValue, type PopoverPlacement } from './popover-context';
 import { PopoverTrigger } from './popover-trigger';
 
 type Props = {

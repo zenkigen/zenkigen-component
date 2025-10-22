@@ -79,6 +79,7 @@ const ComponentStory = (args: Story['args']) => {
         placement={args?.placement ?? 'top'}
         offset={args?.offset ?? 8}
         onClose={(reason) => {
+          // eslint-disable-next-line no-console
           console.log('Popover closed:', reason);
           setIsOpen(false);
         }}
