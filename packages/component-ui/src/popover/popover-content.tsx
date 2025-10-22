@@ -13,7 +13,7 @@ export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(fu
   { children },
   ref,
 ) {
-  const { isOpen, triggerRef, floating, panelId, onOutsideClick, onEscapeKeyDown } = usePopoverContext();
+  const { isOpen, triggerRef, floating, panelId, onClose } = usePopoverContext();
 
   const dismiss = useDismiss(floating.context, {
     outsidePressEvent: 'pointerdown',
@@ -37,17 +37,17 @@ export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(fu
   const onKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === 'Escape') {
       event.stopPropagation();
-      if (onEscapeKeyDown != null) {
-        onEscapeKeyDown();
+      if (onClose != null) {
+        onClose('escape-key-down');
       }
     }
   };
 
   const handlePointerDownOutside = useCallback(() => {
-    if (onOutsideClick != null) {
-      onOutsideClick();
+    if (onClose != null) {
+      onClose('outside-click');
     }
-  }, [onOutsideClick]);
+  }, [onClose]);
 
   useEffect(() => {
     if (!isOpen) {

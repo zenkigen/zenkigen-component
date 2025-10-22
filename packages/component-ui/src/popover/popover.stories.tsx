@@ -46,13 +46,9 @@ const meta: Meta<typeof Popover> = {
       control: { type: 'number' },
       description: 'トリガー要素とPopoverコンテンツとの間隔（ピクセル単位）',
     },
-    onOutsideClick: {
-      action: 'outsideClicked',
-      description: 'Popoverの外側をクリックした時に呼び出されるコールバック関数',
-    },
-    onEscapeKeyDown: {
-      action: 'escapeKeyPressed',
-      description: 'Escapeキーが押された時に呼び出されるコールバック関数',
+    onClose: {
+      action: 'closed',
+      description: 'Popoverが閉じられた時に呼び出されるコールバック関数（reason: "outside-click" | "escape-key-down"）',
     },
   },
 };
@@ -81,8 +77,10 @@ const ComponentStory = (args: Story['args']) => {
       <Popover
         isOpen={isOpen}
         placement={args?.placement ?? 'top'}
-        onOutsideClick={() => setIsOpen(false)}
-        onEscapeKeyDown={() => setIsOpen(false)}
+        onClose={(reason) => {
+          console.log('Popover closed:', reason);
+          setIsOpen(false);
+        }}
       >
         <Popover.Trigger>
           <Button variant="fill" onClick={() => setIsOpen((value) => !value)}>
@@ -110,12 +108,7 @@ const PopoverWithPopupStory = (args: Story['args']) => {
 
   return (
     <div className="flex min-h-[700px] flex-col items-center justify-center gap-4">
-      <Popover
-        isOpen={isOpen}
-        placement={args?.placement ?? 'bottom'}
-        onOutsideClick={() => setIsOpen(false)}
-        onEscapeKeyDown={() => setIsOpen(false)}
-      >
+      <Popover isOpen={isOpen} placement={args?.placement ?? 'bottom'} onClose={() => setIsOpen(false)}>
         <Popover.Trigger>
           <Button variant="fill" onClick={() => setIsOpen((value) => !value)}>
             {isOpen ? 'Popoverを非表示' : 'Popoverを表示'}
@@ -178,12 +171,7 @@ const PopoverWithSelectStory = (args: Story['args']) => {
 
   return (
     <div className="flex min-h-[400px] flex-col items-center justify-center gap-4">
-      <Popover
-        isOpen={isOpen}
-        placement={args?.placement ?? 'bottom'}
-        onOutsideClick={() => setIsOpen(false)}
-        onEscapeKeyDown={() => setIsOpen(false)}
-      >
+      <Popover isOpen={isOpen} placement={args?.placement ?? 'bottom'} onClose={() => setIsOpen(false)}>
         <Popover.Trigger>
           <Button variant="fill" onClick={() => setIsOpen((value) => !value)}>
             {isOpen ? 'Popoverを非表示' : 'Popoverを表示'}

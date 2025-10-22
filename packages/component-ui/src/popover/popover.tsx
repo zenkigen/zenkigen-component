@@ -3,15 +3,14 @@ import type { PropsWithChildren } from 'react';
 import { useMemo, useRef } from 'react';
 
 import { PopoverContent } from './popover-content';
-import { PopoverContext, type PopoverContextValue, type PopoverPlacement } from './popover-context';
+import { PopoverContext, type PopoverContextValue, type PopoverPlacement, type CloseReason } from './popover-context';
 import { PopoverTrigger } from './popover-trigger';
 
 type Props = {
   isOpen: boolean;
   placement?: PopoverPlacement;
   offset?: number;
-  onOutsideClick?: () => void;
-  onEscapeKeyDown?: () => void;
+  onClose?: (reason: CloseReason) => void;
 };
 
 export function Popover({
@@ -19,8 +18,7 @@ export function Popover({
   children,
   placement = 'top',
   offset: offsetValue = 8,
-  onOutsideClick,
-  onEscapeKeyDown,
+  onClose,
 }: PropsWithChildren<Props>) {
   const triggerRef = useRef<HTMLElement>(null);
 
@@ -42,10 +40,9 @@ export function Popover({
       floating,
       contentId,
       panelId,
-      onOutsideClick,
-      onEscapeKeyDown,
+      onClose,
     }),
-    [isOpen, floating, contentId, panelId, onOutsideClick, onEscapeKeyDown],
+    [isOpen, floating, contentId, panelId, onClose],
   );
 
   return <PopoverContext.Provider value={contextValue}>{children}</PopoverContext.Provider>;

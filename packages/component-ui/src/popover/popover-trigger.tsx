@@ -18,11 +18,11 @@ export const PopoverTrigger = forwardRef<HTMLElement, PopoverTriggerProps>(funct
   const setTriggerRefs = composeRefs<HTMLElement>(
     floating.refs.setReference as unknown as React.Ref<HTMLElement>,
     (node: HTMLElement | null) => {
-      (triggerRef as React.MutableRefObject<HTMLElement | null>).current = node;
+      (triggerRef as React.RefObject<HTMLElement | null>).current = node;
       if (typeof ref === 'function') {
         ref(node as HTMLElement);
       } else if (ref != null) {
-        (ref as React.MutableRefObject<HTMLElement | null>).current = node;
+        (ref as React.RefObject<HTMLElement | null>).current = node;
       }
     },
   );

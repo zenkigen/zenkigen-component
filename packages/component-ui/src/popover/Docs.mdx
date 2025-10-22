@@ -21,12 +21,7 @@ const PopoverExample = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <Popover
-      isOpen={isOpen}
-      placement="top"
-      onOutsideClick={() => setIsOpen(false)}
-      onEscapeKeyDown={() => setIsOpen(false)}
-    >
+    <Popover isOpen={isOpen} placement="top" onClose={() => setIsOpen(false)}>
       <Popover.Trigger>
         <Button variant="fill" onClick={() => setIsOpen(!isOpen)}>
           {isOpen ? 'Popoverを非表示' : 'Popoverを表示'}
@@ -54,26 +49,22 @@ import { useState } from 'react';
 const PopoverWithPopupExample = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleClose = () => {
-    setIsOpen(false);
-  };
-
   return (
-    <Popover isOpen={isOpen} placement="bottom" onOutsideClick={handleClose} onEscapeKeyDown={handleClose}>
+    <Popover isOpen={isOpen} placement="bottom" onClose={() => setIsOpen(false)}>
       <Popover.Trigger>
         <Button variant="fill" onClick={() => setIsOpen(!isOpen)}>
           {isOpen ? 'Popoverを非表示' : 'Popoverを表示'}
         </Button>
       </Popover.Trigger>
       <Popover.Content>
-        <Popup width={400} onClose={handleClose}>
+        <Popup width={400} onClose={() => setIsOpen(false)}>
           <Popup.Header>Popup in Popover</Popup.Header>
           <Popup.Body>
             <div className="flex w-full flex-col gap-2 p-4">コンテンツ</div>
           </Popup.Body>
           <Popup.Footer>
             <div className="flex w-full flex-wrap items-center justify-end gap-4">
-              <Button variant="outline" size="large" onClick={handleClose}>
+              <Button variant="outline" size="large" onClick={() => setIsOpen(false)}>
                 閉じる
               </Button>
               <Button variant="fill" size="large">
