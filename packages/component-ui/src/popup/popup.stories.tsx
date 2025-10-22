@@ -218,12 +218,7 @@ export const WithPopover: Story = {
 
     return (
       <div className="flex min-h-[800px] items-center justify-center">
-        <Popover
-          isOpen={isOpen}
-          placement="top"
-          onOutsideClick={() => setIsOpen(false)}
-          onEscapeKeyDown={() => setIsOpen(false)}
-        >
+        <Popover isOpen={isOpen} placement="top" onClose={() => setIsOpen(false)}>
           <Popover.Trigger>
             <Button variant="fill" onClick={() => setIsOpen((value) => !value)}>
               {isOpen ? 'Popover を閉じる' : 'Popover を開く'}
@@ -242,12 +237,7 @@ export const WithPopover: Story = {
             </Popup>
           </Popover.Content>
         </Popover>
-        <Popover
-          isOpen={isOpen3}
-          placement="top"
-          onOutsideClick={() => setIsOpen3(false)}
-          onEscapeKeyDown={() => setIsOpen3(false)}
-        >
+        <Popover isOpen={isOpen3} placement="top" onClose={() => setIsOpen3(false)}>
           <Popover.Trigger>
             <Button variant="fill" onClick={() => setIsOpen3((value) => !value)}>
               {isOpen3 ? 'Popover を閉じる' : 'Popover を開く'}
@@ -266,12 +256,7 @@ export const WithPopover: Story = {
             </Popup>
           </Popover.Content>
         </Popover>
-        <Popover
-          isOpen={isOpen2}
-          placement="top"
-          onOutsideClick={() => setIsOpen2(false)}
-          onEscapeKeyDown={() => setIsOpen2(false)}
-        >
+        <Popover isOpen={isOpen2} placement="top" onClose={() => setIsOpen2(false)}>
           <Popover.Trigger>
             <Button variant="fill" onClick={() => setIsOpen2((value) => !value)}>
               {isOpen2 ? 'Popover を閉じる' : 'Popover を開く'}
