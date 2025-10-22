@@ -77,6 +77,7 @@ const ComponentStory = (args: Story['args']) => {
       <Popover
         isOpen={isOpen}
         placement={args?.placement ?? 'top'}
+        offset={args?.offset ?? 8}
         onClose={(reason) => {
           console.log('Popover closed:', reason);
           setIsOpen(false);
@@ -108,7 +109,12 @@ const PopoverWithPopupStory = (args: Story['args']) => {
 
   return (
     <div className="flex min-h-[700px] flex-col items-center justify-center gap-4">
-      <Popover isOpen={isOpen} placement={args?.placement ?? 'bottom'} onClose={() => setIsOpen(false)}>
+      <Popover
+        isOpen={isOpen}
+        placement={args?.placement ?? 'bottom'}
+        offset={args?.offset ?? 8}
+        onClose={() => setIsOpen(false)}
+      >
         <Popover.Trigger>
           <Button variant="fill" onClick={() => setIsOpen((value) => !value)}>
             {isOpen ? 'Popoverを非表示' : 'Popoverを表示'}
@@ -171,7 +177,12 @@ const PopoverWithSelectStory = (args: Story['args']) => {
 
   return (
     <div className="flex min-h-[400px] flex-col items-center justify-center gap-4">
-      <Popover isOpen={isOpen} placement={args?.placement ?? 'bottom'} onClose={() => setIsOpen(false)}>
+      <Popover
+        isOpen={isOpen}
+        placement={args?.placement ?? 'bottom'}
+        offset={args?.offset ?? 8}
+        onClose={() => setIsOpen(false)}
+      >
         <Popover.Trigger>
           <Button variant="fill" onClick={() => setIsOpen((value) => !value)}>
             {isOpen ? 'Popoverを非表示' : 'Popoverを表示'}
@@ -235,7 +246,8 @@ const PopoverWithPopupNoCloseStory = (args: Story['args']) => {
       <Popover
         isOpen={isOpen}
         placement={args?.placement ?? 'bottom'}
-        // onOutsideClick と onEscapeKeyDown を設定しないことで、外部クリック・Escapeキーで閉じない
+        offset={args?.offset ?? 8}
+        // onClose を設定しないことで、外部クリック・Escapeキーで閉じない
       >
         <Popover.Trigger>
           <Button variant="fill" onClick={() => setIsOpen((value) => !value)}>
