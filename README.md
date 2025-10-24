@@ -86,6 +86,7 @@ const MyComponent = () => {
 - Checkbox
 - Dropdown
 - Evaluation Star
+- [File Uploader](./docs/component/file-uploader-specification.md)
 - Heading
 - [Icon](./docs/component/icon-specification.md)
 - [Icon Button](./docs/component/icon-button-specification.md)
