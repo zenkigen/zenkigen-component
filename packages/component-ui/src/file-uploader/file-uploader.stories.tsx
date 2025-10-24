@@ -7,22 +7,39 @@ import { FileUploader } from './file-uploader';
 const meta: Meta<typeof FileUploader> = {
   title: 'Components/FileUploader',
   component: FileUploader,
-  parameters: {},
+  parameters: {
+    layout: 'centered',
+  },
   tags: ['autodocs'],
   argTypes: {
     variant: {
       control: { type: 'select' },
       options: ['button', 'dropzone'],
+      description: 'コンポーネントのバリエーション',
     },
     size: {
       control: { type: 'select' },
       options: ['small', 'medium', 'large'],
+      if: { arg: 'variant', eq: 'button' },
+      description: 'サイズ（`button` variantのみ有効）',
     },
     isDisabled: {
       control: { type: 'boolean' },
+      description: '無効化状態',
     },
-    isError: {
-      control: { type: 'boolean' },
+    accept: {
+      control: { type: 'text' },
+      description: '許可するファイル形式（拡張子またはMIMEタイプ。例：.csv,.pdf,image/*）',
+    },
+    maxSize: {
+      control: { type: 'number' },
+      description: '最大ファイルサイズ（バイト単位）',
+    },
+    onSelect: {
+      description: 'ファイル選択時のコールバック',
+    },
+    onError: {
+      description: 'エラー発生時のコールバック',
     },
   },
 };
@@ -30,41 +47,65 @@ const meta: Meta<typeof FileUploader> = {
 export default meta;
 type Story = StoryObj<typeof FileUploader>;
 
-const WithResetControlComponent = () => {
-  const fileUploaderRef = useRef<{ reset: () => void; openFileDialog: () => void }>(null);
+const WithExternalResetControlComponent = ({
+  variant = 'button',
+  size = 'medium',
+  accept,
+  maxSize,
+  isDisabled = false,
+}: {
+  variant?: 'button' | 'dropzone';
+  size?: 'small' | 'medium' | 'large';
+  accept?: string;
+  maxSize?: number;
+  isDisabled?: boolean;
+}) => {
+  const fileUploaderRef = useRef<{ reset: () => void }>(null);
 
   const handleReset = () => {
     fileUploaderRef.current?.reset();
-  };
-
-  const handleOpenDialog = () => {
-    fileUploaderRef.current?.openFileDialog();
   };
 
   return (
     <div className="flex w-full flex-col items-start justify-start gap-4">
       <FileUploader
         ref={fileUploaderRef}
-        variant="button"
-        onFileSelect={(file) => {
+        variant={variant as 'button' | 'dropzone'}
+        {...(variant === 'button' && size && { size: size as 'small' | 'medium' | 'large' })}
+        accept={accept}
+        maxSize={maxSize}
+        isDisabled={isDisabled}
+        onSelect={(file) => {
           // eslint-disable-next-line no-console
           console.log('Selected file:', file);
         }}
       />
-      <div className="flex gap-2">
-        <Button variant="text" onClick={handleOpenDialog}>
-          ファイル選択ダイアログを開く
-        </Button>
-        <Button variant="text" onClick={handleReset}>
-          リセット
-        </Button>
-      </div>
+      <Button variant="text" onClick={handleReset}>
+        リセット
+      </Button>
     </div>
   );
 };
 
 export const Default: Story = {
-  render: () => <WithResetControlComponent />,
+  args: {
+    variant: 'button',
+    size: 'medium',
+    isDisabled: false,
+  },
+};
+
+export const WithExternalResetControl: Story = {
+  args: {
+    variant: 'button',
+    size: 'medium',
+    isDisabled: false,
+  },
+  render: (args) => (
+    <div className="flex w-full max-w-md flex-col items-center justify-center gap-4">
+      <WithExternalResetControlComponent {...args} />
+    </div>
+  ),
 };
 
 export const ButtonVariants: Story = {
@@ -84,7 +125,6 @@ export const ButtonStates: Story = {
     <div className="flex size-full h-screen items-center justify-center ">
       <div className="flex flex-col items-center justify-center gap-4">
         <FileUploader variant="button" />
-        <FileUploader variant="button" isError />
         <FileUploader variant="button" isDisabled />
       </div>
     </div>
@@ -96,21 +136,8 @@ export const Dropzone: Story = {
     <div className="flex size-full h-screen items-center justify-center ">
       <div className="flex flex-col items-center justify-center gap-4">
         <FileUploader variant="dropzone" />
-        <FileUploader variant="dropzone" isError />
         <FileUploader variant="dropzone" isDisabled />
       </div>
     </div>
   ),
-};
-
-export const WithFileRestrictions: Story = {
-  args: {
-    variant: 'button',
-    accept: '.csv,.pdf',
-    maxSize: 50 * 1024 * 1024, // 50MB
-    onError: (error: string) => {
-      // eslint-disable-next-line no-alert
-      alert(error);
-    },
-  },
 };
