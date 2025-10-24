@@ -263,7 +263,7 @@ export const FileUploader = forwardRef<FileUploaderRef, FileUploaderProps>(
               isDisabled={isDisabled}
               width="100%"
               onClick={handleButtonClick}
-              before={<Icon name="download-document" size="small" />}
+              before={<Icon name="upload" size="small" />}
             >
               <span className="truncate">
                 {selectedFile ? `ファイルを選択 ${selectedFile.name}` : 'ファイルを選択'}
