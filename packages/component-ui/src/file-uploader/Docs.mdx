@@ -1,0 +1,50 @@
+import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/blocks';
+import FileUploaderStories, { Default } from './file-uploader.stories';
+
+<Meta title="FileUploader" of={FileUploaderStories} />
+
+# FileUploader
+
+<Canvas>
+  <Story of={Default} />
+</Canvas>
+
+<Controls of={Default} />
+
+### Code Example
+
+```tsx
+import { useRef } from 'react';
+import { FileUploader, Button } from '@zenkigen-inc/component-ui';
+import type { FileUploaderRef } from '@zenkigen-inc/component-ui';
+
+const MyComponent = () => {
+  const fileUploaderRef = useRef<FileUploaderRef>(null);
+
+  const handleReset = () => {
+    fileUploaderRef.current?.reset();
+  };
+
+  return (
+    <div>
+      <FileUploader
+        ref={fileUploaderRef}
+        variant="button"
+        accept=".csv,.pdf,image/*,application/vnd.ms-excel"
+        maxSize={50 * 1024 * 1024}
+        onSelect={(file) => {
+          console.log('Selected file:', file);
+        }}
+        onError={(errors) => {
+          errors.forEach((error) => {
+            console.error(`[${error.type}] ${error.message}`);
+          });
+        }}
+      />
+      <Button variant="text" onClick={handleReset}>
+        リセット
+      </Button>
+    </div>
+  );
+};
+```
