@@ -13,14 +13,44 @@ export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(fu
   { children },
   ref,
 ) {
-  const { isOpen, triggerRef, anchorRef, floating, panelId, onClose } = usePopoverContext();
+  const { isOpen, triggerRef, floating, panelId, onClose } = usePopoverContext();
 
+  // 外側クリック判定のカスタムロジック
+  // ネストされたFloating UI要素（Select、Dropdown等）のクリックを除外
+  const shouldCloseOnOutsidePress = useCallback(
+    (event: MouseEvent) => {
+      const target = event.target;
+
+      if (!(target instanceof Element)) {
+        return true;
+      }
+
+      // クリックされた要素が別のFloating UI要素内にあるかチェック
+      // 自分自身のfloating elementではなく、他のz-overlayやz-dropdown要素内のクリックを除外
+      const floatingElement = floating.refs.floating.current;
+      const closestOverlay = target.closest('.z-overlay, .z-dropdown');
+
+      if (closestOverlay !== null && floatingElement instanceof Element) {
+        const isInsideOwnFloating = floatingElement.contains(closestOverlay);
+
+        return isInsideOwnFloating;
+      }
+
+      return true;
+    },
+    [floating.refs.floating],
+  );
+
+  // useDismissで外側クリックを検出（Escapeキーは無効化し、独自処理で対応）
   const dismiss = useDismiss(floating.context, {
     outsidePressEvent: 'pointerdown',
+    outsidePress: shouldCloseOnOutsidePress,
+    escapeKey: false,
   });
 
   const interactions = useInteractions([dismiss, useRole(floating.context, { role: 'dialog' })]);
 
+  // Popover表示時にフォーカスを移動
   useEffect(() => {
     if (isOpen) {
       const element = floating.refs.floating.current as HTMLElement | null;
@@ -28,69 +58,25 @@ export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(fu
     }
   }, [isOpen, floating.refs.floating]);
 
+  // Popover非表示時にトリガーにフォーカスを戻す
   useEffect(() => {
     if (!isOpen) {
       triggerRef.current?.focus({ preventScroll: true });
     }
   }, [isOpen, triggerRef]);
 
-  const onKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === 'Escape') {
-      event.stopPropagation();
-      if (onClose != null) {
-        onClose('escape-key-down');
-      }
-    }
-  };
-
-  const handlePointerDownOutside = useCallback(() => {
-    if (onClose != null) {
-      onClose('outside-click');
-    }
-  }, [onClose]);
-
-  useEffect(() => {
-    if (!isOpen) {
-      return;
-    }
-
-    const handleOutsideClick = (event: MouseEvent) => {
-      const target = event.target as Node;
-      const floatingElement = floating.refs.floating.current as Element | null;
-      const referenceElement = floating.refs.reference.current as Element | null;
-
-      if (!(floatingElement instanceof Element) || !(referenceElement instanceof Element)) {
-        return;
-      }
-
-      const floatingEl: Element = floatingElement;
-      const referenceEl: Element = referenceElement;
-
-      const isOutsideFloating = !(floatingEl.contains(target) as boolean);
-      const isOutsideReference = !(referenceEl.contains(target) as boolean);
-
-      // クリックされた要素が別のFloating UI要素内にあるかチェック
-      // （Select、Dropdown、Tooltipなどの子コンポーネントのポータル要素）
-      // 自分自身のfloating elementではなく、他のz-overlayやz-dropdown要素内のクリックを除外
-      let isInsideOtherFloatingElement = false;
-      if (target instanceof Element) {
-        const closestOverlay = target.closest('.z-overlay, .z-dropdown');
-        if (closestOverlay !== null && (floatingEl.contains(closestOverlay) as boolean) === false) {
-          isInsideOtherFloatingElement = true;
+  // Escapeキーハンドラー（reasonを'escape-key-down'として正しく渡すため）
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.stopPropagation();
+        if (onClose != null) {
+          onClose('escape-key-down');
         }
       }
-
-      if (isOutsideFloating === true && isOutsideReference === true && !isInsideOtherFloatingElement) {
-        handlePointerDownOutside();
-      }
-    };
-
-    document.addEventListener('pointerdown', handleOutsideClick);
-
-    return () => {
-      document.removeEventListener('pointerdown', handleOutsideClick);
-    };
-  }, [isOpen, floating.refs.floating, floating.refs.reference, handlePointerDownOutside, anchorRef]);
+    },
+    [onClose],
+  );
 
   let wrappedChildren = children;
   if (isElement(children)) {
@@ -109,7 +95,7 @@ export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(fu
           {...interactions.getFloatingProps({
             ref: composeRefs(floating.refs.setFloating, ref),
             tabIndex: -1,
-            onKeyDown,
+            onKeyDown: handleKeyDown,
             style: {
               position: floating.strategy,
               top: floating.y ?? 0,

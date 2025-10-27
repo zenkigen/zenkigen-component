@@ -26,6 +26,13 @@ export function Popover({
 
   const floating = useFloating({
     open: isOpen,
+    onOpenChange: (open) => {
+      // useDismissによって閉じられた場合、onCloseコールバックを呼ぶ
+      // ただし、reasonは'outside-click'として扱う（Escapeキーの場合は別途ハンドラーで処理）
+      if (!open && onClose != null) {
+        onClose('outside-click');
+      }
+    },
     placement,
     middleware: [offset(offsetValue)],
     whileElementsMounted: autoUpdate,

@@ -81,8 +81,7 @@ const ComponentStory = (args: Story['args']) => {
         placement={args?.placement ?? 'top'}
         offset={args?.offset ?? 8}
         onClose={(reason) => {
-          // eslint-disable-next-line no-console
-          console.log('Popover closed:', reason);
+          args?.onClose?.(reason);
           setIsOpen(false);
         }}
       >
@@ -124,6 +123,10 @@ const CustomAnchorStory = (args: Story['args']) => {
         placement={args?.placement ?? 'top'}
         offset={args?.offset ?? 8}
         anchorRef={customAnchorRef}
+        onClose={(reason) => {
+          args?.onClose?.(reason);
+          setIsOpen(false);
+        }}
       >
         <Popover.Trigger>
           <Button variant="fill" onClick={() => setIsOpen((value) => !value)}>
