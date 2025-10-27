@@ -194,11 +194,10 @@ export const FileUploader = forwardRef<FileUploaderRef, FileUploaderProps>(
     );
 
     const dropzoneClasses = clsx(
-      'flex cursor-pointer flex-col items-center justify-center gap-4 rounded border border-dashed px-6 text-center transition-colors',
+      'flex cursor-pointer flex-col items-center justify-center gap-4 rounded border border-dashed px-6 text-center hover:bg-hover02',
       selectedFile ? 'py-[52px]' : 'py-4',
       {
-        'border-uiBorder02 bg-white text-text01 hover:border-hoverInput':
-          !isDisabled && !isDragOver && errors.length === 0,
+        'border-uiBorder03 bg-white text-text01': !isDisabled && !isDragOver && errors.length === 0,
         'border-activeInput bg-activeInput/5': !isDisabled && isDragOver && errors.length === 0,
         'border-supportDanger bg-white': errors.length > 0 && !isDisabled,
         'border-disabled01 bg-disabled02 text-textPlaceholder cursor-not-allowed': isDisabled,
@@ -267,14 +266,14 @@ export const FileUploader = forwardRef<FileUploaderRef, FileUploaderProps>(
               after={
                 <>
                   {selectedFile ? (
-                    <span className="typography-label12regular text-text01">{selectedFile.name}</span>
+                    <span className="typography-label12regular truncate text-text01">{selectedFile.name}</span>
                   ) : (
                     ''
                   )}
                 </>
               }
             >
-              <span className="truncate">ファイルを選択</span>
+              <span className="shrink-0">ファイルを選択</span>
             </Button>
           </div>
           {selectedFile && !isDisabled && (
@@ -345,7 +344,8 @@ export const FileUploader = forwardRef<FileUploaderRef, FileUploaderProps>(
                   variant="text"
                   icon="close"
                   size="small"
-                  onClick={() => {
+                  onClick={(event) => {
+                    event.stopPropagation();
                     handleClear();
                   }}
                 />
