@@ -29,7 +29,7 @@ type Props = {
     } & Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href' | 'target' | 'className'>)
   | ({
       isAnchor?: false;
-      onClick?: () => void;
+      onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
     } & Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onClick' | 'disabled' | 'className'>)
 );
 
@@ -79,7 +79,13 @@ export function IconButton({
     ) as Omit<typeof props, 'isAnchor' | 'onClick'>;
 
     return (
-      <button type="button" className={baseClasses} disabled={isDisabled} onClick={props.onClick} {...buttonProps}>
+      <button
+        type="button"
+        className={baseClasses}
+        disabled={isDisabled}
+        onClick={(event) => props.onClick?.(event)}
+        {...buttonProps}
+      >
         <Icon name={icon} size={iconSize} />
       </button>
     );
