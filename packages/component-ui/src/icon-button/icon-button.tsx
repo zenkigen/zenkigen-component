@@ -29,8 +29,7 @@ type Props = {
     } & Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href' | 'target' | 'className'>)
   | ({
       isAnchor?: false;
-      onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-    } & Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onClick' | 'disabled' | 'className'>)
+    } & Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'disabled' | 'className'>)
 );
 
 export function IconButton({
@@ -74,18 +73,13 @@ export function IconButton({
       </a>
     );
   } else {
-    const buttonProps = Object.fromEntries(
-      Object.entries(props).filter(([key]) => key !== 'isAnchor' && key !== 'onClick'),
-    ) as Omit<typeof props, 'isAnchor' | 'onClick'>;
+    const buttonProps = Object.fromEntries(Object.entries(props).filter(([key]) => key !== 'isAnchor')) as Omit<
+      typeof props,
+      'isAnchor'
+    >;
 
     return (
-      <button
-        type="button"
-        className={baseClasses}
-        disabled={isDisabled}
-        onClick={(event) => props.onClick?.(event)}
-        {...buttonProps}
-      >
+      <button type="button" className={baseClasses} disabled={isDisabled} {...buttonProps}>
         <Icon name={icon} size={iconSize} />
       </button>
     );
