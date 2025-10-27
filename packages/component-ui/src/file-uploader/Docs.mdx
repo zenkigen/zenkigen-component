@@ -1,6 +1,6 @@
 import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/blocks';
 import { Markdown } from '@storybook/blocks';
-import FileUploaderStories, { Default } from './file-uploader.stories';
+import FileUploaderStories, { Default, LayoutExamples } from './file-uploader.stories';
 import spec from '../../../../docs/component/file-uploader-specification.md?raw';
 
 <Meta title="FileUploader" of={FileUploaderStories} />
@@ -58,3 +58,7 @@ const MyComponent = () => {
   );
 };
 ```
+
+## Layout examples
+
+<Canvas of={LayoutExamples} />
