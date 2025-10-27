@@ -82,12 +82,12 @@ const MyComponent = () => {
 
 ### オプションプロパティ
 
-| プロパティ  | 型                              | デフォルト値 | 説明                                                    |
-| ----------- | ------------------------------- | ------------ | ------------------------------------------------------- |
-| `placement` | `PopoverPlacement`              | `'top'`      | Popoverの配置位置                                       |
-| `offset`    | `number`                        | `8`          | トリガー要素とPopoverコンテンツとの間隔（ピクセル単位） |
-| `anchorRef` | `React.RefObject<HTMLElement>`  | `undefined`  | 配置基準となる要素のref（未指定時はTrigger要素が基準）  |
-| `onClose`   | `(reason: CloseReason) => void` | `undefined`  | Popoverが閉じられた時に呼び出されるコールバック         |
+| プロパティ  | 型                                   | デフォルト値 | 説明                                                    |
+| ----------- | ------------------------------------ | ------------ | ------------------------------------------------------- |
+| `placement` | `PopoverPlacement`                   | `'top'`      | Popoverの配置位置                                       |
+| `offset`    | `number`                             | `8`          | トリガー要素とPopoverコンテンツとの間隔（ピクセル単位） |
+| `anchorRef` | `React.RefObject<HTMLElement>`       | `undefined`  | 配置基準となる要素のref（未指定時はTrigger要素が基準）  |
+| `onClose`   | `(event: PopoverCloseEvent) => void` | `undefined`  | Popoverが閉じられた時に呼び出されるコールバック         |
 
 ### CloseReason型
 
@@ -97,6 +97,15 @@ type CloseReason = 'outside-click' | 'escape-key-down';
 
 - `'outside-click'`: Popoverの外側をクリックした時
 - `'escape-key-down'`: Escapeキーが押された時
+
+### PopoverCloseEvent型
+
+```typescript
+type PopoverCloseEvent = {
+  /** 閉じられた理由 */
+  reason: CloseReason;
+};
+```
 
 ### 子コンポーネント
 
@@ -399,14 +408,14 @@ if (target instanceof Element) {
 }
 
 if (isOutsideFloating === true && isOutsideReference === true && !isInsideOtherFloatingElement) {
-  onClose('outside-click');
+  onClose({ reason: 'outside-click' });
 }
 
 // Escapeキー対応
 const onKeyDown = (event: React.KeyboardEvent) => {
   if (event.key === 'Escape') {
     event.stopPropagation();
-    onClose('escape-key-down');
+    onClose({ reason: 'escape-key-down' });
   }
 };
 ```
@@ -438,7 +447,7 @@ const onKeyDown = (event: React.KeyboardEvent) => {
 2. **開閉状態の制御**
    - `isOpen`は必須プロパティであり、開閉状態は親コンポーネントで管理する必要があります
    - `onClose`を適切に設定して状態を更新してください
-   - `onClose`の`reason`パラメータを使用して、閉じる理由に応じた処理を実装できます
+   - `onClose`の`event.reason`を使用して、閉じる理由に応じた処理を実装できます（`'outside-click'`または`'escape-key-down'`）
 
 3. **PopoverContextの使用範囲**
    - `Popover.Trigger`と`Popover.Content`は`Popover`コンポーネント内でのみ使用できます
@@ -477,8 +486,9 @@ Popoverコンポーネント自体は最小限のスタイルのみを適用し�
 
 ## 更新履歴
 
-| 日付                 | 内容                                              | 担当者 |
-| -------------------- | ------------------------------------------------- | ------ |
-| 2025-10-27 14:56 JST | anchorRef追加・技術詳細/使用例反映                | -      |
-| 2025-10-22 16:30 JST | API統合: onOutsideClick/onEscapeKeyDown → onClose | -      |
-| 2025-10-17 15:00 JST | 新規作成                                          | -      |
+| 日付                 | 内容                                               | 担当者 |
+| -------------------- | -------------------------------------------------- | ------ |
+| 2025-10-27 15:43 JST | onClose型をPopoverCloseEventオブジェクト形式に変更 | -      |
+| 2025-10-27 14:56 JST | anchorRef追加・技術詳細/使用例反映                 | -      |
+| 2025-10-22 16:30 JST | API統合: onOutsideClick/onEscapeKeyDown → onClose  | -      |
+| 2025-10-17 15:00 JST | 新規作成                                           | -      |
