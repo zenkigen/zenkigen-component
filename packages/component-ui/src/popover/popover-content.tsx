@@ -71,7 +71,7 @@ export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(fu
       if (event.key === 'Escape') {
         event.stopPropagation();
         if (onClose != null) {
-          onClose('escape-key-down');
+          onClose({ reason: 'escape-key-down' });
         }
       }
     },

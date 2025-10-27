@@ -80,8 +80,8 @@ const ComponentStory = (args: Story['args']) => {
         isOpen={isOpen}
         placement={args?.placement ?? 'top'}
         offset={args?.offset ?? 8}
-        onClose={(reason) => {
-          args?.onClose?.(reason);
+        onClose={(event) => {
+          args?.onClose?.(event);
           setIsOpen(false);
         }}
       >
@@ -123,8 +123,8 @@ const CustomAnchorStory = (args: Story['args']) => {
         placement={args?.placement ?? 'top'}
         offset={args?.offset ?? 8}
         anchorRef={customAnchorRef}
-        onClose={(reason) => {
-          args?.onClose?.(reason);
+        onClose={(event) => {
+          args?.onClose?.(event);
           setIsOpen(false);
         }}
       >

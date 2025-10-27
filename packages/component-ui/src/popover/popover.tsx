@@ -3,14 +3,19 @@ import type { PropsWithChildren } from 'react';
 import { useEffect, useMemo, useRef } from 'react';
 
 import { PopoverContent } from './popover-content';
-import { type CloseReason, PopoverContext, type PopoverContextValue, type PopoverPlacement } from './popover-context';
+import {
+  type PopoverCloseEvent,
+  PopoverContext,
+  type PopoverContextValue,
+  type PopoverPlacement,
+} from './popover-context';
 import { PopoverTrigger } from './popover-trigger';
 
 type Props = {
   isOpen: boolean;
   placement?: PopoverPlacement;
   offset?: number;
-  onClose?: (reason: CloseReason) => void;
+  onClose?: (event: PopoverCloseEvent) => void;
   anchorRef?: React.RefObject<HTMLElement | null>;
 };
 
@@ -30,7 +35,7 @@ export function Popover({
       // useDismissによって閉じられた場合、onCloseコールバックを呼ぶ
       // ただし、reasonは'outside-click'として扱う（Escapeキーの場合は別途ハンドラーで処理）
       if (!open && onClose != null) {
-        onClose('outside-click');
+        onClose({ reason: 'outside-click' });
       }
     },
     placement,
