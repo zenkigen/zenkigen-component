@@ -106,65 +106,6 @@ export const Component: Story = {
   render: ComponentStory,
 };
 
-// Popover + Popup 連携ストーリー
-const PopoverWithPopupStory = (args: Story['args']) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <div className="flex min-h-[700px] flex-col items-center justify-center gap-4">
-      <Popover
-        isOpen={isOpen}
-        placement={args?.placement ?? 'top'}
-        offset={args?.offset ?? 8}
-        onClose={() => setIsOpen(false)}
-      >
-        <Popover.Trigger>
-          <Button variant="fill" onClick={() => setIsOpen((value) => !value)}>
-            {isOpen ? 'Popoverを非表示' : 'Popoverを表示'}
-          </Button>
-        </Popover.Trigger>
-        <Popover.Content>
-          {/* Popup は PopoverContext の状態を自動的に使用 */}
-          <Popup width={400} onClose={() => setIsOpen(false)}>
-            <Popup.Header>Popup in Popover</Popup.Header>
-            <Popup.Body>
-              <div className="flex w-full flex-col gap-2 p-4">
-                <p className="text-sm text-text01">
-                  この Popup は Popover 内で使用されており、
-                  <br />
-                  PopoverContext の開閉状態を自動的に継承しています。
-                </p>
-                <p className="text-xs text-text02">
-                  ヘッダーの閉じるボタンをクリックすると、
-                  <br />
-                  Popover も一緒に閉じます。
-                </p>
-              </div>
-            </Popup.Body>
-            <Popup.Footer>
-              <div className="flex w-full flex-wrap items-center justify-end gap-4">
-                <Button variant="outline" size="large" onClick={() => setIsOpen(false)}>
-                  閉じる
-                </Button>
-                <Button variant="fill" size="large">
-                  保存する
-                </Button>
-              </div>
-            </Popup.Footer>
-          </Popup>
-        </Popover.Content>
-      </Popover>
-    </div>
-  );
-};
-
-export const WithPopup: Story = {
-  args: {
-    placement: 'top',
-  },
-  render: PopoverWithPopupStory,
-};
-
 // Custom Anchor Element ストーリー
 const CustomAnchorStory = (args: Story['args']) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -223,6 +164,60 @@ export const WithCustomAnchor: Story = {
   },
 };
 
+// Popover + Popup 連携ストーリー
+const PopoverWithPopupStory = (args: Story['args']) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="flex min-h-[700px] flex-col items-center justify-center gap-4">
+      <Popover
+        isOpen={isOpen}
+        placement={args?.placement ?? 'top'}
+        offset={args?.offset ?? 8}
+        onClose={() => setIsOpen(false)}
+      >
+        <Popover.Trigger>
+          <Button variant="fill" onClick={() => setIsOpen((value) => !value)}>
+            {isOpen ? 'Popoverを非表示' : 'Popoverを表示'}
+          </Button>
+        </Popover.Trigger>
+        <Popover.Content>
+          {/* Popup は PopoverContext の状態を自動的に使用 */}
+          <Popup width={400} onClose={() => setIsOpen(false)}>
+            <Popup.Header>Popup in Popover</Popup.Header>
+            <Popup.Body>
+              <div className="flex w-full flex-col gap-2 px-6">
+                <p className="typography-body14regular text-text01">このダイアログは以下の特徴があります：</p>
+                <ul className="typography-body12regular list-disc pl-4 text-text02">
+                  <li>この Popup は Popover 内で使用されており、PopoverContext の開閉状態を自動的に継承しています。</li>
+                  <li>ヘッダーの閉じるボタンをクリックすると、Popoverも一緒に閉じます。</li>
+                </ul>
+              </div>
+            </Popup.Body>
+            <Popup.Footer>
+              <div className="flex w-full flex-wrap items-center justify-end gap-4">
+                <Button variant="outline" size="medium" onClick={() => setIsOpen(false)}>
+                  閉じる
+                </Button>
+                <Button variant="fill" size="medium" onClick={() => setIsOpen(false)}>
+                  保存する
+                </Button>
+              </div>
+            </Popup.Footer>
+          </Popup>
+        </Popover.Content>
+      </Popover>
+    </div>
+  );
+};
+
+export const WithPopup: Story = {
+  args: {
+    placement: 'top',
+  },
+  render: PopoverWithPopupStory,
+};
+
 // Popover + Popup 連携ストーリー（閉じるボタンなし、外部クリック・Escapeキーで閉じない）
 const PopoverWithPopupNoCloseStory = (args: Story['args']) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -245,12 +240,12 @@ const PopoverWithPopupNoCloseStory = (args: Story['args']) => {
           <Popup width={400}>
             <Popup.Header>確認ダイアログ（閉じるボタンなし）</Popup.Header>
             <Popup.Body>
-              <div className="flex w-full flex-col gap-2 p-4">
-                <p className="text-sm text-text01">このダイアログは以下の特徴があります：</p>
-                <ul className="text-xs text-text02">
-                  <li>• ヘッダーに閉じるボタンがありません</li>
-                  <li>• 外部クリックでは閉じません</li>
-                  <li>• Escapeキーでは閉じません</li>
+              <div className="flex w-full flex-col gap-2 px-6 pb-4">
+                <p className="typography-body14regular text-text01">このダイアログは以下の特徴があります：</p>
+                <ul className="typography-body12regular list-disc pl-4 text-text02">
+                  <li>ヘッダーに閉じるボタンがありません</li>
+                  <li>外部クリックでは閉じません</li>
+                  <li>Escapeキーでは閉じません</li>
                 </ul>
               </div>
             </Popup.Body>
