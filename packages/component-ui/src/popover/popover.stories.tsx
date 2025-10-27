@@ -21,7 +21,7 @@ const ALL_PLACEMENTS = [
 ] as const;
 
 const meta: Meta<typeof Popover> = {
-  title: 'Components/Popover',
+  title: 'Layout/Popover',
   component: Popover,
   parameters: {
     docs: {
