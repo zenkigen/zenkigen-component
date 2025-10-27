@@ -1,17 +1,17 @@
 import { Canvas, Meta, Story, Controls, Source } from '@storybook/blocks';
 import { Markdown } from '@storybook/blocks';
 import TabStories, { Component, LayoutAutoExample, LayoutEqualExample, LayoutExamples } from './tab.stories';
-import tabSpec from '../../../../docs/component/tab-specification.md?raw';
+import spec from '../../../../docs/component/tab-specification.md?raw';
 
 <Meta of={TabStories} />
 
 # Tab
 
 <details>
-  <summary>詳細仕様書</summary>
-  <div style={{ padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
     <p>※ 目次のアンカーリンクは使用できません。</p>
-    <Markdown>{tabSpec}</Markdown>
+    <Markdown>{spec}</Markdown>
   </div>
 </details>
 
