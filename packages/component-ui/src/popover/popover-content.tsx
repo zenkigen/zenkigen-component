@@ -13,7 +13,7 @@ export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(fu
   { children },
   ref,
 ) {
-  const { isOpen, triggerRef, floating, panelId, onClose } = usePopoverContext();
+  const { isOpen, triggerRef, anchorRef, floating, panelId, onClose } = usePopoverContext();
 
   const dismiss = useDismiss(floating.context, {
     outsidePressEvent: 'pointerdown',
@@ -90,7 +90,7 @@ export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(fu
     return () => {
       document.removeEventListener('pointerdown', handleOutsideClick);
     };
-  }, [isOpen, floating.refs.floating, floating.refs.reference, handlePointerDownOutside]);
+  }, [isOpen, floating.refs.floating, floating.refs.reference, handlePointerDownOutside, anchorRef]);
 
   let wrappedChildren = children;
   if (isElement(children)) {

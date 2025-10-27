@@ -30,6 +30,7 @@ export type PopoverPlacement =
 export type PopoverContextValue = {
   isOpen: boolean;
   triggerRef: React.RefObject<HTMLElement | null>;
+  anchorRef?: React.RefObject<HTMLElement | null>;
   floating: ReturnType<typeof useFloating>;
   contentId: string;
   panelId: string;
