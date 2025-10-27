@@ -1,9 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { Button } from '../button';
 import { Popup } from '../popup';
-import { Select } from '../select';
 import { Popover } from '.';
 
 // 定数の抽出
@@ -23,7 +22,7 @@ const ALL_PLACEMENTS = [
 ] as const;
 
 const meta: Meta<typeof Popover> = {
-  title: 'Components/Popover',
+  title: 'Layout/Popover',
   component: Popover,
   parameters: {
     docs: {
@@ -46,6 +45,10 @@ const meta: Meta<typeof Popover> = {
       control: { type: 'number' },
       description: 'トリガー要素とPopoverコンテンツとの間隔（ピクセル単位）',
     },
+    anchorRef: {
+      control: false,
+      description: 'Popoverの配置基準となる要素のref（指定しない場合はTrigger要素が基準）',
+    },
     onClose: {
       action: 'closed',
       description: 'Popoverが閉じられた時に呼び出されるコールバック関数（reason: "outside-click" | "escape-key-down"）',
@@ -59,7 +62,7 @@ export default meta;
 
 // 共通のPopoverコンテンツコンポーネント
 const SamplePopoverContent = () => (
-  <div className="rounded-lg bg-slate-200 p-4">
+  <div className="bg-slate-200 p-4">
     <p className="mb-2 text-sm font-semibold text-text01">Popoverのコンテンツ</p>
     <p className="text-xs text-text02">
       ここにPopoverの内容を表示します。
@@ -78,9 +81,8 @@ const ComponentStory = (args: Story['args']) => {
         isOpen={isOpen}
         placement={args?.placement ?? 'top'}
         offset={args?.offset ?? 8}
-        onClose={(reason) => {
-          // eslint-disable-next-line no-console
-          console.log('Popover closed:', reason);
+        onClose={(event) => {
+          args?.onClose?.(event);
           setIsOpen(false);
         }}
       >
@@ -112,7 +114,7 @@ const PopoverWithPopupStory = (args: Story['args']) => {
     <div className="flex min-h-[700px] flex-col items-center justify-center gap-4">
       <Popover
         isOpen={isOpen}
-        placement={args?.placement ?? 'bottom'}
+        placement={args?.placement ?? 'top'}
         offset={args?.offset ?? 8}
         onClose={() => setIsOpen(false)}
       >
@@ -163,26 +165,28 @@ export const WithPopup: Story = {
   render: PopoverWithPopupStory,
 };
 
-// Popover + Select 連携ストーリー（不具合修正の検証用）
-const PopoverWithSelectStory = (args: Story['args']) => {
+// Custom Anchor Element ストーリー
+const CustomAnchorStory = (args: Story['args']) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<{ id: string; value: string; label: string } | null>(null);
-
-  const options = [
-    { id: '1', value: 'option1', label: 'オプション1' },
-    { id: '2', value: 'option2', label: 'オプション2' },
-    { id: '3', value: 'option3', label: 'オプション3' },
-    { id: '4', value: 'option4', label: 'オプション4' },
-    { id: '5', value: 'option5', label: 'オプション5' },
-  ];
+  const customAnchorRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div className="flex min-h-[400px] flex-col items-center justify-center gap-4">
+    <div className="flex min-h-[800px] flex-col items-center justify-center gap-10">
+      {/* カスタムアンカー要素 */}
+      <div ref={customAnchorRef} className="flex size-[300px] items-center justify-center bg-blue-100 text-blue-800">
+        カスタムアンカー
+      </div>
+
+      {/* トリガーボタン */}
       <Popover
         isOpen={isOpen}
-        placement={args?.placement ?? 'bottom'}
+        placement={args?.placement ?? 'top'}
         offset={args?.offset ?? 8}
-        onClose={() => setIsOpen(false)}
+        anchorRef={customAnchorRef}
+        onClose={(event) => {
+          args?.onClose?.(event);
+          setIsOpen(false);
+        }}
       >
         <Popover.Trigger>
           <Button variant="fill" onClick={() => setIsOpen((value) => !value)}>
@@ -190,31 +194,12 @@ const PopoverWithSelectStory = (args: Story['args']) => {
           </Button>
         </Popover.Trigger>
         <Popover.Content>
-          <div className="rounded-lg bg-uiBackground01 p-4 shadow-floatingShadow" style={{ width: '320px' }}>
-            <p className="mb-4 font-bold text-text01">Popover内のSelect</p>
-            <div className="mb-4">
-              <p className="typography-label12regular mb-2 text-text02">選択してください</p>
-              <Select
-                size="medium"
-                placeholder="オプションを選択"
-                selectedOption={selectedOption}
-                onChange={setSelectedOption}
-                optionListMaxHeight="200px"
-              >
-                {options.map((option) => (
-                  <Select.Option key={option.id} option={option} />
-                ))}
-              </Select>
-            </div>
-            {selectedOption !== null && (
-              <p className="typography-label12regular text-text02">
-                選択中: <span className="font-semibold">{selectedOption.label}</span>
-              </p>
-            )}
-            <p className="typography-label12regular mt-4 text-text03">
-              Selectのドロップダウンをクリックしても
+          <div className="rounded-lg bg-slate-200 p-4">
+            <p className="mb-2 text-sm font-semibold text-text01">カスタムアンカー要素を基準としたPopover</p>
+            <p className="text-xs text-text02">
+              このPopoverは青い四角形の要素を基準に配置されています。
               <br />
-              Popoverが閉じないことを確認してください。
+              トリガーボタンではなく、別の要素を基準にできます。
             </p>
           </div>
         </Popover.Content>
@@ -223,16 +208,16 @@ const PopoverWithSelectStory = (args: Story['args']) => {
   );
 };
 
-export const WithSelect: Story = {
+export const WithCustomAnchor: Story = {
   args: {
-    placement: 'bottom',
+    placement: 'top',
   },
-  render: PopoverWithSelectStory,
+  render: CustomAnchorStory,
   parameters: {
     docs: {
       description: {
         story:
-          'Popover内にSelectを配置した例です。Selectのドロップダウンリストからオプションを選択しても、Popoverが閉じないことを確認できます。',
+          'anchorRefプロパティを使用して、トリガー要素以外の要素を基準にPopoverを配置する例です。青い四角形の要素を基準にPopoverが表示されます。',
       },
     },
   },

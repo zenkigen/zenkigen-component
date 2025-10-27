@@ -8,6 +8,14 @@ import { createContext, useContext } from 'react';
 export type CloseReason = 'outside-click' | 'escape-key-down';
 
 /**
+ * Popoverのクローズイベントの型定義
+ */
+export type PopoverCloseEvent = {
+  /** 閉じられた理由 */
+  reason: CloseReason;
+};
+
+/**
  * Popoverの配置位置を定義する型
  */
 export type PopoverPlacement =
@@ -30,10 +38,11 @@ export type PopoverPlacement =
 export type PopoverContextValue = {
   isOpen: boolean;
   triggerRef: React.RefObject<HTMLElement | null>;
+  anchorRef?: React.RefObject<HTMLElement | null>;
   floating: ReturnType<typeof useFloating>;
   contentId: string;
   panelId: string;
-  onClose?: (reason: CloseReason) => void;
+  onClose?: (event: PopoverCloseEvent) => void;
 };
 
 /**

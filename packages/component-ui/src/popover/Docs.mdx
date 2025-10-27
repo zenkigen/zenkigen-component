@@ -1,9 +1,19 @@
 import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/blocks';
+import { Markdown } from '@storybook/blocks';
 import PopoverStories, { Component } from './popover.stories';
+import spec from '../../../../docs/component/popover-specification.md?raw';
 
 <Meta title="Popover" of={PopoverStories} />
 
 # Popover
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
 
 <Canvas />
 
@@ -11,7 +21,7 @@ import PopoverStories, { Component } from './popover.stories';
 
 ## Code Examples
 
-### 基本的な使用例
+基本的な使用例
 
 ```tsx
 import { Popover, Button } from '@zenkigen-inc/component-ui';
@@ -34,6 +44,40 @@ const PopoverExample = () => {
         </div>
       </Popover.Content>
     </Popover>
+  );
+};
+```
+
+カスタムアンカー要素の使用（anchorRef）
+
+```tsx
+import { Popover, Button } from '@zenkigen-inc/component-ui';
+import { useRef, useState } from 'react';
+
+const WithCustomAnchor = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const customAnchorRef = useRef<HTMLDivElement>(null);
+
+  return (
+    <div className="flex min-h-[300px] flex-col items-center gap-6">
+      <div ref={customAnchorRef} className="flex size-[240px] items-center justify-center bg-blue-100 text-blue-800">
+        カスタムアンカー
+      </div>
+
+      <Popover isOpen={isOpen} placement="top" offset={8} anchorRef={customAnchorRef} onClose={() => setIsOpen(false)}>
+        <Popover.Trigger>
+          <Button variant="fill" onClick={() => setIsOpen((v) => !v)}>
+            {isOpen ? 'Popoverを非表示' : 'Popoverを表示'}
+          </Button>
+        </Popover.Trigger>
+        <Popover.Content>
+          <div className="rounded-lg bg-slate-200 p-4">
+            <p className="mb-2 text-sm font-semibold text-text01">カスタムアンカー基準のPopover</p>
+            <p className="text-xs text-text02">トリガーではなく、上の青い要素を基準に配置されます。</p>
+          </div>
+        </Popover.Content>
+      </Popover>
+    </div>
   );
 };
 ```
