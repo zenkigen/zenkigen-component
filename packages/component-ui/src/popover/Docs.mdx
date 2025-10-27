@@ -1,0 +1,39 @@
+import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/blocks';
+import PopoverStories, { Component } from './popover.stories';
+
+<Meta title="Popover" of={PopoverStories} />
+
+# Popover
+
+<Canvas />
+
+<Controls of={Component} />
+
+## Code Examples
+
+### 基本的な使用例
+
+```tsx
+import { Popover, Button } from '@zenkigen-inc/component-ui';
+import { useState } from 'react';
+
+const PopoverExample = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <Popover isOpen={isOpen} placement="top" onClose={() => setIsOpen(false)}>
+      <Popover.Trigger>
+        <Button variant="fill" onClick={() => setIsOpen(!isOpen)}>
+          {isOpen ? 'Popoverを非表示' : 'Popoverを表示'}
+        </Button>
+      </Popover.Trigger>
+      <Popover.Content>
+        <div className="rounded-lg bg-slate-200 p-4">
+          <p className="mb-2 text-sm font-semibold text-text01">Popoverのコンテンツ</p>
+          <p className="text-xs text-text02">ここにPopoverの内容を表示します。</p>
+        </div>
+      </Popover.Content>
+    </Popover>
+  );
+};
+```
