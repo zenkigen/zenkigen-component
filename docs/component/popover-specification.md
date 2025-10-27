@@ -86,6 +86,7 @@ const MyComponent = () => {
 | ----------- | ------------------------------- | ------------ | ------------------------------------------------------- |
 | `placement` | `PopoverPlacement`              | `'top'`      | Popoverの配置位置                                       |
 | `offset`    | `number`                        | `8`          | トリガー要素とPopoverコンテンツとの間隔（ピクセル単位） |
+| `anchorRef` | `React.RefObject<HTMLElement>`  | `undefined`  | 配置基準となる要素のref（未指定時はTrigger要素が基準）  |
 | `onClose`   | `(reason: CloseReason) => void` | `undefined`  | Popoverが閉じられた時に呼び出されるコールバック         |
 
 ### CloseReason型
@@ -114,6 +115,7 @@ type CloseReason = 'outside-click' | 'escape-key-down';
   - `aria-expanded={isOpen}`
   - `aria-controls={panelId}`
 - `forwardRef`を使用してref転送をサポート
+  - `anchorRef`が指定されている場合、配置の基準は`anchorRef`となり、Trigger要素は基準としては使用されません（フォーカス復帰には使用されます）
 
 #### Popover.Content
 
@@ -281,6 +283,40 @@ const OffsetExample = () => {
 };
 ```
 
+### カスタムアンカー要素の使用（anchorRef）
+
+```typescript
+import { useRef, useState } from 'react';
+import { Popover, Button } from '@zenkigen-inc/component-ui';
+
+const WithCustomAnchor = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const customAnchorRef = useRef<HTMLDivElement>(null);
+
+  return (
+    <div className="flex min-h-[300px] flex-col items-center gap-6">
+      <div ref={customAnchorRef} className="flex size-[240px] items-center justify-center bg-blue-100 text-blue-800">
+        カスタムアンカー
+      </div>
+
+      <Popover isOpen={isOpen} placement="top" offset={8} anchorRef={customAnchorRef} onClose={() => setIsOpen(false)}>
+        <Popover.Trigger>
+          <Button variant="fill" onClick={() => setIsOpen((v) => !v)}>
+            {isOpen ? 'Popoverを非表示' : 'Popoverを表示'}
+          </Button>
+        </Popover.Trigger>
+        <Popover.Content>
+          <div className="rounded-lg bg-slate-200 p-4">
+            <p className="mb-2 text-sm font-semibold text-text01">カスタムアンカー基準のPopover</p>
+            <p className="text-xs text-text02">トリガーではなく、上の青い要素を基準に配置されます。</p>
+          </div>
+        </Popover.Content>
+      </Popover>
+    </div>
+  );
+};
+```
+
 ## 技術的な詳細
 
 ### Floating UIの統合
@@ -293,6 +329,8 @@ Popoverコンポーネントは[@floating-ui/react](https://floating-ui.com/)を
 - `autoUpdate`: トリガー要素の移動やリサイズ時の自動位置更新
 - `offset`: トリガーとコンテンツ間の間隔制御
 - `strategy: 'fixed'`: `position: fixed`を使用した固定配置
+- `useDismiss` + `useInteractions`: 外側クリックの検知を含むインタラクションのハンドリング
+- `useRole`: コンテンツに`role="dialog"`を付与
 
 **使用されているミドルウェア**
 
@@ -341,16 +379,26 @@ Popoverの外側をクリックした時やEscapeキーが押された時に`onC
 
 **実装の特徴**
 
-- **外部クリック検知**: `pointerdown`イベントをリスンし、Floating要素とトリガー要素の両方の外側をクリックした時のみ発火
+- **外部クリック検知**: `pointerdown`イベントをリスンし、Floating要素とトリガー（または`anchorRef`で指定した参照要素）の両方の外側をクリックした時のみ発火
 - **Escapeキー対応**: `event.stopPropagation()`でイベントの伝播を停止
 - **reasonパラメータ**: 閉じる理由を`'outside-click'`または`'escape-key-down'`で区別
+- **他のポータル要素のクリック除外**: クリックターゲットが`.z-overlay`や`.z-dropdown`内（Select/Dropdown/Tooltip等の別ポータル）にある場合は、自己以外のFloating UIとして除外して閉じない
 
 ```typescript
 // 外部クリック検知
 const isOutsideFloating = !(floatingEl.contains(target) as boolean);
 const isOutsideReference = !(referenceEl.contains(target) as boolean);
 
-if (isOutsideFloating === true && isOutsideReference === true) {
+// 他のFloating要素内のクリックは除外
+let isInsideOtherFloatingElement = false;
+if (target instanceof Element) {
+  const closestOverlay = target.closest('.z-overlay, .z-dropdown');
+  if (closestOverlay !== null && (floatingEl.contains(closestOverlay) as boolean) === false) {
+    isInsideOtherFloatingElement = true;
+  }
+}
+
+if (isOutsideFloating === true && isOutsideReference === true && !isInsideOtherFloatingElement) {
   onClose('outside-click');
 }
 
@@ -370,6 +418,7 @@ const onKeyDown = (event: React.KeyboardEvent) => {
   - `aria-expanded`: Popoverの開閉状態を示す
   - `aria-controls`: トリガーが制御するPopoverのIDを示す
   - `role="dialog"`: Popoverコンテンツがダイアログであることを示す
+- `Popover.Content`は`children`が要素の場合、`id`（`panelId`）と`role="dialog"`を自動的に補完
 - **フォーカス管理**
   - Popover表示時にコンテンツへ自動フォーカス
   - Popover非表示時にトリガー要素へ自動フォーカス復帰
@@ -395,15 +444,19 @@ const onKeyDown = (event: React.KeyboardEvent) => {
    - `Popover.Trigger`と`Popover.Content`は`Popover`コンポーネント内でのみ使用できます
    - コンテキスト外で使用するとエラーがスローされます
 
-4. **Popupコンポーネントとの統合**
+4. **anchorRefの使用時の基準要素**
+   - `anchorRef`を指定すると、その要素が配置の基準になります
+   - その場合でもフォーカス復帰はTrigger要素に戻ります
+
+5. **Popupコンポーネントとの統合**
    - PopupコンポーネントはPopoverContext内で使用する場合、自動的にコンテキストを参照します
    - Popupの`onClose`でPopoverの`isOpen`状態を更新することを推奨します
 
-5. **ポータル描画の影響**
+6. **ポータル描画の影響**
    - `FloatingPortal`によりDOM階層が親要素から分離されるため、CSS継承が期待通りに動作しない場合があります
    - 必要なスタイルはPopoverコンテンツに直接適用してください
 
-6. **アイコンの使用**
+7. **アイコンの使用**
    - アイコンを使用する場合は、`@zenkigen-inc/component-icons`の`Icon`コンポーネントのみを使用してください
 
 ## スタイルのカスタマイズ
@@ -426,5 +479,6 @@ Popoverコンポーネント自体は最小限のスタイルのみを適用し�
 
 | 日付                 | 内容                                              | 担当者 |
 | -------------------- | ------------------------------------------------- | ------ |
+| 2025-10-27 14:56 JST | anchorRef追加・技術詳細/使用例反映                | -      |
 | 2025-10-22 16:30 JST | API統合: onOutsideClick/onEscapeKeyDown → onClose | -      |
 | 2025-10-17 15:00 JST | 新規作成                                          | -      |
