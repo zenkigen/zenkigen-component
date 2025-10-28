@@ -2,12 +2,12 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { useRef, useState } from 'react';
 
 import { Button } from '../button';
-import type { FileUploadError } from './file-uploader';
-import { FileUploader } from './file-uploader';
+import type { FileInputError } from './file-input';
+import { FileInput } from './file-input';
 
-const meta: Meta<typeof FileUploader> = {
-  title: 'Components/FileUploader',
-  component: FileUploader,
+const meta: Meta<typeof FileInput> = {
+  title: 'Components/FileInput',
+  component: FileInput,
   tags: ['autodocs'],
   argTypes: {
     variant: {
@@ -43,7 +43,7 @@ const meta: Meta<typeof FileUploader> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof FileUploader>;
+type Story = StoryObj<typeof FileInput>;
 
 const WithExternalResetControlComponent = ({
   variant = 'button',
@@ -58,19 +58,19 @@ const WithExternalResetControlComponent = ({
   maxSize?: number;
   isDisabled?: boolean;
 }) => {
-  const fileUploaderRef = useRef<{ reset: () => void }>(null);
-  const [errors, setErrors] = useState<FileUploadError[]>([]);
+  const fileInputRef = useRef<{ reset: () => void }>(null);
+  const [errors, setErrors] = useState<FileInputError[]>([]);
 
   const handleReset = () => {
-    fileUploaderRef.current?.reset();
+    fileInputRef.current?.reset();
     setErrors([]);
   };
 
   return (
     <div className="flex w-full flex-col items-center justify-center gap-4">
       <div className="flex flex-col items-center justify-start gap-8">
-        <FileUploader
-          ref={fileUploaderRef}
+        <FileInput
+          ref={fileInputRef}
           variant={variant}
           {...(variant === 'button' && size && { size: size as 'small' | 'medium' | 'large' })}
           accept={accept}
@@ -120,9 +120,9 @@ export const ButtonVariants: Story = {
   render: () => (
     <div className="flex size-full h-screen items-center justify-center ">
       <div className="flex flex-col items-center justify-center gap-4">
-        <FileUploader variant="button" size="small" />
-        <FileUploader variant="button" size="medium" />
-        <FileUploader variant="button" size="large" />
+        <FileInput variant="button" size="small" />
+        <FileInput variant="button" size="medium" />
+        <FileInput variant="button" size="large" />
       </div>
     </div>
   ),
@@ -132,8 +132,8 @@ export const ButtonStates: Story = {
   render: () => (
     <div className="flex size-full h-screen items-center justify-center ">
       <div className="flex flex-col items-center justify-center gap-4">
-        <FileUploader variant="button" />
-        <FileUploader variant="button" isDisabled />
+        <FileInput variant="button" />
+        <FileInput variant="button" isDisabled />
       </div>
     </div>
   ),
@@ -143,7 +143,7 @@ export const Dropzone: Story = {
   parameters: {
     layout: 'centered',
   },
-  render: () => <FileUploader variant="dropzone" />,
+  render: () => <FileInput variant="dropzone" />,
 };
 
 export const WithExternalResetControl: Story = {
@@ -162,22 +162,22 @@ export const LayoutExamples: Story = {
   render: () => (
     <div className="flex h-full flex-col items-center justify-center gap-4">
       <div className="flex">
-        <FileUploader variant="button" />
+        <FileInput variant="button" />
       </div>
       <div className="w-[360px]">
-        <FileUploader variant="button" />
+        <FileInput variant="button" />
       </div>
       <div className="w-full">
-        <FileUploader variant="button" />
+        <FileInput variant="button" />
       </div>
       <div className="flex">
-        <FileUploader variant="dropzone" />
+        <FileInput variant="dropzone" />
       </div>
       <div className="w-[360px]">
-        <FileUploader variant="dropzone" />
+        <FileInput variant="dropzone" />
       </div>
       <div className="grid h-[600px] w-full">
-        <FileUploader variant="dropzone" />
+        <FileInput variant="dropzone" />
       </div>
     </div>
   ),

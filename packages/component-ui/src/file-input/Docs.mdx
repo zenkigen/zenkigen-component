@@ -1,11 +1,11 @@
 import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/blocks';
 import { Markdown } from '@storybook/blocks';
-import FileUploaderStories, { Default, LayoutExamples } from './file-uploader.stories';
-import spec from '../../../../docs/component/file-uploader-specification.md?raw';
+import FileInputStories, { Default, LayoutExamples } from './file-input.stories';
+import spec from '../../../../docs/component/file-input-specification.md?raw';
 
-<Meta title="FileUploader" of={FileUploaderStories} />
+<Meta title="FileInput" of={FileInputStories} />
 
-# FileUploader
+# FileInput
 
 <details>
   <summary className="typography-label14regular text-text02">詳細仕様書</summary>
@@ -25,20 +25,20 @@ import spec from '../../../../docs/component/file-uploader-specification.md?raw'
 
 ```tsx
 import { useRef } from 'react';
-import { FileUploader, Button } from '@zenkigen-inc/component-ui';
-import type { FileUploaderRef } from '@zenkigen-inc/component-ui';
+import { FileInput, Button } from '@zenkigen-inc/component-ui';
+import type { FileInputRef } from '@zenkigen-inc/component-ui';
 
 const MyComponent = () => {
-  const fileUploaderRef = useRef<FileUploaderRef>(null);
+  const fileInputRef = useRef<FileInputRef>(null);
 
   const handleReset = () => {
-    fileUploaderRef.current?.reset();
+    fileInputRef.current?.reset();
   };
 
   return (
     <div>
-      <FileUploader
-        ref={fileUploaderRef}
+      <FileInput
+        ref={fileInputRef}
         variant="button"
         accept=".csv,.pdf,image/*,application/vnd.ms-excel"
         maxSize={50 * 1024 * 1024}

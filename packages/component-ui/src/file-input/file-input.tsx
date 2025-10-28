@@ -8,14 +8,14 @@ import { IconButton } from '../icon-button';
 
 type Size = 'small' | 'medium' | 'large';
 
-export type FileUploadErrorType = 'SIZE_TOO_LARGE' | 'UNSUPPORTED_FORMAT';
+export type FileInputErrorType = 'SIZE_TOO_LARGE' | 'UNSUPPORTED_FORMAT';
 
-export type FileUploadError = {
-  type: FileUploadErrorType;
+export type FileInputError = {
+  type: FileInputErrorType;
   message: string;
 };
 
-type BaseFileUploaderProps = {
+type BaseFileInputProps = {
   /** 許可するファイル形式（MIMEタイプ） */
   accept?: string;
   /** 最大ファイルサイズ（バイト単位） */
@@ -25,40 +25,40 @@ type BaseFileUploaderProps = {
   /** ファイル選択時のコールバック */
   onSelect?: (file: File | null) => void;
   /** エラー時のコールバック */
-  onError?: (errors: FileUploadError[]) => void;
+  onError?: (errors: FileInputError[]) => void;
 };
 
-type ButtonFileUploaderProps = BaseFileUploaderProps & {
+type ButtonFileInputProps = BaseFileInputProps & {
   /** コンポーネントのバリエーション */
   variant: 'button';
   /** サイズ */
   size?: Size;
 };
 
-type DropzoneFileUploaderProps = BaseFileUploaderProps & {
+type DropzoneFileInputProps = BaseFileInputProps & {
   /** コンポーネントのバリエーション */
   variant: 'dropzone';
 };
 
-type FileUploaderProps = ButtonFileUploaderProps | DropzoneFileUploaderProps;
+type FileInputProps = ButtonFileInputProps | DropzoneFileInputProps;
 
-export type FileUploaderRef = {
+export type FileInputRef = {
   /** ファイル選択状態をリセット */
   reset: () => void;
 };
 
-export const FileUploader = forwardRef<FileUploaderRef, FileUploaderProps>(
-  ({ variant, accept, maxSize, isDisabled = false, onSelect, onError, ...rest }, ref: Ref<FileUploaderRef>) => {
+export const FileInput = forwardRef<FileInputRef, FileInputProps>(
+  ({ variant, accept, maxSize, isDisabled = false, onSelect, onError, ...rest }, ref: Ref<FileInputRef>) => {
     // variantがbuttonの時のみsizeを取得
-    const size = variant === 'button' ? ((rest as ButtonFileUploaderProps).size ?? 'medium') : 'medium';
+    const size = variant === 'button' ? ((rest as ButtonFileInputProps).size ?? 'medium') : 'medium';
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [isDragOver, setIsDragOver] = useState(false);
-    const [errors, setErrors] = useState<FileUploadError[]>([]);
+    const [errors, setErrors] = useState<FileInputError[]>([]);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const validateFile = useCallback(
       (file: File): boolean => {
-        const errors: FileUploadError[] = [];
+        const errors: FileInputError[] = [];
 
         // ファイルサイズチェック
         if (maxSize != null && maxSize > 0 && file.size > maxSize) {
@@ -359,4 +359,4 @@ export const FileUploader = forwardRef<FileUploaderRef, FileUploaderProps>(
   },
 );
 
-FileUploader.displayName = 'FileUploader';
+FileInput.displayName = 'FileInput';

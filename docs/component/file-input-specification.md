@@ -1,4 +1,4 @@
-# FileUploader コンポーネント仕様書
+# FileInput コンポーネント仕様書
 
 ## 目次
 
@@ -38,26 +38,26 @@
 
 ## 概要
 
-FileUploaderコンポーネントは、ファイル選択とアップロード機能を提供するUIコンポーネントである。ボタン形式とドロップゾーン形式の2つのバリエーションがあり、ドラッグ&ドロップによるファイル選択、ファイル形式とサイズのバリデーション、選択状態のリセット機能などを備えている。
+FileInputコンポーネントは、ファイル選択とアップロード機能を提供するUIコンポーネントである。ボタン形式とドロップゾーン形式の2つのバリエーションがあり、ドラッグ&ドロップによるファイル選択、ファイル形式とサイズのバリデーション、選択状態のリセット機能などを備えている。
 
 ## インポート
 
 ```typescript
-import { FileUploader } from '@zenkigen-inc/component-ui';
-import type { FileUploaderRef } from '@zenkigen-inc/component-ui';
+import { FileInput } from '@zenkigen-inc/component-ui';
+import type { FileInputRef } from '@zenkigen-inc/component-ui';
 ```
 
 ## 基本的な使用方法
 
 ```typescript
 import { useState } from 'react';
-import { FileUploader } from '@zenkigen-inc/component-ui';
+import { FileInput } from '@zenkigen-inc/component-ui';
 
 const MyComponent = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   return (
-    <FileUploader
+    <FileInput
       variant="button"
       onSelect={(file) => setSelectedFile(file)}
       onError={(errors) => {
@@ -82,12 +82,12 @@ const MyComponent = () => {
 | `maxSize`    | `number`                              | `undefined`  | 最大ファイルサイズ（バイト単位）               |
 | `isDisabled` | `boolean`                             | `false`      | 無効化状態                                     |
 | `onSelect`   | `(file: File \| null) => void`        | `undefined`  | ファイル選択時のコールバック関数               |
-| `onError`    | `(errors: FileUploadError[]) => void` | `undefined`  | エラー発生時のコールバック関数                 |
+| `onError`    | `(errors: FileInputError[]) => void` | `undefined`  | エラー発生時のコールバック関数                 |
 
-#### FileUploadError 型
+#### FileInputError 型
 
 ```typescript
-type FileUploadError = {
+type FileInputError = {
   type: 'SIZE_TOO_LARGE' | 'UNSUPPORTED_FORMAT';
   message: string;
 };
@@ -106,17 +106,17 @@ type FileUploadError = {
 
 ## Ref API
 
-`FileUploaderRef`型を使用して、コンポーネントの機能をプログラマティックに制御できる。
+`FileInputRef`型を使用して、コンポーネントの機能をプログラマティックに制御できる。
 
 | メソッド | 型           | 説明                           |
 | -------- | ------------ | ------------------------------ |
 | `reset`  | `() => void` | ファイル選択状態をリセットする |
 
 ```typescript
-const fileUploaderRef = useRef<FileUploaderRef>(null);
+const fileInputRef = useRef<FileInputRef>(null);
 
 // ファイル選択をリセット
-fileUploaderRef.current?.reset();
+fileInputRef.current?.reset();
 ```
 
 ## 状態とスタイル
@@ -222,13 +222,13 @@ fileUploaderRef.current?.reset();
 
 ```typescript
 import { useState } from 'react';
-import { FileUploader } from '@zenkigen-inc/component-ui';
+import { FileInput } from '@zenkigen-inc/component-ui';
 
 const BasicExample = () => {
   const [file, setFile] = useState<File | null>(null);
 
   return (
-    <FileUploader
+    <FileInput
       variant="button"
       onSelect={(selectedFile) => {
         setFile(selectedFile);
@@ -245,7 +245,7 @@ const BasicExample = () => {
 ### Dropzoneバリエーション
 
 ```typescript
-<FileUploader
+<FileInput
   variant="dropzone"
   onSelect={(file) => {
     console.log('Selected file:', file);
@@ -262,19 +262,19 @@ const BasicExample = () => {
 
 ```typescript
 // Small
-<FileUploader variant="button" size="small" />
+<FileInput variant="button" size="small" />
 
 // Medium（デフォルト）
-<FileUploader variant="button" size="medium" />
+<FileInput variant="button" size="medium" />
 
 // Large
-<FileUploader variant="button" size="large" />
+<FileInput variant="button" size="large" />
 ```
 
 ### ファイル制約の設定
 
 ```typescript
-<FileUploader
+<FileInput
   variant="button"
   accept=".csv,.pdf"
   maxSize={50 * 1024 * 1024} // 50MB
@@ -291,21 +291,21 @@ const BasicExample = () => {
 
 ```typescript
 import { useRef } from 'react';
-import { FileUploader } from '@zenkigen-inc/component-ui';
-import type { FileUploaderRef } from '@zenkigen-inc/component-ui';
+import { FileInput } from '@zenkigen-inc/component-ui';
+import type { FileInputRef } from '@zenkigen-inc/component-ui';
 import { Button } from '@zenkigen-inc/component-ui';
 
 const RefControlExample = () => {
-  const fileUploaderRef = useRef<FileUploaderRef>(null);
+  const fileInputRef = useRef<FileInputRef>(null);
 
   const handleReset = () => {
-    fileUploaderRef.current?.reset();
+    fileInputRef.current?.reset();
   };
 
   return (
     <div className="flex flex-col gap-4">
-      <FileUploader
-        ref={fileUploaderRef}
+      <FileInput
+        ref={fileInputRef}
         variant="button"
         onSelect={(file) => {
           console.log('Selected file:', file);
@@ -322,7 +322,7 @@ const RefControlExample = () => {
 ### エラー状態
 
 ```typescript
-<FileUploader
+<FileInput
   variant="button"
   accept=".csv,.pdf"
   maxSize={10 * 1024 * 1024}
@@ -333,7 +333,7 @@ const RefControlExample = () => {
   }}
 />
 
-<FileUploader
+<FileInput
   variant="dropzone"
   accept=".csv,.pdf"
   maxSize={10 * 1024 * 1024}
@@ -348,13 +348,13 @@ const RefControlExample = () => {
 ### 無効状態
 
 ```typescript
-<FileUploader
+<FileInput
   variant="button"
   isDisabled={true}
   onSelect={(file) => console.log(file)}
 />
 
-<FileUploader
+<FileInput
   variant="dropzone"
   isDisabled={true}
   onSelect={(file) => console.log(file)}
@@ -363,14 +363,14 @@ const RefControlExample = () => {
 
 ## ファイルバリデーション
 
-FileUploaderコンポーネントは、ファイル選択時に自動的にバリデーションを実行する。
+FileInputコンポーネントは、ファイル選択時に自動的にバリデーションを実行する。
 
 ### サイズチェック
 
 `maxSize` Propが設定されている場合、選択されたファイルのサイズがこの値を超えていないかチェックする。
 
 ```typescript
-<FileUploader
+<FileInput
   maxSize={10 * 1024 * 1024} // 10MB
   onError={(errors) => {
     // errors[0].type: 'SIZE_TOO_LARGE'
@@ -391,7 +391,7 @@ FileUploaderコンポーネントは、ファイル選択時に自動的にバ�
 `accept` Propが設定されている場合、選択されたファイルの形式（拡張子またはMIMEタイプ）が許可されているかチェックする。
 
 ```typescript
-<FileUploader
+<FileInput
   accept=".csv,.pdf,image/*"
   onError={(errors) => {
     // errors[0].type: 'UNSUPPORTED_FORMAT'
@@ -417,7 +417,7 @@ FileUploaderコンポーネントは、ファイル選択時に自動的にバ�
 
 ### 実装について
 
-- `forwardRef`を使用してref転送をサポート（`FileUploaderRef`型）
+- `forwardRef`を使用してref転送をサポート（`FileInputRef`型）
 - `useImperativeHandle`で`reset`メソッドを公開
 - `clsx`を使用した動的クラス名の生成
 - 内部で`<input type="file">`要素を使用（`hidden`クラスで非表示）
@@ -492,7 +492,7 @@ dropzone variantでのドラッグ&ドロップ機能：
 
 ## 関連ドキュメント
 
-- [FileUploader 残りの作業](./file-uploader-known-issues.md) - 実装予定の改善項目
+- [FileInput 残りの作業](./file-uploader-known-issues.md) - 実装予定の改善項目
 
 ---
 
