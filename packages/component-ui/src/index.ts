@@ -4,7 +4,7 @@ export * from './button';
 export * from './checkbox';
 export * from './dropdown';
 export * from './evaluation-star';
-export * from './file-uploader';
+export * from './file-input';
 export * from './heading';
 export * from './hooks';
 export * from './icon';
