@@ -24,15 +24,19 @@ import spec from '../../../../docs/component/file-input-specification.md?raw';
 ### Code Example
 
 ```tsx
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { FileInput, Button } from '@zenkigen-inc/component-ui';
 import type { FileInputRef } from '@zenkigen-inc/component-ui';
 
 const MyComponent = () => {
   const fileInputRef = useRef<FileInputRef>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
   const handleReset = () => {
     fileInputRef.current?.reset();
+    setSelectedFile(null);
+    setErrorMessages([]);
   };
 
   return (
@@ -42,14 +46,9 @@ const MyComponent = () => {
         variant="button"
         accept=".csv,.pdf,image/*,application/vnd.ms-excel"
         maxSize={50 * 1024 * 1024}
-        onSelect={(file) => {
-          console.log('Selected file:', file);
-        }}
-        onError={(errors) => {
-          errors.forEach((error) => {
-            console.error(`[${error.type}] ${error.message}`);
-          });
-        }}
+        errorMessages={errorMessages}
+        onSelect={(file) => setSelectedFile(file)}
+        onError={(errors) => setErrorMessages(errors.map((e) => e.message))}
       />
       <Button variant="text" onClick={handleReset}>
         リセット
