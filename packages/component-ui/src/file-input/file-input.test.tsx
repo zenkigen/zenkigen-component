@@ -45,7 +45,7 @@ describe('FileInput', () => {
 
       const input = container.querySelector('input[type="file"]') as HTMLInputElement;
       expect(input).toHaveAttribute('id');
-      expect(input.id).toMatch(/^«r\d+»/); // useId の形式
+      expect(input.id).toMatch(/^«r[a-z0-9]+»/); // useId の形式
     });
   });
 
@@ -355,44 +355,6 @@ describe('FileInput', () => {
     });
   });
 
-  describe('アクセシビリティ', () => {
-    it('ボタンバリアントで適切なARIA属性が設定される', () => {
-      const { container } = render(<FileInput variant="button" errorMessages={['Error message']} />);
-
-      const input = container.querySelector('input[type="file"]') as HTMLInputElement;
-      expect(input).toHaveAttribute('aria-invalid', 'true');
-      expect(input).toHaveAttribute('aria-describedby');
-    });
-
-    it('ドロップゾーンバリアントで適切なARIA属性が設定される', () => {
-      render(<FileInput variant="dropzone" errorMessages={['Error message']} />);
-
-      const dropzone = screen.getByRole('button', { name: /ファイルを選択/ });
-      expect(dropzone).toHaveAttribute('aria-label', 'ファイルを選択');
-      expect(dropzone).toHaveAttribute('aria-disabled', 'false');
-      expect(dropzone).toHaveAttribute('aria-describedby');
-
-      const { container } = render(<FileInput variant="dropzone" errorMessages={['Error message']} />);
-      const input = container.querySelector('input[type="file"]') as HTMLInputElement;
-      expect(input).toHaveAttribute('aria-invalid', 'true');
-    });
-
-    it('無効時に適切なARIA属性が設定される', () => {
-      render(<FileInput variant="dropzone" isDisabled />);
-
-      const dropzone = screen.getByRole('button', { name: /ファイルを選択/ });
-      expect(dropzone).toHaveAttribute('aria-disabled', 'true');
-    });
-
-    it('エラーがない時に適切なARIA属性が設定される', () => {
-      const { container } = render(<FileInput variant="button" />);
-
-      const input = container.querySelector('input[type="file"]') as HTMLInputElement;
-      expect(input).toHaveAttribute('aria-invalid', 'false');
-      expect(input).not.toHaveAttribute('aria-describedby');
-    });
-  });
-
   describe('ドラッグ&ドロップ', () => {
     it('ドロップゾーンでファイルドロップが処理される', async () => {
       const onSelect = vi.fn();
@@ -489,6 +451,158 @@ describe('FileInput', () => {
       render(<FileInput variant="dropzone" />);
 
       expect(screen.getAllByText('制限なし')).toHaveLength(2);
+    });
+  });
+
+  describe('アクセシビリティ', () => {
+    it('ボタンバリアントで適切なARIA属性が設定される', () => {
+      const { container } = render(<FileInput variant="button" errorMessages={['Error message']} />);
+
+      const input = container.querySelector('input[type="file"]') as HTMLInputElement;
+      expect(input).toHaveAttribute('aria-invalid', 'true');
+      expect(input).toHaveAttribute('aria-describedby');
+    });
+
+    it('ドロップゾーンバリアントで適切なARIA属性が設定される', () => {
+      render(<FileInput variant="dropzone" errorMessages={['Error message']} />);
+
+      const dropzone = screen.getByRole('button', { name: /ファイルを選択/ });
+      expect(dropzone).toHaveAttribute('aria-label', 'ファイルを選択');
+      expect(dropzone).toHaveAttribute('aria-disabled', 'false');
+      expect(dropzone).toHaveAttribute('aria-describedby');
+
+      const { container } = render(<FileInput variant="dropzone" errorMessages={['Error message']} />);
+      const input = container.querySelector('input[type="file"]') as HTMLInputElement;
+      expect(input).toHaveAttribute('aria-invalid', 'true');
+    });
+
+    it('無効時に適切なARIA属性が設定される', () => {
+      render(<FileInput variant="dropzone" isDisabled />);
+
+      const dropzone = screen.getByRole('button', { name: /ファイルを選択/ });
+      expect(dropzone).toHaveAttribute('aria-disabled', 'true');
+    });
+
+    it('エラーがない時に適切なARIA属性が設定される', () => {
+      const { container } = render(<FileInput variant="button" />);
+
+      const input = container.querySelector('input[type="file"]') as HTMLInputElement;
+      expect(input).toHaveAttribute('aria-invalid', 'false');
+      expect(input).not.toHaveAttribute('aria-describedby');
+    });
+
+    it('ボタンバリアントでrole="button"が設定される', () => {
+      render(<FileInput variant="button" />);
+
+      const button = screen.getByRole('button', { name: /ファイルを選択/ });
+      expect(button).toBeInTheDocument();
+    });
+
+    it('ドロップゾーンバリアントでrole="button"が設定される', () => {
+      render(<FileInput variant="dropzone" />);
+
+      const dropzone = screen.getByRole('button', { name: /ファイルを選択/ });
+      expect(dropzone).toBeInTheDocument();
+    });
+
+    it('ドロップゾーンバリアントでtabIndexが設定される', () => {
+      render(<FileInput variant="dropzone" />);
+
+      const dropzone = screen.getByRole('button', { name: /ファイルを選択/ });
+      expect(dropzone).toHaveAttribute('tabIndex', '0');
+    });
+
+    it('無効時にtabIndexが-1に設定される', () => {
+      render(<FileInput variant="dropzone" isDisabled />);
+
+      const dropzone = screen.getByRole('button', { name: /ファイルを選択/ });
+      expect(dropzone).toHaveAttribute('tabIndex', '-1');
+    });
+
+    it('エラーメッセージに適切なIDが設定される', () => {
+      const { container } = render(<FileInput variant="button" errorMessages={['Error message']} />);
+
+      const errorContainer = container.querySelector('[data-testid="error-messages"]');
+      expect(errorContainer).toHaveAttribute('id');
+      expect(errorContainer?.id).toMatch(/^«r[a-z0-9]+»/);
+    });
+
+    it('aria-describedbyでエラーメッセージと入力が関連付けられる', () => {
+      const { container } = render(<FileInput variant="button" errorMessages={['Error message']} />);
+
+      const input = container.querySelector('input[type="file"]') as HTMLInputElement;
+      const errorContainer = container.querySelector('[data-testid="error-messages"]');
+
+      expect(input).toHaveAttribute('aria-describedby', errorContainer?.id);
+    });
+
+    it('カスタムIDが提供された時にそのIDが使用される', () => {
+      const { container } = render(<FileInput variant="button" id="custom-file-input" />);
+
+      const input = container.querySelector('input[type="file"]') as HTMLInputElement;
+      expect(input).toHaveAttribute('id', 'custom-file-input');
+    });
+
+    it('複数のFileInputインスタンスでユニークなIDが生成される', () => {
+      const { container: container1 } = render(<FileInput variant="button" />);
+      const { container: container2 } = render(<FileInput variant="button" />);
+
+      const input1 = container1.querySelector('input[type="file"]') as HTMLInputElement;
+      const input2 = container2.querySelector('input[type="file"]') as HTMLInputElement;
+
+      expect(input1.id).not.toBe(input2.id);
+    });
+
+    it('ドロップゾーンバリアントでキーボードナビゲーションが可能', async () => {
+      const user = userEvent.setup();
+
+      render(<FileInput variant="dropzone" />);
+
+      const dropzone = screen.getByRole('button', { name: /ファイルを選択/ });
+
+      // フォーカス可能
+      await user.tab();
+      expect(dropzone).toHaveFocus();
+    });
+
+    it('ボタンバリアントでキーボードナビゲーションが可能', async () => {
+      const user = userEvent.setup();
+
+      render(<FileInput variant="button" />);
+
+      const button = screen.getByRole('button', { name: /ファイルを選択/ });
+
+      // フォーカス可能
+      await user.tab();
+      expect(button).toHaveFocus();
+    });
+
+    it('無効時にキーボードナビゲーションが無効化される', async () => {
+      const user = userEvent.setup();
+
+      render(<FileInput variant="dropzone" isDisabled />);
+
+      const dropzone = screen.getByRole('button', { name: /ファイルを選択/ });
+
+      // フォーカスできない
+      await user.tab();
+      expect(dropzone).not.toHaveFocus();
+    });
+
+    it('エラーメッセージが複数ある場合に適切に表示される', () => {
+      const errorMessages = ['エラー1', 'エラー2', 'エラー3'];
+      render(<FileInput variant="button" errorMessages={errorMessages} />);
+
+      errorMessages.forEach((message) => {
+        expect(screen.getByText(message)).toBeInTheDocument();
+      });
+    });
+
+    it('エラーメッセージが空配列の場合に表示されない', () => {
+      const { container } = render(<FileInput variant="button" errorMessages={[]} />);
+
+      const input = container.querySelector('input[type="file"]') as HTMLInputElement;
+      expect(input).not.toHaveAttribute('aria-describedby');
     });
   });
 });
