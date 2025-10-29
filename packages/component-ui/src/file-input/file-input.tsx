@@ -216,7 +216,7 @@ export const FileInput = forwardRef<FileInputRef, FileInputProps>(
     const hasErrors = !isDisabled && errorMessages != null && errorMessages.length > 0;
 
     const dropzoneClasses = clsx(
-      'flex cursor-pointer flex-col items-center justify-center gap-4 rounded border border-dashed px-6 text-center hover:bg-hover02',
+      'flex flex-1 cursor-pointer flex-col items-center justify-center gap-4 rounded border border-dashed px-6 text-center hover:bg-hover02',
       selectedFile ? 'py-[52px]' : 'py-4',
       {
         'border-uiBorder03 bg-white text-text01': !isDisabled && !isDragOver && !hasErrors,
@@ -318,68 +318,70 @@ export const FileInput = forwardRef<FileInputRef, FileInputProps>(
     }
 
     return (
-      <div
-        className={dropzoneClasses}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-        onClick={handleButtonClick}
-      >
+      <div className="flex flex-col gap-2">
+        <div
+          className={dropzoneClasses}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+          onClick={handleButtonClick}
+        >
+          <Icon name="download-document" size="large" color={isDisabled ? 'icon03' : 'icon01'} />
+          {!selectedFile && (
+            <div className="flex flex-col gap-1">
+              <div className="typography-body13regular select-none">
+                <>
+                  ここにファイルをドロップしてください。
+                  <br />
+                  または、<span className={clsx(!isDisabled ? 'text-link01' : '')}>ファイルを選択</span>してください。
+                </>
+              </div>
+            </div>
+          )}
+          {!selectedFile && (
+            <div className="flex flex-col gap-1">
+              <div className={clsx('typography-label11regular', isDisabled ? 'text-textPlaceholder' : 'text-text02')}>
+                対応形式
+              </div>
+              <div className={clsx('typography-body12regular', isDisabled ? 'text-textPlaceholder' : 'text-text01')}>
+                {acceptLabel}
+              </div>
+              <div className={clsx('typography-label11regular', isDisabled ? 'text-textPlaceholder' : 'text-text02')}>
+                サイズ
+              </div>
+              <div className={clsx('typography-body12regular', isDisabled ? 'text-textPlaceholder' : 'text-text01')}>
+                {maxSizeLabel}
+              </div>
+            </div>
+          )}
+          {selectedFile && (
+            <div className="mt-2 flex flex-col items-center gap-1">
+              <span className="typography-label11regular text-text02">ファイル名</span>
+              <div className="flex items-center gap-2">
+                <span className="typography-label14regular">{selectedFile.name}</span>
+                {!isDisabled && (
+                  <IconButton
+                    variant="text"
+                    icon="close"
+                    size="small"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      handleClear();
+                    }}
+                  />
+                )}
+              </div>
+            </div>
+          )}
+          <input ref={fileInputRef} type="file" accept={accept} onChange={handleFileInputChange} className="hidden" />
+        </div>
         {hasErrors && (
-          <div className="flex select-none flex-col gap-1 bg-uiBackgroundError text-supportDanger">
+          <div className="typography-body13regular flex flex-col text-supportDanger">
             {errorMessages.map((message, index) => (
               <div key={index}>{message}</div>
             ))}
           </div>
         )}
-        <Icon name="download-document" size="large" color={isDisabled ? 'icon03' : 'icon01'} />
-        {!selectedFile && (
-          <div className="flex flex-col gap-1">
-            <div className="typography-body13regular select-none">
-              <>
-                ここにファイルをドロップしてください。
-                <br />
-                または、<span className={clsx(!isDisabled ? 'text-link01' : '')}>ファイルを選択</span>してください。
-              </>
-            </div>
-          </div>
-        )}
-        {!selectedFile && (
-          <div className="flex flex-col gap-1">
-            <div className={clsx('typography-label11regular', isDisabled ? 'text-textPlaceholder' : 'text-text02')}>
-              対応形式
-            </div>
-            <div className={clsx('typography-body12regular', isDisabled ? 'text-textPlaceholder' : 'text-text01')}>
-              {acceptLabel}
-            </div>
-            <div className={clsx('typography-label11regular', isDisabled ? 'text-textPlaceholder' : 'text-text02')}>
-              サイズ
-            </div>
-            <div className={clsx('typography-body12regular', isDisabled ? 'text-textPlaceholder' : 'text-text01')}>
-              {maxSizeLabel}
-            </div>
-          </div>
-        )}
-        {selectedFile && (
-          <div className="mt-2 flex flex-col items-center gap-1">
-            <span className="typography-label11regular text-text02">ファイル名</span>
-            <div className="flex items-center gap-2">
-              <span className="typography-label14regular">{selectedFile.name}</span>
-              {!isDisabled && (
-                <IconButton
-                  variant="text"
-                  icon="close"
-                  size="small"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    handleClear();
-                  }}
-                />
-              )}
-            </div>
-          </div>
-        )}
-        <input ref={fileInputRef} type="file" accept={accept} onChange={handleFileInputChange} className="hidden" />
       </div>
     );
   },
