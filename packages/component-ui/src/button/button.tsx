@@ -6,6 +6,9 @@ type Size = 'small' | 'medium' | 'large';
 type Variant = 'fill' | 'fillDanger' | 'outline' | 'text';
 type JustifyContent = 'start' | 'center';
 
+// 内部実装用の型（outlineDangerを含む）
+type InternalVariant = Variant | 'outlineDanger';
+
 export type ElementAs = ElementType;
 
 export type AsProp<T extends ElementAs> = {
@@ -16,14 +19,14 @@ export type PolymorphicPropsWithoutRef<T extends ElementAs, P extends object> = 
   ComponentPropsWithoutRef<T> &
   AsProp<T>;
 
-type Props<T extends ElementAs> = PolymorphicPropsWithoutRef<
+// 共通のプロパティ型
+type BaseProps<T extends ElementAs> = PolymorphicPropsWithoutRef<
   T,
   {
     size?: Size;
     width?: CSSProperties['width'];
     isSelected?: boolean;
     isDisabled?: boolean;
-    variant?: Variant;
     before?: ReactNode;
     after?: ReactNode;
     borderRadius?: CSSProperties['borderRadius'];
@@ -31,20 +34,33 @@ type Props<T extends ElementAs> = PolymorphicPropsWithoutRef<
   }
 >;
 
-export const Button = <T extends ElementAs = 'button'>({
-  size = 'medium',
-  variant = 'fill',
-  isDisabled,
-  isSelected = false,
-  width,
-  borderRadius,
-  justifyContent = 'center',
-  before,
-  after,
-  elementAs,
-  children,
-  ...props
-}: Props<T>) => {
+// 公開API用の型（outlineDangerは含まない）
+type PublicProps<T extends ElementAs> = BaseProps<T> & {
+  variant?: Variant;
+};
+
+// 内部実装用の型（outlineDanger variantを含む）
+type InternalProps<T extends ElementAs> = BaseProps<T> & {
+  variant?: InternalVariant;
+};
+
+// 共通のButton実装
+const createButton = <T extends ElementAs = 'button'>(props: InternalProps<T>) => {
+  const {
+    size = 'medium',
+    variant = 'fill',
+    isDisabled,
+    isSelected = false,
+    width,
+    borderRadius,
+    justifyContent = 'center',
+    before,
+    after,
+    elementAs,
+    children,
+    ...restProps
+  } = props;
+
   const baseClasses = clsx(
     'flex shrink-0 items-center gap-1',
     buttonColors[variant].hover,
@@ -59,7 +75,7 @@ export const Button = <T extends ElementAs = 'button'>({
       [buttonColors[variant].selected]: isSelected,
       [buttonColors[variant].base]: !isSelected,
       'hover:text-textOnColor active:text-textOnColor [&:hover>*]:fill-iconOnColor [&:active>*]:fill-iconOnColor':
-        isSelected && variant !== 'outline' && variant !== 'text',
+        isSelected && variant !== 'outline' && variant !== 'text' && variant !== 'outlineDanger',
       'pointer-events-none': isDisabled,
       'rounded-button': borderRadius == null,
       'justify-start': justifyContent === 'start',
@@ -72,10 +88,20 @@ export const Button = <T extends ElementAs = 'button'>({
   const Component = elementAs ?? 'button';
 
   return (
-    <Component className={baseClasses} style={{ width, borderRadius }} disabled={isDisabled} {...props}>
+    <Component className={baseClasses} style={{ width, borderRadius }} disabled={isDisabled} {...restProps}>
       {before}
       {children}
       {after}
     </Component>
   );
+};
+
+// 公開API用のButtonコンポーネント
+export const Button = <T extends ElementAs = 'button'>(props: PublicProps<T>) => {
+  return createButton(props as InternalProps<T>);
+};
+
+// 内部実装用のButtonコンポーネント（outlineDanger variantを含む）
+export const InternalButton = <T extends ElementAs = 'button'>(props: InternalProps<T>) => {
+  return createButton(props);
 };
