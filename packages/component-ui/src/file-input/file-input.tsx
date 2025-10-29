@@ -2,18 +2,30 @@ import { clsx } from 'clsx';
 import type { ChangeEvent, DragEvent, Ref } from 'react';
 import { forwardRef, useCallback, useImperativeHandle, useRef, useState } from 'react';
 
-import { Button } from '../button';
+import { InternalButton } from '../button/button';
 import { Icon } from '../icon';
 import { IconButton } from '../icon-button';
 
 type Size = 'small' | 'medium' | 'large';
 
-export type FileInputErrorType = 'SIZE_TOO_LARGE' | 'UNSUPPORTED_FORMAT';
+// エラータイプ定数
+const ERROR_TYPES = {
+  SIZE_TOO_LARGE: 'SIZE_TOO_LARGE',
+  UNSUPPORTED_FORMAT: 'UNSUPPORTED_FORMAT',
+} as const;
+
+export type FileInputErrorType = (typeof ERROR_TYPES)[keyof typeof ERROR_TYPES];
 
 export type FileInputError = {
   type: FileInputErrorType;
   message: string;
 };
+
+// エラーメッセージ定数
+const ERROR_MESSAGES = {
+  SIZE_TOO_LARGE: 'ファイルサイズが大き過ぎます。',
+  UNSUPPORTED_FORMAT: 'ファイル形式が正しくありません。',
+} as const;
 
 type BaseFileInputProps = {
   /** 許可するファイル形式（MIMEタイプ） */
@@ -26,6 +38,8 @@ type BaseFileInputProps = {
   onSelect?: (file: File | null) => void;
   /** エラー時のコールバック */
   onError?: (errors: FileInputError[]) => void;
+  /** エラーメッセージリスト */
+  errorMessages?: string[];
 };
 
 type ButtonFileInputProps = BaseFileInputProps & {
@@ -48,12 +62,14 @@ export type FileInputRef = {
 };
 
 export const FileInput = forwardRef<FileInputRef, FileInputProps>(
-  ({ variant, accept, maxSize, isDisabled = false, onSelect, onError, ...rest }, ref: Ref<FileInputRef>) => {
+  (
+    { variant, accept, maxSize, isDisabled = false, onSelect, onError, errorMessages, ...rest },
+    ref: Ref<FileInputRef>,
+  ) => {
     // variantがbuttonの時のみsizeを取得
     const size = variant === 'button' ? ((rest as ButtonFileInputProps).size ?? 'medium') : 'medium';
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [isDragOver, setIsDragOver] = useState(false);
-    const [errors, setErrors] = useState<FileInputError[]>([]);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const validateFile = useCallback(
@@ -63,8 +79,8 @@ export const FileInput = forwardRef<FileInputRef, FileInputProps>(
         // ファイルサイズチェック
         if (maxSize != null && maxSize > 0 && file.size > maxSize) {
           errors.push({
-            type: 'SIZE_TOO_LARGE',
-            message: `ファイルサイズが大き過ぎます。`,
+            type: ERROR_TYPES.SIZE_TOO_LARGE,
+            message: ERROR_MESSAGES.SIZE_TOO_LARGE,
           });
         }
 
@@ -101,18 +117,15 @@ export const FileInput = forwardRef<FileInputRef, FileInputProps>(
           });
 
           if (!isAccepted) {
-            errors.push({ type: 'UNSUPPORTED_FORMAT', message: 'ファイル形式が正しくありません。' });
+            errors.push({ type: ERROR_TYPES.UNSUPPORTED_FORMAT, message: ERROR_MESSAGES.UNSUPPORTED_FORMAT });
           }
         }
 
         if (errors.length > 0) {
-          setErrors(errors);
           onError?.(errors);
 
           return false;
         }
-
-        setErrors([]);
 
         return true;
       },
@@ -133,8 +146,15 @@ export const FileInput = forwardRef<FileInputRef, FileInputProps>(
 
     const handleFileInputChange = useCallback(
       (event: ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0] ?? null;
-        handleFileSelect(file);
+        const files = event.target.files;
+        // ファイルが選択されていない場合（キャンセル）は既存の状態を維持
+        if (files == null || files.length === 0) {
+          return;
+        }
+        const file = files[0];
+        if (file != null) {
+          handleFileSelect(file);
+        }
       },
       [handleFileSelect],
     );
@@ -177,7 +197,6 @@ export const FileInput = forwardRef<FileInputRef, FileInputProps>(
 
     const handleClear = useCallback(() => {
       setSelectedFile(null);
-      setErrors([]);
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
@@ -193,13 +212,16 @@ export const FileInput = forwardRef<FileInputRef, FileInputProps>(
       [handleClear],
     );
 
+    // エラーメッセージの表示判定
+    const hasErrors = !isDisabled && errorMessages != null && errorMessages.length > 0;
+
     const dropzoneClasses = clsx(
       'flex cursor-pointer flex-col items-center justify-center gap-4 rounded border border-dashed px-6 text-center hover:bg-hover02',
       selectedFile ? 'py-[52px]' : 'py-4',
       {
-        'border-uiBorder03 bg-white text-text01': !isDisabled && !isDragOver && errors.length === 0,
-        'border-activeInput bg-activeInput/5': !isDisabled && isDragOver && errors.length === 0,
-        'border-supportDanger bg-white': errors.length > 0 && !isDisabled,
+        'border-uiBorder03 bg-white text-text01': !isDisabled && !isDragOver && !hasErrors,
+        'border-activeInput bg-activeInput/5': !isDisabled && isDragOver && !hasErrors,
+        'border-supportDanger bg-white': hasErrors && !isDisabled,
         'border-disabled01 bg-disabled02 text-textPlaceholder cursor-not-allowed': isDisabled,
       },
     );
@@ -256,9 +278,9 @@ export const FileInput = forwardRef<FileInputRef, FileInputProps>(
       return (
         <div className="flex items-center gap-2">
           <div className="min-w-0 flex-1">
-            <Button
+            <InternalButton
               size={size}
-              variant={errors.length > 0 ? 'fillDanger' : 'outline'}
+              variant={hasErrors ? 'outlineDanger' : 'outline'}
               isDisabled={isDisabled}
               width="100%"
               onClick={handleButtonClick}
@@ -274,17 +296,19 @@ export const FileInput = forwardRef<FileInputRef, FileInputProps>(
               }
             >
               <span className="shrink-0">ファイルを選択</span>
-            </Button>
+            </InternalButton>
           </div>
           {selectedFile && !isDisabled && (
             <div className="shrink-0">
               <IconButton variant="text" icon="close" size="small" onClick={handleClear} />
             </div>
           )}
-          {errors.length > 0 && (
-            <div className="typography-label12regular shrink-0 text-supportError">
-              {errors.map((error, index) => (
-                <div key={index}>{error.message}</div>
+          {hasErrors && (
+            <div className="typography-label12regular text-supportError">
+              {errorMessages.map((message, index) => (
+                <div key={index} className="break-all">
+                  {message}
+                </div>
               ))}
             </div>
           )}
@@ -301,9 +325,11 @@ export const FileInput = forwardRef<FileInputRef, FileInputProps>(
         onDrop={handleDrop}
         onClick={handleButtonClick}
       >
-        {errors.length > 0 && (
+        {hasErrors && (
           <div className="flex select-none flex-col gap-1 bg-uiBackgroundError text-supportDanger">
-            {errors.length > 0 && errors.map((error, index) => <div key={index}>{error.message}</div>)}
+            {errorMessages.map((message, index) => (
+              <div key={index}>{message}</div>
+            ))}
           </div>
         )}
         <Icon name="download-document" size="large" color={isDisabled ? 'icon03' : 'icon01'} />
