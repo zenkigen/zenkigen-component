@@ -74,14 +74,14 @@ const MyComponent = () => {
 
 ### オプションプロパティ
 
-| プロパティ   | 型                                    | デフォルト値 | 説明                                           |
-| ------------ | ------------------------------------- | ------------ | ---------------------------------------------- |
-| `variant`    | `'button' \| 'dropzone'`              | `'button'`   | コンポーネントのバリエーション                 |
-| `size`       | `'small' \| 'medium' \| 'large'`      | `'medium'`   | サイズ（`button` variantのみ有効）             |
-| `accept`     | `string`                              | `undefined`  | 許可するファイル形式（拡張子またはMIMEタイプ） |
-| `maxSize`    | `number`                              | `undefined`  | 最大ファイルサイズ（バイト単位）               |
-| `isDisabled` | `boolean`                             | `false`      | 無効化状態                                     |
-| `onSelect`   | `(file: File \| null) => void`        | `undefined`  | ファイル選択時のコールバック関数               |
+| プロパティ   | 型                                   | デフォルト値 | 説明                                           |
+| ------------ | ------------------------------------ | ------------ | ---------------------------------------------- |
+| `variant`    | `'button' \| 'dropzone'`             | `'button'`   | コンポーネントのバリエーション                 |
+| `size`       | `'small' \| 'medium' \| 'large'`     | `'medium'`   | サイズ（`button` variantのみ有効）             |
+| `accept`     | `string`                             | `undefined`  | 許可するファイル形式（拡張子またはMIMEタイプ） |
+| `maxSize`    | `number`                             | `undefined`  | 最大ファイルサイズ（バイト単位）               |
+| `isDisabled` | `boolean`                            | `false`      | 無効化状態                                     |
+| `onSelect`   | `(file: File \| null) => void`       | `undefined`  | ファイル選択時のコールバック関数               |
 | `onError`    | `(errors: FileInputError[]) => void` | `undefined`  | エラー発生時のコールバック関数                 |
 
 #### FileInputError 型
