@@ -151,6 +151,11 @@ export const FileInput = forwardRef<FileInputRef, FileInputProps>(
 
     const handleFileInputChange = useCallback(
       (event: ChangeEvent<HTMLInputElement>) => {
+        // 無効状態ではファイル選択を無視
+        if (isDisabled) {
+          return;
+        }
+
         const files = event.target.files;
         // ユーザーがファイルダイアログでキャンセルした場合は、
         // 既存の選択状態を維持する（意図的な仕様）
@@ -162,7 +167,7 @@ export const FileInput = forwardRef<FileInputRef, FileInputProps>(
           handleFileSelect(file);
         }
       },
-      [handleFileSelect],
+      [isDisabled, handleFileSelect],
     );
 
     const handleDragOver = useCallback(
@@ -325,6 +330,7 @@ export const FileInput = forwardRef<FileInputRef, FileInputProps>(
             accept={accept}
             onChange={handleFileInputChange}
             className="hidden"
+            aria-invalid={hasErrors}
             {...(hasErrors && { 'aria-describedby': errorId })}
           />
         </div>
@@ -405,6 +411,7 @@ export const FileInput = forwardRef<FileInputRef, FileInputProps>(
             accept={accept}
             onChange={handleFileInputChange}
             className="hidden"
+            aria-invalid={hasErrors}
             {...(hasErrors && { 'aria-describedby': errorId })}
           />
         </div>
