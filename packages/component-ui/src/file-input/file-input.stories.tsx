@@ -221,7 +221,7 @@ export const LayoutExamplesWithError: Story = {
       <div className="flex">
         <FileInput variant="button" errorMessages={args.errorMessages} />
       </div>
-      <div className="w-[280px]">
+      <div className="w-[200px]">
         <FileInput variant="button" errorMessages={args.errorMessages} />
       </div>
       <div className="w-full">
@@ -230,7 +230,7 @@ export const LayoutExamplesWithError: Story = {
       <div className="flex">
         <FileInput variant="dropzone" errorMessages={args.errorMessages} />
       </div>
-      <div className="w-[280px]">
+      <div className="w-[200px]">
         <FileInput variant="dropzone" errorMessages={args.errorMessages} />
       </div>
       <div className="grid h-[600px] w-full">
