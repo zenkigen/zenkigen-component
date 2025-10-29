@@ -80,6 +80,7 @@ const MyComponent = () => {
 
 | プロパティ      | 型                                   | デフォルト値 | 説明                                                             |
 | --------------- | ------------------------------------ | ------------ | ---------------------------------------------------------------- |
+| `id`            | `string`                             | `undefined`  | input要素のID（外部のlabel要素との連携用）                       |
 | `size`          | `'small'` \| `'medium'` \| `'large'` | `'medium'`   | サイズ（`button` variant のみ有効）                              |
 | `accept`        | `string`                             | `undefined`  | 許可するファイル形式（拡張子またはMIMEタイプ。カンマ区切り対応） |
 | `maxSize`       | `number`                             | `undefined`  | 最大ファイルサイズ（バイト単位）                                 |
@@ -330,6 +331,23 @@ const RefControlExample = () => {
 />
 ```
 
+### 外部label要素との連携
+
+```typescript
+// 外部のlabel要素と連携
+<label htmlFor="my-file-input">
+  ファイルを選択してください
+</label>
+<FileInput
+  id="my-file-input"
+  variant="button"
+  onSelect={(file) => console.log('Selected:', file)}
+/>
+
+// IDを指定しない場合は自動生成
+<FileInput variant="button" />
+```
+
 ## ファイルバリデーション
 
 FileInputコンポーネントは、ファイル選択時に自動的にバリデーションを実行する。
@@ -389,6 +407,8 @@ FileInputコンポーネントは、ファイル選択時に自動的にバリ�
 - `clsx`を使用した動的クラス名の生成
 - 内部で`<input type="file">`要素を使用（`hidden`クラスで非表示）
 - ButtonコンポーネントとIconButtonコンポーネントを内部で使用
+- `useId`を使用して一意のIDを生成（外部`id` propが未指定の場合）
+- アクセシビリティ対応（ARIA属性、キーボード操作）
 
 ### ドラッグ&ドロップ
 
@@ -432,12 +452,16 @@ dropzone variantでのドラッグ&ドロップ機能：
 - 標準のButtonコンポーネント機能を継承
 - キーボード操作：Tab、Enter、Spaceキーで操作可能
 - スクリーンリーダー対応：ボタンラベルが読み上げられる
+- エラーメッセージ：`aria-describedby`でinput要素と連携
 
 ### Dropzone Variant
 
-- クリック操作でファイルダイアログを開く（ルート要素は`div`）
-- 現状、キーボード操作のフォーカス移動・Enter/Spaceでの起動は未実装（要対応）
-- エラーメッセージ読み上げなどのARIA属性付与は今後の改善項目（既知課題を参照）
+- クリック操作でファイルダイアログを開く
+- キーボード操作：Tab、Enter、Spaceキーで操作可能
+- `role="button"`でボタンとして認識
+- `aria-label`でアクセシブルな名前を提供
+- `aria-disabled`で無効状態を明示
+- エラーメッセージ：`aria-describedby`でinput要素と連携
 
 ---
 
@@ -447,7 +471,8 @@ dropzone variantでのドラッグ&ドロップ機能：
 - バリデーション失敗時は`onError(errors)`のみが呼ばれ、`onSelect`は呼ばれない
 - エラー表示は外部制御（`errorMessages`）で行う。`onError`で受け取った内容を必要に応じて反映する
 - `reset`/クリア時は`onSelect(null)`が呼ばれる
-- dropzone variant のキーボード操作は未対応（フォーカス/操作は今後の改善予定）
+- ユーザーがファイルダイアログでキャンセルした場合は、既存の選択状態を維持する（意図的な仕様）
+- 外部`<label>`要素と連携する場合は`id` propを指定する
 
 ---
 
@@ -459,12 +484,13 @@ dropzone variantでのドラッグ&ドロップ機能：
 
 ## 関連ドキュメント
 
-- [FileInput 残りの作業](./file-input-known-issues.md) - 実装予定の改善項目（アクセシビリティ改善を含む）
+- [FileInput 残りの作業](./file-input-known-issues.md) - 実装予定の改善項目
 
 ---
 
 ## 更新履歴
 
-| 日付       | 内容     | 担当者 |
-| ---------- | -------- | ------ |
-| 2025-10-29 | 新規作成 | -      |
+| 日付       | 内容                                    | 担当者 |
+| ---------- | --------------------------------------- | ------ |
+| 2025-10-29 | 新規作成                                | -      |
+| 2025-10-29 | アクセシビリティ改善、外部label連携対応 | -      |
