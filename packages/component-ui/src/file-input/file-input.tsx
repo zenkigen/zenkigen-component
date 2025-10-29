@@ -315,7 +315,7 @@ export const FileInput = forwardRef<FileInputRef, FileInputProps>(
             </div>
           )}
           {hasErrors && (
-            <div id={errorId} className="typography-label12regular text-supportError">
+            <div id={errorId} data-testid="error-messages" className="typography-label12regular text-supportError">
               {errorMessages.map((message, index) => (
                 <div key={index} className="break-all">
                   {message}
@@ -416,7 +416,11 @@ export const FileInput = forwardRef<FileInputRef, FileInputProps>(
           />
         </div>
         {hasErrors && (
-          <div id={errorId} className="typography-body13regular flex flex-col text-supportDanger">
+          <div
+            id={errorId}
+            data-testid="error-messages"
+            className="typography-body13regular flex flex-col text-supportDanger"
+          >
             {errorMessages.map((message, index) => (
               <div key={index}>{message}</div>
             ))}
