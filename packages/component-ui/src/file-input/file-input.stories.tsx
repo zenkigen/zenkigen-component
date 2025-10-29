@@ -61,20 +61,12 @@ export const Default: Story = {
 };
 
 export const ButtonVariants: Story = {
-  args: {
-    errorMessages: ['ファイルサイズが大き過ぎます。', 'ファイル形式が正しくありません。'],
-  },
-  render: (args) => (
+  render: () => (
     <div className="flex size-full h-screen items-center justify-center gap-4">
       <div className="flex flex-col items-center justify-center gap-4">
         <FileInput variant="button" size="small" />
         <FileInput variant="button" size="medium" />
         <FileInput variant="button" size="large" />
-      </div>
-      <div className="flex flex-col items-center justify-center gap-4">
-        <FileInput variant="button" size="small" errorMessages={args.errorMessages} />
-        <FileInput variant="button" size="medium" errorMessages={args.errorMessages} />
-        <FileInput variant="button" size="large" errorMessages={args.errorMessages} />
       </div>
     </div>
   ),
