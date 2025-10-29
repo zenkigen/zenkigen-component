@@ -211,3 +211,31 @@ export const LayoutExamples: Story = {
     </div>
   ),
 };
+
+export const LayoutExamplesWithError: Story = {
+  args: {
+    errorMessages: ['ファイルサイズが大き過ぎます。', 'ファイル形式が正しくありません。'],
+  },
+  render: (args) => (
+    <div className="flex h-full flex-col items-center justify-center gap-4">
+      <div className="flex">
+        <FileInput variant="button" errorMessages={args.errorMessages} />
+      </div>
+      <div className="w-[280px]">
+        <FileInput variant="button" errorMessages={args.errorMessages} />
+      </div>
+      <div className="w-full">
+        <FileInput variant="button" errorMessages={args.errorMessages} />
+      </div>
+      <div className="flex">
+        <FileInput variant="dropzone" errorMessages={args.errorMessages} />
+      </div>
+      <div className="w-[280px]">
+        <FileInput variant="dropzone" errorMessages={args.errorMessages} />
+      </div>
+      <div className="grid h-[600px] w-full">
+        <FileInput variant="dropzone" errorMessages={args.errorMessages} />
+      </div>
+    </div>
+  ),
+};
