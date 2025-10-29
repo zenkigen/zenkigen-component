@@ -55,16 +55,14 @@ import { FileInput } from '@zenkigen-inc/component-ui';
 
 const MyComponent = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
   return (
     <FileInput
       variant="button"
+      errorMessages={errorMessages}
       onSelect={(file) => setSelectedFile(file)}
-      onError={(errors) => {
-        errors.forEach((error) => {
-          console.error(`[${error.type}] ${error.message}`);
-        });
-      }}
+      onError={(errors) => setErrorMessages(errors.map((e) => e.message))}
     />
   );
 };
@@ -72,17 +70,23 @@ const MyComponent = () => {
 
 ## Props
 
+### 必須プロパティ
+
+| プロパティ | 型                         | 説明                           |
+| ---------- | -------------------------- | ------------------------------ |
+| `variant`  | `'button'` \| `'dropzone'` | コンポーネントのバリエーション |
+
 ### オプションプロパティ
 
-| プロパティ   | 型                                   | デフォルト値 | 説明                                           |
-| ------------ | ------------------------------------ | ------------ | ---------------------------------------------- |
-| `variant`    | `'button' \| 'dropzone'`             | `'button'`   | コンポーネントのバリエーション                 |
-| `size`       | `'small' \| 'medium' \| 'large'`     | `'medium'`   | サイズ（`button` variantのみ有効）             |
-| `accept`     | `string`                             | `undefined`  | 許可するファイル形式（拡張子またはMIMEタイプ） |
-| `maxSize`    | `number`                             | `undefined`  | 最大ファイルサイズ（バイト単位）               |
-| `isDisabled` | `boolean`                            | `false`      | 無効化状態                                     |
-| `onSelect`   | `(file: File \| null) => void`       | `undefined`  | ファイル選択時のコールバック関数               |
-| `onError`    | `(errors: FileInputError[]) => void` | `undefined`  | エラー発生時のコールバック関数                 |
+| プロパティ      | 型                                   | デフォルト値 | 説明                                                             |
+| --------------- | ------------------------------------ | ------------ | ---------------------------------------------------------------- |
+| `size`          | `'small'` \| `'medium'` \| `'large'` | `'medium'`   | サイズ（`button` variant のみ有効）                              |
+| `accept`        | `string`                             | `undefined`  | 許可するファイル形式（拡張子またはMIMEタイプ。カンマ区切り対応） |
+| `maxSize`       | `number`                             | `undefined`  | 最大ファイルサイズ（バイト単位）                                 |
+| `isDisabled`    | `boolean`                            | `false`      | 無効化状態                                                       |
+| `onSelect`      | `(file: File \| null) => void`       | `undefined`  | ファイル選択時／クリア時（`null`）のコールバック                 |
+| `onError`       | `(errors: FileInputError[]) => void` | `undefined`  | バリデーションエラー発生時のコールバック                         |
+| `errorMessages` | `string[]`                           | `undefined`  | エラーメッセージの外部制御。指定時はUIにエラー表示が出る         |
 
 #### FileInputError 型
 
@@ -172,33 +176,32 @@ fileInputRef.current?.reset();
 
 #### 通常状態（dropzone）
 
-- ボーダー: `border-uiBorder02`、破線（`border-dashed`）
+- ボーダー: `border-uiBorder03`、破線（`border-dashed`）
 - 背景: `bg-white`
 - テキスト色: `text-text01`
-- ホバー時: `border-hoverInput`
+- ホバー時: `hover:bg-hover02`
 - カーソル: `cursor-pointer`
-- アイコン色: `icon01`
+- アイコン: `download-document`（色: `icon01`）
 
 #### ドラッグオーバー状態（dropzone）
 
 - ボーダー: `border-activeInput`
 - 背景: `bg-activeInput/5`（薄い背景色）
-- トランジション効果あり
 
 #### エラー状態（バリデーション失敗時）
 
+エラーの検出自体は内部バリデーションで行うが、UI上の表示は`errorMessages`を渡した場合にのみ行われる。
+
 **button variant:**
 
-- ボタンバリエーション: `fillDanger`（危険色の塗りつぶし）
-- エラーは`onError`コールバックで通知される
+- ボタンバリエーション: `outlineDanger`
+- エラーメッセージ色: `text-supportError`
 
 **dropzone variant:**
 
 - ボーダー: `border-supportDanger`
 - 背景: `bg-white`
-- エラーメッセージ表示: `onError`コールバックで返されたエラー内容を動的に表示
-- エラーメッセージ背景: `bg-uiBackgroundError`
-- エラーメッセージテキスト色: `text-supportDanger`
+- エラーメッセージ色: `text-supportDanger`
 
 #### 無効状態（`isDisabled: true`）
 
@@ -226,17 +229,14 @@ import { FileInput } from '@zenkigen-inc/component-ui';
 
 const BasicExample = () => {
   const [file, setFile] = useState<File | null>(null);
+  const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
   return (
     <FileInput
       variant="button"
-      onSelect={(selectedFile) => {
-        setFile(selectedFile);
-        console.log('Selected file:', selectedFile);
-      }}
-      onError={(errors) => {
-        alert(errors.map((e) => e.message).join('\n'));
-      }}
+      errorMessages={errorMessages}
+      onSelect={(selectedFile) => setFile(selectedFile)}
+      onError={(errors) => setErrorMessages(errors.map((e) => e.message))}
     />
   );
 };
@@ -247,14 +247,8 @@ const BasicExample = () => {
 ```typescript
 <FileInput
   variant="dropzone"
-  onSelect={(file) => {
-    console.log('Selected file:', file);
-  }}
-  onError={(errors) => {
-    errors.forEach((error) => {
-      console.error(`[${error.type}] ${error.message}`);
-    });
-  }}
+  // onSelect={(file) => { /* 選択ファイルを状態に保持する */ }}
+  // onError={(errors) => { /* errors.map(e => e.message) を状態に保持して表示 */ }}
 />
 ```
 
@@ -278,12 +272,8 @@ const BasicExample = () => {
   variant="button"
   accept=".csv,.pdf"
   maxSize={50 * 1024 * 1024} // 50MB
-  onSelect={(file) => {
-    console.log('Valid file selected:', file);
-  }}
-  onError={(errors) => {
-    alert(errors.map((e) => e.message).join('\n'));
-  }}
+  // onSelect={(file) => { /* 選択ファイルを状態に保持する */ }}
+  // onError={(errors) => { /* errors.map(e => e.message) を状態に保持して表示 */ }}
 />
 ```
 
@@ -307,9 +297,7 @@ const RefControlExample = () => {
       <FileInput
         ref={fileInputRef}
         variant="button"
-        onSelect={(file) => {
-          console.log('Selected file:', file);
-        }}
+        // onSelect={(file) => { /* 選択ファイルを状態に保持する */ }}
       />
       <Button variant="text" onClick={handleReset}>
         リセット
@@ -322,27 +310,10 @@ const RefControlExample = () => {
 ### エラー状態
 
 ```typescript
-<FileInput
-  variant="button"
-  accept=".csv,.pdf"
-  maxSize={10 * 1024 * 1024}
-  onError={(errors) => {
-    errors.forEach((error) => {
-      console.error(`[${error.type}] ${error.message}`);
-    });
-  }}
-/>
+// エラー表示をUIに出す場合の例：
+<FileInput variant="button" errorMessages={["ファイルサイズが大き過ぎます。", "ファイル形式が正しくありません。"]} />
 
-<FileInput
-  variant="dropzone"
-  accept=".csv,.pdf"
-  maxSize={10 * 1024 * 1024}
-  onError={(errors) => {
-    errors.forEach((error) => {
-      console.error(`[${error.type}] ${error.message}`);
-    });
-  }}
-/>
+<FileInput variant="dropzone" errorMessages={["ファイルサイズが大き過ぎます。", "ファイル形式が正しくありません。"]} />
 ```
 
 ### 無効状態
@@ -351,13 +322,11 @@ const RefControlExample = () => {
 <FileInput
   variant="button"
   isDisabled={true}
-  onSelect={(file) => console.log(file)}
 />
 
 <FileInput
   variant="dropzone"
   isDisabled={true}
-  onSelect={(file) => console.log(file)}
 />
 ```
 
@@ -374,10 +343,8 @@ FileInputコンポーネントは、ファイル選択時に自動的にバリ�
   maxSize={10 * 1024 * 1024} // 10MB
   onError={(errors) => {
     // errors[0].type: 'SIZE_TOO_LARGE'
-    // errors[0].message: "ファイルサイズが制限（10MB）を超えています"
-    errors.forEach((error) => {
-      console.error(`[${error.type}] ${error.message}`);
-    });
+    // errors[0].message: 'ファイルサイズが大き過ぎます。'
+    // UI表示する場合は errorMessages に渡す（例：setStateで保持）
   }}
 />
 ```
@@ -404,7 +371,7 @@ FileInputコンポーネントは、ファイル選択時に自動的にバリ�
 ```
 
 - 許可されていない形式の場合、`onError`コールバックが呼ばれる
-- `errors` 配列に `{ type: 'UNSUPPORTED_FORMAT', message: "対応していないファイル形式です" }` が含まれる
+- `errors` 配列に `{ type: 'UNSUPPORTED_FORMAT', message: 'ファイル形式が正しくありません。' }` が含まれる
 - ファイルは選択されず、`onSelect`は呼ばれない
 - MIMEタイプの指定形式:
   - 具体的なMIMEタイプ: `image/png`, `application/pdf`
@@ -438,8 +405,8 @@ dropzone variantでのドラッグ&ドロップ機能：
 
 - 選択済みファイルをクリア
 - UI表示をファイル選択前の状態に戻す
-- エラー状態もクリア
-- `onSelect`コールバックに`null`を渡さない（リセット時は呼び出さない）
+- `onSelect(null)` が呼ばれる（クリア/リセット時）
+- エラー表示は外部制御（`errorMessages`）のため、必要に応じて呼び出し側でクリアする
 
 ### 制約情報の動的表示
 
@@ -468,31 +435,31 @@ dropzone variantでのドラッグ&ドロップ機能：
 
 ### Dropzone Variant
 
-- キーボード操作：Tab、Enter、Spaceキーでファイルダイアログを開く
-- ドラッグ&ドロップ操作のみでなく、クリックでも操作可能
-- エラーメッセージはスクリーンリーダーで読み上げられる
+- クリック操作でファイルダイアログを開く（ルート要素は`div`）
+- 現状、キーボード操作のフォーカス移動・Enter/Spaceでの起動は未実装（要対応）
+- エラーメッセージ読み上げなどのARIA属性付与は今後の改善項目（既知課題を参照）
 
 ---
 
 ## 注意事項
 
-- ファイルはバリデーション後に`onSelect`コールバックで渡される
-- バリデーション失敗時は`onError`コールバックのみが呼ばれ、`onSelect`は呼ばれない
-- エラー状態は内部的に管理され、外部から制御することはできない
-- dropzone variantでのエラー表示は`onError`で返されたメッセージに基づく
-- button variantでのエラー表示は外部のUIで実装する必要がある
+- ファイルはバリデーション成功後に`onSelect(file)`で渡される
+- バリデーション失敗時は`onError(errors)`のみが呼ばれ、`onSelect`は呼ばれない
+- エラー表示は外部制御（`errorMessages`）で行う。`onError`で受け取った内容を必要に応じて反映する
+- `reset`/クリア時は`onSelect(null)`が呼ばれる
+- dropzone variant のキーボード操作は未対応（フォーカス/操作は今後の改善予定）
 
 ---
 
 ## スタイルのカスタマイズ
 
-本コンポーネントはTailwind CSSを使用しており、プロジェクト全体のデザインシステムに統合されている。カスタマイズが必要な場合は、Tailwind設定ファイル（`tailwind.config.ts`）で色やタイポグラフィを調整してください。
+本コンポーネントはTailwind CSSを使用しており、プロジェクト全体のデザインシステムに統合されている。カスタマイズが必要な場合は、Tailwind設定ファイル（`tailwind.config.js`）で色やタイポグラフィを調整すること。
 
 ---
 
 ## 関連ドキュメント
 
-- [FileInput 残りの作業](./file-uploader-known-issues.md) - 実装予定の改善項目
+- [FileInput 残りの作業](./file-input-known-issues.md) - 実装予定の改善項目（アクセシビリティ改善を含む）
 
 ---
 
@@ -500,4 +467,4 @@ dropzone variantでのドラッグ&ドロップ機能：
 
 | 日付       | 内容     | 担当者 |
 | ---------- | -------- | ------ |
-| 2025-10-21 | 新規作成 | -      |
+| 2025-10-29 | 新規作成 | -      |
