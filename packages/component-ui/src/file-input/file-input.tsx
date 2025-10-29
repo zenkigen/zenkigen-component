@@ -1,6 +1,6 @@
 import { clsx } from 'clsx';
 import type { ChangeEvent, DragEvent, Ref } from 'react';
-import { forwardRef, useCallback, useImperativeHandle, useRef, useState } from 'react';
+import { forwardRef, useCallback, useId, useImperativeHandle, useRef, useState } from 'react';
 
 import { InternalButton } from '../button/button';
 import { Icon } from '../icon';
@@ -28,6 +28,8 @@ const ERROR_MESSAGES = {
 } as const;
 
 type BaseFileInputProps = {
+  /** input要素のID（外部のlabel要素との連携用） */
+  id?: string;
   /** 許可するファイル形式（MIMEタイプ） */
   accept?: string;
   /** 最大ファイルサイズ（バイト単位） */
@@ -63,7 +65,7 @@ export type FileInputRef = {
 
 export const FileInput = forwardRef<FileInputRef, FileInputProps>(
   (
-    { variant, accept, maxSize, isDisabled = false, onSelect, onError, errorMessages, ...rest },
+    { id, variant, accept, maxSize, isDisabled = false, onSelect, onError, errorMessages, ...rest },
     ref: Ref<FileInputRef>,
   ) => {
     // variantがbuttonの時のみsizeを取得
@@ -71,6 +73,9 @@ export const FileInput = forwardRef<FileInputRef, FileInputProps>(
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [isDragOver, setIsDragOver] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const errorId = useId();
+    const fallbackId = useId();
+    const inputId = id ?? fallbackId;
 
     const validateFile = useCallback(
       (file: File): boolean => {
@@ -147,7 +152,8 @@ export const FileInput = forwardRef<FileInputRef, FileInputProps>(
     const handleFileInputChange = useCallback(
       (event: ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
-        // ファイルが選択されていない場合（キャンセル）は既存の状態を維持
+        // ユーザーがファイルダイアログでキャンセルした場合は、
+        // 既存の選択状態を維持する（意図的な仕様）
         if (files == null || files.length === 0) {
           return;
         }
@@ -304,7 +310,7 @@ export const FileInput = forwardRef<FileInputRef, FileInputProps>(
             </div>
           )}
           {hasErrors && (
-            <div className="typography-label12regular text-supportError">
+            <div id={errorId} className="typography-label12regular text-supportError">
               {errorMessages.map((message, index) => (
                 <div key={index} className="break-all">
                   {message}
@@ -312,7 +318,15 @@ export const FileInput = forwardRef<FileInputRef, FileInputProps>(
               ))}
             </div>
           )}
-          <input ref={fileInputRef} type="file" accept={accept} onChange={handleFileInputChange} className="hidden" />
+          <input
+            id={inputId}
+            ref={fileInputRef}
+            type="file"
+            accept={accept}
+            onChange={handleFileInputChange}
+            className="hidden"
+            {...(hasErrors && { 'aria-describedby': errorId })}
+          />
         </div>
       );
     }
@@ -321,10 +335,21 @@ export const FileInput = forwardRef<FileInputRef, FileInputProps>(
       <div className="flex flex-col gap-2">
         <div
           className={dropzoneClasses}
+          role="button"
+          tabIndex={isDisabled ? -1 : 0}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
           onClick={handleButtonClick}
+          onKeyDown={(e) => {
+            if ((e.key === 'Enter' || e.key === ' ') && !isDisabled) {
+              e.preventDefault();
+              handleButtonClick();
+            }
+          }}
+          aria-label="ファイルを選択"
+          aria-disabled={isDisabled}
+          {...(hasErrors && { 'aria-describedby': errorId })}
         >
           <Icon name="upload-document" size="large" color={isDisabled ? 'icon03' : 'icon01'} />
           {!selectedFile && (
@@ -373,10 +398,18 @@ export const FileInput = forwardRef<FileInputRef, FileInputProps>(
               </div>
             </div>
           )}
-          <input ref={fileInputRef} type="file" accept={accept} onChange={handleFileInputChange} className="hidden" />
+          <input
+            id={inputId}
+            ref={fileInputRef}
+            type="file"
+            accept={accept}
+            onChange={handleFileInputChange}
+            className="hidden"
+            {...(hasErrors && { 'aria-describedby': errorId })}
+          />
         </div>
         {hasErrors && (
-          <div className="typography-body13regular flex flex-col text-supportDanger">
+          <div id={errorId} className="typography-body13regular flex flex-col text-supportDanger">
             {errorMessages.map((message, index) => (
               <div key={index}>{message}</div>
             ))}
