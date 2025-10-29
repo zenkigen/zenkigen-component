@@ -33,6 +33,13 @@ export const buttonColors = {
     disabled: 'disabled:border-uiBorder01 disabled:text-disabled01 disabled:fill-disabled01',
     selected: 'border border-interactive01 bg-selectedUi text-interactive01 fill-interactive01',
   },
+  outlineDanger: {
+    base: 'border border-supportDanger bg-uiBackground01 text-supportDanger fill-supportDanger',
+    hover: 'hover:bg-uiBackgroundError',
+    active: 'active:bg-uiBackgroundError',
+    disabled: 'disabled:border-uiBorder01 disabled:text-disabled01 disabled:fill-disabled01',
+    selected: 'border border-interactive01 bg-selectedUi text-interactive01 fill-interactive01',
+  },
   text: {
     base: 'border border-transparent text-interactive02 fill-interactive02',
     hover: 'hover:bg-hover02 hover:border-hover02',
