@@ -326,7 +326,7 @@ export const FileInput = forwardRef<FileInputRef, FileInputProps>(
           onDrop={handleDrop}
           onClick={handleButtonClick}
         >
-          <Icon name="download-document" size="large" color={isDisabled ? 'icon03' : 'icon01'} />
+          <Icon name="upload-document" size="large" color={isDisabled ? 'icon03' : 'icon01'} />
           {!selectedFile && (
             <div className="flex flex-col gap-1">
               <div className="typography-body13regular select-none">
