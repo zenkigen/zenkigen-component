@@ -277,7 +277,7 @@ export const FileInput = forwardRef<FileInputRef, FileInputProps>(
     if (variant === 'button') {
       return (
         <div className="flex items-center gap-2">
-          <div className="min-w-0 flex-1">
+          <div className={hasErrors ? 'flex-1' : 'min-w-0 flex-1'}>
             <InternalButton
               size={size}
               variant={hasErrors ? 'outlineDanger' : 'outline'}
@@ -295,7 +295,7 @@ export const FileInput = forwardRef<FileInputRef, FileInputProps>(
                 </>
               }
             >
-              <span className="shrink-0">ファイルを選択</span>
+              <span className="truncate">ファイルを選択</span>
             </InternalButton>
           </div>
           {selectedFile && !isDisabled && (
