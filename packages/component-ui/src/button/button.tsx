@@ -88,13 +88,11 @@ const createButton = <T extends ElementAs = 'button'>(props: InternalProps<T>) =
   const Component = elementAs ?? 'button';
 
   return (
-    <div>
-      <Component className={baseClasses} style={{ width, borderRadius }} disabled={isDisabled} {...restProps}>
-        {before}
-        {children}
-        {after}
-      </Component>
-    </div>
+    <Component className={baseClasses} style={{ width, borderRadius }} disabled={isDisabled} {...restProps}>
+      {before}
+      {children}
+      {after}
+    </Component>
   );
 };
 
