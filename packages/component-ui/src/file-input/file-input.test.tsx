@@ -621,7 +621,7 @@ describe('FileInput', () => {
 
     it('エラーメッセージが複数ある場合に適切に表示される', () => {
       const errorMessages = ['エラー1', 'エラー2', 'エラー3'];
-      render(<FileInput variant="button" errorMessages={errorMessages} />);
+      render(<FileInput variant="button" isError errorMessages={errorMessages} />);
 
       errorMessages.forEach((message) => {
         expect(screen.getByText(message)).toBeInTheDocument();
