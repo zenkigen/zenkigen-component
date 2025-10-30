@@ -1,0 +1,94 @@
+import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/blocks';
+import { Markdown } from '@storybook/blocks';
+import PopupStories, { Component } from './popup.stories';
+import spec from '../../../../docs/component/popup-specification.md?raw';
+
+<Meta title="Popup" of={PopupStories} />
+
+# Popup
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
+
+<Canvas />
+
+<Controls of={Component} />
+
+## Code Examples
+
+基本的な使用例
+
+```tsx
+import { Popup, Button } from '@zenkigen-inc/component-ui';
+import { useState } from 'react';
+
+const PopupExample = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <>
+      <Button variant="fill" onClick={() => setIsOpen(true)}>
+        Popupを表示
+      </Button>
+
+      <Popup isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <Popup.Header>タイトル</Popup.Header>
+        <Popup.Body>
+          <div className="p-4">
+            <p className="typography-body14regular text-text01">Popupのコンテンツがここに表示されます。</p>
+          </div>
+        </Popup.Body>
+        <Popup.Footer>
+          <div className="flex w-full justify-end gap-4">
+            <Button variant="outline" onClick={() => setIsOpen(false)}>
+              キャンセル
+            </Button>
+            <Button variant="fill" onClick={() => setIsOpen(false)}>
+              保存
+            </Button>
+          </div>
+        </Popup.Footer>
+      </Popup>
+    </>
+  );
+};
+```
+
+Popover内での使用例
+
+```tsx
+import { Popup, Button, Popover } from '@zenkigen-inc/component-ui';
+import { useState } from 'react';
+
+const PopoverPopupExample = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <Popover isOpen={isOpen} placement="top" onClose={() => setIsOpen(false)}>
+      <Popover.Trigger>
+        <Button variant="fill" onClick={() => setIsOpen(!isOpen)}>
+          {isOpen ? 'Popoverを閉じる' : 'Popoverを開く'}
+        </Button>
+      </Popover.Trigger>
+      <Popover.Content>
+        <Popup onClose={() => setIsOpen(false)}>
+          <Popup.Header>Popover内のPopup</Popup.Header>
+          <Popup.Body>
+            <div className="p-4">
+              <p className="typography-body14regular text-text01">このPopupはPopover内で使用されています。</p>
+              <p className="typography-body14regular text-text01 mt-2">
+                ヘッダーの×ボタンをクリックすると、PopupとPopoverの両方が閉じます。
+              </p>
+            </div>
+          </Popup.Body>
+        </Popup>
+      </Popover.Content>
+    </Popover>
+  );
+};
+```
