@@ -81,14 +81,13 @@ const MyComponent = () => {
 
 ### オプションプロパティ
 
-| プロパティ | 型                          | デフォルト値           | 説明                                                       |
-| ---------- | --------------------------- | ---------------------- | ---------------------------------------------------------- |
-| `isOpen`   | `boolean`                   | `undefined`            | Popupの表示/非表示状態（PopoverContext内では自動的に取得） |
-| `width`    | `CSSProperties['width']`    | `480`                  | Popupの幅（数値の場合は最小320px）                         |
-| `height`   | `CSSProperties['height']`   | `undefined`            | Popupの高さ（数値の場合は最小184px、未指定時は自動調整）   |
-| `maxWidth` | `CSSProperties['maxWidth']` | `'calc(100vw - 40px)'` | Popupの最大幅                                              |
-| `onClose`  | `() => void`                | `undefined`            | 閉じる操作が発生した時に呼び出されるコールバック           |
-| `children` | `ReactNode`                 | -                      | `Popup.Header`、`Popup.Body`、`Popup.Footer`を含む子要素   |
+| プロパティ | 型                        | デフォルト値 | 説明                                                       |
+| ---------- | ------------------------- | ------------ | ---------------------------------------------------------- |
+| `isOpen`   | `boolean`                 | `undefined`  | Popupの表示/非表示状態（PopoverContext内では自動的に取得） |
+| `width`    | `CSSProperties['width']`  | `480`        | Popupの幅（数値の場合は最小320px）                         |
+| `height`   | `CSSProperties['height']` | `undefined`  | Popupの高さ（数値の場合は最小184px、未指定時は自動調整）   |
+| `onClose`  | `() => void`              | `undefined`  | 閉じる操作が発生した時に呼び出されるコールバック           |
+| `children` | `ReactNode`               | -            | `Popup.Header`、`Popup.Body`、`Popup.Footer`を含む子要素   |
 
 ### 子コンポーネント
 
@@ -96,19 +95,21 @@ const MyComponent = () => {
 
 Popupのヘッダーセクションを定義するコンポーネント。
 
-| プロパティ | 型          | 説明                   |
-| ---------- | ----------- | ---------------------- |
-| `children` | `ReactNode` | ヘッダーに表示する内容 |
+| プロパティ | 型          | デフォルト値 | 説明                                     |
+| ---------- | ----------- | ------------ | ---------------------------------------- |
+| `children` | `ReactNode` | -            | ヘッダーに表示する内容                   |
+| `before`   | `ReactNode` | `undefined`  | タイトル前に表示する要素（アイコンなど） |
 
 **特徴**
 
 - タイトルテキストを表示
 - `onClose`が指定されている場合、自動的に閉じるボタン（IconButton）を表示
-- 閉じるボタンの有無でヘッダーの高さが変化（ボタンあり: `h-12`、ボタンなし: `h-14`）
+- 高さ: `h-12` (48px) で固定
 - タイポグラフィ: `typography-h5`
 - テキスト色: `text-text01`
 - パディング: `px-6 pt-3`
 - 角丸: `rounded-t-lg`（上部のみ）
+- レイアウト: `flex items-start justify-between`
 
 #### Popup.Body
 
@@ -148,7 +149,6 @@ Popupのフッターセクションを定義するコンポーネント。
 
 - **デフォルト幅**: `480px`
 - **最小幅**: `320px`（数値指定時に自動適用）
-- **最大幅**: `calc(100vw - 40px)`（デフォルト）
 - **幅の指定方法**:
   - 数値: ピクセル値として扱われ、最小320pxが保証される
   - 文字列: CSS値として直接適用（例: `'50vw'`, `'100%'`）
@@ -177,25 +177,26 @@ grid-rows-[max-content_1fr_max-content]
 
 ### ヘッダースタイル
 
-#### 閉じるボタンあり（`onClose`指定時）
-
-- 高さ: `h-12` (48px)
-- レイアウト: `flex items-start justify-between`
-- IconButton: `size="small"`, `variant="text"`, `icon="close"`
-
-#### 閉じるボタンなし
-
-- 高さ: `h-14` (56px)
-- レイアウト: `flex`
-
 #### 共通スタイル
 
+- 高さ: `h-12` (48px) で固定
+- レイアウト: `flex items-start justify-between`
 - タイポグラフィ: `typography-h5`
 - テキスト色: `text-text01`
 - パディング: `px-6 pt-3`
 - 幅: `w-full`
 - 縮小: `shrink-0`
 - 角丸: `rounded-t-lg`
+
+#### 閉じるボタンあり（`onClose`指定時）
+
+- IconButton: `size="small"`, `variant="text"`, `icon="close"`
+- 右端に配置
+
+#### 閉じるボタンなし
+
+- 閉じるボタンは表示されない
+- レイアウトは同じ（`flex items-start justify-between`）
 
 ### ボディスタイル
 
@@ -428,14 +429,9 @@ const renderHeight = typeof height === 'number' ? Math.max(height, LIMIT_HEIGHT)
 
 ### レスポンシブ対応
 
-デフォルトの`maxWidth`設定により、画面サイズに応じて自動的に調整されます。
+Popupコンポーネントは`max-h-full`クラスにより、画面高さを超えないように制限されています。
 
-```typescript
-maxWidth = 'calc(100vw - 40px)';
-```
-
-- 画面幅から40pxを引いた値を最大幅として設定
-- 左右に最低20pxずつのマージンを確保
+- 最大高さ: `max-h-full`（画面高さを超えない）
 - 小さい画面でもPopupが画面からはみ出さない
 
 ## アクセシビリティ
@@ -463,7 +459,7 @@ maxWidth = 'calc(100vw - 40px)';
 
 4. **閉じるボタンの表示**
    - `onClose`を指定した場合のみ、ヘッダーに閉じるボタンが表示されます
-   - 閉じるボタンの有無でヘッダーの高さが変わります（ボタンあり: 48px、ボタンなし: 56px）
+   - ヘッダーの高さは固定で48pxです
 
 5. **PopoverContextとの連携**
    - Popover内で使用する場合、Popupの`onClose`でPopoverの`isOpen`状態も更新することを推奨します
@@ -502,12 +498,8 @@ Popupコンポーネントは統一されたスタイルを提供しますが、
 
 ```typescript
 <Popup width={600} height={400} onClose={handleClose}>
-  <Popup.Header>
-    {/* カスタムヘッダーコンテンツ */}
-    <div className="flex items-center gap-2">
-      <Icon name="info" size="small" />
-      <span>情報</span>
-    </div>
+  <Popup.Header before={<Icon name="info" size="small" />}>
+    情報
   </Popup.Header>
   <Popup.Body>
     {/* カスタムボディコンテンツ */}
