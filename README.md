@@ -127,7 +127,7 @@ yarn list --pattern "@zenkigen-inc/component-*"
 
 - [Avatar](./docs/component/avatar-specification.md)
 - Breadcrumb
-- Button
+- [Button](./docs/component/button-specification.md)
 - Checkbox
 - Dropdown
 - Evaluation Star
