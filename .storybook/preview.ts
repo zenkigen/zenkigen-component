@@ -15,6 +15,11 @@ const preview: Preview = {
         date: /Date$/,
       },
     },
+    options: {
+      storySort: {
+        order: ['Tokens', 'Components'],
+      },
+    },
     a11y: {
       config: {
         locale: AXE_LOCALE_JA,
