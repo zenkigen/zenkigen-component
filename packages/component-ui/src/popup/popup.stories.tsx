@@ -19,13 +19,11 @@ const meta: Meta<typeof Popup> = {
         code: ``,
       },
     },
-    // layout: 'centered',
   },
   argTypes: {
     isOpen: { control: 'boolean', description: '表示状態' },
     width: { control: 'text', description: '幅（320px以上が指定できる）' },
     height: { control: 'text', description: '高さ（184px以上が指定できる）' },
-    maxWidth: { control: 'text', description: '最大幅' },
     onClose: { action: 'onClose', description: '閉じる操作が発生したときのコールバック' },
   },
 };
