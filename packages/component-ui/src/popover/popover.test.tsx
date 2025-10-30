@@ -686,7 +686,7 @@ describe('Popover', () => {
             <Button>Orphan Trigger</Button>
           </Popover.Trigger>,
         );
-      }).toThrow('Popover components must be used inside');
+      }).toThrow('Popover components must be used inside <Popover.Root>');
     });
   });
 });
