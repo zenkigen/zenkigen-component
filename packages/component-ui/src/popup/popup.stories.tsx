@@ -163,12 +163,13 @@ export const WithHeaderBefore: Story = {
   render: function MyFunc({ ...args }) {
     return (
       <Popup isOpen={args.isOpen} width={args.width} onClose={args.onClose}>
-        <Popup.Header before={<Icon name="warning" className="fill-supportWarning" />}>警告メッセージ</Popup.Header>
+        <Popup.Header before={<Icon name="warning" className="fill-supportWarning" />}>
+          ヘッダー（アイコン付き）
+        </Popup.Header>
         <Popup.Body>
           <div className="flex w-full flex-col gap-4 p-4">
-            <p className="typography-body14regular text-text01">この操作は元に戻すことができません。</p>
             <p className="typography-body14regular text-text01">
-              続行する前に、すべてのデータがバックアップされていることを確認してください。
+              ヘッダーにアイコンを表示するには、Popup.Header の before props に Iconコンポーネント を指定します。
             </p>
           </div>
         </Popup.Body>
