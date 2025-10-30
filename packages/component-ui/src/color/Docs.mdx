@@ -3,7 +3,19 @@ import { tokens } from '@zenkigen-inc/component-config';
 import { useState } from 'react';
 import { IconButton } from '@zenkigen-inc/component-ui';
 
+<style>
+  {`
+  /* Docs 本文のコンテナの幅制限を外す */
+  .sbdocs-content {
+    max-width: none !important;
+    width: 100% !important;
+  }
+`}
+</style>
+
 <Meta title="Tokens/Color" />
+
+<div style={{ width: '100%', maxWidth: 'none' }}>
 
 # Color Tokens
 
@@ -279,4 +291,6 @@ return (
     <ColorItem colorKey="black" value={tokens.colors.black} />
     <ColorItem colorKey="white" value={tokens.colors.white} />
   </div>
+</div>
+
 </div>
