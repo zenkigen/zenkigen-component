@@ -32,8 +32,12 @@ export function Popover({
   const floating = useFloating({
     open: isOpen,
     onOpenChange: (open) => {
-      // useDismissによって閉じられた場合、onCloseコールバックを呼ぶ
-      // ただし、reasonは'outside-click'として扱う（Escapeキーの場合は別途ハンドラーで処理）
+      /**
+       * Floating UIのuseDismissフックによって閉じられた場合の処理
+       *
+       * 注意: このコールバックは外部クリックで呼ばれるため、reasonは'outside-click'として扱う
+       * Escapeキーの場合は、PopoverContent内の独自ハンドラーで処理される
+       */
       if (!open && onClose != null) {
         onClose({ reason: 'outside-click' });
       }
