@@ -24,6 +24,10 @@ const meta: Meta<typeof FileInput> = {
       control: { type: 'boolean' },
       description: '無効化状態',
     },
+    isError: {
+      control: { type: 'boolean' },
+      description: 'エラー状態（メッセージなしでもエラースタイル適用）',
+    },
     accept: {
       control: { type: 'text' },
       description: '許可するファイル形式（拡張子またはMIMEタイプ。例：.csv,.pdf,image/*）',
@@ -96,17 +100,36 @@ export const Dropzone: Story = {
 
 export const Error: Story = {
   args: {
+    isError: true,
     errorMessages: ['ファイルサイズが大き過ぎます。', 'ファイル形式が正しくありません。'],
   },
   render: (args) => (
     <div className="flex size-full h-screen items-center justify-center gap-4">
       <div className="flex flex-col items-center justify-center gap-4">
-        <FileInput variant="button" size="small" errorMessages={args.errorMessages} />
-        <FileInput variant="button" size="medium" errorMessages={args.errorMessages} />
-        <FileInput variant="button" size="large" errorMessages={args.errorMessages} />
+        <FileInput variant="button" size="small" isError={args.isError} errorMessages={args.errorMessages} />
+        <FileInput variant="button" size="medium" isError={args.isError} errorMessages={args.errorMessages} />
+        <FileInput variant="button" size="large" isError={args.isError} errorMessages={args.errorMessages} />
       </div>
       <div className="flex flex-col items-center justify-center gap-4">
-        <FileInput variant="dropzone" errorMessages={args.errorMessages} />
+        <FileInput variant="dropzone" isError={args.isError} errorMessages={args.errorMessages} />
+      </div>
+    </div>
+  ),
+};
+
+export const ErrorStateWithoutMessages: Story = {
+  args: {
+    isError: true,
+  },
+  render: (args) => (
+    <div className="flex size-full h-screen items-center justify-center gap-4">
+      <div className="flex flex-col items-center justify-center gap-4">
+        <FileInput variant="button" size="small" isError={args.isError} />
+        <FileInput variant="button" size="medium" isError={args.isError} />
+        <FileInput variant="button" size="large" isError={args.isError} />
+      </div>
+      <div className="flex flex-col items-center justify-center gap-4">
+        <FileInput variant="dropzone" isError={args.isError} />
       </div>
     </div>
   ),
@@ -206,27 +229,28 @@ export const LayoutExamples: Story = {
 
 export const LayoutExamplesWithError: Story = {
   args: {
+    isError: true,
     errorMessages: ['ファイルサイズが大き過ぎます。', 'ファイル形式が正しくありません。'],
   },
   render: (args) => (
     <div className="flex h-full flex-col items-center justify-center gap-4">
       <div className="flex">
-        <FileInput variant="button" errorMessages={args.errorMessages} />
+        <FileInput variant="button" isError={args.isError} errorMessages={args.errorMessages} />
       </div>
       <div className="w-[200px]">
-        <FileInput variant="button" errorMessages={args.errorMessages} />
+        <FileInput variant="button" isError={args.isError} errorMessages={args.errorMessages} />
       </div>
       <div className="w-full">
-        <FileInput variant="button" errorMessages={args.errorMessages} />
+        <FileInput variant="button" isError={args.isError} errorMessages={args.errorMessages} />
       </div>
       <div className="flex">
-        <FileInput variant="dropzone" errorMessages={args.errorMessages} />
+        <FileInput variant="dropzone" isError={args.isError} errorMessages={args.errorMessages} />
       </div>
       <div className="w-[200px]">
-        <FileInput variant="dropzone" errorMessages={args.errorMessages} />
+        <FileInput variant="dropzone" isError={args.isError} errorMessages={args.errorMessages} />
       </div>
       <div className="grid h-[600px] w-full">
-        <FileInput variant="dropzone" errorMessages={args.errorMessages} />
+        <FileInput variant="dropzone" isError={args.isError} errorMessages={args.errorMessages} />
       </div>
     </div>
   ),

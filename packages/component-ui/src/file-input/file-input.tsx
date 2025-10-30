@@ -36,6 +36,8 @@ type BaseFileInputProps = {
   maxSize?: number;
   /** 無効化状態 */
   isDisabled?: boolean;
+  /** エラー状態 */
+  isError?: boolean;
   /** ファイル選択時のコールバック */
   onSelect?: (file: File | null) => void;
   /** エラー時のコールバック */
@@ -65,7 +67,7 @@ export type FileInputRef = {
 
 export const FileInput = forwardRef<FileInputRef, FileInputProps>(
   (
-    { id, variant, accept, maxSize, isDisabled = false, onSelect, onError, errorMessages, ...rest },
+    { id, variant, accept, maxSize, isDisabled = false, isError = false, onSelect, onError, errorMessages, ...rest },
     ref: Ref<FileInputRef>,
   ) => {
     // variantがbuttonの時のみsizeを取得
@@ -223,8 +225,9 @@ export const FileInput = forwardRef<FileInputRef, FileInputProps>(
       [handleClear],
     );
 
-    // エラーメッセージの表示判定
-    const hasErrors = !isDisabled && errorMessages != null && errorMessages.length > 0;
+    // エラーの有無（スタイル・aria-invalid 用）
+    const hasErrorMessages = !isDisabled && errorMessages != null && errorMessages.length > 0;
+    const hasErrors = !isDisabled && isError === true;
 
     const dropzoneClasses = clsx(
       'flex flex-1 cursor-pointer flex-col items-center justify-center gap-4 rounded border border-dashed px-6 text-center hover:bg-hover02',
@@ -314,7 +317,7 @@ export const FileInput = forwardRef<FileInputRef, FileInputProps>(
               <IconButton variant="text" icon="close" size="small" onClick={handleClear} />
             </div>
           )}
-          {hasErrors && (
+          {hasErrors && hasErrorMessages && (
             <div id={errorId} data-testid="error-messages" className="typography-label12regular text-supportError">
               {errorMessages.map((message, index) => (
                 <div key={index} className="break-all">
@@ -331,7 +334,7 @@ export const FileInput = forwardRef<FileInputRef, FileInputProps>(
             onChange={handleFileInputChange}
             className="hidden"
             aria-invalid={hasErrors}
-            {...(hasErrors && { 'aria-describedby': errorId })}
+            {...(hasErrors && hasErrorMessages && { 'aria-describedby': errorId })}
           />
         </div>
       );
@@ -355,7 +358,7 @@ export const FileInput = forwardRef<FileInputRef, FileInputProps>(
           }}
           aria-label="ファイルを選択"
           aria-disabled={isDisabled}
-          {...(hasErrors && { 'aria-describedby': errorId })}
+          {...(hasErrors && hasErrorMessages && { 'aria-describedby': errorId })}
         >
           <Icon name="upload-document" size="large" color={isDisabled ? 'icon03' : 'icon01'} />
           {!selectedFile && (
@@ -412,10 +415,10 @@ export const FileInput = forwardRef<FileInputRef, FileInputProps>(
             onChange={handleFileInputChange}
             className="hidden"
             aria-invalid={hasErrors}
-            {...(hasErrors && { 'aria-describedby': errorId })}
+            {...(hasErrors && hasErrorMessages && { 'aria-describedby': errorId })}
           />
         </div>
-        {hasErrors && (
+        {hasErrors && hasErrorMessages && (
           <div
             id={errorId}
             data-testid="error-messages"

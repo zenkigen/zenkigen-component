@@ -239,10 +239,10 @@ describe('FileInput', () => {
   });
 
   describe('エラー表示', () => {
-    it('エラーメッセージが提供された時に表示される', () => {
+    it('isErrorがtrueでエラーメッセージが提供された時に表示される', () => {
       const errorMessages = ['ファイルサイズが大き過ぎます。', 'ファイル形式が正しくありません。'];
 
-      render(<FileInput variant="button" errorMessages={errorMessages} />);
+      render(<FileInput variant="button" isError errorMessages={errorMessages} />);
 
       errorMessages.forEach((message) => {
         expect(screen.getByText(message)).toBeInTheDocument();
@@ -255,18 +255,40 @@ describe('FileInput', () => {
       expect(screen.queryByText('ファイルサイズが大き過ぎます。')).not.toBeInTheDocument();
     });
 
-    it('エラーがある時にボタンにエラースタイルが適用される', () => {
-      render(<FileInput variant="button" errorMessages={['Error message']} />);
+    it('isErrorがtrueの時にボタンにエラースタイルが適用される', () => {
+      render(<FileInput variant="button" isError errorMessages={['Error message']} />);
 
       const button = screen.getByRole('button', { name: /ファイルを選択/ });
       expect(button).toHaveClass('border-supportDanger');
     });
 
-    it('エラーがある時にドロップゾーンにエラースタイルが適用される', () => {
-      render(<FileInput variant="dropzone" errorMessages={['Error message']} />);
+    it('isErrorがtrueの時にドロップゾーンにエラースタイルが適用される', () => {
+      render(<FileInput variant="dropzone" isError errorMessages={['Error message']} />);
 
       const dropzone = screen.getByRole('button', { name: /ファイルを選択/ });
       expect(dropzone).toHaveClass('border-supportDanger');
+    });
+
+    it('isErrorがtrueのとき、メッセージなしでもボタンにエラースタイルが適用される', () => {
+      const { container } = render(<FileInput variant="button" isError />);
+
+      const button = screen.getByRole('button', { name: /ファイルを選択/ });
+      expect(button).toHaveClass('border-supportDanger');
+
+      const input = container.querySelector('input[type="file"]') as HTMLInputElement;
+      expect(input).toHaveAttribute('aria-invalid', 'true');
+      expect(input).not.toHaveAttribute('aria-describedby');
+    });
+
+    it('isErrorがtrueのとき、メッセージなしでもドロップゾーンにエラースタイルが適用される', () => {
+      const { container } = render(<FileInput variant="dropzone" isError />);
+
+      const dropzone = screen.getByRole('button', { name: /ファイルを選択/ });
+      expect(dropzone).toHaveClass('border-supportDanger');
+
+      const input = container.querySelector('input[type="file"]') as HTMLInputElement;
+      expect(input).toHaveAttribute('aria-invalid', 'true');
+      expect(input).not.toHaveAttribute('aria-describedby');
     });
   });
 
@@ -456,7 +478,7 @@ describe('FileInput', () => {
 
   describe('アクセシビリティ', () => {
     it('ボタンバリアントで適切なARIA属性が設定される', () => {
-      const { container } = render(<FileInput variant="button" errorMessages={['Error message']} />);
+      const { container } = render(<FileInput variant="button" isError errorMessages={['Error message']} />);
 
       const input = container.querySelector('input[type="file"]') as HTMLInputElement;
       expect(input).toHaveAttribute('aria-invalid', 'true');
@@ -464,14 +486,14 @@ describe('FileInput', () => {
     });
 
     it('ドロップゾーンバリアントで適切なARIA属性が設定される', () => {
-      render(<FileInput variant="dropzone" errorMessages={['Error message']} />);
+      render(<FileInput variant="dropzone" isError errorMessages={['Error message']} />);
 
       const dropzone = screen.getByRole('button', { name: /ファイルを選択/ });
       expect(dropzone).toHaveAttribute('aria-label', 'ファイルを選択');
       expect(dropzone).toHaveAttribute('aria-disabled', 'false');
       expect(dropzone).toHaveAttribute('aria-describedby');
 
-      const { container } = render(<FileInput variant="dropzone" errorMessages={['Error message']} />);
+      const { container } = render(<FileInput variant="dropzone" isError errorMessages={['Error message']} />);
       const input = container.querySelector('input[type="file"]') as HTMLInputElement;
       expect(input).toHaveAttribute('aria-invalid', 'true');
     });
@@ -488,6 +510,14 @@ describe('FileInput', () => {
 
       const input = container.querySelector('input[type="file"]') as HTMLInputElement;
       expect(input).toHaveAttribute('aria-invalid', 'false');
+      expect(input).not.toHaveAttribute('aria-describedby');
+    });
+
+    it('isErrorがtrueかつエラーメッセージが無い場合、aria-describedbyは設定されない', () => {
+      const { container } = render(<FileInput variant="button" isError />);
+
+      const input = container.querySelector('input[type="file"]') as HTMLInputElement;
+      expect(input).toHaveAttribute('aria-invalid', 'true');
       expect(input).not.toHaveAttribute('aria-describedby');
     });
 
@@ -520,7 +550,7 @@ describe('FileInput', () => {
     });
 
     it('エラーメッセージに適切なIDが設定される', () => {
-      const { container } = render(<FileInput variant="button" errorMessages={['Error message']} />);
+      const { container } = render(<FileInput variant="button" isError errorMessages={['Error message']} />);
 
       const errorContainer = container.querySelector('[data-testid="error-messages"]');
       expect(errorContainer).toHaveAttribute('id');
@@ -528,7 +558,7 @@ describe('FileInput', () => {
     });
 
     it('aria-describedbyでエラーメッセージと入力が関連付けられる', () => {
-      const { container } = render(<FileInput variant="button" errorMessages={['Error message']} />);
+      const { container } = render(<FileInput variant="button" isError errorMessages={['Error message']} />);
 
       const input = container.querySelector('input[type="file"]') as HTMLInputElement;
       const errorContainer = container.querySelector('[data-testid="error-messages"]');
