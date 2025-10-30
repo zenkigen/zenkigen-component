@@ -2,14 +2,17 @@
 
 ZENKIGENのコンポーネントライブラリです。Reactコンポーネントと設定を提供し、ZENKIGENのデザインシステムに準拠したUIを簡単に構築できます。
 
-## パッケージ構成
+## 目次
 
-このリポジトリは以下のパッケージで構成されています：
-
-- `@zenkigen-inc/component-ui` - コンポーネントライブラリ
-- `@zenkigen-inc/component-theme` - テーマ関連の設定
-- `@zenkigen-inc/component-config` - Tailwind CSSの設定
-- `@zenkigen-inc/component-icons` - アイコンコンポーネント
+- [インストール](#インストール)
+- [基本的な使い方](#基本的な使い方)
+- [ライブラリの更新](#ライブラリの更新)
+- [コンポーネント一覧・仕様書](#コンポーネント一覧仕様書)
+- [Storybook](#storybook)
+- [開発者向け](#開発者向け)
+  - [プロジェクト詳細ドキュメント](#プロジェクト詳細ドキュメント)
+  - [ローカル開発環境でのStorybook](#ローカル開発環境でのstorybook)
+- [ライセンス](#ライセンス)
 
 ## インストール
 
@@ -76,6 +79,48 @@ const MyComponent = () => {
 };
 ```
 
+## ライブラリの更新
+
+**重要**: このライブラリのすべてのパッケージは、必ず**同じバージョン**で使用してください。
+
+### 更新方法
+
+最新バージョンに更新する場合：
+
+```bash
+# npmの場合
+npm update @zenkigen-inc/component-ui @zenkigen-inc/component-config
+
+# yarnの場合
+yarn upgrade @zenkigen-inc/component-ui @zenkigen-inc/component-config
+```
+
+特定のバージョンにアップデートする場合：
+
+```bash
+# npmの場合（例: バージョン1.2.3にアップデート）
+npm install @zenkigen-inc/component-ui@1.2.3 @zenkigen-inc/component-config@1.2.3
+
+# yarnの場合（例: バージョン1.2.3にアップデート）
+yarn add @zenkigen-inc/component-ui@1.2.3 @zenkigen-inc/component-config@1.2.3
+```
+
+依存パッケージ（`component-theme`、`component-icons`）も同じバージョンに自動的に更新されます。
+
+### バージョンの確認
+
+インストールされているバージョンを確認するには：
+
+```bash
+# npmの場合
+npm list @zenkigen-inc/component-ui @zenkigen-inc/component-config
+
+# yarnの場合
+yarn list --pattern "@zenkigen-inc/component-*"
+```
+
+または、`package.json` の `dependencies` セクションを確認してください。
+
 ## コンポーネント一覧・仕様書
 
 以下は利用可能なコンポーネントの一覧です。リンクがあるコンポーネントは詳細な仕様書が参照できます。
@@ -111,7 +156,15 @@ const MyComponent = () => {
 - Tooltip
 - Typography
 
-## プロジェクト詳細ドキュメント
+## Storybook
+
+各コンポーネントの実装例とインタラクティブなデモは、Storybookで確認できます：
+
+**[https://storybook.zenkigen.co.jp/](https://storybook.zenkigen.co.jp/)**
+
+## 開発者向け
+
+### プロジェクト詳細ドキュメント
 
 プロジェクトの詳細な技術資料は以下のドキュメントを参照してください：
 
@@ -121,9 +174,9 @@ const MyComponent = () => {
 - [テーマシステム](./docs/theme-system.md) - テーマとTailwind CSS設定
 - [コーディングガイドライン](./docs/coding-guidelines.md) - 開発時のコーディング標準と規約
 
-## Storybookでのコンポーネント確認
+### ローカル開発環境でのStorybook
 
-開発環境では、Storybookを使用してコンポーネントの確認ができます：
+ローカル開発環境でStorybookを起動してコンポーネントの確認ができます：
 
 ```bash
 # リポジトリのクローン
