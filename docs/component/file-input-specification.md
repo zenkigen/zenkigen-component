@@ -60,6 +60,7 @@ const MyComponent = () => {
   return (
     <FileInput
       variant="button"
+      isError={errorMessages.length > 0}
       errorMessages={errorMessages}
       onSelect={(file) => setSelectedFile(file)}
       onError={(errors) => setErrorMessages(errors.map((e) => e.message))}
@@ -78,16 +79,17 @@ const MyComponent = () => {
 
 ### オプションプロパティ
 
-| プロパティ      | 型                                   | デフォルト値 | 説明                                                             |
-| --------------- | ------------------------------------ | ------------ | ---------------------------------------------------------------- |
-| `id`            | `string`                             | `undefined`  | input要素のID（外部のlabel要素との連携用）                       |
-| `size`          | `'small'` \| `'medium'` \| `'large'` | `'medium'`   | サイズ（`button` variant のみ有効）                              |
-| `accept`        | `string`                             | `undefined`  | 許可するファイル形式（拡張子またはMIMEタイプ。カンマ区切り対応） |
-| `maxSize`       | `number`                             | `undefined`  | 最大ファイルサイズ（バイト単位）                                 |
-| `isDisabled`    | `boolean`                            | `false`      | 無効化状態                                                       |
-| `onSelect`      | `(file: File \| null) => void`       | `undefined`  | ファイル選択時／クリア時（`null`）のコールバック                 |
-| `onError`       | `(errors: FileInputError[]) => void` | `undefined`  | バリデーションエラー発生時のコールバック                         |
-| `errorMessages` | `string[]`                           | `undefined`  | エラーメッセージの外部制御。指定時はUIにエラー表示が出る         |
+| プロパティ      | 型                                   | デフォルト値 | 説明                                                                                             |
+| --------------- | ------------------------------------ | ------------ | ------------------------------------------------------------------------------------------------ |
+| `id`            | `string`                             | `undefined`  | input要素のID（外部のlabel要素との連携用）                                                       |
+| `size`          | `'small'` \| `'medium'` \| `'large'` | `'medium'`   | サイズ（`button` variant のみ有効）                                                              |
+| `accept`        | `string`                             | `undefined`  | 許可するファイル形式（拡張子またはMIMEタイプ。カンマ区切り対応）                                 |
+| `maxSize`       | `number`                             | `undefined`  | 最大ファイルサイズ（バイト単位）                                                                 |
+| `isDisabled`    | `boolean`                            | `false`      | 無効化状態                                                                                       |
+| `isError`       | `boolean`                            | `false`      | エラー表現の有効化。true のときのみエラースタイル/`aria-invalid` が適用される                    |
+| `onSelect`      | `(file: File \| null) => void`       | `undefined`  | ファイル選択時／クリア時（`null`）のコールバック                                                 |
+| `onError`       | `(errors: FileInputError[]) => void` | `undefined`  | バリデーションエラー発生時のコールバック                                                         |
+| `errorMessages` | `string[]`                           | `undefined`  | 表示用のエラーメッセージ。`isError=true` のときにのみUIに表示され、`aria-describedby` 連携される |
 
 #### FileInputError 型
 
@@ -191,18 +193,17 @@ fileInputRef.current?.reset();
 
 #### エラー状態（バリデーション失敗時）
 
-エラーの検出自体は内部バリデーションで行うが、UI上の表示は`errorMessages`を渡した場合にのみ行われる。
+UIのエラー表現は `isError` によってのみ制御される。`errorMessages` は文言表示用であり、視覚表現は変化しない。
 
 **button variant:**
 
-- ボタンバリエーション: `outlineDanger`
-- エラーメッセージ色: `text-supportError`
+- `isError=true` のとき、ボタンバリエーション: `outlineDanger`
+- `isError=true` かつ `errorMessages` がある場合、メッセージ色: `text-supportError`
 
 **dropzone variant:**
 
-- ボーダー: `border-supportDanger`
-- 背景: `bg-white`
-- エラーメッセージ色: `text-supportDanger`
+- `isError=true` のとき、ボーダー: `border-supportDanger`（背景: `bg-white`）
+- `isError=true` かつ `errorMessages` がある場合、メッセージ色: `text-supportDanger`
 
 #### 無効状態（`isDisabled: true`）
 
@@ -235,6 +236,7 @@ const BasicExample = () => {
   return (
     <FileInput
       variant="button"
+      isError={errorMessages.length > 0}
       errorMessages={errorMessages}
       onSelect={(selectedFile) => setFile(selectedFile)}
       onError={(errors) => setErrorMessages(errors.map((e) => e.message))}
@@ -311,10 +313,18 @@ const RefControlExample = () => {
 ### エラー状態
 
 ```typescript
-// エラー表示をUIに出す場合の例：
-<FileInput variant="button" errorMessages={["ファイルサイズが大き過ぎます。", "ファイル形式が正しくありません。"]} />
+// エラー表示（見た目）を出すには isError を true にする
+<FileInput
+  variant="button"
+  isError={true}
+  errorMessages={["ファイルサイズが大き過ぎます。", "ファイル形式が正しくありません。"]}
+/>
 
-<FileInput variant="dropzone" errorMessages={["ファイルサイズが大き過ぎます。", "ファイル形式が正しくありません。"]} />
+<FileInput
+  variant="dropzone"
+  isError={true}
+  errorMessages={["ファイルサイズが大き過ぎます。", "ファイル形式が正しくありません。"]}
+/>
 ```
 
 ### 無効状態
@@ -452,7 +462,7 @@ dropzone variantでのドラッグ&ドロップ機能：
 - 標準のButtonコンポーネント機能を継承
 - キーボード操作：Tab、Enter、Spaceキーで操作可能
 - スクリーンリーダー対応：ボタンラベルが読み上げられる
-- エラーメッセージ：`aria-describedby`でinput要素と連携
+- エラー表示時（`isError=true` かつ `errorMessages` あり）：`aria-describedby`でinput要素と連携
 
 ### Dropzone Variant
 
@@ -461,7 +471,7 @@ dropzone variantでのドラッグ&ドロップ機能：
 - `role="button"`でボタンとして認識
 - `aria-label`でアクセシブルな名前を提供
 - `aria-disabled`で無効状態を明示
-- エラーメッセージ：`aria-describedby`でinput要素と連携
+- エラー表示時（`isError=true` かつ `errorMessages` あり）：`aria-describedby`でinput要素と連携
 
 ---
 
@@ -469,7 +479,7 @@ dropzone variantでのドラッグ&ドロップ機能：
 
 - ファイルはバリデーション成功後に`onSelect(file)`で渡される
 - バリデーション失敗時は`onError(errors)`のみが呼ばれ、`onSelect`は呼ばれない
-- エラー表示は外部制御（`errorMessages`）で行う。`onError`で受け取った内容を必要に応じて反映する
+- エラー表現は `isError` で制御する。`errorMessages` は文言表示のみを担い、`isError=true` のときに表示される
 - `reset`/クリア時は`onSelect(null)`が呼ばれる
 - ユーザーがファイルダイアログでキャンセルした場合は、既存の選択状態を維持する（意図的な仕様）
 - 外部`<label>`要素と連携する場合は`id` propを指定する
