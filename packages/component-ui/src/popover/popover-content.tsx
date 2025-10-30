@@ -9,6 +9,12 @@ type PopoverContentProps = {
   children?: React.ReactNode;
 };
 
+type ChildProps = {
+  id?: string;
+  role?: string;
+  [key: string]: unknown;
+};
+
 export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(function PopoverContent(
   { children },
   ref,
@@ -80,12 +86,12 @@ export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(fu
 
   let wrappedChildren = children;
   if (isElement(children)) {
-    const childProps = children.props as Record<string, unknown> & { id?: string; role?: string };
+    const childProps = children.props as ChildProps;
     wrappedChildren = React.cloneElement(children, {
       ...childProps,
-      id: childProps.id ?? panelId,
-      role: childProps.role ?? 'dialog',
-    } as Partial<typeof childProps>);
+      ...(childProps.id == null && { id: panelId }),
+      ...(childProps.role == null && { role: 'dialog' }),
+    });
   }
 
   return (
