@@ -46,9 +46,12 @@ const MyComponent = () => {
         variant="button"
         accept=".csv,.pdf,image/*,application/vnd.ms-excel"
         maxSize={50 * 1024 * 1024}
+        isError={errorMessages.length > 0}
         errorMessages={errorMessages}
         onSelect={(file) => setSelectedFile(file)}
-        onError={(errors) => setErrorMessages(errors.map((e) => e.message))}
+        onError={(errors) => {
+          setErrorMessages(errors.map((e) => e.message));
+        }}
       />
       <Button variant="text" onClick={handleReset}>
         リセット
