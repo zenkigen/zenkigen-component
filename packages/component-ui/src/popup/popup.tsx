@@ -21,18 +21,10 @@ type Props = {
   isOpen?: boolean;
   width?: CSSProperties['width'];
   height?: CSSProperties['height'];
-  maxWidth?: CSSProperties['maxWidth'];
   onClose?: () => void;
 };
 
-export function Popup({
-  children,
-  isOpen: controlledIsOpen,
-  width = 480,
-  height,
-  maxWidth = 'calc(100vw - 40px)',
-  onClose,
-}: PropsWithChildren<Props>) {
+export function Popup({ children, isOpen: controlledIsOpen, width = 480, height, onClose }: PropsWithChildren<Props>) {
   const renderWidth = typeof width === 'number' ? Math.max(width, LIMIT_WIDTH) : width;
   const renderHeight = typeof height === 'number' ? Math.max(height, LIMIT_HEIGHT) : height;
 
@@ -49,7 +41,7 @@ export function Popup({
     <PopupContext.Provider value={{ isOpen, onClose }}>
       <div
         className="grid max-h-full grid-rows-[max-content_1fr_max-content] flex-col rounded-lg bg-uiBackground01 shadow-floatingShadow"
-        style={{ width: renderWidth, height: renderHeight, maxWidth }}
+        style={{ width: renderWidth, height: renderHeight }}
       >
         {children}
       </div>
