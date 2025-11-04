@@ -12,7 +12,7 @@ export function PopupHeader({ children, before }: Props) {
   const { onClose } = useContext(PopupContext);
 
   return (
-    <div className="typography-h5 flex h-12 w-full shrink-0 items-start justify-between  rounded-t-lg px-6 pt-3 text-text01">
+    <div className="typography-h5 flex h-12 w-full shrink-0 items-start justify-between rounded-t-lg px-6 pt-3 text-text01">
       <div className="flex items-center gap-1">
         {before}
         {children}

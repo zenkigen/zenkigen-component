@@ -37,7 +37,7 @@ const PopupExample = () => {
       </Button>
 
       <Popup isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <Popup.Header>タイトル</Popup.Header>
+        <Popup.Header before={<Icon name="add" color="icon01" />}>タイトル</Popup.Header>
         <Popup.Body>
           <div className="p-4">
             <p className="typography-body14regular text-text01">Popupのコンテンツがここに表示されます。</p>

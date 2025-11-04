@@ -41,7 +41,7 @@ export const Component: Story = {
   render: function MyFunc({ ...args }) {
     return (
       <Popup isOpen={args.isOpen} width={args.width} onClose={args.onClose}>
-        <Popup.Header>タイトル</Popup.Header>
+        <Popup.Header before={<Icon name="add" color="icon01" />}>タイトル</Popup.Header>
         <Popup.Body>
           <div className="flex w-full items-center justify-center py-20">Content</div>
         </Popup.Body>
@@ -163,7 +163,7 @@ export const WithHeaderBefore: Story = {
   render: function MyFunc({ ...args }) {
     return (
       <Popup isOpen={args.isOpen} width={args.width} onClose={args.onClose}>
-        <Popup.Header before={<Icon name="warning" className="fill-supportWarning" />}>
+        <Popup.Header before={<Icon name="calendar-check" color="icon01" accentColor="supportInfo" />}>
           ヘッダー（アイコン付き）
         </Popup.Header>
         <Popup.Body>
