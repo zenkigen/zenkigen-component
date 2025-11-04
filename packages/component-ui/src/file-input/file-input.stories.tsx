@@ -82,20 +82,22 @@ export const ButtonStates: Story = {
       <div className="flex flex-col items-center justify-center gap-4">
         <FileInput variant="button" />
         <FileInput variant="button" isDisabled />
+        <FileInput variant="button" isError />
       </div>
     </div>
   ),
 };
 
-export const Dropzone: Story = {
-  args: {
-    variant: 'dropzone',
-    isDisabled: false,
-    errorMessages: [],
-  },
-  parameters: {
-    layout: 'centered',
-  },
+export const DropzoneStates: Story = {
+  render: () => (
+    <div className="flex size-full h-screen items-center justify-center ">
+      <div className="flex items-center justify-center gap-4">
+        <FileInput variant="dropzone" />
+        <FileInput variant="dropzone" isDisabled />
+        <FileInput variant="dropzone" isError />
+      </div>
+    </div>
+  ),
 };
 
 export const Error: Story = {
@@ -166,6 +168,7 @@ const WithExternalResetControlComponent = ({
           accept={accept}
           maxSize={maxSize}
           isDisabled={isDisabled}
+          isError={errorMessages.length > 0}
           errorMessages={errorMessages}
           onSelect={(file) => {
             // eslint-disable-next-line no-console
@@ -190,7 +193,6 @@ export const WithExternalResetControl: Story = {
     variant: 'button',
     size: 'medium',
     accept: '',
-    maxSize: 1 * 1024,
     isDisabled: false,
   },
   parameters: {
