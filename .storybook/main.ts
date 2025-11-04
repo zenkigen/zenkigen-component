@@ -1,6 +1,10 @@
+import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 import type { StorybookConfig } from '@storybook/react-vite';
 import path, { dirname, join } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const require = createRequire(import.meta.url);
 
@@ -25,6 +29,19 @@ const config: StorybookConfig = {
         mangle: { keep_fnames: true, keep_classnames: true },
       };
     }
+
+    // file:// プロトコルを処理するプラグイン
+    config.plugins ??= [];
+    config.plugins.push({
+      name: 'fix-file-protocol',
+      enforce: 'pre',
+      resolveId(id) {
+        if (id.startsWith('file://')) {
+          return id.replace('file://', '');
+        }
+        return null;
+      },
+    });
 
     return mergeConfig(config, {
       resolve: {

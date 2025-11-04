@@ -39,7 +39,7 @@ export const Component: Story = {
     const [value, setValue] = useState<string>('');
     const { addToast } = useToast();
     const handleClick = useCallback(() => {
-      if (args.state) addToast({ state: args.state, message: value });
+      if (args.state != null) addToast({ state: args.state, message: value });
     }, [addToast, args.state, value]);
 
     return (
