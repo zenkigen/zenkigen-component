@@ -4,13 +4,15 @@
 */
 import type React from 'react';
 
-export type IconName = 'add' | 'ai' | 'angle-down' | 'angle-left' | 'angle-right' | 'angle-small-down' | 'angle-small-up' | 'angle-up' | 'arrow-down' | 'arrow-left' | 'arrow-right' | 'arrow-up' | 'attachment' | 'attention' | 'beginner' | 'bookmark' | 'building' | 'calendar-attention' | 'calendar-check' | 'calendar-draft' | 'calendar-minus' | 'calendar-today' | 'calendar' | 'caret-down' | 'caret-right' | 'catch' | 'chart-bar' | 'chart-line' | 'check' | 'circle' | 'close' | 'comment' | 'contract' | 'copy' | 'delete' | 'document-edit' | 'document' | 'documents' | 'double-circle' | 'download-document' | 'download' | 'edit' | 'email' | 'expand' | 'external-link' | 'filter' | 'flag' | 'global' | 'graph-line' | 'hamburger-close' | 'hamburger-open' | 'hamburger' | 'handle' | 'help' | 'hint' | 'home' | 'image' | 'information-filled' | 'information' | 'input-delete' | 'link' | 'list' | 'logout' | 'message-text' | 'mic-off' | 'mic' | 'minus' | 'more' | 'movie' | 'network' | 'notification' | 'pause' | 'pdf' | 'picture-in-picture' | 'play-filled' | 'play' | 'plus' | 'presentation' | 'remove' | 'repeat' | 'score' | 'search' | 'send' | 'share' | 'shuffle' | 'sidebar' | 'slider-editing' | 'sort-down' | 'sort-up' | 'sort' | 'sparkle' | 'stamp' | 'star-filled' | 'star' | 'success-filled' | 'table-download' | 'table-upload' | 'table' | 'timer' | 'transcription' | 'triangle' | 'upload' | 'user-add' | 'user-group' | 'user-line' | 'user-multi' | 'user-one' | 'user-remove' | 'user-verified' | 'user' | 'video-off' | 'video' | 'visibility-off' | 'visibility' | 'volume-off' | 'volume' | 'warning';
+export type IconName = 'add' | 'ai-agent' | 'ai' | 'angle-down' | 'angle-left' | 'angle-right' | 'angle-small-down' | 'angle-small-up' | 'angle-up' | 'arrow-down' | 'arrow-left' | 'arrow-right' | 'arrow-up' | 'attachment' | 'attention' | 'background-blur-strong' | 'background-blur-weak' | 'beginner' | 'block' | 'bookmark' | 'building' | 'calendar-attention' | 'calendar-check' | 'calendar-draft' | 'calendar-minus' | 'calendar-today' | 'calendar' | 'caret-down' | 'caret-right' | 'catch' | 'chart-bar' | 'chart-line' | 'check' | 'circle' | 'close' | 'comment' | 'contract' | 'copy' | 'delete' | 'display' | 'document-edit' | 'document' | 'documents' | 'double-circle' | 'download-document' | 'download' | 'edit' | 'email' | 'exit' | 'expand' | 'external-link' | 'feedback' | 'filter' | 'flag' | 'global' | 'graph-line' | 'guide' | 'hamburger-close' | 'hamburger-open' | 'hamburger' | 'handle' | 'harutaka' | 'help' | 'hint' | 'home' | 'image' | 'information-filled' | 'information' | 'input-delete' | 'link' | 'list' | 'live-background' | 'logout' | 'main-view' | 'message-text' | 'mic-off' | 'mic' | 'minus' | 'more' | 'movie' | 'network' | 'notification' | 'pause' | 'pdf' | 'picture-in-picture' | 'play-filled' | 'play' | 'plus' | 'presentation' | 'record' | 'reload' | 'remove' | 'repeat' | 'score' | 'screen-share' | 'search' | 'security' | 'send' | 'setting' | 'share' | 'shuffle' | 'sidebar' | 'signal-low' | 'signal-off' | 'signal' | 'slider-editing' | 'sort-down' | 'sort-up' | 'sort' | 'sparkle' | 'stamp' | 'star-filled' | 'star' | 'success-filled' | 'superadmin' | 'table-download' | 'table-upload' | 'table' | 'timer' | 'transcription' | 'triangle' | 'upload-document-success' | 'upload' | 'user-add' | 'user-group' | 'user-line' | 'user-multi' | 'user-one' | 'user-remove' | 'user-verified' | 'user' | 'video-off' | 'video' | 'visibility-off' | 'visibility' | 'volume-off' | 'volume' | 'warning';
 
 export type IconComponent = React.FC<{ accentClassName?: string }>;
 
 // Import all icon components
 
 import { addIcon } from './icons/add';
+
+import { aiagentIcon } from './icons/ai-agent';
 
 import { aiIcon } from './icons/ai';
 
@@ -38,7 +40,13 @@ import { attachmentIcon } from './icons/attachment';
 
 import { attentionIcon } from './icons/attention';
 
+import { backgroundblurstrongIcon } from './icons/background-blur-strong';
+
+import { backgroundblurweakIcon } from './icons/background-blur-weak';
+
 import { beginnerIcon } from './icons/beginner';
+
+import { blockIcon } from './icons/block';
 
 import { bookmarkIcon } from './icons/bookmark';
 
@@ -80,6 +88,8 @@ import { copyIcon } from './icons/copy';
 
 import { deleteIcon } from './icons/delete';
 
+import { displayIcon } from './icons/display';
+
 import { documenteditIcon } from './icons/document-edit';
 
 import { documentIcon } from './icons/document';
@@ -96,9 +106,13 @@ import { editIcon } from './icons/edit';
 
 import { emailIcon } from './icons/email';
 
+import { exitIcon } from './icons/exit';
+
 import { expandIcon } from './icons/expand';
 
 import { externallinkIcon } from './icons/external-link';
+
+import { feedbackIcon } from './icons/feedback';
 
 import { filterIcon } from './icons/filter';
 
@@ -108,6 +122,8 @@ import { globalIcon } from './icons/global';
 
 import { graphlineIcon } from './icons/graph-line';
 
+import { guideIcon } from './icons/guide';
+
 import { hamburgercloseIcon } from './icons/hamburger-close';
 
 import { hamburgeropenIcon } from './icons/hamburger-open';
@@ -115,6 +131,8 @@ import { hamburgeropenIcon } from './icons/hamburger-open';
 import { hamburgerIcon } from './icons/hamburger';
 
 import { handleIcon } from './icons/handle';
+
+import { harutakaIcon } from './icons/harutaka';
 
 import { helpIcon } from './icons/help';
 
@@ -134,7 +152,11 @@ import { linkIcon } from './icons/link';
 
 import { listIcon } from './icons/list';
 
+import { livebackgroundIcon } from './icons/live-background';
+
 import { logoutIcon } from './icons/logout';
+
+import { mainviewIcon } from './icons/main-view';
 
 import { messagetextIcon } from './icons/message-text';
 
@@ -166,21 +188,37 @@ import { plusIcon } from './icons/plus';
 
 import { presentationIcon } from './icons/presentation';
 
+import { recordIcon } from './icons/record';
+
+import { reloadIcon } from './icons/reload';
+
 import { removeIcon } from './icons/remove';
 
 import { repeatIcon } from './icons/repeat';
 
 import { scoreIcon } from './icons/score';
 
+import { screenshareIcon } from './icons/screen-share';
+
 import { searchIcon } from './icons/search';
 
+import { securityIcon } from './icons/security';
+
 import { sendIcon } from './icons/send';
+
+import { settingIcon } from './icons/setting';
 
 import { shareIcon } from './icons/share';
 
 import { shuffleIcon } from './icons/shuffle';
 
 import { sidebarIcon } from './icons/sidebar';
+
+import { signallowIcon } from './icons/signal-low';
+
+import { signaloffIcon } from './icons/signal-off';
+
+import { signalIcon } from './icons/signal';
 
 import { slidereditingIcon } from './icons/slider-editing';
 
@@ -200,6 +238,8 @@ import { starIcon } from './icons/star';
 
 import { successfilledIcon } from './icons/success-filled';
 
+import { superadminIcon } from './icons/superadmin';
+
 import { tabledownloadIcon } from './icons/table-download';
 
 import { tableuploadIcon } from './icons/table-upload';
@@ -211,6 +251,8 @@ import { timerIcon } from './icons/timer';
 import { transcriptionIcon } from './icons/transcription';
 
 import { triangleIcon } from './icons/triangle';
+
+import { uploaddocumentsuccessIcon } from './icons/upload-document-success';
 
 import { uploadIcon } from './icons/upload';
 
@@ -250,6 +292,8 @@ export const iconElements = {
   
     'add': addIcon,
   
+    'ai-agent': aiagentIcon,
+  
     'ai': aiIcon,
   
     'angle-down': angledownIcon,
@@ -276,7 +320,13 @@ export const iconElements = {
   
     'attention': attentionIcon,
   
+    'background-blur-strong': backgroundblurstrongIcon,
+  
+    'background-blur-weak': backgroundblurweakIcon,
+  
     'beginner': beginnerIcon,
+  
+    'block': blockIcon,
   
     'bookmark': bookmarkIcon,
   
@@ -318,6 +368,8 @@ export const iconElements = {
   
     'delete': deleteIcon,
   
+    'display': displayIcon,
+  
     'document-edit': documenteditIcon,
   
     'document': documentIcon,
@@ -334,9 +386,13 @@ export const iconElements = {
   
     'email': emailIcon,
   
+    'exit': exitIcon,
+  
     'expand': expandIcon,
   
     'external-link': externallinkIcon,
+  
+    'feedback': feedbackIcon,
   
     'filter': filterIcon,
   
@@ -346,6 +402,8 @@ export const iconElements = {
   
     'graph-line': graphlineIcon,
   
+    'guide': guideIcon,
+  
     'hamburger-close': hamburgercloseIcon,
   
     'hamburger-open': hamburgeropenIcon,
@@ -353,6 +411,8 @@ export const iconElements = {
     'hamburger': hamburgerIcon,
   
     'handle': handleIcon,
+  
+    'harutaka': harutakaIcon,
   
     'help': helpIcon,
   
@@ -372,7 +432,11 @@ export const iconElements = {
   
     'list': listIcon,
   
+    'live-background': livebackgroundIcon,
+  
     'logout': logoutIcon,
+  
+    'main-view': mainviewIcon,
   
     'message-text': messagetextIcon,
   
@@ -404,21 +468,37 @@ export const iconElements = {
   
     'presentation': presentationIcon,
   
+    'record': recordIcon,
+  
+    'reload': reloadIcon,
+  
     'remove': removeIcon,
   
     'repeat': repeatIcon,
   
     'score': scoreIcon,
   
+    'screen-share': screenshareIcon,
+  
     'search': searchIcon,
   
+    'security': securityIcon,
+  
     'send': sendIcon,
+  
+    'setting': settingIcon,
   
     'share': shareIcon,
   
     'shuffle': shuffleIcon,
   
     'sidebar': sidebarIcon,
+  
+    'signal-low': signallowIcon,
+  
+    'signal-off': signaloffIcon,
+  
+    'signal': signalIcon,
   
     'slider-editing': slidereditingIcon,
   
@@ -438,6 +518,8 @@ export const iconElements = {
   
     'success-filled': successfilledIcon,
   
+    'superadmin': superadminIcon,
+  
     'table-download': tabledownloadIcon,
   
     'table-upload': tableuploadIcon,
@@ -449,6 +531,8 @@ export const iconElements = {
     'transcription': transcriptionIcon,
   
     'triangle': triangleIcon,
+  
+    'upload-document-success': uploaddocumentsuccessIcon,
   
     'upload': uploadIcon,
   
