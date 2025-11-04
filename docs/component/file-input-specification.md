@@ -327,6 +327,56 @@ const RefControlExample = () => {
 />
 ```
 
+### エラーメッセージのカスタマイズ例
+
+`onError`コールバックで受け取ったエラー情報（`FileInputError[]`）に基づいて、カスタムメッセージを生成できます。エラーの`type`に応じて、異なるメッセージを表示することができます。
+
+```typescript
+import { useState } from 'react';
+import { FileInput } from '@zenkigen-inc/component-ui';
+import type { FileInputError } from '@zenkigen-inc/component-ui';
+
+const CustomErrorMessageExample = () => {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [errorMessages, setErrorMessages] = useState<string[]>([]);
+
+  const handleError = (errors: FileInputError[]) => {
+    const customMessages = errors.map((error) => {
+      switch (error.type) {
+        case 'SIZE_TOO_LARGE':
+          // カスタムメッセージ例: 具体的なサイズ制限を表示
+          return 'ファイルサイズが10MBを超えています。別のファイルを選択してください。';
+        case 'UNSUPPORTED_FORMAT':
+          // カスタムメッセージ例: 許可されている形式を表示
+          return 'CSVファイルまたはPDFファイルのみアップロード可能です。';
+        default:
+          return error.message; // デフォルトメッセージを使用
+      }
+    });
+
+    setErrorMessages(customMessages);
+  };
+
+  return (
+    <FileInput
+      variant="button"
+      accept=".csv,.pdf"
+      maxSize={10 * 1024 * 1024} // 10MB
+      isError={errorMessages.length > 0}
+      errorMessages={errorMessages}
+      onSelect={(file) => {
+        setSelectedFile(file);
+        // ファイル選択成功時はエラーメッセージをクリア
+        if (file != null) {
+          setErrorMessages([]);
+        }
+      }}
+      onError={handleError}
+    />
+  );
+};
+```
+
 ### 無効状態
 
 ```typescript
