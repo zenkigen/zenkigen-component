@@ -57,6 +57,7 @@ export const Default: Story = {
     variant: 'button',
     size: 'medium',
     isDisabled: false,
+    isError: false,
     errorMessages: [],
   },
   parameters: {
