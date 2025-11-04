@@ -230,12 +230,13 @@ export const FileInput = forwardRef<FileInputRef, FileInputProps>(
     const hasErrors = !isDisabled && isError === true;
 
     const dropzoneClasses = clsx(
-      'flex flex-1 cursor-pointer flex-col items-center justify-center gap-4 rounded border border-dashed px-6 text-center hover:bg-hover02',
+      'flex flex-1 flex-col items-center justify-center gap-4 rounded border border-dashed px-6 text-center',
       selectedFile ? 'py-[52px]' : 'py-4',
       {
         'border-uiBorder03 bg-white text-text01': !isDisabled && !isDragOver && !hasErrors,
         'border-activeInput bg-activeInput/5': !isDisabled && isDragOver && !hasErrors,
         'border-supportDanger bg-white': hasErrors && !isDisabled,
+        'hover:bg-hover02 cursor-pointer': !isDisabled,
         'border-disabled01 bg-disabled02 text-textPlaceholder cursor-not-allowed': isDisabled,
       },
     );
@@ -302,7 +303,9 @@ export const FileInput = forwardRef<FileInputRef, FileInputProps>(
               after={
                 <>
                   {selectedFile ? (
-                    <span className="typography-label12regular truncate text-text01">{selectedFile.name}</span>
+                    <span className={clsx('typography-label12regular truncate', !isDisabled && 'text-text01')}>
+                      {selectedFile.name}
+                    </span>
                   ) : (
                     ''
                   )}
