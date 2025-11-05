@@ -344,7 +344,7 @@ export const FileInput = forwardRef<FileInputRef, FileInputProps>(
     }
 
     return (
-      <div className="flex flex-col gap-2">
+      <div className="flex min-w-[320px] flex-col gap-2">
         <div
           className={dropzoneClasses}
           role="button"
