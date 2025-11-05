@@ -60,14 +60,17 @@ describe('SegmentedControl', () => {
   // アクセシビリティー関連
 
   it('Tabキーで現在選択中のItemにフォーカスが移動する', async () => {
-    const user = await import('@testing-library/user-event').then((m) => m.default);
+    const userEvent = await import('@testing-library/user-event').then((m) => m.default);
+    const user = userEvent.setup();
     render(<SegmentedControl {...defaultProps} value="option2" onChange={() => {}} aria-label="" />);
     // 最初にdocument.bodyにフォーカスを当てる
     (document.activeElement as HTMLElement)?.blur();
     // Tabキーを押す
-    await user.tab();
+    await act(async () => {
+      await user.tab();
+    });
     // Option 2がフォーカスされていること
-    expect(screen.getByRole('tab', { name: 'Option 2' })).toHaveFocus();
+    await waitFor(() => expect(screen.getByRole('tab', { name: 'Option 2' })).toHaveFocus());
   });
 
   it('フォーカス時、左右の矢印キーで選択中のItemを変更できる', async () => {
@@ -131,7 +134,8 @@ describe('SegmentedControl', () => {
   });
 
   it('フォーカス時、上下の矢印キーで選択中のItemを変更できる', async () => {
-    const user = await import('@testing-library/user-event').then((m) => m.default);
+    const userEvent = await import('@testing-library/user-event').then((m) => m.default);
+    const user = userEvent.setup();
     const onChange = vi.fn();
 
     // valueをuseStateで管理するラッパー
@@ -153,32 +157,45 @@ describe('SegmentedControl', () => {
 
     render(<Wrapper />);
     (document.activeElement as HTMLElement)?.blur();
-    await user.tab();
-    expect(screen.getByRole('tab', { name: 'Option 1' })).toHaveFocus();
+    await act(async () => {
+      await user.tab();
+    });
+    await waitFor(() => expect(screen.getByRole('tab', { name: 'Option 1' })).toHaveFocus());
 
     // ↓キーでOption 2へ
-    await user.keyboard('{ArrowDown}');
-    expect(onChange).toHaveBeenCalledWith('option2');
+    await act(async () => {
+      await user.keyboard('{ArrowDown}');
+    });
+    await waitFor(() => expect(onChange).toHaveBeenNthCalledWith(1, 'option2'));
 
     // ↓キーでOption 3へ
-    await user.keyboard('{ArrowDown}');
-    expect(onChange).toHaveBeenCalledWith('option3');
+    await act(async () => {
+      await user.keyboard('{ArrowDown}');
+    });
+    await waitFor(() => expect(onChange).toHaveBeenNthCalledWith(2, 'option3'));
 
     // ↓キーでOption 1へ
-    await user.keyboard('{ArrowDown}');
-    expect(onChange).toHaveBeenCalledWith('option1');
+    await act(async () => {
+      await user.keyboard('{ArrowDown}');
+    });
+    await waitFor(() => expect(onChange).toHaveBeenNthCalledWith(3, 'option1'));
 
     // ↑キーでOption 3へ戻る
-    await user.keyboard('{ArrowUp}');
-    expect(onChange).toHaveBeenCalledWith('option3');
+    await act(async () => {
+      await user.keyboard('{ArrowUp}');
+    });
+    await waitFor(() => expect(onChange).toHaveBeenNthCalledWith(4, 'option3'));
 
     // ↑キーでOption 2へ戻る
-    await user.keyboard('{ArrowUp}');
-    expect(onChange).toHaveBeenCalledWith('option2');
+    await act(async () => {
+      await user.keyboard('{ArrowUp}');
+    });
+    await waitFor(() => expect(onChange).toHaveBeenNthCalledWith(5, 'option2'));
   });
 
   it('Homeキーを押すと最初のItemが選択される', async () => {
-    const user = await import('@testing-library/user-event').then((m) => m.default);
+    const userEvent = await import('@testing-library/user-event').then((m) => m.default);
+    const user = userEvent.setup();
     const onChange = vi.fn();
 
     // valueをuseStateで管理するラッパー
@@ -200,16 +217,21 @@ describe('SegmentedControl', () => {
 
     render(<Wrapper />);
     (document.activeElement as HTMLElement)?.blur();
-    await user.tab();
-    expect(screen.getByRole('tab', { name: 'Option 3' })).toHaveFocus();
+    await act(async () => {
+      await user.tab();
+    });
+    await waitFor(() => expect(screen.getByRole('tab', { name: 'Option 3' })).toHaveFocus());
 
     // HomeキーでOption 1へ
-    await user.keyboard('{Home}');
-    expect(onChange).toHaveBeenCalledWith('option1');
+    await act(async () => {
+      await user.keyboard('{Home}');
+    });
+    await waitFor(() => expect(onChange).toHaveBeenNthCalledWith(1, 'option1'));
   });
 
   it('Endキーを押すと最後のItemが選択される', async () => {
-    const user = await import('@testing-library/user-event').then((m) => m.default);
+    const userEvent = await import('@testing-library/user-event').then((m) => m.default);
+    const user = userEvent.setup();
     const onChange = vi.fn();
 
     // valueをuseStateで管理するラッパー
@@ -231,11 +253,15 @@ describe('SegmentedControl', () => {
 
     render(<Wrapper />);
     (document.activeElement as HTMLElement)?.blur();
-    await user.tab();
-    expect(screen.getByRole('tab', { name: 'Option 1' })).toHaveFocus();
+    await act(async () => {
+      await user.tab();
+    });
+    await waitFor(() => expect(screen.getByRole('tab', { name: 'Option 1' })).toHaveFocus());
 
-    // HomeキーでOption 3へ
-    await user.keyboard('{End}');
-    expect(onChange).toHaveBeenCalledWith('option3');
+    // EndキーでOption 3へ
+    await act(async () => {
+      await user.keyboard('{End}');
+    });
+    await waitFor(() => expect(onChange).toHaveBeenNthCalledWith(1, 'option3'));
   });
 });
