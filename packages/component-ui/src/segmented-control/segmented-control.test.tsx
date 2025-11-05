@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -71,7 +71,8 @@ describe('SegmentedControl', () => {
   });
 
   it('フォーカス時、左右の矢印キーで選択中のItemを変更できる', async () => {
-    const user = await import('@testing-library/user-event').then((m) => m.default);
+    const userEvent = await import('@testing-library/user-event').then((m) => m.default);
+    const user = userEvent.setup();
     const onChange = vi.fn();
 
     // valueをuseStateで管理するラッパー
@@ -93,28 +94,40 @@ describe('SegmentedControl', () => {
 
     render(<Wrapper />);
     (document.activeElement as HTMLElement)?.blur();
-    await user.tab();
+    await act(async () => {
+      await user.tab();
+    });
     expect(screen.getByRole('tab', { name: 'Option 1' })).toHaveFocus();
 
     // →キーでOption 2へ
-    await user.keyboard('{ArrowRight}');
-    expect(onChange).toHaveBeenCalledWith('option2');
+    await act(async () => {
+      await user.keyboard('{ArrowRight}');
+    });
+    await waitFor(() => expect(onChange).toHaveBeenNthCalledWith(1, 'option2'));
 
     // →キーでOption 3へ
-    await user.keyboard('{ArrowRight}');
-    expect(onChange).toHaveBeenCalledWith('option3');
+    await act(async () => {
+      await user.keyboard('{ArrowRight}');
+    });
+    await waitFor(() => expect(onChange).toHaveBeenNthCalledWith(2, 'option3'));
 
     // →キーでOption 1へ
-    await user.keyboard('{ArrowRight}');
-    expect(onChange).toHaveBeenCalledWith('option1');
+    await act(async () => {
+      await user.keyboard('{ArrowRight}');
+    });
+    await waitFor(() => expect(onChange).toHaveBeenNthCalledWith(3, 'option1'));
 
     // ←キーでOption 3へ戻る
-    await user.keyboard('{ArrowLeft}');
-    expect(onChange).toHaveBeenCalledWith('option3');
+    await act(async () => {
+      await user.keyboard('{ArrowLeft}');
+    });
+    await waitFor(() => expect(onChange).toHaveBeenNthCalledWith(4, 'option3'));
 
     // ←キーでOption 2へ戻る
-    await user.keyboard('{ArrowLeft}');
-    expect(onChange).toHaveBeenCalledWith('option2');
+    await act(async () => {
+      await user.keyboard('{ArrowLeft}');
+    });
+    await waitFor(() => expect(onChange).toHaveBeenNthCalledWith(5, 'option2'));
   });
 
   it('フォーカス時、上下の矢印キーで選択中のItemを変更できる', async () => {
