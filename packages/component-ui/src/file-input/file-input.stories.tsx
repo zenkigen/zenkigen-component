@@ -220,7 +220,7 @@ export const LayoutExamples: Story = {
       <div className="flex">
         <FileInput variant="dropzone" />
       </div>
-      <div className="w-[280px]">
+      <div className="w-[360px]">
         <FileInput variant="dropzone" />
       </div>
       <div className="grid h-[600px] w-full">

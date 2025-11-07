@@ -476,6 +476,23 @@ describe('FileInput', () => {
     });
   });
 
+  describe('レイアウト', () => {
+    it('ドロップゾーンでファイル選択後も最小幅が維持される', async () => {
+      const user = userEvent.setup();
+
+      const { container } = render(<FileInput variant="dropzone" />);
+      const file = createMockFile('a.txt', 1000);
+      const input = container.querySelector('input[type="file"]') as HTMLInputElement;
+
+      await user.upload(input, file);
+
+      const dropzone = screen.getByRole('button', { name: /ファイルを選択/ });
+      const wrapper = dropzone.parentElement as HTMLElement;
+
+      expect(wrapper).toHaveClass('min-w-[320px]');
+    });
+  });
+
   describe('アクセシビリティ', () => {
     it('ボタンバリアントで適切なARIA属性が設定される', () => {
       const { container } = render(<FileInput variant="button" isError errorMessages={['Error message']} />);
