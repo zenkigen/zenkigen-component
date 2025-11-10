@@ -4,7 +4,7 @@
 */
 import type React from 'react';
 
-export type IconName = 'add' | 'ai-agent' | 'ai' | 'angle-down' | 'angle-left' | 'angle-right' | 'angle-small-down' | 'angle-small-up' | 'angle-up' | 'arrow-down' | 'arrow-left' | 'arrow-right' | 'arrow-up' | 'attachment' | 'attention' | 'background-blur-strong' | 'background-blur-weak' | 'beginner' | 'block' | 'bookmark' | 'building' | 'calendar-attention' | 'calendar-check' | 'calendar-draft' | 'calendar-minus' | 'calendar-today' | 'calendar' | 'caret-down' | 'caret-right' | 'catch' | 'chart-bar' | 'chart-line' | 'check' | 'circle' | 'close' | 'comment' | 'contract' | 'copy' | 'delete' | 'display' | 'document-edit' | 'document' | 'documents' | 'double-circle' | 'download-document' | 'download' | 'edit' | 'email' | 'exit' | 'expand' | 'external-link' | 'feedback' | 'filter' | 'flag' | 'global' | 'graph-line' | 'guide' | 'hamburger-close' | 'hamburger-open' | 'hamburger' | 'handle' | 'harutaka' | 'help' | 'hint' | 'home' | 'image' | 'information-filled' | 'information' | 'input-delete' | 'link' | 'list' | 'live-background' | 'logout' | 'main-view' | 'message-text' | 'mic-off' | 'mic' | 'minus' | 'more' | 'movie' | 'network' | 'notification' | 'pause' | 'pdf' | 'picture-in-picture' | 'play-filled' | 'play' | 'plus' | 'presentation' | 'record' | 'reload' | 'remove' | 'repeat' | 'score' | 'screen-share' | 'search' | 'security' | 'send' | 'setting' | 'share' | 'shuffle' | 'sidebar' | 'signal-low' | 'signal-off' | 'signal' | 'slider-editing' | 'sort-down' | 'sort-up' | 'sort' | 'sparkle' | 'stamp' | 'star-filled' | 'star' | 'success-filled' | 'superadmin' | 'table-download' | 'table-upload' | 'table' | 'timer' | 'transcription' | 'triangle' | 'upload-document-success' | 'upload' | 'user-add' | 'user-group' | 'user-line' | 'user-multi' | 'user-one' | 'user-remove' | 'user-verified' | 'user' | 'video-off' | 'video' | 'visibility-off' | 'visibility' | 'volume-off' | 'volume' | 'warning';
+export type IconName = 'add' | 'ai-agent' | 'ai' | 'angle-down' | 'angle-left' | 'angle-right' | 'angle-small-down' | 'angle-small-up' | 'angle-up' | 'arrow-down' | 'arrow-left' | 'arrow-right' | 'arrow-up' | 'attachment' | 'attention' | 'background-blur-strong' | 'background-blur-weak' | 'beginner' | 'block' | 'bookmark' | 'building' | 'calendar-attention' | 'calendar-check' | 'calendar-draft' | 'calendar-minus' | 'calendar-today' | 'calendar' | 'caret-down' | 'caret-right' | 'catch' | 'chart-bar' | 'chart-line' | 'check' | 'circle' | 'close' | 'comment' | 'contract' | 'copy' | 'delete' | 'display' | 'document-edit' | 'document' | 'documents' | 'double-circle' | 'download-document' | 'download' | 'edit' | 'email' | 'exit' | 'expand' | 'external-link' | 'feedback' | 'filter' | 'flag' | 'global' | 'graph-line' | 'guide' | 'hamburger-close' | 'hamburger-open' | 'hamburger' | 'handle' | 'harutaka' | 'help' | 'hint' | 'home' | 'image' | 'information-filled' | 'information' | 'input-delete' | 'link' | 'list' | 'live-background' | 'logout' | 'main-view' | 'message-text' | 'mic-off' | 'mic' | 'minus' | 'more' | 'movie' | 'network' | 'notification' | 'pause' | 'pdf' | 'picture-in-picture' | 'play-filled' | 'play' | 'plus' | 'presentation' | 'record' | 'reload' | 'remove' | 'repeat' | 'score' | 'screen-share' | 'search' | 'security' | 'send' | 'setting' | 'share' | 'shuffle' | 'sidebar' | 'signal-low' | 'signal-off' | 'signal' | 'slider-editing' | 'sort-down' | 'sort-up' | 'sort' | 'sparkle' | 'stamp' | 'star-filled' | 'star' | 'success-filled' | 'superadmin' | 'table-download' | 'table-upload' | 'table' | 'timer' | 'transcription' | 'triangle' | 'upload-document-success' | 'upload-document' | 'upload' | 'user-add' | 'user-group' | 'user-line' | 'user-multi' | 'user-one' | 'user-remove' | 'user-verified' | 'user' | 'video-off' | 'video' | 'visibility-off' | 'visibility' | 'volume-off' | 'volume' | 'warning';
 
 export type IconComponent = React.FC<{ accentClassName?: string }>;
 
@@ -253,6 +253,8 @@ import { transcriptionIcon } from './icons/transcription';
 import { triangleIcon } from './icons/triangle';
 
 import { uploaddocumentsuccessIcon } from './icons/upload-document-success';
+
+import { uploaddocumentIcon } from './icons/upload-document';
 
 import { uploadIcon } from './icons/upload';
 
@@ -533,6 +535,8 @@ export const iconElements = {
     'triangle': triangleIcon,
   
     'upload-document-success': uploaddocumentsuccessIcon,
+  
+    'upload-document': uploaddocumentIcon,
   
     'upload': uploadIcon,
   
