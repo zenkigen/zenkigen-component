@@ -294,6 +294,35 @@ const [isSelected, setIsSelected] = useState(false);
 - `a`要素の場合は`inline-flex`クラスが自動適用
 - デフォルトの角丸は`rounded-button`（`borderRadius`が未指定の場合）
 
+### 内部実装の詳細
+
+Buttonコンポーネントは以下の2つのコンポーネントで構成されています：
+
+1. **`Button`**: 公開API用のコンポーネント（`outlineDanger`バリアントは含まない）
+2. **`InternalButton`**: 内部実装用のコンポーネント（`outlineDanger`バリアントを含む）
+
+```typescript
+// 公開API用の型（outlineDangerは含まない）
+type PublicProps<T extends ElementAs> = BaseProps<T> & {
+  variant?: 'fill' | 'fillDanger' | 'outline' | 'text';
+};
+
+// 内部実装用の型（outlineDanger variantを含む）
+type InternalProps<T extends ElementAs> = BaseProps<T> & {
+  variant?: 'fill' | 'fillDanger' | 'outline' | 'text' | 'outlineDanger';
+};
+```
+
+### 共通実装パターン
+
+`createButton`関数により、両方のコンポーネントで共通の実装ロジックが使用されています：
+
+```typescript
+const createButton = <T extends ElementAs = 'button'>(props: InternalProps<T>) => {
+  // 共通の実装ロジック
+};
+```
+
 ### ポリモーフィック実装
 
 Buttonコンポーネントはポリモーフィックな実装により、`elementAs`プロパティで指定された要素としてレンダリングされます。
@@ -328,6 +357,8 @@ Buttonコンポーネントはポリモーフィックな実装により、`elem
 2. **ポリモーフィック使用時**: `elementAs`で指定した要素に適切な属性を設定してください（例：`a`要素の場合は`href`属性）
 3. **アクセシビリティ**: カスタム要素を使用する場合は、適切な`role`属性や`aria-*`属性を設定してください
 4. **選択状態の視覚的フィードバック**: `isSelected`が`true`の場合、`outline`と`text`バリアントでは選択状態のスタイルが適用されます
+5. **内部実装の使用**: `InternalButton`コンポーネントは内部実装用であり、通常の使用では`Button`コンポーネントを使用してください
+6. **outlineDangerバリアント**: `outlineDanger`バリアントは`InternalButton`でのみ利用可能で、公開APIでは提供されていません
 
 ## スタイルのカスタマイズ
 
@@ -341,6 +372,7 @@ Buttonコンポーネントのスタイルは`@zenkigen-inc/component-theme`の`
 
 ## 更新履歴
 
-| 日付                 | 内容     | 担当者 |
-| -------------------- | -------- | ------ |
-| 2025-10-29 10:16 JST | 新規作成 | -      |
+| 日付                 | 内容                                                                                    | 担当者 |
+| -------------------- | --------------------------------------------------------------------------------------- | ------ |
+| 2025-10-29 10:28 JST | 内部実装の詳細を追加、InternalButtonコンポーネントとoutlineDangerバリアントの説明を追加 | -      |
+| 2025-10-29 10:16 JST | 新規作成                                                                                | -      |

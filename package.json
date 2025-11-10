@@ -23,7 +23,7 @@
     "clean": "rimraf node_modules"
   },
   "resolutions": {
-    "vite": "5.4.19",
+    "vite": "7.1.12",
     "rollup": "4.44.0"
   },
   "devDependencies": {
@@ -41,16 +41,17 @@
     "@storybook/preview-api": "8.6.14",
     "@storybook/react": "8.6.14",
     "@storybook/react-vite": "8.6.14",
+    "@testing-library/dom": "10.4.1",
     "@testing-library/jest-dom": "6.4.0",
-    "@testing-library/react": "15.0.0",
+    "@testing-library/react": "16.3.0",
     "@testing-library/user-event": "14.6.1",
     "@types/babel__preset-env": "7.10.0",
     "@types/node": "20.19.7",
     "@types/react": "19.1.8",
-    "@types/react-dom": "19.1.6",
+    "@types/react-dom": "19.2.2",
     "@typescript-eslint/eslint-plugin": "8.36.0",
     "@typescript-eslint/parser": "8.36.0",
-    "@vitejs/plugin-react": "4.6.0",
+    "@vitejs/plugin-react": "5.1.0",
     "autoprefixer": "10.4.21",
     "babel-loader": "10.0.0",
     "eslint": "9.31.0",
@@ -73,7 +74,7 @@
     "terser": "5.43.1",
     "tsup": "8.5.0",
     "typescript": "5.8.3",
-    "vite": "5.4.19",
+    "vite": "7.1.12",
     "vitest": "3.2.4"
   }
 }

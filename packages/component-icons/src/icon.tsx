@@ -4,7 +4,7 @@
 */
 import type React from 'react';
 
-export type IconName = 'add' | 'ai' | 'angle-down' | 'angle-left' | 'angle-right' | 'angle-small-down' | 'angle-small-up' | 'angle-up' | 'arrow-down' | 'arrow-left' | 'arrow-right' | 'arrow-up' | 'attachment' | 'attention' | 'beginner' | 'bookmark' | 'building' | 'calendar-attention' | 'calendar-check' | 'calendar-draft' | 'calendar-minus' | 'calendar-today' | 'calendar' | 'caret-down' | 'caret-right' | 'catch' | 'chart-bar' | 'chart-line' | 'check' | 'circle' | 'close' | 'comment' | 'contract' | 'copy' | 'delete' | 'document-edit' | 'document' | 'documents' | 'double-circle' | 'download-document' | 'download' | 'edit' | 'email' | 'expand' | 'external-link' | 'filter' | 'flag' | 'global' | 'graph-line' | 'hamburger-close' | 'hamburger-open' | 'hamburger' | 'handle' | 'help' | 'hint' | 'home' | 'image' | 'information-filled' | 'information' | 'input-delete' | 'link' | 'list' | 'logout' | 'message-text' | 'mic-off' | 'mic' | 'minus' | 'more' | 'movie' | 'network' | 'notification' | 'pause' | 'pdf' | 'picture-in-picture' | 'play-filled' | 'play' | 'plus' | 'presentation' | 'remove' | 'repeat' | 'score' | 'search' | 'send' | 'share' | 'shuffle' | 'sidebar' | 'slider-editing' | 'sort-down' | 'sort-up' | 'sort' | 'sparkle' | 'stamp' | 'star-filled' | 'star' | 'success-filled' | 'table-download' | 'table-upload' | 'table' | 'timer' | 'transcription' | 'triangle' | 'upload' | 'user-add' | 'user-group' | 'user-line' | 'user-multi' | 'user-one' | 'user-remove' | 'user-verified' | 'user' | 'video-off' | 'video' | 'visibility-off' | 'visibility' | 'volume-off' | 'volume' | 'warning';
+export type IconName = 'add' | 'ai' | 'angle-down' | 'angle-left' | 'angle-right' | 'angle-small-down' | 'angle-small-up' | 'angle-up' | 'arrow-down' | 'arrow-left' | 'arrow-right' | 'arrow-up' | 'attachment' | 'attention' | 'beginner' | 'bookmark' | 'building' | 'calendar-attention' | 'calendar-check' | 'calendar-draft' | 'calendar-minus' | 'calendar-today' | 'calendar' | 'caret-down' | 'caret-right' | 'catch' | 'chart-bar' | 'chart-line' | 'check' | 'circle' | 'close' | 'comment' | 'contract' | 'copy' | 'delete' | 'document-edit' | 'document' | 'documents' | 'double-circle' | 'download-document' | 'download' | 'edit' | 'email' | 'expand' | 'external-link' | 'filter' | 'flag' | 'global' | 'graph-line' | 'hamburger-close' | 'hamburger-open' | 'hamburger' | 'handle' | 'help' | 'hint' | 'home' | 'image' | 'information-filled' | 'information' | 'input-delete' | 'link' | 'list' | 'logout' | 'message-text' | 'mic-off' | 'mic' | 'minus' | 'more' | 'movie' | 'network' | 'notification' | 'pause' | 'pdf' | 'picture-in-picture' | 'play-filled' | 'play' | 'plus' | 'presentation' | 'remove' | 'repeat' | 'score' | 'search' | 'send' | 'share' | 'shuffle' | 'sidebar' | 'slider-editing' | 'sort-down' | 'sort-up' | 'sort' | 'sparkle' | 'stamp' | 'star-filled' | 'star' | 'success-filled' | 'table-download' | 'table-upload' | 'table' | 'timer' | 'transcription' | 'triangle' | 'upload-document' | 'upload' | 'user-add' | 'user-group' | 'user-line' | 'user-multi' | 'user-one' | 'user-remove' | 'user-verified' | 'user' | 'video-off' | 'video' | 'visibility-off' | 'visibility' | 'volume-off' | 'volume' | 'warning';
 
 export type IconComponent = React.FC<{ accentClassName?: string }>;
 
@@ -211,6 +211,8 @@ import { timerIcon } from './icons/timer';
 import { transcriptionIcon } from './icons/transcription';
 
 import { triangleIcon } from './icons/triangle';
+
+import { uploaddocumentIcon } from './icons/upload-document';
 
 import { uploadIcon } from './icons/upload';
 
@@ -449,6 +451,8 @@ export const iconElements = {
     'transcription': transcriptionIcon,
   
     'triangle': triangleIcon,
+  
+    'upload-document': uploaddocumentIcon,
   
     'upload': uploadIcon,
   
