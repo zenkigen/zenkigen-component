@@ -1,7 +1,7 @@
-import { action } from 'storybook/actions';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ChangeEvent } from 'react';
 import { useCallback, useState } from 'react';
+import { action } from 'storybook/actions';
 
 import { Button } from '../button';
 import { TextInput } from '../text-input';

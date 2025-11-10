@@ -1,7 +1,7 @@
-import { action } from 'storybook/actions';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ChangeEvent, FormEvent } from 'react';
 import { useState } from 'react';
+import { action } from 'storybook/actions';
 
 import { Search } from '.';
 
