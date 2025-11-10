@@ -1,6 +1,6 @@
 import './globals.css';
 
-import type { Preview } from '@storybook/react';
+import type { Preview } from '@storybook/react-vite';
 import AXE_LOCALE_JA from 'axe-core/locales/ja.json';
 import React from 'react';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
