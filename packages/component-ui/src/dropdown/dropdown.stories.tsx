@@ -1,10 +1,10 @@
-import { action } from '@storybook/addon-actions';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { IconName } from '@zenkigen-inc/component-icons';
 import { iconElements } from '@zenkigen-inc/component-icons';
 import clsx from 'clsx';
 import type { PropsWithChildren } from 'react';
 import { forwardRef, useRef, useState } from 'react';
+import { action } from 'storybook/actions';
 
 import { Avatar } from '../avatar';
 import { Button } from '../button';
