@@ -1,12 +1,49 @@
 import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/blocks';
-import ModalStories, { Base } from './modal.stories';
+import { Markdown } from '@storybook/blocks';
+import ModalStories, { Component } from './modal.stories';
+import spec from '../../../../docs/component/modal-specification.md?raw';
 
 <Meta title="Modal" of={ModalStories} />
 
 # Modal
 
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
+
 <Canvas>
-  <Story of={Base} />
+  <Story of={Component} />
 </Canvas>
 
-<Controls of={Base} />
+<Controls of={Component} />
+
+### Code Example
+
+```tsx
+import { Button } from '@zenkigen-inc/component-ui';
+
+const [isOpen, setIsOpen] = useState(false);
+
+return (
+  <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+    <Modal.Header>タイトル</Modal.Header>
+    <Modal.Body>
+      <div className="flex w-full items-center justify-center py-20">Content</div>
+    </Modal.Body>
+    <Modal.Footer>
+      <div className="flex w-full flex-wrap items-center justify-end gap-4">
+        <Button variant="outline" size="large" onClick={action('キャンセル')}>
+          キャンセル
+        </Button>
+        <Button variant="fill" size="large" onClick={action('保存する')}>
+          保存する
+        </Button>
+      </div>
+    </Modal.Footer>
+  </Modal>
+);
+```

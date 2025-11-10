@@ -1,6 +1,8 @@
 import { userColors } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
 
+import { Icon } from '../icon';
+
 export const isAsciiString = (str: string) => {
   return str.charCodeAt(0) < 256;
 };
@@ -8,8 +10,8 @@ export const isAsciiString = (str: string) => {
 type Props = {
   size?: 'x-small' | 'small' | 'medium' | 'large' | 'x-large';
   userId?: number;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   isDisabled?: boolean;
 };
 
@@ -26,8 +28,30 @@ export function Avatar({ size = 'medium', ...props }: Props) {
       props.userId != null && !(props.isDisabled ?? false),
   });
 
-  const trimmedFirstName = props.firstName.replace('　', ' ').trim();
-  const trimmedLastName = props.lastName.replace('　', ' ').trim().trim();
+  // firstName と lastName の両方が未定義または空文字の場合はアイコンを表示
+  const hasName =
+    (props.firstName != null && props.firstName.trim() !== '') ||
+    (props.lastName != null && props.lastName.trim() !== '');
+
+  if (hasName === false) {
+    // アイコンサイズのマッピング
+    const iconSizeMap = {
+      'x-small': 'x-small' as const,
+      small: 'small' as const,
+      medium: 'medium' as const,
+      large: 'large' as const,
+      'x-large': 'x-large' as const,
+    };
+
+    return (
+      <span className={classes}>
+        <Icon name="user-one" size={iconSizeMap[size]} color="iconOnColor" />
+      </span>
+    );
+  }
+
+  const trimmedFirstName = (props.firstName ?? '').replace('　', ' ').trim();
+  const trimmedLastName = (props.lastName ?? '').replace('　', ' ').trim();
   const nameOnIcon = isAsciiString(trimmedLastName)
     ? trimmedFirstName.slice(0, 1).toUpperCase() + trimmedLastName.slice(0, 1).toUpperCase()
     : (trimmedLastName + trimmedFirstName).slice(0, 2);

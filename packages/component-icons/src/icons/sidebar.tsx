@@ -2,10 +2,14 @@
 * NOTE: This file is auto generated
 * Do not edit manually.
 */
-import type React from 'react';
+import React from 'react';
 
-export const sidebarIcon: React.ReactElement = (
-  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img"><title>sidebar</title>
+export interface sidebarIconProps {
+  accentClassName?: string;
+}
+
+export const sidebarIcon: React.FC<sidebarIconProps> = ({ accentClassName }) => (
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="sidebar">
 <path d="M19 5H4.5C4.10218 5 3.7207 5.15803 3.43939 5.43933C3.15809 5.72064 3 6.10218 3 6.5V18C3 18.3978 3.15809 18.7794 3.43939 19.0607C3.7207 19.342 4.10218 19.5 4.5 19.5H19C19.397 19.4974 19.7771 19.3385 20.0578 19.0578C20.3385 18.777 20.4974 18.397 20.5 18V6.5C20.5 6.10218 20.342 5.72064 20.0607 5.43933C19.7794 5.15803 19.3978 5 19 5ZM19.5 18C19.4974 18.1318 19.444 18.2575 19.3508 18.3507C19.2575 18.4439 19.1318 18.4974 19 18.5H9.25V6H19C19.1326 6 19.2598 6.05269 19.3536 6.14645C19.4473 6.24022 19.5 6.36739 19.5 6.5V18Z"></path>
 </svg>
 );

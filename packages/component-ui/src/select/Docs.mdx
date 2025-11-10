@@ -1,12 +1,53 @@
 import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/blocks';
+import { Markdown } from '@storybook/blocks';
 import SelectStories, { Component } from './select.stories';
+import spec from '../../../../docs/component/select-specification.md?raw';
 
 <Meta title="Select" of={SelectStories} />
 
 # Select
 
-<Canvas>
-  <Story of={Component} />
-</Canvas>
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
+
+<Canvas />
 
 <Controls of={Component} />
+
+### Code Example
+
+```tsx
+import { IconName } from '@zenkigen-inc/component-icons';
+import { Select } from '@zenkigen-inc/component-ui';
+import type { SelectOption } from '@zenkigen-inc/component-ui';
+
+const optionsList = [
+  { id: '1', label: '選択肢A', value: 'A', icon: 'add' as IconName },
+  { id: '2', label: '選択肢B', value: 'B', icon: 'add' as IconName },
+  { id: '3', label: '選択肢C', value: 'C', icon: 'add' as IconName },
+];
+
+const [selectedOption, setSelectedOption] = useState<SelectOption | null>(null);
+
+return (
+  <Select
+    placeholder="選択"
+    size="medium"
+    variant="outline"
+    selectedOption={selectedOption}
+    onChange={(option) => setSelectedOption(option)}
+    isOptionSelected
+    isError={false}
+    isDisabled={false}
+  >
+    {optionsList.map((option) => (
+      <Select.Option key={option.id} option={option} />
+    ))}
+  </Select>
+);
+```

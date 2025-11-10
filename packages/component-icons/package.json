@@ -1,6 +1,6 @@
 {
   "name": "@zenkigen-inc/component-icons",
-  "version": "1.14.4",
+  "version": "1.17.0",
   "repository": "https://github.com/zenkigen/zenkigen-component",
   "license": "MIT",
   "publishConfig": {
@@ -8,18 +8,23 @@
   },
   "source": "./src/index.ts",
   "main": "./dist/index.js",
-  "module": "./dist/index.esm.js",
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-  "exports": "./dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
   "scripts": {
     "generate": "node ./codegen.cjs",
-    "build": "rimraf dist && yarn generate && microbundle --no-compress -f modern,esm,cjs --jsx React.createElement --jsxFragment React.Fragment --external none",
-    "build-lib": "rimraf dist && yarn generate && microbundle --no-compress -f modern,esm,cjs --jsx React.createElement --jsxFragment React.Fragment"
+    "build": "rimraf dist && yarn generate && tsup",
+    "build-lib": "rimraf dist && yarn generate && tsup"
   },
   "devDependencies": {
-    "cheerio": "1.0.0",
+    "cheerio": "1.1.0",
     "ejs": "3.1.10",
-    "microbundle": "0.15.1",
+    "tsup": "8.5.0",
     "typescript": "5.8.3"
   },
   "peerDependencies": {

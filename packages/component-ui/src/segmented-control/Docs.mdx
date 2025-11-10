@@ -1,0 +1,63 @@
+import { Canvas, Meta, Story, Controls, Source } from '@storybook/blocks';
+import { Markdown } from '@storybook/blocks';
+import SegmentedControlStories, {
+  Component,
+  LabelWithIconSmallSize,
+  LabelWithIconMediumSize,
+  LabelOnlyMediumSize,
+  LabelOnlySmallSize,
+  IconOnlySmallSize,
+  IconOnlyMediumSize,
+  LayoutExamples,
+} from './segmented-control.stories';
+import spec from '../../../../docs/component/segmented-control-specification.md?raw';
+
+<Meta of={SegmentedControlStories} />
+
+# SegmentedControl
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
+
+<Canvas />
+
+<Controls of={Component} />
+
+### Code Example
+
+- SegmentedControlに必ず`aria-label`を指定すること。
+- SegmentedControl.Itemでlabelを使用しない場合は必ず`aria-label`を指定すること。
+
+```tsx
+const [selectedSegment, setSelectedSegment] = useState('short');
+
+<SegmentedControl
+  value={selectedSegment}
+  size="medium"
+  aria-label="SegmentedControlのサンプル"
+  onChange={setSelectedSegment}
+>
+  <SegmentedControl.Item label="短い" value="short" icon="list" />
+  <SegmentedControl.Item label="中くらいのラベル" value="medium" icon="table" />
+  <SegmentedControl.Item label="ボタンラベル" value="value" icon="table" isDisabled />
+  <SegmentedControl.Item label="とても長いラベルのボタン" value="long" icon="documents" />
+</SegmentedControl>;
+```
+
+## Stories
+
+<Canvas of={LabelWithIconSmallSize} />
+<Canvas of={LabelWithIconMediumSize} />
+<Canvas of={LabelOnlySmallSize} />
+<Canvas of={LabelOnlyMediumSize} />
+<Canvas of={IconOnlySmallSize} />
+<Canvas of={IconOnlyMediumSize} />
+
+## Layout examples
+
+<Canvas of={LayoutExamples} />

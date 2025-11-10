@@ -2,10 +2,14 @@
 * NOTE: This file is auto generated
 * Do not edit manually.
 */
-import type React from 'react';
+import React from 'react';
 
-export const caretdownIcon: React.ReactElement = (
-  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img"><title>caretDown</title>
+export interface caretdownIconProps {
+  accentClassName?: string;
+}
+
+export const caretdownIcon: React.FC<caretdownIconProps> = ({ accentClassName }) => (
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="caretDown">
 <path d="M18 9H6L12 15L18 9Z"></path>
 </svg>
 );

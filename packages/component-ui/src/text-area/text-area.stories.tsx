@@ -9,6 +9,23 @@ import { TextArea } from '.';
 const meta: Meta<typeof TextArea> = {
   title: 'Components/TextArea',
   component: TextArea,
+  parameters: {
+    docs: {
+      source: {
+        code: ``,
+      },
+    },
+  },
+  argTypes: {
+    size: { control: 'select', options: ['medium', 'large'], description: 'サイズ' },
+    value: { control: 'text', description: '値' },
+    height: { control: 'text', description: '高さ' },
+    autoHeight: { control: 'boolean', description: '自動リサイズ' },
+    maxHeight: { control: 'text', description: '最大高さ（autoHeightがtrueの場合のみ有効）' },
+    isResizable: { control: 'boolean', description: 'リサイズ可能かどうか（autoHeightがtrueの場合は無効）' },
+    isError: { control: 'boolean', description: 'エラーかどうか' },
+    disabled: { control: 'boolean', description: '無効かどうか' },
+  },
 };
 
 export default meta;
@@ -19,6 +36,7 @@ export const Component: Story = {
     size: 'medium',
     placeholder: 'placeholder',
     height: 'auto',
+    autoHeight: false,
     isResizable: false,
     isError: false,
     disabled: false,
@@ -229,6 +247,34 @@ export const Base: Story = {
             <ErrorText>入力済み ＋ disabled</ErrorText>
           </div>
         </div>
+      </div>
+    );
+  },
+};
+
+export const AutoHeight: Story = {
+  args: {
+    size: 'large',
+    autoHeight: true,
+    placeholder: '入力してください',
+    height: '',
+    maxHeight: '120px',
+    isError: false,
+    disabled: false,
+  },
+  render: function MyFunc({ ...args }) {
+    const [value, setValue] = useState<string>(args.value);
+
+    return (
+      <div style={{ width: 400 }} className="flex flex-col">
+        <TextArea
+          {...args}
+          value={value}
+          onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+            action('onChange')(e);
+            setValue(e.target.value);
+          }}
+        />
       </div>
     );
   },

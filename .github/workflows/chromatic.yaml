@@ -28,10 +28,12 @@ jobs:
 
       - name: Publish to Chromatic
         id: chromatic
-        uses: chromaui/action@v11
+        uses: chromaui/action@v13
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           onlyChanged: true
+        env:
+          IS_CHROMATIC: 'true'
 
       - name: Find Comment
         uses: peter-evans/find-comment@v3

@@ -24,12 +24,18 @@ async function processSvgFile(file) {
   $('[width]').removeAttr('width');
   $('[height]').removeAttr('height');
 
-  $('svg').attr('role', 'img').prepend($('<title>').text(key));
+  // Handle accent class specially
+  $('[class="accent"]').attr('className', '{accentClassName}').removeAttr('class');
+
+  // Create a dummy element to safely escape the text
+  const escapedKey = $('<div>').text(key).html();
+  $('svg').attr('role', 'img').attr('aria-label', escapedKey);
 
   const value = $.xml('svg')
     .replaceAll('"{', '{')
     .replaceAll('}"', '}')
-    .replaceAll(/[-]([a-z])/g, (_, x) => x.toUpperCase());
+    .replaceAll(/\bclass=/g, 'className=')
+    .replaceAll(/(?<!aria)[-]([a-z])/g, (_, x) => x.toUpperCase());
 
   return { key, value };
 }
@@ -41,9 +47,13 @@ function generateIconFile(key, value) {
 * NOTE: This file is auto generated
 * Do not edit manually.
 */
-import type React from 'react';
+import React from 'react';
 
-export const ${componentName}: React.ReactElement = (
+export interface ${componentName}Props {
+  accentClassName?: string;
+}
+
+export const ${componentName}: React.FC<${componentName}Props> = ({ accentClassName }) => (
   ${value}
 );
 `;
