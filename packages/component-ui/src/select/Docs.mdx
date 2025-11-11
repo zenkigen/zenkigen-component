@@ -19,35 +19,31 @@ import spec from '../../../../docs/component/select-specification.md?raw';
 
 <Controls of={Component} />
 
-### Code Example
+## 概要
 
-```tsx
-import { IconName } from '@zenkigen-inc/component-icons';
-import { Select } from '@zenkigen-inc/component-ui';
-import type { SelectOption } from '@zenkigen-inc/component-ui';
+リスト形式の複数の選択肢の中から選択できるコンポーネントです。Listと組み合わせて使用します。
 
-const optionsList = [
-  { id: '1', label: '選択肢A', value: 'A', icon: 'add' as IconName },
-  { id: '2', label: '選択肢B', value: 'B', icon: 'add' as IconName },
-  { id: '3', label: '選択肢C', value: 'C', icon: 'add' as IconName },
-];
+## 設計の原則 （Do）
 
-const [selectedOption, setSelectedOption] = useState<SelectOption | null>(null);
+### 選択肢が4つ以上ある場合に使用します
 
-return (
-  <Select
-    placeholder="選択"
-    size="medium"
-    variant="outline"
-    selectedOption={selectedOption}
-    onChange={(option) => setSelectedOption(option)}
-    isOptionSelected
-    isError={false}
-    isDisabled={false}
-  >
-    {optionsList.map((option) => (
-      <Select.Option key={option.id} option={option} />
-    ))}
-  </Select>
-);
-```
+選択肢が4つ以下の場合は、代わりにRadioButtonの使用を検討してください。
+
+### 選択肢は論理的な順序で並べます
+
+ユーザーが目的の項目を簡単に見つけられるよう、五十音順、使用頻度順など選択肢の並び順には一貫したルールを設けてください。
+
+## 推奨しないこと（Don't）
+
+### 二者択一の時に、Selectが最適というケースは基本的にない
+
+ただし、Selectの中の選択肢の数が状況に応じて変動するケースで場合によっては選択肢が2つになることはあります。また、表などのスペースの制約が強い時に、二者択一の選択をあえてSelectにするという可能性はあります。
+![推奨しないこと その1](/storybook/images/select_01.jpg)
+
+### 選択肢が2つの時は基本的に使用しない
+
+選択肢が2つで更にはっきり示せる場合(Yes/Noなど)は1つのCheckBox、または、Toggleにまとめます。ただし、Selectの中の選択肢の数が状況に応じて変動するケースで場合によっては選択肢が2つになることはあります。また、表などのスペースの制約が強い時に、二者択一の選択をあえてSelectにするという可能性はあります。
+
+### 選択しただけでアクションをトリガーしない
+
+ユーザーがドロップダウンから項目を選択した瞬間に、フォームの送信やページの再読み込みといったアクションを自動で実行しないでください。アクションの実行は「決定」や「適用」といった**明確なボタン**によって、ユーザーの意思で行われるべきです。
