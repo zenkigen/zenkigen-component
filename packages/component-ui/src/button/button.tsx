@@ -68,7 +68,7 @@ const createButton = <T extends ElementAs = 'button'>(props: InternalProps<T>) =
     buttonColors[variant].disabled,
     focusVisible.normal,
     {
-      'h-6 px-2.5': size === 'small',
+      'h-6 px-2': size === 'small',
       'h-8 px-3': size === 'medium',
       'h-10 px-4 leading-[24px]': size === 'large',
       'inline-flex': elementAs === 'a',
