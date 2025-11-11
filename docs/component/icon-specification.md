@@ -318,9 +318,9 @@ const MyComponent = () => {
 ```typescript
 const StatusIcon = ({ status }: { status: 'success' | 'error' | 'warning' }) => {
   const iconMap = {
-    success: { name: 'check-circle', color: 'fill-supportSuccess' },
-    error: { name: 'close-circle', color: 'fill-supportError' },
-    warning: { name: 'alert-triangle', color: 'fill-supportWarning' },
+    success: { name: 'check', color: 'fill-supportSuccess' },
+    error: { name: 'close', color: 'fill-supportError' },
+    warning: { name: 'warning', color: 'fill-supportWarning' },
   };
 
   const config = iconMap[status];

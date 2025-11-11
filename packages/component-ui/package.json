@@ -1,6 +1,6 @@
 {
   "name": "@zenkigen-inc/component-ui",
-  "version": "1.17.0",
+  "version": "1.18.0",
   "repository": "https://github.com/zenkigen/zenkigen-component",
   "license": "MIT",
   "publishConfig": {
@@ -26,7 +26,7 @@
   },
   "devDependencies": {
     "@testing-library/jest-dom": "6.4.0",
-    "@testing-library/react": "15.0.0",
+    "@testing-library/react": "16.3.0",
     "@testing-library/user-event": "14.6.1",
     "hygen": "6.2.11",
     "tsup": "8.5.0",
@@ -38,9 +38,9 @@
   },
   "dependencies": {
     "@floating-ui/react": "0.27.16",
-    "@zenkigen-inc/component-config": "1.17.0",
-    "@zenkigen-inc/component-icons": "1.17.0",
-    "@zenkigen-inc/component-theme": "1.17.0",
+    "@zenkigen-inc/component-config": "1.18.0",
+    "@zenkigen-inc/component-icons": "1.18.0",
+    "@zenkigen-inc/component-theme": "1.18.0",
     "clsx": "2.1.1"
   }
 }
