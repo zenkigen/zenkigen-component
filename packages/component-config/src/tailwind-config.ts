@@ -185,6 +185,7 @@ export const tailwindConfig = {
     'active:border-active02',
     'disabled:text-disabled01',
     'disabled:fill-disabled01',
+    'active:bg-red-red20',
     // tagColors
     'text-textOnColor',
     'bg-supportError',
