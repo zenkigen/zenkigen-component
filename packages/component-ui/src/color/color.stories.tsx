@@ -64,9 +64,6 @@ function ColorItem({ colorKey, value }: { colorKey: string; value: string }) {
 }
 
 export const UserColors: Story = {
-  parameters: {
-    chromatic: { disable: true },
-  },
   render: () => (
     <>
       <div className="flex flex-col gap-2">
@@ -82,9 +79,6 @@ export const UserColors: Story = {
 };
 
 export const TextColors: Story = {
-  parameters: {
-    chromatic: { disable: true },
-  },
   render: () => (
     <>
       <div className="flex flex-col gap-2">
@@ -100,9 +94,6 @@ export const TextColors: Story = {
 };
 
 export const LinkColors: Story = {
-  parameters: {
-    chromatic: { disable: true },
-  },
   render: () => (
     <>
       <div className="flex flex-col gap-2">
@@ -118,9 +109,6 @@ export const LinkColors: Story = {
 };
 
 export const BorderColors: Story = {
-  parameters: {
-    chromatic: { disable: true },
-  },
   render: () => (
     <>
       <div className="flex flex-col gap-2">
@@ -136,9 +124,6 @@ export const BorderColors: Story = {
 };
 
 export const BackgroundColors: Story = {
-  parameters: {
-    chromatic: { disable: true },
-  },
   render: () => (
     <>
       <div className="flex flex-col gap-2">
@@ -154,9 +139,6 @@ export const BackgroundColors: Story = {
 };
 
 export const IconColors: Story = {
-  parameters: {
-    chromatic: { disable: true },
-  },
   render: () => (
     <>
       <div className="flex flex-col gap-2">
@@ -172,9 +154,6 @@ export const IconColors: Story = {
 };
 
 export const InteractiveColors: Story = {
-  parameters: {
-    chromatic: { disable: true },
-  },
   render: () => (
     <>
       <div className="flex flex-col gap-2">
@@ -190,9 +169,6 @@ export const InteractiveColors: Story = {
 };
 
 export const FieldColors: Story = {
-  parameters: {
-    chromatic: { disable: true },
-  },
   render: () => (
     <>
       <div className="flex flex-col gap-2">
@@ -208,9 +184,6 @@ export const FieldColors: Story = {
 };
 
 export const FocusColors: Story = {
-  parameters: {
-    chromatic: { disable: true },
-  },
   render: () => (
     <>
       <div className="flex flex-col gap-2">
@@ -226,9 +199,6 @@ export const FocusColors: Story = {
 };
 
 export const HoverColors: Story = {
-  parameters: {
-    chromatic: { disable: true },
-  },
   render: () => (
     <>
       <div className="flex flex-col gap-2">
@@ -244,9 +214,6 @@ export const HoverColors: Story = {
 };
 
 export const ActiveColors: Story = {
-  parameters: {
-    chromatic: { disable: true },
-  },
   render: () => (
     <>
       <div className="flex flex-col gap-2">
@@ -262,9 +229,6 @@ export const ActiveColors: Story = {
 };
 
 export const SelectedColors: Story = {
-  parameters: {
-    chromatic: { disable: true },
-  },
   render: () => (
     <>
       <div className="flex flex-col gap-2">
@@ -280,9 +244,6 @@ export const SelectedColors: Story = {
 };
 
 export const DisabledColors: Story = {
-  parameters: {
-    chromatic: { disable: true },
-  },
   render: () => (
     <>
       <div className="flex flex-col gap-2">
@@ -298,9 +259,6 @@ export const DisabledColors: Story = {
 };
 
 export const SupportColors: Story = {
-  parameters: {
-    chromatic: { disable: true },
-  },
   render: () => (
     <>
       <div className="flex flex-col gap-2">
@@ -316,9 +274,6 @@ export const SupportColors: Story = {
 };
 
 export const BlueScale: Story = {
-  parameters: {
-    chromatic: { disable: true },
-  },
   render: () => (
     <>
       <div className="flex flex-col gap-2">
@@ -334,9 +289,6 @@ export const BlueScale: Story = {
 };
 
 export const GrayScale: Story = {
-  parameters: {
-    chromatic: { disable: true },
-  },
   render: () => (
     <>
       <div className="flex flex-col gap-2">
@@ -352,9 +304,6 @@ export const GrayScale: Story = {
 };
 
 export const RedScale: Story = {
-  parameters: {
-    chromatic: { disable: true },
-  },
   render: () => (
     <>
       <div className="flex flex-col gap-2">
@@ -370,9 +319,6 @@ export const RedScale: Story = {
 };
 
 export const YellowScale: Story = {
-  parameters: {
-    chromatic: { disable: true },
-  },
   render: () => (
     <>
       <div className="flex flex-col gap-2">
@@ -388,9 +334,6 @@ export const YellowScale: Story = {
 };
 
 export const GreenScale: Story = {
-  parameters: {
-    chromatic: { disable: true },
-  },
   render: () => (
     <>
       <div className="flex flex-col gap-2">
@@ -406,9 +349,6 @@ export const GreenScale: Story = {
 };
 
 export const PurpleScale: Story = {
-  parameters: {
-    chromatic: { disable: true },
-  },
   render: () => (
     <>
       <div className="flex flex-col gap-2">
@@ -424,9 +364,6 @@ export const PurpleScale: Story = {
 };
 
 export const BlueGreenScale: Story = {
-  parameters: {
-    chromatic: { disable: true },
-  },
   render: () => (
     <>
       <div className="flex flex-col gap-2">
@@ -442,9 +379,6 @@ export const BlueGreenScale: Story = {
 };
 
 export const BasicColors: Story = {
-  parameters: {
-    chromatic: { disable: true },
-  },
   render: () => (
     <>
       <div className="flex flex-col gap-2">
