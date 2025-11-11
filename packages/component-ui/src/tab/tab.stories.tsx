@@ -279,3 +279,32 @@ export const LayoutExamples: Story = {
     </div>
   ),
 };
+
+export const WithIconExample: Story = {
+  args: {
+    layout: 'auto',
+    children: <></>,
+  },
+  argTypes: {
+    children: {
+      table: {
+        disable: true,
+      },
+    },
+  },
+  render: (args) => (
+    <div className="flex items-center justify-center">
+      <TabExample {...args}>
+        <Tab.Item id="tab-analytics" onClick={() => {}} icon="chart-bar">
+          アナリティクス
+        </Tab.Item>
+        <Tab.Item id="tab-calendar" onClick={() => {}} icon="calendar-check">
+          スケジュール
+        </Tab.Item>
+        <Tab.Item id="tab-member" onClick={() => {}} icon="user">
+          メンバー
+        </Tab.Item>
+      </TabExample>
+    </div>
+  ),
+};
