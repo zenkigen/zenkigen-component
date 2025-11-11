@@ -152,6 +152,7 @@ yarn list --pattern "@zenkigen-inc/component-*"
 - [Text Area](./docs/component/text-area-specification.md)
 - [Text Input](./docs/component/text-input-specification.md)
 - [Password Input](./docs/component/password-input-specification.md)
+- [Popover](./docs/component/popover-specification.md)
 - Toast
 - Toggle
 - Tooltip
