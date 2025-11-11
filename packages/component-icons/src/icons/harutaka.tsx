@@ -1,0 +1,15 @@
+/*
+* NOTE: This file is auto generated
+* Do not edit manually.
+*/
+import React from 'react';
+
+export interface harutakaIconProps {
+  accentClassName?: string;
+}
+
+export const harutakaIcon: React.FC<harutakaIconProps> = ({ accentClassName }) => (
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="harutaka">
+<path d="M9.67964 13.7501C9.75418 12.4156 10.5741 11.3777 11.9655 11.3777C13.5557 11.3777 14.2266 12.4403 14.2266 13.7995V20.8921H17.5312V13.2311C17.5312 10.5621 16.0901 8.41211 12.9843 8.41211C11.8165 8.41211 10.4747 8.80752 9.67964 9.74661V3H6.375V20.8921H9.67964V13.7501Z"></path>
+</svg>
+);
