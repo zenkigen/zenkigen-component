@@ -1,0 +1,15 @@
+/*
+* NOTE: This file is auto generated
+* Do not edit manually.
+*/
+import React from 'react';
+
+export interface guideIconProps {
+  accentClassName?: string;
+}
+
+export const guideIcon: React.FC<guideIconProps> = ({ accentClassName }) => (
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="guide">
+<path d="M14 22.6249C13.98 22.6249 13.9625 22.6249 13.9425 22.6224C13.6675 22.5974 13.44 22.3949 13.3875 22.1224L11.47 12.5299L1.87747 10.6124C1.60747 10.5574 1.40247 10.3324 1.37747 10.0574C1.35247 9.78238 1.50997 9.52238 1.76747 9.41988L21.7675 1.41988C22 1.32738 22.265 1.38238 22.4425 1.55738C22.62 1.73488 22.6725 1.99988 22.58 2.23238L14.58 22.2324C14.485 22.4724 14.2525 22.6249 14 22.6249ZM4.18497 9.79988L12.1225 11.3874C12.37 11.4374 12.5625 11.6299 12.6125 11.8774L14.2 19.8149L20.8775 3.12238L4.18497 9.79988Z"></path>
+</svg>
+);
