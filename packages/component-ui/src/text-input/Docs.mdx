@@ -21,6 +21,62 @@ import spec from '../../../../docs/component/text-input-specification.md?raw';
 
 <Controls of={Component} />
 
+## Code Examples
+
+### コンポジション API（推奨）
+
+```tsx
+import { useState, type ChangeEvent } from 'react';
+import { TextInput } from '@zenkigen-inc/component-ui';
+
+const CompositionExample = () => {
+  const [value, setValue] = useState('');
+  const maxLength = 20;
+  const isLimitExceeded = value.length > maxLength;
+
+  return (
+    <TextInput
+      value={value}
+      isError={isLimitExceeded}
+      placeholder="メールアドレスを入力してください"
+      onChange={(event: ChangeEvent<HTMLInputElement>) => setValue(event.target.value)}
+      onClickClearButton={() => setValue('')}
+    >
+      <TextInput.Input />
+      <TextInput.Messages>
+        <TextInput.Message>入力例: sample@example.com</TextInput.Message>
+        <TextInput.Message>{`現在の文字数: ${value.length} / ${maxLength}`}</TextInput.Message>
+      </TextInput.Messages>
+      {isLimitExceeded && (
+        <TextInput.Errors>
+          <TextInput.Error>{`最大 ${maxLength} 文字まで入力できます。`}</TextInput.Error>
+        </TextInput.Errors>
+      )}
+    </TextInput>
+  );
+};
+```
+
+### 旧 API（後方互換用）
+
+```tsx
+import { useState, type ChangeEvent } from 'react';
+import { TextInput } from '@zenkigen-inc/component-ui';
+
+const LegacyExample = () => {
+  const [value, setValue] = useState('');
+
+  return (
+    <TextInput
+      value={value}
+      placeholder="入力してください"
+      onChange={(event: ChangeEvent<HTMLInputElement>) => setValue(event.target.value)}
+      onClickClearButton={() => setValue('')}
+    />
+  );
+};
+```
+
 ## 概要
 
 ユーザーが1行のテキストを入力するためのフィールドを提供するUI要素です。
