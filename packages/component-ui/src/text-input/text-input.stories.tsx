@@ -374,7 +374,7 @@ export const Composition: Story = {
                 <TextInput.Message>
                   ○文字以内で入力してください ○文字以内で入力してください ○文字以内で入力してください
                 </TextInput.Message>
-                <TextInput.Message>入力内容にエラーがあります</TextInput.Message>
+                <TextInput.Message>○文字以内で入力してください</TextInput.Message>
               </TextInput.Messages>
             </TextInput>
           </div>
@@ -501,7 +501,7 @@ export const Composition: Story = {
                 <TextInput.Message>
                   ○文字以内で入力してください ○文字以内で入力してください ○文字以内で入力してください
                 </TextInput.Message>
-                <TextInput.Message>入力内容にエラーがあります</TextInput.Message>
+                <TextInput.Message>○文字以内で入力してください</TextInput.Message>
               </TextInput.Messages>
             </TextInput>
           </div>
