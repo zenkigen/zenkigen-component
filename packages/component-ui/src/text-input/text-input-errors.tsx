@@ -1,0 +1,17 @@
+import type { HTMLAttributes } from 'react';
+import { Children, forwardRef } from 'react';
+
+export type TextInputErrorsProps = Omit<HTMLAttributes<HTMLDivElement>, 'className'>;
+
+export const TextInputErrors = forwardRef<HTMLDivElement, TextInputErrorsProps>(({ children, ...props }, ref) => {
+  if (Children.count(children) === 0) {
+    return null;
+  }
+
+  return (
+    <div ref={ref} className="flex flex-col gap-1" {...props}>
+      {children}
+    </div>
+  );
+});
+TextInputErrors.displayName = 'TextInput.Errors';
