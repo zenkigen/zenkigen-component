@@ -67,9 +67,9 @@ describe('TextInput', () => {
 
   describe('状態管理', () => {
     it('通常状態のスタイルが適用されること', () => {
-      const { container } = render(<TextInput value="" readOnly data-testid="text-input" />);
-      const wrapper = container.firstChild as HTMLElement;
+      render(<TextInput value="" readOnly data-testid="text-input" />);
       const input = screen.getByTestId('text-input');
+      const wrapper = input.parentElement as HTMLElement;
 
       expect(wrapper.className).toMatch(/border-uiBorder02/);
       expect(wrapper.className).not.toMatch(/border-supportError/);
@@ -77,9 +77,9 @@ describe('TextInput', () => {
     });
 
     it('エラー状態のスタイルが適用されること', () => {
-      const { container } = render(<TextInput value="" isError readOnly data-testid="text-input" />);
-      const wrapper = container.firstChild as HTMLElement;
+      render(<TextInput value="" isError readOnly data-testid="text-input" />);
       const input = screen.getByTestId('text-input');
+      const wrapper = input.parentElement as HTMLElement;
 
       expect(wrapper.className).toMatch(/border-supportError/);
       expect(wrapper.className).not.toMatch(/border-uiBorder02/);
@@ -87,9 +87,9 @@ describe('TextInput', () => {
     });
 
     it('無効状態のスタイルが適用されること', () => {
-      const { container } = render(<TextInput value="" disabled data-testid="text-input" />);
-      const wrapper = container.firstChild as HTMLElement;
+      render(<TextInput value="" disabled data-testid="text-input" />);
       const input = screen.getByTestId('text-input');
+      const wrapper = input.parentElement as HTMLElement;
 
       expect(input).toBeDisabled();
       expect(wrapper.className).toMatch(/bg-disabled02/);
@@ -97,9 +97,9 @@ describe('TextInput', () => {
     });
 
     it('無効状態がエラー状態より優先されること', () => {
-      const { container } = render(<TextInput value="" isError disabled data-testid="text-input" />);
-      const wrapper = container.firstChild as HTMLElement;
+      render(<TextInput value="" isError disabled data-testid="text-input" />);
       const input = screen.getByTestId('text-input');
+      const wrapper = input.parentElement as HTMLElement;
 
       expect(input).toBeDisabled();
       expect(wrapper.className).toMatch(/bg-disabled02/);
