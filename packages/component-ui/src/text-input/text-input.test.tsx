@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React, { createRef } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -204,6 +204,93 @@ describe('TextInput', () => {
       const input = screen.getByTestId('text-input');
 
       expect(input).toHaveAttribute('maxlength', '10');
+    });
+  });
+
+  describe('HelperTexts / Errors', () => {
+    it('HelperText を指定すると aria-describedby に連結されること', () => {
+      render(
+        <TextInput value="abc" onChange={() => {}}>
+          <TextInput.HelperTexts>
+            <TextInput.HelperText id="helper-1">ヘルプ</TextInput.HelperText>
+          </TextInput.HelperTexts>
+        </TextInput>,
+      );
+
+      const input = screen.getByRole('textbox');
+      expect(input).toHaveAttribute('aria-describedby', 'helper-1');
+    });
+
+    it('aria-describedby props と HelperText が結合されること', async () => {
+      render(
+        <TextInput value="abc" aria-describedby="external" onChange={() => {}}>
+          <TextInput.HelperTexts>
+            <TextInput.HelperText id="helper-2">ヘルプ</TextInput.HelperText>
+          </TextInput.HelperTexts>
+        </TextInput>,
+      );
+
+      const input = screen.getByRole('textbox');
+      await waitFor(() => expect(input).toHaveAttribute('aria-describedby', 'external helper-2'));
+    });
+
+    it('isError=false では Errors が描画されないこと', () => {
+      render(
+        <TextInput value="abc" onChange={() => {}}>
+          <TextInput.Errors>
+            <TextInput.Error>エラー</TextInput.Error>
+          </TextInput.Errors>
+        </TextInput>,
+      );
+
+      expect(screen.queryByText('エラー')).toBeNull();
+    });
+
+    it('isError=true では Errors が描画され role/aria-live が付与されること', () => {
+      render(
+        <TextInput value="abc" onChange={() => {}} isError>
+          <TextInput.Errors>
+            <TextInput.Error>エラー</TextInput.Error>
+          </TextInput.Errors>
+        </TextInput>,
+      );
+
+      const error = screen.getByText('エラー');
+      expect(error).toBeInTheDocument();
+      expect(error).toHaveAttribute('role', 'alert');
+      expect(error).toHaveAttribute('aria-live', 'assertive');
+    });
+
+    it('isError またはエラー子要素がある場合に aria-invalid が true になること', () => {
+      render(
+        <TextInput value="abc" onChange={() => {}} isError>
+          <TextInput.Errors>
+            <TextInput.Error>エラー</TextInput.Error>
+          </TextInput.Errors>
+        </TextInput>,
+      );
+
+      const input = screen.getByRole('textbox');
+      expect(input).toHaveAttribute('aria-invalid', 'true');
+    });
+
+    it('Errors/HelperTexts を指定しても after 要素（クリアボタン）が表示されること', () => {
+      render(
+        <TextInput value="abc" onChange={() => {}} onClickClearButton={() => {}} isError>
+          <TextInput.HelperTexts>
+            <TextInput.HelperText>ヘルプ</TextInput.HelperText>
+          </TextInput.HelperTexts>
+          <TextInput.Errors>
+            <TextInput.Error>エラー</TextInput.Error>
+          </TextInput.Errors>
+        </TextInput>,
+      );
+
+      const clearButton = screen
+        .queryAllByRole('button')
+        .find((button) => button.querySelector('svg[aria-label="close"]') != null);
+
+      expect(clearButton).toBeDefined();
     });
   });
 });
