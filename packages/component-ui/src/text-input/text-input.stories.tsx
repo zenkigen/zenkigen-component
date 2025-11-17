@@ -355,7 +355,6 @@ export const Composition: Story = {
               onChange={handleChange(setValue)}
               onClickClearButton={handleClear(setValue)}
             >
-              <TextInput.Input />
               <TextInput.Messages>
                 <TextInput.Message>○文字以内で入力してください</TextInput.Message>
               </TextInput.Messages>
@@ -369,7 +368,6 @@ export const Composition: Story = {
               onChange={handleChange(setValue)}
               onClickClearButton={handleClear(setValue)}
             >
-              <TextInput.Input />
               <TextInput.Messages>
                 <TextInput.Message>
                   ○文字以内で入力してください ○文字以内で入力してください ○文字以内で入力してください
@@ -387,7 +385,6 @@ export const Composition: Story = {
               onChange={handleChange(setValue)}
               onClickClearButton={handleClear(setValue)}
             >
-              <TextInput.Input />
               <TextInput.Messages>
                 <TextInput.Message>○文字以内で入力してください</TextInput.Message>
               </TextInput.Messages>
@@ -405,7 +402,6 @@ export const Composition: Story = {
               onChange={handleChange(setValue)}
               onClickClearButton={handleClear(setValue)}
             >
-              <TextInput.Input />
               <TextInput.Errors>
                 <TextInput.Error>
                   入力内容にエラーがあります 入力内容にエラーがあります 入力内容にエラーがあります
@@ -423,7 +419,6 @@ export const Composition: Story = {
               onChange={handleChange(setValue2)}
               onClickClearButton={handleClear(setValue2)}
             >
-              <TextInput.Input />
               <TextInput.Errors>
                 <TextInput.Error>入力内容にエラーがあります</TextInput.Error>
               </TextInput.Errors>
@@ -437,9 +432,7 @@ export const Composition: Story = {
               disabled
               onChange={handleChange(setValue)}
               onClickClearButton={handleClear(setValue)}
-            >
-              <TextInput.Input />
-            </TextInput>
+            ></TextInput>
           </div>
           <div className={classNameCellS}>
             <TextInput
@@ -449,9 +442,7 @@ export const Composition: Story = {
               disabled
               onChange={handleChange(setValue2)}
               onClickClearButton={handleClear(setValue2)}
-            >
-              <TextInput.Input />
-            </TextInput>
+            ></TextInput>
           </div>
           <div className={classNameCellS}>
             <TextInput
@@ -460,13 +451,10 @@ export const Composition: Story = {
               size="medium"
               type="number"
               onChange={handleChange(setValueNumber)}
-            >
-              <TextInput.Input />
-            </TextInput>
+            ></TextInput>
           </div>
           <div className={classNameCellS}>
             <TextInput value={value} placeholder="入力してください" size="medium" onChange={handleChange(setValue)}>
-              <TextInput.Input />
               <TextInput.Messages>
                 <TextInput.Message>クリアボタンなしパターン</TextInput.Message>
               </TextInput.Messages>
@@ -482,7 +470,6 @@ export const Composition: Story = {
               onChange={handleChange(setValue)}
               onClickClearButton={handleClear(setValue)}
             >
-              <TextInput.Input />
               <TextInput.Messages>
                 <TextInput.Message>○文字以内で入力してください</TextInput.Message>
               </TextInput.Messages>
@@ -496,7 +483,6 @@ export const Composition: Story = {
               onChange={handleChange(setValue)}
               onClickClearButton={handleClear(setValue)}
             >
-              <TextInput.Input />
               <TextInput.Messages>
                 <TextInput.Message>
                   ○文字以内で入力してください ○文字以内で入力してください ○文字以内で入力してください
@@ -514,7 +500,6 @@ export const Composition: Story = {
               onChange={handleChange(setValue)}
               onClickClearButton={handleClear(setValue)}
             >
-              <TextInput.Input />
               <TextInput.Messages>
                 <TextInput.Message>○文字以内で入力してください</TextInput.Message>
               </TextInput.Messages>
@@ -532,7 +517,6 @@ export const Composition: Story = {
               onChange={handleChange(setValue)}
               onClickClearButton={handleClear(setValue)}
             >
-              <TextInput.Input />
               <TextInput.Errors>
                 <TextInput.Error>
                   入力内容にエラーがあります 入力内容にエラーがあります 入力内容にエラーがあります
@@ -550,7 +534,6 @@ export const Composition: Story = {
               onChange={handleChange(setValue2)}
               onClickClearButton={handleClear(setValue2)}
             >
-              <TextInput.Input />
               <TextInput.Errors>
                 <TextInput.Error>入力内容にエラーがあります</TextInput.Error>
               </TextInput.Errors>
@@ -564,9 +547,7 @@ export const Composition: Story = {
               disabled
               onChange={handleChange(setValue)}
               onClickClearButton={handleClear(setValue)}
-            >
-              <TextInput.Input />
-            </TextInput>
+            ></TextInput>
           </div>
           <div className={classNameCellS}>
             <TextInput
@@ -576,9 +557,7 @@ export const Composition: Story = {
               disabled
               onChange={handleChange(setValue2)}
               onClickClearButton={handleClear(setValue2)}
-            >
-              <TextInput.Input />
-            </TextInput>
+            ></TextInput>
           </div>
           <div className={classNameCellS}>
             <TextInput
@@ -587,13 +566,10 @@ export const Composition: Story = {
               size="large"
               type="number"
               onChange={handleChange(setValueNumber)}
-            >
-              <TextInput.Input />
-            </TextInput>
+            ></TextInput>
           </div>
           <div className={classNameCellS}>
             <TextInput value={value} placeholder="入力してください" size="large" onChange={handleChange(setValue)}>
-              <TextInput.Input />
               <TextInput.Messages>
                 <TextInput.Message>クリアボタンなしパターン</TextInput.Message>
               </TextInput.Messages>

@@ -42,7 +42,6 @@ const CompositionExample = () => {
       onChange={(event: ChangeEvent<HTMLInputElement>) => setValue(event.target.value)}
       onClickClearButton={() => setValue('')}
     >
-      <TextInput.Input />
       <TextInput.Messages>
         <TextInput.Message>入力例: sample@example.com</TextInput.Message>
         <TextInput.Message>{`現在の文字数: ${value.length} / ${maxLength}`}</TextInput.Message>
@@ -53,26 +52,6 @@ const CompositionExample = () => {
         </TextInput.Errors>
       )}
     </TextInput>
-  );
-};
-```
-
-### 旧 API（後方互換用）
-
-```tsx
-import { useState, type ChangeEvent } from 'react';
-import { TextInput } from '@zenkigen-inc/component-ui';
-
-const LegacyExample = () => {
-  const [value, setValue] = useState('');
-
-  return (
-    <TextInput
-      value={value}
-      placeholder="入力してください"
-      onChange={(event: ChangeEvent<HTMLInputElement>) => setValue(event.target.value)}
-      onClickClearButton={() => setValue('')}
-    />
   );
 };
 ```
