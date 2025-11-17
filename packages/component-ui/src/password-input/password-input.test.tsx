@@ -76,4 +76,74 @@ describe('PasswordInput', () => {
     expect(input).toHaveClass('typography-label16regular'); // large sizeのクラス
     expect(input).toHaveClass('text-supportError'); // isErrorのクラス
   });
+
+  describe('HelperTexts / Errors', () => {
+    it('HelperText を指定すると aria-describedby に連結されること', () => {
+      render(
+        <PasswordInput value="abc" onChange={() => {}}>
+          <PasswordInput.HelperTexts>
+            <PasswordInput.HelperText id="helper-1">ヘルプ</PasswordInput.HelperText>
+          </PasswordInput.HelperTexts>
+        </PasswordInput>,
+      );
+
+      const input = screen.getByDisplayValue('abc');
+      expect(input).toHaveAttribute('aria-describedby', 'helper-1');
+    });
+
+    it('isError=false では Errors が描画されないこと', () => {
+      render(
+        <PasswordInput value="abc" onChange={() => {}}>
+          <PasswordInput.Errors>
+            <PasswordInput.Error>エラー</PasswordInput.Error>
+          </PasswordInput.Errors>
+        </PasswordInput>,
+      );
+
+      expect(screen.queryByText('エラー')).toBeNull();
+    });
+
+    it('isError=true では Errors が描画され role/aria-live が付与されること', () => {
+      render(
+        <PasswordInput value="abc" onChange={() => {}} isError>
+          <PasswordInput.Errors>
+            <PasswordInput.Error>エラー</PasswordInput.Error>
+          </PasswordInput.Errors>
+        </PasswordInput>,
+      );
+
+      const error = screen.getByText('エラー');
+      expect(error).toBeInTheDocument();
+      expect(error).toHaveAttribute('role', 'alert');
+      expect(error).toHaveAttribute('aria-live', 'assertive');
+    });
+
+    it('Errors/HelperTexts を指定してもトグルボタンが表示されること', () => {
+      render(
+        <PasswordInput value="abc" onChange={() => {}} isError>
+          <PasswordInput.HelperTexts>
+            <PasswordInput.HelperText>ヘルプ</PasswordInput.HelperText>
+          </PasswordInput.HelperTexts>
+          <PasswordInput.Errors>
+            <PasswordInput.Error>エラー</PasswordInput.Error>
+          </PasswordInput.Errors>
+        </PasswordInput>,
+      );
+
+      expect(screen.getByRole('button', { name: 'パスワードを表示する' })).toBeInTheDocument();
+    });
+
+    it('isError またはエラー子要素がある場合に aria-invalid が true になること', () => {
+      render(
+        <PasswordInput value="abc" onChange={() => {}} isError>
+          <PasswordInput.Errors>
+            <PasswordInput.Error>エラー</PasswordInput.Error>
+          </PasswordInput.Errors>
+        </PasswordInput>,
+      );
+
+      const input = screen.getByDisplayValue('abc');
+      expect(input).toHaveAttribute('aria-invalid', 'true');
+    });
+  });
 });
