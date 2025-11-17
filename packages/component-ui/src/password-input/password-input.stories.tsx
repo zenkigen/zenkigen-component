@@ -45,7 +45,14 @@ export const Component: Story = {
               action('onChange')(e);
               setValue(e.target.value);
             }}
-          />
+          >
+            <PasswordInput.HelperTexts>
+              <PasswordInput.HelperText>○文字以内で入力してください</PasswordInput.HelperText>
+            </PasswordInput.HelperTexts>
+            <PasswordInput.Errors>
+              <PasswordInput.Error>入力内容にエラーがあります</PasswordInput.Error>
+            </PasswordInput.Errors>
+          </PasswordInput>
         </div>
       </div>
     );
