@@ -115,13 +115,10 @@ const TextInput = forwardRef<HTMLInputElement, TextInputRootProps>((props, ref) 
     ...restInputProps
   } = rest;
 
-  const additionalInputProps = {
-    ...describedByProps,
-    ...ariaInvalidProps,
-  };
+  const additionalInputProps = { ...describedByProps, ...ariaInvalidProps };
   const mergedInputProps = {
-    ...additionalInputProps,
     ...restInputProps,
+    ...additionalInputProps,
     disabled: isDisabled,
     size: 1,
   };
