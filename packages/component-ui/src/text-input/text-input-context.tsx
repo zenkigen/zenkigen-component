@@ -6,10 +6,10 @@ import type { TextInputInternalProps } from './text-input.types';
 export type TextInputContextValue = {
   inputProps: TextInputInternalProps;
   forwardedRef: ForwardedRef<HTMLInputElement>;
-  messageIds: string[];
+  helperTextIds: string[];
   errorIds: string[];
-  registerMessageId: (id: string) => void;
-  unregisterMessageId: (id: string) => void;
+  registerHelperTextId: (id: string) => void;
+  unregisterHelperTextId: (id: string) => void;
   registerErrorId: (id: string) => void;
   unregisterErrorId: (id: string) => void;
 };

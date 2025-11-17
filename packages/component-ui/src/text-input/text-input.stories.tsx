@@ -43,7 +43,14 @@ export const Component: Story = {
             onClickClearButton={() => {
               setValue('');
             }}
-          />
+          >
+            <TextInput.HelperTexts>
+              <TextInput.HelperText>○文字以内で入力してください</TextInput.HelperText>
+            </TextInput.HelperTexts>
+            <TextInput.Errors>
+              <TextInput.Error>入力内容にエラーがあります</TextInput.Error>
+            </TextInput.Errors>
+          </TextInput>
         </div>
       </div>
     );
@@ -355,9 +362,9 @@ export const Composition: Story = {
               onChange={handleChange(setValue)}
               onClickClearButton={handleClear(setValue)}
             >
-              <TextInput.Messages>
-                <TextInput.Message>○文字以内で入力してください</TextInput.Message>
-              </TextInput.Messages>
+              <TextInput.HelperTexts>
+                <TextInput.HelperText>○文字以内で入力してください</TextInput.HelperText>
+              </TextInput.HelperTexts>
             </TextInput>
           </div>
           <div className={classNameCell}>
@@ -368,12 +375,12 @@ export const Composition: Story = {
               onChange={handleChange(setValue)}
               onClickClearButton={handleClear(setValue)}
             >
-              <TextInput.Messages>
-                <TextInput.Message>
+              <TextInput.HelperTexts>
+                <TextInput.HelperText>
                   ○文字以内で入力してください ○文字以内で入力してください ○文字以内で入力してください
-                </TextInput.Message>
-                <TextInput.Message>○文字以内で入力してください</TextInput.Message>
-              </TextInput.Messages>
+                </TextInput.HelperText>
+                <TextInput.HelperText>○文字以内で入力してください</TextInput.HelperText>
+              </TextInput.HelperTexts>
             </TextInput>
           </div>
           <div className={classNameCell}>
@@ -385,9 +392,9 @@ export const Composition: Story = {
               onChange={handleChange(setValue)}
               onClickClearButton={handleClear(setValue)}
             >
-              <TextInput.Messages>
-                <TextInput.Message>○文字以内で入力してください</TextInput.Message>
-              </TextInput.Messages>
+              <TextInput.HelperTexts>
+                <TextInput.HelperText>○文字以内で入力してください</TextInput.HelperText>
+              </TextInput.HelperTexts>
               <TextInput.Errors>
                 <TextInput.Error>入力内容にエラーがあります</TextInput.Error>
               </TextInput.Errors>
@@ -455,9 +462,9 @@ export const Composition: Story = {
           </div>
           <div className={classNameCellS}>
             <TextInput value={value} placeholder="入力してください" size="medium" onChange={handleChange(setValue)}>
-              <TextInput.Messages>
-                <TextInput.Message>クリアボタンなしパターン</TextInput.Message>
-              </TextInput.Messages>
+              <TextInput.HelperTexts>
+                <TextInput.HelperText>クリアボタンなしパターン</TextInput.HelperText>
+              </TextInput.HelperTexts>
             </TextInput>
           </div>
         </div>
@@ -470,9 +477,9 @@ export const Composition: Story = {
               onChange={handleChange(setValue)}
               onClickClearButton={handleClear(setValue)}
             >
-              <TextInput.Messages>
-                <TextInput.Message>○文字以内で入力してください</TextInput.Message>
-              </TextInput.Messages>
+              <TextInput.HelperTexts>
+                <TextInput.HelperText>○文字以内で入力してください</TextInput.HelperText>
+              </TextInput.HelperTexts>
             </TextInput>
           </div>
           <div className={classNameCell}>
@@ -483,12 +490,12 @@ export const Composition: Story = {
               onChange={handleChange(setValue)}
               onClickClearButton={handleClear(setValue)}
             >
-              <TextInput.Messages>
-                <TextInput.Message>
+              <TextInput.HelperTexts>
+                <TextInput.HelperText>
                   ○文字以内で入力してください ○文字以内で入力してください ○文字以内で入力してください
-                </TextInput.Message>
-                <TextInput.Message>○文字以内で入力してください</TextInput.Message>
-              </TextInput.Messages>
+                </TextInput.HelperText>
+                <TextInput.HelperText>○文字以内で入力してください</TextInput.HelperText>
+              </TextInput.HelperTexts>
             </TextInput>
           </div>
           <div className={classNameCell}>
@@ -500,9 +507,9 @@ export const Composition: Story = {
               onChange={handleChange(setValue)}
               onClickClearButton={handleClear(setValue)}
             >
-              <TextInput.Messages>
-                <TextInput.Message>○文字以内で入力してください</TextInput.Message>
-              </TextInput.Messages>
+              <TextInput.HelperTexts>
+                <TextInput.HelperText>○文字以内で入力してください</TextInput.HelperText>
+              </TextInput.HelperTexts>
               <TextInput.Errors>
                 <TextInput.Error>入力内容にエラーがあります</TextInput.Error>
               </TextInput.Errors>
@@ -570,9 +577,9 @@ export const Composition: Story = {
           </div>
           <div className={classNameCellS}>
             <TextInput value={value} placeholder="入力してください" size="large" onChange={handleChange(setValue)}>
-              <TextInput.Messages>
-                <TextInput.Message>クリアボタンなしパターン</TextInput.Message>
-              </TextInput.Messages>
+              <TextInput.HelperTexts>
+                <TextInput.HelperText>クリアボタンなしパターン</TextInput.HelperText>
+              </TextInput.HelperTexts>
             </TextInput>
           </div>
         </div>

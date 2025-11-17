@@ -7,8 +7,8 @@ import type { TextInputInternalProps } from './text-input.types';
 import { TextInputCompoundContext } from './text-input-context';
 import { TextInputError } from './text-input-error';
 import { TextInputErrors } from './text-input-errors';
-import { TextInputMessage } from './text-input-message';
-import { TextInputMessages } from './text-input-messages';
+import { TextInputHelperText } from './text-input-helper-text';
+import { TextInputHelperTexts } from './text-input-helper-texts';
 import { assignRef } from './text-input-utils';
 
 export type { TextInputProps } from './text-input.types';
@@ -18,8 +18,8 @@ type TextInputRootProps = TextInputInternalProps & {
 };
 
 type TextInputComponent = ForwardRefExoticComponent<TextInputRootProps & RefAttributes<HTMLInputElement>> & {
-  Messages: typeof TextInputMessages;
-  Message: typeof TextInputMessage;
+  HelperTexts: typeof TextInputHelperTexts;
+  HelperText: typeof TextInputHelperText;
   Errors: typeof TextInputErrors;
   Error: typeof TextInputError;
 };
@@ -38,17 +38,17 @@ const getValueLength = (value: InputHTMLAttributes<HTMLInputElement>['value']): 
   return 0;
 };
 
-const TextInputWithCompound = forwardRef<HTMLInputElement, TextInputRootProps>((props, ref) => {
+const TextInput = forwardRef<HTMLInputElement, TextInputRootProps>((props, ref) => {
   const { children, ...rest } = props;
-  const [messageIds, setMessageIds] = useState<string[]>([]);
+  const [helperTextIds, setHelperTextIds] = useState<string[]>([]);
   const [errorIds, setErrorIds] = useState<string[]>([]);
 
-  const registerMessageId = useCallback((id: string) => {
-    setMessageIds((prev) => (prev.includes(id) ? prev : [...prev, id]));
+  const registerHelperTextId = useCallback((id: string) => {
+    setHelperTextIds((prev) => (prev.includes(id) ? prev : [...prev, id]));
   }, []);
 
-  const unregisterMessageId = useCallback((id: string) => {
-    setMessageIds((prev) => prev.filter((item) => item !== id));
+  const unregisterHelperTextId = useCallback((id: string) => {
+    setHelperTextIds((prev) => prev.filter((item) => item !== id));
   }, []);
 
   const registerErrorId = useCallback((id: string) => {
@@ -63,14 +63,23 @@ const TextInputWithCompound = forwardRef<HTMLInputElement, TextInputRootProps>((
     () => ({
       inputProps: rest,
       forwardedRef: ref,
-      messageIds,
+      helperTextIds,
       errorIds,
-      registerMessageId,
-      unregisterMessageId,
+      registerHelperTextId,
+      unregisterHelperTextId,
       registerErrorId,
       unregisterErrorId,
     }),
-    [rest, ref, messageIds, errorIds, registerMessageId, unregisterMessageId, registerErrorId, unregisterErrorId],
+    [
+      rest,
+      ref,
+      helperTextIds,
+      errorIds,
+      registerHelperTextId,
+      unregisterHelperTextId,
+      registerErrorId,
+      unregisterErrorId,
+    ],
   );
 
   const handleRef = useCallback(
@@ -81,7 +90,7 @@ const TextInputWithCompound = forwardRef<HTMLInputElement, TextInputRootProps>((
   );
 
   const describedByFromProps = typeof rest['aria-describedby'] === 'string' ? rest['aria-describedby'] : null;
-  const describedByList = [describedByFromProps, ...messageIds, ...errorIds].filter(
+  const describedByList = [describedByFromProps, ...helperTextIds, ...errorIds].filter(
     (id): id is string => typeof id === 'string' && id.trim().length > 0,
   );
   const describedByProps =
@@ -158,10 +167,10 @@ const TextInputWithCompound = forwardRef<HTMLInputElement, TextInputRootProps>((
   );
 }) as TextInputComponent;
 
-TextInputWithCompound.Messages = TextInputMessages;
-TextInputWithCompound.Message = TextInputMessage;
-TextInputWithCompound.Errors = TextInputErrors;
-TextInputWithCompound.Error = TextInputError;
-TextInputWithCompound.displayName = 'TextInput';
+TextInput.HelperTexts = TextInputHelperTexts;
+TextInput.HelperText = TextInputHelperText;
+TextInput.Errors = TextInputErrors;
+TextInput.Error = TextInputError;
+TextInput.displayName = 'TextInput';
 
-export const TextInput = TextInputWithCompound;
+export { TextInput };

@@ -42,15 +42,12 @@ const CompositionExample = () => {
       onChange={(event: ChangeEvent<HTMLInputElement>) => setValue(event.target.value)}
       onClickClearButton={() => setValue('')}
     >
-      <TextInput.Messages>
-        <TextInput.Message>入力例: sample@example.com</TextInput.Message>
-        <TextInput.Message>{`現在の文字数: ${value.length} / ${maxLength}`}</TextInput.Message>
-      </TextInput.Messages>
-      {isLimitExceeded && (
-        <TextInput.Errors>
-          <TextInput.Error>{`最大 ${maxLength} 文字まで入力できます。`}</TextInput.Error>
-        </TextInput.Errors>
-      )}
+      <TextInput.HelperTexts>
+        <TextInput.HelperText>○文字以内で入力してください</TextInput.HelperText>
+      </TextInput.HelperTexts>
+      <TextInput.Errors>
+        <TextInput.Error>{`最大 ${maxLength} 文字まで入力できます。`}</TextInput.Error>
+      </TextInput.Errors>
     </TextInput>
   );
 };
