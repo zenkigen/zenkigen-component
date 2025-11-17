@@ -44,7 +44,8 @@ import { TextInput } from '@zenkigen-inc/component-ui';
 ### コンポジション API（推奨）
 
 ```typescript
-import { useState, type ChangeEvent } from 'react';
+import { useMemo, useState, type ChangeEvent } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { TextInput } from '@zenkigen-inc/component-ui';
 
 const MyComponent = () => {
@@ -60,21 +61,19 @@ const MyComponent = () => {
       onClickClearButton={() => setValue('')}
       placeholder="メールアドレスを入力してください"
     >
-      <TextInput.Messages>
-        <TextInput.Message>入力例: sample@example.com</TextInput.Message>
-        <TextInput.Message>{`現在の文字数: ${value.length} / ${maxLength}`}</TextInput.Message>
-      </TextInput.Messages>
-      {isLimitExceeded && (
-        <TextInput.Errors>
-          <TextInput.Error>{`最大 ${maxLength} 文字まで入力できます。`}</TextInput.Error>
-        </TextInput.Errors>
-      )}
+      <TextInput.HelperTexts>
+        <TextInput.HelperText>入力例: sample@example.com</TextInput.HelperText>
+        <TextInput.HelperText>{`現在の文字数: ${value.length} / ${maxLength}`}</TextInput.HelperText>
+      </TextInput.HelperTexts>
+      <TextInput.Errors>
+        <TextInput.Error>{`最大 ${maxLength} 文字まで入力できます。`}</TextInput.Error>
+      </TextInput.Errors>
     </TextInput>
   );
 };
 ```
 
-> `<TextInput>` は内部で入力欄を自動で描画する。子要素にはメッセージ/エラー行のみを配置し、必要なときだけ `<TextInput.Messages>`・`<TextInput.Errors>` を追加する。
+> `<TextInput>` は内部で入力欄を自動で描画する。子要素にはメッセージ/エラー行のみを配置し、必要なときだけ `<TextInput.HelperTexts>`・`<TextInput.Errors>` を追加する。
 
 ## Props
 
@@ -86,15 +85,15 @@ const MyComponent = () => {
 
 ### オプションプロパティ
 
-| プロパティ           | 型                                              | デフォルト値 | 説明                                                                                                        |
-| -------------------- | ----------------------------------------------- | ------------ | ----------------------------------------------------------------------------------------------------------- |
-| `size`               | `'medium' \| 'large'`                           | `'medium'`   | コンポーネントのサイズを指定する                                                                            |
-| `children`           | `ReactNode`                                     | `undefined`  | メッセージ/エラースロットなどの子要素。`<TextInput.Messages>` / `<TextInput.Errors>` を必要に応じて追加する |
-| `isError`            | `boolean`                                       | `false`      | エラー状態かどうかを指定する                                                                                |
-| `disabled`           | `boolean`                                       | `false`      | 入力を無効化するかどうかを指定する（継承）                                                                  |
-| `placeholder`        | `string`                                        | `undefined`  | プレースホルダーテキストを指定する（継承）                                                                  |
-| `type`               | `InputHTMLAttributes<HTMLInputElement>['type']` | `'text'`     | 入力タイプ（例: `'text'`, `'number'`, `'password'` など）（継承）                                           |
-| `onClickClearButton` | `() => void`                                    | `undefined`  | クリアボタン押下時のハンドラ。指定時かつ値が空でない場合のみ表示する                                        |
+| プロパティ           | 型                                              | デフォルト値 | 説明                                                                                                           |
+| -------------------- | ----------------------------------------------- | ------------ | -------------------------------------------------------------------------------------------------------------- |
+| `size`               | `'medium' \| 'large'`                           | `'medium'`   | コンポーネントのサイズを指定する                                                                               |
+| `children`           | `ReactNode`                                     | `undefined`  | メッセージ/エラースロットなどの子要素。`<TextInput.HelperTexts>` / `<TextInput.Errors>` を必要に応じて追加する |
+| `isError`            | `boolean`                                       | `false`      | エラー状態かどうかを指定する                                                                                   |
+| `disabled`           | `boolean`                                       | `false`      | 入力を無効化するかどうかを指定する（継承）                                                                     |
+| `placeholder`        | `string`                                        | `undefined`  | プレースホルダーテキストを指定する（継承）                                                                     |
+| `type`               | `InputHTMLAttributes<HTMLInputElement>['type']` | `'text'`     | 入力タイプ（例: `'text'`, `'number'`, `'password'` など）（継承）                                              |
+| `onClickClearButton` | `() => void`                                    | `undefined`  | クリアボタン押下時のハンドラ。指定時かつ値が空でない場合のみ表示する                                           |
 
 ### 継承プロパティ
 
@@ -102,10 +101,10 @@ const MyComponent = () => {
 
 ### サブコンポーネント（コンポジション API）
 
-- `TextInput.Messages`
+- `TextInput.HelperTexts`
   - 情報・補助テキストのラッパー。`Children.count(children) === 0` の場合は DOM を出力しない。
   - デフォルトクラス: `flex flex-col gap-1`。
-- `TextInput.Message`
+- `TextInput.HelperText`
   - 任意の `id` を指定可能（省略時は自動生成）。登録済み ID は TextInput 本体の `aria-describedby` に追加される。
   - タイポグラフィ: `size='medium'` は `typography-label11regular text-text02`、`size='large'` は `typography-label12regular text-text02`。
 - `TextInput.Errors`
@@ -149,8 +148,8 @@ const MyComponent = () => {
 - コンテナ: `relative flex items-center gap-2 overflow-hidden rounded border`
 - 入力: `flex-1 outline-0 placeholder:text-textPlaceholder disabled:text-textPlaceholder`
 - クリアボタン表示時、右側パディングを調整する（`pr-2`/`pr-3` 付与、入力側は `pr-0`）
-- `<TextInput.Messages>` / `<TextInput.Errors>` ラッパー: `flex flex-col gap-1`。子要素が 0 件の場合は DOM を生成しない。
-- `<TextInput.Message>`: `size='medium'` は `typography-label11regular text-text02`、`size='large'` は `typography-label12regular text-text02`。
+- `<TextInput.HelperTexts>` / `<TextInput.Errors>` ラッパー: `flex flex-col gap-1`。子要素が 0 件の場合は DOM を生成しない。
+- `<TextInput.HelperText>`: `size='medium'` は `typography-label11regular text-text02`、`size='large'` は `typography-label12regular text-text02`。
 - `<TextInput.Error>`: `size='medium'` は `typography-label11regular text-supportError`、`size='large'` は `typography-label12regular text-supportError`。
 
 ## 使用例
@@ -166,9 +165,9 @@ const MyComponent = () => {
   placeholder="入力してください"
   onClickClearButton={() => setValue('')}
 >
-  <TextInput.Messages>
-    <TextInput.Message>全角 20 文字以内で入力してください</TextInput.Message>
-  </TextInput.Messages>
+  <TextInput.HelperTexts>
+    <TextInput.HelperText>全角 20 文字以内で入力してください</TextInput.HelperText>
+  </TextInput.HelperTexts>
 </TextInput>
 ```
 
@@ -181,9 +180,9 @@ const MyComponent = () => {
 
 // large
 <TextInput value={value} size="large" onChange={(e) => setValue(e.target.value)}>
-  <TextInput.Messages>
-    <TextInput.Message>ラージサイズでは typography-label12regular が適用される</TextInput.Message>
-  </TextInput.Messages>
+  <TextInput.HelperTexts>
+    <TextInput.HelperText>ラージサイズでは typography-label12regular が適用される</TextInput.HelperText>
+  </TextInput.HelperTexts>
 </TextInput>
 ```
 
@@ -242,15 +241,15 @@ const MyComponent = () => {
 - `TextInput.Error` は `role="alert"` `aria-live="assertive"` がデフォルトであり、エラー発生時に支援技術へ即座に通知される。
 - クリアボタンは `IconButton`（`button` 要素）で実装し、タブフォーカス可能。`disabled` または入力値が空の場合は DOM から除外される。
 - ラベル要素は含まれないため、フォーム利用時は外部で `<label>` と `htmlFor` を設定するか、`aria-labelledby` を用いること。
-- `TextInput.Messages` / `TextInput.Errors` は子要素が無いとレンダリングされず、空グループが支援技術に通知されない。
+- `TextInput.HelperTexts` / `TextInput.Errors` は子要素が無いとレンダリングされず、空グループが支援技術に通知されない。
 
 ## 技術的な詳細
 
 - `TextInput` は `forwardRef` + `TextInputCompoundContext` で構成され、常に内部で input を描画し、その下に子要素（メッセージ/エラー）を並べる。
-- `TextInput.Message` / `TextInput.Error` は `useId` と登録関数で ID を管理し、`aria-describedby` を自動連結する。
+- `TextInput.HelperText` / `TextInput.Error` は `useId` と登録関数で ID を管理し、`aria-describedby` を自動連結する。
 - クラス結合は `clsx` を用い、`size`, `isError`, `disabled` に応じたユーティリティを適用する。ネイティブ `size` 属性は常に `1` とし、幅はレイアウトで制御する。
 - クリアボタンは `IconButton`（`variant="text"`, `icon="close"`, `size="small"`）として描画され、表示条件は「`onClickClearButton` が存在し値が空でなく、かつ `disabled` ではない」場合である。
-- `TextInput.Messages` / `TextInput.Errors` は `Children.count` を利用して空ノードを抑止する。
+- `TextInput.HelperTexts` / `TextInput.Errors` は `Children.count` を利用して空ノードを抑止する。
 - 内部向け `TextInputInternalProps` には `after?: ReactNode` が含まれ、旧 API や一部ラップコンポーネントで末尾アイコンなどを挿入できる（公開 API ではない）。
 
 ## 注意事項
