@@ -13,43 +13,41 @@ type PasswordInputComponent = ForwardRefExoticComponent<Props & RefAttributes<HT
   Error: typeof TextInput.Error;
 };
 
-const PasswordInputWithCompound = forwardRef<HTMLInputElement, Props>(
-  ({ disabled = false, children, ...props }, ref) => {
-    const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
+const PasswordInput = forwardRef<HTMLInputElement, Props>(({ disabled = false, children, ...props }, ref) => {
+  const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
-    const handlePasswordVisibilityToggle = () => {
-      setIsPasswordVisible(!isPasswordVisible);
-    };
+  const handlePasswordVisibilityToggle = () => {
+    setIsPasswordVisible(!isPasswordVisible);
+  };
 
-    const passwordToggleButton = (
-      <IconButton
-        variant="text"
-        icon={isPasswordVisible === true ? 'visibility-off' : 'visibility'}
-        size="small"
-        onClick={handlePasswordVisibilityToggle}
-        isDisabled={disabled}
-        aria-label={isPasswordVisible === true ? 'パスワードを非表示にする' : 'パスワードを表示する'}
-      />
-    );
+  const passwordToggleButton = (
+    <IconButton
+      variant="text"
+      icon={isPasswordVisible === true ? 'visibility-off' : 'visibility'}
+      size="small"
+      onClick={handlePasswordVisibilityToggle}
+      isDisabled={disabled}
+      aria-label={isPasswordVisible === true ? 'パスワードを非表示にする' : 'パスワードを表示する'}
+    />
+  );
 
-    return (
-      <TextInput
-        ref={ref}
-        type={isPasswordVisible === true ? 'text' : 'password'}
-        disabled={disabled}
-        after={passwordToggleButton}
-        {...props}
-      >
-        {children}
-      </TextInput>
-    );
-  },
-) as PasswordInputComponent;
+  return (
+    <TextInput
+      ref={ref}
+      type={isPasswordVisible === true ? 'text' : 'password'}
+      disabled={disabled}
+      after={passwordToggleButton}
+      {...props}
+    >
+      {children}
+    </TextInput>
+  );
+}) as PasswordInputComponent;
 
-PasswordInputWithCompound.HelperTexts = TextInput.HelperTexts;
-PasswordInputWithCompound.HelperText = TextInput.HelperText;
-PasswordInputWithCompound.Errors = TextInput.Errors;
-PasswordInputWithCompound.Error = TextInput.Error;
-PasswordInputWithCompound.displayName = 'PasswordInput';
+PasswordInput.HelperTexts = TextInput.HelperTexts;
+PasswordInput.HelperText = TextInput.HelperText;
+PasswordInput.Errors = TextInput.Errors;
+PasswordInput.Error = TextInput.Error;
+PasswordInput.displayName = 'PasswordInput';
 
-export const PasswordInput = PasswordInputWithCompound;
+export { PasswordInput };
