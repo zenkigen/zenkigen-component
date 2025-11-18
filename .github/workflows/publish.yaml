@@ -9,7 +9,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Read Node version from .node-version
         run: echo "node_version=$(cat .node-version)" >> $GITHUB_OUTPUT
