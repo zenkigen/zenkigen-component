@@ -7,7 +7,6 @@ import type { TextInputInternalProps } from './text-input.types';
 import { TextInputCompoundContext } from './text-input-context';
 import { TextInputErrorMessage } from './text-input-error-message';
 import { TextInputHelperMessage } from './text-input-helper-message';
-import { assignRef } from './text-input-utils';
 
 export type { TextInputProps } from './text-input.types';
 
@@ -78,13 +77,6 @@ const TextInput = forwardRef<HTMLInputElement, TextInputRootProps>((props, ref) 
     ],
   );
 
-  const handleRef = useCallback(
-    (node: HTMLInputElement | null) => {
-      assignRef(ref, node);
-    },
-    [ref],
-  );
-
   const describedByFromProps = typeof rest['aria-describedby'] === 'string' ? rest['aria-describedby'] : null;
   const describedByList = [describedByFromProps, ...helperMessageIds, ...errorIds].filter(
     (id): id is string => typeof id === 'string' && id.trim().length > 0,
@@ -150,7 +142,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputRootProps>((props, ref) 
     <TextInputCompoundContext.Provider value={contextValue}>
       <div className="flex flex-col gap-2">
         <div className={inputWrapClasses}>
-          <input ref={handleRef} className={mergedClassName} {...mergedInputProps} />
+          <input ref={ref} className={mergedClassName} {...mergedInputProps} />
           {after}
           {isShowClearButton && <IconButton variant="text" icon="close" size="small" onClick={onClickClearButton} />}
         </div>
