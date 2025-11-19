@@ -1,46 +1,24 @@
+import { clsx } from 'clsx';
 import type { HTMLAttributes } from 'react';
-import { forwardRef, useEffect, useId } from 'react';
+import { forwardRef } from 'react';
 
 import { useTextInputCompoundContext } from './text-input-context';
 
-export type TextInputErrorMessageProps = Omit<HTMLAttributes<HTMLDivElement>, 'className'>;
+export type TextInputErrorMessageProps = HTMLAttributes<HTMLDivElement>;
 
 export const TextInputErrorMessage = forwardRef<HTMLDivElement, TextInputErrorMessageProps>(
-  ({ id: idProp, role = 'alert', 'aria-live': ariaLive = 'assertive', ...props }, ref) => {
-    const autoId = useId();
-    const id = idProp ?? `${autoId}-error-message`;
-    const { registerErrorId, unregisterErrorId, inputProps } = useTextInputCompoundContext('TextInput.ErrorMessage');
+  ({ className, role = 'alert', 'aria-live': ariaLive = 'assertive', ...props }, ref) => {
+    const { inputProps } = useTextInputCompoundContext('TextInput.ErrorMessage');
     const typographyClass = inputProps.size === 'large' ? 'typography-label12regular' : 'typography-label11regular';
     const shouldRender = inputProps.isError === true;
 
-    useEffect(() => {
-      if (!shouldRender) {
-        return;
-      }
-
-      registerErrorId(id);
-
-      return () => unregisterErrorId(id);
-    }, [id, registerErrorId, unregisterErrorId, shouldRender]);
-
     if (!shouldRender) {
       return null;
     }
 
-    if (!shouldRender) {
-      return null;
-    }
+    const errorMessageClassName = clsx(typographyClass, 'bg-slate-300 text-supportError', className);
 
-    return (
-      <div
-        ref={ref}
-        id={id}
-        className={`${typographyClass} text-supportError`}
-        role={role}
-        aria-live={ariaLive}
-        {...props}
-      />
-    );
+    return <div ref={ref} className={errorMessageClassName} role={role} aria-live={ariaLive} {...props} />;
   },
 );
 TextInputErrorMessage.displayName = 'TextInput.ErrorMessage';
