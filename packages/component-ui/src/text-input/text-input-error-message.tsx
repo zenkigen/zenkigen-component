@@ -3,20 +3,33 @@ import { forwardRef, useEffect, useId } from 'react';
 
 import { useTextInputCompoundContext } from './text-input-context';
 
-export type TextInputErrorProps = Omit<HTMLAttributes<HTMLDivElement>, 'className'>;
+export type TextInputErrorMessageProps = Omit<HTMLAttributes<HTMLDivElement>, 'className'>;
 
-export const TextInputError = forwardRef<HTMLDivElement, TextInputErrorProps>(
+export const TextInputErrorMessage = forwardRef<HTMLDivElement, TextInputErrorMessageProps>(
   ({ id: idProp, role = 'alert', 'aria-live': ariaLive = 'assertive', ...props }, ref) => {
     const autoId = useId();
-    const id = idProp ?? `${autoId}-error`;
-    const { registerErrorId, unregisterErrorId, inputProps } = useTextInputCompoundContext('TextInput.Error');
+    const id = idProp ?? `${autoId}-error-message`;
+    const { registerErrorId, unregisterErrorId, inputProps } = useTextInputCompoundContext('TextInput.ErrorMessage');
     const typographyClass = inputProps.size === 'large' ? 'typography-label12regular' : 'typography-label11regular';
+    const shouldRender = inputProps.isError === true;
 
     useEffect(() => {
+      if (!shouldRender) {
+        return;
+      }
+
       registerErrorId(id);
 
       return () => unregisterErrorId(id);
-    }, [id, registerErrorId, unregisterErrorId]);
+    }, [id, registerErrorId, unregisterErrorId, shouldRender]);
+
+    if (!shouldRender) {
+      return null;
+    }
+
+    if (!shouldRender) {
+      return null;
+    }
 
     return (
       <div
@@ -30,4 +43,4 @@ export const TextInputError = forwardRef<HTMLDivElement, TextInputErrorProps>(
     );
   },
 );
-TextInputError.displayName = 'TextInput.Error';
+TextInputErrorMessage.displayName = 'TextInput.ErrorMessage';

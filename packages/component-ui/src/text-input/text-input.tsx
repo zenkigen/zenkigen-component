@@ -5,10 +5,8 @@ import { forwardRef, useCallback, useMemo, useState } from 'react';
 import { IconButton } from '../icon-button';
 import type { TextInputInternalProps } from './text-input.types';
 import { TextInputCompoundContext } from './text-input-context';
-import { TextInputError } from './text-input-error';
-import { TextInputErrors } from './text-input-errors';
-import { TextInputHelperText } from './text-input-helper-text';
-import { TextInputHelperTexts } from './text-input-helper-texts';
+import { TextInputErrorMessage } from './text-input-error-message';
+import { TextInputHelperMessage } from './text-input-helper-message';
 import { assignRef } from './text-input-utils';
 
 export type { TextInputProps } from './text-input.types';
@@ -18,10 +16,8 @@ type TextInputRootProps = TextInputInternalProps & {
 };
 
 type TextInputComponent = ForwardRefExoticComponent<TextInputRootProps & RefAttributes<HTMLInputElement>> & {
-  HelperTexts: typeof TextInputHelperTexts;
-  HelperText: typeof TextInputHelperText;
-  Errors: typeof TextInputErrors;
-  Error: typeof TextInputError;
+  HelperMessage: typeof TextInputHelperMessage;
+  ErrorMessage: typeof TextInputErrorMessage;
 };
 
 const getValueLength = (value: InputHTMLAttributes<HTMLInputElement>['value']): number => {
@@ -40,15 +36,15 @@ const getValueLength = (value: InputHTMLAttributes<HTMLInputElement>['value']): 
 
 const TextInput = forwardRef<HTMLInputElement, TextInputRootProps>((props, ref) => {
   const { children, ...rest } = props;
-  const [helperTextIds, setHelperTextIds] = useState<string[]>([]);
+  const [helperMessageIds, setHelperMessageIds] = useState<string[]>([]);
   const [errorIds, setErrorIds] = useState<string[]>([]);
 
-  const registerHelperTextId = useCallback((id: string) => {
-    setHelperTextIds((prev) => (prev.includes(id) ? prev : [...prev, id]));
+  const registerHelperMessageId = useCallback((id: string) => {
+    setHelperMessageIds((prev) => (prev.includes(id) ? prev : [...prev, id]));
   }, []);
 
-  const unregisterHelperTextId = useCallback((id: string) => {
-    setHelperTextIds((prev) => prev.filter((item) => item !== id));
+  const unregisterHelperMessageId = useCallback((id: string) => {
+    setHelperMessageIds((prev) => prev.filter((item) => item !== id));
   }, []);
 
   const registerErrorId = useCallback((id: string) => {
@@ -63,20 +59,20 @@ const TextInput = forwardRef<HTMLInputElement, TextInputRootProps>((props, ref) 
     () => ({
       inputProps: rest,
       forwardedRef: ref,
-      helperTextIds,
+      helperMessageIds,
       errorIds,
-      registerHelperTextId,
-      unregisterHelperTextId,
+      registerHelperMessageId,
+      unregisterHelperMessageId,
       registerErrorId,
       unregisterErrorId,
     }),
     [
       rest,
       ref,
-      helperTextIds,
+      helperMessageIds,
       errorIds,
-      registerHelperTextId,
-      unregisterHelperTextId,
+      registerHelperMessageId,
+      unregisterHelperMessageId,
       registerErrorId,
       unregisterErrorId,
     ],
@@ -90,7 +86,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputRootProps>((props, ref) 
   );
 
   const describedByFromProps = typeof rest['aria-describedby'] === 'string' ? rest['aria-describedby'] : null;
-  const describedByList = [describedByFromProps, ...helperTextIds, ...errorIds].filter(
+  const describedByList = [describedByFromProps, ...helperMessageIds, ...errorIds].filter(
     (id): id is string => typeof id === 'string' && id.trim().length > 0,
   );
   const describedByProps =
@@ -164,10 +160,8 @@ const TextInput = forwardRef<HTMLInputElement, TextInputRootProps>((props, ref) 
   );
 }) as TextInputComponent;
 
-TextInput.HelperTexts = TextInputHelperTexts;
-TextInput.HelperText = TextInputHelperText;
-TextInput.Errors = TextInputErrors;
-TextInput.Error = TextInputError;
+TextInput.HelperMessage = TextInputHelperMessage;
+TextInput.ErrorMessage = TextInputErrorMessage;
 TextInput.displayName = 'TextInput';
 
 export { TextInput };
