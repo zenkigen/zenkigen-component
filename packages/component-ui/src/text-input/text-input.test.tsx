@@ -207,13 +207,11 @@ describe('TextInput', () => {
     });
   });
 
-  describe('HelperTexts / Errors', () => {
-    it('HelperText を指定すると aria-describedby に連結されること', () => {
+  describe('HelperMessage / ErrorMessage', () => {
+    it('HelperMessage を指定すると aria-describedby に連結されること', () => {
       render(
         <TextInput value="abc" onChange={() => {}}>
-          <TextInput.HelperTexts>
-            <TextInput.HelperText id="helper-1">ヘルプ</TextInput.HelperText>
-          </TextInput.HelperTexts>
+          <TextInput.HelperMessage id="helper-1">ヘルプ</TextInput.HelperMessage>
         </TextInput>,
       );
 
@@ -221,12 +219,10 @@ describe('TextInput', () => {
       expect(input).toHaveAttribute('aria-describedby', 'helper-1');
     });
 
-    it('aria-describedby props と HelperText が結合されること', async () => {
+    it('aria-describedby props と HelperMessage が結合されること', async () => {
       render(
         <TextInput value="abc" aria-describedby="external" onChange={() => {}}>
-          <TextInput.HelperTexts>
-            <TextInput.HelperText id="helper-2">ヘルプ</TextInput.HelperText>
-          </TextInput.HelperTexts>
+          <TextInput.HelperMessage id="helper-2">ヘルプ</TextInput.HelperMessage>
         </TextInput>,
       );
 
@@ -234,24 +230,20 @@ describe('TextInput', () => {
       await waitFor(() => expect(input).toHaveAttribute('aria-describedby', 'external helper-2'));
     });
 
-    it('isError=false では Errors が描画されないこと', () => {
+    it('isError=false では ErrorMessage が描画されないこと', () => {
       render(
         <TextInput value="abc" onChange={() => {}}>
-          <TextInput.Errors>
-            <TextInput.Error>エラー</TextInput.Error>
-          </TextInput.Errors>
+          <TextInput.ErrorMessage>エラー</TextInput.ErrorMessage>
         </TextInput>,
       );
 
       expect(screen.queryByText('エラー')).toBeNull();
     });
 
-    it('isError=true では Errors が描画され role/aria-live が付与されること', () => {
+    it('isError=true では ErrorMessage が描画され role/aria-live が付与されること', () => {
       render(
         <TextInput value="abc" onChange={() => {}} isError>
-          <TextInput.Errors>
-            <TextInput.Error>エラー</TextInput.Error>
-          </TextInput.Errors>
+          <TextInput.ErrorMessage>エラー</TextInput.ErrorMessage>
         </TextInput>,
       );
 
@@ -264,9 +256,7 @@ describe('TextInput', () => {
     it('isError またはエラー子要素がある場合に aria-invalid が true になること', () => {
       render(
         <TextInput value="abc" onChange={() => {}} isError>
-          <TextInput.Errors>
-            <TextInput.Error>エラー</TextInput.Error>
-          </TextInput.Errors>
+          <TextInput.ErrorMessage>エラー</TextInput.ErrorMessage>
         </TextInput>,
       );
 
@@ -274,15 +264,11 @@ describe('TextInput', () => {
       expect(input).toHaveAttribute('aria-invalid', 'true');
     });
 
-    it('Errors/HelperTexts を指定しても after 要素（クリアボタン）が表示されること', () => {
+    it('ErrorMessage/HelperMessage を指定しても after 要素（クリアボタン）が表示されること', () => {
       render(
         <TextInput value="abc" onChange={() => {}} onClickClearButton={() => {}} isError>
-          <TextInput.HelperTexts>
-            <TextInput.HelperText>ヘルプ</TextInput.HelperText>
-          </TextInput.HelperTexts>
-          <TextInput.Errors>
-            <TextInput.Error>エラー</TextInput.Error>
-          </TextInput.Errors>
+          <TextInput.HelperMessage>ヘルプ</TextInput.HelperMessage>
+          <TextInput.ErrorMessage>エラー</TextInput.ErrorMessage>
         </TextInput>,
       );
 
