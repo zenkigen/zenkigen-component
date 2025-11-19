@@ -146,6 +146,13 @@ const MyTabComponent = () => {
 
 #### アイコン
 
+- Tab.Item の `icon` に `IconName` を指定すると `<Icon name={icon} size="small" />` を描画する。
+- 通常: `fill-icon01`
+- 選択時: `fill-interactive01`（`isSelected` で色を切り替え）
+- 無効時: `fill-disabled01` で視覚的に抑止
+
+#### アイコン
+
 - `icon`プロパティに `IconName` を渡すと `@zenkigen-inc/component-icons` の `<Icon>`（`size="small"`）を描画する
 - 通常: `fill-icon01`
 - ホバー: `group-hover:fill-interactive01`
@@ -206,6 +213,31 @@ const BasicTabExample = () => {
 ```
 
 Tab.Itemの`onClick`は必ずクリック対象の`id`を1つだけ引数に渡して呼び出されるため、`setSelectedTab`のような`(value: string) => void`であれば無名関数を挟まずにそのまま渡せる。
+
+### アイコン付きの基本例
+
+```typescript
+import { useState } from 'react';
+import { Tab } from '@zenkigen-inc/component-ui';
+
+const IconTabExample = () => {
+  const [selectedTab, setSelectedTab] = useState('tab1');
+
+  return (
+    <Tab layout="auto">
+      <Tab.Item id="tab1" icon="chart-bar" isSelected={selectedTab === 'tab1'} onClick={setSelectedTab}>
+        ダッシュボード
+      </Tab.Item>
+      <Tab.Item id="tab2" icon="calendar-check" isSelected={selectedTab === 'tab2'} onClick={setSelectedTab}>
+        スケジュール
+      </Tab.Item>
+      <Tab.Item id="tab3" icon="user" isSelected={selectedTab === 'tab3'} onClick={setSelectedTab}>
+        メンバー
+      </Tab.Item>
+    </Tab>
+  );
+};
+```
 
 ### 自動レイアウト
 
