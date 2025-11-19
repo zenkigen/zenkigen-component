@@ -15,11 +15,11 @@ type Props = {
 
 export const TabItem = ({ isSelected = false, isDisabled = false, icon, ...props }: Props) => {
   const classes = clsx(
-    'group relative z-0 flex items-center justify-center gap-1 py-2 leading-[24px] before:absolute before:inset-x-0 before:bottom-0 before:h-px hover:text-interactive01 disabled:pointer-events-none disabled:text-disabled01',
+    'group relative z-0 flex items-center justify-center gap-1 py-2 leading-[24px] before:absolute before:inset-x-0 before:bottom-0 before:h-[2px] hover:text-interactive01 disabled:pointer-events-none disabled:text-disabled01',
     {
       'typography-label14regular text-interactive02': !isSelected,
       'typography-label14bold text-interactive01': isSelected,
-      'before:bg-interactive01 before:h-[2px] hover:before:bg-interactive01 pointer-events-none': isSelected,
+      'before:bg-interactive01 hover:before:bg-interactive01 pointer-events-none': isSelected,
     },
   );
 
