@@ -23,8 +23,6 @@ import spec from '../../../../docs/component/text-input-specification.md?raw';
 
 ## Code Examples
 
-### コンポジション API（推奨）
-
 ```tsx
 import { useState, type ChangeEvent } from 'react';
 import { TextInput } from '@zenkigen-inc/component-ui';
@@ -35,20 +33,20 @@ const CompositionExample = () => {
   const isLimitExceeded = value.length > maxLength;
 
   return (
-    <TextInput
-      value={value}
-      isError={isLimitExceeded}
-      placeholder="メールアドレスを入力してください"
-      onChange={(event: ChangeEvent<HTMLInputElement>) => setValue(event.target.value)}
-      onClickClearButton={() => setValue('')}
-    >
-      <TextInput.HelperTexts>
-        <TextInput.HelperText>○文字以内で入力してください</TextInput.HelperText>
-      </TextInput.HelperTexts>
-      <TextInput.Errors>
-        <TextInput.Error>{`最大 ${maxLength} 文字まで入力できます。`}</TextInput.Error>
-      </TextInput.Errors>
-    </TextInput>
+    <>
+      <label htmlFor="name-input">名前</label>
+      <TextInput
+        value={value}
+        isError={isLimitExceeded}
+        placeholder="名前を入力してください"
+        onChange={(event: ChangeEvent<HTMLInputElement>) => setValue(event.target.value)}
+        onClickClearButton={() => setValue('')}
+        id="name-input"
+      >
+        <TextInput.HelperMessage>○文字以内で入力してください</TextInput.HelperMessage>
+        <TextInput.ErrorMessage>入力内容にエラーがあります</TextInput.ErrorMessage>
+      </TextInput>
+    </>
   );
 };
 ```
