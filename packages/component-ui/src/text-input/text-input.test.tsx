@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import React, { createRef } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -150,6 +150,13 @@ describe('TextInput', () => {
       const handleClear = vi.fn();
       render(<TextInput value="abc" disabled onChange={() => {}} onClickClearButton={handleClear} />);
 
+      const clearButton = findClearButton();
+      expect(clearButton).toBeUndefined();
+
+      if (clearButton) {
+        fireEvent.click(clearButton);
+      }
+
       expect(handleClear).not.toHaveBeenCalled();
     });
   });
@@ -219,7 +226,7 @@ describe('TextInput', () => {
       expect(input).toHaveAttribute('aria-describedby', 'helper-1');
     });
 
-    it('aria-describedby props と HelperMessage が結合されること', async () => {
+    it('aria-describedby props と HelperMessage が結合されること', () => {
       render(
         <TextInput value="abc" aria-describedby="external" onChange={() => {}}>
           <TextInput.HelperMessage id="helper-2">ヘルプ</TextInput.HelperMessage>
@@ -227,7 +234,34 @@ describe('TextInput', () => {
       );
 
       const input = screen.getByRole('textbox');
-      await waitFor(() => expect(input).toHaveAttribute('aria-describedby', 'external helper-2'));
+      expect(input).toHaveAttribute('aria-describedby', 'external helper-2');
+    });
+
+    it('HelperMessage に id を渡さなくても aria-describedby に採番されること', () => {
+      render(
+        <TextInput value="abc" onChange={() => {}}>
+          <TextInput.HelperMessage>ヘルプ</TextInput.HelperMessage>
+        </TextInput>,
+      );
+
+      const input = screen.getByRole('textbox');
+      const describedBy = input.getAttribute('aria-describedby');
+
+      expect(describedBy).not.toBeNull();
+      expect(describedBy?.endsWith('-helper-1')).toBe(true);
+    });
+
+    it('ErrorMessage に id を渡さなくても aria-describedby に採番されること', () => {
+      render(
+        <TextInput value="abc" onChange={() => {}} isError>
+          <TextInput.ErrorMessage>エラー</TextInput.ErrorMessage>
+        </TextInput>,
+      );
+
+      const input = screen.getByRole('textbox');
+      const describedByList = input.getAttribute('aria-describedby')?.split(' ') ?? [];
+
+      expect(describedByList.some((id) => id.endsWith('-error-1'))).toBe(true);
     });
 
     it('isError=false では ErrorMessage が描画されないこと', () => {
