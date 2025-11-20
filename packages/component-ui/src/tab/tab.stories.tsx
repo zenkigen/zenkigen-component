@@ -89,6 +89,7 @@ export const Component: Story = {
             isSelected={selectedTab === 'tab1'}
             onClick={setSelectedTab}
             isDisabled={disabledTab === 'tab1'}
+            icon="list"
           >
             短い
           </Tab.Item>
@@ -97,6 +98,7 @@ export const Component: Story = {
             isSelected={selectedTab === 'tab2'}
             onClick={setSelectedTab}
             isDisabled={disabledTab === 'tab2'}
+            icon="list"
           >
             中程度のタブ
           </Tab.Item>
@@ -105,6 +107,7 @@ export const Component: Story = {
             isSelected={selectedTab === 'tab3'}
             onClick={setSelectedTab}
             isDisabled={disabledTab === 'tab3'}
+            icon="list"
           >
             とても長いタブのテキスト
           </Tab.Item>
