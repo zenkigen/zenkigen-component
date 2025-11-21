@@ -1,5 +1,8 @@
+import { useState } from 'react';
 import { Canvas, Meta, Story, Controls, Source } from '@storybook/blocks';
 import { Markdown } from '@storybook/blocks';
+import { SegmentedControl } from './segmented-control';
+import { Tab } from '../tab';
 import SegmentedControlStories, {
   Component,
   LabelWithIconSmallSize,
@@ -16,24 +19,18 @@ import spec from '../../../../docs/component/segmented-control-specification.md?
 
 # SegmentedControl
 
-<details>
-  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
-  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
-    <p>※ 目次のアンカーリンクは使用できません。</p>
-    <Markdown>{spec}</Markdown>
-  </div>
-</details>
-
 <Canvas />
 
 <Controls of={Component} />
 
-### Code Example
+<Tabs />
 
-- SegmentedControlに必ず`aria-label`を指定すること。
-- SegmentedControl.Itemでlabelを使用しない場合は必ず`aria-label`を指定すること。
+export const CodeExample = `
 
-```tsx
+- SegmentedControlに必ず\`aria-label\`を指定すること。
+- SegmentedControl.Itemでlabelを使用しない場合は必ず\`aria-label\`を指定すること。
+
+\`\`\`tsx
 const [selectedSegment, setSelectedSegment] = useState('short');
 
 <SegmentedControl
@@ -46,18 +43,127 @@ const [selectedSegment, setSelectedSegment] = useState('short');
   <SegmentedControl.Item label="中くらいのラベル" value="medium" icon="table" />
   <SegmentedControl.Item label="ボタンラベル" value="value" icon="table" isDisabled />
   <SegmentedControl.Item label="とても長いラベルのボタン" value="long" icon="documents" />
-</SegmentedControl>;
-```
+</SegmentedControl>
+; \`\`\` `
 
-## Stories
+export const Aaa = `
 
-<Canvas of={LabelWithIconSmallSize} />
-<Canvas of={LabelWithIconMediumSize} />
-<Canvas of={LabelOnlySmallSize} />
-<Canvas of={LabelOnlyMediumSize} />
-<Canvas of={IconOnlySmallSize} />
-<Canvas of={IconOnlyMediumSize} />
+## 概要
 
-## Layout examples
+このテキストはダミーです。このテキストはダミーです。このテキストはダミーです。このテキストはダミーです。このテキストはダミーです。このテキストはダミーです。
 
-<Canvas of={LayoutExamples} />
+## 設計の原則 （Do）
+
+### このテキストはダミーです。このテキストはダミーです。
+
+このテキストはダミーです。このテキストはダミーです。このテキストはダミーです。
+
+### Modalと組み合わせて使用できます
+
+Modal内のコンテンツをTabで整理します。
+
+### 必ずいずれか1つのタブが選択された状態から開始します
+
+ページやコンポーネントが読み込まれた時点では、必ずデフォルトのタブが選択され、対応するコンテンツが表示されている状態にしてください。
+
+## 推奨しないこと（Don't）
+
+### 連続したコンテンツを分割するために使用しない
+
+特定の順序で読む必要がある連続したコンテンツを移動するためにタブを使用しないでください。代わりに、Pagerを使用します。
+![推奨しないこと その1](/storybook/images/tab_01.jpg)
+
+### タブの中にタブは使用しない
+
+ユーザーが今「どのタブの中のどのタブ」を見ているか不明瞭になります。また、同画面に複数の「似たような見た目のタブ」があると、現在地(コンテキスト)を見失いやすいので、タブの中にタブは使用しないでください。代わりに[Segmented controller](/docs/components-segmentedcontrol--docs)を使用します。
+![推奨しないこと その2](/storybook/images/tab_02.jpg)
+
+### グローバルナビゲーションでは使用しない
+
+アクティブのオブジェクトに下線を入れるデザインを採用したい場合タブのデザインが当てはまりますが、タブは表示の切り替えでボタンはページ遷移になり挙動が違います。グローバルナビゲーションはページ遷移になるため、タブは使用しません。
+![推奨しないこと その3](/storybook/images/tab_03.jpg)
+
+`;
+
+export const Tabs = () => {
+  const [active, setActive] = useState('code');
+  const [stories, setStories] = useState('stories');
+
+return (
+
+<>
+
+<Tab layout="equal">
+  <Tab.Item id="code" isSelected={active === 'code'} onClick={setActive}>
+    サンプルコード
+  </Tab.Item>
+  <Tab.Item id="stories" isSelected={active === 'stories'} onClick={setActive}>
+    Stories / レイアウト例
+  </Tab.Item>
+  <Tab.Item id="design" isSelected={active === 'design'} onClick={setActive}>
+    デザインプリンシプル
+  </Tab.Item>
+  <Tab.Item id="specification" isSelected={active === 'specification'} onClick={setActive}>
+    詳細仕様
+  </Tab.Item>
+</Tab>
+
+{active === 'code' && (
+
+<div style={{ padding: '20px' }}>
+  <Markdown>{CodeExample}</Markdown>
+</div>
+)}
+
+{active === 'stories' && (
+
+<div style={{ padding: '40px' }}>
+<SegmentedControl value={stories} size="small" aria-label="" onChange={setStories}>
+  <SegmentedControl.Item label="Stories" value="stories" />
+  <SegmentedControl.Item label="レイアウト例" value="layouts" />
+</SegmentedControl>
+
+{stories === 'stories' && (
+
+<div style={{ padding: '20px 0px' }}>
+  <h2>Stories</h2>
+  <Canvas of={LabelWithIconSmallSize} />
+  <Canvas of={LabelWithIconMediumSize} />
+  <Canvas of={LabelOnlySmallSize} />
+  <Canvas of={LabelOnlyMediumSize} />
+  <Canvas of={IconOnlySmallSize} />
+  <Canvas of={IconOnlyMediumSize} />
+</div>
+)}
+
+{stories === 'layouts' && (
+
+<div style={{ padding: '20px' }}>
+  <h2>レイアウト例</h2>
+  <Canvas of={LayoutExamples} />
+</div>
+
+)}
+
+</div>
+)}
+
+{active === 'design' && (
+
+<div style={{ marginTop: '20px', padding: '20px' }}>
+  <Markdown>{Aaa}</Markdown>
+</div>
+)}
+
+{active === 'specification' && (
+
+<div style={{ padding: '20px' }}>
+  <p>※ 目次のアンカーリンクは使用できません。</p>
+  <Markdown>{spec}</Markdown>
+</div>
+)}
+
+</>
+
+)
+};
