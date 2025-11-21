@@ -4,13 +4,13 @@ import { forwardRef } from 'react';
 
 import { useTextInputCompoundContext } from './text-input-context';
 
-export type TextInputHelperMessageProps = HTMLAttributes<HTMLDivElement>;
+export type TextInputHelperMessageProps = Omit<HTMLAttributes<HTMLDivElement>, 'className'>;
 
 export const TextInputHelperMessage = forwardRef<HTMLDivElement, TextInputHelperMessageProps>(
-  ({ className, ...props }, ref) => {
+  (props, ref) => {
     const { inputProps } = useTextInputCompoundContext('TextInput.HelperMessage');
     const typographyClass = inputProps.size === 'large' ? 'typography-label12regular' : 'typography-label11regular';
-    const helperMessageClassName = clsx(typographyClass, 'text-text02', className);
+    const helperMessageClassName = clsx(typographyClass, 'text-text02');
 
     return <div ref={ref} className={helperMessageClassName} {...props} />;
   },
