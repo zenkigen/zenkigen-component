@@ -16,7 +16,7 @@ export const TextInputErrorMessage = forwardRef<HTMLDivElement, TextInputErrorMe
       return null;
     }
 
-    const errorMessageClassName = clsx(typographyClass, 'bg-slate-300 text-supportError', className);
+    const errorMessageClassName = clsx(typographyClass, 'text-supportError', className);
 
     return <div ref={ref} className={errorMessageClassName} role={role} aria-live={ariaLive} {...props} />;
   },

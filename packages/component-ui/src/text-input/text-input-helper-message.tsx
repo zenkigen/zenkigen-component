@@ -10,7 +10,7 @@ export const TextInputHelperMessage = forwardRef<HTMLDivElement, TextInputHelper
   ({ className, ...props }, ref) => {
     const { inputProps } = useTextInputCompoundContext('TextInput.HelperMessage');
     const typographyClass = inputProps.size === 'large' ? 'typography-label12regular' : 'typography-label11regular';
-    const helperMessageClassName = clsx(typographyClass, 'bg-slate-300 text-text02', className);
+    const helperMessageClassName = clsx(typographyClass, 'text-text02', className);
 
     return <div ref={ref} className={helperMessageClassName} {...props} />;
   },
