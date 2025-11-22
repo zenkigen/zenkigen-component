@@ -1,4 +1,4 @@
-import type { ComponentPropsWithoutRef } from 'react';
+import type { ComponentPropsWithoutRef, ForwardRefExoticComponent, RefAttributes } from 'react';
 import { forwardRef, useState } from 'react';
 
 import { IconButton } from '../icon-button';
@@ -6,7 +6,14 @@ import { TextInput } from '../text-input';
 
 type Props = Omit<ComponentPropsWithoutRef<typeof TextInput>, 'type' | 'onClickClearButton'>;
 
-export const PasswordInput = forwardRef<HTMLInputElement, Props>(({ disabled = false, ...props }: Props, ref) => {
+type PasswordInputComponent = ForwardRefExoticComponent<Props & RefAttributes<HTMLInputElement>> & {
+  HelperTexts: typeof TextInput.HelperTexts;
+  HelperText: typeof TextInput.HelperText;
+  Errors: typeof TextInput.Errors;
+  Error: typeof TextInput.Error;
+};
+
+const PasswordInput = forwardRef<HTMLInputElement, Props>(({ disabled = false, children, ...props }, ref) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
   const handlePasswordVisibilityToggle = () => {
@@ -29,9 +36,18 @@ export const PasswordInput = forwardRef<HTMLInputElement, Props>(({ disabled = f
       ref={ref}
       type={isPasswordVisible === true ? 'text' : 'password'}
       disabled={disabled}
+      after={passwordToggleButton}
       {...props}
-      {...({ after: passwordToggleButton } as Record<string, unknown>)}
-    />
+    >
+      {children}
+    </TextInput>
   );
-});
+}) as PasswordInputComponent;
+
+PasswordInput.HelperTexts = TextInput.HelperTexts;
+PasswordInput.HelperText = TextInput.HelperText;
+PasswordInput.Errors = TextInput.Errors;
+PasswordInput.Error = TextInput.Error;
 PasswordInput.displayName = 'PasswordInput';
+
+export { PasswordInput };
