@@ -102,10 +102,10 @@ export const tokens = {
     },
     "selected": {
       "selectedUi": "#f1f7fd",
-      "selectedUiDark": "#1366b9",
       "selectedUiGray": "#dedfe0",
       "selectedUiOnColor": "#ffffff",
-      "selectedUiBorder": "#177ee5"
+      "selectedUiBorder": "#177ee5",
+      "selectedUiDark": "#1366b9"
     },
     "disabled": {
       "disabled01": "#dedfe0",
