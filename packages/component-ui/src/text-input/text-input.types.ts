@@ -1,6 +1,6 @@
 import type { InputHTMLAttributes, ReactNode } from 'react';
 
-export type TextInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> & {
+export type TextInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'className'> & {
   size?: 'medium' | 'large';
   value: string;
   isError?: boolean;
