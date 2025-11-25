@@ -398,6 +398,11 @@
         "type": "color",
         "description": "Selected List Navigation"
       },
+      "SelectedUiDark": {
+        "value": "#1366B9",
+        "type": "color",
+        "description": "XXX XXX XXX XXX XXX XXX"
+      },
       "SelectedUiGray": {
         "value": "#DEDFE0",
         "type": "color",
