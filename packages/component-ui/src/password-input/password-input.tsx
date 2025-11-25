@@ -1,16 +1,28 @@
-import type { ComponentPropsWithoutRef } from 'react';
+import type { ComponentPropsWithoutRef, ForwardRefExoticComponent, RefAttributes } from 'react';
 import { forwardRef, useState } from 'react';
 
 import { IconButton } from '../icon-button';
-import { TextInput } from '../text-input';
+import type { TextInput } from '../text-input/text-input';
+import { InternalTextInput } from '../text-input/text-input';
+import { TextInputErrorMessage } from '../text-input/text-input-error-message';
+import { TextInputHelperMessage } from '../text-input/text-input-helper-message';
 
-type Props = Omit<ComponentPropsWithoutRef<typeof TextInput>, 'type' | 'onClickClearButton'>;
+type Props = Omit<ComponentPropsWithoutRef<typeof TextInput>, 'type' | 'onClickClearButton' | 'className'>;
 
-export const PasswordInput = forwardRef<HTMLInputElement, Props>(({ disabled = false, ...props }: Props, ref) => {
+type PasswordInputComponent = ForwardRefExoticComponent<Props & RefAttributes<HTMLInputElement>> & {
+  HelperMessage: typeof TextInputHelperMessage;
+  ErrorMessage: typeof TextInputErrorMessage;
+};
+
+const PasswordInputBase = forwardRef<HTMLInputElement, Props>(function PasswordInput(
+  { disabled = false, children, ...props }: Props,
+  ref,
+) {
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
+  const { className: _className, ...textInputProps } = props as Props & { className?: string };
 
   const handlePasswordVisibilityToggle = () => {
-    setIsPasswordVisible(!isPasswordVisible);
+    setIsPasswordVisible((prev) => !prev);
   };
 
   const passwordToggleButton = (
@@ -25,13 +37,22 @@ export const PasswordInput = forwardRef<HTMLInputElement, Props>(({ disabled = f
   );
 
   return (
-    <TextInput
+    <InternalTextInput
       ref={ref}
       type={isPasswordVisible === true ? 'text' : 'password'}
       disabled={disabled}
-      {...props}
-      {...({ after: passwordToggleButton } as Record<string, unknown>)}
-    />
+      after={passwordToggleButton}
+      {...textInputProps}
+    >
+      {children}
+    </InternalTextInput>
   );
 });
-PasswordInput.displayName = 'PasswordInput';
+
+const PasswordInput = Object.assign(PasswordInputBase, {
+  HelperMessage: TextInputHelperMessage,
+  ErrorMessage: TextInputErrorMessage,
+  displayName: 'PasswordInput',
+}) satisfies PasswordInputComponent;
+
+export { PasswordInput };
