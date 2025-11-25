@@ -150,6 +150,13 @@ describe('TextInput', () => {
       const handleClear = vi.fn();
       render(<TextInput value="abc" disabled onChange={() => {}} onClickClearButton={handleClear} />);
 
+      const clearButton = findClearButton();
+      expect(clearButton).toBeUndefined();
+
+      if (clearButton) {
+        fireEvent.click(clearButton);
+      }
+
       expect(handleClear).not.toHaveBeenCalled();
     });
   });
