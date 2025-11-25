@@ -7,7 +7,7 @@ import { useTextInputCompoundContext } from './text-input-context';
 export type TextInputErrorMessageProps = Omit<HTMLAttributes<HTMLDivElement>, 'className'>;
 
 export const TextInputErrorMessage = forwardRef<HTMLDivElement, TextInputErrorMessageProps>(
-  ({ role = 'alert', 'aria-live': ariaLive = 'assertive', ...props }, ref) => {
+  ({ 'aria-live': ariaLive = 'assertive', ...props }, ref) => {
     const { inputProps } = useTextInputCompoundContext('TextInput.ErrorMessage');
     const typographyClass = inputProps.size === 'large' ? 'typography-label12regular' : 'typography-label11regular';
     const shouldRender = inputProps.isError === true;
@@ -18,7 +18,7 @@ export const TextInputErrorMessage = forwardRef<HTMLDivElement, TextInputErrorMe
 
     const errorMessageClassName = clsx(typographyClass, 'text-supportError');
 
-    return <div ref={ref} className={errorMessageClassName} role={role} aria-live={ariaLive} {...props} />;
+    return <div ref={ref} className={errorMessageClassName} aria-live={ariaLive} {...props} />;
   },
 );
 TextInputErrorMessage.displayName = 'TextInput.ErrorMessage';

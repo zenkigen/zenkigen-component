@@ -283,7 +283,6 @@ describe('TextInput', () => {
 
       const error = screen.getByText('エラー');
       expect(error).toBeInTheDocument();
-      expect(error).toHaveAttribute('role', 'alert');
       expect(error).toHaveAttribute('aria-live', 'assertive');
     });
 
