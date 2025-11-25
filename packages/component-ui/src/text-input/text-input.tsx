@@ -3,19 +3,26 @@ import type { ForwardRefExoticComponent, ReactElement, RefAttributes } from 'rea
 import { Children, cloneElement, forwardRef, isValidElement, useId, useMemo } from 'react';
 
 import { IconButton } from '../icon-button';
-import type { TextInputInternalProps } from './text-input.types';
+import type { TextInputInternalProps, TextInputProps } from './text-input.types';
 import { TextInputCompoundContext } from './text-input-context';
 import type { TextInputErrorMessageProps } from './text-input-error-message';
 import { TextInputErrorMessage } from './text-input-error-message';
 import type { TextInputHelperMessageProps } from './text-input-helper-message';
 import { TextInputHelperMessage } from './text-input-helper-message';
 
-type TextInputComponent = ForwardRefExoticComponent<TextInputInternalProps & RefAttributes<HTMLInputElement>> & {
+type TextInputComponent = ForwardRefExoticComponent<TextInputProps & RefAttributes<HTMLInputElement>> & {
   HelperMessage: typeof TextInputHelperMessage;
   ErrorMessage: typeof TextInputErrorMessage;
 };
 
-const TextInput = forwardRef<HTMLInputElement, TextInputInternalProps>(
+type TextInputInternalComponent = ForwardRefExoticComponent<
+  TextInputInternalProps & RefAttributes<HTMLInputElement>
+> & {
+  HelperMessage: typeof TextInputHelperMessage;
+  ErrorMessage: typeof TextInputErrorMessage;
+};
+
+const TextInputBase = forwardRef<HTMLInputElement, TextInputInternalProps>(
   (
     {
       size = 'medium',
@@ -148,10 +155,13 @@ const TextInput = forwardRef<HTMLInputElement, TextInputInternalProps>(
       </TextInputCompoundContext.Provider>
     );
   },
-) as TextInputComponent;
+) as TextInputInternalComponent;
 
-TextInput.HelperMessage = TextInputHelperMessage;
-TextInput.ErrorMessage = TextInputErrorMessage;
-TextInput.displayName = 'TextInput';
+TextInputBase.HelperMessage = TextInputHelperMessage;
+TextInputBase.ErrorMessage = TextInputErrorMessage;
+TextInputBase.displayName = 'TextInput';
 
-export { TextInput };
+const TextInput = TextInputBase as TextInputComponent;
+const InternalTextInput = TextInputBase;
+
+export { InternalTextInput, TextInput };
