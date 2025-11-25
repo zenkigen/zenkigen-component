@@ -27,14 +27,21 @@ import spec from '../../../../docs/component/password-input-specification.md?raw
 import { PasswordInput } from '@zenkigen-inc/component-ui';
 import { useState } from 'react';
 
-const [password, setPassword] = useState('');
+const Example = () => {
+  const [password, setPassword] = useState('');
+  const isError = password.length > 0 && password.length < 8;
 
-return (
-  <PasswordInput
-    value={password}
-    onChange={(e) => setPassword(e.target.value)}
-    placeholder="パスワードを入力してください"
-    size="medium"
-  />
-);
+  return (
+    <PasswordInput
+      value={password}
+      isError={isError}
+      onChange={(e) => setPassword(e.target.value)}
+      placeholder="パスワードを入力してください"
+      size="medium"
+    >
+      <PasswordInput.HelperMessage>8文字以上で入力してください</PasswordInput.HelperMessage>
+      <PasswordInput.ErrorMessage>入力内容にエラーがあります</PasswordInput.ErrorMessage>
+    </PasswordInput>
+  );
+};
 ```

@@ -76,4 +76,40 @@ describe('PasswordInput', () => {
     expect(input).toHaveClass('typography-label16regular'); // large sizeのクラス
     expect(input).toHaveClass('text-supportError'); // isErrorのクラス
   });
+
+  it('HelperMessage を指定すると aria-describedby に ID が付与されること', () => {
+    render(
+      <PasswordInput value="password123" onChange={() => {}}>
+        <PasswordInput.HelperMessage id="password-helper">パスワードは8文字以上</PasswordInput.HelperMessage>
+      </PasswordInput>,
+    );
+
+    const input = screen.getByDisplayValue('password123');
+    expect(input).toHaveAttribute('aria-describedby', 'password-helper');
+  });
+
+  it('HelperMessage と ErrorMessage を指定すると補助文とエラー文を表示できること', () => {
+    render(
+      <PasswordInput value="password123" onChange={() => {}} isError>
+        <PasswordInput.HelperMessage id="password-helper">パスワードは8文字以上</PasswordInput.HelperMessage>
+        <PasswordInput.ErrorMessage id="password-error">入力内容にエラーがあります</PasswordInput.ErrorMessage>
+      </PasswordInput>,
+    );
+
+    const input = screen.getByDisplayValue('password123');
+    expect(input).toHaveAttribute('aria-describedby', 'password-helper password-error');
+    expect(input).toHaveAttribute('aria-invalid', 'true');
+    expect(screen.getByText('パスワードは8文字以上')).toBeInTheDocument();
+    expect(screen.getByText('入力内容にエラーがあります')).toBeInTheDocument();
+  });
+
+  it('isError=false の場合は ErrorMessage が描画されないこと', () => {
+    render(
+      <PasswordInput value="password123" onChange={() => {}}>
+        <PasswordInput.ErrorMessage>入力内容にエラーがあります</PasswordInput.ErrorMessage>
+      </PasswordInput>,
+    );
+
+    expect(screen.queryByText('入力内容にエラーがあります')).toBeNull();
+  });
 });
