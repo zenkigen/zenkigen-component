@@ -212,6 +212,19 @@ describe('TextInput', () => {
 
       expect(input).toHaveAttribute('maxlength', '10');
     });
+
+    it('className が注入されないこと', () => {
+      const customClassName = 'custom-class';
+
+      // @ts-expect-error className は受け付けない想定
+      render(<TextInput value="" onChange={() => {}} className={customClassName} data-testid="text-input" />);
+
+      const input = screen.getByTestId('text-input');
+      const wrapper = input.parentElement as HTMLElement;
+
+      expect(input.className).not.toContain(customClassName);
+      expect(wrapper.className).not.toContain(customClassName);
+    });
   });
 
   describe('HelperMessage / ErrorMessage', () => {
