@@ -1,6 +1,7 @@
 import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
-import type { ChangeEvent } from 'react';
+import clsx from 'clsx';
+import type { ChangeEvent, ReactNode } from 'react';
 import { useState } from 'react';
 
 import { TextArea } from '.';
@@ -33,7 +34,6 @@ type Story = StoryObj<typeof TextArea>;
 export const Component: Story = {
   args: {
     size: 'medium',
-    value: '',
     placeholder: 'placeholder',
     height: 'auto',
     autoHeight: false,
@@ -48,8 +48,8 @@ export const Component: Story = {
     <div className="flex items-center gap-4">
       <div style={{ flex: 1 }}>
         <TextArea {...args}>
-          <TextArea.HelperMessage>補足テキスト</TextArea.HelperMessage>
-          <TextArea.ErrorMessage>エラーメッセージ</TextArea.ErrorMessage>
+          <TextArea.HelperMessage>○文字以内で入力してください</TextArea.HelperMessage>
+          <TextArea.ErrorMessage>入力内容にエラーがあります</TextArea.ErrorMessage>
         </TextArea>
       </div>
       <div style={{ flex: 1 }}></div>
@@ -57,12 +57,24 @@ export const Component: Story = {
   ),
 };
 
+type ErrorTextProps = {
+  children?: ReactNode;
+  isError?: boolean;
+};
+
+const ErrorText = ({ isError = false, ...props }: ErrorTextProps) => {
+  const classes = clsx('typography-label11regular mt-1 px-2', {
+    'text-text02': !isError,
+    'text-supportError': isError,
+  });
+
+  return <div className={classes}>{props.children}</div>;
+};
+
 export const Base: Story = {
-  args: {
-    value: '',
-  },
+  args: {},
   render: function MyFunc({ ...args }) {
-    const [value, setValue] = useState<string>(args.value ?? '');
+    const [value, setValue] = useState<string>(args.value);
     const [value2, setValue2] = useState<string>('入力した文字列。');
 
     return (
@@ -78,9 +90,8 @@ export const Base: Story = {
                 action('onChange')(e);
                 setValue(e.target.value);
               }}
-            >
-              <TextArea.HelperMessage>補足テキスト</TextArea.HelperMessage>
-            </TextArea>
+            />
+            <ErrorText></ErrorText>
           </div>
           <div>
             <TextArea
@@ -93,9 +104,8 @@ export const Base: Story = {
                 action('onChange')(e);
                 setValue(e.target.value);
               }}
-            >
-              <TextArea.HelperMessage>リサイズ可能</TextArea.HelperMessage>
-            </TextArea>
+            />
+            <ErrorText>リサイズ可能</ErrorText>
           </div>
           <div>
             <TextArea
@@ -108,9 +118,8 @@ export const Base: Story = {
                 action('onChange')(e);
                 setValue(e.target.value);
               }}
-            >
-              <TextArea.ErrorMessage>未入力 ＋ エラー</TextArea.ErrorMessage>
-            </TextArea>
+            />
+            <ErrorText isError>未入力 ＋ エラー</ErrorText>
           </div>
           <div>
             <TextArea
@@ -123,9 +132,8 @@ export const Base: Story = {
                 action('onChange')(e);
                 setValue2(e.target.value);
               }}
-            >
-              <TextArea.ErrorMessage>入力済み ＋ エラー</TextArea.ErrorMessage>
-            </TextArea>
+            />
+            <ErrorText isError>入力済み ＋ エラー</ErrorText>
           </div>
           <div>
             <TextArea
@@ -138,9 +146,8 @@ export const Base: Story = {
                 setValue(e.target.value);
               }}
               disabled
-            >
-              <TextArea.HelperMessage>未入力 ＋ disabled</TextArea.HelperMessage>
-            </TextArea>
+            />
+            <ErrorText>未入力 ＋ disabled</ErrorText>
           </div>
           <div>
             <TextArea
@@ -154,9 +161,8 @@ export const Base: Story = {
                 action('onChange')(e);
                 setValue2(e.target.value);
               }}
-            >
-              <TextArea.ErrorMessage>入力済み ＋ disabled</TextArea.ErrorMessage>
-            </TextArea>
+            />
+            <ErrorText>入力済み ＋ disabled</ErrorText>
           </div>
         </div>
         <div style={{ width: 400 }} className="flex flex-col gap-12">
@@ -170,9 +176,8 @@ export const Base: Story = {
                 action('onChange')(e);
                 setValue(e.target.value);
               }}
-            >
-              <TextArea.HelperMessage>補足テキスト</TextArea.HelperMessage>
-            </TextArea>
+            />
+            <ErrorText></ErrorText>
           </div>
           <div>
             <TextArea
@@ -185,9 +190,8 @@ export const Base: Story = {
                 action('onChange')(e);
                 setValue(e.target.value);
               }}
-            >
-              <TextArea.HelperMessage>リサイズ可能</TextArea.HelperMessage>
-            </TextArea>
+            />
+            <ErrorText>リサイズ可能</ErrorText>
           </div>
           <div>
             <TextArea
@@ -200,9 +204,8 @@ export const Base: Story = {
                 action('onChange')(e);
                 setValue(e.target.value);
               }}
-            >
-              <TextArea.ErrorMessage>未入力 ＋ エラー</TextArea.ErrorMessage>
-            </TextArea>
+            />
+            <ErrorText isError>未入力 ＋ エラー</ErrorText>
           </div>
           <div>
             <TextArea
@@ -215,9 +218,8 @@ export const Base: Story = {
                 action('onChange')(e);
                 setValue2(e.target.value);
               }}
-            >
-              <TextArea.ErrorMessage>入力済み ＋ エラー</TextArea.ErrorMessage>
-            </TextArea>
+            />
+            <ErrorText isError>入力済み ＋ エラー</ErrorText>
           </div>
           <div>
             <TextArea
@@ -230,9 +232,8 @@ export const Base: Story = {
                 setValue(e.target.value);
               }}
               disabled
-            >
-              <TextArea.HelperMessage>未入力 ＋ disabled</TextArea.HelperMessage>
-            </TextArea>
+            />
+            <ErrorText>未入力 ＋ disabled</ErrorText>
           </div>
           <div>
             <TextArea
@@ -245,9 +246,8 @@ export const Base: Story = {
                 action('onChange')(e);
                 setValue2(e.target.value);
               }}
-            >
-              <TextArea.HelperMessage>入力済み ＋ disabled</TextArea.HelperMessage>
-            </TextArea>
+            />
+            <ErrorText>入力済み ＋ disabled</ErrorText>
           </div>
         </div>
       </div>
@@ -258,7 +258,6 @@ export const Base: Story = {
 export const AutoHeight: Story = {
   args: {
     size: 'large',
-    value: '',
     autoHeight: true,
     placeholder: '入力してください',
     height: '',
@@ -267,7 +266,7 @@ export const AutoHeight: Story = {
     disabled: false,
   },
   render: function MyFunc({ ...args }) {
-    const [value, setValue] = useState<string>(args.value ?? '');
+    const [value, setValue] = useState<string>(args.value);
 
     return (
       <div style={{ width: 400 }} className="flex flex-col">
@@ -278,9 +277,245 @@ export const AutoHeight: Story = {
             action('onChange')(e);
             setValue(e.target.value);
           }}
-        >
-          <TextArea.HelperMessage>入力量に応じて高さが変わります</TextArea.HelperMessage>
-        </TextArea>
+        />
+      </div>
+    );
+  },
+};
+
+export const Composition: Story = {
+  args: {
+    value: '',
+  },
+  render: function MyFunc({ ...args }) {
+    const [value, setValue] = useState<string>(args.value ?? '');
+    const [value2, setValue2] = useState<string>(
+      '入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列',
+    );
+
+    const classNameLine = 'flex w-[300px] flex-col gap-12';
+    const classNameCell = 'h-[150px]';
+
+    return (
+      <div className="flex gap-10">
+        <div className={classNameLine}>
+          <div className={classNameCell}>
+            <TextArea
+              value={value}
+              placeholder="入力してください"
+              size="medium"
+              height={120}
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+            >
+              <TextArea.HelperMessage>○文字以内で入力してください</TextArea.HelperMessage>
+            </TextArea>
+          </div>
+          <div className={classNameCell}>
+            <TextArea
+              value={value}
+              placeholder="入力してください"
+              size="medium"
+              height={120}
+              isResizable
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+            >
+              <TextArea.HelperMessage>○文字以内で入力してください</TextArea.HelperMessage>
+            </TextArea>
+          </div>
+          <div className={classNameCell}>
+            <TextArea
+              value={value}
+              placeholder="入力してください"
+              size="medium"
+              height={120}
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+            >
+              <TextArea.HelperMessage>
+                ○文字以内で入力してください ○文字以内で入力してください ○文字以内で入力してください
+              </TextArea.HelperMessage>
+              <TextArea.HelperMessage>○文字以内で入力してください</TextArea.HelperMessage>
+            </TextArea>
+          </div>
+          <div className={classNameCell}>
+            <TextArea
+              value={value}
+              placeholder="入力してください"
+              size="medium"
+              height={120}
+              isError
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+            >
+              <TextArea.HelperMessage>○文字以内で入力してください</TextArea.HelperMessage>
+              <TextArea.ErrorMessage>入力内容にエラーがあります</TextArea.ErrorMessage>
+            </TextArea>
+          </div>
+          <div className={classNameCell}>
+            <TextArea
+              value={value2}
+              placeholder="入力してください"
+              size="medium"
+              height={120}
+              isError
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue2(e.target.value);
+              }}
+            >
+              <TextArea.ErrorMessage>
+                入力内容にエラーがあります 入力内容にエラーがあります 入力内容にエラーがあります
+              </TextArea.ErrorMessage>
+              <TextArea.ErrorMessage>入力内容にエラーがあります</TextArea.ErrorMessage>
+            </TextArea>
+          </div>
+          <div className={classNameCell}>
+            <TextArea
+              value={value}
+              placeholder="入力してください"
+              size="medium"
+              height={120}
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+              disabled
+            ></TextArea>
+          </div>
+          <div className={classNameCell}>
+            <TextArea
+              value={value2}
+              placeholder="入力してください"
+              size="medium"
+              height={120}
+              isError
+              disabled
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue2(e.target.value);
+              }}
+            ></TextArea>
+          </div>
+        </div>
+        <div className={classNameLine}>
+          <div className={classNameCell}>
+            <TextArea
+              value={value}
+              placeholder="入力してください"
+              size="large"
+              height={120}
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+            >
+              <TextArea.HelperMessage>○文字以内で入力してください</TextArea.HelperMessage>
+            </TextArea>
+          </div>
+          <div className={classNameCell}>
+            <TextArea
+              value={value}
+              placeholder="入力してください"
+              size="large"
+              height={120}
+              isResizable
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+            >
+              <TextArea.HelperMessage>○文字以内で入力してください</TextArea.HelperMessage>
+            </TextArea>
+          </div>
+          <div className={classNameCell}>
+            <TextArea
+              value={value}
+              placeholder="入力してください"
+              size="large"
+              height={120}
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+            >
+              <TextArea.HelperMessage>
+                ○文字以内で入力してください ○文字以内で入力してください ○文字以内で入力してください
+              </TextArea.HelperMessage>
+              <TextArea.HelperMessage>○文字以内で入力してください</TextArea.HelperMessage>
+            </TextArea>
+          </div>
+          <div className={classNameCell}>
+            <TextArea
+              value={value}
+              placeholder="入力してください"
+              size="large"
+              height={120}
+              isError
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+            >
+              <TextArea.HelperMessage>○文字以内で入力してください</TextArea.HelperMessage>
+              <TextArea.ErrorMessage>入力内容にエラーがあります</TextArea.ErrorMessage>
+            </TextArea>
+          </div>
+          <div className={classNameCell}>
+            <TextArea
+              value={value2}
+              placeholder="入力してください"
+              size="large"
+              height={120}
+              isError
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue2(e.target.value);
+              }}
+            >
+              <TextArea.ErrorMessage>
+                入力内容にエラーがあります 入力内容にエラーがあります 入力内容にエラーがあります
+              </TextArea.ErrorMessage>
+              <TextArea.ErrorMessage>入力内容にエラーがあります</TextArea.ErrorMessage>
+            </TextArea>
+          </div>
+          <div className={classNameCell}>
+            <TextArea
+              value={value}
+              placeholder="入力してください"
+              size="large"
+              height={120}
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+              disabled
+            ></TextArea>
+          </div>
+          <div className={classNameCell}>
+            <TextArea
+              value={value2}
+              placeholder="入力してください"
+              size="large"
+              height={120}
+              isError
+              disabled
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue2(e.target.value);
+              }}
+            ></TextArea>
+          </div>
+        </div>
       </div>
     );
   },
