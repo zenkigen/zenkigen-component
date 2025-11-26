@@ -214,6 +214,15 @@ const MyComponent = () => {
 />
 ```
 
+### ヘルパー/エラーメッセージ付き
+
+```typescript
+<TextArea value={value} onChange={(e) => setValue(e.target.value)} isError>
+  <TextArea.HelperMessage>入力時の補足説明</TextArea.HelperMessage>
+  <TextArea.ErrorMessage>バリデーションエラー</TextArea.ErrorMessage>
+</TextArea>
+```
+
 ### 無効状態
 
 ```typescript
@@ -231,6 +240,8 @@ const MyComponent = () => {
 - 標準的な`<textarea>`要素のすべてのアクセシビリティ機能を継承
 - `disabled`属性が適切に設定される
 - フォーカス管理が適切に実装されている
+- `TextArea.HelperMessage` / `TextArea.ErrorMessage` を子要素に配置すると、自動で`aria-describedby`が連結される
+- `isError`がtrueのとき、`aria-invalid=true`が付与され、`TextArea.ErrorMessage`は`aria-live="assertive"`で通知される
 
 ## 技術的な詳細
 
@@ -262,6 +273,7 @@ const MyComponent = () => {
 3. `maxHeight`は`autoHeight: true`の場合のみ有効です
 4. エラー状態は無効状態よりも優先度が低く、無効時はエラースタイルが適用されません
 5. コンポーネントは`div`要素でラップされており、`flex`クラスが適用されています
+6. `TextArea.HelperMessage` / `TextArea.ErrorMessage` は TextArea の子要素としてのみ使用してください。単独ではコンテキストエラーになります。
 
 ## スタイルのカスタマイズ
 
@@ -269,6 +281,7 @@ const MyComponent = () => {
 
 ## 更新履歴
 
-| 日付       | 内容     | 担当者 |
-| ---------- | -------- | ------ |
-| 2025-08-18 | 新規作成 | -      |
+| 日付                 | 内容                                                          | 担当者 |
+| -------------------- | ------------------------------------------------------------- | ------ |
+| 2025-11-26 10:36 JST | ヘルパー/エラーメッセージを追加し、アクセシビリティ仕様を更新 | -      |
+| 2025-08-18           | 新規作成                                                      | -      |
