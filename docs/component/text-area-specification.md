@@ -70,13 +70,13 @@ const MyComponent = () => {
 
 ### オプションプロパティ
 
-| プロパティ    | 型                        | デフォルト値 | 説明                     |
-| ------------- | ------------------------- | ------------ | ------------------------ |
-| `size`        | `'medium' \| 'large'`     | `'medium'`   | コンポーネントのサイズ   |
-| `height`      | `CSSProperties['height']` | `undefined`  | 高さの指定               |
-| `isError`     | `boolean`                 | `false`      | エラー状態かどうか       |
-| `disabled`    | `boolean`                 | `false`      | 無効状態かどうか         |
-| `placeholder` | `string`                  | `undefined`  | プレースホルダーテキスト |
+| プロパティ    | 型                        | デフォルト値 | 説明                                                       |
+| ------------- | ------------------------- | ------------ | ---------------------------------------------------------- |
+| `size`        | `'medium' \| 'large'`     | `'medium'`   | コンポーネントのサイズ                                     |
+| `height`      | `CSSProperties['height']` | `undefined`  | 高さの指定                                                 |
+| `isError`     | `boolean`                 | `false`      | エラー状態かどうか                                         |
+| `disabled`    | `boolean`                 | `false`      | 無効状態かどうか                                           |
+| `placeholder` | `string`                  | `undefined`  | プレースホルダーテキスト                                   |
 | `className`   | `string`                  | `undefined`  | 外部クラスの付与（後方互換目的の非推奨 API。将来削除予定） |
 
 ### 排他的プロパティグループ
