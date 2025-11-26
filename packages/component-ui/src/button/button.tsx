@@ -19,6 +19,13 @@ export type PolymorphicPropsWithoutRef<T extends ElementAs, P extends object> = 
   ComponentPropsWithoutRef<T> &
   AsProp<T>;
 
+type DeprecatedClassNameProp<T extends ElementAs> = {
+  /**
+   * @deprecated 外部から className を渡してスタイルを上書きすることは非推奨です。props やテーマトークンでの調整を検討してください。
+   */
+  className?: ComponentPropsWithoutRef<T>['className'];
+};
+
 // 共通のプロパティ型
 type BaseProps<T extends ElementAs> = PolymorphicPropsWithoutRef<
   T,
@@ -32,7 +39,8 @@ type BaseProps<T extends ElementAs> = PolymorphicPropsWithoutRef<
     borderRadius?: CSSProperties['borderRadius'];
     justifyContent?: JustifyContent;
   }
->;
+> &
+  DeprecatedClassNameProp<T>;
 
 // 公開API用の型（outlineDangerは含まない）
 type PublicProps<T extends ElementAs> = BaseProps<T> & {
