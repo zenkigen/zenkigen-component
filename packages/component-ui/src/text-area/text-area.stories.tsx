@@ -47,7 +47,10 @@ export const Component: Story = {
   render: (args) => (
     <div className="flex items-center gap-4">
       <div style={{ flex: 1 }}>
-        <TextArea {...args} />
+        <TextArea {...args}>
+          <TextArea.HelperMessage>○文字以内で入力してください</TextArea.HelperMessage>
+          <TextArea.ErrorMessage>入力内容にエラーがあります</TextArea.ErrorMessage>
+        </TextArea>
       </div>
       <div style={{ flex: 1 }}></div>
     </div>
@@ -275,6 +278,244 @@ export const AutoHeight: Story = {
             setValue(e.target.value);
           }}
         />
+      </div>
+    );
+  },
+};
+
+export const Composition: Story = {
+  args: {
+    value: '',
+  },
+  render: function MyFunc({ ...args }) {
+    const [value, setValue] = useState<string>(args.value ?? '');
+    const [value2, setValue2] = useState<string>(
+      '入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列入力文字列',
+    );
+
+    const classNameLine = 'flex w-[300px] flex-col gap-12';
+    const classNameCell = 'h-[150px]';
+
+    return (
+      <div className="flex gap-10">
+        <div className={classNameLine}>
+          <div className={classNameCell}>
+            <TextArea
+              value={value}
+              placeholder="入力してください"
+              size="medium"
+              height={120}
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+            >
+              <TextArea.HelperMessage>○文字以内で入力してください</TextArea.HelperMessage>
+            </TextArea>
+          </div>
+          <div className={classNameCell}>
+            <TextArea
+              value={value}
+              placeholder="入力してください"
+              size="medium"
+              height={120}
+              isResizable
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+            >
+              <TextArea.HelperMessage>○文字以内で入力してください</TextArea.HelperMessage>
+            </TextArea>
+          </div>
+          <div className={classNameCell}>
+            <TextArea
+              value={value}
+              placeholder="入力してください"
+              size="medium"
+              height={120}
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+            >
+              <TextArea.HelperMessage>
+                ○文字以内で入力してください ○文字以内で入力してください ○文字以内で入力してください
+              </TextArea.HelperMessage>
+              <TextArea.HelperMessage>○文字以内で入力してください</TextArea.HelperMessage>
+            </TextArea>
+          </div>
+          <div className={classNameCell}>
+            <TextArea
+              value={value}
+              placeholder="入力してください"
+              size="medium"
+              height={120}
+              isError
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+            >
+              <TextArea.HelperMessage>○文字以内で入力してください</TextArea.HelperMessage>
+              <TextArea.ErrorMessage>入力内容にエラーがあります</TextArea.ErrorMessage>
+            </TextArea>
+          </div>
+          <div className={classNameCell}>
+            <TextArea
+              value={value2}
+              placeholder="入力してください"
+              size="medium"
+              height={120}
+              isError
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue2(e.target.value);
+              }}
+            >
+              <TextArea.ErrorMessage>
+                入力内容にエラーがあります 入力内容にエラーがあります 入力内容にエラーがあります
+              </TextArea.ErrorMessage>
+              <TextArea.ErrorMessage>入力内容にエラーがあります</TextArea.ErrorMessage>
+            </TextArea>
+          </div>
+          <div className={classNameCell}>
+            <TextArea
+              value={value}
+              placeholder="入力してください"
+              size="medium"
+              height={120}
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+              disabled
+            ></TextArea>
+          </div>
+          <div className={classNameCell}>
+            <TextArea
+              value={value2}
+              placeholder="入力してください"
+              size="medium"
+              height={120}
+              isError
+              disabled
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue2(e.target.value);
+              }}
+            ></TextArea>
+          </div>
+        </div>
+        <div className={classNameLine}>
+          <div className={classNameCell}>
+            <TextArea
+              value={value}
+              placeholder="入力してください"
+              size="large"
+              height={120}
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+            >
+              <TextArea.HelperMessage>○文字以内で入力してください</TextArea.HelperMessage>
+            </TextArea>
+          </div>
+          <div className={classNameCell}>
+            <TextArea
+              value={value}
+              placeholder="入力してください"
+              size="large"
+              height={120}
+              isResizable
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+            >
+              <TextArea.HelperMessage>○文字以内で入力してください</TextArea.HelperMessage>
+            </TextArea>
+          </div>
+          <div className={classNameCell}>
+            <TextArea
+              value={value}
+              placeholder="入力してください"
+              size="large"
+              height={120}
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+            >
+              <TextArea.HelperMessage>
+                ○文字以内で入力してください ○文字以内で入力してください ○文字以内で入力してください
+              </TextArea.HelperMessage>
+              <TextArea.HelperMessage>○文字以内で入力してください</TextArea.HelperMessage>
+            </TextArea>
+          </div>
+          <div className={classNameCell}>
+            <TextArea
+              value={value}
+              placeholder="入力してください"
+              size="large"
+              height={120}
+              isError
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+            >
+              <TextArea.HelperMessage>○文字以内で入力してください</TextArea.HelperMessage>
+              <TextArea.ErrorMessage>入力内容にエラーがあります</TextArea.ErrorMessage>
+            </TextArea>
+          </div>
+          <div className={classNameCell}>
+            <TextArea
+              value={value2}
+              placeholder="入力してください"
+              size="large"
+              height={120}
+              isError
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue2(e.target.value);
+              }}
+            >
+              <TextArea.ErrorMessage>
+                入力内容にエラーがあります 入力内容にエラーがあります 入力内容にエラーがあります
+              </TextArea.ErrorMessage>
+              <TextArea.ErrorMessage>入力内容にエラーがあります</TextArea.ErrorMessage>
+            </TextArea>
+          </div>
+          <div className={classNameCell}>
+            <TextArea
+              value={value}
+              placeholder="入力してください"
+              size="large"
+              height={120}
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+              disabled
+            ></TextArea>
+          </div>
+          <div className={classNameCell}>
+            <TextArea
+              value={value2}
+              placeholder="入力してください"
+              size="large"
+              height={120}
+              isError
+              disabled
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue2(e.target.value);
+              }}
+            ></TextArea>
+          </div>
+        </div>
       </div>
     );
   },
