@@ -26,7 +26,7 @@ export const tokens = {
       "text01": "#1f2121",
       "text02": "#5c6366",
       "text03": "#838789",
-      "textPlaceholder": "#cacccd",
+      "textPlaceholder": "#a4a5a6",
       "textOnColor": "#ffffff",
       "textBlack": "#000000"
     },
@@ -87,7 +87,8 @@ export const tokens = {
       "hoverInput": "#6f7476",
       "hoverLink01": "#1366b9",
       "hoverLink02": "#6f7476",
-      "hoverGray": "#454a4d"
+      "hoverGray": "#454a4d",
+      "hoverUiError": "#fceff3"
     },
     "active": {
       "active01": "#0e4b87",
@@ -98,7 +99,8 @@ export const tokens = {
       "activeDanger": "#821732",
       "activeInput": "#1366b9",
       "activeLink01": "#0e4b87",
-      "activeLink02": "#1f2121"
+      "activeLink02": "#1f2121",
+      "activeUiError": "#f9e0e6"
     },
     "selected": {
       "selectedUi": "#f1f7fd",
@@ -117,7 +119,7 @@ export const tokens = {
       "disabledOn": "#d9eafb"
     },
     "support": {
-      "supportError": "#d92b57",
+      "supportError": "#c6244d",
       "supportErrorLight": "#f4bfcd",
       "supportSuccess": "#2dc87d",
       "supportSuccessLight": "#ccf4e1",
@@ -125,7 +127,7 @@ export const tokens = {
       "supportInfoLight": "#b9d8f7",
       "supportWarning": "#fcd200",
       "supportWarningLight": "#fff4ba",
-      "supportDanger": "#d92b57",
+      "supportDanger": "#c6244d",
       "supportDangerLight": "#f4bfcd"
     }
   },
