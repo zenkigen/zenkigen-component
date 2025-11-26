@@ -1,7 +1,6 @@
 import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
-import clsx from 'clsx';
-import type { ChangeEvent, ReactNode } from 'react';
+import type { ChangeEvent } from 'react';
 import { useState } from 'react';
 
 import { TextArea } from '.';
@@ -34,6 +33,7 @@ type Story = StoryObj<typeof TextArea>;
 export const Component: Story = {
   args: {
     size: 'medium',
+    value: '',
     placeholder: 'placeholder',
     height: 'auto',
     autoHeight: false,
@@ -47,31 +47,22 @@ export const Component: Story = {
   render: (args) => (
     <div className="flex items-center gap-4">
       <div style={{ flex: 1 }}>
-        <TextArea {...args} />
+        <TextArea {...args}>
+          <TextArea.HelperMessage>補足テキスト</TextArea.HelperMessage>
+          <TextArea.ErrorMessage>エラーメッセージ</TextArea.ErrorMessage>
+        </TextArea>
       </div>
       <div style={{ flex: 1 }}></div>
     </div>
   ),
 };
 
-type ErrorTextProps = {
-  children?: ReactNode;
-  isError?: boolean;
-};
-
-const ErrorText = ({ isError = false, ...props }: ErrorTextProps) => {
-  const classes = clsx('typography-label11regular mt-1 px-2', {
-    'text-text02': !isError,
-    'text-supportError': isError,
-  });
-
-  return <div className={classes}>{props.children}</div>;
-};
-
 export const Base: Story = {
-  args: {},
+  args: {
+    value: '',
+  },
   render: function MyFunc({ ...args }) {
-    const [value, setValue] = useState<string>(args.value);
+    const [value, setValue] = useState<string>(args.value ?? '');
     const [value2, setValue2] = useState<string>('入力した文字列。');
 
     return (
@@ -87,8 +78,9 @@ export const Base: Story = {
                 action('onChange')(e);
                 setValue(e.target.value);
               }}
-            />
-            <ErrorText></ErrorText>
+            >
+              <TextArea.HelperMessage>補足テキスト</TextArea.HelperMessage>
+            </TextArea>
           </div>
           <div>
             <TextArea
@@ -101,8 +93,9 @@ export const Base: Story = {
                 action('onChange')(e);
                 setValue(e.target.value);
               }}
-            />
-            <ErrorText>リサイズ可能</ErrorText>
+            >
+              <TextArea.HelperMessage>リサイズ可能</TextArea.HelperMessage>
+            </TextArea>
           </div>
           <div>
             <TextArea
@@ -115,8 +108,9 @@ export const Base: Story = {
                 action('onChange')(e);
                 setValue(e.target.value);
               }}
-            />
-            <ErrorText isError>未入力 ＋ エラー</ErrorText>
+            >
+              <TextArea.ErrorMessage>未入力 ＋ エラー</TextArea.ErrorMessage>
+            </TextArea>
           </div>
           <div>
             <TextArea
@@ -129,8 +123,9 @@ export const Base: Story = {
                 action('onChange')(e);
                 setValue2(e.target.value);
               }}
-            />
-            <ErrorText isError>入力済み ＋ エラー</ErrorText>
+            >
+              <TextArea.ErrorMessage>入力済み ＋ エラー</TextArea.ErrorMessage>
+            </TextArea>
           </div>
           <div>
             <TextArea
@@ -143,8 +138,9 @@ export const Base: Story = {
                 setValue(e.target.value);
               }}
               disabled
-            />
-            <ErrorText>未入力 ＋ disabled</ErrorText>
+            >
+              <TextArea.HelperMessage>未入力 ＋ disabled</TextArea.HelperMessage>
+            </TextArea>
           </div>
           <div>
             <TextArea
@@ -158,8 +154,9 @@ export const Base: Story = {
                 action('onChange')(e);
                 setValue2(e.target.value);
               }}
-            />
-            <ErrorText>入力済み ＋ disabled</ErrorText>
+            >
+              <TextArea.ErrorMessage>入力済み ＋ disabled</TextArea.ErrorMessage>
+            </TextArea>
           </div>
         </div>
         <div style={{ width: 400 }} className="flex flex-col gap-12">
@@ -173,8 +170,9 @@ export const Base: Story = {
                 action('onChange')(e);
                 setValue(e.target.value);
               }}
-            />
-            <ErrorText></ErrorText>
+            >
+              <TextArea.HelperMessage>補足テキスト</TextArea.HelperMessage>
+            </TextArea>
           </div>
           <div>
             <TextArea
@@ -187,8 +185,9 @@ export const Base: Story = {
                 action('onChange')(e);
                 setValue(e.target.value);
               }}
-            />
-            <ErrorText>リサイズ可能</ErrorText>
+            >
+              <TextArea.HelperMessage>リサイズ可能</TextArea.HelperMessage>
+            </TextArea>
           </div>
           <div>
             <TextArea
@@ -201,8 +200,9 @@ export const Base: Story = {
                 action('onChange')(e);
                 setValue(e.target.value);
               }}
-            />
-            <ErrorText isError>未入力 ＋ エラー</ErrorText>
+            >
+              <TextArea.ErrorMessage>未入力 ＋ エラー</TextArea.ErrorMessage>
+            </TextArea>
           </div>
           <div>
             <TextArea
@@ -215,8 +215,9 @@ export const Base: Story = {
                 action('onChange')(e);
                 setValue2(e.target.value);
               }}
-            />
-            <ErrorText isError>入力済み ＋ エラー</ErrorText>
+            >
+              <TextArea.ErrorMessage>入力済み ＋ エラー</TextArea.ErrorMessage>
+            </TextArea>
           </div>
           <div>
             <TextArea
@@ -229,8 +230,9 @@ export const Base: Story = {
                 setValue(e.target.value);
               }}
               disabled
-            />
-            <ErrorText>未入力 ＋ disabled</ErrorText>
+            >
+              <TextArea.HelperMessage>未入力 ＋ disabled</TextArea.HelperMessage>
+            </TextArea>
           </div>
           <div>
             <TextArea
@@ -243,8 +245,9 @@ export const Base: Story = {
                 action('onChange')(e);
                 setValue2(e.target.value);
               }}
-            />
-            <ErrorText>入力済み ＋ disabled</ErrorText>
+            >
+              <TextArea.HelperMessage>入力済み ＋ disabled</TextArea.HelperMessage>
+            </TextArea>
           </div>
         </div>
       </div>
@@ -255,6 +258,7 @@ export const Base: Story = {
 export const AutoHeight: Story = {
   args: {
     size: 'large',
+    value: '',
     autoHeight: true,
     placeholder: '入力してください',
     height: '',
@@ -263,7 +267,7 @@ export const AutoHeight: Story = {
     disabled: false,
   },
   render: function MyFunc({ ...args }) {
-    const [value, setValue] = useState<string>(args.value);
+    const [value, setValue] = useState<string>(args.value ?? '');
 
     return (
       <div style={{ width: 400 }} className="flex flex-col">
@@ -274,7 +278,9 @@ export const AutoHeight: Story = {
             action('onChange')(e);
             setValue(e.target.value);
           }}
-        />
+        >
+          <TextArea.HelperMessage>入力量に応じて高さが変わります</TextArea.HelperMessage>
+        </TextArea>
       </div>
     );
   },
