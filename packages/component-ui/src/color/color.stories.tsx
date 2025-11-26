@@ -7,7 +7,7 @@ const meta: Meta = {
   title: 'Tokens/Color',
 };
 
-const version = 1;
+const version = 2;
 
 export default meta;
 type Story = StoryObj;
