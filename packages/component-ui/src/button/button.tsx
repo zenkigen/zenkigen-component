@@ -21,7 +21,7 @@ export type PolymorphicPropsWithoutRef<T extends ElementAs, P extends object> = 
 
 type DeprecatedClassNameProp<T extends ElementAs> = {
   /**
-   * @deprecated 外部から className を渡してスタイルを上書きすることは非推奨です。props やテーマトークンでの調整を検討してください。
+   * @deprecated 外部から className を渡してスタイルを上書きすることは非推奨です。
    */
   className?: ComponentPropsWithoutRef<T>['className'];
 };
