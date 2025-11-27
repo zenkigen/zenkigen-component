@@ -51,8 +51,10 @@ export function Pagination({ currentPage, totalPage, sideNumPagesToShow = 3, onC
   const threeDotIconClasses = 'flex h-8 w-8 items-center justify-center gap-1 fill-icon01';
   const isFirstPage = clampedCurrentPage === START_PAGE;
   const isLastPage = clampedCurrentPage === totalPage;
-  const hasHeadEllipsis = pageList.length > 0 && pageList[0] > START_PAGE + 1;
-  const hasTailEllipsis = pageList.length > 0 && pageList[pageList.length - 1] < totalPage - 1;
+  const firstPageInList = pageList.at(0) ?? null;
+  const lastPageInList = pageList.at(-1) ?? null;
+  const hasHeadEllipsis = firstPageInList !== null && firstPageInList > START_PAGE + 1;
+  const hasTailEllipsis = lastPageInList !== null && lastPageInList < totalPage - 1;
   const hasLastPageButton = totalPage > START_PAGE;
 
   return (
