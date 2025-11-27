@@ -17,41 +17,64 @@ type Props = {
 };
 
 export function Pagination({ currentPage, totalPage, sideNumPagesToShow = 3, onClick }: Props) {
-  let center = Math.max(currentPage, START_PAGE + 1);
-  center = Math.min(center, totalPage - 1);
+  if (totalPage < START_PAGE) {
+    return null;
+  }
 
-  const start = Math.max(center - sideNumPagesToShow, START_PAGE + 1);
-  const end = Math.min(center + sideNumPagesToShow, totalPage - 1);
-  const offsetStart = center + sideNumPagesToShow >= totalPage ? totalPage - center - sideNumPagesToShow : 0;
-  const offsetEnd = center <= sideNumPagesToShow ? sideNumPagesToShow - center + 1 : 0;
+  const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
+  const clampedCurrentPage = clamp(currentPage, START_PAGE, totalPage);
+  const maxSideNumPagesToShow = Math.max(0, totalPage - 2);
+  const side = clamp(sideNumPagesToShow, 0, maxSideNumPagesToShow);
+
+  const minPage = START_PAGE + 1;
+  const maxPage = totalPage - 1;
+  const availablePagesCount = Math.max(0, maxPage - minPage + 1);
+  const hasBothSides = clampedCurrentPage > START_PAGE && clampedCurrentPage < totalPage;
+  const windowSize = Math.min(availablePagesCount, hasBothSides ? side * 2 + 1 : side * 2);
+
+  let start = minPage;
+  if (windowSize > 0) {
+    if (hasBothSides) {
+      start = Math.max(minPage, Math.min(clampedCurrentPage - side, maxPage - windowSize + 1));
+    } else if (clampedCurrentPage === totalPage) {
+      start = Math.max(minPage, maxPage - windowSize + 1);
+    }
+  }
+
+  const end = windowSize === 0 ? minPage - 1 : Math.min(maxPage, start + windowSize - 1);
 
   const pageList: Array<number> = [];
-  for (let i = start + offsetStart; i <= end + offsetEnd; i++) {
+  for (let i = start; i <= end; i++) {
     pageList.push(i);
   }
 
   const threeDotIconClasses = 'flex h-8 w-8 items-center justify-center gap-1 fill-icon01';
+  const isFirstPage = clampedCurrentPage === START_PAGE;
+  const isLastPage = clampedCurrentPage === totalPage;
+  const hasHeadEllipsis = pageList.length > 0 && pageList[0] > START_PAGE + 1;
+  const hasTailEllipsis = pageList.length > 0 && pageList[pageList.length - 1] < totalPage - 1;
+  const hasLastPageButton = totalPage > START_PAGE;
 
   return (
     <PaginationContext.Provider
       value={{
-        currentPage,
+        currentPage: clampedCurrentPage,
       }}
     >
       <ul className="flex gap-1">
         <li className="flex items-center">
           <IconButton
-            isDisabled={currentPage === START_PAGE}
+            isDisabled={isFirstPage}
             variant="text"
             icon="angle-left"
             size="small"
-            onClick={() => onClick(currentPage - 1)}
+            onClick={() => onClick(Math.max(START_PAGE, clampedCurrentPage - 1))}
           />
         </li>
         <li>
           <PaginationButton onClick={() => onClick(START_PAGE)} page={START_PAGE} />
         </li>
-        {pageList.length !== 0 && pageList[0] !== 2 && (
+        {hasHeadEllipsis && (
           <li className={threeDotIconClasses}>
             <Icon name="more" size="small" />
           </li>
@@ -61,21 +84,23 @@ export function Pagination({ currentPage, totalPage, sideNumPagesToShow = 3, onC
             <PaginationButton onClick={() => onClick(page)} page={page} />
           </li>
         ))}
-        {pageList.length !== 0 && pageList[pageList.length - 1] !== totalPage - 1 && (
+        {hasTailEllipsis && (
           <li className={threeDotIconClasses}>
             <Icon name="more" size="small" />
           </li>
         )}
-        <li>
-          <PaginationButton onClick={() => onClick(totalPage)} page={totalPage} />
-        </li>
+        {hasLastPageButton && (
+          <li>
+            <PaginationButton onClick={() => onClick(totalPage)} page={totalPage} />
+          </li>
+        )}
         <li className="flex items-center">
           <IconButton
-            isDisabled={currentPage === totalPage}
+            isDisabled={isLastPage}
             variant="text"
             icon="angle-right"
             size="small"
-            onClick={() => onClick(currentPage + 1)}
+            onClick={() => onClick(Math.min(totalPage, clampedCurrentPage + 1))}
           />
         </li>
       </ul>
