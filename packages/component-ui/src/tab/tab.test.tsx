@@ -270,6 +270,59 @@ describe('Tab', () => {
     });
   });
 
+  describe('アイコン表示テスト', () => {
+    it('iconプロパティ指定時にアイコンが表示され、通常状態のクラスが付与されること', () => {
+      render(
+        <Tab>
+          <Tab.Item id="tab1" icon="chart-bar" onClick={vi.fn()}>
+            アイコン付き
+          </Tab.Item>
+        </Tab>,
+      );
+
+      const tabItem = screen.getByRole('tab', { name: /アイコン付き$/ });
+      const iconWrapper = tabItem.querySelector('span.flex');
+
+      expect(iconWrapper).toBeInTheDocument();
+      expect(iconWrapper?.className).toContain('fill-icon01');
+      expect(iconWrapper?.className).toContain('group-hover:fill-interactive01');
+      expect(iconWrapper?.querySelector('svg')).not.toBeNull();
+    });
+
+    it('選択状態ではアイコンにインタラクティブカラーが適用されること', () => {
+      render(
+        <Tab>
+          <Tab.Item id="tab1" icon="chart-bar" isSelected onClick={vi.fn()}>
+            選択済みアイコン付き
+          </Tab.Item>
+        </Tab>,
+      );
+
+      const tabItem = screen.getByRole('tab', { name: /選択済みアイコン付き$/ });
+      const iconWrapper = tabItem.querySelector('span.flex');
+
+      expect(iconWrapper?.className).toContain('fill-interactive01');
+      expect(iconWrapper?.className).not.toContain('group-hover:fill-interactive01');
+      expect(iconWrapper?.className).not.toContain('fill-disabled01');
+    });
+
+    it('無効状態ではアイコンがdisabledカラーになること', () => {
+      render(
+        <Tab>
+          <Tab.Item id="tab1" icon="chart-bar" isDisabled onClick={vi.fn()}>
+            無効アイコン付き
+          </Tab.Item>
+        </Tab>,
+      );
+
+      const tabItem = screen.getByRole('tab', { name: /無効アイコン付き$/ });
+      const iconWrapper = tabItem.querySelector('span.flex');
+
+      expect(iconWrapper?.className).toContain('fill-disabled01');
+      expect(iconWrapper?.className).not.toContain('fill-interactive01');
+    });
+  });
+
   describe('アクセシビリティテスト', () => {
     it('Tabコンテナにrole="tablist"が設定されること', () => {
       render(
