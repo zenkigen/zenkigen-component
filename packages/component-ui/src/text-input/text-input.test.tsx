@@ -212,5 +212,117 @@ describe('TextInput', () => {
 
       expect(input).toHaveAttribute('maxlength', '10');
     });
+
+    it('className が注入されないこと', () => {
+      const customClassName = 'custom-class';
+
+      // @ts-expect-error className は受け付けない想定
+      render(<TextInput value="" onChange={() => {}} className={customClassName} data-testid="text-input" />);
+
+      const input = screen.getByTestId('text-input');
+      const wrapper = input.parentElement as HTMLElement;
+
+      expect(input.className).not.toContain(customClassName);
+      expect(wrapper.className).not.toContain(customClassName);
+    });
+  });
+
+  describe('HelperMessage / ErrorMessage', () => {
+    it('HelperMessage を指定すると aria-describedby に連結されること', () => {
+      render(
+        <TextInput value="abc" onChange={() => {}}>
+          <TextInput.HelperMessage id="helper-1">ヘルプ</TextInput.HelperMessage>
+        </TextInput>,
+      );
+
+      const input = screen.getByRole('textbox');
+      expect(input).toHaveAttribute('aria-describedby', 'helper-1');
+    });
+
+    it('aria-describedby props と HelperMessage が結合されること', () => {
+      render(
+        <TextInput value="abc" aria-describedby="external" onChange={() => {}}>
+          <TextInput.HelperMessage id="helper-2">ヘルプ</TextInput.HelperMessage>
+        </TextInput>,
+      );
+
+      const input = screen.getByRole('textbox');
+      expect(input).toHaveAttribute('aria-describedby', 'external helper-2');
+    });
+
+    it('HelperMessage に id を渡さなくても aria-describedby に採番されること', () => {
+      render(
+        <TextInput value="abc" onChange={() => {}}>
+          <TextInput.HelperMessage>ヘルプ</TextInput.HelperMessage>
+        </TextInput>,
+      );
+
+      const input = screen.getByRole('textbox');
+      const describedBy = input.getAttribute('aria-describedby');
+
+      expect(describedBy).not.toBeNull();
+      expect(describedBy?.endsWith('-helper-1')).toBe(true);
+    });
+
+    it('ErrorMessage に id を渡さなくても aria-describedby に採番されること', () => {
+      render(
+        <TextInput value="abc" onChange={() => {}} isError>
+          <TextInput.ErrorMessage>エラー</TextInput.ErrorMessage>
+        </TextInput>,
+      );
+
+      const input = screen.getByRole('textbox');
+      const describedByList = input.getAttribute('aria-describedby')?.split(' ') ?? [];
+
+      expect(describedByList.some((id) => id.endsWith('-error-1'))).toBe(true);
+    });
+
+    it('isError=false では ErrorMessage が描画されないこと', () => {
+      render(
+        <TextInput value="abc" onChange={() => {}}>
+          <TextInput.ErrorMessage>エラー</TextInput.ErrorMessage>
+        </TextInput>,
+      );
+
+      expect(screen.queryByText('エラー')).toBeNull();
+    });
+
+    it('isError=true では ErrorMessage が描画され role/aria-live が付与されること', () => {
+      render(
+        <TextInput value="abc" onChange={() => {}} isError>
+          <TextInput.ErrorMessage>エラー</TextInput.ErrorMessage>
+        </TextInput>,
+      );
+
+      const error = screen.getByText('エラー');
+      expect(error).toBeInTheDocument();
+      expect(error).toHaveAttribute('aria-live', 'assertive');
+    });
+
+    it('isError またはエラー子要素がある場合に aria-invalid が true になること', () => {
+      render(
+        <TextInput value="abc" onChange={() => {}} isError>
+          <TextInput.ErrorMessage>エラー</TextInput.ErrorMessage>
+        </TextInput>,
+      );
+
+      const input = screen.getByRole('textbox');
+      expect(input).toHaveAttribute('aria-invalid', 'true');
+    });
+
+    it('ErrorMessage/HelperMessage を指定しても after 要素（クリアボタン）が表示されること', () => {
+      render(
+        <TextInput value="abc" onChange={() => {}} onClickClearButton={() => {}} isError>
+          <TextInput.HelperMessage>ヘルプ</TextInput.HelperMessage>
+          <TextInput.ErrorMessage>エラー</TextInput.ErrorMessage>
+        </TextInput>,
+      );
+
+      const clearButton = screen
+        .queryAllByRole('button')
+        .find((button) => button.querySelector('svg[aria-label="close"]') != null);
+
+      expect(clearButton).toBeDefined();
+    });
   });
 });
