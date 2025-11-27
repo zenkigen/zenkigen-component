@@ -7,6 +7,8 @@ const meta: Meta = {
   title: 'Tokens/Color',
 };
 
+const version = 1;
+
 export default meta;
 type Story = StoryObj;
 
@@ -59,6 +61,7 @@ function ColorItem({ colorKey, value }: { colorKey: string; value: string }) {
           />
         </div>
       </div>
+      <div hidden>{version}</div>
     </div>
   );
 }
