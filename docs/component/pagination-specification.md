@@ -65,15 +65,15 @@ export const Example = () => {
 
 | プロパティ    | 型                        | 説明                                                                     |
 | ------------- | ------------------------- | ------------------------------------------------------------------------ |
-| `currentPage` | `number`                  | 現在のページ番号。1起算で、`totalPage`の範囲内に収めて渡すこと。         |
-| `totalPage`   | `number`                  | 総ページ数。1以上の整数を想定し、先頭/末尾ページ番号として使用する。     |
+| `currentPage` | `number`                  | 現在のページ番号。1起算。コンポーネント内で`1`〜`totalPage`にクランプされる。 |
+| `totalPage`   | `number`                  | 総ページ数。1以上の整数を想定し、先頭/末尾ページ番号として使用する。`1未満`の場合は何も描画しない。 |
 | `onClick`     | `(value: number) => void` | クリックされたページ番号を受け取るハンドラ。呼び出し側で状態を更新する。 |
 
 ### オプションプロパティ
 
 | プロパティ           | 型       | デフォルト値 | 説明                                                                                                           |
 | -------------------- | -------- | ------------ | -------------------------------------------------------------------------------------------------------------- |
-| `sideNumPagesToShow` | `number` | `3`          | 現在ページを中心に左右それぞれ何件のページ番号を並べるかを指定する。端付近では不足分を反対側に回して表示する。 |
+| `sideNumPagesToShow` | `number` | `3`          | 現在ページを中心に左右それぞれ何件のページ番号を並べるかを指定する。コンポーネント内で`0`以上`totalPage - 2`以下にクランプされる。端付近では不足分を反対側に回して表示する。 |
 
 ### 排他的プロパティグループ
 
@@ -84,9 +84,10 @@ export const Example = () => {
 #### ページリストと省略記号の生成
 
 - 先頭ページ(`1`)と末尾ページ(`totalPage`)は常に表示する。
-- `sideNumPagesToShow`を基準に現在ページ周辺のページ番号リストを生成し、開始/終了付近では不足分を反対側に補う。
-- 先頭・末尾と連続しない場合は、省略記号として`Icon name="more"`を表示する。
+- `sideNumPagesToShow`を基準に現在ページ周辺のページ番号リストを生成する。先頭/末尾に位置する場合は左右合計`sideNumPagesToShow * 2`件までを反対側に寄せて表示し、中間では左右均等に`sideNumPagesToShow`件ずつ（計`sideNumPagesToShow * 2 + 1`件）を表示する。
+- 先頭・末尾と連続しない場合は、省略記号として`Icon name="more"`を表示する（リストの最小値が`2`より大きい／最大値が`totalPage - 1`より小さい場合）。
 - 前後ナビゲーションは`angle-left`/`angle-right`のアイコンボタンで提供する。
+- `totalPage`が`1`の場合は「1」のみを表示し、前後ナビゲーションは非活性となる。
 
 ### 継承プロパティ
 
@@ -157,19 +158,15 @@ const [page, setPage] = useState(3);
 ### バリエーション例2
 
 ```typescript
-// ハンドラ側でページ範囲をクランプする例
-const totalPage = 8;
-const handleClick = (nextPage: number) => {
-  const clamped = Math.min(Math.max(nextPage, 1), totalPage);
-  setPage(clamped);
-};
+// 総ページが小さいケース（大きめのsideNumPagesToShowでも内部でクランプされる）
+<Pagination currentPage={1} totalPage={3} sideNumPagesToShow={5} onClick={setPage} />;
+```
 
-<Pagination
-  currentPage={page}
-  totalPage={totalPage}
-  sideNumPagesToShow={4}
-  onClick={handleClick}
-/>;
+### バリエーション例3
+
+```typescript
+// 総ページが1の場合もページ「1」が表示され、前後ナビゲーションは非活性
+<Pagination currentPage={1} totalPage={1} onClick={setPage} />;
 ```
 
 ## アクセシビリティ
@@ -184,15 +181,16 @@ const handleClick = (nextPage: number) => {
 ### 実装について
 
 - `PaginationContext`で`currentPage`のみを共有し、`PaginationButton`側でアクティブ判定を行う。
-- `sideNumPagesToShow`を用いて中心位置を算出し、開始/終了付近では不足分を反対側にオフセットしてページ番号を補完する。
+- `currentPage`は`1`〜`totalPage`にクランプする。`sideNumPagesToShow`は`0`〜`totalPage - 2`にクランプする。
+- `sideNumPagesToShow`を用いて中心位置を算出し、開始/終了付近では不足分を反対側にオフセットしてページ番号を補完する。先頭/末尾では左右合計が`sideNumPagesToShow * 2`件になる。
 - 先頭/末尾と連続しない場合のみ`more`アイコンによる省略記号を描画する。
 - クリック時は`onClick`にページ番号を渡すだけで状態管理は行わない。
 
 ## 注意事項
 
-1. `totalPage`は2以上、`currentPage`は1〜`totalPage`の範囲で渡すことを前提としており、バリデーションやクランプ処理は行わない。
-2. 現在ページの番号ボタンも押下可能であり、`onClick`が再度呼ばれるため必要に応じて呼び出し側で無視または処理を分岐すること。
-3. `sideNumPagesToShow`は0以上の整数を想定する。負数や極端に大きな値を指定した場合の表示は未定義である。
+1. `totalPage`が`1未満`の場合は何も描画されない。`1`の場合はページ「1」を表示し、前後ナビゲーションは非活性となる。
+2. `currentPage`および`sideNumPagesToShow`は内部でクランプされる。負数や`NaN`を渡した場合はクランプ結果に依存するため、呼び出し側でも適切な型/値を渡すことが望ましい。
+3. 現在ページの番号ボタンも押下可能であり、`onClick`が再度呼ばれるため必要に応じて呼び出し側で無視または処理を分岐すること。
 
 ## スタイルのカスタマイズ
 
@@ -202,4 +200,5 @@ const handleClick = (nextPage: number) => {
 
 | 日付                 | 内容     | 担当者 |
 | -------------------- | -------- | ------ |
+| 2025-11-27 09:51 JST | totalPage=1時の表示、各値のクランプ挙動を仕様に反映 | -      |
 | 2025-11-27 08:18 JST | 新規作成 | -      |
