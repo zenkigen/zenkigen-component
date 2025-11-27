@@ -126,7 +126,20 @@ describe('Pagination', () => {
     it('totalPageが1の場合でもページ1が選択状態で表示され、前後ボタンが非活性であること', () => {
       render(<Pagination currentPage={1} totalPage={1} onClick={() => {}} />);
 
+      const numberButtons = screen.queryAllByRole('button', { name: /^\d+$/ });
+      expect(numberButtons).toHaveLength(1);
       expect(screen.getAllByRole('button', { name: '1' })).toHaveLength(1);
+      expect(screen.getByRole('button', { name: '1' })).toHaveClass('border-uiBorder02');
+      expect(screen.getByRole('button', { name: 'angleLeft' })).toBeDisabled();
+      expect(screen.getByRole('button', { name: 'angleRight' })).toBeDisabled();
+      expect(screen.queryAllByRole('img', { name: 'more' })).toHaveLength(0);
+    });
+
+    it('totalPageが1、sideNumPagesToShowが0の場合でもページ1が選択状態で表示され、前後ボタンが非活性であること', () => {
+      render(<Pagination currentPage={1} totalPage={1} sideNumPagesToShow={0} onClick={() => {}} />);
+
+      const numberButtons = screen.queryAllByRole('button', { name: /^\d+$/ });
+      expect(numberButtons).toHaveLength(1);
       expect(screen.getByRole('button', { name: '1' })).toHaveClass('border-uiBorder02');
       expect(screen.getByRole('button', { name: 'angleLeft' })).toBeDisabled();
       expect(screen.getByRole('button', { name: 'angleRight' })).toBeDisabled();
