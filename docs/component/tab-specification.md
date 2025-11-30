@@ -146,13 +146,6 @@ const MyTabComponent = () => {
 
 #### アイコン
 
-- Tab.Item の `icon` に `IconName` を指定すると `<Icon name={icon} size="small" />` を描画する。
-- 通常: `fill-icon01`
-- 選択時: `fill-interactive01`（`isSelected` で色を切り替え）
-- 無効時: `fill-disabled01` で視覚的に抑止
-
-#### アイコン
-
 - `icon`プロパティに `IconName` を渡すと `@zenkigen-inc/component-icons` の `<Icon>`（`size="small"`）を描画する
 - 通常: `fill-icon01`
 - ホバー: `group-hover:fill-interactive01`
