@@ -1,5 +1,5 @@
-import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/blocks';
-import { Markdown } from '@storybook/blocks';
+import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/addon-docs/blocks';
+import { Markdown } from '@storybook/addon-docs/blocks';
 import IconButtonStories, { Component } from './icon-button.stories';
 import spec from '../../../../docs/component/icon-button-specification.md?raw';
 
@@ -34,7 +34,7 @@ import spec from '../../../../docs/component/icon-button-specification.md?raw';
 
 警告ボタンがコンテンツの削除などの破壊的なアクションをもたらす場合は、破壊的なボタンスタイルを指定して、ユーザーがそれを区別できるようにします。
 
-# 推奨しないこと（Don't）
+## 推奨しないこと（Don't）
 
 ### 定常的に使うアクションや重要なボタンの場合はIconButtonではなく、Buttonを用いてラベルを明記する
 

@@ -1,5 +1,5 @@
-import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/blocks';
-import { Markdown } from '@storybook/blocks';
+import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/addon-docs/blocks';
+import { Markdown } from '@storybook/addon-docs/blocks';
 import PasswordInputStories, { Component, Base } from './password-input.stories';
 import spec from '../../../../docs/component/password-input-specification.md?raw';
 
@@ -38,3 +38,25 @@ return (
   />
 );
 ```
+
+## 概要
+
+ユーザーがパスワードを入力するためのフィールドを提供するUI要素です。表示形式を変更したり、入力可能な文字種や文字数を制限したりすることができます。
+
+## 設計の原則（Do）
+
+### ヘルパーテキストは入力項目を明確に表現します
+
+必要文字数や入力可能な文字種などを明確に説明します。
+
+![設計の原則 その1](/storybook/images/password-input_01.jpg)
+
+### 表示形式の変更や文字数の制限が可能です
+
+用途に応じて表示形式を変更したり、入力可能な文字種や文字数を制限したりすることができます。 表示形式変更の際は `type="passward"` , `type="text"` のように、入力されるデータに最適な `type`属性を指定してください。
+
+## 推奨しないこと（Don’t）
+
+### パスワード入力以外では使用しない
+
+パスワード以外のテキストを入力する場合は[TextInput](/docs/components-textinput--docs)を使用します。
