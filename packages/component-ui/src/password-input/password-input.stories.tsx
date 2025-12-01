@@ -1,8 +1,8 @@
-import { action } from '@storybook/addon-actions';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import clsx from 'clsx';
 import type { ChangeEvent, ReactNode } from 'react';
 import { useState } from 'react';
+import { action } from 'storybook/actions';
 
 import { PasswordInput } from '.';
 
@@ -45,7 +45,10 @@ export const Component: Story = {
               action('onChange')(e);
               setValue(e.target.value);
             }}
-          />
+          >
+            <PasswordInput.HelperMessage>8文字以上で入力してください</PasswordInput.HelperMessage>
+            <PasswordInput.ErrorMessage>入力内容にエラーがあります</PasswordInput.ErrorMessage>
+          </PasswordInput>
         </div>
       </div>
     );
@@ -231,6 +234,158 @@ export const Base: Story = {
               }}
             />
             <ErrorText>基本状態</ErrorText>
+          </div>
+        </div>
+      </div>
+    );
+  },
+};
+
+export const Composition: Story = {
+  render: function CompositionStory() {
+    const [value, setValue] = useState<string>('');
+    const [value2, setValue2] = useState<string>('password123');
+    const [valueError, setValueError] = useState<string>('error');
+    const [valueLong, setValueLong] = useState<string>('passwordpasswordpassword');
+
+    const handleChange = (setter: (nextValue: string) => void) => (event: ChangeEvent<HTMLInputElement>) => {
+      action('onChange')(event);
+      setter(event.target.value);
+    };
+
+    const classNameLine = 'flex w-[300px] flex-col gap-12';
+    const classNameCell = 'h-[52px]';
+    const classNameCellS = 'h-[32px]';
+
+    return (
+      <div className="flex gap-10">
+        <div className={classNameLine}>
+          <div className={classNameCell}>
+            <PasswordInput value={value} placeholder="パスワードを入力してください" onChange={handleChange(setValue)}>
+              <PasswordInput.HelperMessage>8文字以上で入力してください</PasswordInput.HelperMessage>
+            </PasswordInput>
+          </div>
+          <div className={classNameCell}>
+            <PasswordInput
+              value={valueLong}
+              placeholder="パスワードを入力してください"
+              onChange={handleChange(setValueLong)}
+            >
+              <PasswordInput.HelperMessage>
+                8文字以上で入力してください 8文字以上で入力してください 8文字以上で入力してください
+              </PasswordInput.HelperMessage>
+              <PasswordInput.HelperMessage>8文字以上で入力してください</PasswordInput.HelperMessage>
+            </PasswordInput>
+          </div>
+          <div className={classNameCell}>
+            <PasswordInput
+              value={valueError}
+              placeholder="パスワードを入力してください"
+              isError
+              onChange={handleChange(setValueError)}
+            >
+              <PasswordInput.HelperMessage>8文字以上で入力してください</PasswordInput.HelperMessage>
+              <PasswordInput.ErrorMessage>入力内容にエラーがあります</PasswordInput.ErrorMessage>
+            </PasswordInput>
+          </div>
+          <div className={classNameCell}>
+            <PasswordInput
+              value={value2}
+              placeholder="パスワードを入力してください"
+              isError
+              onChange={handleChange(setValue2)}
+            >
+              <PasswordInput.ErrorMessage>
+                入力内容にエラーがあります 入力内容にエラーがあります 入力内容にエラーがあります
+              </PasswordInput.ErrorMessage>
+              <PasswordInput.ErrorMessage>入力内容にエラーがあります</PasswordInput.ErrorMessage>
+            </PasswordInput>
+          </div>
+          <div className={classNameCell}>
+            <PasswordInput
+              value={value2}
+              placeholder="パスワードを入力してください"
+              isError
+              onChange={handleChange(setValue2)}
+            />
+          </div>
+          <div className={classNameCellS}>
+            <PasswordInput value="" placeholder="パスワードを入力してください" disabled />
+          </div>
+          <div className={classNameCellS}>
+            <PasswordInput value="disabled-error" placeholder="パスワードを入力してください" disabled isError />
+          </div>
+        </div>
+        <div className={classNameLine}>
+          <div className={classNameCell}>
+            <PasswordInput
+              value={value}
+              placeholder="パスワードを入力してください"
+              size="large"
+              onChange={handleChange(setValue)}
+            >
+              <PasswordInput.HelperMessage>8文字以上で入力してください</PasswordInput.HelperMessage>
+            </PasswordInput>
+          </div>
+          <div className={classNameCell}>
+            <PasswordInput
+              value={valueLong}
+              placeholder="パスワードを入力してください"
+              size="large"
+              onChange={handleChange(setValueLong)}
+            >
+              <PasswordInput.HelperMessage>
+                8文字以上で入力してください 8文字以上で入力してください 8文字以上で入力してください
+              </PasswordInput.HelperMessage>
+              <PasswordInput.HelperMessage>8文字以上で入力してください</PasswordInput.HelperMessage>
+            </PasswordInput>
+          </div>
+          <div className={classNameCell}>
+            <PasswordInput
+              value={valueError}
+              placeholder="パスワードを入力してください"
+              size="large"
+              isError
+              onChange={handleChange(setValueError)}
+            >
+              <PasswordInput.HelperMessage>8文字以上で入力してください</PasswordInput.HelperMessage>
+              <PasswordInput.ErrorMessage>入力内容にエラーがあります</PasswordInput.ErrorMessage>
+            </PasswordInput>
+          </div>
+          <div className={classNameCell}>
+            <PasswordInput
+              value={value2}
+              placeholder="パスワードを入力してください"
+              size="large"
+              isError
+              onChange={handleChange(setValue2)}
+            >
+              <PasswordInput.ErrorMessage>
+                入力内容にエラーがあります 入力内容にエラーがあります 入力内容にエラーがあります
+              </PasswordInput.ErrorMessage>
+              <PasswordInput.ErrorMessage>入力内容にエラーがあります</PasswordInput.ErrorMessage>
+            </PasswordInput>
+          </div>
+          <div className={classNameCell}>
+            <PasswordInput
+              value={value2}
+              placeholder="パスワードを入力してください"
+              size="large"
+              isError
+              onChange={handleChange(setValue2)}
+            />
+          </div>
+          <div className={classNameCellS}>
+            <PasswordInput value="" placeholder="パスワードを入力してください" size="large" disabled />
+          </div>
+          <div className={classNameCellS}>
+            <PasswordInput
+              value="disabled-error"
+              placeholder="パスワードを入力してください"
+              size="large"
+              disabled
+              isError
+            />
           </div>
         </div>
       </div>

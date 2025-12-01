@@ -1,5 +1,5 @@
-import { Canvas, Meta, Story, Controls, Source } from '@storybook/blocks';
-import { Markdown } from '@storybook/blocks';
+import { Canvas, Meta, Story, Controls, Source } from '@storybook/addon-docs/blocks';
+import { Markdown } from '@storybook/addon-docs/blocks';
 import TabStories, { Component, LayoutAutoExample, LayoutEqualExample, LayoutExamples } from './tab.stories';
 import spec from '../../../../docs/component/tab-specification.md?raw';
 
@@ -18,6 +18,35 @@ import spec from '../../../../docs/component/tab-specification.md?raw';
 <Canvas />
 
 <Controls of={Component} />
+
+### Code Example
+
+```tsx
+import React, { useState } from 'react';
+import { Tab } from '@zenkigen-inc/component-ui';
+
+export const MyComponent = () => {
+  const [selectedId, setSelectedId] = useState('home');
+
+  return (
+    <Tab layout="auto">
+      <Tab.Item id="home" icon="add" isSelected={selectedId === 'home'} onClick={setSelectedId}>
+        ホーム
+      </Tab.Item>
+      <Tab.Item id="settings" icon="check" isSelected={selectedId === 'settings'} onClick={setSelectedId}>
+        設定
+      </Tab.Item>
+      <Tab.Item id="profile" icon="copy" isSelected={selectedId === 'profile'} onClick={setSelectedId}>
+        プロフィール
+      </Tab.Item>
+    </Tab>
+  );
+};
+```
+
+## Layout examples
+
+<Canvas of={LayoutExamples} />
 
 ## 概要
 

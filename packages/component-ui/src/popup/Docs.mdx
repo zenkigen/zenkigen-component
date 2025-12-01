@@ -1,5 +1,5 @@
-import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/blocks';
-import { Markdown } from '@storybook/blocks';
+import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/addon-docs/blocks';
+import { Markdown } from '@storybook/addon-docs/blocks';
 import PopupStories, { Component } from './popup.stories';
 import spec from '../../../../docs/component/popup-specification.md?raw';
 
@@ -92,3 +92,35 @@ const PopoverPopupExample = () => {
   );
 };
 ```
+
+## 概要
+
+ユーザーにアクションを促したり、補足的な情報やアクションをその場のコンテキストを維持したまま一時的に表示するためのコンポーネントです。
+
+## 設計の原則（Do）
+
+### ユーザーの明確なアクション(クリックや入力)に基づいて表示されます
+
+曖昧な条件で自動表示は避けましょう。
+
+### 軽量な操作のみにとどめます
+
+ページ遷移をさせるような重い操作は避けます。
+
+### 一度に1つだけ表示します
+
+複数のポップアップが重なって表示されないよう制御します。
+
+## 推奨しないこと（Don’t）
+
+### ユーザーの操作を中断させるため、不必要に使用しない
+
+ポップアップは正しく使用すると効果的ですが、ユーザーへの混乱を抑えるために控えめに使用する必要があります。現在のコンテキストから離れることなく、関連する情報を提供したり、簡単なタスクを実行させたりする場合に有効です。
+
+### 背景のブロックはしません
+
+背景をブロックしてユーザーに特定のアクションのみを促したい場合は、[Modal](/docs/components-modal--docs)を使用します。
+
+### 複雑なフォームや複数ステップのタスクに使用しない
+
+多くの入力フィールドを持つフォームや、複数のステップを要する複雑なタスクにPopupを使用することは避けてください。特定のアクションのみを促したい場合は、専用のページやモーダルを用意しましょう。

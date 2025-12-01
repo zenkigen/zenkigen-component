@@ -51,7 +51,7 @@ describe('TextArea', () => {
       const textarea = screen.getByTestId('textarea');
       expect(textarea.className).toMatch(/typography-body14regular/);
       expect(textarea.className).toMatch(/px-2/);
-      expect(textarea.className).toMatch(/pt-1\.5/);
+      expect(textarea.className).toMatch(/pt-2/);
       expect(textarea.className).toMatch(/pb-2/);
     });
 
