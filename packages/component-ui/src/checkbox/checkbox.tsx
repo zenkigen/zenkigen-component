@@ -55,7 +55,7 @@ export function Checkbox({
     {
       'border-disabled01': isDisabled,
       'border-hoverUiBorder': !isDisabled && isMouseOver && color === 'default',
-      'border-uiBorder03': !isDisabled && !isMouseOver && color === 'default',
+      'border-uiBorder04': !isDisabled && !isMouseOver && color === 'default',
       'border-interactive02': !isDisabled && !isMouseOver && color === 'gray',
       'border-hoverError': !isDisabled && isMouseOver && color === 'error',
       'border-supportError': !isDisabled && !isMouseOver && color === 'error',
