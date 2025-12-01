@@ -21,6 +21,36 @@ import spec from '../../../../docs/component/text-input-specification.md?raw';
 
 <Controls of={Component} />
 
+## Code Examples
+
+```tsx
+import { useState, type ChangeEvent } from 'react';
+import { TextInput } from '@zenkigen-inc/component-ui';
+
+const CompositionExample = () => {
+  const [value, setValue] = useState('');
+  const maxLength = 20;
+  const isLimitExceeded = value.length > maxLength;
+
+  return (
+    <>
+      <label htmlFor="name-input">名前</label>
+      <TextInput
+        value={value}
+        isError={isLimitExceeded}
+        placeholder="名前を入力してください"
+        onChange={(event: ChangeEvent<HTMLInputElement>) => setValue(event.target.value)}
+        onClickClearButton={() => setValue('')}
+        id="name-input"
+      >
+        <TextInput.HelperMessage>○文字以内で入力してください</TextInput.HelperMessage>
+        <TextInput.ErrorMessage>入力内容にエラーがあります</TextInput.ErrorMessage>
+      </TextInput>
+    </>
+  );
+};
+```
+
 ## 概要
 
 ユーザーが1行のテキストを入力するためのフィールドを提供するUI要素です。
