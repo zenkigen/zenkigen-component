@@ -102,7 +102,7 @@ function TextAreaInner(
       'hover:border-hoverInput': !disabled && !isError,
       'border-uiBorder02 hover:focus-within:border-activeInput focus-within:border-activeInput text-text01': !isError,
       'bg-disabled02 border-disabled01': disabled,
-      'typography-body14regular px-2 pt-1.5 pb-2': size === 'medium',
+      'typography-body14regular px-2 pt-2 pb-2': size === 'medium',
       'text-4 leading-normal px-3.5 py-2.5': size === 'large',
       'field-sizing-content': autoHeight,
       'text-supportError': isError,
