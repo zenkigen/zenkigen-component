@@ -40,7 +40,7 @@ export function Radio({ name, value, id, label, isChecked = false, isDisabled = 
     {
       'border-disabled01 hover:border-disabled01': isDisabled && !isMouseOver,
       'border-hoverUiBorder': !isDisabled && isMouseOver,
-      'border-uiBorder03': !isDisabled,
+      'border-uiBorder04': !isDisabled,
       'cursor-not-allowed': isDisabled,
       'cursor-pointer': !isDisabled,
     },
