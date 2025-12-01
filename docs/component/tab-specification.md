@@ -128,14 +128,14 @@ const MyTabComponent = () => {
 - タイポグラフィ: `typography-label14regular`
 - テキストカラー: `text-interactive02`
 - ホバー時: `hover:text-interactive01`
-- ボトムインジケータ: `before:h-px`（高さのみ定義され背景色は付かないため視覚的には非表示）
+- ボトムインジケータ: `before:h-[2px]`（背景色なしでライン高さのみ確保）
 
 #### 選択状態（`isSelected: true`）
 
 - タイポグラフィ: `typography-label14bold`
 - テキストカラー: `text-interactive01`
 - ポインターイベント無効: `pointer-events-none`
-- アクティブインジケータ: `before:bg-interactive01 before:h-[2px]`
+- アクティブインジケータ: `before:bg-interactive01`（高さは共通で`before:h-[2px]`）
 - ホバー時もアクティブボーダー維持: `hover:before:bg-interactive01`（色は固定）
 
 #### 無効状態（`isDisabled: true`）
