@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { tokens } from '@zenkigen-inc/component-config';
 import { IconButton } from '@zenkigen-inc/component-ui';
 import { useState } from 'react';
