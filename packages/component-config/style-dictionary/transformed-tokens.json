@@ -347,7 +347,7 @@
       "HoverUiError": {
         "value": "#FCEFF3",
         "type": "color",
-        "description": "XXX XXX XXX XXX XXX XXX"
+        "description": "Hover error ui background"
       }
     },
     "Active": {
@@ -399,7 +399,7 @@
       "ActiveUiError": {
         "value": "#F9E0E6",
         "type": "color",
-        "description": "XXX XXX XXX XXX XXX XXX"
+        "description": "Active error ui background"
       }
     },
     "Selected": {
@@ -426,7 +426,7 @@
       "SelectedUiDark": {
         "value": "#1366B9",
         "type": "color",
-        "description": "XXX XXX XXX XXX XXX XXX"
+        "description": "Selected List Navigation on Dark Color"
       }
     },
     "Disabled": {
