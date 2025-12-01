@@ -49,21 +49,21 @@ const MyTabComponent = () => {
       <Tab.Item
         id="tab1"
         isSelected={selectedTab === 'tab1'}
-        onClick={(id) => setSelectedTab(id)}
+        onClick={setSelectedTab}
       >
         タブ1
       </Tab.Item>
       <Tab.Item
         id="tab2"
         isSelected={selectedTab === 'tab2'}
-        onClick={(id) => setSelectedTab(id)}
+        onClick={setSelectedTab}
       >
         タブ2
       </Tab.Item>
       <Tab.Item
         id="tab3"
         isSelected={selectedTab === 'tab3'}
-        onClick={(id) => setSelectedTab(id)}
+        onClick={setSelectedTab}
       >
         タブ3
       </Tab.Item>
@@ -87,18 +87,19 @@ const MyTabComponent = () => {
 
 #### 必須プロパティ
 
-| プロパティ | 型                     | 説明                             |
-| ---------- | ---------------------- | -------------------------------- |
-| `id`       | `string`               | タブアイテムの一意識別子         |
-| `onClick`  | `(id: string) => void` | タブクリック時のコールバック関数 |
+| プロパティ | 型                     | 説明                                                                     |
+| ---------- | ---------------------- | ------------------------------------------------------------------------ |
+| `id`       | `string`               | タブアイテムの一意識別子                                                 |
+| `onClick`  | `(id: string) => void` | タブクリック時のコールバック関数。Tab.Item側で自身の`id`を引数として渡す |
 
 #### オプションプロパティ
 
-| プロパティ   | 型          | デフォルト値 | 説明                       |
-| ------------ | ----------- | ------------ | -------------------------- |
-| `isSelected` | `boolean`   | `false`      | タブが選択状態かどうか     |
-| `isDisabled` | `boolean`   | `false`      | タブが無効状態かどうか     |
-| `children`   | `ReactNode` | -            | タブ内に表示するコンテンツ |
+| プロパティ   | 型          | デフォルト値 | 説明                                                                              |
+| ------------ | ----------- | ------------ | --------------------------------------------------------------------------------- |
+| `isSelected` | `boolean`   | `false`      | タブが選択状態かどうか                                                            |
+| `isDisabled` | `boolean`   | `false`      | タブが無効状態かどうか                                                            |
+| `children`   | `ReactNode` | -            | タブ内に表示するコンテンツ                                                        |
+| `icon`       | `IconName`  | -            | ラベルの前に表示する公式アイコン。内部で`<Icon name={icon} size="small" />`を描画 |
 
 ## 状態とスタイル
 
@@ -126,28 +127,36 @@ const MyTabComponent = () => {
 
 - タイポグラフィ: `typography-label14regular`
 - テキストカラー: `text-interactive02`
-- ホバー時: `hover:text-text01`
-- ホバー時ボーダー: `hover:before:bg-uiBorder04`
-- ボトムボーダー: `before:h-px` (透明)
+- ホバー時: `hover:text-interactive01`
+- ボトムインジケータ: `before:h-[2px]`（背景色なしでライン高さのみ確保）
 
 #### 選択状態（`isSelected: true`）
 
 - タイポグラフィ: `typography-label14bold`
+- テキストカラー: `text-interactive01`
 - ポインターイベント無効: `pointer-events-none`
-- アクティブボーダー: `before:bg-interactive01`
-- ホバー時もアクティブボーダー維持: `hover:before:bg-interactive01`
+- アクティブインジケータ: `before:bg-interactive01`（高さは共通で`before:h-[2px]`）
+- ホバー時もアクティブボーダー維持: `hover:before:bg-interactive01`（色は固定）
 
 #### 無効状態（`isDisabled: true`）
 
 - ポインターイベント無効: `disabled:pointer-events-none`
 - テキストカラー: `disabled:text-disabled01`
-- `disabled`属性が設定される
+- `disabled`属性が設定されるため、ネイティブフォーカス移動やクリックも抑止される
+
+#### アイコン
+
+- `icon`プロパティに `IconName` を渡すと `@zenkigen-inc/component-icons` の `<Icon>`（`size="small"`）を描画する
+- 通常: `fill-icon01`
+- ホバー: `group-hover:fill-interactive01`
+- 選択: `fill-interactive01`
+- 無効: `fill-disabled01`
 
 #### コンテナスタイル
 
-- 背景ボーダー: `before:absolute before:inset-x-0 before:bottom-0 before:h-px before:bg-uiBorder01`
-- パディング: `px-6`
-- ポジション: `relative`
+- レイアウト共通クラス: `relative gap-4 px-6`
+- 最下段ボーダー: `before:absolute before:inset-x-0 before:bottom-0 before:h-px before:bg-uiBorder01`
+- `layout="auto"`は`flex`、`layout="equal"`は`grid`として描画される
 
 ## 使用例
 
@@ -166,21 +175,21 @@ const BasicTabExample = () => {
         <Tab.Item
           id="overview"
           isSelected={selectedTab === 'overview'}
-          onClick={(id) => setSelectedTab(id)}
+          onClick={setSelectedTab}
         >
           概要
         </Tab.Item>
         <Tab.Item
           id="details"
           isSelected={selectedTab === 'details'}
-          onClick={(id) => setSelectedTab(id)}
+          onClick={setSelectedTab}
         >
           詳細
         </Tab.Item>
         <Tab.Item
           id="settings"
           isSelected={selectedTab === 'settings'}
-          onClick={(id) => setSelectedTab(id)}
+          onClick={setSelectedTab}
         >
           設定
         </Tab.Item>
@@ -192,6 +201,33 @@ const BasicTabExample = () => {
         {selectedTab === 'settings' && <div>設定コンテンツ</div>}
       </div>
     </div>
+  );
+};
+```
+
+Tab.Itemの`onClick`は必ずクリック対象の`id`を1つだけ引数に渡して呼び出されるため、`setSelectedTab`のような`(value: string) => void`であれば無名関数を挟まずにそのまま渡せる。
+
+### アイコン付きの基本例
+
+```typescript
+import { useState } from 'react';
+import { Tab } from '@zenkigen-inc/component-ui';
+
+const IconTabExample = () => {
+  const [selectedTab, setSelectedTab] = useState('tab1');
+
+  return (
+    <Tab layout="auto">
+      <Tab.Item id="tab1" icon="chart-bar" isSelected={selectedTab === 'tab1'} onClick={setSelectedTab}>
+        ダッシュボード
+      </Tab.Item>
+      <Tab.Item id="tab2" icon="calendar-check" isSelected={selectedTab === 'tab2'} onClick={setSelectedTab}>
+        スケジュール
+      </Tab.Item>
+      <Tab.Item id="tab3" icon="user" isSelected={selectedTab === 'tab3'} onClick={setSelectedTab}>
+        メンバー
+      </Tab.Item>
+    </Tab>
   );
 };
 ```
@@ -246,6 +282,24 @@ const BasicTabExample = () => {
     isDisabled={true}
   >
     無効なタブ
+  </Tab.Item>
+</Tab>
+```
+
+### アイコン付きタブ
+
+`icon`プロパティに`IconName`を指定することで、テキストの前に公式アイコンを配置でき、タブの状態に合わせて色も自動的に切り替わります。
+
+```typescript
+<Tab>
+  <Tab.Item id="analytics" isSelected={selectedTab === 'analytics'} onClick={setSelectedTab} icon="chart-bar">
+    アナリティクス
+  </Tab.Item>
+  <Tab.Item id="schedule" isSelected={selectedTab === 'schedule'} onClick={setSelectedTab} icon="calendar-check">
+    スケジュール
+  </Tab.Item>
+  <Tab.Item id="member" isSelected={selectedTab === 'member'} onClick={setSelectedTab} icon="user">
+    メンバー
   </Tab.Item>
 </Tab>
 ```
@@ -336,8 +390,8 @@ const TabWithStateManagement = () => {
 - WAI-ARIA Tabsパターンに準拠
 - タブリストに`role="tablist"`を設定
 - 各タブアイテムに`role="tab"`を設定
-- 選択状態を`aria-selected`属性で表現
-- `button`要素を使用してキーボードナビゲーションをサポート
+- 選択状態を`aria-selected="true" | "false"`で常時表現
+- `button`要素（`type="button"`）を使用してキーボードナビゲーションとフォームとの独立性を確保
 - `disabled`属性による適切な無効状態の表現
 - フォーカス管理が適切に実装されている
 
@@ -347,6 +401,8 @@ const TabWithStateManagement = () => {
 
 - `Tab`メインコンポーネントは`Children.count`を使用して子要素数を取得し、等幅レイアウト時のグリッド設定を動的に生成
 - `Tab.Item`はstaticプロパティとして`Tab`コンポーネントに追加される複合コンポーネントパターン
+- `Tab.Item`は`<button type="button">`で実装され、`aria-selected` / `disabled`を直接制御する
+- アイコンは`@zenkigen-inc/component-icons`の`<Icon>`コンポーネント（`size="small"`）を用い、`group`クラスで親のホバー状態を共有する
 - `clsx`を使用した条件付きクラス名の動的生成
 - CSS Grid（equal）とFlexbox（auto）を使い分けたレスポンシブレイアウト
 
@@ -373,6 +429,7 @@ const [selectedTab, setSelectedTab] = useState('tab1');
 3. **選択状態の同期**: `isSelected`プロパティと実際の選択状態を適切に同期させる必要があります
 4. **無効タブの扱い**: 無効なタブがアクティブ状態の場合、別のタブに切り替える処理を実装することを推奨します
 5. **レイアウトの選択**: コンテンツ幅が大きく異なる場合は`layout="auto"`、統一感が必要な場合は`layout="equal"`を選択してください
+6. **onClickの引数定義**: `onClick`は`(id: string) => void`で受け取る想定であり、UIイベントは渡されないため注意すること
 
 ## スタイルのカスタマイズ
 
@@ -390,6 +447,8 @@ Tabコンポーネントのスタイルは`@zenkigen-inc/component-theme`のTail
 
 ## 更新履歴
 
-| 日付       | 内容     | 担当者 |
-| ---------- | -------- | ------ |
-| 2025-09-09 | 新規作成 | -      |
+| 日付       | 内容                                                                 | 担当者 |
+| ---------- | -------------------------------------------------------------------- | ------ |
+| 2025-11-12 | 実装に合わせてスタイル説明・使用例・注意事項を最新コードに同期       | -      |
+| 2025-11-11 | Tab.Itemのアイコン指定方法を`icon`プロパティ（IconNameベース）に変更 | -      |
+| 2025-09-09 | 新規作成                                                             | -      |

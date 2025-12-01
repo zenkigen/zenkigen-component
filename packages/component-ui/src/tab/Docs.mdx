@@ -19,6 +19,35 @@ import spec from '../../../../docs/component/tab-specification.md?raw';
 
 <Controls of={Component} />
 
+### Code Example
+
+```tsx
+import React, { useState } from 'react';
+import { Tab } from '@zenkigen-inc/component-ui';
+
+export const MyComponent = () => {
+  const [selectedId, setSelectedId] = useState('home');
+
+  return (
+    <Tab layout="auto">
+      <Tab.Item id="home" icon="add" isSelected={selectedId === 'home'} onClick={setSelectedId}>
+        ホーム
+      </Tab.Item>
+      <Tab.Item id="settings" icon="check" isSelected={selectedId === 'settings'} onClick={setSelectedId}>
+        設定
+      </Tab.Item>
+      <Tab.Item id="profile" icon="copy" isSelected={selectedId === 'profile'} onClick={setSelectedId}>
+        プロフィール
+      </Tab.Item>
+    </Tab>
+  );
+};
+```
+
+## Layout examples
+
+<Canvas of={LayoutExamples} />
+
 ## 概要
 
 異なるコンテンツを並列化し、クリックすることでビューを切り替えるための、ページ遷移を伴わないコンポーネントです。
