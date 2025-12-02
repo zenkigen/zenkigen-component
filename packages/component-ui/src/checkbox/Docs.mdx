@@ -21,6 +21,26 @@ import spec from '../../../../docs/component/checkbox-specification.md?raw';
 
 <Controls of={Component} />
 
+### Code Example
+
+```typescript
+import { useState } from 'react';
+import { Checkbox } from '@zenkigen-inc/component-ui';
+
+const Example = () => {
+  const [checked, setChecked] = useState(false);
+
+  return (
+    <Checkbox
+      id="agreement"
+      label="利用規約に同意する"
+      isChecked={checked}
+      onChange={() => setChecked((prev) => !prev)}
+    />
+  );
+};
+```
+
 ## 概要
 
 複数の選択肢の中から複数の項目を選ぶことができるコンポーネントです。
