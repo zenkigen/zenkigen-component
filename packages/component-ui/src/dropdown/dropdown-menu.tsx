@@ -5,10 +5,15 @@ import { useContext } from 'react';
 import { DropdownContext } from './dropdown-context';
 import type { DropdownHorizontalAlign, DropdownVerticalPosition } from './type';
 
+/** Dropdown.Menu コンポーネントのプロパティ */
 type Props = {
+  /** メニュー全体の最大高さ。スクロール領域を制限したい場合に設定する。 */
   maxHeight?: CSSProperties['height'];
+  /** true のとき上下の余白を取り除き、完全にカスタムなコンテンツを配置する。 */
   isNoPadding?: boolean;
+  /** トリガーからの垂直方向（上側か下側か）を指定する。 */
   verticalPosition?: DropdownVerticalPosition;
+  /** トリガーに対する水平方向の揃えを決める。 */
   horizontalAlign?: DropdownHorizontalAlign;
 };
 

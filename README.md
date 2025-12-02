@@ -129,7 +129,7 @@ yarn list --pattern "@zenkigen-inc/component-*"
 - Breadcrumb
 - [Button](./docs/component/button-specification.md)
 - Checkbox
-- Dropdown
+- [Dropdown](./docs/component/dropdown-specification.md)
 - Evaluation Star
 - [File Input](./docs/component/file-input-specification.md)
 - Heading
