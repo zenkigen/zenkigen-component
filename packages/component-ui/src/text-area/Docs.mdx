@@ -21,6 +21,37 @@ import spec from '../../../../docs/component/text-area-specification.md?raw';
 
 <Controls of={Component} />
 
+## Code Examples
+
+```tsx
+import { useState, type ChangeEvent } from 'react';
+import { TextArea } from '@zenkigen-inc/component-ui';
+
+const CompositionExample = () => {
+  const [value, setValue] = useState('');
+  const maxLength = 120;
+  const isLimitExceeded = value.length > maxLength;
+
+  return (
+    <>
+      <label htmlFor="message">メッセージ</label>
+      <TextArea
+        id="message"
+        value={value}
+        placeholder="お問い合わせ内容を入力してください"
+        autoHeight
+        maxHeight={240}
+        isError={isLimitExceeded}
+        onChange={(event: ChangeEvent<HTMLTextAreaElement>) => setValue(event.target.value)}
+      >
+        <TextArea.HelperMessage>120文字以内で入力してください</TextArea.HelperMessage>
+        <TextArea.ErrorMessage>文字数が上限を超えています</TextArea.ErrorMessage>
+      </TextArea>
+    </
+  );
+};
+```
+
 ## 概要
 
 複数行のテキストを入力するためのフィールドを提供するコンポーネントです。
