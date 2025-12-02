@@ -1,0 +1,1 @@
+Zenkigen Component: ReactベースのUIコンポーネント・デザインシステムのmonorepo。パッケージは `@zenkigen-inc/component-ui`(UI), `@zenkigen-inc/component-theme`(テーマ変数/設定), `@zenkigen-inc/component-config`(Tailwindプリセット/トークン), `@zenkigen-inc/component-icons`(SVGアイコン)。開発はStorybook/TypeScript/tsup/ Vitestを使用。
