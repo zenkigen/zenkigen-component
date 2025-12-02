@@ -76,21 +76,21 @@ const Example = () => {
 
 ### 必須プロパティ
 
-| プロパティ | 型 | 説明 |
-| ---------- | -- | ---- |
-| なし       | -  | -    |
+| プロパティ | 型  | 説明 |
+| ---------- | --- | ---- |
+| なし       | -   | -    |
 
 ### オプションプロパティ
 
-| プロパティ    | 型                                         | デフォルト値 | 説明                                                                 |
-| ------------- | ------------------------------------------ | ------------ | -------------------------------------------------------------------- |
-| `name`        | `string`                                   | `undefined`  | フォーム送信用の name 属性。グループ化して単一選択を扱う場合に指定する。 |
-| `value`       | `string`                                   | `undefined`  | フォーム送信用の値。                                                 |
-| `id`          | `string`                                   | `undefined`  | 入力要素の ID。`label` と関連付ける場合に指定する。                   |
-| `label`       | `string`                                   | `undefined`  | 右側に表示するラベルテキスト。                                        |
-| `isChecked`   | `boolean`                                  | `false`      | 選択状態（制御用）。                                                 |
-| `isDisabled`  | `boolean`                                  | `false`      | 無効状態にするか。                                                   |
-| `onChange`    | `(e: ChangeEvent<HTMLInputElement>) => void` | `undefined` | 状態変化時のハンドラー。`isDisabled` が `true` の場合は呼ばれない。    |
+| プロパティ   | 型                                           | デフォルト値 | 説明                                                                     |
+| ------------ | -------------------------------------------- | ------------ | ------------------------------------------------------------------------ |
+| `name`       | `string`                                     | `undefined`  | フォーム送信用の name 属性。グループ化して単一選択を扱う場合に指定する。 |
+| `value`      | `string`                                     | `undefined`  | フォーム送信用の値。                                                     |
+| `id`         | `string`                                     | `undefined`  | 入力要素の ID。`label` と関連付ける場合に指定する。                      |
+| `label`      | `string`                                     | `undefined`  | 右側に表示するラベルテキスト。                                           |
+| `isChecked`  | `boolean`                                    | `false`      | 選択状態（制御用）。                                                     |
+| `isDisabled` | `boolean`                                    | `false`      | 無効状態にするか。                                                       |
+| `onChange`   | `(e: ChangeEvent<HTMLInputElement>) => void` | `undefined`  | 状態変化時のハンドラー。`isDisabled` が `true` の場合は呼ばれない。      |
 
 ### 排他的プロパティグループ
 
