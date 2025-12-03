@@ -1,4 +1,4 @@
-import { Canvas, Markdown, Meta } from '@storybook/addon-docs/blocks';
+import { Canvas, Meta, ArgTypes, Story, Controls, Source, Markdown } from '@storybook/addon-docs/blocks';
 import HeadingStories, { Base } from './heading.stories';
 import spec from '../../../../docs/component/heading-specification.md?raw';
 
@@ -14,15 +14,11 @@ import spec from '../../../../docs/component/heading-specification.md?raw';
   </div>
 </details>
 
-<Meta title="Heading" of={HeadingStories} />
-
-# Heading
-
 <Canvas>
-  <Story of={Component} />
+  <Story of={Base} />
 </Canvas>
 
-<Controls of={Component} />
+<Controls of={Base} />
 
 ## コード例
 
@@ -31,16 +27,8 @@ import { Button, Heading, Icon } from '@zenkigen-inc/component-ui';
 
 export const PageHeading = () => {
   return (
-    <Heading
-      level={2}
-      before={<Icon name="chart-bar" size="large" />}
-      after={
-        <Button variant="outline" before={<Icon name="add" size="medium" />}>
-          新規追加
-        </Button>
-      }
-    >
-      <div className="mr-auto">ダッシュボード</div>
+    <Heading level={2} before={<Icon name="chart-bar" size="large" />} after={<Icon name="information" size="small" />}>
+      ダッシュボード
     </Heading>
   );
 };
