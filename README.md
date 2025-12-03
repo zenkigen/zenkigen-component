@@ -130,7 +130,7 @@ yarn list --pattern "@zenkigen-inc/component-*"
 - [Button](./docs/component/button-specification.md)
 - Checkbox
 - Dropdown
-- Evaluation Star
+- [Evaluation Star](./docs/component/evaluation-star-specification.md)
 - [File Input](./docs/component/file-input-specification.md)
 - Heading
 - [Icon](./docs/component/icon-specification.md)
