@@ -1,15 +1,48 @@
 import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/addon-docs/blocks';
+import { Markdown } from '@storybook/addon-docs/blocks';
 import ToastStories, { Component, Base } from './toast.stories';
+import spec from '../../../../docs/component/toast-specification.md?raw';
 
 <Meta title="Toast" of={ToastStories} />
 
 # Toast
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
 
 <Canvas>
   <Story of={Component} />
 </Canvas>
 
 <Controls of={Component} />
+
+## コード例
+
+<Source
+  code={`import { Button, ToastProvider, useToast } from '@zenkigen-inc/component-ui';
+
+const ShowToastButton = () => {
+  const { addToast } = useToast();
+
+  return (
+    <Button onClick={() => addToast({ message: '保存しました', state: 'success' })}>
+      トーストを表示
+    </Button>
+  );
+};
+
+export const App = () => (
+  <ToastProvider>
+    <ShowToastButton />
+  </ToastProvider>
+);`}
+  language="tsx"
+/>
 
 ## 概要
 

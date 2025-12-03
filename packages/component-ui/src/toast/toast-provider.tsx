@@ -5,7 +5,12 @@ import { createPortal } from 'react-dom';
 import { Toast } from './toast';
 import type { ToastState } from './type';
 
-type AddToastArgs = { message: string; state: ToastState };
+type AddToastArgs = {
+  /** 表示する本文 */
+  message: string;
+  /** 表示ステート */
+  state: ToastState;
+};
 
 type ToastProviderProps = {
   addToast: (args: AddToastArgs) => void;
