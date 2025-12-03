@@ -1,8 +1,9 @@
-import { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Tooltip } from './tooltip';
 
 const meta: Meta<typeof Tooltip> = {
+  title: 'Components/Tooltip',
   component: Tooltip,
   argTypes: {
     size: {
@@ -21,90 +22,74 @@ const meta: Meta<typeof Tooltip> = {
 };
 
 export default meta;
-
 type Story = StoryObj<typeof Tooltip>;
 
+export const Component: Story = {
+  args: {
+    size: 'small',
+    content: (
+      <>
+        内容説明テキスト1
+        <br />
+        内容説明テキスト2
+      </>
+    ),
+  },
+  parameters: {
+    chromatic: { disable: true },
+  },
+  render: (args) => (
+    <div className="grid gap-10 px-20 py-10">
+      <div className="flex items-center gap-20">
+        <Tooltip {...args}>
+          <div className="flex h-10 w-[240px] items-center justify-center rounded border border-gray-400">target</div>
+        </Tooltip>
+      </div>
+    </div>
+  ),
+};
+
 export const Base: Story = {
-  render: ({ ...args }) => (
-    <div style={{ display: 'grid', rowGap: '50px', padding: '50px 100px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', columnGap: '100px' }}>
-        <Tooltip {...args} content="内容説明テキストテキスト" verticalPosition="top" horizontalAlign="right">
-          <div className="flex h-10 w-24 items-center justify-center rounded border border-gray-400">target</div>
-        </Tooltip>
-        <Tooltip {...args} content="内容説明テキストテキスト" verticalPosition="top" horizontalAlign="center">
-          <div className="flex h-10 w-24 items-center justify-center rounded border border-gray-400">target</div>
-        </Tooltip>
-        <Tooltip {...args} content="内容説明テキストテキスト" verticalPosition="top" horizontalAlign="left">
-          <div className="flex h-10 w-24 items-center justify-center rounded border border-gray-400">target</div>
-        </Tooltip>
-      </div>
-      <div style={{ display: 'flex', alignItems: 'center', columnGap: '100px' }}>
-        <Tooltip {...args} content="内容説明テキストテキスト" verticalPosition="bottom" horizontalAlign="right">
-          <div className="flex h-10 w-24 items-center justify-center rounded border border-gray-400">target</div>
-        </Tooltip>
-        <Tooltip {...args} content="内容説明テキストテキスト" verticalPosition="bottom" horizontalAlign="center">
-          <div className="flex h-10 w-24 items-center justify-center rounded border border-gray-400">target</div>
-        </Tooltip>
-        <Tooltip {...args} content="内容説明テキストテキスト" verticalPosition="bottom" horizontalAlign="left">
+  args: {
+    content: (
+      <>
+        内容説明テキスト1
+        <br />
+        内容説明テキスト2
+      </>
+    ),
+  },
+  render: (args) => (
+    <div className="grid gap-10 px-20 py-10">
+      <div className="flex items-center gap-20">
+        <Tooltip {...args}>
           <div className="flex h-10 w-24 items-center justify-center rounded border border-gray-400">target</div>
         </Tooltip>
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', columnGap: '100px', marginTop: '100px' }}>
-        <Tooltip
-          {...args}
-          size="medium"
-          content="内容説明テキストテキスト"
-          verticalPosition="top"
-          horizontalAlign="right"
-        >
-          <div className="flex h-10 w-24 items-center justify-center rounded border border-gray-400">target</div>
+      <div className="flex items-center gap-20">
+        <Tooltip {...args}>
+          <div className="flex h-10 w-[240px] items-center justify-center rounded border border-gray-400">target</div>
         </Tooltip>
-        <Tooltip
-          {...args}
-          size="medium"
-          content="内容説明テキストテキスト"
-          verticalPosition="top"
-          horizontalAlign="center"
-        >
-          <div className="flex h-10 w-24 items-center justify-center rounded border border-gray-400">target</div>
-        </Tooltip>
-        <Tooltip
-          {...args}
-          size="medium"
-          content="内容説明テキストテキスト"
-          verticalPosition="top"
-          horizontalAlign="left"
-        >
+      </div>
+    </div>
+  ),
+};
+
+export const Portal: Story = {
+  args: {
+    portalTarget: document.body,
+    content: '内容説明テキスト',
+  },
+  render: (args) => (
+    <div className="grid gap-10 px-20 py-10">
+      <div className="flex items-center gap-20">
+        <Tooltip {...args}>
           <div className="flex h-10 w-24 items-center justify-center rounded border border-gray-400">target</div>
         </Tooltip>
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', columnGap: '100px' }}>
-        <Tooltip
-          {...args}
-          size="medium"
-          content="内容説明テキストテキスト"
-          verticalPosition="bottom"
-          horizontalAlign="right"
-        >
-          <div className="flex h-10 w-24 items-center justify-center rounded border border-gray-400">target</div>
-        </Tooltip>
-        <Tooltip
-          {...args}
-          size="medium"
-          content="内容説明テキストテキスト"
-          verticalPosition="bottom"
-          horizontalAlign="center"
-        >
-          <div className="flex h-10 w-24 items-center justify-center rounded border border-gray-400">target</div>
-        </Tooltip>
-        <Tooltip
-          {...args}
-          size="medium"
-          content="内容説明テキストテキスト"
-          verticalPosition="bottom"
-          horizontalAlign="left"
-        >
-          <div className="flex h-10 w-24 items-center justify-center rounded border border-gray-400">target</div>
+      <div className="flex items-center gap-20">
+        <Tooltip {...args}>
+          <div className="flex h-10 w-[240px] items-center justify-center rounded border border-gray-400">target</div>
         </Tooltip>
       </div>
     </div>

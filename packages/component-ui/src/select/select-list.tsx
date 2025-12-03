@@ -1,57 +1,61 @@
-import { CSSProperties, ReactNode, useContext } from 'react';
-
-import { focusVisible, typography } from '@zenkigen-inc/component-theme';
+import { focusVisible } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
+import type { CSSProperties, PropsWithChildren } from 'react';
+import { forwardRef, useContext, useLayoutEffect } from 'react';
 
 import { SelectContext } from './select-context';
 
 type Props = {
-  children: ReactNode;
   maxHeight?: CSSProperties['height'];
 };
 
-export function SelectList({ children, maxHeight }: Props) {
-  const { size, selectedOption, setIsOptionListOpen, variant, placeholder, onChange } = useContext(SelectContext);
+export const SelectList = forwardRef<HTMLUListElement, PropsWithChildren<Props>>(({ children, maxHeight }, ref) => {
+  const { selectedOption, setIsOptionListOpen, variant, placeholder, onChange, floatingStyles, floatingRef } =
+    useContext(SelectContext);
 
   const handleClickDeselect = () => {
     onChange?.(null);
     setIsOptionListOpen(false);
   };
 
-  const listClasses = clsx(
-    'z-dropdown',
-    'absolute',
-    'w-max',
-    'py-2',
-    'overflow-y-auto',
-    'bg-background-uiBackground01',
-    'rounded',
-    'shadow-floatingShadow',
-    {
-      'top-7': size === 'x-small' || size === 'small',
-      'top-9': size === 'medium',
-      'top-11': size === 'large',
-      'border-solid border border-border-uiBorder01': variant === 'outline',
-    },
-  );
+  useLayoutEffect(() => {
+    // maxHeight（optionListMaxHeight）が指定されてない場合はスクロールしない（リストは全て見えている想定のため場合）
+    if (maxHeight != null && selectedOption != null) {
+      const container = floatingRef?.current;
+      if (container != null) {
+        const element = container.querySelector(`[data-id="${selectedOption.id}"]`) as HTMLElement;
+
+        if (element != null) {
+          // 要素の位置を計算してスクロール
+          const htmlElement = element as HTMLElement;
+          const elementTop = htmlElement.offsetTop;
+          const elementHeight = htmlElement.offsetHeight;
+          const containerHeight = container.clientHeight;
+
+          // 要素を中央に配置するためのスクロール位置を計算
+          const scrollTop = elementTop - (containerHeight - elementHeight) / 2;
+
+          container.scrollTo({
+            top: Math.max(0, scrollTop),
+          });
+        }
+      }
+    }
+  }, [selectedOption, maxHeight, floatingRef]);
+
+  const listClasses = clsx('z-dropdown overflow-y-auto rounded bg-uiBackground01 py-2 shadow-floatingShadow', {
+    'border-solid border border-uiBorder01': variant === 'outline',
+  });
 
   const deselectButtonClasses = clsx(
-    'flex',
-    'items-center',
-    'w-full',
-    'h-8',
-    'px-3',
-    'hover:bg-hover-hover02',
-    'active:bg-active-active02',
-    'text-interactive-interactive02',
+    'typography-label14regular flex h-8 w-full items-center px-3 text-interactive02 hover:bg-hover02 active:bg-active02',
     focusVisible.inset,
-    typography.label.label2regular,
   );
 
   return (
-    <ul className={listClasses} style={{ maxHeight }}>
+    <ul className={listClasses} style={{ maxHeight, ...floatingStyles }} ref={ref}>
       {children}
-      {placeholder && selectedOption !== null && (
+      {placeholder != null && selectedOption !== null && (
         <li>
           <button className={deselectButtonClasses} type="button" onClick={handleClickDeselect}>
             選択解除
@@ -60,4 +64,6 @@ export function SelectList({ children, maxHeight }: Props) {
       )}
     </ul>
   );
-}
+});
+
+SelectList.displayName = 'SelectList';

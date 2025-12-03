@@ -1,9 +1,11 @@
+import type { MutableRefObject } from 'react';
 import { createContext } from 'react';
 
 type UseDropdownReturnType = {
   isVisible: boolean;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
   isDisabled: boolean;
+  portalTargetRef?: MutableRefObject<HTMLElement | null>;
   targetDimensions: {
     width: number;
     height: number;

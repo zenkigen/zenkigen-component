@@ -1,3 +1,3 @@
-export { TableContainer } from './table-container';
-export { TableRowContainer } from './table-row-container';
+export { Table } from './table';
 export { TableCell } from './table-cell';
+export { TableRow } from './table-row';

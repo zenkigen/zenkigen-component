@@ -1,49 +1,48 @@
-import { ReactNode } from 'react';
-
-import { typography } from '@zenkigen-inc/component-theme';
+import type { IconName } from '@zenkigen-inc/component-icons';
 import { clsx } from 'clsx';
+import type { ReactNode } from 'react';
+
+import { Icon } from '../icon';
 
 type Props = {
   id: string;
   isSelected?: boolean;
   isDisabled?: boolean;
+  icon?: IconName;
   children?: ReactNode;
   onClick: (id: string) => void;
 };
 
-export const TabItem = (props: Props) => {
+export const TabItem = ({ isSelected = false, isDisabled = false, icon, ...props }: Props) => {
   const classes = clsx(
-    'relative',
-    'flex',
-    'z-0',
-    'py-2',
-    'leading-[24px]',
-    'before:h-px',
-    'before:absolute',
-    'before:left-0',
-    'before:right-0',
-    'before:bottom-0',
-    'hover:text-text-text01',
-    'disabled:text-disabled-disabled01',
-    'disabled:pointer-events-none',
+    'group relative z-0 flex items-center justify-center gap-1 py-2 leading-[24px] before:absolute before:inset-x-0 before:bottom-0 before:h-[2px] hover:text-interactive01 disabled:pointer-events-none disabled:text-disabled01',
     {
-      [`${typography.label.label2regular}`]: !props.isSelected,
-      ['text-interactive-interactive02 hover:before:bg-border-uiBorder02Dark']: !props.isSelected,
-      [`${typography.label.label2bold}`]: props.isSelected,
-      ['before:bg-interactive-interactive01 hover:before:bg-interactive-interactive01 pointer-events-none']:
-        props.isSelected,
+      'typography-label14regular text-interactive02': !isSelected,
+      'typography-label14bold text-interactive01': isSelected,
+      'before:bg-interactive01 hover:before:bg-interactive01 pointer-events-none': isSelected,
     },
   );
+
+  const iconWrapperClasses = clsx('flex shrink-0 items-center', {
+    'fill-disabled01': isDisabled,
+    'fill-interactive01': !isDisabled && isSelected,
+    'fill-icon01 group-hover:fill-interactive01': !isDisabled && !isSelected,
+  });
 
   return (
     <button
       type="button"
       role="tab"
-      aria-selected={props.isSelected}
+      aria-selected={isSelected}
       className={classes}
-      disabled={props.isDisabled}
+      disabled={isDisabled}
       onClick={() => props.onClick(props.id)}
     >
+      {icon != null && (
+        <span className={iconWrapperClasses}>
+          <Icon name={icon} size="small" />
+        </span>
+      )}
       {props.children}
     </button>
   );

@@ -1,0 +1,81 @@
+import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/addon-docs/blocks';
+import { Markdown } from '@storybook/addon-docs/blocks';
+import SortButtonStories, { Component, SizesAndStates, LayoutExamples } from './sort-button.stories';
+import spec from '../../../../docs/component/sort-button-specification.md?raw';
+
+<Meta title="SortButton" of={SortButtonStories} />
+
+# SortButton
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
+
+<Canvas>
+  <Story of={Component} />
+</Canvas>
+
+<Controls of={Component} />
+
+### Code Example
+
+- ソート順序は `降順`→`昇順` を基本とする
+- 必ず`aria-label`を指定すること
+
+```tsx
+import { SortButton } from '@zenkigen-inc/component-ui';
+import type { SortOrder } from '@zenkigen-inc/component-ui';
+
+const [sortOrder, setSortOrder] = useState<SortOrder>(null);
+
+return (
+  <SortButton
+    label="項目A"
+    sortOrder={sortOrder}
+    onClick={() => {
+      setSortOrder(sortOrder === null ? 'descend' : sortOrder === 'descend' ? 'ascend' : 'descend');
+    }}
+    aria-label={`項目A ${sortOrder === null ? 'ソートなし' : sortOrder === 'ascend' ? '昇順' : '降順'}`}
+  />
+);
+```
+
+## Stories
+
+<Canvas of={SizesAndStates} />
+
+## Layout examples
+
+<Canvas of={LayoutExamples} />
+
+## 概要
+
+表の並べ替えを行なうためのコンポーネント。Select Sortコンポーネントと類似していますが、クリックする度に並べ替えアクションが発動する点で異なります。
+
+1クリック目で降順・2クリック目で昇順ができるため、ユーザビリティを高めることができます。
+
+## 設計の原則（Do）
+
+### 昇順/降順の切り替えがクリック毎にできる
+
+選択肢のListを表示させずに、クリックで昇順と降順の切り替えができ、即座に並べ替えができます。
+
+### ボタンを押下すると、直ちに関連する要素へ影響します
+
+[Toggle](/docs/components-toggle--docs)のように、すぐに効果を発揮するものでなければなりません。ステータスをすぐに変更するために使用します。
+
+### ボタンが複数並んでいる場合、1つのみアクションが可能です
+
+[項目A]が選択されている状態で、他の項目(項目Bなど)をクリックしたら、[項目A]が未選択状態になります。
+
+## 推奨しないこと（Don’t）
+
+### 別のボタンのせいで反映が遅れるとすれば、使用しない
+
+選択肢を選んだ後にサブミットを使用する場合は[Select](/docs/components-select--docs)を使用します。
+
+![推奨しないこと その1](/storybook/images/sortbutton_01.jpg)

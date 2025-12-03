@@ -13,28 +13,30 @@ concurrency:
 
 jobs:
   chromatic-deployment:
-    if: github.event.pull_request.draft == false && contains(github.event.pull_request.labels.*.name, 'renovate') == false
+    if: github.event.pull_request.draft == false && contains(github.event.pull_request.labels.*.name, 'renovate') == false && contains(github.event.pull_request.labels.*.name, 'dependencies') == false
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Install dependencies
-        run: yarn install
+      - name: Yarn install
+        uses: ./.github/actions/yarn-install
 
       - name: Build
         run: yarn build:all
 
       - name: Publish to Chromatic
         id: chromatic
-        uses: chromaui/action@v1
+        uses: chromaui/action@v13
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           onlyChanged: true
+        env:
+          IS_CHROMATIC: 'true'
 
       - name: Find Comment
-        uses: peter-evans/find-comment@v2
+        uses: peter-evans/find-comment@v3
         if: success() && github.event.number
         id: fc
         with:
@@ -43,7 +45,7 @@ jobs:
           body-includes: Chromatic results
 
       - name: Create or update comment
-        uses: peter-evans/create-or-update-comment@v3
+        uses: peter-evans/create-or-update-comment@v4
         if: success() && github.event.number
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}

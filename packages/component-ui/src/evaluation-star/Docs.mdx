@@ -1,0 +1,28 @@
+import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/addon-docs/blocks';
+import EvaluationStarStories, { Component } from './evaluation-star.stories';
+
+<Meta title="EvaluationStar" of={EvaluationStarStories} />
+
+# EvaluationStar
+
+<Canvas>
+  <Story of={Component} />
+</Canvas>
+
+<Controls of={Component} />
+
+## 概要
+
+水平に配置された一連のグラフィックシンボル(星)を使用して、評価を表示します。 ユーザーはボタンを通じて評価を入力することができます。
+
+## 設計の原則 （Do）
+
+### 評価は5段階、または3段階で表示します
+
+値は、5つの場合、0から5までの感情尺度(0が最低、5が最高)、3つの場合、0から3までの感情尺度(0が最低、3が最高)で、選択された評価の数です。
+
+## 推奨しないこと（Don’t）
+
+### 同一の評価軸の場合は星の数を項目ごとに変更しない
+
+スターレーティングは、5つ、または3つの星を使用します。 同一の評価軸の場合に、星の数を項目ごとに増やしたり減らしたりしてはいけません。 同一の評価軸の場合は、他の項目と同じ星の数で評価します。

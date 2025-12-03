@@ -1,27 +1,32 @@
-import { CSSProperties, ReactNode, useRef, useState } from 'react';
-
-import { IconName } from '@zenkigen-inc/component-icons';
-import { buttonColors, focusVisible, typography } from '@zenkigen-inc/component-theme';
+import { autoUpdate, FloatingPortal, offset, size as sizeMiddleware, useFloating } from '@floating-ui/react';
+import type { IconName } from '@zenkigen-inc/component-icons';
+import { focusVisible, selectColors } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
+import type { CSSProperties, PropsWithChildren, RefObject } from 'react';
+import { useRef, useState } from 'react';
 
 import { useOutsideClick } from '../hooks/use-outside-click';
 import { Icon } from '../icon';
-
 import { SelectContext } from './select-context';
 import { SelectItem } from './select-item';
 import { SelectList } from './select-list';
 import type { SelectOption } from './type';
 
+// Floating UI の定数
+const FLOATING_OFFSET = 4;
+
 type Props = {
-  children: ReactNode;
   size?: 'x-small' | 'small' | 'medium' | 'large';
   variant?: 'outline' | 'text';
   width?: CSSProperties['width'];
+  maxWidth?: CSSProperties['maxWidth'];
   placeholder?: string;
   placeholderIcon?: IconName;
   selectedOption?: SelectOption | null;
   optionListMaxHeight?: CSSProperties['height'];
   isDisabled?: boolean;
+  isError?: boolean;
+  isOptionSelected?: boolean;
   onChange?: (option: SelectOption | null) => void;
 };
 
@@ -30,20 +35,47 @@ export function Select({
   size = 'medium',
   variant = 'outline',
   width,
+  maxWidth,
   placeholder,
   placeholderIcon,
   selectedOption = null,
   isDisabled = false,
+  isError = false,
+  isOptionSelected = false,
   onChange,
   optionListMaxHeight,
-}: Props) {
+}: PropsWithChildren<Props>) {
   const [isOptionListOpen, setIsOptionListOpen] = useState(false);
   const targetRef = useRef<HTMLDivElement>(null);
   useOutsideClick(targetRef, () => setIsOptionListOpen(false));
 
+  // Floating UI の設定
+  const { refs, floatingStyles } = useFloating({
+    open: isOptionListOpen,
+    onOpenChange: setIsOptionListOpen,
+    placement: 'bottom-start',
+    middleware: [
+      offset(FLOATING_OFFSET),
+      sizeMiddleware({
+        apply({ availableWidth, elements, rects }) {
+          const referenceWidth = rects.reference.width;
+          // トリガーボタンが小さい場合は最小幅を保証し、大きい場合はトリガーボタンに合わせる
+          elements.floating.style.minWidth = `${referenceWidth}px`;
+          elements.floating.style.maxWidth = `${availableWidth}px`;
+        },
+      }),
+    ],
+    whileElementsMounted: autoUpdate,
+  });
+
   const handleClickToggle = () => setIsOptionListOpen((prev) => !prev);
 
-  const wrapperClasses = clsx('relative', 'flex', 'shrink-0', 'gap-1', 'items-center', 'rounded', {
+  const buttonVariant: 'outline' | 'text' | 'outlineError' | 'textError' =
+    isError && !isDisabled ? (`${variant}Error` as 'outlineError' | 'textError') : variant;
+
+  const isSelected = isOptionSelected && !isDisabled && selectedOption !== null && !isError;
+
+  const wrapperClasses = clsx('relative flex shrink-0 items-center gap-1 rounded bg-uiBackground01', {
     'h-6': size === 'x-small' || size === 'small',
     'h-8': size === 'medium',
     'h-10': size === 'large',
@@ -51,30 +83,28 @@ export function Select({
   });
 
   const buttonClasses = clsx(
-    'flex',
-    'items-center',
-    'w-full',
-    'h-full',
-    'rounded',
-    buttonColors[variant].base,
-    buttonColors[variant].hover,
-    buttonColors[variant].active,
-    buttonColors[variant].disabled,
+    'flex size-full items-center rounded',
+    selectColors[buttonVariant].hover,
+    selectColors[buttonVariant].active,
+    selectColors[buttonVariant].disabled,
     focusVisible.normal,
     {
+      [selectColors[buttonVariant].selected]: isSelected,
+      [selectColors[buttonVariant].base]: !isSelected,
       'px-2': size === 'x-small' || size === 'small',
       'px-4': size === 'medium' || size === 'large',
       'pointer-events-none': isDisabled,
+      'border-supportError': !isSelected && !isDisabled && isError,
     },
   );
 
-  const labelClasses = clsx(
-    'overflow-hidden',
-    size === 'x-small' ? 'mr-1' : 'mr-2',
-    typography.label[
-      size === 'x-small' ? 'label3regular' : size === 'small' || size === 'medium' ? 'label2regular' : 'label1regular'
-    ],
-  );
+  const labelClasses = clsx('overflow-hidden', {
+    'mr-1': size === 'x-small',
+    'mr-2': size !== 'x-small',
+    'typography-label12regular': size === 'x-small',
+    'typography-label14regular': size === 'small' || size === 'medium',
+    'typography-label16regular': size === 'large',
+  });
 
   return (
     <SelectContext.Provider
@@ -85,16 +115,25 @@ export function Select({
         setIsOptionListOpen,
         selectedOption,
         onChange,
+        isError,
+        floatingStyles,
+        floatingRef: refs.floating as RefObject<HTMLUListElement | null>,
       }}
     >
-      <div className={wrapperClasses} style={{ width }} ref={targetRef}>
-        <button className={buttonClasses} type="button" onClick={handleClickToggle} disabled={isDisabled}>
+      <div className={wrapperClasses} style={{ width, maxWidth }} ref={targetRef}>
+        <button
+          ref={refs.setReference}
+          className={buttonClasses}
+          type="button"
+          onClick={handleClickToggle}
+          disabled={isDisabled}
+        >
           {selectedOption?.icon ? (
             <div className="mr-1 flex">
               <Icon name={selectedOption.icon} size={size === 'large' ? 'medium' : 'small'} />
             </div>
           ) : (
-            placeholder &&
+            placeholder != null &&
             placeholderIcon && (
               <div className="mr-1 flex">
                 <Icon name={placeholderIcon} size={size === 'large' ? 'medium' : 'small'} />
@@ -102,13 +141,24 @@ export function Select({
             )
           )}
           <div className={labelClasses}>
-            <div className="truncate">{selectedOption ? selectedOption.label : placeholder && placeholder}</div>
+            <div className="truncate">{selectedOption ? selectedOption.label : placeholder != null && placeholder}</div>
           </div>
           <div className="ml-auto flex items-center">
-            <Icon name={isOptionListOpen ? 'angle-small-up' : 'angle-small-down'} size="small" />
+            <Icon
+              name={isOptionListOpen ? 'angle-small-up' : 'angle-small-down'}
+              size={size === 'large' ? 'medium' : 'small'}
+            />
           </div>
         </button>
-        {isOptionListOpen && !isDisabled && <SelectList maxHeight={optionListMaxHeight}>{children}</SelectList>}
+        {isOptionListOpen && !isDisabled && (
+          <FloatingPortal>
+            <div className="relative z-overlay">
+              <SelectList ref={refs.setFloating} maxHeight={optionListMaxHeight}>
+                {children}
+              </SelectList>
+            </div>
+          </FloatingPortal>
+        )}
       </div>
     </SelectContext.Provider>
   );

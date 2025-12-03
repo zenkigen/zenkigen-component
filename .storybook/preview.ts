@@ -1,6 +1,10 @@
 import './globals.css';
 
-import type { Preview } from '@storybook/react';
+import type { Preview } from '@storybook/react-vite';
+import AXE_LOCALE_JA from 'axe-core/locales/ja.json';
+import React from 'react';
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(globalThis as any).React = React;
 
 const preview: Preview = {
   parameters: {
@@ -11,6 +15,17 @@ const preview: Preview = {
         date: /Date$/,
       },
     },
+    options: {
+      storySort: {
+        order: ['Tokens', 'Components'],
+      },
+    },
+    a11y: {
+      config: {
+        locale: AXE_LOCALE_JA,
+      },
+    },
   },
+  tags: ['autodocs'],
 };
 export default preview;

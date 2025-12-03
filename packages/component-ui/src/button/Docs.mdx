@@ -1,0 +1,42 @@
+import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/addon-docs/blocks';
+import ButtonStories, { Component, Base } from './button.stories';
+import { Markdown } from '@storybook/addon-docs/blocks';
+import spec from '../../../../docs/component/button-specification.md?raw';
+
+<Meta title="Button" of={ButtonStories} />
+
+# Button
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
+
+<Canvas>
+  <Story of={Component} />
+</Canvas>
+
+<Controls of={Component} />
+
+## 概要
+
+ボタンはシンプルなユーザー操作のためのトリガーを表します。Buttonは、カード、ダイアログ、フォーム、その他コンポーネントやパターンに使用します。ボタンはユーザーに選択肢を与えます。Webサイトやモバイルアプリで行う操作を選択したり、提示されているものの中から選ぶことを可能にします。
+
+## 設計の原則 （Do）
+
+### 関連するボタンやコンポーネントはグルーピング(並列)してください
+
+関連するボタンやコンポーネントはグルーピング(並列)してください。
+
+### 破壊的なボタンを区別します
+
+警告ボタンがコンテンツの削除などの破壊的なアクションをもたらす場合は、破壊的なボタンスタイルを指定して、ユーザーがそれを区別できるようにします。
+
+## 推奨しないこと（Don’t）
+
+### 一つの画面にプライマリボタンを多用しない
+
+プライマリボタンは、ページ内で最も重要なアクション事に使用します。(ex : 「同意」、「送信」、「応募」)

@@ -1,12 +1,12 @@
-import { ReactElement, ReactNode, cloneElement, useCallback, useRef, useState } from 'react';
-
-import { IconName } from '@zenkigen-inc/component-icons';
-import { buttonColors, focusVisible, typography } from '@zenkigen-inc/component-theme';
+import type { IconName } from '@zenkigen-inc/component-icons';
+import { buttonColors, focusVisible } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
+import type { MutableRefObject, PropsWithChildren, ReactElement } from 'react';
+import { useCallback, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 import { useOutsideClick } from '../hooks/use-outside-click';
 import { Icon } from '../icon';
-
 import { DropdownContext } from './dropdown-context';
 import { DropdownItem } from './dropdown-item';
 import { DropdownMenu } from './dropdown-menu';
@@ -17,7 +17,7 @@ type Props = {
   title?: string;
   isDisabled?: boolean;
   isArrowHidden?: boolean;
-  children: ReactNode;
+  portalTargetRef?: MutableRefObject<HTMLElement | null>;
 } & (
   | { target: ReactElement; label?: never; icon?: never }
   | {
@@ -33,11 +33,12 @@ export function Dropdown({
   label,
   icon,
   size = 'medium',
-  variant = target ? 'text' : 'outline',
+  variant = 'outline',
   title,
   isDisabled = false,
   isArrowHidden = false,
-}: Props) {
+  portalTargetRef,
+}: PropsWithChildren<Props>) {
   const [isVisible, setIsVisible] = useState(false);
   const [targetDimensions, setTargetDimensions] = useState({
     width: 0,
@@ -66,58 +67,46 @@ export function Dropdown({
     }
   }, [isVisible]);
 
-  const wrapperClasses = clsx(
-    'relative',
-    'flex shrink-0 items-center gap-1',
-    'rounded',
-    isDisabled && 'cursor-not-allowed',
-  );
+  const wrapperClasses = clsx('relative flex shrink-0 items-center gap-1 rounded', {
+    'cursor-not-allowed': isDisabled,
+  });
 
   const childrenButtonClasses = clsx(
-    'flex items-center justify-center',
-    'rounded',
-    'hover:bg-hover-hover02',
-    'active:bg-active-active02',
+    'flex items-center justify-center rounded bg-uiBackground01 p-1 hover:bg-hover02 active:bg-active02',
     focusVisible.normal,
-    isDisabled && 'pointer-events-none',
     {
-      'h-6 w-6': size === 'x-small',
-      'h-8 w-8': size === 'small',
-      'h-10 w-10': size === 'medium',
-      'h-12 w-12': size === 'large',
-      'border border-border-uiBorder02': variant === 'outline',
+      'pointer-events-none': isDisabled,
+      'border border-uiBorder02': variant === 'outline',
     },
   );
 
   const buttonClasses = clsx(
-    'flex items-center',
-    'rounded',
+    'flex items-center rounded bg-uiBackground01',
     buttonColors[variant].base,
     buttonColors[variant].hover,
     buttonColors[variant].active,
     buttonColors[variant].disabled,
     focusVisible.normal,
-    isDisabled && 'pointer-events-none',
     {
+      'pointer-events-none': isDisabled,
       'h-6 px-2': size === 'x-small' || size === 'small',
       'h-8 px-4': size === 'medium',
       'h-10 px-4': size === 'large',
     },
   );
 
-  const labelClasses = clsx(
-    'flex',
-    'items-center',
-    !isArrowHidden ? (size === 'x-small' ? 'mr-1' : 'mr-2') : null,
-    typography.label[
-      size === 'x-small' ? 'label3regular' : size === 'small' || size === 'medium' ? 'label2regular' : 'label1regular'
-    ],
-  );
-
-  const targetWithProps = target && cloneElement(target, { isDisabled });
+  const labelClasses = clsx('flex items-center', {
+    'mr-1': !isArrowHidden && size === 'x-small',
+    'mr-2': !isArrowHidden && size !== 'x-small',
+    'typography-label12regular': size === 'x-small',
+    'typography-label14regular': size === 'small' || size === 'medium',
+    'typography-label16regular': size === 'large',
+  });
 
   return (
-    <DropdownContext.Provider value={{ isVisible, setIsVisible, isDisabled, targetDimensions, variant }}>
+    <DropdownContext.Provider
+      value={{ isVisible, setIsVisible, isDisabled, targetDimensions, variant, portalTargetRef }}
+    >
       <div ref={targetRef} className={wrapperClasses}>
         {target ? (
           <button
@@ -127,7 +116,15 @@ export function Dropdown({
             onClick={handleToggle}
             disabled={isDisabled}
           >
-            {targetWithProps}
+            {target}
+            {!isArrowHidden && (
+              <div className="ml-2 flex items-center fill-icon01">
+                <Icon
+                  name={isVisible ? 'angle-small-up' : 'angle-small-down'}
+                  size={size === 'large' ? 'medium' : 'small'}
+                />
+              </div>
+            )}
           </button>
         ) : (
           <button type="button" title={title} className={buttonClasses} onClick={handleToggle} disabled={isDisabled}>
@@ -144,7 +141,9 @@ export function Dropdown({
             )}
           </button>
         )}
-        {children}
+        {!portalTargetRef
+          ? children
+          : portalTargetRef != null && portalTargetRef.current && createPortal(children, portalTargetRef.current)}
       </div>
     </DropdownContext.Provider>
   );

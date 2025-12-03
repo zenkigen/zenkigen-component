@@ -1,0 +1,69 @@
+import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/addon-docs/blocks';
+import { Markdown } from '@storybook/addon-docs/blocks';
+import ModalStories, { Component } from './modal.stories';
+import spec from '../../../../docs/component/modal-specification.md?raw';
+
+<Meta title="Modal" of={ModalStories} />
+
+# Modal
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
+
+<Canvas>
+  <Story of={Component} />
+</Canvas>
+
+<Controls of={Component} />
+
+### Code Example
+
+```tsx
+import { Button } from '@zenkigen-inc/component-ui';
+
+const [isOpen, setIsOpen] = useState(false);
+
+return (
+  <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+    <Modal.Header>タイトル</Modal.Header>
+    <Modal.Body>
+      <div className="flex w-full items-center justify-center py-20">Content</div>
+    </Modal.Body>
+    <Modal.Footer>
+      <div className="flex w-full flex-wrap items-center justify-end gap-4">
+        <Button variant="outline" size="large" onClick={action('キャンセル')}>
+          キャンセル
+        </Button>
+        <Button variant="fill" size="large" onClick={action('保存する')}>
+          保存する
+        </Button>
+      </div>
+    </Modal.Footer>
+  </Modal>
+);
+```
+
+## 概要
+
+元のウィンドウの上に別枠で表示されるウィンドウのことです。
+
+## 設計の原則 （Do）
+
+### ウィンドウを閉じるまで、ユーザーに何もさせません
+
+指定された操作を完了、もしくはキャンセルするまでずっと表示され続け、他のウィンドウに移ることができません。ユーザーを特定のアクションや情報に集中させるために使用してください。
+
+## 推奨しないこと（Don't）
+
+### ユーザーの操作を中断させるため、不必要に使用しない
+
+モーダルは正しく使用すると効果的ですが、ユーザーへの混乱を抑えるために控えめに使用する必要があります。
+
+### モーダルonモーダルは極力避ける
+
+モーダルはユーザーの操作を一時的にブロックし、特定のタスクに集中させるためのUI要素であり、複数のモーダルを重ねると、ユーザーエクスペリエンスを損なう可能性があります。

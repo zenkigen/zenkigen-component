@@ -1,11 +1,10 @@
-import { CSSProperties, useCallback, useRef, useState } from 'react';
-
-import { buttonColors, focusVisible, typography } from '@zenkigen-inc/component-theme';
+import { buttonColors, focusVisible } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
+import type { CSSProperties } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 import { useOutsideClick } from '../hooks/use-outside-click';
 import { Icon } from '../icon';
-
 import { SelectList } from './select-list';
 import type { SortOrder } from './type';
 
@@ -28,7 +27,7 @@ export function SelectSort({
   label,
   sortOrder,
   isDisabled = false,
-  isSortKey,
+  isSortKey = false,
   onChange,
   onClickDeselect,
 }: Props) {
@@ -45,7 +44,7 @@ export function SelectSort({
     [onChange],
   );
 
-  const wrapperClasses = clsx('relative', 'flex', 'shrink-0', 'gap-1', 'items-center', 'rounded', {
+  const wrapperClasses = clsx('relative flex shrink-0 items-center gap-1 rounded', {
     'h-6': size === 'x-small' || size === 'small',
     'h-8': size === 'medium',
     'h-10': size === 'large',
@@ -53,30 +52,27 @@ export function SelectSort({
   });
 
   const buttonClasses = clsx(
-    'flex',
-    'items-center',
-    'w-full',
-    'h-full',
-    'rounded',
-    isSortKey ? buttonColors[variant].selected : buttonColors[variant].base,
+    'flex size-full items-center rounded',
     buttonColors[variant].hover,
     buttonColors[variant].active,
     buttonColors[variant].disabled,
     focusVisible.normal,
     {
+      [buttonColors[variant].selected]: isSortKey,
+      [buttonColors[variant].base]: !isSortKey,
       'px-2': size === 'x-small' || size === 'small',
       'px-4': size === 'medium' || size === 'large',
       'pointer-events-none': isDisabled,
     },
   );
 
-  const labelClasses = clsx(
-    'truncate',
-    size === 'x-small' ? 'mr-1' : 'mr-2',
-    typography.label[
-      size === 'x-small' ? 'label3regular' : size === 'small' || size === 'medium' ? 'label2regular' : 'label1regular'
-    ],
-  );
+  const labelClasses = clsx('truncate', {
+    'typography-label12regular': size === 'x-small',
+    'typography-label14regular': size === 'small' || size === 'medium',
+    'typography-label16regular': size === 'large',
+    'mr-1': size === 'x-small',
+    'mr-2': size !== 'x-small',
+  });
 
   return (
     <div className={wrapperClasses} style={{ width }} ref={targetRef}>
@@ -89,7 +85,10 @@ export function SelectSort({
               size={size === 'large' ? 'medium' : 'small'}
             />
           ) : (
-            <Icon name={isOptionListOpen ? 'angle-small-up' : 'angle-small-down'} size="small" />
+            <Icon
+              name={isOptionListOpen ? 'angle-small-up' : 'angle-small-down'}
+              size={size === 'large' ? 'medium' : 'small'}
+            />
           )}
         </div>
       </button>

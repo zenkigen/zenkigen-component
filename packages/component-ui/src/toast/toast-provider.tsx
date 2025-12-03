@@ -1,9 +1,9 @@
-import { PropsWithChildren, createContext, useCallback, useContext, useEffect, useState } from 'react';
-
+import type { PropsWithChildren } from 'react';
+import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import { Toast } from './toast';
-import { ToastState } from './type';
+import type { ToastState } from './type';
 
 type AddToastArgs = { message: string; state: ToastState };
 
@@ -19,7 +19,7 @@ export const ToastProvider = ({ children }: PropsWithChildren) => {
   const [toasts, setToasts] = useState<{ id: number; message: string; state: ToastState }[]>([]);
 
   const addToast = useCallback(({ message, state }: AddToastArgs) => {
-    setToasts((prev) => [...prev, { id: Date.now(), message, state }]);
+    setToasts((prev) => [...prev, { id: Math.trunc(Math.random() * 100000), message, state }]);
   }, []);
 
   const removeToast = useCallback((id: number) => {
@@ -35,7 +35,7 @@ export const ToastProvider = ({ children }: PropsWithChildren) => {
       {children}
       {isClientRender &&
         createPortal(
-          <div className="pointer-events-none fixed bottom-0 left-0 z-toast mb-4 ml-4 flex w-full flex-col-reverse">
+          <div className="pointer-events-none fixed bottom-0 left-0 z-toast mb-4 ml-4 flex w-full flex-col-reverse gap-[16px]">
             {toasts.map(({ id, message, state }) => (
               <Toast key={id} state={state} isAutoClose isAnimation onClickClose={() => removeToast(id)} width={475}>
                 {message}

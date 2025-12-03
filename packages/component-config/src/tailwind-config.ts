@@ -1,6 +1,28 @@
+import { typography } from '@zenkigen-inc/component-theme';
+import plugin from 'tailwindcss/plugin';
+
 import { tokens } from './tokens/tokens';
 
-module.exports = {
+const {
+  tokens: {
+    text,
+    link,
+    border,
+    background,
+    icon,
+    interactive,
+    field,
+    focus,
+    hover,
+    active,
+    selected,
+    disabled,
+    support,
+  },
+  colors,
+} = tokens;
+
+export const tailwindConfig = {
   theme: {
     extend: {
       fontFamily: {
@@ -8,11 +30,26 @@ module.exports = {
       },
       colors: {
         user: tokens.user,
-        ...tokens.tokens,
-        ...tokens.colors,
+        ...text,
+        ...link,
+        ...border,
+        ...background,
+        ...icon,
+        ...interactive,
+        ...field,
+        ...focus,
+        ...hover,
+        ...active,
+        ...selected,
+        ...disabled,
+        ...support,
+        ...colors,
       },
       fontSize: tokens.fontSize,
       lineHeight: tokens.lineHeights,
+      borderRadius: {
+        button: '.25rem',
+      },
       boxShadow: {
         modalShadow: tokens.shadow.modalShadow,
         floatingShadow: tokens.shadow.floatingShadow,
@@ -111,5 +148,132 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  safelist: [
+    // buttonColors の全クラスを明示的にリストアップ
+    'border-interactive01',
+    'bg-interactive01',
+    'text-textOnColor',
+    'fill-textOnColor',
+    'hover:bg-hover01',
+    'hover:border-hover01',
+    'active:bg-active01',
+    'active:border-active01',
+    'disabled:bg-disabled01',
+    'disabled:border-disabled01',
+    'bg-selectedUi',
+    'text-interactive01',
+    'fill-interactive01',
+    'border-supportDanger',
+    'bg-supportDanger',
+    'hover:bg-hoverDanger',
+    'hover:border-hoverDanger',
+    'active:bg-activeDanger',
+    'active:border-activeDanger',
+    'bg-supportDangerLight',
+    'text-supportDanger',
+    'border-uiBorder02',
+    'bg-uiBackground01',
+    'text-interactive02',
+    'fill-interactive02',
+    'hover:bg-hover02',
+    'active:bg-active02',
+    'disabled:border-uiBorder01',
+    'disabled:text-disabled01',
+    'disabled:fill-disabled01',
+    'border-transparent',
+    'hover:border-hover02',
+    'active:border-active02',
+    'disabled:text-disabled01',
+    'disabled:fill-disabled01',
+    'active:bg-red-red20',
+    // tagColors
+    'text-textOnColor',
+    'bg-supportError',
+    'bg-supportSuccess',
+    'bg-supportWarning',
+    'bg-supportDanger',
+    'bg-user-red',
+    'bg-user-pink',
+    'bg-user-purple',
+    'bg-user-turquoise',
+    'bg-user-royalBlue',
+    'bg-user-blue',
+    'bg-user-aquamarine',
+    'bg-user-yellowGreen',
+    'bg-user-yellow',
+    'bg-user-orange',
+    'bg-supportInfo',
+    'text-text01',
+    'bg-supportErrorLight',
+    'bg-supportSuccessLight',
+    'bg-supportWarningLight',
+    'bg-supportDangerLight',
+    'bg-user-redLight',
+    'bg-user-pinkLight',
+    'bg-user-purpleLight',
+    'bg-user-turquoiseLight',
+    'bg-user-royalBlueLight',
+    'bg-user-blueLight',
+    'bg-user-aquamarineLight',
+    'bg-user-yellowGreenLight',
+    'bg-user-yellowLight',
+    'bg-user-orangeLight',
+    'bg-supportInfoLight',
+    // selectColors
+    'border-uiBorder02',
+    'bg-uiBackground01',
+    'text-interactive02',
+    'fill-interactive02',
+    'hover:bg-hover02',
+    'active:bg-active02',
+    'disabled:border-uiBorder01',
+    'disabled:text-disabled01',
+    'disabled:fill-disabled01',
+    'border-interactive01',
+    'bg-selectedUi',
+    'text-interactive01',
+    'fill-interactive01',
+    'border-transparent',
+    'border-supportError',
+    'bg-uiBackgroundError',
+    'text-supportError',
+    'fill-supportError',
+    // iconColors
+    'fill-icon01',
+    'fill-icon02',
+    'fill-icon03',
+    'fill-iconOnColor',
+    // userColors (Avatar用)
+    'bg-user-red',
+    'bg-user-pink',
+    'bg-user-purple',
+    'bg-user-turquoise',
+    'bg-user-royalBlue',
+    'bg-user-blue',
+    'bg-user-aquamarine',
+    'bg-user-yellowGreen',
+    'bg-user-yellow',
+    'bg-user-orange',
+  ],
+  plugins: [
+    plugin(({ addUtilities, addComponents }) => {
+      addUtilities({
+        '.field-sizing-content': {
+          fieldSizing: 'content',
+        },
+      });
+      addComponents(
+        Object.entries(typography).reduce(
+          (acc, [, innerObj]) => (
+            Object.entries(innerObj).forEach(
+              ([innerKey, value]) => (acc[`.typography-${innerKey}`] = { [`@apply ${value}`]: {} }),
+            ),
+            acc
+          ),
+          // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+          {} as Record<string, Record<string, {}>>,
+        ),
+      );
+    }),
+  ],
 };

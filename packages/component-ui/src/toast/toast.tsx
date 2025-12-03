@@ -1,12 +1,10 @@
-import { AnimationEvent, CSSProperties, ReactNode, useCallback, useEffect, useState } from 'react';
-
-import { typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
+import type { AnimationEvent, CSSProperties, ReactNode } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { Icon } from '../icon';
 import { IconButton } from '../icon-button';
-
-import { ToastState } from './type';
+import type { ToastState } from './type';
 
 const CLOSE_TIME_MSEC = 5000;
 
@@ -22,8 +20,8 @@ type Props = {
 export function Toast({
   state = 'information',
   width = 'auto',
-  isAutoClose,
-  isAnimation,
+  isAutoClose = false,
+  isAnimation = false,
   children,
   onClickClose,
 }: Props) {
@@ -37,23 +35,22 @@ export function Toast({
     }
   }, [isAnimation, onClickClose]);
 
-  const handleAnimationEnd = (e: AnimationEvent<HTMLDivElement>) => {
+  const handleAnimationEnd = (e: AnimationEvent<HTMLDivElement>) =>
     window.getComputedStyle(e.currentTarget).opacity === '0' && onClickClose();
-  };
 
   const wrapperClasses = clsx('pointer-events-auto flex items-start gap-1 bg-white p-4 shadow-floatingShadow', {
     ['animate-toast-in']: isAnimation && !isRemoving,
     ['animate-toast-out opacity-0']: isAnimation && isRemoving,
   });
-  const iconClasses = clsx('flex', 'items-center', {
-    'fill-support-supportSuccess': state === 'success',
-    'fill-support-supportError': state === 'error',
-    'fill-support-supportWarning': state === 'warning',
-    'fill-support-supportInfo': state === 'information',
+  const iconClasses = clsx('flex items-center', {
+    'fill-supportSuccess': state === 'success',
+    'fill-supportError': state === 'error',
+    'fill-supportWarning': state === 'warning',
+    'fill-supportInfo': state === 'information',
   });
-  const textClasses = clsx('flex-1', 'pt-[3px]', typography.body.body2regular, {
-    'text-support-supportError': state === 'error',
-    'text-text-text01': state === 'success' || state === 'warning' || state === 'information',
+  const textClasses = clsx('typography-body13regular flex-1 pt-[3px]', {
+    'text-supportError': state === 'error',
+    'text-text01': state === 'success' || state === 'warning' || state === 'information',
   });
 
   const iconName = {

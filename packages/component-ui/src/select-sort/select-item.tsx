@@ -1,36 +1,26 @@
-import { ReactNode } from 'react';
-
-import { focusVisible, typography } from '@zenkigen-inc/component-theme';
+import { focusVisible } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
+import type { PropsWithChildren } from 'react';
 
 import { Icon } from '../icon';
 
 type Props = {
-  children: ReactNode;
   isSortKey: boolean;
   onClickItem: () => void;
 };
 
-export function SelectItem({ children, isSortKey, onClickItem }: Props) {
-  const listItemClasses = clsx('flex w-full items-center');
-
+export function SelectItem({ children, isSortKey, onClickItem }: PropsWithChildren<Props>) {
   const itemClasses = clsx(
-    'flex',
-    'items-center',
-    'w-full',
-    'h-8',
-    'px-3',
-    'hover:bg-hover-hover02',
-    'active:bg-active-active02',
+    'typography-label14regular flex h-8 w-full items-center px-3 hover:bg-hover02 active:bg-active02',
     focusVisible.inset,
-    typography.label.label2regular,
-    isSortKey
-      ? 'bg-selected-selectedUi fill-interactive-interactive01 text-interactive-interactive01'
-      : 'bg-background-uiBackground01 fill-icon-icon01 text-interactive-interactive02',
+    {
+      'bg-selectedUi fill-interactive01 text-interactive01': isSortKey,
+      'bg-uiBackground01 fill-icon01 text-interactive02': !isSortKey,
+    },
   );
 
   return (
-    <li className={listItemClasses} onClick={onClickItem}>
+    <li className="flex w-full items-center" onClick={onClickItem}>
       <button className={itemClasses} type="button">
         <span className="ml-1 mr-6">{children}</span>
         {isSortKey && (

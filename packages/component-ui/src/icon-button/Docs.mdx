@@ -1,0 +1,41 @@
+import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/addon-docs/blocks';
+import { Markdown } from '@storybook/addon-docs/blocks';
+import IconButtonStories, { Component } from './icon-button.stories';
+import spec from '../../../../docs/component/icon-button-specification.md?raw';
+
+<Meta title="IconButton" of={IconButtonStories} />
+
+# IconButton
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
+
+<Canvas />
+
+<Controls of={Component} />
+
+## 概要
+
+ボタンはシンプルなユーザー操作のためのトリガーを表します。Buttonは、カード、ダイアログ、フォーム、その他コンポーネントやパターンに使用します。
+ボタンはユーザーに選択肢を与えます。Webサイトやモバイルアプリで行う操作を選択したり、提示されているものの中から選ぶことを可能にします。
+
+## 設計の原則(Do)
+
+### 関連するボタンやコンポーネントはグルーピング(並列)してください
+
+関連するボタンやコンポーネントはグルーピング(並列)してください。
+
+### 破壊的なボタンを区別します
+
+警告ボタンがコンテンツの削除などの破壊的なアクションをもたらす場合は、破壊的なボタンスタイルを指定して、ユーザーがそれを区別できるようにします。
+
+## 推奨しないこと（Don't）
+
+### 定常的に使うアクションや重要なボタンの場合はIconButtonではなく、Buttonを用いてラベルを明記する
+
+ex: ログインボタンや送信ボタン、新規登録ボタン、ナビゲーションはIconButtonを使わない

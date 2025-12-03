@@ -1,78 +1,63 @@
-import { CSSProperties, MutableRefObject, ReactElement, ReactNode } from 'react';
-
-import clsx from 'clsx';
+import type { CSSProperties, MutableRefObject, PropsWithChildren } from 'react';
+import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import { ModalButtonTab } from './modal-button-tab';
+import { BodyScrollLock } from './body-scroll-lock';
+import { ModalBody } from './modal-body';
 import { ModalContext } from './modal-context';
+import { ModalFooter } from './modal-footer';
 import { ModalHeader } from './modal-header';
-import { ModalTab } from './modal-tab';
+
+const LIMIT_WIDTH = 320;
+const LIMIT_HEIGHT = 184;
 
 type Props = {
-  children?: ReactNode;
-  size?: 'small' | 'medium' | 'large' | 'x-large';
+  width?: CSSProperties['width'];
   height?: CSSProperties['height'];
+  maxWidth?: CSSProperties['maxWidth'];
   isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onClose?: () => void;
   portalTargetRef?: MutableRefObject<HTMLElement | null>;
-  headerElement?: ReactElement;
-  tabElement?: ReactElement;
-  buttonTabElement?: ReactElement;
 };
 
 export function Modal({
   children,
-  size = 'medium',
+  width = 480,
   height,
+  maxWidth = 'calc(100vw - 40px)',
   isOpen,
-  setIsOpen,
+  onClose,
   portalTargetRef,
-  headerElement,
-  tabElement,
-  buttonTabElement,
-}: Props) {
-  const wrapperClasses = clsx(
-    'flex',
-    'items-center',
-    'justify-center',
-    'z-overlay',
-    'bg-background-backgroundOverlayBlack',
-    'fixed left-0 top-0',
-    'h-full w-full',
-  );
-  const modalBaseClasses = clsx(
-    'flex',
-    'shrink-0',
-    'flex-col',
-    'bg-background-uiBackground01',
-    'rounded-lg',
-    'shadow-modalShadow',
-    {
-      'w-[320px]': size === 'small',
-      'w-[480px]': size === 'medium',
-      'w-[640px]': size === 'large',
-      'w-[720px]': size === 'x-large',
-    },
-  );
-  const contentClasses = clsx('flex', 'items-center', 'justify-center', 'overflow-y-auto');
+}: PropsWithChildren<Props>) {
+  const [isMounted, setIsMounted] = useState(false);
 
-  return createPortal(
-    isOpen && (
-      <ModalContext.Provider value={{ size, setIsOpen }}>
-        <div className={wrapperClasses}>
-          <div className={modalBaseClasses} style={{ height }}>
-            {headerElement}
-            {tabElement}
-            <div className={contentClasses}>{children}</div>
-            {buttonTabElement}
+  const renderWidth = typeof width === 'number' ? Math.max(width, LIMIT_WIDTH) : width;
+  const renderHeight = typeof height === 'number' ? Math.max(height, LIMIT_HEIGHT) : height;
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  return isMounted && isOpen ? (
+    <>
+      <BodyScrollLock />
+      {createPortal(
+        <ModalContext.Provider value={{ onClose }}>
+          <div className="fixed left-0 top-0 z-overlay flex size-full items-center justify-center bg-backgroundOverlayBlack py-4">
+            <div
+              className="grid max-h-full min-h-[120px] grid-rows-[max-content_1fr_max-content] flex-col rounded-lg bg-uiBackground01 shadow-modalShadow"
+              style={{ width: renderWidth, height: renderHeight, maxWidth }}
+            >
+              {children}
+            </div>
           </div>
-        </div>
-      </ModalContext.Provider>
-    ),
-    !portalTargetRef || portalTargetRef?.current === null ? document.body : portalTargetRef.current,
-  );
+        </ModalContext.Provider>,
+        portalTargetRef?.current != null ? portalTargetRef.current : document.body,
+      )}
+    </>
+  ) : null;
 }
 
+Modal.Body = ModalBody;
 Modal.Header = ModalHeader;
-Modal.Tab = ModalTab;
-Modal.ButtonTab = ModalButtonTab;
+Modal.Footer = ModalFooter;

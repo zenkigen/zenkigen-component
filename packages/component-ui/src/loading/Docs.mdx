@@ -1,0 +1,37 @@
+import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/addon-docs/blocks';
+import LoadingStories, { Component } from './loading.stories';
+
+<Meta title="Loading" of={LoadingStories} />
+
+# Loading
+
+<Canvas>
+  <Story of={Component} />
+</Canvas>
+
+<Controls of={Component} />
+
+## 概要
+
+読み込み中や操作中など任意の処理の進捗状況を、ユーザーに知らせ待機を促します。
+
+## 設計の原則 （Do）
+
+### 処理が小さい、待機時間が短い場合に使用します
+
+待機終了の時間・完了率を明示する場合や、一定時間以上待機が続く場合は、Progressを使用します。
+
+### ユーザー入力の後、繰り返しのアクションを防止する役割があります
+
+ユーザーが動作していないと思い、再度クリックさせるのを防ぎます。
+
+### Loadingは不確定タイプです。
+
+ユーザーに対して「何かが起きているが、あとどれだけ時間を要するか」は明確に伝えないタイプのプログレスインジケータです。
+逆に、確定タイプは、ユーザーに対して「何が起きていて、あとどれだけ時間を要するのか」を視覚化したプログレスインジケータです。
+
+## 推奨しないこと（Don’t）
+
+### 読み込みが1秒未満で終わる場合は使用しない
+
+読み込み時間1秒未満の場合は、画面のチラつきが生まれて体験を損なうので使用しないようにしてください。

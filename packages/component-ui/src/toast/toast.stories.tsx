@@ -1,13 +1,14 @@
-import { useCallback } from 'react';
-
-import { action } from '@storybook/addon-actions';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { ChangeEvent } from 'react';
+import { useCallback, useState } from 'react';
+import { action } from 'storybook/actions';
 
 import { Button } from '../button';
-
+import { TextInput } from '../text-input';
 import { Toast, ToastProvider, useToast } from '.';
 
-export default {
-  component: Toast,
+const meta: Meta<typeof Toast> = {
+  title: 'Components/Toast',
   decorators: [
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (Story: any) => (
@@ -16,6 +17,52 @@ export default {
       </ToastProvider>
     ),
   ],
+};
+
+export default meta;
+type Story = StoryObj<typeof Toast>;
+
+export const Component: Story = {
+  args: {
+    state: 'success',
+  },
+  argTypes: {
+    state: {
+      options: ['success', 'error', 'warning', 'information'],
+      control: { type: 'radio' },
+    },
+  },
+  parameters: {
+    chromatic: { disable: true },
+  },
+  render: function MyFunc({ ...args }) {
+    const [value, setValue] = useState<string>('');
+    const { addToast } = useToast();
+    const handleClick = useCallback(() => {
+      if (typeof args.state !== 'undefined') addToast({ state: args.state, message: value });
+    }, [addToast, args.state, value]);
+
+    return (
+      <div className="flex flex-col justify-start gap-2">
+        <div>
+          <TextInput
+            {...args}
+            value={value}
+            placeholder="テキストを入力"
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              setValue(e.target.value);
+            }}
+            onClickClearButton={() => {
+              setValue('');
+            }}
+          />
+        </div>
+        <div>
+          <Button onClick={handleClick}>トーストを表示</Button>
+        </div>
+      </div>
+    );
+  },
 };
 
 export function Base() {

@@ -1,7 +1,5 @@
-import { ReactNode } from 'react';
-
-import { typography } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
+import type { ReactNode } from 'react';
 
 import { Icon } from '../icon';
 import { IconButton } from '../icon-button';
@@ -19,29 +17,21 @@ type Props = {
 );
 
 export function NotificationInline({ state = 'default', size = 'medium', ...props }: Props) {
-  const wrapperClasses = clsx(
-    'rounded',
-    'text-text-text01',
-    'flex',
-    'gap-1',
-    'items-center',
-    typography.body.body2regular,
-    {
-      'bg-background-uiBackgroundError': state === 'attention',
-      'bg-background-uiBackgroundWarning': state === 'warning',
-      'bg-background-uiBackgroundBlue': state === 'information',
-      'bg-background-uiBackgroundSuccess': state === 'success',
-      'bg-background-uiBackgroundGray': state === 'default',
-      'p-2': size === 'small',
-      'p-3': size === 'medium',
-    },
-  );
+  const wrapperClasses = clsx('typography-body13regular flex items-center gap-1 rounded text-text01', {
+    'bg-uiBackgroundError': state === 'attention',
+    'bg-uiBackgroundWarning': state === 'warning',
+    'bg-uiBackgroundBlue': state === 'information',
+    'bg-uiBackgroundSuccess': state === 'success',
+    'bg-uiBackgroundGray': state === 'default',
+    'p-2': size === 'small',
+    'p-3': size === 'medium',
+  });
 
-  const iconClasses = clsx('flex', 'items-center', {
-    'fill-support-supportError': state === 'attention',
-    'fill-support-supportWarning': state === 'warning',
+  const iconClasses = clsx('flex items-center', {
+    'fill-supportError': state === 'attention',
+    'fill-supportWarning': state === 'warning',
     'fill-blue-blue50': state === 'information',
-    'fill-support-supportSuccess': state === 'success',
+    'fill-supportSuccess': state === 'success',
   });
 
   const iconName = {
@@ -64,7 +54,7 @@ export function NotificationInline({ state = 'default', size = 'medium', ...prop
         </div>
       )}
       <p className="flex-1">{props.children}</p>
-      {props.showClose && (
+      {props.showClose === true && (
         <div className="flex items-center">
           <IconButton icon="close" size="small" variant="text" />
         </div>

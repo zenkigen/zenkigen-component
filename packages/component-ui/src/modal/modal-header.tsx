@@ -1,40 +1,30 @@
-import { ReactNode, useContext } from 'react';
-
-import { typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
+import type { PropsWithChildren } from 'react';
+import { useContext } from 'react';
 
 import { IconButton } from '../icon-button';
-
 import { ModalContext } from './modal-context';
 
 type Props = {
-  children: ReactNode;
   isNoBorder?: boolean;
-  isNoCloseButton?: boolean;
 };
 
-export function ModalHeader({ children, isNoBorder, isNoCloseButton }: Props) {
-  const { setIsOpen } = useContext(ModalContext);
+export function ModalHeader({ children, isNoBorder = false }: PropsWithChildren<Props>) {
+  const { onClose } = useContext(ModalContext);
+
   const headerClasses = clsx(
-    'flex',
-    'shrink-0',
-    'items-center',
-    'justify-between',
-    'w-full',
-    'rounded-t-lg',
-    'px-6',
-    'text-text-text01',
-    typography.heading.h5,
+    'typography-h5 flex w-full shrink-0 items-center justify-between rounded-t-lg px-6 text-text01',
     {
-      'border-b-[1px] border-border-uiBorder01': !isNoBorder,
-      'h-14': !isNoCloseButton,
-      'h-12': isNoCloseButton,
+      'border-b border-uiBorder01': !isNoBorder,
+      'h-14': !onClose,
+      'h-12': onClose,
     },
   );
+
   return (
     <div className={headerClasses}>
-      {children}
-      {!isNoCloseButton && <IconButton icon="close" size="small" variant="text" onClick={() => setIsOpen(false)} />}
+      <div>{children}</div>
+      {onClose && <IconButton icon="close" size="small" variant="text" onClick={onClose} />}
     </div>
   );
 }

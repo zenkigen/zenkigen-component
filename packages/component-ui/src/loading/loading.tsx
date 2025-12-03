@@ -7,13 +7,13 @@ type Props = {
 };
 
 export function Loading({ size = 'medium', position = 'fixed', height = '100%' }: Props) {
-  const wrapperClasses = clsx(position, 'top-0', 'left-0', 'z-20', 'flex', 'items-center', 'justify-center', 'w-full');
+  const wrapperClasses = clsx(position, 'left-0 top-0 z-20 flex w-full items-center justify-center');
 
-  const svgClasses = clsx(
-    size === 'small' && 'h-4 w-4',
-    size === 'medium' && 'h-8 w-8',
-    size === 'large' && 'h-16 w-16',
-  );
+  const svgClasses = clsx({
+    'h-4 w-4': size === 'small',
+    'h-8 w-8': size === 'medium',
+    'h-16 w-16': size === 'large',
+  });
 
   return (
     <>
@@ -21,7 +21,7 @@ export function Loading({ size = 'medium', position = 'fixed', height = '100%' }
         {size === 'small' && (
           <svg className={svgClasses} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle
-              className="origin-center animate-circular-small-move stroke-interactive-interactive01"
+              className="origin-center animate-circular-small-move stroke-interactive01"
               cx="8"
               cy="8"
               r="7"
@@ -34,7 +34,7 @@ export function Loading({ size = 'medium', position = 'fixed', height = '100%' }
         {size === 'medium' && (
           <svg className={svgClasses} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle
-              className="origin-center animate-circular-medium-move stroke-interactive-interactive01"
+              className="origin-center animate-circular-medium-move stroke-interactive01"
               cx="16"
               cy="16"
               r="15"
@@ -47,7 +47,7 @@ export function Loading({ size = 'medium', position = 'fixed', height = '100%' }
         {size === 'large' && (
           <svg className={svgClasses} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle
-              className="origin-center animate-circular-large-move stroke-interactive-interactive01"
+              className="origin-center animate-circular-large-move stroke-interactive01"
               cx="32"
               cy="32"
               r="30"

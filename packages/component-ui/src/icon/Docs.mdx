@@ -1,0 +1,23 @@
+import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/addon-docs/blocks';
+
+import { Markdown } from '@storybook/addon-docs/blocks';
+import IconStories, { Component, Base } from './icon.stories';
+import spec from '../../../../docs/component/icon-specification.md?raw';
+
+<Meta title="Icon" of={IconStories} />
+
+# Icon
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
+
+<Canvas>
+  <Story of={Component} />
+</Canvas>
+
+<Controls of={Component} />

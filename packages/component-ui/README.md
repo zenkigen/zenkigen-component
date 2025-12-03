@@ -1,9 +1,32 @@
 # @zenkigen-inc/component-ui
 
+## 目次
+
+- [インストール](#インストール)
+- [利用方法](#利用方法)
+- [開発者向け](#開発者向け)
+  - [コンポーネントの雛形を生成する](#コンポーネントの雛形を生成する)
+  - [実装したコンポーネントを export する](#実装したコンポーネントを-export-する)
+- [ライセンス](#ライセンス)
+
 ## インストール
 
 ```bash
-yarn add @zenkigen-inc/component-ui
+yarn add @zenkigen-inc/component-ui @zenkigen-inc/component-config
+```
+
+Tailwind CSSの設定に以下を追加する。
+
+```diff
+{
+
+  content: [
++ './node_modules/@zenkigen-inc/**/*.{js,ts,tsx}',
+  ],
+  presets: [
++    require('@zenkigen-inc/component-config')
+  ],
+}
 ```
 
 ## 利用方法
@@ -29,11 +52,6 @@ yarn generate-component
 ### 実装したコンポーネントを export する
 
 使用する側の import を簡略化させるため root にある [packages/component-ui/src/index.ts](https://github.com/zenkigen/zenkigen-component/blob/main/packages/components/src/index.ts) に実装したコンポーネントを export してください。
-
-### コーディングガイドライン（社内のみ）
-
-開発する際は以下を参照してください。
-https://www.notion.so/zenkigen/5d4ebd0d93b74124a533cf167b852ec0
 
 ## ライセンス
 

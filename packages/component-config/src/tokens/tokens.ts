@@ -10,269 +10,214 @@ export const tokens = {
     "yellowGreen": "#8ae58b",
     "yellow": "#f3c90a",
     "orange": "#f9b12c",
-    "redLight": "#FDDADA",
-    "pinkLight": "#FBDEF5",
-    "purpleLight": "#EFDCF7",
-    "turquoiseLight": "#DBF0F7",
-    "royalBlueLight": "#DFE8FB",
-    "blueLight": "#D8EFFC",
-    "aquamarineLight": "#D7F9F4",
-    "yellowGreenLight": "#DCF7DC",
-    "yellowLight": "#FCEFB6",
-    "orangeLight": "#FDE8C0"
+    "redLight": "#fddada",
+    "pinkLight": "#fbdef5",
+    "purpleLight": "#efdcf7",
+    "turquoiseLight": "#dbf0f7",
+    "royalBlueLight": "#dfe8fb",
+    "blueLight": "#d8effc",
+    "aquamarineLight": "#d7f9f4",
+    "yellowGreenLight": "#dcf7dc",
+    "yellowLight": "#fcefb6",
+    "orangeLight": "#fde8c0"
   },
   "tokens": {
     "text": {
-      "text01": "#2F3233",
-      "text02": "#838789",
-      "text03": "#7C868A",
-      "textPlaceholder": "#CACCCD",
-      "textOnColor": "#FFFFFF",
-      "textBlack": "#000000",
-      "text01Dark": "#FFFFFF",
-      "text02Dark": "#CACCCD",
-      "text03Dark": "#A4A5A6",
-      "textPlaceholderDark": "#7C868A"
+      "text01": "#1f2121",
+      "text02": "#5c6366",
+      "text03": "#838789",
+      "textPlaceholder": "#a4a5a6",
+      "textOnColor": "#ffffff",
+      "textBlack": "#000000"
     },
     "link": {
-      "link01": "#177EE5",
-      "link01Dark": "#177EE5",
-      "link02": "#A4A5A6",
-      "link02Dark": "#A4A5A6"
+      "link01": "#0077d9",
+      "link02": "#a4a5a6"
     },
     "border": {
-      "uiBorder01": "#DEDFE0",
-      "uiBorder01Dark": "#5C6366",
-      "uiBorder02": "#CACCCD",
-      "uiBorder02Dark": "#7C868A",
-      "uiBorder03": "#A4A5A6",
-      "uiBorder03Dark": "#838789"
+      "uiBorder01": "#dedfe0",
+      "uiBorder02": "#cacccd",
+      "uiBorder03": "#a4a5a6",
+      "uiBorder04": "#838789"
     },
     "background": {
-      "uiBackground01": "#FFFFFF",
-      "uiBackground02": "#F3F4F5",
-      "uiBackground02Light": "#FAFAFA",
-      "uiBackground01Dark": "#2F3233",
-      "uiBackground02Dark": "#454A4D",
-      "uiBackground02Blue": "#F1F7FD",
-      "uiBackgroundBlue": "#F1F7FD",
-      "uiBackgroundBlueDark": "#115CA7",
-      "uiBackgroundGray": "#F3F4F5",
-      "uiBackgroundGrayDark": "#7C868A",
-      "uiBackgroundSuccess": "#ECFBF4",
-      "uiBackgroundSuccessDark": "#1E8353",
-      "uiBackgroundError": "#FCEFF3",
-      "uiBackgroundErrorDark": "#A01D3E",
-      "uiBackgroundWarning": "#FFFADC",
-      "uiBackgroundWarningDark": "#A68A00",
-      "uiBackgroundTooltip": "#2F3233",
-      "uiBackgroundTooltipDark": "#F3F4F5",
-      "backgroundOverlayGray": "#2f323380",
+      "uiBackground01": "#ffffff",
+      "uiBackground02": "#f3f4f5",
+      "uiBackground02Light": "#fafafa",
+      "uiBackground02Blue": "#f1f7fd",
+      "uiBackgroundBlue": "#f1f7fd",
+      "uiBackgroundGray": "#f3f4f5",
+      "uiBackgroundSuccess": "#ecfbf4",
+      "uiBackgroundError": "#fceff3",
+      "uiBackgroundWarning": "#fffadc",
+      "uiBackgroundTooltip": "#1f2121",
+      "backgroundOverlayGray": "#1f212180",
       "backgroundOverlayBlack": "#00000099"
     },
     "icon": {
-      "icon01": "#7C868A",
-      "icon01Dark": "#CACCCD",
-      "icon02": "#A4A5A6",
-      "icon02Dark": "#7C868A",
-      "icon03": "#CACCCD",
-      "icon03Dark": "#5C6366",
-      "iconOnColor": "#FFFFFF"
+      "icon01": "#5c6366",
+      "icon02": "#a4a5a6",
+      "icon03": "#cacccd",
+      "iconOnColor": "#ffffff"
     },
     "interactive": {
-      "interactive01": "#177EE5",
-      "interactiveBg01": "#177EE5",
-      "interactive01Dark": "#9FCBF5",
-      "interactiveBg01Dark": "#177EE5",
-      "interactive02": "#7C868A",
-      "interactive02Dark": "#CACCCD",
-      "interactive03": "#177EE5",
-      "interactive03Dark": "#7C868A"
+      "interactive01": "#0077d9",
+      "interactiveBg01": "#0077d9",
+      "interactive02": "#5c6366",
+      "interactive03": "#0077d9",
+      "interactive04": "#cacccd"
     },
     "field": {
-      "fieldInput": "#FFFFFF",
-      "fieldInputDark": "#2F3233",
-      "fieldSearch": "#FFFFFF",
-      "fieldSearchDark": "#5C6366"
+      "fieldInput": "#ffffff",
+      "fieldSearch": "#ffffff"
     },
     "focus": {
-      "focus": "#177EE5",
-      "focusDark": "#177EE5"
+      "focus": "#0077d9"
     },
     "hover": {
-      "hover01": "#1366B9",
-      "hover01Dark": "#1366B9",
-      "hover02": "#E9EAEB",
-      "hover02Dark": "#5C6366",
-      "hover02Background": "#E9EAEB",
-      "hover02BackgroundDark": "#454A4D",
-      "hoverUi": "#E9EAEB",
-      "hoverUiDark": "#5C6366",
-      "hoverUi02": "#F3F4F5",
-      "hoverUi02Dark": "#454A4D",
-      "hoverUiBorder": "#7C868A",
-      "hoverUiBorderDark": "#CACCCD",
-      "hoverSelectedUi": "#CACCCD",
-      "hoverSelectedUiDark": "#7C868A",
-      "hoverDanger": "#B22045",
-      "hoverDangerDark": "#B22045",
-      "hoverError": "#B22045",
-      "hoverErrorDark": "#F9E0E6",
-      "hoverInput": "#7C868A",
-      "hoverInputDark": "#A4A5A6",
-      "hoverLink01": "#1366B9",
-      "hoverLink01Dark": "#9FCBF5",
-      "hoverLink02": "#7C868A",
-      "hoverLink02Dark": "#DEDFE0"
+      "hover01": "#1366b9",
+      "hover02": "#e9eaeb",
+      "hover02Background": "#e9eaeb",
+      "hoverUi": "#e9eaeb",
+      "hoverUi02": "#f3f4f5",
+      "hoverUiBorder": "#6f7476",
+      "hoverSelectedUi": "#cacccd",
+      "hoverDanger": "#b22045",
+      "hoverError": "#b22045",
+      "hoverInput": "#6f7476",
+      "hoverLink01": "#1366b9",
+      "hoverLink02": "#6f7476",
+      "hoverGray": "#454a4d",
+      "hoverUiError": "#fceff3"
     },
     "active": {
-      "active01": "#0E4B87",
-      "active01Dark": "#0E4B87",
-      "active02": "#CACCCD",
-      "active02Dark": "#838789",
-      "active02Background": "#DEDFE0",
-      "active02BackgroundDark": "#5C6366",
-      "activeUi": "#D9EAFB",
-      "activeUiDark": "#7C868A",
-      "activeSelectedUi": "#177EE5",
-      "activeSelectedUiDark": "#177EE5",
+      "active01": "#0e4b87",
+      "active02": "#cacccd",
+      "active02Background": "#dedfe0",
+      "activeUi": "#d9eafb",
+      "activeSelectedUi": "#0077d9",
       "activeDanger": "#821732",
-      "activeDangerDark": "#821732",
-      "activeInput": "#1366B9",
-      "activeInputDark": "#CACCCD",
-      "activeLink01": "#0E4B87",
-      "activeLink01Dark": "#D9EAFB",
-      "activeLink02": "#2F3233",
-      "activeLink02Dark": "#E9EAEB"
+      "activeInput": "#1366b9",
+      "activeLink01": "#0e4b87",
+      "activeLink02": "#1f2121",
+      "activeUiError": "#f9e0e6"
     },
     "selected": {
-      "selectedUi": "#D9EAFB",
-      "selectedUiDark": "#1366B9",
-      "selectedUiGray": "#DEDFE0",
-      "selectedUiGrayDark": "#7C868A",
-      "selectedUiOnColor": "#FFFFFF",
-      "selectedUiBorder": "#177EE5",
-      "selectedUiBorderDark": "#9FCBF5"
+      "selectedUi": "#f1f7fd",
+      "selectedUiGray": "#dedfe0",
+      "selectedUiOnColor": "#ffffff",
+      "selectedUiBorder": "#0077d9",
+      "selectedUiDark": "#1366b9"
     },
     "disabled": {
-      "disabled01": "#DEDFE0",
-      "disabled01Dark": "#5C6366",
-      "disabled02": "#F3F4F5",
-      "disabled02Dark": "#838789",
-      "disabled03": "#454A4D",
-      "disabled04": "#0E4B87",
-      "disabledLink01": "#DEDFE0",
-      "disabledLink02": "#DEDFE0",
-      "disabledLink01Dark": "#115CA7",
-      "disabledLink02Dark": "#5C6366",
-      "disabledOn": "#D9EAFB",
-      "disabledOnDark": "#9FCBF5"
+      "disabled01": "#dedfe0",
+      "disabled02": "#f3f4f5",
+      "disabled03": "#454a4d",
+      "disabled04": "#0e4b87",
+      "disabledLink01": "#dedfe0",
+      "disabledLink02": "#dedfe0",
+      "disabledOn": "#d9eafb"
     },
     "support": {
-      "supportError": "#D92B57",
-      "supportErrorLight": "#F4BFCD",
-      "supportErrorDark": "#E67490",
-      "supportSuccess": "#2DC87D",
-      "supportSuccessLight": "#CCF4E1",
-      "supportSuccessDark": "#69DDA5",
-      "supportInfo": "#177EE5",
-      "supportInfoLight": "#B9D8F7",
-      "supportInfoDark": "#177EE5",
-      "supportWarning": "#FCD200",
-      "supportWarningLight": "#FFF4BA",
-      "supportWarningDark": "#FFE976",
-      "supportDanger": "#D92B57",
-      "supportDangerLight": "#F4BFCD",
-      "supportDangerDark": "#E67490"
+      "supportError": "#c6244d",
+      "supportErrorLight": "#f4bfcd",
+      "supportSuccess": "#2dc87d",
+      "supportSuccessLight": "#ccf4e1",
+      "supportInfo": "#0077d9",
+      "supportInfoLight": "#b9d8f7",
+      "supportWarning": "#fcd200",
+      "supportWarningLight": "#fff4ba",
+      "supportDanger": "#c6244d",
+      "supportDangerLight": "#f4bfcd"
     }
   },
   "colors": {
     "black": "#000000",
-    "white": "#FFFFFF",
+    "white": "#ffffff",
     "blue": {
-      "blue10": "#F1F7FD",
-      "blue20": "#D9EAFB",
-      "blue30": "#9FCBF5",
-      "blue40": "#60A8EF",
-      "blue50": "#177EE5",
-      "blue60": "#1571CE",
-      "blue70": "#1366B9",
-      "blue80": "#115CA7",
-      "blue90": "#0F5396",
-      "blue100": "#0E4B87"
+      "blue10": "#f1f7fd",
+      "blue20": "#d9eafb",
+      "blue30": "#9fcbf5",
+      "blue40": "#60a8ef",
+      "blue50": "#0077d9",
+      "blue60": "#1571ce",
+      "blue70": "#1366b9",
+      "blue80": "#115ca7",
+      "blue90": "#0f5396",
+      "blue100": "#0e4b87"
     },
     "gray": {
-      "gray05": "#FAFAFA",
-      "gray10": "#F3F4F5",
-      "gray20": "#E9EAEB",
-      "gray30": "#DEDFE0",
-      "gray40": "#CACCCD",
-      "gray50": "#A4A5A6",
+      "gray05": "#fafafa",
+      "gray10": "#f3f4f5",
+      "gray20": "#e9eaeb",
+      "gray30": "#dedfe0",
+      "gray40": "#cacccd",
+      "gray50": "#a4a5a6",
       "gray60": "#838789",
-      "gray70": "#7C868A",
-      "gray80": "#5C6366",
-      "gray90": "#454A4D",
-      "gray100": "#2F3233"
+      "gray70": "#6f7476",
+      "gray80": "#5c6366",
+      "gray90": "#454a4d",
+      "gray100": "#1f2121"
     },
     "red": {
-      "red10": "#FCEFF3",
-      "red20": "#F9E0E6",
-      "red30": "#F1B1C1",
-      "red40": "#E67490",
-      "red50": "#D92B57",
-      "red60": "#C6244D",
-      "red70": "#B22045",
-      "red80": "#A01D3E",
-      "red90": "#901A38",
+      "red10": "#fceff3",
+      "red20": "#f9e0e6",
+      "red30": "#f1b1c1",
+      "red40": "#e67490",
+      "red50": "#d92b57",
+      "red60": "#c6244d",
+      "red70": "#b22045",
+      "red80": "#a01d3e",
+      "red90": "#901a38",
       "red100": "#821732"
     },
     "yellow": {
-      "yellow10": "#FFFADC",
-      "yellow20": "#FFF6C4",
-      "yellow30": "#FFEF9B",
-      "yellow40": "#FFE976",
-      "yellow50": "#FFD919",
-      "yellow60": "#FCD200",
-      "yellow70": "#E3BD00",
-      "yellow80": "#CCAA00",
-      "yellow90": "#B89900",
-      "yellow100": "#A68A00"
+      "yellow10": "#fffadc",
+      "yellow20": "#fff6c4",
+      "yellow30": "#ffef9b",
+      "yellow40": "#ffe976",
+      "yellow50": "#ffd919",
+      "yellow60": "#fcd200",
+      "yellow70": "#e3bd00",
+      "yellow80": "#ccaa00",
+      "yellow90": "#b89900",
+      "yellow100": "#a68a00"
     },
     "green": {
-      "green10": "#ECFBF4",
-      "green20": "#D0F4E3",
-      "green30": "#A1EAC7",
-      "green40": "#69DDA5",
-      "green50": "#2DC87D",
-      "green60": "#29B471",
-      "green70": "#25A266",
-      "green80": "#21925C",
-      "green90": "#1E8353",
-      "green100": "#1B764B"
+      "green10": "#ecfbf4",
+      "green20": "#d0f4e3",
+      "green30": "#a1eac7",
+      "green40": "#69dda5",
+      "green50": "#2dc87d",
+      "green60": "#29b471",
+      "green70": "#25a266",
+      "green80": "#21925c",
+      "green90": "#1e8353",
+      "green100": "#1b764b"
     },
     "purple": {
-      "purple10": "#F3F3FF",
-      "purple20": "#E0E1FF",
-      "purple30": "#C1C3FF",
-      "purple40": "#989CFF",
-      "purple50": "#7379FF",
-      "purple60": "#4E56FF",
-      "purple70": "#3F46DF",
-      "purple80": "#3338BE",
-      "purple90": "#2B30AA",
-      "purple100": "#22278E"
+      "purple10": "#f3f3ff",
+      "purple20": "#e0e1ff",
+      "purple30": "#c1c3ff",
+      "purple40": "#989cff",
+      "purple50": "#7379ff",
+      "purple60": "#4e56ff",
+      "purple70": "#3f46df",
+      "purple80": "#3338be",
+      "purple90": "#2b30aa",
+      "purple100": "#22278e"
     },
     "blueGreen": {
-      "blueGreen10": "#ECFCFD",
-      "blueGreen20": "#CFF6FA",
-      "blueGreen30": "#9FEEF5",
-      "blueGreen40": "#60E3EF",
-      "blueGreen50": "#17D4E5",
-      "blueGreen60": "#15BFCE",
-      "blueGreen70": "#13ACB9",
-      "blueGreen80": "#119BA7",
-      "blueGreen90": "#0F8C96",
-      "blueGreen100": "#0E7E87"
+      "blueGreen10": "#ecfcfd",
+      "blueGreen20": "#cff6fa",
+      "blueGreen30": "#9feef5",
+      "blueGreen40": "#60e3ef",
+      "blueGreen50": "#17d4e5",
+      "blueGreen60": "#15bfce",
+      "blueGreen70": "#13acb9",
+      "blueGreen80": "#119ba7",
+      "blueGreen90": "#0f8c96",
+      "blueGreen100": "#0e7e87"
     }
   },
   "fontFamilies": {
@@ -285,7 +230,8 @@ export const tokens = {
     "3": "150%",
     "4": "171%",
     "5": "153%",
-    "6": "100%"
+    "6": "100%",
+    "7": "180%"
   },
   "fontWeights": {
     "helvetica-0": "Bold",
@@ -354,7 +300,27 @@ export const tokens = {
     }
   },
   "body": {
-    "body1_Regular": {
+    "body16_Regular": {
+      "fontFamily": "Helvetica",
+      "fontWeight": "Regular",
+      "lineHeight": "180%",
+      "fontSize": 16,
+      "letterSpacing": 0,
+      "paragraphSpacing": 0,
+      "textCase": "none",
+      "textDecoration": "none"
+    },
+    "body16_Bold": {
+      "fontFamily": "Helvetica",
+      "fontWeight": "Bold",
+      "lineHeight": "180%",
+      "fontSize": 16,
+      "letterSpacing": 0,
+      "paragraphSpacing": 0,
+      "textCase": "none",
+      "textDecoration": "none"
+    },
+    "body14_Regular": {
       "fontFamily": "Helvetica",
       "fontWeight": "Regular",
       "lineHeight": "171%",
@@ -364,7 +330,7 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "body1_Bold": {
+    "body14_Bold": {
       "fontFamily": "Helvetica",
       "fontWeight": "Bold",
       "lineHeight": "171%",
@@ -374,7 +340,7 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "body2_Regular": {
+    "body13_Regular": {
       "fontFamily": "Helvetica",
       "fontWeight": "Regular",
       "lineHeight": "153%",
@@ -384,7 +350,7 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "body2_Bold": {
+    "body13_Bold": {
       "fontFamily": "Helvetica",
       "fontWeight": "Bold",
       "lineHeight": "153%",
@@ -394,7 +360,7 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "body3_Regular": {
+    "body12_Regular": {
       "fontFamily": "Helvetica",
       "fontWeight": "Regular",
       "lineHeight": "133%",
@@ -404,7 +370,7 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "body3_Bold": {
+    "body12_Bold": {
       "fontFamily": "Helvetica",
       "fontWeight": "Bold",
       "lineHeight": "133%",
@@ -416,7 +382,7 @@ export const tokens = {
     }
   },
   "label": {
-    "label1_Bold": {
+    "label16_Bold": {
       "fontFamily": "Helvetica",
       "fontWeight": "Bold",
       "lineHeight": "100%",
@@ -426,7 +392,7 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "label1_Regular": {
+    "label16_Regular": {
       "fontFamily": "Helvetica",
       "fontWeight": "Regular",
       "lineHeight": "100%",
@@ -436,7 +402,7 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "label2_Bold": {
+    "label14_Bold": {
       "fontFamily": "Helvetica",
       "fontWeight": "Bold",
       "lineHeight": "100%",
@@ -446,7 +412,7 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "label2_Regular": {
+    "label14_Regular": {
       "fontFamily": "Helvetica",
       "fontWeight": "Regular",
       "lineHeight": "100%",
@@ -456,7 +422,7 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "label3_Bold": {
+    "label12_Bold": {
       "fontFamily": "Helvetica",
       "fontWeight": "Bold",
       "lineHeight": "100%",
@@ -466,7 +432,7 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "label3_Regular": {
+    "label12_Regular": {
       "fontFamily": "Helvetica",
       "fontWeight": "Regular",
       "lineHeight": "100%",
@@ -476,7 +442,7 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "label4_Bold": {
+    "label11_Bold": {
       "fontFamily": "Helvetica",
       "fontWeight": "Bold",
       "lineHeight": "100%",
@@ -486,7 +452,7 @@ export const tokens = {
       "textCase": "none",
       "textDecoration": "none"
     },
-    "label4_Regular": {
+    "label11_Regular": {
       "fontFamily": "Helvetica",
       "fontWeight": "Regular",
       "lineHeight": "100%",

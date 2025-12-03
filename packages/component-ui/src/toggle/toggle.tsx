@@ -1,11 +1,9 @@
-import { ReactNode } from 'react';
-
-import { typography } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
+import type { ReactNode } from 'react';
 
 type Props = {
   id: string;
-  size: 'small' | 'medium';
+  size: 'small' | 'medium' | 'large';
   isChecked: boolean;
   onChange: () => void;
   label?: ReactNode;
@@ -20,48 +18,37 @@ export function Toggle({
   onChange,
   label,
   labelPosition = 'right',
-  isDisabled,
+  isDisabled = false,
 }: Props) {
-  const wrapperClasses = clsx('flex', 'flex-[0_0_auto]', 'items-center', 'relative');
-  const baseClasses = clsx(
-    'relative',
-    'flex',
-    'items-center',
-    'rounded-full',
-    {
-      'w-8 h-4 px-[3px]': size === 'small',
-      'w-12 h-6 px-1': size === 'medium',
-    },
-    isDisabled
-      ? { 'bg-disabled-disabledOn': isChecked, 'bg-disabled-disabled01': !isChecked }
-      : {
-          'bg-interactive-interactive01 peer-hover:bg-hover-hover01': isChecked,
-          'bg-interactive-interactive02 peer-hover:bg-hover-hover02Dark': !isChecked,
-        },
-  );
+  const baseClasses = clsx('relative flex items-center rounded-full', {
+    'bg-disabledOn': isDisabled && isChecked,
+    'bg-disabled01': isDisabled && !isChecked,
+    'bg-interactive01 peer-hover:bg-hover01': !isDisabled && isChecked,
+    'bg-interactive02 peer-hover:bg-hoverGray': !isDisabled && !isChecked,
+    'w-8 h-4 px-[3px]': size === 'small',
+    'w-12 h-6 px-1': size === 'medium' || size === 'large',
+  });
   const inputClasses = clsx(
-    'peer',
-    'absolute',
-    'inset-0',
-    'z-[1]',
-    'opacity-0',
+    'peer absolute inset-0 z-[1] opacity-0',
     isDisabled ? 'cursor-not-allowed' : 'cursor-pointer',
   );
-  const indicatorClasses = clsx('bg-icon-iconOnColor', 'rounded-full', {
+  const indicatorClasses = clsx('rounded-full bg-iconOnColor', {
     'w-2.5 h-2.5': size === 'small',
-    'w-4 h-4': size === 'medium',
+    'w-4 h-4': size === 'medium' || size === 'large',
     'ml-auto': isChecked,
   });
-  const labelClasses = clsx(
-    labelPosition === 'right' ? 'ml-2' : 'mr-2',
-    typography.label[size === 'small' ? 'label3regular' : 'label1regular'],
-    'break-all',
-    isDisabled ? 'pointer-events-none cursor-not-allowed text-disabled-disabled01' : 'cursor-pointer text-text-text01',
-  );
+  const labelClasses = clsx('break-all', {
+    'mr-2': labelPosition === 'left',
+    'ml-2': labelPosition === 'right',
+    'typography-label14regular': size === 'small' || size === 'medium',
+    'typography-label16regular': size === 'large',
+    'pointer-events-none cursor-not-allowed text-disabled01': isDisabled,
+    'cursor-pointer text-text01': !isDisabled,
+  });
 
   return (
-    <div className={wrapperClasses}>
-      {label && labelPosition === 'left' && (
+    <div className="relative flex flex-[0_0_auto] items-center">
+      {label != null && labelPosition === 'left' && (
         <label htmlFor={id} className={labelClasses}>
           {label}
         </label>
@@ -78,7 +65,7 @@ export function Toggle({
       <div className={baseClasses}>
         <span className={indicatorClasses} />
       </div>
-      {label && labelPosition === 'right' && (
+      {label != null && labelPosition === 'right' && (
         <label htmlFor={id} className={labelClasses}>
           {label}
         </label>

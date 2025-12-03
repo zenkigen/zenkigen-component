@@ -1,0 +1,69 @@
+import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/addon-docs/blocks';
+import { Markdown } from '@storybook/addon-docs/blocks';
+import PasswordInputStories, { Component, Base } from './password-input.stories';
+import spec from '../../../../docs/component/password-input-specification.md?raw';
+
+<Meta title="PasswordInput" of={PasswordInputStories} />
+
+# PasswordInput
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
+
+<Canvas>
+  <Story of={Component} />
+</Canvas>
+
+<Controls of={Component} />
+
+### Code Example
+
+```tsx
+import { PasswordInput } from '@zenkigen-inc/component-ui';
+import { useState } from 'react';
+
+const Example = () => {
+  const [password, setPassword] = useState('');
+  const isError = password.length > 0 && password.length < 8;
+
+  return (
+    <PasswordInput
+      value={password}
+      isError={isError}
+      onChange={(e) => setPassword(e.target.value)}
+      placeholder="パスワードを入力してください"
+      size="medium"
+    >
+      <PasswordInput.HelperMessage>8文字以上で入力してください</PasswordInput.HelperMessage>
+      <PasswordInput.ErrorMessage>入力内容にエラーがあります</PasswordInput.ErrorMessage>
+    </PasswordInput>
+  );
+};
+```
+
+## 概要
+
+ユーザーがパスワードを入力するためのフィールドを提供するUI要素です。表示形式を変更したり、入力可能な文字種や文字数を制限したりすることができます。
+
+## 設計の原則（Do）
+
+### ヘルパーテキストは入力項目を明確に表現します
+
+必要文字数や入力可能な文字種などを明確に説明します。
+
+![設計の原則 その1](/storybook/images/password-input_01.jpg)
+
+### 表示形式の変更や文字数の制限が可能です
+
+用途に応じて表示形式を変更したり、入力可能な文字種や文字数を制限したりすることができます。 表示形式変更の際は `type="passward"` , `type="text"` のように、入力されるデータに最適な `type`属性を指定してください。
+
+## 推奨しないこと（Don’t）
+
+### パスワード入力以外では使用しない
+
+パスワード以外のテキストを入力する場合は[TextInput](/docs/components-textinput--docs)を使用します。

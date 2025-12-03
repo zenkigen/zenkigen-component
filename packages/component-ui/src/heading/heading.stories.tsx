@@ -1,14 +1,28 @@
-import { typography } from '@zenkigen-inc/component-theme';
-import { clsx } from 'clsx';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Avatar } from '../avatar';
 import { Button } from '../button';
 import { Icon } from '../icon';
-
 import { Heading } from '.';
 
-export default {
+const meta: Meta<typeof Heading> = {
+  title: 'Components/Heading',
   component: Heading,
+};
+
+export default meta;
+type Story = StoryObj<typeof Heading>;
+
+export const Component: Story = {
+  args: {
+    level: 3,
+    children: 'タイトル',
+    before: '',
+    after: '',
+  },
+  parameters: {
+    chromatic: { disable: true },
+  },
 };
 
 export function Base() {
@@ -63,7 +77,7 @@ export function Base() {
       </Heading>
       <Heading level={2} before={<Avatar size="small" userId={1} lastName="全機現" firstName="太郎" />}>
         <div className="flex items-end gap-1">
-          全機現太郎<span className={clsx(typography.label.label1bold, 'mb-1')}>さん</span>
+          全機現太郎<span className="typography-label16bold mb-1">さん</span>
         </div>
       </Heading>
     </div>

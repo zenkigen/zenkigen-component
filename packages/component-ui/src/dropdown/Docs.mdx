@@ -1,0 +1,39 @@
+import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/addon-docs/blocks';
+import DropdownStories, { Component } from './dropdown.stories';
+
+<Meta title="Dropdown" of={DropdownStories} />
+
+# Dropdown
+
+<Canvas>
+  <Story of={Component} />
+</Canvas>
+
+<Controls of={Component} />
+
+## 概要
+
+ボタンを押すというユーザーインタラクションに応じて、リスト形式の複数の選択肢によるパネルが開くコンポーネントです。
+
+## 設計の原則 （Do）
+
+### Listと組み合わせて使用します
+
+選択肢にはListを使用します。
+
+- 基本的にメニューに使われます
+- 操作後にアクションが発生します(ページ遷移など)
+
+## 推奨しないこと（Don't）
+
+### 主要なアクションや情報を隠すために使用しない
+
+その画面で最も重要、あるいは最も頻繁に使われるアクション（例：「投稿する」「カートに入れる」）をDropdownの中に配置しないでください。重要なアクションは常に表示し、ワンクリックで実行できるようにするべきです。Dropdownは、あくまで**補助的なアクション**や設定項目を整理するために使用します。
+
+### Selectと混同しない
+
+以下の場合はSelectを使用します。
+
+- 基本的にフォームに使われます
+- 基本的に選択肢から選択するときに使用します
+- 他のボタンをクリックするまで選択内容は実行・送信されません

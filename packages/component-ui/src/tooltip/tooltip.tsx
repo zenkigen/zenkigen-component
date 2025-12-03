@@ -1,19 +1,19 @@
-import { CSSProperties, ReactNode, useCallback, useRef, useState } from 'react';
+import type { CSSProperties, PropsWithChildren, ReactNode } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 
-import { typography } from '@zenkigen-inc/component-theme';
-import clsx from 'clsx';
-
-import { TailIcon } from './tail-icon';
-import { TooltipHorizontalAlign, TooltipSize, TooltipVerticalPosition } from './type';
+import { TooltipContent } from './tooltip-content';
+import { useTooltip } from './tooltip-hook';
+import type { TooltipHorizontalAlign, TooltipPosition, TooltipSize, TooltipVerticalPosition } from './type';
 
 type Props = {
-  children: ReactNode;
-  content: string;
+  content: ReactNode;
   size?: TooltipSize;
-  maxWidth?: CSSProperties['width'];
+  maxWidth?: CSSProperties['maxWidth'];
   verticalPosition?: TooltipVerticalPosition;
   horizontalAlign?: TooltipHorizontalAlign;
   isDisabledHover?: boolean;
+  portalTarget?: HTMLElement;
 };
 
 export function Tooltip({
@@ -24,27 +24,27 @@ export function Tooltip({
   verticalPosition = 'bottom',
   horizontalAlign = 'center',
   isDisabledHover = false,
-}: Props) {
+  portalTarget,
+}: PropsWithChildren<Props>) {
+  const { calculatePosition } = useTooltip();
+
   const [isVisible, setIsVisible] = useState(false);
-  const [targetDimensions, setTargetDimensions] = useState({
-    width: 0,
-    height: 0,
+  const [tooltipPosition, setTooltipPosition] = useState<TooltipPosition>({
+    maxWidth: 'none',
+    width: 'auto',
+    left: '0px',
+    top: '0px',
+    bottom: '0px',
+    translateX: '0',
+    translateY: '0',
   });
 
   const targetRef = useRef<HTMLDivElement>(null);
 
   const handleMouseOverWrapper = useCallback(() => {
-    if (targetRef.current === null || isDisabledHover) {
+    if (isDisabledHover) {
       return;
     }
-
-    const dimensions = targetRef.current.getBoundingClientRect();
-    const calculatedDimensions = {
-      width: dimensions.right - dimensions.left,
-      height: dimensions.bottom - dimensions.top,
-    };
-
-    setTargetDimensions(calculatedDimensions);
     setIsVisible(true);
   }, [isDisabledHover]);
 
@@ -52,53 +52,47 @@ export function Tooltip({
     setIsVisible(false);
   }, []);
 
-  const targetClasses = clsx('relative', 'flex', 'items-center', 'justify-center');
+  useEffect(() => {
+    if (targetRef.current === null) return;
 
-  const tooltipBodyClasses = clsx(
-    'z-tooltip',
-    'absolute',
-    'w-max',
-    horizontalAlign === 'left' ? 'left-0' : horizontalAlign === 'right' ? 'right-0' : 'left-auto',
-    'inline-block',
-    size === 'small' ? 'px-2 pb-1 pt-1.5' : 'px-4 py-3',
-    'text-text-textOnColor',
-    'bg-background-uiBackgroundTooltip',
-    'rounded',
-    'shadow-floatingShadow',
-    typography.body[size === 'small' ? 'body3regular' : 'body2regular'],
-  );
+    const dimensions = targetRef.current?.getBoundingClientRect();
+    const position = calculatePosition({ dimensions, maxWidth, verticalPosition, horizontalAlign, tooltipSize: size });
+
+    setTooltipPosition(position);
+  }, [calculatePosition, horizontalAlign, maxWidth, size, verticalPosition]);
 
   return (
     <div
       ref={targetRef}
-      className={targetClasses}
+      className="relative flex items-center justify-center"
       onMouseOver={handleMouseOverWrapper}
       onMouseLeave={handleMouseOutWrapper}
     >
       {children}
-      {isVisible && (
-        <div
-          className={tooltipBodyClasses}
-          style={{
-            maxWidth,
-            top:
-              verticalPosition === 'bottom'
-                ? size === 'small'
-                  ? `${targetDimensions.height + 8}px`
-                  : `${targetDimensions.height + 12}px`
-                : 'unset',
-            bottom:
-              verticalPosition === 'top'
-                ? size === 'small'
-                  ? `${targetDimensions.height + 8}px`
-                  : `${targetDimensions.height + 12}px`
-                : 'unset',
-          }}
-        >
-          {content}
-          <TailIcon size={size} verticalPosition={verticalPosition} horizontalAlign={horizontalAlign} />
-        </div>
-      )}
+      {isVisible &&
+        (portalTarget == null ? (
+          <TooltipContent
+            content={content}
+            size={size}
+            maxWidth={maxWidth}
+            verticalPosition={verticalPosition}
+            horizontalAlign={horizontalAlign}
+            tooltipPosition={tooltipPosition}
+          />
+        ) : (
+          createPortal(
+            <TooltipContent
+              isPortal
+              content={content}
+              size={size}
+              maxWidth={maxWidth}
+              verticalPosition={verticalPosition}
+              horizontalAlign={horizontalAlign}
+              tooltipPosition={tooltipPosition}
+            />,
+            portalTarget,
+          )
+        ))}
     </div>
   );
 }

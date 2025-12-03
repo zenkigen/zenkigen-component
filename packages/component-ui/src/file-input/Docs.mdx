@@ -1,0 +1,100 @@
+import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/addon-docs/blocks';
+import { Markdown } from '@storybook/addon-docs/blocks';
+import FileInputStories, { Default, LayoutExamples } from './file-input.stories';
+import spec from '../../../../docs/component/file-input-specification.md?raw';
+
+<Meta title="FileInput" of={FileInputStories} />
+
+# FileInput
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
+
+<Canvas>
+  <Story of={Default} />
+</Canvas>
+
+<Controls of={Default} />
+
+### Code Example
+
+```tsx
+import { useRef, useState } from 'react';
+import { FileInput, Button } from '@zenkigen-inc/component-ui';
+import type { FileInputRef } from '@zenkigen-inc/component-ui';
+
+const MyComponent = () => {
+  const fileInputRef = useRef<FileInputRef>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [errorMessages, setErrorMessages] = useState<string[]>([]);
+
+  const handleReset = () => {
+    fileInputRef.current?.reset();
+    setSelectedFile(null);
+    setErrorMessages([]);
+  };
+
+  return (
+    <div>
+      <FileInput
+        ref={fileInputRef}
+        variant="button"
+        accept=".csv,.pdf,image/*,application/vnd.ms-excel"
+        maxSize={50 * 1024 * 1024}
+        isError={errorMessages.length > 0}
+        errorMessages={errorMessages}
+        onSelect={(file) => setSelectedFile(file)}
+        onError={(errors) => {
+          setErrorMessages(errors.map((e) => e.message));
+        }}
+      />
+      <Button variant="text" onClick={handleReset}>
+        リセット
+      </Button>
+    </div>
+  );
+};
+```
+
+## Layout examples
+
+<Canvas of={LayoutExamples} />
+
+## 概要
+
+ファイルを選択・アップロードするためのコンポーネントです。ボタンとドロップゾーンの2つのバリエーションがあり、優先度やスペースの活用等、必要に応じて使い分けます。
+
+## 設計の原則 （Do）
+
+### ラベルを使用して、ファイルの種類やサイズを説明します。
+
+アップロードできるファイルの拡張子(CSV,PDFなど)や上限のファイルサイズを記載します。
+
+![設計の原則 その1](/storybook/images/fileinput_01.jpg)
+
+### アップロードしたファイルは確認・削除・変更が可能です。
+
+アップロード後にファイル名が確認でき、削除ボタンが付与されます。そして削除した場合は再度別のファイルをアップロードすることができます。
+
+![設計の原則 その2](/storybook/images/fileinput_02.jpg)
+
+### アップロード可能なファイルは1つです。
+
+1コンポーネントにつき、ファイルは1つのみアップロードできます。
+
+### エラーの原因は明記します。
+
+アップロード時にエラーが起きた際はその原因を明記し、ユーザーが再アップロードする時に同じエラーを起こすことを予防します。
+
+![設計の原則 その3](/storybook/images/fileinput_03.jpg)
+
+## 推奨しないこと（Don’t）
+
+### ドロップゾーンは乱用しない
+
+一定以上の大きさでレイアウトをする必要があり、視線を強く誘導する効果があるので乱雑に配置しない(ボタンタイプを併用する)

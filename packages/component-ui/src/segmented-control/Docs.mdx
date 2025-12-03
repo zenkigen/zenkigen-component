@@ -1,0 +1,113 @@
+import { Canvas, Meta, Story, Controls, Source } from '@storybook/addon-docs/blocks';
+import { Markdown } from '@storybook/addon-docs/blocks';
+import SegmentedControlStories, {
+  Component,
+  LabelWithIconSmallSize,
+  LabelWithIconMediumSize,
+  LabelOnlyMediumSize,
+  LabelOnlySmallSize,
+  IconOnlySmallSize,
+  IconOnlyMediumSize,
+  LayoutExamples,
+} from './segmented-control.stories';
+import spec from '../../../../docs/component/segmented-control-specification.md?raw';
+
+<Meta of={SegmentedControlStories} />
+
+# SegmentedControl
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
+
+<Canvas />
+
+<Controls of={Component} />
+
+### Code Example
+
+- SegmentedControlに必ず`aria-label`を指定すること。
+- SegmentedControl.Itemでlabelを使用しない場合は必ず`aria-label`を指定すること。
+
+```tsx
+const [selectedSegment, setSelectedSegment] = useState('short');
+
+<SegmentedControl
+  value={selectedSegment}
+  size="medium"
+  aria-label="SegmentedControlのサンプル"
+  onChange={setSelectedSegment}
+>
+  <SegmentedControl.Item label="短い" value="short" icon="list" />
+  <SegmentedControl.Item label="中くらいのラベル" value="medium" icon="table" />
+  <SegmentedControl.Item label="ボタンラベル" value="value" icon="table" isDisabled />
+  <SegmentedControl.Item label="とても長いラベルのボタン" value="long" icon="documents" />
+</SegmentedControl>;
+```
+
+## Stories
+
+<Canvas of={LabelWithIconSmallSize} />
+<Canvas of={LabelWithIconMediumSize} />
+<Canvas of={LabelOnlySmallSize} />
+<Canvas of={LabelOnlyMediumSize} />
+<Canvas of={IconOnlySmallSize} />
+<Canvas of={IconOnlyMediumSize} />
+
+## Layout examples
+
+<Canvas of={LayoutExamples} />
+
+## 概要
+
+水平方向に配置され、関連する選択肢から1つを選ぶことができます。
+タブコンポーネントと一緒に使われる事が多く、そのタブのコンテンツ内で関連する情報をフィルタリングや並び替えるためにより低い階層で使われます。
+
+![概要](/storybook/images/segmented-control_01.jpg)
+
+## 設計の原則（Do）
+
+### デフォルト値が必要です
+
+データやシステム・アクセスの損失を防ぐために、デフォルトでは最も安全か、最も便利そうな選択肢を選びましょう。ユーザーが選択を控える必要性があるならば、Disabled状態かつ[Tooltip](/docs/components-tooltip--docs)などで選択ができない事を明示してあげましょう。
+
+### タブとの相違点
+
+タブを操作すると、通常、そのタブに固有のコンテンツを表示する新しいビューが開きます。これに対して、Segmented controlを使用すると、同じビュー内でコンテンツの一部をフィルタリングしたり、表示を変更したりすることができます。
+
+### フィルタリングやソート
+
+セグメントコントロールは、リストやテーブルの内容をフィルタリングしたりソートしたりするための手段として使用されることがあります。各セグメントは、異なるフィルタリングオプションやソート順序を表すことができます。
+
+![設計の原則 その3](/storybook/images/segmented-control_02.jpg)
+
+### 選択肢は2〜5つまで
+
+テキストラベルの選択肢は2〜4つ、またはアイコンのみの選択肢は5つまで配置ができます。
+
+選択肢が多すぎると認知が難しくなり、水平方向のスペースが大きくなり過ぎます。
+選択肢がその数を超える場合は情報設計を見直し、[Radio](/docs/components-radio--docs)など別のコンポーネントを使用しましょう。
+
+### aria-labelを必ず入力してください
+
+アクセシビリティ向上のため、スクリーンリーダーなどの支援技術が要素の内容を正しく理解できるよう、全体の目的を必ず入力します。
+
+![設計の原則 その3](/storybook/images/segmented-control_03.jpg)
+
+## 推奨しないこと（Don’t）
+
+- サブページのようなコンテンツ間の移動にはSegmented controlを使用せず、代わりに[Tab](/docs/components-tab--docs)を使用してください。
+
+- 「Yes/No」や「On/Off」などの二者択一の選択肢には、代わりにチェックボックスやトグルを使用してください。
+
+- ネスティングは避けてください。
+  ![推奨しないこと その3](/storybook/images/segmented-control_04.jpg)
+
+- 各アイテムの横幅は揃えてください。最長のアイテムの横幅に他のアイテムも合わせて、横幅を統一にしてください。Figmaでは設定が難しくこの通りには出来ていません。個別で調整をしてください。
+
+  NG例：[応募]や[面]を[ダッシュボード]の横幅がバラバラである
+  ![推奨しないこと その4](/storybook/images/segmented-control_05.jpg)

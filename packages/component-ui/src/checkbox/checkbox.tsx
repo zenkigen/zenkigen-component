@@ -1,7 +1,7 @@
-import { ChangeEvent, useCallback, useState } from 'react';
-
-import { focusVisible, typography } from '@zenkigen-inc/component-theme';
+import { focusVisible } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
+import type { ChangeEvent } from 'react';
+import { useCallback, useState } from 'react';
 
 import { CheckedIcon } from './checked-icon';
 import { MinusIcon } from './minus-icon';
@@ -40,103 +40,57 @@ export function Checkbox({
   }, []);
 
   const handleChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      !isDisabled && onChange?.(e);
-    },
+    (e: ChangeEvent<HTMLInputElement>) => !isDisabled && onChange?.(e),
     [isDisabled, onChange],
   );
 
-  const wrapperClasses = clsx('flex', 'items-center');
-
-  const baseClasses = clsx('flex', 'items-center', 'justify-center', 'h-6', 'w-6');
-
-  const baseInputClasses = clsx(
-    'absolute',
-    'z-[1]',
-    'opacity-0',
-    'w-5',
-    'h-5',
-    'peer',
-    isDisabled ? 'cursor-not-allowed' : 'cursor-pointer',
-  );
-
-  const boxClasses = clsx(
-    'inline-flex',
-    'items-center',
-    'justify-center',
-    'h-5',
-    'w-5',
-    'bg-white',
-    'border',
-    'rounded-sm',
-    focusVisible.normalPeer,
-    isDisabled
-      ? 'border-disabled-disabled01'
-      : color === 'error'
-      ? isMouseOver
-        ? 'border-hover-hoverError'
-        : 'border-support-supportError'
-      : color === 'gray'
-      ? isMouseOver
-        ? 'border-hover-hoverUiBorder'
-        : 'border-interactive-interactive02'
-      : isMouseOver
-      ? 'border-hover-hoverUiBorder'
-      : 'border-border-uiBorder03',
-  );
-
-  const indicatorClasses = clsx('h-5', 'w-5', 'relative', 'flex', 'flex-[0_0_auto]', 'items-center', 'justify-center', {
-    'bg-disabled-disabled01': isDisabled && isChecked,
-    'border-disabled-disabled01': isDisabled,
+  const baseInputClasses = clsx('peer absolute z-[1] size-5 opacity-0', {
+    'cursor-not-allowed': isDisabled,
+    'cursor-pointer': !isDisabled,
   });
 
-  const afterClasses = clsx(
-    'absolute',
-    'top-0',
-    'right-0',
-    'bottom-0',
-    'left-0',
-    'block',
-    'm-auto',
-    'rounded-sm',
-    isDisabled && isChecked
-      ? 'bg-disabled-disabled01'
-      : color === 'gray'
-      ? isMouseOver
-        ? 'bg-hover-hover02Dark'
-        : 'bg-interactive-interactive02'
-      : color === 'error'
-      ? isMouseOver
-        ? 'bg-hover-hoverError'
-        : 'bg-support-supportError'
-      : isMouseOver
-      ? 'bg-hover-hover01'
-      : 'bg-interactive-interactive01',
+  const boxClasses = clsx(
+    'inline-flex size-5 items-center justify-center rounded-sm border bg-white',
+    focusVisible.normalPeer,
     {
-      'scale-0': !isChecked,
-      'scale-100': isChecked,
+      'border-disabled01': isDisabled,
+      'border-hoverUiBorder': !isDisabled && isMouseOver && color === 'default',
+      'border-uiBorder03': !isDisabled && !isMouseOver && color === 'default',
+      'border-interactive02': !isDisabled && !isMouseOver && color === 'gray',
+      'border-hoverError': !isDisabled && isMouseOver && color === 'error',
+      'border-supportError': !isDisabled && !isMouseOver && color === 'error',
     },
   );
 
-  const hoverIndicatorClasses = clsx(
-    'w-3',
-    'h-3',
-    'inline-block',
-    'rounded-[1px]',
-    !isDisabled && !isChecked && isMouseOver && 'bg-hover-hoverUi',
-  );
+  const indicatorClasses = clsx('relative flex size-5 flex-[0_0_auto] items-center justify-center', {
+    'bg-disabled01': isDisabled && isChecked,
+    'border-disabled01': isDisabled,
+  });
 
-  const labelClasses = clsx(
-    'flex-[1_0_0]',
-    'ml-2',
-    typography.label.label2regular,
-    'break-all',
-    isDisabled ? 'pointer-events-none cursor-not-allowed text-disabled-disabled01' : 'cursor-pointer text-text-text01',
-  );
+  const afterClasses = clsx('absolute inset-0 m-auto block rounded-sm', {
+    'bg-disabled01': isDisabled && isChecked,
+    'bg-hover01': !(isDisabled && isChecked) && isMouseOver,
+    'bg-interactive01': !(isDisabled && isChecked) && !isMouseOver,
+    'bg-hoverGray': !(isDisabled && isChecked) && isMouseOver && color === 'gray',
+    'bg-interactive02': !(isDisabled && isChecked) && !isMouseOver && color === 'gray',
+    'bg-hoverError': !(isDisabled && isChecked) && isMouseOver && color === 'error',
+    'bg-supportError': !(isDisabled && isChecked) && !isMouseOver && color === 'error',
+    'scale-0': !isChecked,
+    'scale-100': isChecked,
+  });
+
+  const hoverIndicatorClasses = clsx('inline-block size-3 rounded-[1px]', {
+    'bg-hoverUi': !isDisabled && !isChecked && isMouseOver,
+  });
+
+  const labelClasses = clsx('typography-label14regular ml-2 flex-[1_0_0] break-all', {
+    'pointer-events-none cursor-not-allowed text-disabled01': isDisabled,
+    'cursor-pointer text-text01': !isDisabled,
+  });
 
   return (
-    <div className={wrapperClasses}>
-      <div className={baseClasses}>
+    <div className="flex items-center">
+      <div className="relative flex size-6 items-center justify-center">
         <input
           type="checkbox"
           value={value}
@@ -159,9 +113,11 @@ export function Checkbox({
           </div>
         </div>
       </div>
-      <label htmlFor={id} className={labelClasses}>
-        {label}
-      </label>
+      {label != null && (
+        <label htmlFor={id} className={labelClasses}>
+          {label}
+        </label>
+      )}
     </div>
   );
 }

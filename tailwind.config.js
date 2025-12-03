@@ -1,6 +1,8 @@
+import componentConfig from '@zenkigen-inc/component-config';
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./packages/**/*.{ts,tsx}'],
-  presets: [require('@zenkigen-inc/component-config')],
+  presets: [componentConfig],
   plugins: [],
 };

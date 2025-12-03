@@ -1,9 +1,29 @@
-import { ChangeEvent, useCallback, useState } from 'react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { ChangeEvent } from 'react';
+import { useCallback, useState } from 'react';
 
 import { Radio } from '.';
 
-export default {
+const meta: Meta<typeof Radio> = {
+  title: 'Components/Radio',
   component: Radio,
+};
+export default meta;
+
+type Story = StoryObj<typeof Radio>;
+
+export const Component: Story = {
+  args: {
+    label: 'label',
+    isChecked: false,
+    isDisabled: false,
+    name: 'name',
+    value: 'value',
+    id: 'id',
+  },
+  parameters: {
+    chromatic: { disable: true },
+  },
 };
 
 export function Base() {

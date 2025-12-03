@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react';
-
 import { typography } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
 
@@ -19,14 +18,10 @@ type Props = {
 export function Heading(props: Props) {
   const TagName = `h${props.level}` as const;
 
-  const classes = clsx(
-    'flex',
-    'items-center',
-    'text-text-text01',
-    typography.heading[TagName],
-    { 'gap-2': props.level === 1 },
-    { 'gap-1': props.level > 1 },
-  );
+  const classes = clsx(`flex items-center text-text01`, typography.heading[TagName], {
+    'gap-2': props.level === 1,
+    'gap-1': props.level > 1,
+  });
 
   return (
     <TagName className={classes}>

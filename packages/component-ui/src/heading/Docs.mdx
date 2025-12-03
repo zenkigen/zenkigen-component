@@ -14,6 +14,16 @@ import spec from '../../../../docs/component/heading-specification.md?raw';
   </div>
 </details>
 
+<Meta title="Heading" of={HeadingStories} />
+
+# Heading
+
+<Canvas>
+  <Story of={Component} />
+</Canvas>
+
+<Controls of={Component} />
+
 ## コード例
 
 ```tsx
@@ -36,4 +46,27 @@ export const PageHeading = () => {
 };
 ```
 
-<Canvas of={Base} />
+## 概要
+
+見出しに使用します。
+
+## 設計の原則 （Do）
+
+### Hタグは順番に使用します
+
+H1~H6までありますが、どれかをスキップせず、必ず昇順になるように使用します。階層を飛び越えると、ユーザーを混乱させることになります。
+
+### 全体の内容が端的に伝わるようなラベルを設定します
+
+全体の内容が端的に伝わるようなラベルを設定します。
+
+### 必要に応じてTooltipを設置します
+
+[Tooltip](/docs/components-tooltip--docs)は、UIの中で直接説明がなされていない、見慣れないオブジェクトを、ユーザーが理解するのを手助けするものです。ラベルの右横のiマークをマウスオーバーすることで、[Tooltip](/docs/components-tooltip--docs)を表示させます。
+
+## 推奨しないこと（Don’t）
+
+### 他の色を使用しない
+
+見出しを目立たせるために、いろいろな色を使いたくなるかもしれませんが、その誘惑に負けないでください。何が重要で何が重要でないかを明確にするために、カラースタイルを信頼してください。
+![推奨しないこと その1](/storybook/images/heading_01.jpg)

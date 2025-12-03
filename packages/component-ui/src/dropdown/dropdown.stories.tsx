@@ -1,21 +1,28 @@
-import { useState } from 'react';
-
-import { action } from '@storybook/addon-actions';
-import type { Meta, StoryObj } from '@storybook/react';
-import { IconName } from '@zenkigen-inc/component-icons';
-import { typography } from '@zenkigen-inc/component-theme';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { IconName } from '@zenkigen-inc/component-icons';
+import { iconElements } from '@zenkigen-inc/component-icons';
 import clsx from 'clsx';
+import type { PropsWithChildren } from 'react';
+import { forwardRef, useRef, useState } from 'react';
+import { action } from 'storybook/actions';
 
 import { Avatar } from '../avatar';
 import { Button } from '../button';
+import { Heading } from '../heading';
 import { Icon } from '../icon';
 import { Toggle } from '../toggle';
-
 import { Dropdown } from './dropdown';
-import { DropdownItemType } from './type';
+import type { DropdownItemType } from './type';
 
 const meta: Meta<typeof Dropdown> = {
+  title: 'Components/Dropdown',
   component: Dropdown,
+  argTypes: {
+    icon: {
+      options: [...Object.keys(iconElements).map((iconName) => iconName)],
+      control: 'select',
+    },
+  },
 };
 export default meta;
 type Story = StoryObj<typeof Dropdown>;
@@ -90,11 +97,45 @@ const items2: DropdownItemType[] = [
   },
 ];
 
+export const Component: Story = {
+  args: {
+    size: 'medium',
+    variant: 'outline',
+    label: '選択',
+    isArrowHidden: false,
+    isDisabled: false,
+    // eslint-disable-next-line no-undefined
+    icon: undefined,
+    title: 'title',
+  },
+  parameters: {
+    chromatic: { disable: true },
+  },
+  render: (args) => (
+    <div style={{ height: '200px' }}>
+      <Dropdown {...args}>
+        <Dropdown.Menu horizontalAlign="left" maxHeight={120}>
+          {items2.map((item) => (
+            <Dropdown.Item key={item.id} onClick={item.onClick}>
+              {item.content}
+            </Dropdown.Item>
+          ))}
+        </Dropdown.Menu>
+      </Dropdown>
+    </div>
+  ),
+};
+
 const DropdownBasic = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', margin: '0 100px' }}>
       <div style={{ display: 'flex', alignItems: 'center', columnGap: '100px', marginBottom: '150px' }}>
-        <Dropdown size="small" target={<Avatar size="x-small" userId={1} lastName="全機現" firstName="太郎" />}>
+        <Dropdown
+          variant="text"
+          size="small"
+          target={<Avatar size="x-small" userId={1} lastName="全機現" firstName="太郎" />}
+          isArrowHidden
+        >
           <Dropdown.Menu horizontalAlign="right" maxHeight={120}>
             {items2.map((item) => (
               <Dropdown.Item key={item.id} onClick={item.onClick}>
@@ -103,16 +144,12 @@ const DropdownBasic = () => {
             ))}
           </Dropdown.Menu>
         </Dropdown>
-        <Dropdown size="medium" target={<Avatar size="small" userId={1} lastName="全機現" firstName="太郎" />}>
-          <Dropdown.Menu horizontalAlign="right">
-            {items.map((item) => (
-              <Dropdown.Item key={item.id} onClick={item.onClick}>
-                {item.content}
-              </Dropdown.Item>
-            ))}
-          </Dropdown.Menu>
-        </Dropdown>
-        <Dropdown size="large" target={<Avatar size="medium" userId={1} lastName="全機現" firstName="太郎" />}>
+        <Dropdown
+          variant="text"
+          size="medium"
+          target={<Avatar size="small" userId={1} lastName="全機現" firstName="太郎" />}
+          isArrowHidden
+        >
           <Dropdown.Menu horizontalAlign="right">
             {items.map((item) => (
               <Dropdown.Item key={item.id} onClick={item.onClick}>
@@ -122,9 +159,10 @@ const DropdownBasic = () => {
           </Dropdown.Menu>
         </Dropdown>
         <Dropdown
+          variant="text"
           size="large"
-          variant="outline"
           target={<Avatar size="medium" userId={1} lastName="全機現" firstName="太郎" />}
+          isArrowHidden
         >
           <Dropdown.Menu horizontalAlign="right">
             {items.map((item) => (
@@ -136,8 +174,23 @@ const DropdownBasic = () => {
         </Dropdown>
         <Dropdown
           size="large"
+          target={<Avatar size="medium" userId={1} lastName="全機現" firstName="太郎" />}
+          isArrowHidden
+        >
+          <Dropdown.Menu horizontalAlign="right">
+            {items.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+        <Dropdown
+          variant="text"
+          size="large"
           isDisabled
           target={<Avatar size="medium" userId={1} lastName="全機現" firstName="太郎" />}
+          isArrowHidden
         >
           <Dropdown.Menu horizontalAlign="right">
             {items.map((item) => (
@@ -149,7 +202,7 @@ const DropdownBasic = () => {
         </Dropdown>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', columnGap: '100px', marginBottom: '150px' }}>
-        <Dropdown size="x-small" target={<Icon name="more" size="small" color="icon01" />}>
+        <Dropdown variant="text" size="x-small" target={<Icon name="more" size="small" color="icon01" />} isArrowHidden>
           <Dropdown.Menu horizontalAlign="right" maxHeight={120}>
             {items2.map((item) => (
               <Dropdown.Item key={item.id} onClick={item.onClick}>
@@ -158,7 +211,7 @@ const DropdownBasic = () => {
             ))}
           </Dropdown.Menu>
         </Dropdown>
-        <Dropdown size="small" target={<Icon name="more" size="medium" color="icon01" />}>
+        <Dropdown variant="text" size="small" target={<Icon name="more" size="medium" color="icon01" />} isArrowHidden>
           <Dropdown.Menu horizontalAlign="right">
             {items.map((item) => (
               <Dropdown.Item key={item.id} onClick={item.onClick}>
@@ -167,7 +220,7 @@ const DropdownBasic = () => {
             ))}
           </Dropdown.Menu>
         </Dropdown>
-        <Dropdown size="medium" target={<Icon name="more" size="large" color="icon01" />}>
+        <Dropdown variant="text" size="medium" target={<Icon name="more" size="large" color="icon01" />} isArrowHidden>
           <Dropdown.Menu horizontalAlign="right">
             {items.map((item) => (
               <Dropdown.Item key={item.id} onClick={item.onClick}>
@@ -176,7 +229,7 @@ const DropdownBasic = () => {
             ))}
           </Dropdown.Menu>
         </Dropdown>
-        <Dropdown size="medium" variant="outline" target={<Icon name="more" size="large" color="icon01" />}>
+        <Dropdown size="medium" target={<Icon name="more" size="large" color="icon01" />} isArrowHidden>
           <Dropdown.Menu horizontalAlign="right">
             {items.map((item) => (
               <Dropdown.Item key={item.id} onClick={item.onClick}>
@@ -185,9 +238,62 @@ const DropdownBasic = () => {
             ))}
           </Dropdown.Menu>
         </Dropdown>
-        <Dropdown size="medium" isDisabled target={<Icon name="more" size="large" color="icon01" />}>
+        <Dropdown
+          variant="text"
+          size="medium"
+          isDisabled
+          target={<Icon name="more" size="large" color="icon01" />}
+          isArrowHidden
+        >
           <Dropdown.Menu horizontalAlign="right">
             {items.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', columnGap: '100px', marginBottom: '150px' }}>
+        <Dropdown variant="text" target={<Heading level={5}>タイトル</Heading>}>
+          <Dropdown.Menu horizontalAlign="right" maxHeight={120}>
+            {items2.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+        <Dropdown variant="text" target={<Heading level={4}>タイトル</Heading>}>
+          <Dropdown.Menu horizontalAlign="right" maxHeight={120}>
+            {items2.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+        <Dropdown variant="text" target={<Heading level={3}>タイトル</Heading>}>
+          <Dropdown.Menu horizontalAlign="right" maxHeight={120}>
+            {items2.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+        <Dropdown size="large" target={<Heading level={2}>タイトル</Heading>}>
+          <Dropdown.Menu horizontalAlign="right" maxHeight={120}>
+            {items2.map((item) => (
+              <Dropdown.Item key={item.id} onClick={item.onClick}>
+                {item.content}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+        <Dropdown variant="text" size="large" isDisabled target={<Heading level={1}>タイトル</Heading>}>
+          <Dropdown.Menu horizontalAlign="right" maxHeight={120}>
+            {items2.map((item) => (
               <Dropdown.Item key={item.id} onClick={item.onClick}>
                 {item.content}
               </Dropdown.Item>
@@ -423,18 +529,19 @@ const DropdownWithCustomMenu = () => {
     {
       id: '4',
       label: '相づち',
-      color: 'fill-support-supportSuccess',
+      color: 'fill-supportSuccess',
       isChecked: isOn4,
       onChange: () => setIsOn4((prev) => !prev),
     },
     {
       id: '5',
       label: 'NGワード',
-      color: 'fill-support-supportError',
+      color: 'fill-supportError',
       isChecked: isOn5,
       onChange: () => setIsOn5((prev) => !prev),
     },
   ];
+
   return (
     <div style={{ display: 'flex', alignItems: 'center', margin: '60px 100px' }}>
       <Dropdown size="medium" label="フィルター" icon="filter">
@@ -445,13 +552,11 @@ const DropdownWithCustomMenu = () => {
                 {item.icon ? (
                   <Icon name={item.icon} size="small" />
                 ) : (
-                  <svg className="h-4 w-4">
+                  <svg className="size-4">
                     <circle r="6" cx="8" cy="8" className={clsx(item.color)} />
                   </svg>
                 )}
-                <span className={clsx('ml-2 flex-1 text-text-text01', typography.label.label2regular)}>
-                  {item.label}
-                </span>
+                <span className="typography-label14regular ml-2 flex-1 text-text01">{item.label}</span>
                 <Toggle id="1" size="small" isChecked={item.isChecked} onChange={item.onChange} />
               </li>
             ))}
@@ -474,4 +579,100 @@ const DropdownWithCustomMenu = () => {
 
 export const WithCustomMenu: Story = {
   render: () => <DropdownWithCustomMenu />,
+};
+
+const DropdownMenuContainer = forwardRef<HTMLDivElement, PropsWithChildren>(({ children }: PropsWithChildren, ref) => {
+  const classes = clsx('absolute', 'top-10', 'left-10');
+
+  return (
+    <div className={classes} ref={ref}>
+      {children}
+    </div>
+  );
+});
+DropdownMenuContainer.displayName = 'DropdownMenuContainer';
+
+const DropdownWithPortal = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  return (
+    <div>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+        <div style={{ display: 'flex', flexDirection: 'row', gap: '100px' }}>
+          <div>
+            <Dropdown
+              size="large"
+              target={<Avatar size="medium" userId={1} lastName="全機現" firstName="太郎" />}
+              portalTargetRef={containerRef}
+              isArrowHidden
+              variant="text"
+            >
+              <Dropdown.Menu>
+                {items.map((item) => (
+                  <Dropdown.Item key={item.id} onClick={item.onClick}>
+                    {item.content}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
+          <div>
+            <Dropdown
+              size="medium"
+              target={<Icon name="more" size="large" color="icon01" />}
+              portalTargetRef={containerRef}
+              isArrowHidden
+              variant="text"
+            >
+              <Dropdown.Menu>
+                {items.map((item) => (
+                  <Dropdown.Item key={item.id} onClick={item.onClick}>
+                    {item.content}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
+          <div>
+            <Dropdown size="large" label="選択" portalTargetRef={containerRef}>
+              <Dropdown.Menu horizontalAlign="left">
+                {items2.map((item) => (
+                  <Dropdown.Item key={item.id} onClick={item.onClick}>
+                    {item.content}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
+          <div>
+            <Dropdown size="large" label="選択" icon="add" portalTargetRef={containerRef}>
+              <Dropdown.Menu horizontalAlign="left">
+                {items2.map((item) => (
+                  <Dropdown.Item key={item.id} onClick={item.onClick}>
+                    {item.content}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
+          <div>
+            <Dropdown size="large" label="選択" icon="add" isArrowHidden portalTargetRef={containerRef}>
+              <Dropdown.Menu horizontalAlign="left">
+                {items2.map((item) => (
+                  <Dropdown.Item key={item.id} onClick={item.onClick}>
+                    {item.content}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
+        </div>
+      </div>
+      <DropdownMenuContainer ref={containerRef} />
+    </div>
+  );
+};
+
+export const WithPortal: Story = {
+  render: () => <DropdownWithPortal />,
 };

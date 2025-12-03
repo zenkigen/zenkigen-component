@@ -1,7 +1,7 @@
 import { focusVisible } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
 
-import { ColorVariant, TagColor } from './type';
+import type { ColorVariant, TagColor } from './type';
 
 type Props = {
   color?: TagColor;
@@ -11,22 +11,13 @@ type Props = {
 
 export const DeleteIcon = ({ color, variant, onClick }: Props) => {
   const deleteButtonClasses = clsx(
-    'h-[14px]',
-    'w-[14px]',
-    'ml-2',
-    'p-0.5',
-    'rounded-full',
-    'group',
-    'hover:bg-icon-iconOnColor',
-    'hover:cursor-pointer',
-    'focus-visible:bg-icon-iconOnColor',
+    'group ml-2 size-[14px] rounded-full p-0.5 hover:cursor-pointer hover:bg-iconOnColor focus-visible:bg-iconOnColor',
     focusVisible.normal,
   );
 
   const deletePathClasses = clsx({
-    'fill-interactive-interactive02': color === 'gray' || variant === 'light',
-    'group-hover:fill-interactive-interactive02 group-focus-visible:fill-interactive-interactive02 fill-icon-iconOnColor':
-      color !== 'gray',
+    'fill-interactive02': color === 'gray' || variant === 'light',
+    'group-hover:fill-interactive02 group-focus-visible:fill-interactive02 fill-iconOnColor': color !== 'gray',
   });
 
   return (

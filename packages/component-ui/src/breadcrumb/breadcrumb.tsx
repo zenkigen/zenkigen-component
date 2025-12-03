@@ -1,26 +1,13 @@
-import { ReactNode } from 'react';
-
-import { typography } from '@zenkigen-inc/component-theme';
-import clsx from 'clsx';
+import type { PropsWithChildren } from 'react';
 
 import { BreadcrumbItem } from './breadcrumb-item';
 
-type Props = {
-  children: ReactNode[];
-};
-
-export const Breadcrumb = ({ children }: Props) => {
+export function Breadcrumb({ children }: PropsWithChildren) {
   return (
     <nav aria-label="breadcrumb">
-      <ul className={clsx(typography.label.label2regular, 'flex flex-wrap gap-2 whitespace-nowrap text-text-text01')}>
-        {children.map((child, i) => {
-          return (
-            <BreadcrumbItem key={i} isLast={i === children.length - 1}>
-              {child}
-            </BreadcrumbItem>
-          );
-        })}
-      </ul>
+      <ul className="typography-label14regular flex flex-wrap gap-2 whitespace-nowrap text-text01">{children}</ul>
     </nav>
   );
-};
+}
+
+Breadcrumb.Item = BreadcrumbItem;
