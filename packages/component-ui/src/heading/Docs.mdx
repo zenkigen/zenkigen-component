@@ -1,0 +1,39 @@
+import { Canvas, Markdown, Meta } from '@storybook/addon-docs/blocks';
+import HeadingStories, { Base } from './heading.stories';
+import spec from '../../../../docs/component/heading-specification.md?raw';
+
+<Meta title="Heading" of={HeadingStories} />
+
+# Heading
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
+
+## コード例
+
+```tsx
+import { Button, Heading, Icon } from '@zenkigen-inc/component-ui';
+
+export const PageHeading = () => {
+  return (
+    <Heading
+      level={2}
+      before={<Icon name="chart-bar" size="large" />}
+      after={
+        <Button variant="outline" before={<Icon name="add" size="medium" />}>
+          新規追加
+        </Button>
+      }
+    >
+      <div className="mr-auto">ダッシュボード</div>
+    </Heading>
+  );
+};
+```
+
+<Canvas of={Base} />
