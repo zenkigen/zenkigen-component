@@ -2,12 +2,19 @@ import clsx from 'clsx';
 import type { ReactNode } from 'react';
 
 type Props = {
+  /** input 要素と label を紐付けるためのユニークな ID */
   id: string;
+  /** トラックとインジケータの物理サイズおよびラベルのタイポグラフィを切り替えます */
   size: 'small' | 'medium' | 'large';
+  /** ON/OFF の状態。true でインジケータを右端に表示します */
   isChecked: boolean;
+  /** ユーザー操作ごとに呼ばれるコールバック。親側で状態を反転させます */
   onChange: () => void;
+  /** トグルの対象を説明するラベル。任意の ReactNode を渡せます */
   label?: ReactNode;
+  /** ラベルをトラックの左右どちらに配置するか。デフォルトは right */
   labelPosition?: 'left' | 'right';
+  /** true の場合は操作を無効化し、淡色スタイルにします */
   isDisabled?: boolean;
 };
 
