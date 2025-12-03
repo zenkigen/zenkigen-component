@@ -9,14 +9,23 @@ import { SelectList } from './select-list';
 import type { SortOrder } from './type';
 
 type Props = {
+  /** ボタンとドロップダウンの高さ・タイポグラフィを切り替えるサイズ。 */
   size?: 'x-small' | 'small' | 'medium' | 'large';
+  /** buttonColors を用いたスタイルバリエーション。 */
   variant?: 'outline' | 'text';
+  /** コンポーネント全体の幅。省略時は内容幅に合わせる。 */
   width?: CSSProperties['width'];
+  /** トリガーボタンに表示する列名。 */
   label: string;
+  /** 現在の並び替え方向。外部状態で `'ascend' | 'descend' | null` を制御する。 */
   sortOrder: SortOrder;
+  /** true の場合はボタンやリストの操作を無効化する。 */
   isDisabled?: boolean;
+  /** この列が現在のソートキーであるかどうか。矢印アイコンと選択スタイルを切り替える。 */
   isSortKey?: boolean;
+  /** 並び替え方向を選択したときに呼ばれるコールバック。 */
   onChange?: (value: SortOrder) => void;
+  /** ドロップダウン内の「選択解除」をクリックしたときに呼ばれるコールバック。 */
   onClickDeselect?: () => void;
 };
 
