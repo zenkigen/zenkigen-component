@@ -25,12 +25,12 @@
     "test:ci": "vitest run"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "6.4.0",
+    "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "16.3.0",
     "@testing-library/user-event": "14.6.1",
     "hygen": "6.2.11",
-    "tsup": "8.5.0",
-    "typescript": "5.8.3"
+    "tsup": "8.5.1",
+    "typescript": "5.9.3"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
