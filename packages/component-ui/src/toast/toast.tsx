@@ -9,11 +9,17 @@ import type { ToastState } from './type';
 const CLOSE_TIME_MSEC = 5000;
 
 type Props = {
+  /** 表示するメッセージの状態（色・アイコンを切り替えます） */
   state?: ToastState;
+  /** トースト全体の幅。数値・文字列いずれも指定可能 */
   width?: CSSProperties['width'];
+  /** true で 5 秒後に自動で閉じる */
   isAutoClose?: boolean;
+  /** true でフェードイン/アウトのアニメーションを有効化 */
   isAnimation?: boolean;
+  /** 表示する本文 */
   children?: ReactNode;
+  /** クローズボタンや自動クローズ完了時に呼び出されるコールバック */
   onClickClose: () => void;
 };
 
