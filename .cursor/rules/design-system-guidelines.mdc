@@ -1,0 +1,15 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# デザインシステムガイドライン
+
+このドキュメントは、zenkigen-componentプロジェクトにおけるデザインシステムガイドラインを定義しています。
+
+## アイコン
+- アイコンは、zenkigen-componentに含まれる Icon コンポーネント のみを使用すること
+
+## トランジッション
+- トランジッションは使用しないこと
+  - 使用する必要がある場合は、tailwindConfig に指定されているものを使用する

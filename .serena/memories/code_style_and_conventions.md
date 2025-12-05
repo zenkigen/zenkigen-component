@@ -1,0 +1,1 @@
+TypeScript strict、型は import type、Boolean変数は is/has/should/can、厳格比較。Reactは .tsx、Boolean属性は明示値、不要な中括弧禁止、buttonのtype明示、dangerouslySetInnerHTML禁止。命名はkebab-case(ファイル/ディレクトリ)、関数は動詞+目的語。Prettier(幅120/セミコロン/シングルクォート/末尾カンマ)。Tailwindは@zenkigen-inc/component-configプリセットとclsx使用。ESLint/Prettier/TypeScriptで品質担保。

@@ -1,0 +1,19 @@
+---
+alwaysApply: false
+---
+
+# アイコンの更新手順
+
+- zenkigen-component で使用できるアイコンは、、 packages/component-icons 管理している
+- packages/component-icons/src/svg に、svgファイルを格納
+
+## 追加更新手順
+
+1. packages/component-icons/src/svg にアイコンの svgファイルを格納する
+2. `yarn build` コマンドを実行する
+
+## アイコンのsvgファイルの取得方法
+
+- アイコンは、Figmaで管理している。
+- Figma: https://www.figma.com/design/H3qTLio8vWnSUmGb3BkjkE/%F0%9F%94%86-ZENKIGEN_Icon?node-id=1541-41&t=ckYqcjKeLjp7lwst-4
+- 並ぶ Variants / Component Set が対象です。（\_Label 要素は対象外です）
