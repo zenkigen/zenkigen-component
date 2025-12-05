@@ -1,15 +1,50 @@
 import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/addon-docs/blocks';
+import { Markdown } from '@storybook/addon-docs/blocks';
 import PaginationSelectStories, { Base } from './pagination-select.stories';
+import spec from '../../../../docs/component/pagination-select-specification.md?raw';
 
 <Meta title="PaginationSelect" of={PaginationSelectStories} />
 
 # PaginationSelect
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
 
 <Canvas>
   <Story of={Base} />
 </Canvas>
 
 <Controls of={Base} />
+
+## Code Example
+
+```tsx
+import { useState } from 'react';
+import { PaginationSelect } from '@zenkigen-inc/component-ui';
+
+const PaginationSelectExample = () => {
+  const totalSize = 4000;
+  const sizePerPage = 25;
+  const [page, setPage] = useState(1);
+  const pageMax = Math.ceil(totalSize / sizePerPage);
+
+  return (
+    <PaginationSelect
+      totalSize={totalSize}
+      sizePerPage={sizePerPage}
+      currentPage={page}
+      onChange={(value) => setPage(value)}
+      onClickPrevButton={() => setPage((prev) => Math.max(1, prev - 1))}
+      onClickNextButton={() => setPage((prev) => Math.min(pageMax, prev + 1))}
+    />
+  );
+};
+```
 
 ## 概要
 
