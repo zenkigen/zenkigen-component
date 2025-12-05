@@ -76,23 +76,23 @@ const items: DropdownItemType[] = [
 
 #### オプションプロパティ
 
-| プロパティ | 型 | デフォルト値 | 説明 |
-| ---------- | --- | ------------ | ---- |
-| `size` | `'x-small' \| 'small' \| 'medium' \| 'large'` | `'medium'` | トリガーボタンの高さ・余白・タイポグラフィを切り替える。 |
-| `variant` | `'text' \| 'outline'` | `'outline'` | テーマのボタンスタイルを適用する。`text` は境界線なし、`outline` は枠線表示となる。 |
-| `title` | `string` | `undefined` | `button` 要素の `title` 属性に渡され、ツールチップやスクリーンリーダー補助として利用できる。 |
-| `isDisabled` | `boolean` | `false` | トリガーボタンとメニューを無効化する。`true` の場合は `cursor-not-allowed` と `pointer-events-none` を適用しメニューを開けなくなる。 |
-| `isArrowHidden` | `boolean` | `false` | 組み込みの下向き矢印アイコンを非表示にする。カスタムターゲットで矢印が不要な場合に使用する。 |
-| `icon` | `IconName` | `undefined` | ラベル付きボタンの先頭に配置する公式アイコン。`target` を使用する場合は無視される。 |
-| `portalTargetRef` | `MutableRefObject<HTMLElement \| null>` | `undefined` | メニューを別コンテナへ `createPortal` で描画するためのターゲット要素参照。レイヤーの制約を回避したい場合に利用する。 |
-| `children` | `ReactNode` | - | 一般的には `Dropdown.Menu` を渡し、その中で `Dropdown.Item` などを配置する。 |
+| プロパティ        | 型                                            | デフォルト値 | 説明                                                                                                                                 |
+| ----------------- | --------------------------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `size`            | `'x-small' \| 'small' \| 'medium' \| 'large'` | `'medium'`   | トリガーボタンの高さ・余白・タイポグラフィを切り替える。                                                                             |
+| `variant`         | `'text' \| 'outline'`                         | `'outline'`  | テーマのボタンスタイルを適用する。`text` は境界線なし、`outline` は枠線表示となる。                                                  |
+| `title`           | `string`                                      | `undefined`  | `button` 要素の `title` 属性に渡され、ツールチップやスクリーンリーダー補助として利用できる。                                         |
+| `isDisabled`      | `boolean`                                     | `false`      | トリガーボタンとメニューを無効化する。`true` の場合は `cursor-not-allowed` と `pointer-events-none` を適用しメニューを開けなくなる。 |
+| `isArrowHidden`   | `boolean`                                     | `false`      | 組み込みの下向き矢印アイコンを非表示にする。カスタムターゲットで矢印が不要な場合に使用する。                                         |
+| `icon`            | `IconName`                                    | `undefined`  | ラベル付きボタンの先頭に配置する公式アイコン。`target` を使用する場合は無視される。                                                  |
+| `portalTargetRef` | `MutableRefObject<HTMLElement \| null>`       | `undefined`  | メニューを別コンテナへ `createPortal` で描画するためのターゲット要素参照。レイヤーの制約を回避したい場合に利用する。                 |
+| `children`        | `ReactNode`                                   | -            | 一般的には `Dropdown.Menu` を渡し、その中で `Dropdown.Item` などを配置する。                                                         |
 
 #### 排他的プロパティグループ
 
-| 組み合わせ | 説明 |
-| ---------- | ---- |
-| `target` | `ReactElement` を渡すと任意の要素をトリガーとして描画し、`label` と `icon` は同時に指定できない。アバターやアイコンボタンとの組み合わせに適する。 |
-| `label` + `icon?` | `target` を指定しない場合は `label: string` が必須となり、標準ボタンが描画される。`icon` は任意でラベル先頭に配置できる。 |
+| 組み合わせ        | 説明                                                                                                                                              |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `target`          | `ReactElement` を渡すと任意の要素をトリガーとして描画し、`label` と `icon` は同時に指定できない。アバターやアイコンボタンとの組み合わせに適する。 |
+| `label` + `icon?` | `target` を指定しない場合は `label: string` が必須となり、標準ボタンが描画される。`icon` は任意でラベル先頭に配置できる。                         |
 
 #### 継承プロパティ
 
@@ -100,32 +100,32 @@ const items: DropdownItemType[] = [
 
 ### Dropdown.Menu のProps
 
-| プロパティ | 型 | デフォルト値 | 説明 |
-| ---------- | --- | ------------ | ---- |
-| `maxHeight` | `CSSProperties['height']` | `undefined` | メニューリストの最大高さ。値を設定すると `overflow-y-auto` が有効になり、スクロール可能なリストになる。 |
-| `isNoPadding` | `boolean` | `false` | `py-1` の内部余白を削除し、完全にカスタムなレイアウトを実装できる。 |
-| `verticalPosition` | `'top' \| 'bottom'` | `'bottom'` | トリガーボタンからの表示方向。`top` を指定するとボタンの上側に 4px の余白で配置する。 |
-| `horizontalAlign` | `'left' \| 'center' \| 'right'` | `'left'` | トリガーとの水平位置。`right` は右端を揃え、`center` は左右を固定しない（ポータル描画などのカスタム配置向け）。 |
-| `children` | `ReactNode` | - | `Dropdown.Item` や任意のリスト要素を受け取り、そのまま `ul` の子要素として描画する。 |
+| プロパティ         | 型                              | デフォルト値 | 説明                                                                                                            |
+| ------------------ | ------------------------------- | ------------ | --------------------------------------------------------------------------------------------------------------- |
+| `maxHeight`        | `CSSProperties['height']`       | `undefined`  | メニューリストの最大高さ。値を設定すると `overflow-y-auto` が有効になり、スクロール可能なリストになる。         |
+| `isNoPadding`      | `boolean`                       | `false`      | `py-1` の内部余白を削除し、完全にカスタムなレイアウトを実装できる。                                             |
+| `verticalPosition` | `'top' \| 'bottom'`             | `'bottom'`   | トリガーボタンからの表示方向。`top` を指定するとボタンの上側に 4px の余白で配置する。                           |
+| `horizontalAlign`  | `'left' \| 'center' \| 'right'` | `'left'`     | トリガーとの水平位置。`right` は右端を揃え、`center` は左右を固定しない（ポータル描画などのカスタム配置向け）。 |
+| `children`         | `ReactNode`                     | -            | `Dropdown.Item` や任意のリスト要素を受け取り、そのまま `ul` の子要素として描画する。                            |
 
 ### Dropdown.Item のProps
 
-| プロパティ | 型 | デフォルト値 | 説明 |
-| ---------- | --- | ------------ | ---- |
-| `color` | `'gray' \| 'red'` | `'gray'` | アイテムの配色。`red` を指定すると危険操作向けに `text-supportDanger` を適用する。 |
-| `onClick` | `(event: MouseEvent<HTMLButtonElement>) => void` | `undefined` | アイテム選択時のコールバック。実行前にメニューを自動で閉じる。 |
-| `children` | `ReactNode` | - | ボタン内に表示する内容。テキスト、アイコン、複合レイアウトに対応する。 |
+| プロパティ | 型                                               | デフォルト値 | 説明                                                                               |
+| ---------- | ------------------------------------------------ | ------------ | ---------------------------------------------------------------------------------- |
+| `color`    | `'gray' \| 'red'`                                | `'gray'`     | アイテムの配色。`red` を指定すると危険操作向けに `text-supportDanger` を適用する。 |
+| `onClick`  | `(event: MouseEvent<HTMLButtonElement>) => void` | `undefined`  | アイテム選択時のコールバック。実行前にメニューを自動で閉じる。                     |
+| `children` | `ReactNode`                                      | -            | ボタン内に表示する内容。テキスト、アイコン、複合レイアウトに対応する。             |
 
 ## 状態とスタイル
 
 ### サイズバリエーション
 
-| `size` | 高さ・余白 | タイポグラフィ | アイコンサイズ |
-| ------ | ---------- | -------------- | -------------- |
-| `'x-small'` | `h-6 px-2`（ターゲットボタンの場合は `p-1`） | `typography-label12regular` | `small` |
-| `'small'` | `h-6 px-2` | `typography-label14regular` | `small` |
-| `'medium'` | `h-8 px-4` | `typography-label14regular` | `small` |
-| `'large'` | `h-10 px-4` | `typography-label16regular` | `medium` |
+| `size`      | 高さ・余白                                   | タイポグラフィ              | アイコンサイズ |
+| ----------- | -------------------------------------------- | --------------------------- | -------------- |
+| `'x-small'` | `h-6 px-2`（ターゲットボタンの場合は `p-1`） | `typography-label12regular` | `small`        |
+| `'small'`   | `h-6 px-2`                                   | `typography-label14regular` | `small`        |
+| `'medium'`  | `h-8 px-4`                                   | `typography-label14regular` | `small`        |
+| `'large'`   | `h-10 px-4`                                  | `typography-label16regular` | `medium`       |
 
 ### バリアントスタイル
 
@@ -247,6 +247,6 @@ const PortalizedDropdown = () => {
 
 ## 更新履歴
 
-| 日付 | 内容 | 担当者 |
-| ---- | ---- | ------ |
-| 2025-12-03 08:55 JST | Dropdown仕様書を新規作成し、Props・使用例・アクセシビリティを整理 | - |
+| 日付                 | 内容                                                              | 担当者 |
+| -------------------- | ----------------------------------------------------------------- | ------ |
+| 2025-12-03 08:55 JST | Dropdown仕様書を新規作成し、Props・使用例・アクセシビリティを整理 | -      |
