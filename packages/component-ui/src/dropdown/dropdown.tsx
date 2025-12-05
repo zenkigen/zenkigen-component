@@ -11,18 +11,32 @@ import { DropdownContext } from './dropdown-context';
 import { DropdownItem } from './dropdown-item';
 import { DropdownMenu } from './dropdown-menu';
 
+/** Dropdown コンポーネントのプロパティ */
 type Props = {
+  /** ボタンサイズを指定し、高さとタイポグラフィを切り替える。 */
   size?: 'x-small' | 'small' | 'medium' | 'large';
+  /** テキストスタイルかアウトラインスタイルかを選択する。 */
   variant?: 'text' | 'outline';
+  /** ネイティブの title 属性経由でトリガーボタンにヒントを付与する。 */
   title?: string;
+  /** true のときトリガーとメニューを無効化し、クリックを受け付けない。 */
   isDisabled?: boolean;
+  /** true のとき組み込みの矢印アイコンを非表示にする。 */
   isArrowHidden?: boolean;
+  /** メニューを別コンテナへポータル描画するためのターゲット要素参照。 */
   portalTargetRef?: MutableRefObject<HTMLElement | null>;
 } & (
-  | { target: ReactElement; label?: never; icon?: never }
   | {
+      /** 自前のReact要素をトリガーとして描画する場合に渡す。 */
+      target: ReactElement;
+      label?: never;
+      icon?: never;
+    }
+  | {
+      /** ラベルボタンを描画する場合に必須となる表示文字列。 */
       target?: undefined;
       label: string;
+      /** ラベルの先頭に配置する公式アイコン。 */
       icon?: IconName;
     }
 );
