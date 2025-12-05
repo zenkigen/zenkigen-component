@@ -143,7 +143,7 @@ yarn list --pattern "@zenkigen-inc/component-*"
 - [Popover](./docs/component/popover-specification.md)
 - [Popup](./docs/component/popup-specification.md)
 - Radio
-- Search
+- [Search](./docs/component/search-specification.md)
 - [Segmented Control](./docs/component/segmented-control-specification.md)
 - [Select](./docs/component/select-specification.md)
 - Select Sort
