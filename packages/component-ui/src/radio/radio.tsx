@@ -4,12 +4,19 @@ import type { ChangeEvent } from 'react';
 import { useCallback, useState } from 'react';
 
 type Props = {
+  /** フォーム送信用の name 属性。グループ化して単一選択を扱う場合に指定する */
   name?: string;
+  /** フォーム送信用の値 */
   value?: string;
+  /** 入力要素の ID。label と関連付ける場合に指定する */
   id?: string;
+  /** 右側に表示するラベルテキスト */
   label?: string;
+  /** 選択状態（制御用） */
   isChecked?: boolean;
+  /** 無効状態にするか */
   isDisabled?: boolean;
+  /** 状態変化時のハンドラー。isDisabled=true の場合は呼ばれない */
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
@@ -40,7 +47,7 @@ export function Radio({ name, value, id, label, isChecked = false, isDisabled = 
     {
       'border-disabled01 hover:border-disabled01': isDisabled && !isMouseOver,
       'border-hoverUiBorder': !isDisabled && isMouseOver,
-      'border-uiBorder03': !isDisabled,
+      'border-uiBorder04': !isDisabled,
       'cursor-not-allowed': isDisabled,
       'cursor-pointer': !isDisabled,
     },
