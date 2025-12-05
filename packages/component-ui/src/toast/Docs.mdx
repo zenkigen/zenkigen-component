@@ -27,14 +27,12 @@ import spec from '../../../../docs/component/toast-specification.md?raw';
   code={`import { Button, ToastProvider, useToast } from '@zenkigen-inc/component-ui';
 
 const ShowToastButton = () => {
-  const { addToast } = useToast();
+const { addToast } = useToast();
 
-  return (
-    <Button onClick={() => addToast({ message: '保存しました', state: 'success' })}>
-      トーストを表示
-    </Button>
-  );
-};
+return (
+
+<Button onClick={() => addToast({ message: '保存しました', state: 'success' })}>トーストを表示</Button>
+); };
 
 export const App = () => (
   <ToastProvider>
