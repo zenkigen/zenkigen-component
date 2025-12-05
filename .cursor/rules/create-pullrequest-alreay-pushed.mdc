@@ -1,8 +1,0 @@
----
-description: 
-globs: 
-alwaysApply: false
----
-- 現在のブランチで、すでに作業を終えた
-- commit push 済みである
-- マージ先のブランチを確実に確認すすめること
