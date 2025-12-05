@@ -1,0 +1,79 @@
+---
+description: pull request作成手順
+globs:
+alwaysApply: false
+---
+
+## pull request作成手順
+
+まず、このファイルを参照したら、「Pull Request作成手順のファイルを確認しました！」と報告してください。
+
+### 差分の確認
+
+- {{マージ先ブランチ}}の指定がない場合は、main とする
+- `git diff origin/{{マージ先ブランチ}}...HEAD | cat` でマージ先ブランチとの差分を確認
+
+### 一時的なPR説明ファイルの作成
+
+- PRの説明内容を一時的なmdファイルに記述する
+- ファイル名は `pr_description_temp.md` とする
+<!-- - @pull-request-template.mdc のテンプレートを基に作成 -->
+- 各セクションを明確に区分し、必要な情報を漏れなく記載
+
+# PRの作成
+
+以下のアクションを参考にし、指定されたマージ先ブランチにマージするPRを作成すること
+
+```
+git push origin HEAD && \
+gh pr create --draft --title "{{PRタイトル}}" --body-file pr_description_temp.md && \
+gh pr view --web && \
+rm pr_description_temp.md
+```
+
+- PRのタイトルは英語で作成すること
+  - タスク番号が指定された場合は、タイトルの頭につけること。例えば 120と指定されたら以下のようなする。
+    - 120｜Add Color Tokens Documentation
+- PRの内容は日本語で作成すること
+
+#### 禁止事項
+
+- commit操作
+
+## 既存PRのメッセージ更新手順
+
+既存のPRのメッセージを更新する場合は、以下の手順を実行すること：
+
+### 差分の確認
+
+- `git diff origin/{{マージ先ブランチ}}...HEAD | cat` でマージ先ブランチとの差分を確認
+- `git log --oneline origin/{{マージ先ブランチ}}..HEAD | cat` でコミット履歴を確認
+
+### 一時的なPR説明ファイルの作成
+
+- PRの説明内容を一時的なmdファイルに記述する
+- ファイル名は `pr_description_temp.md` とする
+- 各セクションを明確に区分し、必要な情報を漏れなく記載
+
+### PRメッセージの更新
+
+以下のコマンドでPRメッセージを更新すること：
+
+```
+gh api repos/{{owner}}/{{repo}}/pulls/{{PR番号}} -X PATCH -f body="$(cat pr_description_temp.md)" && \
+rm pr_description_temp.md
+```
+
+- `{{owner}}`: リポジトリのオーナー（例: zenkigen）
+- `{{repo}}`: リポジトリ名（例: zenkigen-component）
+- `{{PR番号}}`: 更新対象のPR番号
+
+**注意**: `gh pr edit`コマンドはGraphQLの警告で失敗することがあるため、`gh api`コマンドを使用すること。
+
+### 更新の確認
+
+以下のコマンドで更新が正常に反映されたことを確認すること：
+
+```
+gh pr view {{PR番号}} --json body --jq '.body' | grep -A 5 "{{更新内容のキーワード}}"
+```
