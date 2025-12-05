@@ -1,15 +1,46 @@
 import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/addon-docs/blocks';
+import { Markdown } from '@storybook/addon-docs/blocks';
 import ToggleStories, { Component, Base } from './toggle.stories';
+import spec from '../../../../docs/component/toggle-specification.md?raw';
 
 <Meta title="Toggle" of={ToggleStories} />
 
 # Toggle
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
 
 <Canvas>
   <Story of={Component} />
 </Canvas>
 
 <Controls of={Component} />
+
+## コード例
+
+```tsx
+import { useState } from 'react';
+import { Toggle } from '@zenkigen-inc/component-ui';
+
+const NotificationToggle = () => {
+  const [isEnabled, setIsEnabled] = useState(false);
+
+  return (
+    <Toggle
+      id="notification-toggle"
+      size="medium"
+      label="通知を受け取る"
+      isChecked={isEnabled}
+      onChange={() => setIsEnabled((prev) => !prev)}
+    />
+  );
+};
+```
 
 ## 概要
 
