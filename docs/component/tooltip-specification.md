@@ -57,21 +57,21 @@ const TooltipExample = () => (
 
 ### 必須プロパティ
 
-| プロパティ | 型 | 説明 |
-| ---------- | --- | ---- |
-| `children` | `ReactNode` | Tooltipを紐づけるトリガー要素。`div`でラップされ、hover対象になる。 |
-| `content` | `ReactNode` | Tooltip本体に表示する内容。テキスト/インライン要素/改行を含むReactノードを渡せる。 |
+| プロパティ | 型          | 説明                                                                               |
+| ---------- | ----------- | ---------------------------------------------------------------------------------- |
+| `children` | `ReactNode` | Tooltipを紐づけるトリガー要素。`div`でラップされ、hover対象になる。                |
+| `content`  | `ReactNode` | Tooltip本体に表示する内容。テキスト/インライン要素/改行を含むReactノードを渡せる。 |
 
 ### オプションプロパティ
 
-| プロパティ | 型 | デフォルト値 | 説明 |
-| ---------- | --- | ---------- | ---- |
-| `size` | `TooltipSize` (`'small' \| 'medium'`) | `'small'` | 表示されるテキストのタイポグラフィとパディングを切り替える。 |
-| `maxWidth` | `CSSProperties['maxWidth']` | `undefined` | Tooltip本体の最大幅。未指定時はコンテンツ幅に追従して`w-max`スタイルで描画される。 |
-| `verticalPosition` | `'top' \| 'bottom'` | `'bottom'` | トリガーに対してTooltipを上下どちらに配置するか。`'top'`はトリガーの上側に表示し、`'bottom'`は下側に表示する。 |
-| `horizontalAlign` | `'left' \| 'center' \| 'right'` | `'center'` | Tooltipの水平位置を制御する。左揃えはトリガー左端から、右揃えは右端からオフセットを付与して配置される。 |
-| `isDisabledHover` | `boolean` | `false` | `true` の間は hover してもTooltipを表示しない。操作ガイドを一時的に止めたいケースで使用する。 |
-| `portalTarget` | `HTMLElement` | `undefined` | Tooltipを指定要素配下にポータル描画する。`overflow: hidden` を回避したいときは `document.body` を渡す。 |
+| プロパティ         | 型                                    | デフォルト値 | 説明                                                                                                           |
+| ------------------ | ------------------------------------- | ------------ | -------------------------------------------------------------------------------------------------------------- |
+| `size`             | `TooltipSize` (`'small' \| 'medium'`) | `'small'`    | 表示されるテキストのタイポグラフィとパディングを切り替える。                                                   |
+| `maxWidth`         | `CSSProperties['maxWidth']`           | `undefined`  | Tooltip本体の最大幅。未指定時はコンテンツ幅に追従して`w-max`スタイルで描画される。                             |
+| `verticalPosition` | `'top' \| 'bottom'`                   | `'bottom'`   | トリガーに対してTooltipを上下どちらに配置するか。`'top'`はトリガーの上側に表示し、`'bottom'`は下側に表示する。 |
+| `horizontalAlign`  | `'left' \| 'center' \| 'right'`       | `'center'`   | Tooltipの水平位置を制御する。左揃えはトリガー左端から、右揃えは右端からオフセットを付与して配置される。        |
+| `isDisabledHover`  | `boolean`                             | `false`      | `true` の間は hover してもTooltipを表示しない。操作ガイドを一時的に止めたいケースで使用する。                  |
+| `portalTarget`     | `HTMLElement`                         | `undefined`  | Tooltipを指定要素配下にポータル描画する。`overflow: hidden` を回避したいときは `document.body` を渡す。        |
 
 ### 特殊機能の詳細
 
@@ -93,10 +93,10 @@ const TooltipExample = () => (
 
 ### サイズバリエーション
 
-| サイズ | タイポグラフィ | パディング | Tailwindクラス |
-| ------ | -------------- | ---------- | -------------- |
-| `small` | `typography-body12regular` | `px-2 pb-1 pt-1.5` | `w-[24px]` のターゲット幅 / TailIconは `8x4px`。 |
-| `medium` | `typography-body13regular` | `px-4 py-3` | `w-[46px]` のターゲット幅 / TailIconは `14x8px`。 |
+| サイズ   | タイポグラフィ             | パディング         | Tailwindクラス                                    |
+| -------- | -------------------------- | ------------------ | ------------------------------------------------- |
+| `small`  | `typography-body12regular` | `px-2 pb-1 pt-1.5` | `w-[24px]` のターゲット幅 / TailIconは `8x4px`。  |
+| `medium` | `typography-body13regular` | `px-4 py-3`        | `w-[46px]` のターゲット幅 / TailIconは `14x8px`。 |
 
 ### 状態に応じたスタイル
 
@@ -201,7 +201,6 @@ const PortalTooltip = () => (
 
 ※ 日時はJST表記
 
-| 日付 | 内容 | 担当者 |
-| ---- | ---- | ------ |
-| 2025-12-03 09:23 JST | Tooltip仕様書を新規作成し、Props/使用例/注意事項を整理。 | - |
-
+| 日付                 | 内容                                                     | 担当者 |
+| -------------------- | -------------------------------------------------------- | ------ |
+| 2025-12-03 09:23 JST | Tooltip仕様書を新規作成し、Props/使用例/注意事項を整理。 | -      |
