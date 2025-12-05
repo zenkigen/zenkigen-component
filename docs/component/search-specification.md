@@ -68,15 +68,15 @@ const SearchExample = () => {
 
 ### 必須プロパティ
 
-| プロパティ | 型       | 説明                                 |
-| ---------- | -------- | ------------------------------------ |
-| `value`    | `string` | 入力中のキーワード。常に制御すること |
+| プロパティ | 型       | 説明               |
+| ---------- | -------- | ------------------ |
+| `value`    | `string` | 入力中のキーワード |
 
 ### オプションプロパティ
 
 | プロパティ           | 型                                           | デフォルト値 | 説明                                                                                |
 | -------------------- | -------------------------------------------- | ------------ | ----------------------------------------------------------------------------------- |
-| `size`               | `'medium' \| 'large'`                        | `'medium'`   | 入力フィールドの高さとタイポグラフィを切り替える                                    |
+| `size`               | `'medium' \| 'large'`                        | `'medium'`   | サイズ                                                                              |
 | `placeholder`        | `string`                                     | `undefined`  | 入力欄に表示するプレースホルダーテキスト                                            |
 | `width`              | `string`                                     | `'100%'`     | 入力フィールドの幅（CSSの幅指定値を文字列で渡す）                                   |
 | `onChange`           | `(e: ChangeEvent<HTMLInputElement>) => void` | `undefined`  | 入力値変更時に呼び出されるハンドラ。`value` を更新する処理を記述する                |
@@ -152,43 +152,6 @@ const BasicSearch = () => {
   );
 };
 ```
-
-### バリエーション例1
-
-> ここからの例では `const [keyword, setKeyword] = useState('');` を既に定義している前提で記述する。
-
-```typescript
-<Search
-  value={keyword}
-  size="large"
-  width="360px"
-  placeholder="企業名を検索"
-  onChange={(event) => setKeyword(event.target.value)}
-  onClickClearButton={() => setKeyword('')}
-/>
-```
-
-幅を固定値にし、ラージサイズで配置する例である。
-
-### バリエーション例2
-
-```typescript
-import { FormEvent } from 'react';
-
-const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-  event.preventDefault();
-  // API呼び出し
-};
-
-<Search
-  value={keyword}
-  placeholder="案件を検索"
-  onChange={(event) => setKeyword(event.target.value)}
-  onSubmit={handleSubmit}
-/>
-```
-
-フォーム送信ハンドラを設定し、Enterキーで検索処理をキックする例である。
 
 ## アクセシビリティ
 
