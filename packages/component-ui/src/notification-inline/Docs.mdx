@@ -1,15 +1,42 @@
 import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/addon-docs/blocks';
+import { Markdown } from '@storybook/addon-docs/blocks';
 import NotificationInlineStories, { Component } from './notification-inline.stories';
+import spec from '../../../../docs/component/notification-inline-specification.md?raw';
 
 <Meta title="NotificationInline" of={NotificationInlineStories} />
 
 # NotificationInline
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
 
 <Canvas>
   <Story of={Component} />
 </Canvas>
 
 <Controls of={Component} />
+
+## Code Examples
+
+```tsx
+import { NotificationInline } from '@zenkigen-inc/component-ui';
+
+export const InlineAlert = () => {
+  return (
+    <div className="flex flex-col gap-2">
+      <NotificationInline state="success">保存が完了しました。</NotificationInline>
+      <NotificationInline size="small" state="attention" showClose onClickClose={() => console.log('close')}>
+        入力内容を確認してください。
+      </NotificationInline>
+    </div>
+  );
+};
+```
 
 ## 概要
 
@@ -39,7 +66,7 @@ import NotificationInlineStories, { Component } from './notification-inline.stor
 ・できる限り丁寧で優しく、好印象を与える表現を使用してください。
 ![設計の原則 その4](/storybook/images/notification-inline_02.jpg)
 
-# 推奨しないこと（Don’t）
+## 推奨しないこと（Don’t）
 
 ### 長すぎるメッセージを設定しない
 
