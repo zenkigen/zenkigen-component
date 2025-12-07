@@ -15,7 +15,7 @@ function toKebab(input: string): string {
 }
 
 /**
- * Normalize component name to kebab-case and validate characters.
+ * コンポーネント名を kebab-case に正規化し、使用できる文字を制限する。
  * - Trims input
  * - Strips path segments via basename
  * - Converts Camel/Pascal to kebab

@@ -26,6 +26,7 @@ const FALLBACK_SERVER_NAME = 'zenkigen-component-mcp';
 const FALLBACK_SERVER_VERSION = '0.1.0';
 
 const packageJsonServerInfo = (() => {
+  // 単体配布時にも name/version を持たせるため、カレントの package.json を参照
   try {
     const packageJsonPath = path.resolve(process.cwd(), 'package.json');
     const pkg = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
@@ -44,6 +45,7 @@ export function findRepoRoot(startDir = process.cwd()): string {
   let lastPackageJsonDir = current;
 
   while (true) {
+    // git が見つかった時点を優先してリポジトリルートとみなす
     const hasGit = fs.existsSync(path.join(current, '.git'));
     if (hasGit) {
       return current;
@@ -63,7 +65,8 @@ export function findRepoRoot(startDir = process.cwd()): string {
 }
 
 export function resolveRepoPaths(): RepoPaths {
-  const repoRoot = process.env.ROOT_DIR ? path.resolve(process.env.ROOT_DIR) : findRepoRoot();
+  const rootEnv = process.env.ROOT_DIR;
+  const repoRoot = typeof rootEnv === 'string' && rootEnv.trim() !== '' ? path.resolve(rootEnv) : findRepoRoot();
 
   return {
     repoRoot,
