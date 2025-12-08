@@ -39,12 +39,9 @@ node <REPO_ROOT>/packages/mcp-server/dist/index.js
 ## Codex などでの設定例（TOML）
 
 ```toml
-[mcp_servers."zenkigenComponent"]
+[mcp_servers."zenkigen-component"]
 command = "node"
 args = ["<REPO_ROOT>/packages/mcp-server/dist/index.js"]
-# 必要に応じて環境変数を指定（例）
-# env.ROOT_DIR = "<REPO_ROOT>"
-# env.LOG_LEVEL = "info"
 ```
 
 ## 開発用コマンド
