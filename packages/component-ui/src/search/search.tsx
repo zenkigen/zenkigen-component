@@ -6,12 +6,19 @@ import { Icon } from '../icon';
 import { IconButton } from '../icon-button';
 
 type Props = {
+  /** サイズ */
   size?: 'medium' | 'large';
+  /** 入力欄に表示するプレースホルダー */
   placeholder?: string;
+  /** 入力フィールドの幅。CSSの幅指定文字列を渡す */
   width?: string;
+  /** 現在の入力値 */
   value: string;
+  /** 入力値変更時に呼び出されるハンドラ */
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  /** Enterキーなどでフォーム送信された際のハンドラ */
   onSubmit?: (e: FormEvent<HTMLFormElement>) => void;
+  /** クリアボタン押下時のハンドラ。指定時のみボタンを描画する */
   onClickClearButton?: () => void;
 };
 
