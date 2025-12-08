@@ -108,7 +108,7 @@ export async function searchComponentSpecifications(
     };
   }
 
-  const escapeCell = (value: string) => value.replace(/\|/g, '\\|');
+  const escapeCell = (value: string) => value.replace(/\\/g, '\\\\').replace(/\|/g, '\\|');
   const rows = sorted.map(({ name, count, excerpt }) => `| ${escapeCell(name)} | ${count} | ${escapeCell(excerpt)} |`);
   const tableLines = [
     `Query: "${normalizedQuery}"`,
