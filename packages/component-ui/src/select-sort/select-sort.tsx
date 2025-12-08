@@ -11,7 +11,7 @@ import type { SortOrder } from './type';
 type Props = {
   /** ボタンとドロップダウンの高さ・タイポグラフィを切り替えるサイズ。 */
   size?: 'x-small' | 'small' | 'medium' | 'large';
-  /** buttonColors を用いたスタイルバリエーション。 */
+  /** スタイルバリエーション。 */
   variant?: 'outline' | 'text';
   /** コンポーネント全体の幅。省略時は内容幅に合わせる。 */
   width?: CSSProperties['width'];
