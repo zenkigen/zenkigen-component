@@ -42,13 +42,7 @@ export async function main(): Promise<void> {
           },
         },
       },
-      instructions: [
-        'ZENKIGEN Component の仕様書/実装を提供する MCP サーバーです。',
-        '- 仕様書データソース: docs/component/*-specification.md',
-        '- 実装データソース: packages/component-ui/src/<component>/',
-        '- 主なツール: get_component_list, get_component_specification, search_component_specifications',
-        '- LOG_LEVEL と CACHE_TTL_MS でロギング/キャッシュを制御します。',
-      ].join('\n'),
+      instructions: ['ZENKIGEN Component の仕様書/実装を提供する MCP サーバーです。'].join('\n'),
     },
   );
 
@@ -62,7 +56,7 @@ export async function main(): Promise<void> {
     componentSpecificationTemplate,
     {
       title: 'Component specifications',
-      description: 'docs/component/*-specification.md',
+      description: 'ZENKIGEN Component の仕様書リソースを提供します。',
       mimeType: 'text/markdown',
     },
     async (uri, variables) => readComponentSpecification(uri, variables, config.paths),
@@ -90,7 +84,7 @@ export async function main(): Promise<void> {
     'get_component_specification',
     {
       title: 'Get component specification',
-      description: '指定された ZENKIGEN Component の仕様書全文（*-specification.md）を返します。',
+      description: '指定された ZENKIGEN Component の仕様書全文を返します。',
       inputSchema: z.object({ name: z.string() }),
     },
     async (args) => {
