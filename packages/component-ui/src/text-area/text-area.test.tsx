@@ -200,6 +200,90 @@ describe('TextArea', () => {
     });
   });
 
+  describe('HelperMessage / ErrorMessage', () => {
+    it('HelperMessage を指定すると aria-describedby に連結されること', () => {
+      render(
+        <TextArea value="abc" onChange={() => {}}>
+          <TextArea.HelperMessage id="helper-1">ヘルプ</TextArea.HelperMessage>
+        </TextArea>,
+      );
+
+      const textarea = screen.getByRole('textbox');
+      expect(textarea).toHaveAttribute('aria-describedby', 'helper-1');
+    });
+
+    it('aria-describedby props と HelperMessage が結合されること', () => {
+      render(
+        <TextArea value="abc" aria-describedby="external" onChange={() => {}}>
+          <TextArea.HelperMessage id="helper-2">ヘルプ</TextArea.HelperMessage>
+        </TextArea>,
+      );
+
+      const textarea = screen.getByRole('textbox');
+      expect(textarea).toHaveAttribute('aria-describedby', 'external helper-2');
+    });
+
+    it('HelperMessage に id を渡さなくても aria-describedby に採番されること', () => {
+      render(
+        <TextArea value="abc" onChange={() => {}}>
+          <TextArea.HelperMessage>ヘルプ</TextArea.HelperMessage>
+        </TextArea>,
+      );
+
+      const textarea = screen.getByRole('textbox');
+      const describedBy = textarea.getAttribute('aria-describedby');
+
+      expect(describedBy).not.toBeNull();
+      expect(describedBy?.endsWith('-helper-1')).toBe(true);
+    });
+
+    it('ErrorMessage に id を渡さなくても aria-describedby に採番されること', () => {
+      render(
+        <TextArea value="abc" onChange={() => {}} isError>
+          <TextArea.ErrorMessage>エラー</TextArea.ErrorMessage>
+        </TextArea>,
+      );
+
+      const textarea = screen.getByRole('textbox');
+      const describedByList = textarea.getAttribute('aria-describedby')?.split(' ') ?? [];
+
+      expect(describedByList.some((id) => id.endsWith('-error-1'))).toBe(true);
+    });
+
+    it('isError=false では ErrorMessage が描画されないこと', () => {
+      render(
+        <TextArea value="abc" onChange={() => {}}>
+          <TextArea.ErrorMessage>エラー</TextArea.ErrorMessage>
+        </TextArea>,
+      );
+
+      expect(screen.queryByText('エラー')).toBeNull();
+    });
+
+    it('isError=true では ErrorMessage が描画され role/aria-live が付与されること', () => {
+      render(
+        <TextArea value="abc" onChange={() => {}} isError>
+          <TextArea.ErrorMessage>エラー</TextArea.ErrorMessage>
+        </TextArea>,
+      );
+
+      const error = screen.getByText('エラー');
+      expect(error).toBeInTheDocument();
+      expect(error).toHaveAttribute('aria-live', 'assertive');
+    });
+
+    it('isError またはエラー子要素がある場合に aria-invalid が true になること', () => {
+      render(
+        <TextArea value="abc" onChange={() => {}} isError>
+          <TextArea.ErrorMessage>エラー</TextArea.ErrorMessage>
+        </TextArea>,
+      );
+
+      const textarea = screen.getByRole('textbox');
+      expect(textarea).toHaveAttribute('aria-invalid', 'true');
+    });
+  });
+
   describe('コンテナ要素', () => {
     it('div要素でラップされていること', () => {
       const { container } = render(<TextArea value="" readOnly data-testid="textarea" />);

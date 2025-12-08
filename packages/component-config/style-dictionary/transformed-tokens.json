@@ -99,7 +99,7 @@
         "description": "Tertiary text"
       },
       "TextPlaceholder": {
-        "value": "#CACCCD",
+        "value": "#A4A5A6",
         "type": "color",
         "description": "Placeholder text"
       },
@@ -343,6 +343,11 @@
         "value": "#454A4D",
         "type": "color",
         "description": "Hover Checkbox, Toggle"
+      },
+      "HoverUiError": {
+        "value": "#FCEFF3",
+        "type": "color",
+        "description": "Hover error ui background"
       }
     },
     "Active": {
@@ -390,6 +395,11 @@
         "value": "#1F2121",
         "type": "color",
         "description": "active secondary link"
+      },
+      "ActiveUiError": {
+        "value": "#F9E0E6",
+        "type": "color",
+        "description": "Active error ui background"
       }
     },
     "Selected": {
@@ -412,6 +422,11 @@
         "value": "#0077D9",
         "type": "color",
         "description": "Selected Button Border"
+      },
+      "SelectedUiDark": {
+        "value": "#1366B9",
+        "type": "color",
+        "description": "Selected List Navigation on Dark Color"
       }
     },
     "Disabled": {
@@ -453,7 +468,7 @@
     },
     "Support": {
       "SupportError": {
-        "value": "#D92B57",
+        "value": "#C6244D",
         "type": "color",
         "description": "Error text, Icon with error, error element border"
       },
@@ -493,7 +508,7 @@
         "description": "Warning light color"
       },
       "SupportDanger": {
-        "value": "#D92B57",
+        "value": "#C6244D",
         "type": "color",
         "description": "Danger text, button background, button border"
       },
