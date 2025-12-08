@@ -57,6 +57,11 @@ export function PaginationSelect({
           {maxCount}
           {countLabel}
         </div>
+        <div className="typography-label14regular text-text01">/</div>
+        <div className="typography-label14regular text-text01">
+          {totalSize}
+          {countLabel}
+        </div>
         <Select
           size="medium"
           variant="outline"
