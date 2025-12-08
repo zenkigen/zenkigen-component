@@ -110,7 +110,7 @@ export async function getComponentList(paths: RepoPaths): Promise<TextToolRespon
     ).entries(),
   ).map(([name, meta]) => ({ name, ...meta }));
 
-  const escapeCell = (value: string | undefined) => (value ?? '').replace(/\|/g, '\\|');
+  const escapeCell = (value: string | undefined) => (value ?? '').replace(/\\/g, '\\\\').replace(/\|/g, '\\|');
 
   const rows = unique.map(({ name, summary }) => `| ${escapeCell(name)} | ${escapeCell(summary)} |`);
   const tableLines = [
