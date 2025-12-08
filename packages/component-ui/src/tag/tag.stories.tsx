@@ -68,12 +68,13 @@ export const Component: Story = {
   parameters: {
     chromatic: { disable: true },
   },
-  render: ({ onDelete, ...rest }) => {
+  render: ({ onDelete, isEditable, size, ...rest }) => {
     const handleDelete = onDelete ?? action('tag削除');
+    const displaySize = isEditable ? 'medium' : size;
 
     return (
       <div className="flex items-center justify-center gap-x-4">
-        <Tag {...rest} id="1" />
+        {typeof isEditable === 'undefined' && <Tag {...rest} size={displaySize} />}
         <Tag variant={rest.variant} color={rest.color} size="medium" id="2" isEditable onDelete={handleDelete}>
           {rest.children}
         </Tag>
