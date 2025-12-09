@@ -10,9 +10,6 @@ const DEFAULT_CACHE_TTL_MS = Number.isFinite(Number(process.env.CACHE_TTL_MS))
 export type RepoPaths = {
   repoRoot: string;
   docsDir: string;
-  componentDocsGlob: string;
-  tokensPath: string;
-  iconsDir: string;
 };
 
 export type BootstrapConfig = {
@@ -74,9 +71,6 @@ export function resolveRepoPaths(): RepoPaths {
   return {
     repoRoot,
     docsDir: path.join(repoRoot, 'docs'),
-    componentDocsGlob: path.join(repoRoot, 'docs', 'component', '*.md'),
-    tokensPath: path.join(repoRoot, 'packages', 'component-config', 'src', 'tokens', 'tokens.ts'),
-    iconsDir: path.join(repoRoot, 'packages', 'component-icons', 'src', 'svg'),
   };
 }
 

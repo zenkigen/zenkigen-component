@@ -27,20 +27,6 @@ export async function main(): Promise<void> {
       capabilities: {
         tools: { listChanged: true },
         resources: { listChanged: true },
-        logging: {},
-        experimental: {
-          repository: {
-            root: config.paths.repoRoot,
-            docs: config.paths.docsDir,
-            componentDocsGlob: config.paths.componentDocsGlob,
-            tokensPath: config.paths.tokensPath,
-            iconsDir: config.paths.iconsDir,
-          },
-          server: {
-            logLevel: config.logLevel,
-            cacheTtlMs: config.cacheTtlMs,
-          },
-        },
       },
       instructions: ['ZENKIGEN Component の仕様書/実装を提供する MCP サーバーです。'].join('\n'),
     },
