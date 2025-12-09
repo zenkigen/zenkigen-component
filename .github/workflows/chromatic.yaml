@@ -32,6 +32,7 @@ jobs:
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           onlyChanged: true
+          storybookArgs: '--initial-path /docs/introduction--docs'
         env:
           IS_CHROMATIC: 'true'
 
