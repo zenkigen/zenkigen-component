@@ -17,6 +17,11 @@ import { IconButton } from '@zenkigen-inc/component-ui';
 
 # Color Tokens
 
+Design Token（デザイントークン）は、デザインのスタイル（色、タイポグラフィ、スペーシング、シャドウなど）をコードとして定義し、再利用しやすくするための仕組みです。これにより、一貫性のあるUIデザインを提供できます。
+デザイントークンは Primitive Token（プリミティブトークン） と Semantic Token（セマンティックトークン） の 2 つの種類に分かれます。
+
+### Code Example
+
 - Color Token は Tailwind の色系ユーティリティ（text / bg / border / ring / fill / stroke など）から参照できます。
 
 ```html
@@ -84,7 +89,9 @@ return (
 </div>
 ); }
 
-## Primitive
+## Primitive Token
+
+Primitive Token は、デザインの基礎となる原子的な値 を定義します。これは特定の用途を持たない、純粋なスタイル値を表します。
 
 ### Primitive/Colors
 
@@ -165,7 +172,9 @@ return (
   </div>
 </div>
 
-## Semantic
+## Semantic Token
+
+Semantic Token は、コンポーネントや UI の意味に応じたデザインスタイル を定義します。これは、Primitive Token を組み合わせて使います。
 
 ### Semantic/Text
 
