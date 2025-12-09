@@ -5,31 +5,46 @@
   StyleDictionary.registerFormat({
     name: 'customTSFormat',
     format: ({ dictionary }) => {
-      const pathKeyedJsonObj = {};
+      const valueTree = {};
+      const metaTree = {};
 
-      dictionary.allTokens.forEach((jsonObj) => {
-        const path = jsonObj.path;
+      const setPath = (target, path, value) => {
+        if (path === null) return;
 
-        if (path !== null) {
-          let obj = pathKeyedJsonObj;
-          path.forEach((key, i) => {
-            key = key.charAt(0).toLowerCase() + key.slice(1);
+        let obj = target;
+        path.forEach((key, i) => {
+          const camelKey = key.charAt(0).toLowerCase() + key.slice(1);
 
-            if (!Object.prototype.hasOwnProperty.call(obj, key)) {
-              obj[key] = {};
-            }
-            if (i === path.length - 1) {
-              obj[key] = jsonObj.value;
-            } else {
-              obj = obj[key];
-            }
-          });
+          if (!Object.prototype.hasOwnProperty.call(obj, camelKey)) {
+            obj[camelKey] = {};
+          }
+          if (i === path.length - 1) {
+            obj[camelKey] = value;
+          } else {
+            obj = obj[camelKey];
+          }
+        });
+      };
+
+      dictionary.allTokens.forEach((token) => {
+        const { path, value, description, type: tokenType } = token;
+
+        setPath(valueTree, path, value);
+
+        const meta = { value };
+        if (typeof description !== 'undefined') {
+          meta.description = description;
         }
+        if (typeof tokenType !== 'undefined') {
+          meta.type = tokenType;
+        }
+
+        setPath(metaTree, path, meta);
       });
 
-      const tokenArray = JSON.stringify(pathKeyedJsonObj, null, 2);
+      const toConst = (name, obj) => `export const ${name} = ${JSON.stringify(obj, null, 2)} as const;`;
 
-      return `export const tokens = ${tokenArray} as const;`;
+      return `${toConst('tokens', valueTree)}\n\n${toConst('tokensWithMeta', metaTree)}\n`;
     },
   });
 
