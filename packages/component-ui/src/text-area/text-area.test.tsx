@@ -51,7 +51,7 @@ describe('TextArea', () => {
       const textarea = screen.getByTestId('textarea');
       expect(textarea.className).toMatch(/typography-body14regular/);
       expect(textarea.className).toMatch(/px-2/);
-      expect(textarea.className).toMatch(/py-1.5/);
+      expect(textarea.className).toMatch(/py-2/);
     });
 
     it('largeサイズのスタイルが適用されること', () => {
@@ -60,7 +60,7 @@ describe('TextArea', () => {
       expect(textarea.className).toMatch(/text-4/);
       expect(textarea.className).toMatch(/leading-normal/);
       expect(textarea.className).toMatch(/px-3\.5/);
-      expect(textarea.className).toMatch(/py-2/);
+      expect(textarea.className).toMatch(/py-2\.5/);
     });
   });
 
@@ -109,20 +109,25 @@ describe('TextArea', () => {
     it('height指定が正しく適用されること（通常モード）', () => {
       render(<TextArea value="" height="120px" readOnly data-testid="textarea" />);
       const textarea = screen.getByTestId('textarea');
-      expect(textarea.style.height).toBe('120px');
+      const wrapper = textarea.parentElement as HTMLElement;
+      expect(wrapper.style.height).toBe('120px');
+      expect(textarea.style.height).toBe('100%');
     });
 
     it('autoHeightモードでheight指定がminHeightとして適用されること', () => {
       render(<TextArea value="" autoHeight height="80px" readOnly data-testid="textarea" />);
       const textarea = screen.getByTestId('textarea');
-      expect(textarea.style.minHeight).toBe('80px');
+      const wrapper = textarea.parentElement as HTMLElement;
+      expect(wrapper.style.minHeight).toBe('80px');
+      expect(textarea.style.minHeight).toBe('100%');
       expect(textarea.className).toMatch(/field-sizing-content/);
     });
 
     it('autoHeightモードでmaxHeightが適用されること', () => {
       render(<TextArea value="" autoHeight maxHeight="200px" readOnly data-testid="textarea" />);
       const textarea = screen.getByTestId('textarea');
-      expect(textarea.style.maxHeight).toBe('200px');
+      const wrapper = textarea.parentElement as HTMLElement;
+      expect(wrapper.style.maxHeight).toBe('200px');
       expect(textarea.className).toMatch(/field-sizing-content/);
     });
 

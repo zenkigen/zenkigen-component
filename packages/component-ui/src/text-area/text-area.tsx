@@ -107,8 +107,8 @@ function TextAreaInner(
   const textAreaClassName = clsx(
     'w-full border-none bg-transparent outline-0 placeholder:text-textPlaceholder disabled:text-textPlaceholder',
     {
-      'typography-body14regular px-2 py-1.5': size === 'medium',
-      'text-4 leading-normal px-3.5 py-2': size === 'large',
+      'typography-body14regular px-2 py-2': size === 'medium',
+      'text-4 leading-normal px-3.5 py-2.5': size === 'large',
       'field-sizing-content': autoHeight,
       'text-text01': !isError,
       'text-supportError': isError,
@@ -118,18 +118,23 @@ function TextAreaInner(
   );
 
   const textAreaElement = (
-    <div className={textAreaWrapperClassName}>
+    <div
+      className={textAreaWrapperClassName}
+      style={{
+        ...{ maxHeight },
+        // height/minHeight はラッパに適用し、外形を揃える
+        ...(!autoHeight && height !== null ? { height } : {}),
+        ...(autoHeight && height !== null ? { minHeight: height } : {}),
+      }}
+    >
       <textarea
         ref={ref}
         className={textAreaClassName}
         {...mergedTextAreaProps}
         disabled={disabled}
         style={{
-          ...{ maxHeight },
-          // 自動高さではない場合で、height 指定がある場合は設定する
-          ...(!autoHeight && height !== null ? { height } : {}),
-          // 自動高さの場合で、height が指定されている場合は、height を minHeight に設定する
-          ...(autoHeight && height !== null ? { minHeight: height } : {}),
+          height: autoHeight ? 'auto' : '100%',
+          minHeight: autoHeight && height !== null ? '100%' : 'auto',
         }}
       />
     </div>
