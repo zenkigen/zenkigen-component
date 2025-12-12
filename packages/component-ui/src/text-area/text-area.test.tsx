@@ -57,8 +57,7 @@ describe('TextArea', () => {
     it('largeサイズのスタイルが適用されること', () => {
       render(<TextArea value="" size="large" readOnly data-testid="textarea" />);
       const textarea = screen.getByTestId('textarea');
-      expect(textarea.className).toMatch(/text-4/);
-      expect(textarea.className).toMatch(/leading-normal/);
+      expect(textarea.className).toMatch(/typography-body16regular/);
       expect(textarea.className).toMatch(/px-3\.5/);
       expect(textarea.className).toMatch(/py-2\.5/);
     });
