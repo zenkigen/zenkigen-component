@@ -108,7 +108,7 @@ function TextAreaInner(
     'w-full border-none bg-transparent outline-0 placeholder:text-textPlaceholder disabled:text-textPlaceholder',
     {
       'typography-body14regular px-2 py-2': size === 'medium',
-      'typography-body16regular px-3.5 py-2.5': size === 'large',
+      'text-4 leading-normal px-3.5 py-2.5': size === 'large',
       'field-sizing-content': autoHeight,
       'text-text01': !isError,
       'text-supportError': isError,
@@ -133,8 +133,8 @@ function TextAreaInner(
         {...mergedTextAreaProps}
         disabled={disabled}
         style={{
-          height: autoHeight ? 'auto' : '100%',
-          minHeight: autoHeight && height !== null ? '100%' : 'auto',
+          height: autoHeight ? undefined : '100%',
+          minHeight: autoHeight && height !== null ? '100%' : undefined,
         }}
       />
     </div>
