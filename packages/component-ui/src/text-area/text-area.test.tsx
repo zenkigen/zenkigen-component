@@ -51,8 +51,7 @@ describe('TextArea', () => {
       const textarea = screen.getByTestId('textarea');
       expect(textarea.className).toMatch(/typography-body14regular/);
       expect(textarea.className).toMatch(/px-2/);
-      expect(textarea.className).toMatch(/pt-2/);
-      expect(textarea.className).toMatch(/pb-2/);
+      expect(textarea.className).toMatch(/py-2/);
     });
 
     it('largeサイズのスタイルが適用されること', () => {
@@ -69,34 +68,40 @@ describe('TextArea', () => {
     it('通常状態のスタイルが適用されること', () => {
       render(<TextArea value="" readOnly data-testid="textarea" />);
       const textarea = screen.getByTestId('textarea');
-      expect(textarea.className).toMatch(/border-uiBorder02/);
+      const wrapper = textarea.parentElement as HTMLElement;
+      expect(wrapper.className).toMatch(/border-uiBorder02/);
+      expect(wrapper.className).not.toMatch(/border-supportError/);
       expect(textarea.className).toMatch(/text-text01/);
-      expect(textarea.className).not.toMatch(/border-supportError/);
     });
 
     it('エラー状態のスタイルが適用されること', () => {
       render(<TextArea value="" isError readOnly data-testid="textarea" />);
       const textarea = screen.getByTestId('textarea');
-      expect(textarea.className).toMatch(/border-supportError/);
+      const wrapper = textarea.parentElement as HTMLElement;
+      expect(wrapper.className).toMatch(/border-supportError/);
       expect(textarea.className).toMatch(/text-supportError/);
     });
 
     it('無効状態のスタイルが適用されること', () => {
       render(<TextArea value="" disabled data-testid="textarea" />);
       const textarea = screen.getByTestId('textarea');
+      const wrapper = textarea.parentElement as HTMLElement;
       expect(textarea).toBeDisabled();
       expect(textarea.className).toMatch(/bg-disabled02/);
-      expect(textarea.className).toMatch(/border-disabled01/);
       expect(textarea.className).toMatch(/text-textPlaceholder/);
+      expect(wrapper.className).toMatch(/bg-disabled02/);
+      expect(wrapper.className).toMatch(/border-disabled01/);
     });
 
     it('無効状態がエラー状態よりも優先されること', () => {
       render(<TextArea value="" isError disabled data-testid="textarea" />);
       const textarea = screen.getByTestId('textarea');
+      const wrapper = textarea.parentElement as HTMLElement;
       expect(textarea).toBeDisabled();
       expect(textarea.className).toMatch(/bg-disabled02/);
-      expect(textarea.className).toMatch(/border-disabled01/);
-      expect(textarea.className).not.toMatch(/border-supportError/);
+      expect(wrapper.className).toMatch(/bg-disabled02/);
+      expect(wrapper.className).toMatch(/border-disabled01/);
+      expect(wrapper.className).not.toMatch(/border-supportError/);
     });
   });
 
@@ -104,20 +109,25 @@ describe('TextArea', () => {
     it('height指定が正しく適用されること（通常モード）', () => {
       render(<TextArea value="" height="120px" readOnly data-testid="textarea" />);
       const textarea = screen.getByTestId('textarea');
-      expect(textarea.style.height).toBe('120px');
+      const wrapper = textarea.parentElement as HTMLElement;
+      expect(wrapper.style.height).toBe('120px');
+      expect(textarea.style.height).toBe('100%');
     });
 
     it('autoHeightモードでheight指定がminHeightとして適用されること', () => {
       render(<TextArea value="" autoHeight height="80px" readOnly data-testid="textarea" />);
       const textarea = screen.getByTestId('textarea');
-      expect(textarea.style.minHeight).toBe('80px');
+      const wrapper = textarea.parentElement as HTMLElement;
+      expect(wrapper.style.minHeight).toBe('80px');
+      expect(textarea.style.minHeight).toBe('100%');
       expect(textarea.className).toMatch(/field-sizing-content/);
     });
 
     it('autoHeightモードでmaxHeightが適用されること', () => {
       render(<TextArea value="" autoHeight maxHeight="200px" readOnly data-testid="textarea" />);
       const textarea = screen.getByTestId('textarea');
-      expect(textarea.style.maxHeight).toBe('200px');
+      const wrapper = textarea.parentElement as HTMLElement;
+      expect(wrapper.style.maxHeight).toBe('200px');
       expect(textarea.className).toMatch(/field-sizing-content/);
     });
 
@@ -290,6 +300,7 @@ describe('TextArea', () => {
       const wrapper = container.firstChild as HTMLElement;
       expect(wrapper.tagName).toBe('DIV');
       expect(wrapper.className).toMatch(/flex/);
+      expect(wrapper.className).toMatch(/overflow-hidden/);
     });
   });
 });

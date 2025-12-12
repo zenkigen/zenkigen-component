@@ -95,34 +95,46 @@ function TextAreaInner(
     ...ariaInvalidProps,
   };
 
-  const classes = clsx(
-    'w-full rounded border outline-0 placeholder:text-textPlaceholder disabled:text-textPlaceholder',
+  const textAreaWrapperClassName = clsx('box-border flex w-full overflow-hidden rounded border', {
+    'border-supportError': isError && !disabled,
+    'border-uiBorder02': !isError && !disabled,
+    'hover:border-hoverInput': !disabled && !isError,
+    'hover:focus-within:border-activeInput': !isError,
+    'focus-within:border-activeInput': !isError,
+    'bg-disabled02 border-disabled01': disabled,
+  });
+
+  const textAreaClassName = clsx(
+    'w-full border-none bg-transparent outline-0 placeholder:text-textPlaceholder disabled:text-textPlaceholder',
     {
-      'border-supportError': isError && !disabled,
-      'hover:border-hoverInput': !disabled && !isError,
-      'border-uiBorder02 hover:focus-within:border-activeInput focus-within:border-activeInput text-text01': !isError,
-      'bg-disabled02 border-disabled01': disabled,
-      'typography-body14regular px-2 pt-2 pb-2': size === 'medium',
+      'typography-body14regular px-2 py-2': size === 'medium',
       'text-4 leading-normal px-3.5 py-2.5': size === 'large',
       'field-sizing-content': autoHeight,
+      'text-text01': !isError,
       'text-supportError': isError,
+      'bg-disabled02': disabled,
       'resize-none': !isResizable,
     },
   );
 
   const textAreaElement = (
-    <div className="flex">
+    <div
+      className={textAreaWrapperClassName}
+      style={{
+        ...{ maxHeight },
+        // height/minHeight はラッパに適用し、外形を揃える
+        ...(!autoHeight && height !== null ? { height } : {}),
+        ...(autoHeight && height !== null ? { minHeight: height } : {}),
+      }}
+    >
       <textarea
         ref={ref}
-        className={classes}
+        className={textAreaClassName}
         {...mergedTextAreaProps}
         disabled={disabled}
         style={{
-          ...{ maxHeight },
-          // 自動高さではない場合で、height 指定がある場合は設定する
-          ...(!autoHeight && height !== null ? { height } : {}),
-          // 自動高さの場合で、height が指定されている場合は、height を minHeight に設定する
-          ...(autoHeight && height !== null ? { minHeight: height } : {}),
+          height: autoHeight ? undefined : '100%',
+          minHeight: autoHeight && height !== null ? '100%' : undefined,
         }}
       />
     </div>
