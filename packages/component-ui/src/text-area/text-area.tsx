@@ -108,7 +108,7 @@ function TextAreaInner(
     'w-full border-none bg-transparent outline-0 placeholder:text-textPlaceholder disabled:text-textPlaceholder',
     {
       'typography-body14regular px-2 pt-2 pb-2': size === 'medium',
-      'typography-body16regular px-3.5 py-2.5': size === 'large',
+      'text-4 leading-normal px-3.5 py-2.5': size === 'large',
       'field-sizing-content': autoHeight,
       'text-text01': !isError,
       'text-supportError': isError,
