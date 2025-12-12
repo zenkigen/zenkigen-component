@@ -95,26 +95,30 @@ function TextAreaInner(
     ...ariaInvalidProps,
   };
 
-  const classes = clsx(
-    'w-full rounded border outline-0 placeholder:text-textPlaceholder disabled:text-textPlaceholder',
-    {
-      'border-supportError': isError && !disabled,
-      'hover:border-hoverInput': !disabled && !isError,
-      'border-uiBorder02 hover:focus-within:border-activeInput focus-within:border-activeInput text-text01': !isError,
-      'bg-disabled02 border-disabled01': disabled,
-      'typography-body14regular px-2 pt-2 pb-2': size === 'medium',
-      'text-4 leading-normal px-3.5 py-2.5': size === 'large',
-      'field-sizing-content': autoHeight,
-      'text-supportError': isError,
-      'resize-none': !isResizable,
-    },
-  );
+  const textAreaWrapperClassName = clsx('flex w-full overflow-hidden rounded border', {
+    'border-supportError': isError && !disabled,
+    'border-uiBorder02': !isError && !disabled,
+    'hover:border-hoverInput': !disabled && !isError,
+    'hover:focus-within:border-activeInput': !isError,
+    'focus-within:border-activeInput': !isError,
+    'bg-disabled02 border-disabled01': disabled,
+  });
+
+  const textAreaClassName = clsx('w-full outline-0 placeholder:text-textPlaceholder disabled:text-textPlaceholder', {
+    'typography-body14regular px-2 pt-2 pb-2': size === 'medium',
+    'typography-body16regular px-3.5 py-2.5': size === 'large',
+    'field-sizing-content': autoHeight,
+    'text-text01': !isError,
+    'text-supportError': isError,
+    'bg-disabled02': disabled,
+    'resize-none': !isResizable,
+  });
 
   const textAreaElement = (
-    <div className="flex">
+    <div className={textAreaWrapperClassName}>
       <textarea
         ref={ref}
-        className={classes}
+        className={textAreaClassName}
         {...mergedTextAreaProps}
         disabled={disabled}
         style={{

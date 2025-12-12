@@ -58,8 +58,7 @@ describe('TextArea', () => {
     it('largeサイズのスタイルが適用されること', () => {
       render(<TextArea value="" size="large" readOnly data-testid="textarea" />);
       const textarea = screen.getByTestId('textarea');
-      expect(textarea.className).toMatch(/text-4/);
-      expect(textarea.className).toMatch(/leading-normal/);
+      expect(textarea.className).toMatch(/typography-body16regular/);
       expect(textarea.className).toMatch(/px-3\.5/);
       expect(textarea.className).toMatch(/py-2\.5/);
     });
@@ -69,34 +68,40 @@ describe('TextArea', () => {
     it('通常状態のスタイルが適用されること', () => {
       render(<TextArea value="" readOnly data-testid="textarea" />);
       const textarea = screen.getByTestId('textarea');
-      expect(textarea.className).toMatch(/border-uiBorder02/);
+      const wrapper = textarea.parentElement as HTMLElement;
+      expect(wrapper.className).toMatch(/border-uiBorder02/);
+      expect(wrapper.className).not.toMatch(/border-supportError/);
       expect(textarea.className).toMatch(/text-text01/);
-      expect(textarea.className).not.toMatch(/border-supportError/);
     });
 
     it('エラー状態のスタイルが適用されること', () => {
       render(<TextArea value="" isError readOnly data-testid="textarea" />);
       const textarea = screen.getByTestId('textarea');
-      expect(textarea.className).toMatch(/border-supportError/);
+      const wrapper = textarea.parentElement as HTMLElement;
+      expect(wrapper.className).toMatch(/border-supportError/);
       expect(textarea.className).toMatch(/text-supportError/);
     });
 
     it('無効状態のスタイルが適用されること', () => {
       render(<TextArea value="" disabled data-testid="textarea" />);
       const textarea = screen.getByTestId('textarea');
+      const wrapper = textarea.parentElement as HTMLElement;
       expect(textarea).toBeDisabled();
       expect(textarea.className).toMatch(/bg-disabled02/);
-      expect(textarea.className).toMatch(/border-disabled01/);
       expect(textarea.className).toMatch(/text-textPlaceholder/);
+      expect(wrapper.className).toMatch(/bg-disabled02/);
+      expect(wrapper.className).toMatch(/border-disabled01/);
     });
 
     it('無効状態がエラー状態よりも優先されること', () => {
       render(<TextArea value="" isError disabled data-testid="textarea" />);
       const textarea = screen.getByTestId('textarea');
+      const wrapper = textarea.parentElement as HTMLElement;
       expect(textarea).toBeDisabled();
       expect(textarea.className).toMatch(/bg-disabled02/);
-      expect(textarea.className).toMatch(/border-disabled01/);
-      expect(textarea.className).not.toMatch(/border-supportError/);
+      expect(wrapper.className).toMatch(/bg-disabled02/);
+      expect(wrapper.className).toMatch(/border-disabled01/);
+      expect(wrapper.className).not.toMatch(/border-supportError/);
     });
   });
 
@@ -290,6 +295,7 @@ describe('TextArea', () => {
       const wrapper = container.firstChild as HTMLElement;
       expect(wrapper.tagName).toBe('DIV');
       expect(wrapper.className).toMatch(/flex/);
+      expect(wrapper.className).toMatch(/overflow-hidden/);
     });
   });
 });
