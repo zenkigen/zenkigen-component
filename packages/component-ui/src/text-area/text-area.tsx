@@ -95,7 +95,7 @@ function TextAreaInner(
     ...ariaInvalidProps,
   };
 
-  const textAreaWrapperClassName = clsx('flex w-full overflow-hidden rounded border', {
+  const textAreaWrapperClassName = clsx('box-border flex w-full overflow-hidden rounded border', {
     'border-supportError': isError && !disabled,
     'border-uiBorder02': !isError && !disabled,
     'hover:border-hoverInput': !disabled && !isError,
