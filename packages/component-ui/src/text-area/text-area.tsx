@@ -104,15 +104,18 @@ function TextAreaInner(
     'bg-disabled02 border-disabled01': disabled,
   });
 
-  const textAreaClassName = clsx('w-full outline-0 placeholder:text-textPlaceholder disabled:text-textPlaceholder', {
-    'typography-body14regular px-2 pt-2 pb-2': size === 'medium',
-    'typography-body16regular px-3.5 py-2.5': size === 'large',
-    'field-sizing-content': autoHeight,
-    'text-text01': !isError,
-    'text-supportError': isError,
-    'bg-disabled02': disabled,
-    'resize-none': !isResizable,
-  });
+  const textAreaClassName = clsx(
+    'w-full border-none bg-transparent outline-0 placeholder:text-textPlaceholder disabled:text-textPlaceholder',
+    {
+      'typography-body14regular px-2 pt-2 pb-2': size === 'medium',
+      'typography-body16regular px-3.5 py-2.5': size === 'large',
+      'field-sizing-content': autoHeight,
+      'text-text01': !isError,
+      'text-supportError': isError,
+      'bg-disabled02': disabled,
+      'resize-none': !isResizable,
+    },
+  );
 
   const textAreaElement = (
     <div className={textAreaWrapperClassName}>
