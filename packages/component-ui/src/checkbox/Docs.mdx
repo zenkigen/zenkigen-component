@@ -1,15 +1,45 @@
 import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/addon-docs/blocks';
+import { Markdown } from '@storybook/addon-docs/blocks';
 import CheckboxStories, { Component } from './checkbox.stories';
+import spec from '../../../../docs/component/checkbox-specification.md?raw';
 
 <Meta title="Checkbox" of={CheckboxStories} />
 
 # Checkbox
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
 
 <Canvas>
   <Story of={Component} />
 </Canvas>
 
 <Controls of={Component} />
+
+### Code Example
+
+```typescript
+import { useState } from 'react';
+import { Checkbox } from '@zenkigen-inc/component-ui';
+
+const Example = () => {
+  const [checked, setChecked] = useState(false);
+
+  return (
+    <Checkbox
+      id="agreement"
+      label="利用規約に同意する"
+      isChecked={checked}
+      onChange={() => setChecked((prev) => !prev)}
+    />
+  );
+};
+```
 
 ## 概要
 
