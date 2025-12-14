@@ -133,8 +133,8 @@ function TextAreaInner(
         {...mergedTextAreaProps}
         disabled={disabled}
         style={{
-          height: autoHeight ? undefined : '100%',
-          minHeight: autoHeight && height !== null ? '100%' : undefined,
+          height: autoHeight ? 'auto' : '100%',
+          minHeight: autoHeight && height !== null ? '100%' : 'auto',
         }}
       />
     </div>
