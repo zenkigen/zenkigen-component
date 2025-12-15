@@ -1,10 +1,38 @@
-import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/addon-docs/blocks';
-import TypographyStories, { Component } from './typography.stories';
+import { Canvas, Meta, ArgTypes, Story, Controls, Source, TableOfContents } from '@storybook/addon-docs/blocks';
+import * as TypographyStories from './typography.stories';
 
 <Meta title="Typography" of={TypographyStories} />
 
 # Typography
 
-<Canvas>
-  <Story of={Component} />
-</Canvas>
+Typography（タイポグラフィ）は、文字のスタイル、サイズ、間隔、階層を定義し、ユーザーにとって読みやすく、一貫性のあるビジュアル体験を提供する ための重要な要素です。デザインシステムにおいて、Typography は単なるフォントの指定にとどまらず、可読性・視認性・アクセシビリティを高め、ブランドのアイデンティティを表現する 役割を担います。
+
+Heading, Body, Label の各コンポーネントを使用して、テキストコンテンツの階層構造を明確にし、ユーザーが情報を迅速に理解できるようにします。
+
+## Heading
+
+- <a href="/?path=/docs/components-heading--docs">Heading コンポーネント</a>
+  を使用して、セクションやページのタイトルを明確に示します。
+
+## Body
+
+- className に `typography-body****` を指定して使用します。
+
+```html
+<div className="typography-body12regular">あのイーハトーヴォのすきとおった風、夏でも底に冷たさをもつ青いそら、...</div>
+```
+
+#### **種類**
+
+<Canvas of={TypographyStories.Body} />
+## Label
+
+- className に `typography-label****` を指定して使用します。
+
+```html
+<div className="typography-label11regular">ユーザー名</div>
+```
+
+#### **種類**
+
+<Canvas of={TypographyStories.Label} />
