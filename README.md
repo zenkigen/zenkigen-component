@@ -150,7 +150,7 @@ yarn list --pattern "@zenkigen-inc/component-*"
 - [Sort Button](./docs/component/sort-button-specification.md)
 - [Tab](./docs/component/tab-specification.md)
 - Table
-- Tag
+- [Tag](./docs/component/tag-specification.md)
 - [Text Area](./docs/component/text-area-specification.md)
 - [Text Input](./docs/component/text-input-specification.md)
 - [Password Input](./docs/component/password-input-specification.md)
