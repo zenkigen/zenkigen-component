@@ -135,7 +135,7 @@ yarn list --pattern "@zenkigen-inc/component-*"
 - Heading
 - [Icon](./docs/component/icon-specification.md)
 - [Icon Button](./docs/component/icon-button-specification.md)
-- Loading
+- [Loading](./docs/component/loading-specification.md)
 - [Modal](./docs/component/modal-specification.md)
 - [Notification Inline](./docs/component/notification-inline-specification.md)
 - Pagination
