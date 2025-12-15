@@ -1,15 +1,46 @@
-import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/addon-docs/blocks';
-import TooltipStories, { Component, Base } from './tooltip.stories';
+import { Canvas, Meta, ArgTypes, Story, Controls, Source, Markdown } from '@storybook/addon-docs/blocks';
+import TooltipStories, { Component } from './tooltip.stories';
+import spec from '../../../../docs/component/tooltip-specification.md?raw';
 
 <Meta title="Tooltip" of={TooltipStories} />
 
 # Tooltip
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
 
 <Canvas>
   <Story of={Component} />
 </Canvas>
 
 <Controls of={Component} />
+
+## Code Example
+
+```tsx
+import { Tooltip, Button } from '@zenkigen-inc/component-ui';
+
+const TooltipDemo = () => (
+  <Tooltip
+    content={
+      <span>
+        削除操作は取り消せません。
+        <br />
+        十分に確認してください。
+      </span>
+    }
+    size="medium"
+    horizontalAlign="left"
+  >
+    <Button variant="ghost">削除</Button>
+  </Tooltip>
+);
+```
 
 ## 概要
 

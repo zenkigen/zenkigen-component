@@ -1,8 +1,13 @@
-import type { PropsWithChildren } from 'react';
+import type { ReactNode } from 'react';
 
 import { BreadcrumbItem } from './breadcrumb-item';
 
-export function Breadcrumb({ children }: PropsWithChildren) {
+type BreadcrumbProps = {
+  /** パンくずとして表示する要素。通常は複数の Breadcrumb.Item を渡す。 */
+  children: ReactNode;
+};
+
+export function Breadcrumb({ children }: BreadcrumbProps) {
   return (
     <nav aria-label="breadcrumb">
       <ul className="typography-label14regular flex flex-wrap gap-2 whitespace-nowrap text-text01">{children}</ul>

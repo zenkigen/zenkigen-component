@@ -478,7 +478,7 @@
         "description": "Error light color"
       },
       "SupportSuccess": {
-        "value": "#2DC87D",
+        "value": "#29B471",
         "type": "color",
         "description": "Success text, button background, button border"
       },
