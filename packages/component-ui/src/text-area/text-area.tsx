@@ -117,14 +117,16 @@ function TextAreaInner(
     },
   );
 
+  const hasHeight = height != null && String(height).trim().length > 0;
+
   const textAreaElement = (
     <div
       className={textAreaWrapperClassName}
       style={{
         ...{ maxHeight },
         // height/minHeight はラッパに適用し、外形を揃える
-        ...(!autoHeight && height !== null ? { height } : {}),
-        ...(autoHeight && height !== null ? { minHeight: height } : {}),
+        ...(!autoHeight && hasHeight ? { height } : {}),
+        ...(autoHeight && hasHeight ? { minHeight: height } : {}),
       }}
     >
       <textarea
@@ -134,7 +136,7 @@ function TextAreaInner(
         disabled={disabled}
         style={{
           height: autoHeight ? 'auto' : '100%',
-          minHeight: autoHeight && height !== null ? '100%' : 'auto',
+          minHeight: autoHeight && hasHeight ? '100%' : 'auto',
         }}
       />
     </div>
