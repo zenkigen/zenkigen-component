@@ -157,7 +157,7 @@ yarn list --pattern "@zenkigen-inc/component-*"
 - [Popover](./docs/component/popover-specification.md)
 - [Toast](./docs/component/toast-specification.md)
 - [Toggle](./docs/component/toggle-specification.md)
-- Tooltip
+- [Tooltip](./docs/component/tooltip-specification.md)
 - Typography
 
 ## Storybook
