@@ -2854,11 +2854,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zenkigen-inc/component-config@npm:1.18.1, @zenkigen-inc/component-config@workspace:packages/component-config":
+"@zenkigen-inc/component-config@npm:1.18.2, @zenkigen-inc/component-config@workspace:packages/component-config":
   version: 0.0.0-use.local
   resolution: "@zenkigen-inc/component-config@workspace:packages/component-config"
   dependencies:
-    "@zenkigen-inc/component-theme": "npm:1.18.1"
+    "@zenkigen-inc/component-theme": "npm:1.18.2"
     style-dictionary: "npm:5.1.1"
     tailwindcss: "npm:3.4.17"
     token-transformer: "npm:0.0.33"
@@ -2867,7 +2867,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zenkigen-inc/component-icons@npm:1.18.1, @zenkigen-inc/component-icons@workspace:packages/component-icons":
+"@zenkigen-inc/component-icons@npm:1.18.2, @zenkigen-inc/component-icons@workspace:packages/component-icons":
   version: 0.0.0-use.local
   resolution: "@zenkigen-inc/component-icons@workspace:packages/component-icons"
   dependencies:
@@ -2881,7 +2881,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zenkigen-inc/component-theme@npm:1.18.1, @zenkigen-inc/component-theme@workspace:packages/component-theme":
+"@zenkigen-inc/component-theme@npm:1.18.2, @zenkigen-inc/component-theme@workspace:packages/component-theme":
   version: 0.0.0-use.local
   resolution: "@zenkigen-inc/component-theme@workspace:packages/component-theme"
   dependencies:
@@ -2899,9 +2899,9 @@ __metadata:
     "@testing-library/jest-dom": "npm:6.4.0"
     "@testing-library/react": "npm:16.3.0"
     "@testing-library/user-event": "npm:14.6.1"
-    "@zenkigen-inc/component-config": "npm:1.18.1"
-    "@zenkigen-inc/component-icons": "npm:1.18.1"
-    "@zenkigen-inc/component-theme": "npm:1.18.1"
+    "@zenkigen-inc/component-config": "npm:1.18.2"
+    "@zenkigen-inc/component-icons": "npm:1.18.2"
+    "@zenkigen-inc/component-theme": "npm:1.18.2"
     clsx: "npm:2.1.1"
     hygen: "npm:6.2.11"
     tsup: "npm:8.5.0"
@@ -7252,14 +7252,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:19.1.0":
-  version: 19.1.0
-  resolution: "react-dom@npm:19.1.0"
+"react-dom@npm:19.1.2":
+  version: 19.1.2
+  resolution: "react-dom@npm:19.1.2"
   dependencies:
     scheduler: "npm:^0.26.0"
   peerDependencies:
-    react: ^19.1.0
-  checksum: 10c0/3e26e89bb6c67c9a6aa86cb888c7a7f8258f2e347a6d2a15299c17eb16e04c19194e3452bc3255bd34000a61e45e2cb51e46292392340432f133e5a5d2dfb5fc
+    react: ^19.1.2
+  checksum: 10c0/67d5f574eecd1f7a89df3c94936122d4df361d3e78ea19d5879c560439ef05f154af9b9281c1f5c92f79d13c39364bfa60136916d00bdbbccd019b8b3471de10
   languageName: node
   linkType: hard
 
@@ -7295,10 +7295,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:19.1.0":
-  version: 19.1.0
-  resolution: "react@npm:19.1.0"
-  checksum: 10c0/530fb9a62237d54137a13d2cfb67a7db6a2156faed43eecc423f4713d9b20c6f2728b026b45e28fcd72e8eadb9e9ed4b089e99f5e295d2f0ad3134251bdd3698
+"react@npm:19.1.2":
+  version: 19.1.2
+  resolution: "react@npm:19.1.2"
+  checksum: 10c0/dfbe1dee96547ad2d6d6872b6052cbd5bd7841b6f57a7d6cda62b27e1a7df31d47beecb6d11e24abaff0c5ea347459a0a3c60917b41f5a0ee0b507436b3c50a6
   languageName: node
   linkType: hard
 
@@ -9348,8 +9348,8 @@ __metadata:
     jsdom: "npm:24.0.0"
     postcss: "npm:8.5.6"
     prettier: "npm:3.6.2"
-    react: "npm:19.1.0"
-    react-dom: "npm:19.1.0"
+    react: "npm:19.1.2"
+    react-dom: "npm:19.1.2"
     rimraf: "npm:6.0.1"
     storybook: "npm:9.1.16"
     tailwindcss: "npm:3.4.17"
