@@ -1,15 +1,61 @@
 import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/addon-docs/blocks';
+import { Markdown } from '@storybook/addon-docs/blocks';
 import RadioStories, { Component } from './radio.stories';
+import spec from '../../../../docs/component/radio-specification.md?raw';
 
 <Meta title="Radio" of={RadioStories} />
 
 # Radio
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
 
 <Canvas>
   <Story of={Component} />
 </Canvas>
 
 <Controls of={Component} />
+
+### Code Example
+
+```typescript
+import { useState, ChangeEvent } from 'react';
+import { Radio } from '@zenkigen-inc/component-ui';
+
+const Example = () => {
+  const [value, setValue] = useState('foo');
+
+  const handleChange = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
+    setValue(value);
+  };
+
+  return (
+    <div className="flex flex-col gap-4">
+      <Radio
+        id="option-foo"
+        name="example-radio"
+        label="Foo"
+        value="foo"
+        isChecked={value === 'foo'}
+        onChange={handleChange}
+      />
+      <Radio
+        id="option-bar"
+        name="example-radio"
+        label="Bar"
+        value="bar"
+        isChecked={value === 'bar'}
+        onChange={handleChange}
+      />
+    </div>
+  );
+};
+```
 
 ## 概要
 

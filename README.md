@@ -129,21 +129,21 @@ yarn list --pattern "@zenkigen-inc/component-*"
 - Breadcrumb
 - [Button](./docs/component/button-specification.md)
 - Checkbox
-- Dropdown
-- Evaluation Star
+- [Dropdown](./docs/component/dropdown-specification.md)
+- [Evaluation Star](./docs/component/evaluation-star-specification.md)
 - [File Input](./docs/component/file-input-specification.md)
 - Heading
 - [Icon](./docs/component/icon-specification.md)
 - [Icon Button](./docs/component/icon-button-specification.md)
-- Loading
+- [Loading](./docs/component/loading-specification.md)
 - [Modal](./docs/component/modal-specification.md)
-- Notification Inline
+- [Notification Inline](./docs/component/notification-inline-specification.md)
 - Pagination
 - Pagination Select
 - [Popover](./docs/component/popover-specification.md)
 - [Popup](./docs/component/popup-specification.md)
 - Radio
-- Search
+- [Search](./docs/component/search-specification.md)
 - [Segmented Control](./docs/component/segmented-control-specification.md)
 - [Select](./docs/component/select-specification.md)
 - [Select Sort](./docs/component/select-sort-specification.md)
@@ -155,9 +155,9 @@ yarn list --pattern "@zenkigen-inc/component-*"
 - [Text Input](./docs/component/text-input-specification.md)
 - [Password Input](./docs/component/password-input-specification.md)
 - [Popover](./docs/component/popover-specification.md)
-- Toast
-- Toggle
-- Tooltip
+- [Toast](./docs/component/toast-specification.md)
+- [Toggle](./docs/component/toggle-specification.md)
+- [Tooltip](./docs/component/tooltip-specification.md)
 - Typography
 
 ## Storybook

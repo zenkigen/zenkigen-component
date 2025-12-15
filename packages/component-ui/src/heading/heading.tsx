@@ -5,9 +5,13 @@ import type { ReactNode } from 'react';
 type Level = 1 | 2 | 3 | 4 | 5;
 
 type Props = {
+  /** DOMの見出しレベル（`<h1>`〜`<h5>`）を指定する */
   level: Level;
+  /** 見出しテキストの前に配置するアイコンやアバターなど */
   before?: ReactNode;
+  /** 見出しテキストの後に配置する補助アクションやラベル */
   after?: ReactNode;
+  /** 表示する見出しコンテンツ */
   children?: ReactNode;
 };
 

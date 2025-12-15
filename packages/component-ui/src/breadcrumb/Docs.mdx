@@ -1,17 +1,33 @@
-import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/addon-docs/blocks';
+import { Canvas, Markdown, Meta, Story, Source } from '@storybook/addon-docs/blocks';
 import BreadcrumbStories, { Base } from './breadcrumb.stories';
+import spec from '../../../../docs/component/breadcrumb-specification.md?raw';
 
 <Meta title="Breadcrumb" of={BreadcrumbStories} />
 
 # Breadcrumb
 
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
+
 <Canvas>
   <Story of={Base} />
 </Canvas>
 
+### Code Example
+
+- `Breadcrumb.Item` を子要素として並べる。
+- 最終階層はリンクではなくテキスト、もしくは `aria-current="page"` を付与した要素で現在位置を示す。
+
+<Source of={Base} />
+
 ## 概要
 
-ユーザーが現在のページまでの階層を理解し、親の階層へ戻るのをナビゲートするコンポーネントです。
+ユーザーが現在のページまでの階層を理解し、親の階層へ戻るのをナビゲートするコンポーネントである。
 
 ## 設計の原則（Do）
 
