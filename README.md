@@ -130,7 +130,7 @@ yarn list --pattern "@zenkigen-inc/component-*"
 - [Button](./docs/component/button-specification.md)
 - Checkbox
 - Dropdown
-- Evaluation Star
+- [Evaluation Star](./docs/component/evaluation-star-specification.md)
 - [File Input](./docs/component/file-input-specification.md)
 - Heading
 - [Icon](./docs/component/icon-specification.md)
@@ -155,7 +155,7 @@ yarn list --pattern "@zenkigen-inc/component-*"
 - [Text Input](./docs/component/text-input-specification.md)
 - [Password Input](./docs/component/password-input-specification.md)
 - [Popover](./docs/component/popover-specification.md)
-- Toast
+- [Toast](./docs/component/toast-specification.md)
 - [Toggle](./docs/component/toggle-specification.md)
 - Tooltip
 - Typography
