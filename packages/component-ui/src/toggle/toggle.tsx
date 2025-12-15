@@ -1,13 +1,21 @@
 import clsx from 'clsx';
 import type { ReactNode } from 'react';
 
+/** Toggle コンポーネントの公開 Props */
 type Props = {
+  /** `label` と関連付けるための input 要素の id/name */
   id: string;
+  /** トラックとインジケーターのサイズを決定する */
   size: 'small' | 'medium' | 'large';
+  /** 現在の ON/OFF 状態（制御コンポーネント） */
   isChecked: boolean;
+  /** ON/OFF の切り替え時に呼び出されるハンドラー */
   onChange: () => void;
+  /** トグル横に表示するラベル。文字列以外の ReactNode も可 */
   label?: ReactNode;
+  /** ラベル配置を右または左から選択する */
   labelPosition?: 'left' | 'right';
+  /** 無効状態の制御。true の場合は操作不可となる */
   isDisabled?: boolean;
 };
 

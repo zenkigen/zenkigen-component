@@ -156,7 +156,7 @@ yarn list --pattern "@zenkigen-inc/component-*"
 - [Password Input](./docs/component/password-input-specification.md)
 - [Popover](./docs/component/popover-specification.md)
 - [Toast](./docs/component/toast-specification.md)
-- Toggle
+- [Toggle](./docs/component/toggle-specification.md)
 - Tooltip
 - Typography
 
