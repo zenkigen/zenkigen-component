@@ -139,7 +139,7 @@ yarn list --pattern "@zenkigen-inc/component-*"
 - [Modal](./docs/component/modal-specification.md)
 - [Notification Inline](./docs/component/notification-inline-specification.md)
 - Pagination
-- Pagination Select
+- [Pagination Select](./docs/component/pagination-select-specification.md)
 - [Popover](./docs/component/popover-specification.md)
 - [Popup](./docs/component/popup-specification.md)
 - Radio
