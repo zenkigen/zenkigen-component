@@ -7,14 +7,23 @@ import { CheckedIcon } from './checked-icon';
 import { MinusIcon } from './minus-icon';
 
 type Props = {
+  /** フォーム送信用の name 属性 */
   name?: string;
+  /** フォーム送信用の値 */
   value?: string;
+  /** 入力要素の ID。label と関連付ける場合に指定する */
   id?: string;
+  /** チェック状態（制御用） */
   isChecked?: boolean;
+  /** 色バリエーション。default: インタラクティブ色 / gray: グレー系 / error: エラー色 */
   color?: 'default' | 'gray' | 'error';
+  /** インデターミネイト表示を行うか（表示時は isChecked も true を推奨） */
   isIndeterminate?: boolean;
+  /** 無効状態にするか */
   isDisabled?: boolean;
+  /** 右側に表示するラベルテキスト */
   label?: string;
+  /** 状態変化時のハンドラー。isDisabled=true の場合は呼ばれない */
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
@@ -55,7 +64,7 @@ export function Checkbox({
     {
       'border-disabled01': isDisabled,
       'border-hoverUiBorder': !isDisabled && isMouseOver && color === 'default',
-      'border-uiBorder03': !isDisabled && !isMouseOver && color === 'default',
+      'border-uiBorder04': !isDisabled && !isMouseOver && color === 'default',
       'border-interactive02': !isDisabled && !isMouseOver && color === 'gray',
       'border-hoverError': !isDisabled && isMouseOver && color === 'error',
       'border-supportError': !isDisabled && !isMouseOver && color === 'error',
