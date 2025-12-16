@@ -52,15 +52,13 @@ export function PaginationSelect({
   return (
     <nav aria-label="pagination" className="flex items-center gap-x-1">
       <div className="flex items-center gap-x-2">
-        <div className="flex gap-1">
-          <div className="typography-label14regular text-text01">
+        <div className="typography-label14regular flex gap-1 text-text01">
+          <span className=" ">
             {minCount > 0 && `${minCount} - `}
             {maxCount}
-          </div>
-          <div className="typography-label14regular flex gap-1 text-text01">
-            <span>/ {totalSize}</span>
-            <span>{countLabel}</span>
-          </div>
+          </span>
+          <span>/ {totalSize}</span>
+          <span>{countLabel}</span>
         </div>
         <Select
           size="medium"
