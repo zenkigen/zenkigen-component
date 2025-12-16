@@ -24,6 +24,7 @@ function TextAreaInner(
     disabled = false,
     height,
     children,
+    className,
     ...props
   }: TextAreaProps,
   ref: ForwardedRef<HTMLTextAreaElement>,
@@ -95,14 +96,18 @@ function TextAreaInner(
     ...ariaInvalidProps,
   };
 
-  const textAreaWrapperClassName = clsx('box-border flex w-full overflow-hidden rounded border', {
-    'border-supportError': isError && !disabled,
-    'border-uiBorder02': !isError && !disabled,
-    'hover:border-hoverInput': !disabled && !isError,
-    'hover:focus-within:border-activeInput': !isError,
-    'focus-within:border-activeInput': !isError,
-    'bg-disabled02 border-disabled01': disabled,
-  });
+  const textAreaWrapperClassName = clsx(
+    'box-border flex w-full overflow-hidden rounded border',
+    {
+      'border-supportError': isError && !disabled,
+      'border-uiBorder02': !isError && !disabled,
+      'hover:border-hoverInput': !disabled && !isError,
+      'hover:focus-within:border-activeInput': !isError,
+      'focus-within:border-activeInput': !isError,
+      'bg-disabled02 border-disabled01': disabled,
+    },
+    className,
+  );
 
   const textAreaClassName = clsx(
     'w-full border-none bg-transparent outline-0 placeholder:text-textPlaceholder disabled:text-textPlaceholder',
