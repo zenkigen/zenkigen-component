@@ -146,7 +146,7 @@ yarn list --pattern "@zenkigen-inc/component-*"
 - [Search](./docs/component/search-specification.md)
 - [Segmented Control](./docs/component/segmented-control-specification.md)
 - [Select](./docs/component/select-specification.md)
-- Select Sort
+- [Select Sort](./docs/component/select-sort-specification.md)
 - [Sort Button](./docs/component/sort-button-specification.md)
 - [Tab](./docs/component/tab-specification.md)
 - Table
