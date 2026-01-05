@@ -5,14 +5,17 @@ import * as TypographyStories from './typography.stories';
 
 # Typography
 
-Typography（タイポグラフィ）は、文字のスタイル、サイズ、間隔、階層を定義し、ユーザーにとって読みやすく、一貫性のあるビジュアル体験を提供する ための重要な要素です。デザインシステムにおいて、Typography は単なるフォントの指定にとどまらず、可読性・視認性・アクセシビリティを高め、ブランドのアイデンティティを表現する 役割を担います。
-
-Heading, Body, Label の各コンポーネントを使用して、テキストコンテンツの階層構造を明確にし、ユーザーが情報を迅速に理解できるようにします。
-
 ## Heading
 
-- <a href="/?path=/docs/components-heading--docs">Heading コンポーネント</a>
-  を使用して、セクションやページのタイトルを明確に示します。
+- className に `typography-h****` を指定して使用します。
+
+```html
+<div className="typography-h1">見出しタイトル</div>
+```
+
+#### **種類**
+
+<Canvas of={TypographyStories.Heading} />
 
 ## Body
 
