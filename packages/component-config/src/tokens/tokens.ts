@@ -121,7 +121,7 @@ export const tokens = {
     "support": {
       "supportError": "#c6244d",
       "supportErrorLight": "#f4bfcd",
-      "supportSuccess": "#2dc87d",
+      "supportSuccess": "#29b471",
       "supportSuccessLight": "#ccf4e1",
       "supportInfo": "#0077d9",
       "supportInfoLight": "#b9d8f7",

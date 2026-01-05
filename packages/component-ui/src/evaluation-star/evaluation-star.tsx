@@ -4,9 +4,13 @@ import clsx from 'clsx';
 import { useCallback, useState } from 'react';
 
 type Props = {
+  /** 表示・初期化に使用する評価値（0〜5の整数を推奨） */
   value: number;
+  /** 星をクリックして評価を変更できるかを制御する */
   isEditable?: boolean;
+  /** 評価が変更された際に新しい値を通知するコールバック */
   onChangeRating?: (newRating: number) => void | null;
+  /** 星アイコンのサイズ（medium: 16px, large: 24px） */
   size?: 'medium' | 'large';
 };
 

@@ -3,23 +3,23 @@ import type { SelectOption } from '../select';
 import { Select } from '../select';
 
 type Props = {
-  /** トータル件数 */
+  /** データの総件数。Selectのオプション数と件数表示の上下限計算に用いる。 */
   totalSize: number;
-  /** ページあたり件数 */
+  /** 1ページに表示する件数。pageMax = Math.ceil(totalSize / sizePerPage) の計算に利用する。 */
   sizePerPage: number;
-  /** 現在のページ番号 */
+  /** 現在のページ番号（1起算）。Selectの選択状態と前後ボタンの活性状態を決定する。 */
   currentPage: number;
-  /** 件数表示単位ラベル */
+  /** 件数範囲表示の末尾に付与する単位ラベル（例: 件 / results）。 */
   countLabel?: string;
-  /** ページ表示単位ラベル */
+  /** 「/ pageMax」表示に付与する単位ラベル（例: ページ）。 */
   pageLabel?: string;
-  /** Selectのリストの最大の高さ */
+  /** Selectのドロップダウンリストに設定する最大高さ(px)。 */
   optionListMaxHeight?: number;
-  /** 戻るボタンクリック時のイベントハンドラ */
+  /** 戻るボタンクリック時のイベントハンドラ。呼び出し側でcurrentPageを減算する。 */
   onClickPrevButton: () => void;
-  /** 進むボタンクリック時のイベントハンドラ */
+  /** 進むボタンクリック時のイベントハンドラ。呼び出し側でcurrentPageを加算する。 */
   onClickNextButton: () => void;
-  /** Selectが切り替わった時のイベントハンドラ */
+  /** Selectが別のページに切り替わった時のイベントハンドラ。引数は選択されたページ番号。 */
   onChange: (value: number) => void;
 };
 
@@ -52,10 +52,13 @@ export function PaginationSelect({
   return (
     <nav aria-label="pagination" className="flex items-center gap-x-1">
       <div className="flex items-center gap-x-2">
-        <div className="typography-label14regular text-text01">
-          {minCount > 0 && `${minCount} - `}
-          {maxCount}
-          {countLabel}
+        <div className="typography-label14regular flex gap-1 text-text01">
+          <span className=" ">
+            {minCount > 0 && `${minCount} - `}
+            {maxCount}
+          </span>
+          <span>/ {totalSize}</span>
+          <span>{countLabel}</span>
         </div>
         <Select
           size="medium"
