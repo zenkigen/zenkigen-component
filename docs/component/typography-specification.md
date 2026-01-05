@@ -44,9 +44,7 @@ module.exports = {
 export const Example = () => (
   <div className="space-y-2">
     <h1 className="typography-h1">見出しタイトル</h1>
-    <p className="typography-body14regular">
-      あのイーハトーヴォのすきとおった風、夏でも底に冷たさをもつ青いそら。
-    </p>
+    <p className="typography-body14regular">あのイーハトーヴォのすきとおった風、夏でも底に冷たさをもつ青いそら。</p>
     <span className="typography-label12regular">ラベル</span>
   </div>
 );
@@ -56,39 +54,39 @@ export const Example = () => (
 
 #### Heading
 
-| クラス | font-size | line-height | font-weight | 用途 |
-| --- | --- | --- | --- | --- |
-| `typography-h1` | `32px` | `125%` | `bold` | 画面タイトルなど最上位の見出し |
-| `typography-h2` | `24px` | `133%` | `bold` | セクション見出し |
-| `typography-h3` | `20px` | `160%` | `bold` | 小見出し |
-| `typography-h4` | `16px` | `150%` | `bold` | サブセクション見出し |
-| `typography-h5` | `14px` | `171%` | `bold` | カード内タイトルなど |
+| クラス          | font-size | line-height | font-weight | 用途                           |
+| --------------- | --------- | ----------- | ----------- | ------------------------------ |
+| `typography-h1` | `32px`    | `125%`      | `bold`      | 画面タイトルなど最上位の見出し |
+| `typography-h2` | `24px`    | `133%`      | `bold`      | セクション見出し               |
+| `typography-h3` | `20px`    | `160%`      | `bold`      | 小見出し                       |
+| `typography-h4` | `16px`    | `150%`      | `bold`      | サブセクション見出し           |
+| `typography-h5` | `14px`    | `171%`      | `bold`      | カード内タイトルなど           |
 
 #### Body
 
-| クラス | font-size | line-height | font-weight | 用途 |
-| --- | --- | --- | --- | --- |
-| `typography-body16regular` | `16px` | `180%` | `normal` | 長文の本文 |
-| `typography-body16bold` | `16px` | `180%` | `bold` | 本文の強調 |
-| `typography-body14regular` | `14px` | `171%` | `normal` | 標準本文 |
-| `typography-body14bold` | `14px` | `171%` | `bold` | 標準本文の強調 |
-| `typography-body13regular` | `13px` | `153%` | `normal` | 補足テキスト |
-| `typography-body13bold` | `13px` | `153%` | `bold` | 補足テキストの強調 |
-| `typography-body12regular` | `12px` | `133%` | `normal` | 注釈など小さめの本文 |
-| `typography-body12bold` | `12px` | `133%` | `bold` | 注釈の強調 |
+| クラス                     | font-size | line-height | font-weight | 用途                 |
+| -------------------------- | --------- | ----------- | ----------- | -------------------- |
+| `typography-body16regular` | `16px`    | `180%`      | `normal`    | 長文の本文           |
+| `typography-body16bold`    | `16px`    | `180%`      | `bold`      | 本文の強調           |
+| `typography-body14regular` | `14px`    | `171%`      | `normal`    | 標準本文             |
+| `typography-body14bold`    | `14px`    | `171%`      | `bold`      | 標準本文の強調       |
+| `typography-body13regular` | `13px`    | `153%`      | `normal`    | 補足テキスト         |
+| `typography-body13bold`    | `13px`    | `153%`      | `bold`      | 補足テキストの強調   |
+| `typography-body12regular` | `12px`    | `133%`      | `normal`    | 注釈など小さめの本文 |
+| `typography-body12bold`    | `12px`    | `133%`      | `bold`      | 注釈の強調           |
 
 #### Label
 
-| クラス | font-size | line-height | font-weight | 用途 |
-| --- | --- | --- | --- | --- |
-| `typography-label16regular` | `16px` | `100%` | `normal` | 強調ラベル |
-| `typography-label16bold` | `16px` | `100%` | `bold` | 強調ラベルの強調 |
-| `typography-label14regular` | `14px` | `100%` | `normal` | 標準ラベル |
-| `typography-label14bold` | `14px` | `100%` | `bold` | 標準ラベルの強調 |
-| `typography-label12regular` | `12px` | `100%` | `normal` | 補足ラベル |
-| `typography-label12bold` | `12px` | `100%` | `bold` | 補足ラベルの強調 |
-| `typography-label11regular` | `11px` | `100%` | `normal` | 最小ラベル |
-| `typography-label11bold` | `11px` | `100%` | `bold` | 最小ラベルの強調 |
+| クラス                      | font-size | line-height | font-weight | 用途             |
+| --------------------------- | --------- | ----------- | ----------- | ---------------- |
+| `typography-label16regular` | `16px`    | `100%`      | `normal`    | 強調ラベル       |
+| `typography-label16bold`    | `16px`    | `100%`      | `bold`      | 強調ラベルの強調 |
+| `typography-label14regular` | `14px`    | `100%`      | `normal`    | 標準ラベル       |
+| `typography-label14bold`    | `14px`    | `100%`      | `bold`      | 標準ラベルの強調 |
+| `typography-label12regular` | `12px`    | `100%`      | `normal`    | 補足ラベル       |
+| `typography-label12bold`    | `12px`    | `100%`      | `bold`      | 補足ラベルの強調 |
+| `typography-label11regular` | `11px`    | `100%`      | `normal`    | 最小ラベル       |
+| `typography-label11bold`    | `11px`    | `100%`      | `bold`      | 最小ラベルの強調 |
 
 ### その他の仕様
 
@@ -103,9 +101,7 @@ export const Example = () => (
 export const BasicTypography = () => (
   <div className="space-y-3">
     <h2 className="typography-h2">セクションタイトル</h2>
-    <p className="typography-body14regular">
-      Typography クラスは Tailwind のユーティリティとして利用できる。
-    </p>
+    <p className="typography-body14regular">Typography クラスは Tailwind のユーティリティとして利用できる。</p>
     <span className="typography-label12regular text-text02">補足情報</span>
   </div>
 );
@@ -159,6 +155,6 @@ Typography の変更は `@zenkigen-inc/component-theme` と `@zenkigen-inc/compo
 
 ## 更新履歴
 
-| 日付 | 内容 | 担当者 |
-| --- | --- | --- |
-| 2026-01-06 08:26 JST | 新規作成 | - |
+| 日付                 | 内容     | 担当者 |
+| -------------------- | -------- | ------ |
+| 2026-01-06 08:26 JST | 新規作成 | -      |
