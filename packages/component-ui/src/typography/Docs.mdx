@@ -1,23 +1,39 @@
 import { Canvas, Meta, ArgTypes, Story, Controls, Source, TableOfContents } from '@storybook/addon-docs/blocks';
+import { Markdown } from '@storybook/addon-docs/blocks';
 import * as TypographyStories from './typography.stories';
+import spec from '../../../../docs/component/typography-specification.md?raw';
 
 <Meta title="Typography" of={TypographyStories} />
 
 # Typography
 
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
+
+Typography（タイポグラフィ）は、文字のスタイル、サイズ、間隔、階層を定義し、ユーザーにとって読みやすく、一貫性のあるビジュアル体験を提供する ための重要な要素です。デザインシステムにおいて、Typography は単なるフォントの指定にとどまらず、可読性・視認性・アクセシビリティを高め、ブランドのアイデンティティを表現する 役割を担います。
+
 ## Heading
 
-- className に `typography-h****` を指定して使用します。
+<Canvas of={TypographyStories.Heading} />
+
+#### **使い方**
+
+- className に `typography-h*` を指定して使用します。
 
 ```html
 <div className="typography-h1">見出しタイトル</div>
 ```
 
-#### **種類**
-
-<Canvas of={TypographyStories.Heading} />
-
 ## Body
+
+<Canvas of={TypographyStories.Body} />
+
+#### **使い方**
 
 - className に `typography-body****` を指定して使用します。
 
@@ -25,17 +41,14 @@ import * as TypographyStories from './typography.stories';
 <div className="typography-body12regular">あのイーハトーヴォのすきとおった風、夏でも底に冷たさをもつ青いそら、...</div>
 ```
 
-#### **種類**
-
-<Canvas of={TypographyStories.Body} />
 ## Label
+
+<Canvas of={TypographyStories.Label} />
+
+#### **使い方**
 
 - className に `typography-label****` を指定して使用します。
 
 ```html
 <div className="typography-label11regular">ユーザー名</div>
 ```
-
-#### **種類**
-
-<Canvas of={TypographyStories.Label} />
