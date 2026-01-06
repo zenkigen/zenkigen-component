@@ -1,7 +1,7 @@
 import { Meta } from '@storybook/addon-docs/blocks';
 import { tokensWithMeta } from '@zenkigen-inc/component-config';
 import { useState } from 'react';
-import { IconButton } from '@zenkigen-inc/component-ui';
+import { IconButton, Icon } from '@zenkigen-inc/component-ui';
 
 <style>
   {`
@@ -18,7 +18,7 @@ import { IconButton } from '@zenkigen-inc/component-ui';
 # Color Tokens
 
 Design Token（デザイントークン）は、デザインのスタイル（色、タイポグラフィ、スペーシング、シャドウなど）をコードとして定義し、再利用しやすくするための仕組みです。これにより、一貫性のあるUIデザインを提供できます。
-デザイントークンは Primitive Token（プリミティブトークン） と Semantic Token（セマンティックトークン） の 2 つの種類に分かれます。
+デザイントークンは [**Primitive Token（プリミティブトークン）**](#primitive-token) と [**Semantic Token（セマンティックトークン）**](#semantic-token) の 2 つの種類に分かれます。
 
 ### Code Example
 
@@ -36,9 +36,10 @@ Design Token（デザイントークン）は、デザインのスタイル（�
 
 <div style={{ width: '100%', maxWidth: 'none' }}>
 
-export function ColorItem({ colorKey, value, description }) {
-  const [copiedName, setCopiedName] = useState(false);
-  const [copiedValue, setCopiedValue] = useState(false);
+export function ColorItem({ colorKey, value, description, rawValue }) {
+
+const [copiedName, setCopiedName] = useState(false);
+const [copiedValue, setCopiedValue] = useState(false);
 
 const handleCopyName = async () => {
 try {
@@ -63,7 +64,14 @@ console.error('Failed to copy: ', err);
 return (
 
 <div className="flex flex-col items-left gap-2 flex-shrink-0">
-  <div className="w-full" style={{ backgroundColor: value, height: 170 }} />
+  <div className="flex w-full p-1 justify-end items-end" style={{ backgroundColor: value, height: 170 }}>
+    {rawValue ? (
+      <div className="flex bg-white rounded-sm px-1 py-0.5">
+        <Icon name="link" size="small" color="icon01" />
+        <span style={{ fontSize: '12px', fontWeight: 'bold' }}>{rawValue.replace('$Colors.', '')}</span>
+      </div>
+    ) : null}
+  </div>
   <div className="flex flex-col gap-1 text-left pr-1" style={{ minWidth: 170 }}>
     <div className="flex items-center">
       <div className="typography-label11bold">{colorKey}</div>
@@ -97,6 +105,11 @@ return (
 ## Primitive Token
 
 Primitive Token は、デザインの基礎となる原子的な値 を定義します。これは特定の用途を持たない、純粋なスタイル値を表します。
+
+- 生の値（数値やカラーコードなど） を定義する
+- 直接 UI に適用せず、Semantic Token によって参照される
+- デザイントークンの管理をしやすくする
+- グローバルに再利用可能
 
 ### Primitive/Colors
 
@@ -189,12 +202,17 @@ Primitive Token は、デザインの基礎となる原子的な値 を定義し
 
 Semantic Token は、コンポーネントや UI の意味に応じたデザインスタイル を定義します。これは、Primitive Token を組み合わせて使います。
 
+- 意味（セマンティクス）に基づいて命名される
+- コンポーネントや UI の文脈に応じたスタイルを表現する
+- デザイン変更時に一括で更新しやすい
+- ブランディングやテーマ適用を柔軟に管理できる
+
 ### Semantic/Text
 
 <div style={{ overflowX: 'auto', width: '100%', minHeight: 300 }}>
   <div className="flex gap-1">
     {Object.entries(tokensWithMeta.tokens.text).map(([key, meta]) => (
-      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} />
+      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} rawValue={meta.rawValue} />
     ))}
   </div>
 </div>
@@ -204,7 +222,7 @@ Semantic Token は、コンポーネントや UI の意味に応じたデザイ�
 <div style={{ overflowX: 'auto', width: '100%', minHeight: 300 }}>
   <div className="flex gap-1">
     {Object.entries(tokensWithMeta.tokens.link).map(([key, meta]) => (
-      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} />
+      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} rawValue={meta.rawValue} />
     ))}
   </div>
 </div>
@@ -214,7 +232,7 @@ Semantic Token は、コンポーネントや UI の意味に応じたデザイ�
 <div style={{ overflowX: 'auto', width: '100%', minHeight: 300 }}>
   <div className="flex gap-1">
     {Object.entries(tokensWithMeta.tokens.border).map(([key, meta]) => (
-      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} />
+      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} rawValue={meta.rawValue} />
     ))}
   </div>
 </div>
@@ -224,7 +242,7 @@ Semantic Token は、コンポーネントや UI の意味に応じたデザイ�
 <div style={{ overflowX: 'auto', width: '100%', minHeight: 300 }}>
   <div className="flex gap-1">
     {Object.entries(tokensWithMeta.tokens.background).map(([key, meta]) => (
-      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} />
+      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} rawValue={meta.rawValue} />
     ))}
   </div>
 </div>
@@ -234,7 +252,7 @@ Semantic Token は、コンポーネントや UI の意味に応じたデザイ�
 <div style={{ overflowX: 'auto', width: '100%', minHeight: 300 }}>
   <div className="flex gap-1">
     {Object.entries(tokensWithMeta.tokens.icon).map(([key, meta]) => (
-      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} />
+      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} rawValue={meta.rawValue} />
     ))}
   </div>
 </div>
@@ -244,7 +262,7 @@ Semantic Token は、コンポーネントや UI の意味に応じたデザイ�
 <div style={{ overflowX: 'auto', width: '100%', minHeight: 300 }}>
   <div className="flex gap-1">
     {Object.entries(tokensWithMeta.tokens.interactive).map(([key, meta]) => (
-      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} />
+      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} rawValue={meta.rawValue} />
     ))}
   </div>
 </div>
@@ -254,7 +272,7 @@ Semantic Token は、コンポーネントや UI の意味に応じたデザイ�
 <div style={{ overflowX: 'auto', width: '100%', minHeight: 300 }}>
   <div className="flex gap-1">
     {Object.entries(tokensWithMeta.tokens.field).map(([key, meta]) => (
-      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} />
+      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} rawValue={meta.rawValue} />
     ))}
   </div>
 </div>
@@ -264,7 +282,7 @@ Semantic Token は、コンポーネントや UI の意味に応じたデザイ�
 <div style={{ overflowX: 'auto', width: '100%', minHeight: 300 }}>
   <div className="flex gap-1">
     {Object.entries(tokensWithMeta.tokens.focus).map(([key, meta]) => (
-      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} />
+      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} rawValue={meta.rawValue} />
     ))}
   </div>
 </div>
@@ -274,7 +292,7 @@ Semantic Token は、コンポーネントや UI の意味に応じたデザイ�
 <div style={{ overflowX: 'auto', width: '100%', minHeight: 300 }}>
   <div className="flex gap-1">
     {Object.entries(tokensWithMeta.tokens.hover).map(([key, meta]) => (
-      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} />
+      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} rawValue={meta.rawValue} />
     ))}
   </div>
 </div>
@@ -284,7 +302,7 @@ Semantic Token は、コンポーネントや UI の意味に応じたデザイ�
 <div style={{ overflowX: 'auto', width: '100%', minHeight: 300 }}>
   <div className="flex gap-1">
     {Object.entries(tokensWithMeta.tokens.active).map(([key, meta]) => (
-      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} />
+      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} rawValue={meta.rawValue} />
     ))}
   </div>
 </div>
@@ -294,7 +312,7 @@ Semantic Token は、コンポーネントや UI の意味に応じたデザイ�
 <div style={{ overflowX: 'auto', width: '100%', minHeight: 300 }}>
   <div className="flex gap-1">
     {Object.entries(tokensWithMeta.tokens.selected).map(([key, meta]) => (
-      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} />
+      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} rawValue={meta.rawValue} />
     ))}
   </div>
 </div>
@@ -304,7 +322,7 @@ Semantic Token は、コンポーネントや UI の意味に応じたデザイ�
 <div style={{ overflowX: 'auto', width: '100%', minHeight: 300 }}>
   <div className="flex gap-1">
     {Object.entries(tokensWithMeta.tokens.support).map(([key, meta]) => (
-      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} />
+      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} rawValue={meta.rawValue} />
     ))}
   </div>
 </div>
@@ -324,7 +342,7 @@ Semantic Token は、コンポーネントや UI の意味に応じたデザイ�
 <div style={{ overflowX: 'auto', width: '100%', minHeight: 300 }}>
   <div className="flex gap-1">
     {Object.entries(tokensWithMeta.tokens.disabled).map(([key, meta]) => (
-      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} />
+      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} rawValue={meta.rawValue} />
     ))}
   </div>
 </div>
