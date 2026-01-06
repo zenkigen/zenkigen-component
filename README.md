@@ -158,6 +158,12 @@ yarn list --pattern "@zenkigen-inc/component-*"
 - [Toast](./docs/component/toast-specification.md)
 - [Toggle](./docs/component/toggle-specification.md)
 - [Tooltip](./docs/component/tooltip-specification.md)
+
+## ユーティリティ一覧・仕様書
+
+以下は利用可能なユーティリティの一覧です。リンクがある項目は詳細な仕様書が参照できます。
+
+- Color
 - [Typography](./docs/component/typography-specification.md)
 
 ## Storybook

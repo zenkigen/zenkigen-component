@@ -1,9 +1,9 @@
-# Typography コンポーネント仕様書
+# Typography 仕様書
 
 ## 目次
 
 1. [概要](#概要)
-2. [インポート](#インポート)
+2. [利用前提](#利用前提)
 3. [基本的な使用方法](#基本的な使用方法)
 4. [クラス仕様](#クラス仕様)
    - [Heading](#heading)
@@ -26,9 +26,9 @@
 Typography はコンポーネントではなく、文字スタイルを `.typography-*` ユーティリティとして提供する仕組みである。
 Heading / Body / Label を通じてサイズ・行高・太さを統一し、UI の可読性と一貫性を確保する。
 
-## インポート
+## 利用前提
 
-Typography は CSS ユーティリティのため import は不要である。
+Typography はコンポーネントではなく CSS ユーティリティであるため、import は不要である。
 `@zenkigen-inc/component-config` の Tailwind プリセットを読み込んだ環境で利用する。
 
 ```javascript
