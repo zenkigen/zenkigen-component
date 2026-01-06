@@ -238,6 +238,8 @@ export const tailwindConfig = {
     'bg-uiBackgroundError',
     'text-supportError',
     'fill-supportError',
+    'bg-hoverUiError',
+    'bg-activeUiError',
     // iconColors
     'fill-icon01',
     'fill-icon02',
