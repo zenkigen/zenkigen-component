@@ -6,6 +6,7 @@
 
 - [設計ガイドライン](./design-guidelines.md) - ライブラリの設計思想とアーキテクチャ方針
 - [コーディングガイドライン](./coding-guidelines.md) - 開発時のコーディング標準と規約
+- [利用者向けコーディングガイドライン](./user/coding-guidelines.md) - プロダクト側でライブラリを使う際のルール
 - [プロジェクト構造](./project-structure.md) - プロジェクト全体の構造とパッケージ間の関係性
 - [コンポーネント実装パターン](./component-patterns.md) - コンポーネントの設計パターンと実装方針
 - [テーマシステム](./theme-system.md) - テーマシステムとTailwind CSS設定
