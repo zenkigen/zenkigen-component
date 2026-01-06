@@ -571,118 +571,140 @@ export const tokensWithMeta = {
       "text01": {
         "value": "#1f2121",
         "description": "Primary text, Body copy, Headers",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray100"
       },
       "text02": {
         "value": "#5c6366",
         "description": "Secondary text, Input labels",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray80"
       },
       "text03": {
         "value": "#838789",
         "description": "Tertiary text",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray60"
       },
       "textPlaceholder": {
         "value": "#a4a5a6",
         "description": "Placeholder text",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray50"
       },
       "textOnColor": {
         "value": "#ffffff",
         "description": "Text on interactive colors",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.White"
       },
       "textBlack": {
         "value": "#000000",
         "description": "Title text",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Black"
       }
     },
     "link": {
       "link01": {
         "value": "#0077d9",
         "description": "Primary links",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Blue.Blue50"
       },
       "link02": {
         "value": "#a4a5a6",
         "description": "Secondary links",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray50"
       }
     },
     "border": {
       "uiBorder01": {
         "value": "#dedfe0",
         "description": "List border color, Container border",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray30"
       },
       "uiBorder02": {
         "value": "#cacccd",
         "description": "Button border, Input border",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray40"
       },
       "uiBorder03": {
         "value": "#a4a5a6",
         "description": "Checkbox border, Input border",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray50"
       },
       "uiBorder04": {
         "value": "#838789",
         "description": "Button border, Checkbox border, Input border",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray60"
       }
     },
     "background": {
       "uiBackground01": {
         "value": "#ffffff",
         "description": "Default page background",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.White"
       },
       "uiBackground02": {
         "value": "#f3f4f5",
         "description": "Side navigation background",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray10"
       },
       "uiBackground02Light": {
         "value": "#fafafa",
         "description": "Side navigation background in lighter hue",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray05"
       },
       "uiBackground02Blue": {
         "value": "#f1f7fd",
         "description": "Side navigation background, checked background - Blue",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Blue.Blue10"
       },
       "uiBackgroundBlue": {
         "value": "#f1f7fd",
         "description": "info message background",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Blue.Blue10"
       },
       "uiBackgroundGray": {
         "value": "#f3f4f5",
         "description": "message background",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray10"
       },
       "uiBackgroundSuccess": {
         "value": "#ecfbf4",
         "description": "Success message background",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Green.Green10"
       },
       "uiBackgroundError": {
         "value": "#fceff3",
         "description": "Error message background",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Red.Red10"
       },
       "uiBackgroundWarning": {
         "value": "#fffadc",
         "description": "Warning message background",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Yellow.Yellow10"
       },
       "uiBackgroundTooltip": {
         "value": "#1f2121",
         "description": "ToolTip background",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray100"
       },
       "backgroundOverlayGray": {
         "value": "#1f212180",
@@ -699,263 +721,312 @@ export const tokensWithMeta = {
       "icon01": {
         "value": "#5c6366",
         "description": "Primary icons",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray80"
       },
       "icon02": {
         "value": "#a4a5a6",
         "description": "Secondary icons",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray50"
       },
       "icon03": {
         "value": "#cacccd",
         "description": "Tertiary icons, icon button default state",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray40"
       },
       "iconOnColor": {
         "value": "#ffffff",
         "description": "Icons on interactive colors",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.White"
       }
     },
     "interactive": {
       "interactive01": {
         "value": "#0077d9",
         "description": "Primary Interactive color, Primary buttons",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Blue.Blue50"
       },
       "interactiveBg01": {
         "value": "#0077d9",
         "description": "Primary Interactive color on background, Primary fill buttons",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Blue.Blue50"
       },
       "interactive02": {
         "value": "#5c6366",
         "description": "Secondary Interactive color, Secondary buttons",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray80"
       },
       "interactive03": {
         "value": "#0077d9",
         "description": "Tertiary button, Selected elements, Active elements, Accent icon",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Blue.Blue50"
       },
       "interactive04": {
         "value": "#cacccd",
         "description": "Quaternary Interactive color, Quaternary buttons",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray40"
       }
     },
     "field": {
       "fieldInput": {
         "value": "#ffffff",
         "description": "Default input fields",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.White"
       },
       "fieldSearch": {
         "value": "#ffffff",
         "description": "Search input fields",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.White"
       }
     },
     "focus": {
       "focus": {
         "value": "#0077d9",
         "description": "Focus border, Focus underline",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Blue.Blue50"
       }
     },
     "hover": {
       "hover01": {
         "value": "#1366b9",
         "description": "$interactive-01 hover",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Blue.Blue70"
       },
       "hover02": {
         "value": "#e9eaeb",
         "description": "$interactive-02 hover",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray20"
       },
       "hover02Background": {
         "value": "#e9eaeb",
         "description": "$interactive-02 hover on background",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray20"
       },
       "hoverUi": {
         "value": "#e9eaeb",
         "description": "hover ui background",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray20"
       },
       "hoverUi02": {
         "value": "#f3f4f5",
         "description": "hover ui background with lighter color",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray10"
       },
       "hoverUiBorder": {
         "value": "#6f7476",
         "description": "hover ui border",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray70"
       },
       "hoverSelectedUi": {
         "value": "#cacccd",
         "description": "Checkbox border color",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray40"
       },
       "hoverDanger": {
         "value": "#b22045",
         "description": "Danger hover",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Red.Red70"
       },
       "hoverError": {
         "value": "#b22045",
         "description": "Error hover",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Red.Red70"
       },
       "hoverInput": {
         "value": "#6f7476",
         "description": "hover input",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray70"
       },
       "hoverLink01": {
         "value": "#1366b9",
         "description": "hover primary link",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Blue.Blue70"
       },
       "hoverLink02": {
         "value": "#6f7476",
         "description": "hover secondary link",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray70"
       },
       "hoverGray": {
         "value": "#454a4d",
         "description": "Hover Checkbox, Toggle",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray90"
       },
       "hoverUiError": {
         "value": "#fceff3",
         "description": "Hover error ui background",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Red.Red10"
       }
     },
     "active": {
       "active01": {
         "value": "#0e4b87",
         "description": "$interactive-01 active",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Blue.Blue100"
       },
       "active02": {
         "value": "#cacccd",
         "description": "$interactive-02 active",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray40"
       },
       "active02Background": {
         "value": "#dedfe0",
         "description": "$interactive-02 active on background",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray30"
       },
       "activeUi": {
         "value": "#d9eafb",
         "description": "Active List background color",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Blue.Blue20"
       },
       "activeSelectedUi": {
         "value": "#0077d9",
         "description": "Checkbox background color, Select border color",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Blue.Blue50"
       },
       "activeDanger": {
         "value": "#821732",
         "description": "Danger active",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Red.Red100"
       },
       "activeInput": {
         "value": "#1366b9",
         "description": "Active input",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Blue.Blue70"
       },
       "activeLink01": {
         "value": "#0e4b87",
         "description": "active primary link",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Blue.Blue100"
       },
       "activeLink02": {
         "value": "#1f2121",
         "description": "active secondary link",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray100"
       },
       "activeUiError": {
         "value": "#f9e0e6",
         "description": "Active error ui background",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Red.Red20"
       }
     },
     "selected": {
       "selectedUi": {
         "value": "#f1f7fd",
         "description": "Selected List Navigation",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Blue.Blue10"
       },
       "selectedUiGray": {
         "value": "#dedfe0",
         "description": "Selected List Navigation Gray",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray30"
       },
       "selectedUiOnColor": {
         "value": "#ffffff",
         "description": "Selected List Navigation on Color",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.White"
       },
       "selectedUiBorder": {
         "value": "#0077d9",
         "description": "Selected Button Border",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Blue.Blue50"
       },
       "selectedUiDark": {
         "value": "#1366b9",
         "description": "Selected List Navigation on Dark Color",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Blue.Blue70"
       }
     },
     "disabled": {
       "disabled01": {
         "value": "#dedfe0",
         "description": "Disabled text, Disabled border",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray30"
       },
       "disabled02": {
         "value": "#f3f4f5",
         "description": "Text on disabled button",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray10"
       },
       "disabled03": {
         "value": "#454a4d",
         "description": "Inverse Disabled fields",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray90"
       },
       "disabled04": {
         "value": "#0e4b87",
         "description": "Inverse Disabled primary button",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Blue.Blue100"
       },
       "disabledLink01": {
         "value": "#dedfe0",
         "description": "Disabled primary links",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray30"
       },
       "disabledLink02": {
         "value": "#dedfe0",
         "description": "Disabled secondary links",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Gray.Gray30"
       },
       "disabledOn": {
         "value": "#d9eafb",
         "description": "Disabled on state",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Blue.Blue20"
       }
     },
     "support": {
       "supportError": {
         "value": "#c6244d",
         "description": "Error text, Icon with error, error element border",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Red.Red60"
       },
       "supportErrorLight": {
         "value": "#f4bfcd",
@@ -965,7 +1036,8 @@ export const tokensWithMeta = {
       "supportSuccess": {
         "value": "#2dc87d",
         "description": "Success text, button background, button border",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Green.Green50"
       },
       "supportSuccessLight": {
         "value": "#ccf4e1",
@@ -975,7 +1047,8 @@ export const tokensWithMeta = {
       "supportInfo": {
         "value": "#0077d9",
         "description": "Information text, button background, button border",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Blue.Blue50"
       },
       "supportInfoLight": {
         "value": "#b9d8f7",
@@ -985,7 +1058,8 @@ export const tokensWithMeta = {
       "supportWarning": {
         "value": "#fcd200",
         "description": "Warning text, Icon with error, error element border",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Yellow.Yellow60"
       },
       "supportWarningLight": {
         "value": "#fff4ba",
@@ -995,7 +1069,8 @@ export const tokensWithMeta = {
       "supportDanger": {
         "value": "#c6244d",
         "description": "Danger text, button background, button border",
-        "type": "color"
+        "type": "color",
+        "rawValue": "$Colors.Red.Red60"
       },
       "supportDangerLight": {
         "value": "#f4bfcd",

@@ -27,7 +27,7 @@
       };
 
       dictionary.allTokens.forEach((token) => {
-        const { path, value, description, type: tokenType } = token;
+        const { path, value, description, type: tokenType, rawValue } = token;
 
         setPath(valueTree, path, value);
 
@@ -37,6 +37,9 @@
         }
         if (typeof tokenType !== 'undefined') {
           meta.type = tokenType;
+        }
+        if (tokenType === 'color' && typeof rawValue === 'string' && rawValue.startsWith('$Colors.')) {
+          meta.rawValue = rawValue;
         }
 
         setPath(metaTree, path, meta);
