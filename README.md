@@ -126,23 +126,23 @@ yarn list --pattern "@zenkigen-inc/component-*"
 以下は利用可能なコンポーネントの一覧です。リンクがあるコンポーネントは詳細な仕様書が参照できます。
 
 - [Avatar](./docs/component/avatar-specification.md)
-- Breadcrumb
+- [Breadcrumb](./docs/component/breadcrumb-specification.md)
 - [Button](./docs/component/button-specification.md)
-- Checkbox
+- [Checkbox](./docs/component/checkbox-specification.md)
 - [Dropdown](./docs/component/dropdown-specification.md)
 - [Evaluation Star](./docs/component/evaluation-star-specification.md)
 - [File Input](./docs/component/file-input-specification.md)
-- Heading
+- [Heading](./docs/component/heading-specification.md)
 - [Icon](./docs/component/icon-specification.md)
 - [Icon Button](./docs/component/icon-button-specification.md)
 - [Loading](./docs/component/loading-specification.md)
 - [Modal](./docs/component/modal-specification.md)
 - [Notification Inline](./docs/component/notification-inline-specification.md)
-- Pagination
+- [Pagination](./docs/component/pagination-specification.md)
 - [Pagination Select](./docs/component/pagination-select-specification.md)
 - [Popover](./docs/component/popover-specification.md)
 - [Popup](./docs/component/popup-specification.md)
-- Radio
+- [Radio](./docs/component/radio-specification.md)
 - [Search](./docs/component/search-specification.md)
 - [Segmented Control](./docs/component/segmented-control-specification.md)
 - [Select](./docs/component/select-specification.md)
@@ -158,7 +158,13 @@ yarn list --pattern "@zenkigen-inc/component-*"
 - [Toast](./docs/component/toast-specification.md)
 - [Toggle](./docs/component/toggle-specification.md)
 - [Tooltip](./docs/component/tooltip-specification.md)
-- Typography
+
+## ユーティリティ一覧・仕様書
+
+以下は利用可能なユーティリティの一覧です。リンクがある項目は詳細な仕様書が参照できます。
+
+- Color
+- [Typography](./docs/component/typography-specification.md)
 
 ## Storybook
 
