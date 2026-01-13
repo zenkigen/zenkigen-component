@@ -78,7 +78,8 @@ DatePicker は単一日付をボタン + カレンダーで選択するUIであ�
 
 ### 日付の扱い・タイムゾーン
 
-- 表示/選択は `timeZone` の指定に従う（デフォルト: `Asia/Tokyo`）
+- 表示/選択は `timeZone` の指定に従う（デフォルト: `UTC`）
+- JSTで表示したい場合は `timeZone="Asia/Tokyo"` を指定する
 
 ### フォーム連携 / データの扱い
 
@@ -111,7 +112,7 @@ DatePicker は単一日付をボタン + カレンダーで選択するUIであ�
 | `max`         | `Date`                           | `undefined`  | 最大日付                                                 |
 | `placeholder` | `string`                         | `日付を選択` | 未選択時の表示                                           |
 | `size`        | `'small' \| 'medium' \| 'large'` | `'medium'`   | トリガーボタンのサイズ（Button と同じ）                  |
-| `timeZone`    | `string`                         | `Asia/Tokyo` | 表示/選択の基準タイムゾーン（`react-day-picker` に渡す） |
+| `timeZone`    | `string`                         | `UTC`        | 表示/選択の基準タイムゾーン（`react-day-picker` に渡す） |
 
 ### コンポジション（子コンポーネント）
 
@@ -137,48 +138,79 @@ TextInput と同様にエラーメッセージコンポーネントを子要素�
 
 ## 使用例
 
-### 期間選択例（JSTで表示し、UTCのISO文字列で送信）
+### 単一日付を保存する最小例
 
-> DatePicker は `Date` を返すのみで、フォーム送信は行わない。
-> 表示は JST、送信は UTC の ISO 文字列に変換する例。
+- サーバーには `YYYY-MM-DD` 形式（例: `2026-01-01`）で保存し、更新時も同形式で送信する例。
 
 ```tsx
 import { useState } from 'react';
 import { DatePicker } from '@zenkigen-inc/component-ui';
 
-const toJstDateString = (value: Date | null, timeZone = 'Asia/Tokyo') => {
+const toDateString = (value: Date | null, timeZone = 'UTC') => {
   if (!value) return '';
-  const formatter = new Intl.DateTimeFormat('en-CA', {
+  return new Intl.DateTimeFormat('en-CA', {
     timeZone,
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
-  });
-  // 例: "2026-01-01"
-  return formatter.format(value);
+  }).format(value);
 };
 
-const toUtcDateTimeString = (jstDateString: string, time: '00:00:00' | '23:59:59') => {
-  if (!jstDateString) return '';
-  // JSTの時刻をUTCに変換する
+const MyForm = () => {
+  // DBにはUTCの日付文字列（YYYY-MM-DD）で保存されている想定
+  const savedDateString = '2026-01-01';
+  const [value, setValue] = useState<Date | null>(new Date(savedDateString));
+  // 送信用に日付文字列へ変換する（例: "2026-01-01"）
+  const submitValue = toDateString(value);
+
+  return (
+    <form>
+      <DatePicker value={value} onChange={setValue} />
+      {/* DatePicker はフォーム要素ではないため hidden で送信する */}
+      <input type="hidden" name="date" value={submitValue} />
+    </form>
+  );
+};
+```
+
+### 期間選択例（JSTで表示し、UTCのISO文字列で送信）
+
+- サーバーには UTC の ISO 文字列で保存し、更新時も同形式で送信する例。
+- 表示は JST に統一する。
+
+```tsx
+import { useState } from 'react';
+import { DatePicker } from '@zenkigen-inc/component-ui';
+
+const formatDateKey = (value: Date | null, timeZone = 'UTC') => {
+  if (!value) return '';
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(value);
+};
+
+const toUtcIso = (value: Date | null, time: '00:00:00' | '23:59:59', timeZone = 'UTC') => {
+  const dateKey = formatDateKey(value, timeZone);
+  if (!dateKey) return '';
   // 例: "2025-12-31T15:00:00.000Z"
-  return new Date(`${jstDateString}T${time}+09:00`).toISOString();
+  return new Date(`${dateKey}T${time}+09:00`).toISOString();
 };
 
 const MyForm = () => {
   const timeZone = 'Asia/Tokyo';
-  const savedStartUtc = '2025-12-31T15:00:00.000Z'; // JST: 2026-01-01 00:00:00
-  const savedEndUtc = '2026-01-07T14:59:59.000Z'; // JST: 2026-01-07 23:59:59
-  const initialStart = savedStartUtc ? new Date(savedStartUtc) : null;
-  const initialEnd = savedEndUtc ? new Date(savedEndUtc) : null;
+  const saved = {
+    startUtc: '2025-12-31T15:00:00.000Z', // JST: 2026-01-01 00:00:00
+    endUtc: '2026-01-07T14:59:59.000Z', // JST: 2026-01-07 23:59:59
+  };
 
-  const [startDate, setStartDate] = useState<Date | null>(initialStart);
-  const [endDate, setEndDate] = useState<Date | null>(initialEnd);
+  const [startDate, setStartDate] = useState<Date | null>(saved.startUtc ? new Date(saved.startUtc) : null);
+  const [endDate, setEndDate] = useState<Date | null>(saved.endUtc ? new Date(saved.endUtc) : null);
 
-  const startJst = toJstDateString(startDate, timeZone);
-  const endJst = toJstDateString(endDate, timeZone);
-  const submitStart = toUtcDateTimeString(startJst, '00:00:00');
-  const submitEnd = toUtcDateTimeString(endJst, '23:59:59');
+  const submitStart = toUtcIso(startDate, '00:00:00', timeZone);
+  const submitEnd = toUtcIso(endDate, '23:59:59', timeZone);
 
   return (
     <form>
