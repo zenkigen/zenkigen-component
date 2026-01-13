@@ -73,6 +73,7 @@ DatePicker のUI詳細仕様をまとめる。設計全体は [設計書](./date
 - 選択日: 背景 `background/uibackgroundblue`、枠線 `selected/selecteduiborder`、文字 `text/text02`
 - ホバー: 選択日と同じ表現
 - 本日: 背景 `interactive/interactive01`、枠線 `selected/selecteduiborder`、文字 `text/textoncolor`
+- 本日: PC ローカルタイム基準の日付を使用する
 
 ### フッター
 

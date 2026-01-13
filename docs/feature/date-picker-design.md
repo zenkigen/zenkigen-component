@@ -198,6 +198,7 @@ DatePicker.ErrorMessage を子要素として受け取り、`aria-describedby` �
 - 祝日/休日表示は不要
 - 制約により選択不可な日付は無効スタイルで表示する
 - `min` / `max` は日付単位で比較し、inclusive（`min <= value <= max`）で判定する
+- 「今日」は PC のローカルタイム基準で判断し、表示のみ行う（選択は変更しない）
 
 ### 10.2 日付の扱い・タイムゾーン
 
@@ -245,6 +246,10 @@ components/
 
 - 対象状態：default / error / disabled
 - 使用ツール：Storybook
+
+### 12.3 テスト項目書
+
+- [DatePicker テスト項目書](./date-picker-test-spec.md)
 
 ---
 
