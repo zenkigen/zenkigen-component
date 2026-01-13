@@ -15,6 +15,7 @@ DatePicker のUI詳細仕様をまとめる。設計全体は [設計書](./date
 - `isError === true` の場合は `variant="outlineDanger"` を使用する
 - `size` は Button と同じ `small` / `medium` / `large` をサポートする
 - `before` props で `calendar` アイコンを表示する
+- アイコン名: `calendar`
 - 手入力は不可（ボタンによる選択のみ）
 - プレースホルダー既定文言は「日付を選択」
 - 日が選択された場合は `yyyy年MM月dd日` フォーマットで表示する
@@ -26,6 +27,8 @@ DatePicker のUI詳細仕様をまとめる。設計全体は [設計書](./date
 ## カレンダーUI
 
 - Popover + [`react-day-picker`](https://daypicker.dev/) で構成する
+- Popover は本プロジェクトの `Popover` を使用する
+- 表示位置（placement）は `bottom-start`
 - ポップオーバー表示（クリックで開閉）
 - 外側クリック/Escape で閉じる
 - クリアボタン/今日ボタンは常に表示（切り替え不可）
@@ -33,8 +36,9 @@ DatePicker のUI詳細仕様をまとめる。設計全体は [設計書](./date
 - `react-day-picker` の `timeZone` を利用し、表示/選択の基準を指定する
 - 初回表示は今月、再度開いた場合は前回選択した月を表示する
 - 前月/次月の移動をサポートする
-- 当月から移動している場合は「今日に戻る」で今月へ戻す
-- 「クリア」で日付選択状態を解除する
+- 当月から移動している場合は「今日に戻る」で今月へ戻す（今日の選択は行わない）
+- 「クリア」で日付選択状態を解除する（実行後はPopoverを閉じる）
+- 日付選択後はPopoverを閉じる
 
 ## カレンダー装飾仕様（Figma準拠）
 
@@ -56,6 +60,8 @@ DatePicker のUI詳細仕様をまとめる。設計全体は [設計書](./date
 
 - 高さ: 28px
 - 曜日テキスト: `Label12_Bold`、`text/text02`
+- 表示言語: `ja`
+- 週の開始曜日: 日曜
 
 ### 日付グリッド
 

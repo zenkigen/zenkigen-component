@@ -104,7 +104,7 @@ UIの詳細仕様は [UI仕様](./date-picker-ui-spec.md) を参照する。
 | max         | Date                           | –    | undefined  | 最大日付                    |
 | placeholder | string                         | –    | 日付を選択 | 未選択時の表示              |
 | size        | 'small' \| 'medium' \| 'large' | –    | 'medium'   | トリガーボタンのサイズ      |
-| timeZone    | string                         | –    | UTC        | 表示/選択の基準タイムゾーン |
+| timeZone    | 'UTC' \| 'Asia/Tokyo'          | –    | UTC        | 表示/選択の基準タイムゾーン |
 
 > `input[type="date"]` と同様のプロパティ・挙動をできるだけ踏襲する。
 > `value` / `min` / `max` / `isDisabled` などは同じ意味で扱う。
@@ -116,11 +116,11 @@ UIの詳細仕様は [UI仕様](./date-picker-ui-spec.md) を参照する。
 
 ### 4.2 コンポジション（子コンポーネント）
 
-TextInput と同様にエラーメッセージコンポーネントを子要素として受け取り、`aria-describedby` を自動で組み立てる。
+DatePicker.ErrorMessage を子要素として受け取り、`aria-describedby` を自動で組み立てる。共通コンポーネントは使用しない。
 
-| コンポーネント            | 説明                                                    |
-| ------------------------- | ------------------------------------------------------- |
-| `DatePicker.ErrorMessage` | `isError === true` のときのみ表示するエラーメッセージ。 |
+| コンポーネント            | 説明                                                              |
+| ------------------------- | ----------------------------------------------------------------- |
+| `DatePicker.ErrorMessage` | `isError === true` のときのみ表示するエラーメッセージ。独自実装。 |
 
 ---
 
@@ -156,7 +156,7 @@ TextInput と同様にエラーメッセージコンポーネントを子要素�
   - Tab：トリガーボタンとポップオーバーに移動
   - Enter / Space：日付選択
 - Popover：Escape もしくは領域外クリックで閉じる
-- フォーカス管理：Popover開閉に合わせて管理（要確認）
+- フォーカス管理：Popover開時は選択日（未選択なら今日）にフォーカスし、閉じたらトリガーボタンに戻す
 - トリガーボタン：`aria-describedby` は `ErrorMessage` と連携し、`isError` 時に `aria-invalid` を付与する
 
 ---
@@ -197,11 +197,12 @@ TextInput と同様にエラーメッセージコンポーネントを子要素�
 
 - 祝日/休日表示は不要
 - 制約により選択不可な日付は無効スタイルで表示する
+- `min` / `max` は日付単位で比較し、inclusive（`min <= value <= max`）で判定する
 
 ### 10.2 日付の扱い・タイムゾーン
 
 - 表示/選択は `timeZone` の指定に従う（デフォルト: `UTC`）
-- JSTで表示したい場合は `timeZone="Asia/Tokyo"` を指定する
+- `timeZone` は `UTC` / `Asia/Tokyo` のみをサポートする
 
 ### 10.3 フォーム連携 / データの扱い
 
