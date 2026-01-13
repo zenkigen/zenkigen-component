@@ -197,6 +197,8 @@ yarn build-lib:all
 yarn storybook
 ```
 
+Storybook MCP は Storybook 起動中に利用可能になります。MCP を使った story の URL 取得や UI 開発支援が必要な場合は、先に `yarn storybook` を起動してください。
+
 ## ライセンス
 
 zenkigen-component は [MIT](./LICENSE) ライセンスに基づいています。  
