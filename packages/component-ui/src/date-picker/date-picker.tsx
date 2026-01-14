@@ -1,5 +1,7 @@
+import 'react-day-picker/style.css';
+
 import { clsx } from 'clsx';
-import type { MouseEventHandler, ReactElement } from 'react';
+import type { CSSProperties, MouseEventHandler, ReactElement } from 'react';
 import {
   Children,
   cloneElement,
@@ -11,23 +13,24 @@ import {
   useRef,
   useState,
 } from 'react';
-import { DayPicker, type Matcher, type MonthCaptionProps, useDayPicker } from 'react-day-picker';
+import type { DayButtonProps, MonthCaptionProps, WeekdayProps } from 'react-day-picker';
+import { DayPicker, getDefaultClassNames, useDayPicker } from 'react-day-picker';
 
-import { InternalButton } from '../button/button';
+import { Button, InternalButton } from '../button/button';
 import { Icon } from '../icon';
 import { IconButton } from '../icon-button';
 import { Popover } from '../popover';
-import type { DatePickerProps, DatePickerTimeZone } from './date-picker.types';
+import type { DatePickerProps } from './date-picker.types';
 import { DatePickerCompoundContext } from './date-picker-context';
 import type { DatePickerErrorMessageProps } from './date-picker-error-message';
 import { DatePickerErrorMessage } from './date-picker-error-message';
 import {
   createDateFromKey,
+  createLocalDateFromKey,
   formatDateKey,
   formatDisplayDate,
   formatLocalDateKey,
   getMonthStartDate,
-  normalizeDate,
 } from './date-picker-utils';
 
 type DatePickerComponent = ((props: DatePickerProps) => ReactElement) & {
@@ -35,26 +38,77 @@ type DatePickerComponent = ((props: DatePickerProps) => ReactElement) & {
   displayName?: string;
 };
 
+const defaultDayPickerClassNames = getDefaultClassNames();
+const dayPickerStyle = {
+  '--rdp-font-family': "Arial, 'Noto Sans JP', sans-serif",
+  '--rdp-nav-height': '28px',
+  '--rdp-day-font': "700 12px/1 'Arial', 'Noto Sans JP', sans-serif",
+  '--rdp-selected-font': "700 12px/1 'Arial', 'Noto Sans JP', sans-serif",
+  '--rdp-weekday-font': "700 12px/1 'Arial', 'Noto Sans JP', sans-serif",
+  '--rdp-day-width': '30px',
+  '--rdp-day-height': '30px',
+  '--rdp-day_button-width': '28px',
+  '--rdp-day_button-height': '28px',
+  '--rdp-day_button-border': '1px solid black',
+  '--rdp-weekday-padding': '0px',
+} as CSSProperties;
+
 const dayPickerClassNames = {
-  months: 'flex flex-col gap-2',
-  month: 'px-2',
-  table: 'w-full border-separate border-spacing-0.5',
-  head_cell: 'h-7 w-7 text-center typography-label12bold text-text02',
-  row: 'h-7',
-  cell: 'p-0 text-center',
-  day: clsx(
-    'typography-label12bold flex size-7 items-center justify-center rounded-full border border-transparent',
-    'text-interactive02 hover:border-selectedUiBorder hover:bg-uiBackgroundBlue hover:text-text02',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-interactive01',
-  ),
-  day_selected: 'bg-uiBackgroundBlue border-selectedUiBorder text-text02',
-  day_today: 'bg-interactive01 border-selectedUiBorder text-textOnColor',
-  day_outside: 'text-interactive04 pointer-events-none',
-  day_disabled: 'text-interactive04 pointer-events-none',
+  // ...defaultDayPickerClassNames,
+  month: clsx(defaultDayPickerClassNames.month, 'flex flex-col gap-0.5 p-2'),
+  // month_grid: clsx(defaultDayPickerClassNames.month_grid, 'w-full'),
+  // weekday: defaultDayPickerClassNames.weekday,
+  // week: clsx(defaultDayPickerClassNames.week, 'h-7'),
+  // day: clsx(defaultDayPickerClassNames.day, 'p-0.5 text-center'),
+  // day_button: defaultDayPickerClassNames.day_button,
+  // selected: '',
+  // disabled: '',
+  // outside: '',
+  // today: '',
 };
 
-const formatMonthLabel = (date: Date, timeZone: DatePickerTimeZone) => {
-  const [year, month] = formatDateKey(date, timeZone).split('-');
+const CustomDayButton = ({ day, modifiers, className, ...buttonProps }: DayButtonProps) => {
+  const isSelected = Boolean(modifiers.selected);
+  const isDisabled = Boolean(modifiers.disabled);
+  const now = new Date();
+  const isToday =
+    day.date.getFullYear() === now.getFullYear() &&
+    day.date.getMonth() === now.getMonth() &&
+    day.date.getDate() === now.getDate();
+
+  return (
+    <button
+      type="button"
+      {...buttonProps}
+      className={clsx(
+        className,
+        'relative grid size-full place-items-center rounded-full !border !border-solid',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-interactive01',
+        !isSelected && '!border-transparent',
+        !isToday && !isDisabled && '!text-interactive02 hover:!bg-hoverUi',
+        isToday && !isSelected && '!border-selectedUiBorder !bg-interactive01 !text-textOnColor',
+        isDisabled && '!cursor-not-allowed !text-interactive04',
+        isSelected && '!border-selectedUiBorder !bg-uiBackgroundBlue',
+      )}
+    >
+      {buttonProps.children}
+    </button>
+  );
+};
+
+const CustomWeekday = ({ className, children, ...props }: WeekdayProps) => {
+  return (
+    <th
+      {...props}
+      className={clsx(className, 'm-0 flex size-7 items-center justify-center p-0 text-center text-text02')}
+    >
+      {children}
+    </th>
+  );
+};
+
+const formatMonthLabel = (date: Date) => {
+  const [year, month] = formatLocalDateKey(date).split('-');
 
   return `${year}年${month}月`;
 };
@@ -77,29 +131,52 @@ export const DatePicker: DatePickerComponent = ({
   const autoGeneratedId = useId();
   const describedByBaseId = restProps.id ?? autoGeneratedId;
   const [isOpen, setIsOpen] = useState(false);
-  const [displayMonth, setDisplayMonth] = useState(() => getMonthStartDate(value ?? new Date(), timeZone));
+  const [displayMonth, setDisplayMonth] = useState(() => {
+    if (value == null) {
+      const todayKey = formatLocalDateKey(new Date());
+
+      return createLocalDateFromKey(`${todayKey.slice(0, 7)}-01`);
+    }
+
+    return getMonthStartDate(value, timeZone);
+  });
   const calendarRef = useRef<HTMLDivElement>(null);
 
-  const normalizedSelected = useMemo(
-    () => (value == null ? undefined : normalizeDate(value, timeZone)),
-    [value, timeZone],
+  const selectedKey = useMemo(() => (value == null ? null : formatDateKey(value, timeZone)), [value, timeZone]);
+  const selectedDate = useMemo(
+    () => (selectedKey == null ? void 0 : createLocalDateFromKey(selectedKey)),
+    [selectedKey],
   );
-  const minDate = useMemo(() => (min == null ? undefined : normalizeDate(min, timeZone)), [min, timeZone]);
-  const maxDate = useMemo(() => (max == null ? undefined : normalizeDate(max, timeZone)), [max, timeZone]);
-  const currentMonthKey = useMemo(() => formatDateKey(displayMonth, timeZone).slice(0, 7), [displayMonth, timeZone]);
+  const minKey = useMemo(() => (min == null ? null : formatDateKey(min, timeZone)), [min, timeZone]);
+  const maxKey = useMemo(() => (max == null ? null : formatDateKey(max, timeZone)), [max, timeZone]);
+  const currentMonthKey = useMemo(() => formatLocalDateKey(displayMonth).slice(0, 7), [displayMonth]);
   const isOutsideMonth = useCallback(
-    (date: Date) => formatDateKey(date, timeZone).slice(0, 7) !== currentMonthKey,
-    [currentMonthKey, timeZone],
+    (date: Date) => formatLocalDateKey(date).slice(0, 7) !== currentMonthKey,
+    [currentMonthKey],
   );
-  const disabledDays = useMemo<Matcher[]>(
-    () => [isOutsideMonth, ...(minDate ? [{ before: minDate }] : []), ...(maxDate ? [{ after: maxDate }] : [])],
-    [isOutsideMonth, minDate, maxDate],
+  const disabledDays = useCallback(
+    (date: Date) => {
+      const dateKey = formatLocalDateKey(date);
+      if (isOutsideMonth(date)) {
+        return true;
+      }
+      if (minKey != null && dateKey < minKey) {
+        return true;
+      }
+      if (maxKey != null && dateKey > maxKey) {
+        return true;
+      }
+
+      return false;
+    },
+    [isOutsideMonth, maxKey, minKey],
   );
-  const todayForCalendar = useMemo(() => createDateFromKey(formatLocalDateKey(), timeZone), [timeZone]);
+  const todayForCalendar = useMemo(() => createLocalDateFromKey(formatLocalDateKey()), []);
 
   useEffect(() => {
     if (value == null) {
-      setDisplayMonth(getMonthStartDate(new Date(), timeZone));
+      const todayKey = formatLocalDateKey(new Date());
+      setDisplayMonth(createLocalDateFromKey(`${todayKey.slice(0, 7)}-01`));
 
       return;
     }
@@ -126,7 +203,7 @@ export const DatePicker: DatePickerComponent = ({
     });
 
     return () => cancelAnimationFrame(frame);
-  }, [displayMonth, isOpen, timeZone, value]);
+  }, [displayMonth, isOpen, value]);
 
   useEffect(() => {
     if (isDisabled) {
@@ -154,7 +231,8 @@ export const DatePicker: DatePickerComponent = ({
       return;
     }
 
-    onChange(normalizeDate(selected, timeZone));
+    const selectedKey = formatLocalDateKey(selected);
+    onChange(createDateFromKey(selectedKey, timeZone));
     setIsOpen(false);
   };
 
@@ -165,27 +243,22 @@ export const DatePicker: DatePickerComponent = ({
 
   const handleClickToday = () => {
     const todayKey = formatLocalDateKey(new Date());
-    const todayInTimeZone = createDateFromKey(todayKey, timeZone);
-    setDisplayMonth(getMonthStartDate(todayInTimeZone, timeZone));
+    setDisplayMonth(createLocalDateFromKey(`${todayKey.slice(0, 7)}-01`));
   };
 
   const formatters = useMemo(() => {
-    const weekdayFormatter = new Intl.DateTimeFormat('ja-JP', { weekday: 'short', timeZone });
+    const weekdayFormatter = new Intl.DateTimeFormat('ja-JP', { weekday: 'short' });
 
     return {
-      formatCaption: (date: Date) => formatMonthLabel(date, timeZone),
-      formatDay: (date: Date) => {
-        const [, , day] = formatDateKey(date, timeZone).split('-');
-
-        return String(Number(day));
-      },
+      formatCaption: (date: Date) => formatMonthLabel(date),
+      formatDay: (date: Date) => String(date.getDate()),
       formatWeekdayName: (date: Date) => weekdayFormatter.format(date),
     };
-  }, [timeZone]);
+  }, []);
 
   const iconSize = size === 'large' ? 'medium' : 'small';
   const displayText = value ? formatDisplayDate(value, timeZone) : placeholder;
-  const displayTextClasses = clsx('min-w-0 flex-1 truncate', !value && 'text-textPlaceholder');
+  const displayTextClasses = 'min-w-0 flex-1 truncate';
 
   const errorIds: string[] = [];
 
@@ -240,22 +313,20 @@ export const DatePicker: DatePickerComponent = ({
     const captionMonth = calendarMonth.date;
 
     return (
-      <div className={clsx('flex h-7 items-center justify-between px-2', className)} {...props}>
+      <div className={clsx('flex h-7 items-center justify-between px-0.5', className)} {...props}>
         <IconButton
           icon="angle-left"
           size="small"
           variant="text"
-          isNoPadding
           isDisabled={!previousMonth}
           aria-label="前の月"
           onClick={() => previousMonth && goToMonth(previousMonth)}
         />
-        <span className="typography-label12bold text-text02">{formatMonthLabel(captionMonth, timeZone)}</span>
+        <span className="typography-label12bold text-text02">{formatMonthLabel(captionMonth)}</span>
         <IconButton
           icon="angle-right"
           size="small"
           variant="text"
-          isNoPadding
           isDisabled={!nextMonth}
           aria-label="次の月"
           onClick={() => nextMonth && goToMonth(nextMonth)}
@@ -280,37 +351,35 @@ export const DatePicker: DatePickerComponent = ({
         </InternalButton>
       </Popover.Trigger>
       <Popover.Content>
-        <div ref={calendarRef} className="w-[224px] rounded bg-uiBackground01 shadow-floatingShadow">
-          <div className="pt-2">
-            <DayPicker
-              mode="single"
-              showOutsideDays
-              hideNavigation
-              weekStartsOn={0}
-              timeZone={timeZone}
-              month={displayMonth}
-              onMonthChange={setDisplayMonth}
-              selected={normalizedSelected}
-              onSelect={handleSelect}
-              today={todayForCalendar}
-              disabled={disabledDays}
-              classNames={dayPickerClassNames}
-              formatters={formatters}
-              components={{ MonthCaption: CustomMonthCaption }}
-            />
-          </div>
-          <div className="flex h-10 items-center justify-between border-t border-uiBorder01 bg-uiBackground01 px-2">
+        <div ref={calendarRef} className="rounded bg-uiBackground01 shadow-floatingShadow">
+          <DayPicker
+            mode="single"
+            showOutsideDays
+            hideNavigation
+            weekStartsOn={0}
+            style={dayPickerStyle}
+            month={displayMonth}
+            onMonthChange={setDisplayMonth}
+            selected={selectedDate}
+            onSelect={handleSelect}
+            today={todayForCalendar}
+            disabled={disabledDays}
+            classNames={dayPickerClassNames}
+            formatters={formatters}
+            fixedWeeks
+            components={{ MonthCaption: CustomMonthCaption, DayButton: CustomDayButton, Weekday: CustomWeekday }}
+          />
+          <div className="flex items-center justify-between border-t border-uiBorder01 px-2 py-1">
             <IconButton
               icon="calendar-today"
               size="medium"
               variant="text"
-              isNoPadding
               aria-label="今日に戻る"
               onClick={handleClickToday}
             />
-            <button type="button" className="typography-label14regular text-interactive02" onClick={handleClear}>
+            <Button type="button" size="small" variant="text" onClick={handleClear}>
               クリア
-            </button>
+            </Button>
           </div>
         </div>
       </Popover.Content>

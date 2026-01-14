@@ -105,7 +105,11 @@ export const Error: Story = {
     size: 'medium',
     timeZone: 'UTC',
   },
-  render: (args) => <DatePickerStory {...args} />,
+  render: (args) => (
+    <div className="flex flex-col items-start gap-4">
+      <DatePickerStory {...args} />
+    </div>
+  ),
 };
 
 export const TimeZoneTokyo: Story = {
@@ -130,7 +134,7 @@ export const MinMax: Story = {
 
 export const SizeVariants: Story = {
   render: () => (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col items-start gap-4">
       <DatePickerStory size="small" />
       <DatePickerStory size="medium" />
       <DatePickerStory size="large" />

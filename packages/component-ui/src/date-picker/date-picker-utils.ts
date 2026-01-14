@@ -35,14 +35,16 @@ export const createDateFromKey = (dateKey: string, timeZone: DatePickerTimeZone)
   return new Date(`${dateKey}T00:00:00${toIsoOffset(timeZone)}`);
 };
 
-export const normalizeDate = (date: Date, timeZone: DatePickerTimeZone): Date => {
-  return createDateFromKey(formatDateKey(date, timeZone), timeZone);
+export const createLocalDateFromKey = (dateKey: string): Date => {
+  const [year = '0', month = '1', day = '1'] = dateKey.split('-');
+
+  return new Date(Number(year), Number(month) - 1, Number(day));
 };
 
 export const getMonthStartDate = (date: Date, timeZone: DatePickerTimeZone): Date => {
-  const [year, month] = formatDateKey(date, timeZone).split('-');
+  const [year = '0', month = '1'] = formatDateKey(date, timeZone).split('-');
 
-  return createDateFromKey(`${year}-${month}-01`, timeZone);
+  return new Date(Number(year), Number(month) - 1, 1);
 };
 
 export const formatDisplayDate = (date: Date, timeZone: DatePickerTimeZone): string => {
