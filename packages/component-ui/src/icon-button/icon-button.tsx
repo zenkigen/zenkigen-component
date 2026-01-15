@@ -1,5 +1,4 @@
 import type { IconName } from '@zenkigen-inc/component-icons';
-import type { iconColors } from '@zenkigen-inc/component-theme';
 import { buttonColors, focusVisible } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
 
@@ -9,8 +8,6 @@ import { Icon } from '../icon/icon';
 type Size = 'small' | 'medium' | 'large';
 
 type Variant = 'outline' | 'text';
-
-type IconColor = keyof typeof iconColors;
 
 type Props = {
   /** 表示するアイコン名 */
@@ -25,8 +22,6 @@ type Props = {
   isNoPadding?: boolean;
   /** ボタンのバリアント */
   variant?: Variant;
-  /** アイコンの色 */
-  iconColor?: IconColor;
   /** アイコンのアクセントカラー */
   iconAccentColor?: ColorToken;
 } & (
@@ -47,7 +42,6 @@ export function IconButton({
   isNoPadding = false,
   isDisabled = false,
   isSelected = false,
-  iconColor,
   iconAccentColor,
   ...props
 }: Props) {
@@ -79,7 +73,7 @@ export function IconButton({
 
     return (
       <a className={baseClasses} {...buttonProps}>
-        <Icon name={icon} size={iconSize} color={iconColor} accentColor={iconAccentColor} />
+        <Icon name={icon} size={iconSize} accentColor={iconAccentColor} />
       </a>
     );
   } else {
@@ -90,7 +84,7 @@ export function IconButton({
 
     return (
       <button type="button" className={baseClasses} disabled={isDisabled} {...buttonProps}>
-        <Icon name={icon} size={iconSize} color={iconColor} accentColor={iconAccentColor} />
+        <Icon name={icon} size={iconSize} accentColor={iconAccentColor} />
       </button>
     );
   }
