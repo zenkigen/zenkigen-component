@@ -150,6 +150,39 @@ describe('IconButton', () => {
         expect(icon?.className).toContain('h-6');
       });
     });
+
+    describe('アイコンカラー', () => {
+      it('iconColor="icon01"の場合、対応するクラスが適用されること', () => {
+        render(<IconButton icon="add" iconColor="icon01" data-testid="icon-button" />);
+        const button = screen.getByTestId('icon-button');
+        const icon = button.querySelector('span');
+        expect(icon).toBeInTheDocument();
+        expect(icon?.className).toContain('fill-icon01');
+      });
+
+      it('iconColor="icon02"の場合、対応するクラスが適用されること', () => {
+        render(<IconButton icon="add" iconColor="icon02" data-testid="icon-button" />);
+        const button = screen.getByTestId('icon-button');
+        const icon = button.querySelector('span');
+        expect(icon).toBeInTheDocument();
+        expect(icon?.className).toContain('fill-icon02');
+      });
+
+      it('iconColorが未指定の場合、デフォルトのスタイルが適用されること', () => {
+        render(<IconButton icon="add" data-testid="icon-button" />);
+        const button = screen.getByTestId('icon-button');
+        const icon = button.querySelector('span');
+        expect(icon).toBeInTheDocument();
+      });
+
+      it('isAnchor=trueの場合もiconColorが正しく適用されること', () => {
+        render(<IconButton icon="add" isAnchor href="/test" iconColor="icon01" data-testid="icon-button" />);
+        const link = screen.getByTestId('icon-button');
+        const icon = link.querySelector('span');
+        expect(icon).toBeInTheDocument();
+        expect(icon?.className).toContain('fill-icon01');
+      });
+    });
   });
 
   describe('アンカータグ切り替え', () => {
