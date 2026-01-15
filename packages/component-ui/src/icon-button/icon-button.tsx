@@ -1,5 +1,6 @@
 import type { IconName } from '@zenkigen-inc/component-icons';
-import { buttonColors, focusVisible, iconColors } from '@zenkigen-inc/component-theme';
+import type { iconColors } from '@zenkigen-inc/component-theme';
+import { buttonColors, focusVisible } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
 
 import type { ColorToken } from '../color-types';
