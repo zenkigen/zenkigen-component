@@ -182,7 +182,13 @@ export function WithAccentColor() {
         <div className="typography-label12regular mb-1 text-text02">outline / small / isSelected</div>
         <div className="flex items-center gap-2">
           <IconButton icon="calendar-today" variant="outline" size="small" iconAccentColor="supportInfo" isSelected />
-          <IconButton icon="calendar-today" variant="outline" size="small" iconAccentColor="supportSuccess" isSelected />
+          <IconButton
+            icon="calendar-today"
+            variant="outline"
+            size="small"
+            iconAccentColor="supportSuccess"
+            isSelected
+          />
           <IconButton icon="calendar-today" variant="outline" size="small" iconAccentColor="supportError" isSelected />
         </div>
       </div>
@@ -198,7 +204,13 @@ export function WithAccentColor() {
         <div className="typography-label12regular mb-1 text-text02">outline / medium / isSelected</div>
         <div className="flex items-center gap-2">
           <IconButton icon="calendar-today" variant="outline" size="medium" iconAccentColor="supportInfo" isSelected />
-          <IconButton icon="calendar-today" variant="outline" size="medium" iconAccentColor="supportSuccess" isSelected />
+          <IconButton
+            icon="calendar-today"
+            variant="outline"
+            size="medium"
+            iconAccentColor="supportSuccess"
+            isSelected
+          />
           <IconButton icon="calendar-today" variant="outline" size="medium" iconAccentColor="supportError" isSelected />
         </div>
       </div>
@@ -214,7 +226,13 @@ export function WithAccentColor() {
         <div className="typography-label12regular mb-1 text-text02">outline / large / isSelected</div>
         <div className="flex items-center gap-2">
           <IconButton icon="calendar-today" variant="outline" size="large" iconAccentColor="supportInfo" isSelected />
-          <IconButton icon="calendar-today" variant="outline" size="large" iconAccentColor="supportSuccess" isSelected />
+          <IconButton
+            icon="calendar-today"
+            variant="outline"
+            size="large"
+            iconAccentColor="supportSuccess"
+            isSelected
+          />
           <IconButton icon="calendar-today" variant="outline" size="large" iconAccentColor="supportError" isSelected />
         </div>
       </div>

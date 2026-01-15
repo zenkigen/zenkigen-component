@@ -150,7 +150,6 @@ describe('IconButton', () => {
         expect(icon?.className).toContain('h-6');
       });
     });
-
   });
 
   describe('アンカータグ切り替え', () => {
