@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { action } from 'storybook/actions';
 
 import { DatePicker } from '.';
@@ -85,14 +85,18 @@ export const Open: Story = {
   },
   render: function OpenStory({ value: initialValue = null, ...args }) {
     const [value, setValue] = useState<Date | null>(initialValue);
+    const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-      const trigger = document.querySelector<HTMLButtonElement>('button[aria-haspopup="dialog"]');
-      trigger?.click();
+      const container = containerRef.current;
+      if (container) {
+        const trigger = container.querySelector<HTMLButtonElement>('button');
+        trigger?.click();
+      }
     }, []);
 
     return (
-      <div className="flex">
+      <div ref={containerRef} className="flex">
         <DatePicker
           {...args}
           value={value}
