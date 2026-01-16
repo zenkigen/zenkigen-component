@@ -308,7 +308,7 @@ export const DatePicker: DatePickerComponent = ({
     [isError, size],
   );
 
-  const CustomMonthCaption = ({ calendarMonth, className, displayIndex, ...props }: MonthCaptionProps) => {
+  const CustomMonthCaption = ({ calendarMonth, className, ...props }: MonthCaptionProps) => {
     const { goToMonth, nextMonth, previousMonth } = useDayPicker();
     const captionMonth = calendarMonth.date;
 
