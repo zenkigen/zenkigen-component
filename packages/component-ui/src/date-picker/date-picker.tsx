@@ -2,7 +2,7 @@ import 'react-day-picker/style.css';
 
 import { focusVisible } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
-import type { CSSProperties, MouseEventHandler, ReactElement } from 'react';
+import type { ButtonHTMLAttributes, CSSProperties, MouseEventHandler, ReactElement, ReactNode } from 'react';
 import {
   Children,
   cloneElement,
@@ -21,19 +21,47 @@ import { Button, InternalButton } from '../button/button';
 import { Icon } from '../icon';
 import { IconButton } from '../icon-button';
 import { Popover } from '../popover';
-import type { DatePickerProps } from './date-picker.types';
 import { DatePickerCompoundContext } from './date-picker-context';
 import type { DatePickerErrorMessageProps } from './date-picker-error-message';
 import { DatePickerErrorMessage } from './date-picker-error-message';
 import {
   createDateFromKey,
   createLocalDateFromKey,
+  type DatePickerTimeZone,
   formatDateKey,
   formatDisplayDate,
   formatLocalDateKey,
   formatMonthLabel,
   getMonthStartDate,
 } from './date-picker-utils';
+
+type DatePickerButtonProps = Omit<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  'children' | 'className' | 'disabled' | 'onChange' | 'style' | 'value'
+>;
+
+export type DatePickerProps = DatePickerButtonProps & {
+  /** 選択された日付。未選択の場合は `null` */
+  value: Date | null;
+  /** 日付が変更されたときに呼び出されるコールバック関数 */
+  onChange: (value: Date | null) => void;
+  /** 無効状態かどうか @default false */
+  isDisabled?: boolean;
+  /** エラー状態かどうか。`true` の場合、トリガーボタンが `outlineDanger` バリアントで表示される @default false */
+  isError?: boolean;
+  /** 選択可能な最小日付。この日付より前の日付は選択不可になる */
+  min?: Date;
+  /** 選択可能な最大日付。この日付より後の日付は選択不可になる */
+  max?: Date;
+  /** 未選択時に表示されるプレースホルダーテキスト @default '日付を選択' */
+  placeholder?: string;
+  /** トリガーボタンのサイズ @default 'medium' */
+  size?: 'small' | 'medium' | 'large';
+  /** 日付変換に使用するタイムゾーン。選択された日付は指定タイムゾーンの 00:00:00 として返される @default 'UTC' */
+  timeZone?: DatePickerTimeZone;
+  /** Compound Component（ErrorMessage 等） */
+  children?: ReactNode;
+};
 
 type DatePickerComponent = ((props: DatePickerProps) => ReactElement) & {
   ErrorMessage: typeof DatePickerErrorMessage;

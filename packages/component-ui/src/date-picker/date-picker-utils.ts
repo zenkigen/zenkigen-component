@@ -6,7 +6,10 @@
  * Date オブジェクトとの相互変換を行う。
  */
 
-import type { DatePickerTimeZone } from './date-picker.types';
+/**
+ * DatePicker でサポートするタイムゾーン
+ */
+export type DatePickerTimeZone = 'UTC' | 'Asia/Tokyo';
 
 // ============================================================================
 // フォーマッター

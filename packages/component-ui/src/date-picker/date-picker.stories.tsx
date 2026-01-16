@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { action } from 'storybook/actions';
 
 import { DatePicker } from '.';
-import type { DatePickerProps } from './date-picker.types';
+import type { DatePickerProps } from './date-picker';
 
 const meta: Meta<typeof DatePicker> = {
   title: 'Components/DatePicker',
@@ -36,9 +36,30 @@ const DatePickerStory = ({ value: initialValue = null, onChange, isError = false
         setValue(nextValue);
       }}
     >
-      {isError && <DatePicker.ErrorMessage>入力内容にエラーがあります</DatePicker.ErrorMessage>}
+      {isError && (
+        <DatePicker.ErrorMessage>入力内容にエラーがあります。日付を選択してください。</DatePicker.ErrorMessage>
+      )}
     </DatePicker>
   );
+};
+
+export const Component: Story = {
+  args: {
+    value: null,
+    placeholder: '日付を選択',
+    size: 'medium',
+    timeZone: 'UTC',
+    isDisabled: false,
+    isError: false,
+  },
+  parameters: {
+    chromatic: { disable: true },
+  },
+  render: (args) => (
+    <div className="flex">
+      <DatePickerStory {...args} />
+    </div>
+  ),
 };
 
 export const Default: Story = {
@@ -48,7 +69,11 @@ export const Default: Story = {
     size: 'medium',
     timeZone: 'UTC',
   },
-  render: (args) => <DatePickerStory {...args} />,
+  render: (args) => (
+    <div className="flex">
+      <DatePickerStory {...args} />
+    </div>
+  ),
 };
 
 export const Open: Story = {
@@ -67,14 +92,16 @@ export const Open: Story = {
     }, []);
 
     return (
-      <DatePicker
-        {...args}
-        value={value}
-        onChange={(nextValue) => {
-          action('onChange')(nextValue);
-          setValue(nextValue);
-        }}
-      />
+      <div className="flex">
+        <DatePicker
+          {...args}
+          value={value}
+          onChange={(nextValue) => {
+            action('onChange')(nextValue);
+            setValue(nextValue);
+          }}
+        />
+      </div>
     );
   },
 };
@@ -85,7 +112,11 @@ export const Selected: Story = {
     size: 'medium',
     timeZone: 'UTC',
   },
-  render: (args) => <DatePickerStory {...args} />,
+  render: (args) => (
+    <div className="flex">
+      <DatePickerStory {...args} />
+    </div>
+  ),
 };
 
 export const Disabled: Story = {
@@ -95,9 +126,26 @@ export const Disabled: Story = {
     size: 'medium',
     timeZone: 'UTC',
   },
-  render: (args) => <DatePickerStory {...args} />,
+  render: (args) => (
+    <div className="flex">
+      <DatePickerStory {...args} />
+    </div>
+  ),
 };
 
+export const SelectedDisabled: Story = {
+  args: {
+    value: new Date('2026-01-12T00:00:00Z'),
+    isDisabled: true,
+    size: 'medium',
+    timeZone: 'UTC',
+  },
+  render: (args) => (
+    <div className="flex">
+      <DatePickerStory {...args} />
+    </div>
+  ),
+};
 export const Error: Story = {
   args: {
     value: new Date('2026-01-12T00:00:00Z'),
@@ -106,19 +154,10 @@ export const Error: Story = {
     timeZone: 'UTC',
   },
   render: (args) => (
-    <div className="flex flex-col items-start gap-4">
+    <div className="flex">
       <DatePickerStory {...args} />
     </div>
   ),
-};
-
-export const TimeZoneTokyo: Story = {
-  args: {
-    value: new Date('2026-01-01T00:00:00+09:00'),
-    size: 'medium',
-    timeZone: 'Asia/Tokyo',
-  },
-  render: (args) => <DatePickerStory {...args} />,
 };
 
 export const MinMax: Story = {
@@ -129,15 +168,72 @@ export const MinMax: Story = {
     size: 'medium',
     timeZone: 'UTC',
   },
-  render: (args) => <DatePickerStory {...args} />,
+  render: (args) => (
+    <div className="flex">
+      <DatePickerStory {...args} />
+    </div>
+  ),
 };
 
 export const SizeVariants: Story = {
   render: () => (
-    <div className="flex flex-col items-start gap-4">
-      <DatePickerStory size="small" />
-      <DatePickerStory size="medium" />
-      <DatePickerStory size="large" />
+    <div className="flex flex-col items-start gap-8">
+      <div className="flex flex-col items-start gap-4">
+        <p className="typography-label14regular text-text02">Normal</p>
+        <DatePickerStory size="small" />
+        <DatePickerStory size="medium" />
+        <DatePickerStory size="large" />
+      </div>
+      <div className="flex flex-col items-start gap-4">
+        <p className="typography-label14regular text-text02">Disabled</p>
+        <DatePickerStory size="small" isDisabled />
+        <DatePickerStory size="medium" isDisabled />
+        <DatePickerStory size="large" isDisabled />
+      </div>
+      <div className="flex flex-col items-start gap-4">
+        <p className="typography-label14regular text-text02">Error</p>
+        <DatePickerStory size="small" isError />
+        <DatePickerStory size="medium" isError />
+        <DatePickerStory size="large" isError />
+      </div>
+    </div>
+  ),
+};
+
+export const LayoutExamples: Story = {
+  render: () => (
+    <div className="flex h-full flex-col items-center justify-center gap-4">
+      <div className="flex">
+        <DatePickerStory size="large" />
+      </div>
+      <div className="w-[140px]">
+        <DatePickerStory size="large" />
+      </div>
+      <div className="w-[280px]">
+        <DatePickerStory size="large" />
+      </div>
+      <div className="w-full">
+        <DatePickerStory size="large" />
+      </div>
+    </div>
+  ),
+};
+
+export const LayoutExamplesWithError: Story = {
+  render: () => (
+    <div className="flex h-full flex-col items-center justify-center gap-4">
+      <div className="flex">
+        <DatePickerStory size="large" isError />
+      </div>
+      <div className="w-[140px]">
+        <DatePickerStory size="large" isError />
+      </div>
+      <div className="w-[280px]">
+        <DatePickerStory size="large" isError />
+      </div>
+      <div className="w-full">
+        <DatePickerStory size="large" isError />
+      </div>
     </div>
   ),
 };

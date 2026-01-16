@@ -4,6 +4,12 @@ import { forwardRef } from 'react';
 
 import { useDatePickerCompoundContext } from './date-picker-context';
 
+/**
+ * DatePicker のエラーメッセージを表示するコンポーネントのプロパティ
+ *
+ * `isError={true}` の場合にのみレンダリングされます。
+ * `className` プロパティは除外されており、内部スタイルが適用されます。
+ */
 export type DatePickerErrorMessageProps = Omit<HTMLAttributes<HTMLDivElement>, 'className'>;
 
 export const DatePickerErrorMessage = forwardRef<HTMLDivElement, DatePickerErrorMessageProps>(
