@@ -66,23 +66,23 @@ const MyComponent = () => {
 
 ### 必須プロパティ
 
-| プロパティ | 型                           | 説明                                         |
-| ---------- | ---------------------------- | -------------------------------------------- |
-| `value`    | `Date \| null`               | 選択された日付。未選択の場合は`null`         |
+| プロパティ | 型                              | 説明                                           |
+| ---------- | ------------------------------- | ---------------------------------------------- |
+| `value`    | `Date \| null`                  | 選択された日付。未選択の場合は`null`           |
 | `onChange` | `(value: Date \| null) => void` | 日付が変更されたときに呼び出されるコールバック |
 
 ### オプションプロパティ
 
-| プロパティ    | 型                              | デフォルト値 | 説明                                     |
-| ------------- | ------------------------------- | ------------ | ---------------------------------------- |
-| `size`        | `'small' \| 'medium' \| 'large'` | `'medium'`   | トリガーボタンのサイズ                   |
-| `placeholder` | `string`                        | `'日付を選択'` | 未選択時に表示されるテキスト             |
-| `isDisabled`  | `boolean`                       | `false`      | 無効状態かどうか                         |
-| `isError`     | `boolean`                       | `false`      | エラー状態かどうか                       |
-| `min`         | `Date`                          | `undefined`  | 選択可能な最小日付                       |
-| `max`         | `Date`                          | `undefined`  | 選択可能な最大日付                       |
-| `timeZone`    | `'UTC' \| 'Asia/Tokyo'`         | `'UTC'`      | 日付変換に使用するタイムゾーン           |
-| `children`    | `ReactNode`                     | `undefined`  | Compound Component（ErrorMessage等）     |
+| プロパティ    | 型                               | デフォルト値   | 説明                                 |
+| ------------- | -------------------------------- | -------------- | ------------------------------------ |
+| `size`        | `'small' \| 'medium' \| 'large'` | `'medium'`     | トリガーボタンのサイズ               |
+| `placeholder` | `string`                         | `'日付を選択'` | 未選択時に表示されるテキスト         |
+| `isDisabled`  | `boolean`                        | `false`        | 無効状態かどうか                     |
+| `isError`     | `boolean`                        | `false`        | エラー状態かどうか                   |
+| `min`         | `Date`                           | `undefined`    | 選択可能な最小日付                   |
+| `max`         | `Date`                           | `undefined`    | 選択可能な最大日付                   |
+| `timeZone`    | `'UTC' \| 'Asia/Tokyo'`          | `'UTC'`        | 日付変換に使用するタイムゾーン       |
+| `children`    | `ReactNode`                      | `undefined`    | Compound Component（ErrorMessage等） |
 
 ### 継承プロパティ
 
@@ -96,10 +96,10 @@ const MyComponent = () => {
 
 #### Props
 
-| プロパティ   | 型        | デフォルト値 | 説明                               |
-| ------------ | --------- | ------------ | ---------------------------------- |
-| `aria-live`  | `string`  | `'assertive'` | スクリーンリーダーへの通知設定     |
-| `id`         | `string`  | 自動生成     | 要素のID（aria-describedby用）     |
+| プロパティ  | 型       | デフォルト値  | 説明                           |
+| ----------- | -------- | ------------- | ------------------------------ |
+| `aria-live` | `string` | `'assertive'` | スクリーンリーダーへの通知設定 |
+| `id`        | `string` | 自動生成      | 要素のID（aria-describedby用） |
 
 その他の `HTMLAttributes<HTMLDivElement>` プロパティが使用可能である（`className` を除く）。
 
@@ -330,10 +330,10 @@ DatePickerは`timeZone`プロパティに基づいて日付を変換する。
 
 #### サポートするタイムゾーン
 
-| タイムゾーン   | ISO 8601 オフセット |
-| -------------- | ------------------- |
-| `UTC`          | `Z`                 |
-| `Asia/Tokyo`   | `+09:00`            |
+| タイムゾーン | ISO 8601 オフセット |
+| ------------ | ------------------- |
+| `UTC`        | `Z`                 |
+| `Asia/Tokyo` | `+09:00`            |
 
 ### 日付キー形式
 
@@ -341,10 +341,10 @@ DatePickerは`timeZone`プロパティに基づいて日付を変換する。
 
 ```typescript
 // 例: UTC 2026-01-15 00:00:00 → 日付キー '2026-01-15'
-formatDateKey(new Date('2026-01-15T00:00:00Z'), 'UTC') // → '2026-01-15'
+formatDateKey(new Date('2026-01-15T00:00:00Z'), 'UTC'); // → '2026-01-15'
 
 // 例: Asia/Tokyo 2026-01-15 09:00:00 JST → 日付キー '2026-01-15'
-formatDateKey(new Date('2026-01-15T00:00:00Z'), 'Asia/Tokyo') // → '2026-01-15'
+formatDateKey(new Date('2026-01-15T00:00:00Z'), 'Asia/Tokyo'); // → '2026-01-15'
 ```
 
 ## 注意事項
