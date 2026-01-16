@@ -7,7 +7,7 @@ const openPopover = () => {
   const trigger = screen.getByRole('button');
   fireEvent.click(trigger);
 
-  return screen.getByRole('dialog');
+  return screen.getByRole('dialog', { name: '日付選択' });
 };
 
 const findDayButton = (container: HTMLElement, label: string) => {

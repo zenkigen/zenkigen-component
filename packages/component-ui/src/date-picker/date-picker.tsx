@@ -308,7 +308,7 @@ export const DatePicker: DatePickerComponent = ({
     [isError, size],
   );
 
-  const CustomMonthCaption = ({ calendarMonth, className, ...props }: MonthCaptionProps) => {
+  const CustomMonthCaption = ({ calendarMonth, className, displayIndex, ...props }: MonthCaptionProps) => {
     const { goToMonth, nextMonth, previousMonth } = useDayPicker();
     const captionMonth = calendarMonth.date;
 
@@ -351,7 +351,7 @@ export const DatePicker: DatePickerComponent = ({
         </InternalButton>
       </Popover.Trigger>
       <Popover.Content>
-        <div ref={calendarRef} className="rounded bg-uiBackground01 shadow-floatingShadow">
+        <div ref={calendarRef} className="rounded bg-uiBackground01 shadow-floatingShadow" aria-label="日付選択">
           <DayPicker
             mode="single"
             showOutsideDays
@@ -375,6 +375,7 @@ export const DatePicker: DatePickerComponent = ({
               size="medium"
               variant="text"
               aria-label="今日に戻る"
+              iconAccentColor="supportInfo"
               onClick={handleClickToday}
             />
             <Button type="button" size="small" variant="text" onClick={handleClear}>
