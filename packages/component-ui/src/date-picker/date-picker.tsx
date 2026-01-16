@@ -1,5 +1,6 @@
 import 'react-day-picker/style.css';
 
+import { focusVisible } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
 import type { CSSProperties, MouseEventHandler, ReactElement } from 'react';
 import {
@@ -59,7 +60,7 @@ const dayPickerStyle = {
 
 /** react-day-picker のクラス名上書き */
 const dayPickerClassNames = {
-  month: clsx(defaultDayPickerClassNames.month, 'flex flex-col gap-0.5 px-[7px] py-2'),
+  month: clsx(defaultDayPickerClassNames.month, 'flex flex-col px-[7px] py-2'),
 };
 
 /**
@@ -109,7 +110,7 @@ const CustomDayButton = ({ day, modifiers, className, ...buttonProps }: DayButto
     day.date.getMonth() === now.getMonth() &&
     day.date.getDate() === now.getDate();
 
-  const isDisabledDay = isMinMaxDisabled || isOutside;
+  const isDisabledDay = isMinMaxDisabled;
 
   return (
     <button
@@ -120,11 +121,11 @@ const CustomDayButton = ({ day, modifiers, className, ...buttonProps }: DayButto
         className,
         dayButtonBaseClass,
         // 共通: フォーカスリング（有効な日のみ）
-        !isDisabledDay && 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-interactive01',
+        !isDisabledDay && focusVisible.normal,
         // min/max 制限日
         isMinMaxDisabled && '!cursor-not-allowed !border-transparent !text-disabled01',
         // 範囲外の日（前後月）
-        isOutside && !isMinMaxDisabled && '!cursor-default !border-transparent !text-interactive04',
+        isOutside && !isMinMaxDisabled && '!border-transparent !text-interactive04',
         // 通常の日
         !isDisabledDay && !isSelected && '!border-transparent',
         !isDisabledDay && !isToday && '!text-interactive02 hover:!bg-hoverUi',
@@ -322,7 +323,7 @@ export const DatePicker: DatePickerComponent = ({
 
   const iconSize = size === 'large' ? 'medium' : 'small';
   const displayText = value ? formatDisplayDate(value, timeZone) : placeholder;
-  const displayTextClasses = 'min-w-0 flex-1 truncate';
+  const displayTextClasses = 'min-w-0 truncate';
 
   // アクセシビリティ: ErrorMessage の ID 管理と aria 属性
   const errorIds: string[] = [];
@@ -387,9 +388,11 @@ export const DatePicker: DatePickerComponent = ({
           variant={isError ? 'outlineDanger' : 'outline'}
           isDisabled={isDisabled}
           before={<Icon name="calendar" size={iconSize} />}
+          justifyContent="start"
           onClick={handleTriggerClick}
         >
           <span className={displayTextClasses}>{displayText}</span>
+          {/* {displayText} */}
         </InternalButton>
       </Popover.Trigger>
       <Popover.Content>
@@ -435,7 +438,9 @@ export const DatePicker: DatePickerComponent = ({
 
   if (!hasMessageChildren) {
     return (
-      <DatePickerCompoundContext.Provider value={contextValue}>{popoverContent}</DatePickerCompoundContext.Provider>
+      <DatePickerCompoundContext.Provider value={contextValue}>
+        <div className="flex flex-col">{popoverContent}</div>
+      </DatePickerCompoundContext.Provider>
     );
   }
 
