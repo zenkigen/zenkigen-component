@@ -57,7 +57,7 @@ export type DatePickerProps = DatePickerButtonProps & {
   placeholder?: string;
   /** トリガーボタンのサイズ @default 'medium' */
   size?: 'small' | 'medium' | 'large';
-  /** 日付変換に使用するタイムゾーン。選択された日付は指定タイムゾーンの 00:00:00 として返される @default 'UTC' */
+  /** 日付変換に使用するタイムゾーン。選択された日付は指定タイムゾーンの 00:00:00 として返される @default 'Asia/Tokyo' */
   timeZone?: DatePickerTimeZone;
   /** Compound Component（ErrorMessage 等） */
   children?: ReactNode;
@@ -191,7 +191,7 @@ export const DatePicker: DatePickerComponent = ({
   max,
   placeholder = '日付を選択',
   size = 'medium',
-  timeZone = 'UTC',
+  timeZone = 'Asia/Tokyo',
   children,
   onClick,
   type,

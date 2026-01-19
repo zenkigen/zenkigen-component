@@ -81,7 +81,7 @@ const MyComponent = () => {
 | `isError`     | `boolean`                        | `false`        | エラー状態かどうか                   |
 | `min`         | `Date`                           | `undefined`    | 選択可能な最小日付                   |
 | `max`         | `Date`                           | `undefined`    | 選択可能な最大日付                   |
-| `timeZone`    | `'UTC' \| 'Asia/Tokyo'`          | `'UTC'`        | 日付変換に使用するタイムゾーン       |
+| `timeZone`    | `'UTC' \| 'Asia/Tokyo'`          | `'Asia/Tokyo'` | 日付変換に使用するタイムゾーン       |
 | `children`    | `ReactNode`                      | `undefined`    | Compound Component（ErrorMessage等） |
 
 ### 継承プロパティ
@@ -274,25 +274,24 @@ oneMonthLater.setMonth(today.getMonth() + 1);
   onChange={setDate}
   min={today}
   max={oneMonthLater}
-  timeZone="Asia/Tokyo"
 />
 ```
 
 ### タイムゾーン指定
 
 ```typescript
-// UTC タイムゾーン（デフォルト）
-<DatePicker
-  value={date}
-  onChange={setDate}
-  timeZone="UTC"
-/>
-
-// 日本標準時
+// 日本標準時（デフォルト）
 <DatePicker
   value={date}
   onChange={setDate}
   timeZone="Asia/Tokyo"
+/>
+
+// UTC タイムゾーン
+<DatePicker
+  value={date}
+  onChange={setDate}
+  timeZone="UTC"
 />
 ```
 
@@ -382,6 +381,7 @@ const dayPickerStyle = {
 
 ## 更新履歴
 
-| 日付                 | 内容     | 担当者 |
-| -------------------- | -------- | ------ |
-| 2026-01-16 11:09 JST | 新規作成 | -      |
+| 日付                 | 内容                                             | 担当者 |
+| -------------------- | ------------------------------------------------ | ------ |
+| 2026-01-19 10:06 JST | `timeZone` のデフォルト値を `Asia/Tokyo` に変更 | -      |
+| 2026-01-16 11:09 JST | 新規作成                                         | -      |
