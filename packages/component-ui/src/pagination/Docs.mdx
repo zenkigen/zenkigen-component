@@ -1,12 +1,43 @@
-import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/blocks';
+import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/addon-docs/blocks';
+
+import { Markdown } from '@storybook/addon-docs/blocks';
 import PaginationStories, { Base } from './pagination.stories';
+import spec from '../../../../docs/component/pagination-specification.md?raw';
 
 <Meta title="Pagination" of={PaginationStories} />
 
 # Pagination
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
 
 <Canvas>
   <Story of={Base} />
 </Canvas>
 
 <Controls of={Base} />
+
+## 概要
+
+検索結果やカテゴリ一覧などリスト化された縦長ページを複数に分割し、次へ・前へを含めた関連ページへのリンクでページを移動するために使用します。
+
+## 設計の原則（Do）
+
+### 大量のアイテムがある場合に使用します
+
+検索結果やカテゴリ一覧など、1ページに記載するには大量すぎるアイテムを複数ページに分けて表記する場合に、ページ間の移動を可能にします。
+
+### ページネーションの範囲を指定できます
+
+現在のページの左右に何桁表示するか、開始と終了のページ番号に隣接して表示するかを指定することができます。
+
+## 推奨しないこと（Don’t）
+
+### アイテム(内容)が少ない場合は使用しない
+
+内容が少ない場合はPaginationを使用せず、1ページにまとめておきます。

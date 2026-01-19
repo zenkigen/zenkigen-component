@@ -1,0 +1,126 @@
+import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/addon-docs/blocks';
+import { Markdown } from '@storybook/addon-docs/blocks';
+import PopupStories, { Component } from './popup.stories';
+import spec from '../../../../docs/component/popup-specification.md?raw';
+
+<Meta title="Popup" of={PopupStories} />
+
+# Popup
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
+
+<Canvas />
+
+<Controls of={Component} />
+
+## Code Examples
+
+基本的な使用例
+
+```tsx
+import { Popup, Button } from '@zenkigen-inc/component-ui';
+import { useState } from 'react';
+
+const PopupExample = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <>
+      <Button variant="fill" onClick={() => setIsOpen(true)}>
+        Popupを表示
+      </Button>
+
+      <Popup isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <Popup.Header before={<Icon name="add" color="icon01" />}>タイトル</Popup.Header>
+        <Popup.Body>
+          <div className="p-4">
+            <p className="typography-body14regular text-text01">Popupのコンテンツがここに表示されます。</p>
+          </div>
+        </Popup.Body>
+        <Popup.Footer>
+          <div className="flex w-full justify-end gap-4">
+            <Button variant="outline" onClick={() => setIsOpen(false)}>
+              キャンセル
+            </Button>
+            <Button variant="fill" onClick={() => setIsOpen(false)}>
+              保存
+            </Button>
+          </div>
+        </Popup.Footer>
+      </Popup>
+    </>
+  );
+};
+```
+
+Popover内での使用例
+
+```tsx
+import { Popup, Button, Popover } from '@zenkigen-inc/component-ui';
+import { useState } from 'react';
+
+const PopoverPopupExample = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <Popover isOpen={isOpen} placement="top" onClose={() => setIsOpen(false)}>
+      <Popover.Trigger>
+        <Button variant="fill" onClick={() => setIsOpen(!isOpen)}>
+          {isOpen ? 'Popoverを閉じる' : 'Popoverを開く'}
+        </Button>
+      </Popover.Trigger>
+      <Popover.Content>
+        <Popup onClose={() => setIsOpen(false)}>
+          <Popup.Header>Popover内のPopup</Popup.Header>
+          <Popup.Body>
+            <div className="p-4">
+              <p className="typography-body14regular text-text01">このPopupはPopover内で使用されています。</p>
+              <p className="typography-body14regular text-text01 mt-2">
+                ヘッダーの×ボタンをクリックすると、PopupとPopoverの両方が閉じます。
+              </p>
+            </div>
+          </Popup.Body>
+        </Popup>
+      </Popover.Content>
+    </Popover>
+  );
+};
+```
+
+## 概要
+
+ユーザーにアクションを促したり、補足的な情報やアクションをその場のコンテキストを維持したまま一時的に表示するためのコンポーネントです。
+
+## 設計の原則（Do）
+
+### ユーザーの明確なアクション(クリックや入力)に基づいて表示されます
+
+曖昧な条件で自動表示は避けましょう。
+
+### 軽量な操作のみにとどめます
+
+ページ遷移をさせるような重い操作は避けます。
+
+### 一度に1つだけ表示します
+
+複数のポップアップが重なって表示されないよう制御します。
+
+## 推奨しないこと（Don’t）
+
+### ユーザーの操作を中断させるため、不必要に使用しない
+
+ポップアップは正しく使用すると効果的ですが、ユーザーへの混乱を抑えるために控えめに使用する必要があります。現在のコンテキストから離れることなく、関連する情報を提供したり、簡単なタスクを実行させたりする場合に有効です。
+
+### 背景のブロックはしません
+
+背景をブロックしてユーザーに特定のアクションのみを促したい場合は、[Modal](/docs/components-modal--docs)を使用します。
+
+### 複雑なフォームや複数ステップのタスクに使用しない
+
+多くの入力フィールドを持つフォームや、複数のステップを要する複雑なタスクにPopupを使用することは避けてください。特定のアクションのみを促したい場合は、専用のページやモーダルを用意しましょう。

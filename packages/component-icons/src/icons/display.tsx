@@ -1,0 +1,15 @@
+/*
+* NOTE: This file is auto generated
+* Do not edit manually.
+*/
+import React from 'react';
+
+export interface displayIconProps {
+  accentClassName?: string;
+}
+
+export const displayIcon: React.FC<displayIconProps> = ({ accentClassName }) => (
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="display">
+<path fillRule="evenodd" clipRule="evenodd" d="M2.62012 4.76758H21.3799C21.7109 4.76758 21.9795 5.03613 21.9795 5.36719V15.8994C21.9795 16.2305 21.7109 16.499 21.3799 16.499H2.62012C2.28906 16.499 2.02051 16.2305 2.02051 15.8994V5.36719C2.02051 5.03613 2.28906 4.76758 2.62012 4.76758ZM3.21973 15.2998H20.7803V5.9668H3.21973V15.2998ZM6.41504 18.0332H17.585C17.916 18.0332 18.1846 18.3018 18.1846 18.6328C18.1846 18.9639 17.916 19.2324 17.585 19.2324H6.41504C6.08398 19.2324 5.81543 18.9639 5.81543 18.6328C5.81543 18.3018 6.08398 18.0332 6.41504 18.0332Z"></path>
+</svg>
+);

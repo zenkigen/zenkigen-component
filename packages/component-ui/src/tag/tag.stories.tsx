@@ -1,11 +1,58 @@
-import { action } from '@storybook/addon-actions';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { action } from 'storybook/actions';
 
 import { Tag } from './tag';
 
 const meta: Meta<typeof Tag> = {
   title: 'Components/Tag',
   component: Tag,
+  argTypes: {
+    variant: {
+      options: ['normal', 'light'],
+      control: { type: 'select' },
+      description: '濃色(normal) / 淡色(light)のスタイル',
+      table: {
+        type: { summary: `'normal' | 'light'` },
+        defaultValue: { summary: 'normal' },
+      },
+    },
+    size: {
+      options: ['x-small', 'small', 'medium'],
+      control: { type: 'select' },
+      description: '標準タグのサイズ。編集可能タグは常にmedium固定。',
+      table: {
+        type: { summary: `'x-small' | 'small' | 'medium'` },
+        defaultValue: { summary: 'medium' },
+      },
+    },
+    color: {
+      options: [
+        'supportError',
+        'supportSuccess',
+        'supportWarning',
+        'supportDanger',
+        'userRed',
+        'userPink',
+        'userPurple',
+        'userTurquoise',
+        'userRoyalBlue',
+        'userBlue',
+        'userAquamarine',
+        'userYellowGreen',
+        'userYellow',
+        'userOrange',
+        'default',
+        'gray',
+      ],
+      control: { type: 'select' },
+      description: 'tagColors / tagLightColors で定義されたカラートークン',
+    },
+    children: {
+      control: { type: 'text' },
+      description: 'タグに表示するテキスト',
+    },
+    onDelete: { action: 'tag削除' },
+  },
 };
 export default meta;
 type Story = StoryObj<typeof Tag>;
@@ -21,14 +68,19 @@ export const Component: Story = {
   parameters: {
     chromatic: { disable: true },
   },
-  render: (args) => (
-    <div className="flex items-center justify-center gap-x-4">
-      <Tag {...args} id="1" />
-      <Tag variant={args.variant} color={args.color} id="2" isEditable onDelete={() => {}}>
-        {args.children}
-      </Tag>
-    </div>
-  ),
+  render: ({ onDelete, isEditable, size, ...rest }) => {
+    const handleDelete = onDelete ?? action('tag削除');
+    const displaySize = isEditable ? 'medium' : size;
+
+    return (
+      <div className="flex items-center justify-center gap-x-4">
+        {typeof isEditable === 'undefined' && <Tag {...rest} size={displaySize} />}
+        <Tag variant={rest.variant} color={rest.color} size="medium" id="2" isEditable onDelete={handleDelete}>
+          {rest.children}
+        </Tag>
+      </div>
+    );
+  },
 };
 
 export function Basic() {

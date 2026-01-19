@@ -1,5 +1,5 @@
-import { Canvas, Meta, Story, Controls, Source } from '@storybook/blocks';
-import { Markdown } from '@storybook/blocks';
+import { Canvas, Meta, Story, Controls, Source } from '@storybook/addon-docs/blocks';
+import { Markdown } from '@storybook/addon-docs/blocks';
 import TabStories, { Component, LayoutAutoExample, LayoutEqualExample, LayoutExamples } from './tab.stories';
 import spec from '../../../../docs/component/tab-specification.md?raw';
 
@@ -21,34 +21,64 @@ import spec from '../../../../docs/component/tab-specification.md?raw';
 
 ### Code Example
 
-- 各Tab.Itemには一意の`id`を指定すること。
-
 ```tsx
+import React, { useState } from 'react';
 import { Tab } from '@zenkigen-inc/component-ui';
-import { useState } from 'react';
 
-const [selectedTab, setSelectedTab] = useState('tab1');
+export const MyComponent = () => {
+  const [selectedId, setSelectedId] = useState('home');
 
-return (
-  <Tab>
-    <Tab.Item id="tab1" isSelected={selectedTab === 'tab1'} onClick={setSelectedTab}>
-      短い
-    </Tab.Item>
-    <Tab.Item id="tab2" isSelected={selectedTab === 'tab2'} onClick={setSelectedTab}>
-      中程度のタブ
-    </Tab.Item>
-    <Tab.Item id="tab3" isSelected={selectedTab === 'tab3'} onClick={setSelectedTab} isDisabled>
-      無効なタブ
-    </Tab.Item>
-  </Tab>
-);
+  return (
+    <Tab layout="auto">
+      <Tab.Item id="home" icon="add" isSelected={selectedId === 'home'} onClick={setSelectedId}>
+        ホーム
+      </Tab.Item>
+      <Tab.Item id="settings" icon="check" isSelected={selectedId === 'settings'} onClick={setSelectedId}>
+        設定
+      </Tab.Item>
+      <Tab.Item id="profile" icon="copy" isSelected={selectedId === 'profile'} onClick={setSelectedId}>
+        プロフィール
+      </Tab.Item>
+    </Tab>
+  );
+};
 ```
-
-## Stories
-
-<Canvas of={LayoutAutoExample} />
-<Canvas of={LayoutEqualExample} />
 
 ## Layout examples
 
 <Canvas of={LayoutExamples} />
+
+## 概要
+
+異なるコンテンツを並列化し、クリックすることでビューを切り替えるための、ページ遷移を伴わないコンポーネントです。
+
+## 設計の原則 （Do）
+
+### タブにすることで情報の全体像が把握できます
+
+タブは、関連性のある同じレベルの階層にあるコンテンツのグループを整理し、ナビゲーションできるようにします。
+
+### Modalと組み合わせて使用できます
+
+Modal内のコンテンツをTabで整理します。
+
+### 必ずいずれか1つのタブが選択された状態から開始します
+
+ページやコンポーネントが読み込まれた時点では、必ずデフォルトのタブが選択され、対応するコンテンツが表示されている状態にしてください。
+
+## 推奨しないこと（Don't）
+
+### 連続したコンテンツを分割するために使用しない
+
+特定の順序で読む必要がある連続したコンテンツを移動するためにタブを使用しないでください。代わりに、Pagerを使用します。
+![推奨しないこと その1](/storybook/images/tab_01.jpg)
+
+### タブの中にタブは使用しない
+
+ユーザーが今「どのタブの中のどのタブ」を見ているか不明瞭になります。また、同画面に複数の「似たような見た目のタブ」があると、現在地(コンテキスト)を見失いやすいので、タブの中にタブは使用しないでください。代わりに[Segmented controller](/docs/components-segmentedcontrol--docs)を使用します。
+![推奨しないこと その2](/storybook/images/tab_02.jpg)
+
+### グローバルナビゲーションでは使用しない
+
+アクティブのオブジェクトに下線を入れるデザインを採用したい場合タブのデザインが当てはまりますが、タブは表示の切り替えでボタンはページ遷移になり挙動が違います。グローバルナビゲーションはページ遷移になるため、タブは使用しません。
+![推奨しないこと その3](/storybook/images/tab_03.jpg)

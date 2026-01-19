@@ -1,12 +1,85 @@
-import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/blocks';
+import { Canvas, Meta, Story, Controls } from '@storybook/addon-docs/blocks';
+import { Markdown } from '@storybook/addon-docs/blocks';
 import SearchStories, { Component, Base } from './search.stories';
+import spec from '../../../../docs/component/search-specification.md?raw';
 
 <Meta title="Search" of={SearchStories} />
 
 # Search
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
 
 <Canvas>
   <Story of={Component} />
 </Canvas>
 
 <Controls of={Component} />
+
+### Code Example
+
+```tsx
+import { useState, type ChangeEvent, type FormEvent } from 'react';
+import { Search } from '@zenkigen-inc/component-ui';
+
+const SearchForm = () => {
+  const [keyword, setKeyword] = useState('');
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log('search', keyword);
+  };
+
+  return (
+    <Search
+      value={keyword}
+      placeholder="候補者を検索"
+      onChange={(event: ChangeEvent<HTMLInputElement>) => setKeyword(event.target.value)}
+      onSubmit={handleSubmit}
+      onClickClearButton={() => setKeyword('')}
+    />
+  );
+};
+```
+
+## 概要
+
+検索アイコン、検索語入力欄、クリアボタン（任意）から構成されるユニットであり、テーブルやリストの検索ヘッダーに適したサイズを持つ。ラッパー側で`width`を指定するだけで水平スペースに合わせた検索欄を配置できる。
+
+## 設計の原則（Do）
+
+### 常に制御された入力として扱う
+
+`value` と `onChange` をセットで渡し、状態管理を呼び出し元で完結させる。クリアボタンのハンドラでも同じ状態を操作する。
+
+### 送信アクションは開発者が明示的に扱う
+
+`onSubmit` には `FormEvent<HTMLFormElement>` が渡されるため、デフォルト送信を抑止しつつ検索APIの呼び出しなどを行う。Enterキー操作でも同じハンドラが呼ばれる。
+
+### 色と余白トークンを統一する
+
+周囲の背景色が異なる場合でも `bg-uiBackground01` と `border-uiBorder02` によって一貫した見た目を保つ。背景色と同系色のレイアウトでは余白や `width` を調整し視認性を確保する。
+
+### 検索結果がない場合は解決策を提示する
+
+結果が0件のときは、単に「見つかりませんでした」と伝えるだけでなく、入力内容の見直しや別のキーワード候補など、ユーザーが情報にたどり着くための行動を併せて示す。
+![設計の原則 その1](/storybook/images/search_01.jpg)
+
+## 推奨しないこと（Don't）
+
+### 入力欄の代わりに複雑な絞り込み要素を配置しない
+
+検索条件が複数にまたがる場合は、FilterPanelなどより適切なコンポーネントを検討する。Searchは単一語句向けの軽量なUIである。
+
+### ラベルを省略して意味を伝えないまま運用しない
+
+単なるアイコンとプレースホルダーでは意味の伝わりづらさがある。必ず画面上にテキストラベルやコンテキストを配置する。
+
+### データ量が少ない画面では使用しない
+
+一覧が単純で一画面に収まるような情報量の場合、検索バーは過剰である。まずは情報構造を見直し、本当に検索UIが必要か検討する。

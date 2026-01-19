@@ -99,7 +99,7 @@
         "description": "Tertiary text"
       },
       "TextPlaceholder": {
-        "value": "#CACCCD",
+        "value": "#A4A5A6",
         "type": "color",
         "description": "Placeholder text"
       },
@@ -116,7 +116,7 @@
     },
     "Link": {
       "Link01": {
-        "value": "#177EE5",
+        "value": "#0077D9",
         "type": "color",
         "description": "Primary links"
       },
@@ -234,12 +234,12 @@
     },
     "Interactive": {
       "Interactive01": {
-        "value": "#177EE5",
+        "value": "#0077D9",
         "type": "color",
         "description": "Primary Interactive color, Primary buttons"
       },
       "InteractiveBg01": {
-        "value": "#177EE5",
+        "value": "#0077D9",
         "type": "color",
         "description": "Primary Interactive color on background, Primary fill buttons"
       },
@@ -249,7 +249,7 @@
         "description": "Secondary Interactive color, Secondary buttons"
       },
       "Interactive03": {
-        "value": "#177EE5",
+        "value": "#0077D9",
         "type": "color",
         "description": "Tertiary button, Selected elements, Active elements, Accent icon"
       },
@@ -273,7 +273,7 @@
     },
     "Focus": {
       "Focus": {
-        "value": "#177EE5",
+        "value": "#0077D9",
         "type": "color",
         "description": "Focus border, Focus underline"
       }
@@ -343,6 +343,11 @@
         "value": "#454A4D",
         "type": "color",
         "description": "Hover Checkbox, Toggle"
+      },
+      "HoverUiError": {
+        "value": "#FCEFF3",
+        "type": "color",
+        "description": "Hover error ui background"
       }
     },
     "Active": {
@@ -367,7 +372,7 @@
         "description": "Active List background color"
       },
       "ActiveSelectedUi": {
-        "value": "#177EE5",
+        "value": "#0077D9",
         "type": "color",
         "description": "Checkbox background color, Select border color"
       },
@@ -390,6 +395,11 @@
         "value": "#1F2121",
         "type": "color",
         "description": "active secondary link"
+      },
+      "ActiveUiError": {
+        "value": "#F9E0E6",
+        "type": "color",
+        "description": "Active error ui background"
       }
     },
     "Selected": {
@@ -409,9 +419,14 @@
         "description": "Selected List Navigation on Color"
       },
       "SelectedUiBorder": {
-        "value": "#177EE5",
+        "value": "#0077D9",
         "type": "color",
         "description": "Selected Button Border"
+      },
+      "SelectedUiDark": {
+        "value": "#1366B9",
+        "type": "color",
+        "description": "Selected List Navigation on Dark Color"
       }
     },
     "Disabled": {
@@ -453,7 +468,7 @@
     },
     "Support": {
       "SupportError": {
-        "value": "#D92B57",
+        "value": "#C6244D",
         "type": "color",
         "description": "Error text, Icon with error, error element border"
       },
@@ -463,7 +478,7 @@
         "description": "Error light color"
       },
       "SupportSuccess": {
-        "value": "#2DC87D",
+        "value": "#29B471",
         "type": "color",
         "description": "Success text, button background, button border"
       },
@@ -473,7 +488,7 @@
         "description": "Success light color"
       },
       "SupportInfo": {
-        "value": "#177EE5",
+        "value": "#0077D9",
         "type": "color",
         "description": "Information text, button background, button border"
       },
@@ -493,7 +508,7 @@
         "description": "Warning light color"
       },
       "SupportDanger": {
-        "value": "#D92B57",
+        "value": "#C6244D",
         "type": "color",
         "description": "Danger text, button background, button border"
       },
@@ -536,7 +551,7 @@
         "description": ""
       },
       "Blue50": {
-        "value": "#177EE5",
+        "value": "#0077D9",
         "type": "color",
         "description": ""
       },

@@ -1,7 +1,7 @@
-import { action } from '@storybook/addon-actions';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ChangeEvent } from 'react';
 import { useCallback, useState } from 'react';
+import { action } from 'storybook/actions';
 
 import { Button } from '../button';
 import { TextInput } from '../text-input';
@@ -39,7 +39,7 @@ export const Component: Story = {
     const [value, setValue] = useState<string>('');
     const { addToast } = useToast();
     const handleClick = useCallback(() => {
-      if (args.state) addToast({ state: args.state, message: value });
+      if (typeof args.state !== 'undefined') addToast({ state: args.state, message: value });
     }, [addToast, args.state, value]);
 
     return (

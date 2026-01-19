@@ -1,12 +1,60 @@
-import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/blocks';
-import HeadingStories, { Component } from './heading.stories';
+import { Canvas, Meta, ArgTypes, Story, Controls, Source, Markdown } from '@storybook/addon-docs/blocks';
+import HeadingStories, { Base } from './heading.stories';
+import spec from '../../../../docs/component/heading-specification.md?raw';
 
 <Meta title="Heading" of={HeadingStories} />
 
 # Heading
 
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
+
 <Canvas>
-  <Story of={Component} />
+  <Story of={Base} />
 </Canvas>
 
-<Controls of={Component} />
+<Controls of={Base} />
+
+## コード例
+
+```tsx
+import { Button, Heading, Icon } from '@zenkigen-inc/component-ui';
+
+export const PageHeading = () => {
+  return (
+    <Heading level={2} before={<Icon name="chart-bar" size="large" />} after={<Icon name="information" size="small" />}>
+      ダッシュボード
+    </Heading>
+  );
+};
+```
+
+## 概要
+
+見出しに使用します。
+
+## 設計の原則 （Do）
+
+### Hタグは順番に使用します
+
+H1~H6までありますが、どれかをスキップせず、必ず昇順になるように使用します。階層を飛び越えると、ユーザーを混乱させることになります。
+
+### 全体の内容が端的に伝わるようなラベルを設定します
+
+全体の内容が端的に伝わるようなラベルを設定します。
+
+### 必要に応じてTooltipを設置します
+
+[Tooltip](/docs/components-tooltip--docs)は、UIの中で直接説明がなされていない、見慣れないオブジェクトを、ユーザーが理解するのを手助けするものです。ラベルの右横のiマークをマウスオーバーすることで、[Tooltip](/docs/components-tooltip--docs)を表示させます。
+
+## 推奨しないこと（Don’t）
+
+### 他の色を使用しない
+
+見出しを目立たせるために、いろいろな色を使いたくなるかもしれませんが、その誘惑に負けないでください。何が重要で何が重要でないかを明確にするために、カラースタイルを信頼してください。
+![推奨しないこと その1](/storybook/images/heading_01.jpg)

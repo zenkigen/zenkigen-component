@@ -1,12 +1,80 @@
-import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/blocks';
-import TooltipStories, { Component, Base } from './tooltip.stories';
+import { Canvas, Meta, ArgTypes, Story, Controls, Source, Markdown } from '@storybook/addon-docs/blocks';
+import TooltipStories, { Component } from './tooltip.stories';
+import spec from '../../../../docs/component/tooltip-specification.md?raw';
 
 <Meta title="Tooltip" of={TooltipStories} />
 
 # Tooltip
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
 
 <Canvas>
   <Story of={Component} />
 </Canvas>
 
 <Controls of={Component} />
+
+## Code Example
+
+```tsx
+import { Tooltip, Button } from '@zenkigen-inc/component-ui';
+
+const TooltipDemo = () => (
+  <Tooltip
+    content={
+      <span>
+        削除操作は取り消せません。
+        <br />
+        十分に確認してください。
+      </span>
+    }
+    size="medium"
+    horizontalAlign="left"
+  >
+    <Button variant="ghost">削除</Button>
+  </Tooltip>
+);
+```
+
+## 概要
+
+UIの中で直接説明がなされていない、見慣れないオブジェクトを、ユーザーが理解するのを手助けするものです。コンピュータの操作画面の表示要素の一種で、対象にカーソルやマウスポインタを合わせると周辺に小さな領域が出現し、注釈などが表示されるものです。
+
+# 設計の原則（Do）
+
+### 操作の説明が表示されていないときに使用します
+
+ボタンやラベル、アイコンなどに説明が記述されておらず、短い説明文が必要な場合には、ツールチップが効果的に機能します。ツールバーの操作や、グラフィックで表示されたコマンドボタンには、ツールチップを付けるとわかりやすいです。
+
+### マウスホバー時にチップを表示し、マウス離脱時に非表示にします
+
+複雑なテキストや、操作には対応していません。Tooltipは、常に関連する要素の近くでペアになっています。
+
+### 簡潔に説明します
+
+Tooltipには、短い説明文のみが含まれています。
+
+## 推奨しないこと（Don’t）
+
+### 表示の一部が切れるように配置しない
+
+要素にTooltip を表示する際の位置は重要です。ほとんどの場合、要素は相互的な関連によって配置されます。Tooltipの一部が切れることがないよう、全体が表示されるよう配置します。
+
+### ユーザーがタスクを完了するために必要な情報を含めないようにする
+
+ツールチップは、ユーザーがマウスを離すと消えてしまうので、ユーザーがタスクを完了するために必要な情報を含めないようにします。必須項目などの重要な情報には、常に表示され、アクセス可能なHelper Textを使用します。
+![推奨しないこと その2](/storybook/images/tooltip_01.jpg)
+
+### モバイルデバイスでは極力使用しない
+
+ツールチップは、タッチパネルのデバイスでは使い勝手が良くありません。もちろんタッチしたら起動するようにデザインすることは可能ですが、ユーザーがインタラクションしてくれる可能性は低いでしょう。もしさらに情報が必要な場合は、点線のアンダーラインを使ってリンクとは別のものだとわかるようにしつつ、インタラクションできることがわかるようにしましょう。
+
+### ツールチップにリッチな情報や画像を表示しない
+
+Tooltipは原則、シンプルなテキストで構成されています。

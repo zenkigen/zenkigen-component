@@ -1,5 +1,5 @@
-import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/blocks';
-import { Markdown } from '@storybook/blocks';
+import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/addon-docs/blocks';
+import { Markdown } from '@storybook/addon-docs/blocks';
 import AvatarStories, { Component, Base } from './avatar.stories';
 import spec from '../../../../docs/component/avatar-specification.md?raw';
 
@@ -20,3 +20,30 @@ import spec from '../../../../docs/component/avatar-specification.md?raw';
 </Canvas>
 
 <Controls of={Component} />
+
+## 概要
+
+プロフィール写真やイニシャル(文字列)などを用いて、ユーザーをグラフィックで表現するために使用します。
+
+## 設計の原則 （Do）
+
+### 画像が未設定の場合、名字(文字列)を使用します
+
+2文字を超える名字の場合は最初の2文字が適用されます。
+EX : 「長谷川」→「長谷」
+
+### 名前のデータがない場合は人型アイコンを表示します
+
+`firstName` 、`lastName`  両方の指定がない場合は、フォールバックとして「人型アイコン」を表示します
+![設計の原則 その1](/storybook/images/avatar_02.jpg)
+
+### 複数のユーザが存在する場合は水平に重ねて表示します
+
+5人を超える場合は、一番右のアバターに全体の人数を表示します。
+省略されている人数を表示する場合は数字の前に「+」マークをつけます。
+![設計の原則 その2](/storybook/images/avatar_01.jpg)
+
+### クリッカブルになっており、Dropdownでメニュー表示されることが多いです
+
+アイコンでも名前表記でも、Avatarはクリッカブルになっていることがほとんどです。
+![設計の原則 その3](/storybook/images/avatar_03.jpg)

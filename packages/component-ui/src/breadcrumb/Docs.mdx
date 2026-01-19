@@ -1,10 +1,46 @@
-import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/blocks';
+import { Canvas, Markdown, Meta, Story, Source } from '@storybook/addon-docs/blocks';
 import BreadcrumbStories, { Base } from './breadcrumb.stories';
+import spec from '../../../../docs/component/breadcrumb-specification.md?raw';
 
 <Meta title="Breadcrumb" of={BreadcrumbStories} />
 
 # Breadcrumb
 
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
+
 <Canvas>
   <Story of={Base} />
 </Canvas>
+
+### Code Example
+
+- `Breadcrumb.Item` を子要素として並べる。
+- 最終階層はリンクではなくテキスト、もしくは `aria-current="page"` を付与した要素で現在位置を示す。
+
+<Source of={Base} />
+
+## 概要
+
+ユーザーが現在のページまでの階層を理解し、親の階層へ戻るのをナビゲートするコンポーネントである。
+
+## 設計の原則（Do）
+
+### パンくずリストは階層間を上下に移動するための、水平方向のナビゲーションです
+
+パンくずリストはスペースをとらず、ナビゲーション階層におけるユーザーの位置づけを示すコンテキストを提供します。
+
+### スマホのときは右側に揃え、横スクロールにします
+
+スペースによって一部が切れる場合は、右側に揃え、切れている部分を閲覧できる様に横スクロールできるようにします。
+
+## 推奨しないこと（Don’t）
+
+### 1階層のナビゲーションを持つ場面では、不必要な混乱を招くため使用しない
+
+パンくずリストは常に二次的なものとして扱われ、主要なナビゲーションを完全に置き換えるべきではありません。また、1階層のナビゲーションを持つ製品では、不必要な混乱を招くため、使用すべきではありません。

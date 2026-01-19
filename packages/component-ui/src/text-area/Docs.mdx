@@ -1,5 +1,5 @@
-import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/blocks';
-import { Markdown } from '@storybook/blocks';
+import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/addon-docs/blocks';
+import { Markdown } from '@storybook/addon-docs/blocks';
 import TextAreaStories, { Component } from './text-area.stories';
 import spec from '../../../../docs/component/text-area-specification.md?raw';
 
@@ -20,3 +20,73 @@ import spec from '../../../../docs/component/text-area-specification.md?raw';
 </Canvas>
 
 <Controls of={Component} />
+
+## Code Examples
+
+```tsx
+import { useState, type ChangeEvent } from 'react';
+import { TextArea } from '@zenkigen-inc/component-ui';
+
+const CompositionExample = () => {
+  const [value, setValue] = useState('');
+  const maxLength = 120;
+  const isLimitExceeded = value.length > maxLength;
+
+  return (
+    <>
+      <label htmlFor="message">メッセージ</label>
+      <TextArea
+        id="message"
+        value={value}
+        placeholder="お問い合わせ内容を入力してください"
+        autoHeight
+        maxHeight={240}
+        isError={isLimitExceeded}
+        onChange={(event: ChangeEvent<HTMLTextAreaElement>) => setValue(event.target.value)}
+      >
+        <TextArea.HelperMessage>120文字以内で入力してください</TextArea.HelperMessage>
+        <TextArea.ErrorMessage>文字数が上限を超えています</TextArea.ErrorMessage>
+      </TextArea>
+    </
+  );
+};
+```
+
+## 概要
+
+複数行のテキストを入力するためのフィールドを提供するコンポーネントです。
+改行や段落を保持したままテキストを表示することができ、TextInputと同様に、入力値のバリデーションチェックを行うことも可能です。
+
+## 設計の原則 （Do）
+
+### 入力フォームの幅を言葉の長さに合わせて調整します
+
+入力項目の長さとフィールドの幅をそろえます。電話番号や郵便番号など、入力する桁数が決まっている場合はこのルールを適用しましょう。
+![推奨しないこと その1](/storybook/images/textarea_01.jpg)
+
+### ラベルテキストは入力項目を端的に表現します
+
+入力項目が1つしかなく、その意味を画面タイトルなどで明確に説明できる場合は省略可能です。
+
+### プレイスホルダーには入力例を記入することで、利用者の入力を補助します
+
+入力中や入力後に説明が必要な場合はサポートテキストを活用してください。
+![推奨しないこと その2](/storybook/images/textarea_02.jpg)
+
+### 改行や段落を保持したままテキストを表示できます
+
+TextInputと同様に、入力値のバリデーションチェックを行うことも可能です。
+
+## 推奨しないこと（Don't）
+
+### ラベルのテキストは切り捨てられるべきではない
+
+短く、明確に、そして完全に見えるようにしましょう。
+
+### プレイスホルダーのみでガイドしない
+
+ラベルを使用せずにプレイスホルダーのみでガイドすると、入力中にヒントを確認するには、入力している内容を削除する必要があります。Labelを適用してより明確に入力事項をガイドすることを推奨します。ユーザーがプレースホルダーの内容を忘れてしまっても、問題なく入力フォームの入力を完了できるように気を配る必要があります。
+
+### ラベルとプレイスホルダーの内容は、なるべく重複しないようにする
+
+テキストの量が2倍になるため、複雑に見える可能性があります。スペースを埋めるためだけのプレイスホルダーは必要ありません。

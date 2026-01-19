@@ -70,13 +70,14 @@ const MyComponent = () => {
 
 ### オプションプロパティ
 
-| プロパティ    | 型                        | デフォルト値 | 説明                     |
-| ------------- | ------------------------- | ------------ | ------------------------ |
-| `size`        | `'medium' \| 'large'`     | `'medium'`   | コンポーネントのサイズ   |
-| `height`      | `CSSProperties['height']` | `undefined`  | 高さの指定               |
-| `isError`     | `boolean`                 | `false`      | エラー状態かどうか       |
-| `disabled`    | `boolean`                 | `false`      | 無効状態かどうか         |
-| `placeholder` | `string`                  | `undefined`  | プレースホルダーテキスト |
+| プロパティ    | 型                        | デフォルト値 | 説明                                                       |
+| ------------- | ------------------------- | ------------ | ---------------------------------------------------------- |
+| `size`        | `'medium' \| 'large'`     | `'medium'`   | コンポーネントのサイズ                                     |
+| `height`      | `CSSProperties['height']` | `undefined`  | 高さの指定                                                 |
+| `isError`     | `boolean`                 | `false`      | エラー状態かどうか                                         |
+| `disabled`    | `boolean`                 | `false`      | 無効状態かどうか                                           |
+| `placeholder` | `string`                  | `undefined`  | プレースホルダーテキスト                                   |
+| `className`   | `string`                  | `undefined`  | 外部クラスの付与（後方互換目的の非推奨 API。将来削除予定） |
 
 ### 排他的プロパティグループ
 
@@ -214,6 +215,15 @@ const MyComponent = () => {
 />
 ```
 
+### ヘルパー/エラーメッセージ付き
+
+```typescript
+<TextArea value={value} onChange={(e) => setValue(e.target.value)} isError>
+  <TextArea.HelperMessage>入力時の補足説明</TextArea.HelperMessage>
+  <TextArea.ErrorMessage>バリデーションエラー</TextArea.ErrorMessage>
+</TextArea>
+```
+
 ### 無効状態
 
 ```typescript
@@ -231,6 +241,8 @@ const MyComponent = () => {
 - 標準的な`<textarea>`要素のすべてのアクセシビリティ機能を継承
 - `disabled`属性が適切に設定される
 - フォーカス管理が適切に実装されている
+- `TextArea.HelperMessage` / `TextArea.ErrorMessage` を子要素に配置すると、自動で`aria-describedby`が連結される
+- `isError`がtrueのとき、`aria-invalid=true`が付与され、`TextArea.ErrorMessage`は`aria-live="assertive"`で通知される
 
 ## 技術的な詳細
 
@@ -262,13 +274,17 @@ const MyComponent = () => {
 3. `maxHeight`は`autoHeight: true`の場合のみ有効です
 4. エラー状態は無効状態よりも優先度が低く、無効時はエラースタイルが適用されません
 5. コンポーネントは`div`要素でラップされており、`flex`クラスが適用されています
+6. `TextArea.HelperMessage` / `TextArea.ErrorMessage` は TextArea の子要素としてのみ使用してください。単独ではコンテキストエラーになります。
+7. `className`でのスタイル上書きは後方互換のために受け付けていますが非推奨です。デザイントークンと既定クラスの利用を優先してください。
 
 ## スタイルのカスタマイズ
 
-このコンポーネントは Tailwind CSS のユーティリティクラスを使用しており、`@zenkigen-inc/component-config`で定義されたデザイントークンに依存しています。カスタマイズする場合は、これらの設定を参照してください。
+このコンポーネントは Tailwind CSS のユーティリティクラスを使用しており、`@zenkigen-inc/component-config`で定義されたデザイントークンに依存しています。基本は提供済みのトークンやユーティリティを組み合わせて調整し、`className` による独自クラスの追加は後方互換のためにのみ許容される非推奨手段として扱ってください。
 
 ## 更新履歴
 
-| 日付       | 内容     | 担当者 |
-| ---------- | -------- | ------ |
-| 2025-08-18 | 新規作成 | -      |
+| 日付                 | 内容                                                          | 担当者 |
+| -------------------- | ------------------------------------------------------------- | ------ |
+| 2025-11-26 07:15 UTC | `className` の後方互換利用を非推奨として明記し仕様を更新      | -      |
+| 2025-11-26 10:36 JST | ヘルパー/エラーメッセージを追加し、アクセシビリティ仕様を更新 | -      |
+| 2025-08-18           | 新規作成                                                      | -      |

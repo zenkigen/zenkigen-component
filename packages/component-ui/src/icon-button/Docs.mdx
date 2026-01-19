@@ -1,5 +1,5 @@
-import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/blocks';
-import { Markdown } from '@storybook/blocks';
+import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/addon-docs/blocks';
+import { Markdown } from '@storybook/addon-docs/blocks';
 import IconButtonStories, { Component } from './icon-button.stories';
 import spec from '../../../../docs/component/icon-button-specification.md?raw';
 
@@ -19,21 +19,23 @@ import spec from '../../../../docs/component/icon-button-specification.md?raw';
 
 <Controls of={Component} />
 
-### Code Example
+## 概要
 
-```tsx
-import { IconButton } from '@zenkigen-inc/component-ui';
-import { useState } from 'react';
+ボタンはシンプルなユーザー操作のためのトリガーを表します。Buttonは、カード、ダイアログ、フォーム、その他コンポーネントやパターンに使用します。
+ボタンはユーザーに選択肢を与えます。Webサイトやモバイルアプリで行う操作を選択したり、提示されているものの中から選ぶことを可能にします。
 
-const [isSelected, setIsSelected] = useState(false);
+## 設計の原則(Do)
 
-return (
-  <IconButton
-    icon="add"
-    size="medium"
-    variant="outline"
-    isSelected={isSelected}
-    onClick={() => setIsSelected(!isSelected)}
-  />
-);
-```
+### 関連するボタンやコンポーネントはグルーピング(並列)してください
+
+関連するボタンやコンポーネントはグルーピング(並列)してください。
+
+### 破壊的なボタンを区別します
+
+警告ボタンがコンテンツの削除などの破壊的なアクションをもたらす場合は、破壊的なボタンスタイルを指定して、ユーザーがそれを区別できるようにします。
+
+## 推奨しないこと（Don't）
+
+### 定常的に使うアクションや重要なボタンの場合はIconButtonではなく、Buttonを用いてラベルを明記する
+
+ex: ログインボタンや送信ボタン、新規登録ボタン、ナビゲーションはIconButtonを使わない

@@ -51,8 +51,7 @@ describe('TextArea', () => {
       const textarea = screen.getByTestId('textarea');
       expect(textarea.className).toMatch(/typography-body14regular/);
       expect(textarea.className).toMatch(/px-2/);
-      expect(textarea.className).toMatch(/pt-1\.5/);
-      expect(textarea.className).toMatch(/pb-2/);
+      expect(textarea.className).toMatch(/py-2/);
     });
 
     it('largeサイズのスタイルが適用されること', () => {
@@ -69,34 +68,40 @@ describe('TextArea', () => {
     it('通常状態のスタイルが適用されること', () => {
       render(<TextArea value="" readOnly data-testid="textarea" />);
       const textarea = screen.getByTestId('textarea');
-      expect(textarea.className).toMatch(/border-uiBorder02/);
+      const wrapper = textarea.parentElement as HTMLElement;
+      expect(wrapper.className).toMatch(/border-uiBorder02/);
+      expect(wrapper.className).not.toMatch(/border-supportError/);
       expect(textarea.className).toMatch(/text-text01/);
-      expect(textarea.className).not.toMatch(/border-supportError/);
     });
 
     it('エラー状態のスタイルが適用されること', () => {
       render(<TextArea value="" isError readOnly data-testid="textarea" />);
       const textarea = screen.getByTestId('textarea');
-      expect(textarea.className).toMatch(/border-supportError/);
+      const wrapper = textarea.parentElement as HTMLElement;
+      expect(wrapper.className).toMatch(/border-supportError/);
       expect(textarea.className).toMatch(/text-supportError/);
     });
 
     it('無効状態のスタイルが適用されること', () => {
       render(<TextArea value="" disabled data-testid="textarea" />);
       const textarea = screen.getByTestId('textarea');
+      const wrapper = textarea.parentElement as HTMLElement;
       expect(textarea).toBeDisabled();
       expect(textarea.className).toMatch(/bg-disabled02/);
-      expect(textarea.className).toMatch(/border-disabled01/);
       expect(textarea.className).toMatch(/text-textPlaceholder/);
+      expect(wrapper.className).toMatch(/bg-disabled02/);
+      expect(wrapper.className).toMatch(/border-disabled01/);
     });
 
     it('無効状態がエラー状態よりも優先されること', () => {
       render(<TextArea value="" isError disabled data-testid="textarea" />);
       const textarea = screen.getByTestId('textarea');
+      const wrapper = textarea.parentElement as HTMLElement;
       expect(textarea).toBeDisabled();
       expect(textarea.className).toMatch(/bg-disabled02/);
-      expect(textarea.className).toMatch(/border-disabled01/);
-      expect(textarea.className).not.toMatch(/border-supportError/);
+      expect(wrapper.className).toMatch(/bg-disabled02/);
+      expect(wrapper.className).toMatch(/border-disabled01/);
+      expect(wrapper.className).not.toMatch(/border-supportError/);
     });
   });
 
@@ -104,20 +109,25 @@ describe('TextArea', () => {
     it('height指定が正しく適用されること（通常モード）', () => {
       render(<TextArea value="" height="120px" readOnly data-testid="textarea" />);
       const textarea = screen.getByTestId('textarea');
-      expect(textarea.style.height).toBe('120px');
+      const wrapper = textarea.parentElement as HTMLElement;
+      expect(wrapper.style.height).toBe('120px');
+      expect(textarea.style.height).toBe('100%');
     });
 
     it('autoHeightモードでheight指定がminHeightとして適用されること', () => {
       render(<TextArea value="" autoHeight height="80px" readOnly data-testid="textarea" />);
       const textarea = screen.getByTestId('textarea');
-      expect(textarea.style.minHeight).toBe('80px');
+      const wrapper = textarea.parentElement as HTMLElement;
+      expect(wrapper.style.minHeight).toBe('80px');
+      expect(textarea.style.minHeight).toBe('100%');
       expect(textarea.className).toMatch(/field-sizing-content/);
     });
 
     it('autoHeightモードでmaxHeightが適用されること', () => {
       render(<TextArea value="" autoHeight maxHeight="200px" readOnly data-testid="textarea" />);
       const textarea = screen.getByTestId('textarea');
-      expect(textarea.style.maxHeight).toBe('200px');
+      const wrapper = textarea.parentElement as HTMLElement;
+      expect(wrapper.style.maxHeight).toBe('200px');
       expect(textarea.className).toMatch(/field-sizing-content/);
     });
 
@@ -200,12 +210,97 @@ describe('TextArea', () => {
     });
   });
 
+  describe('HelperMessage / ErrorMessage', () => {
+    it('HelperMessage を指定すると aria-describedby に連結されること', () => {
+      render(
+        <TextArea value="abc" onChange={() => {}}>
+          <TextArea.HelperMessage id="helper-1">ヘルプ</TextArea.HelperMessage>
+        </TextArea>,
+      );
+
+      const textarea = screen.getByRole('textbox');
+      expect(textarea).toHaveAttribute('aria-describedby', 'helper-1');
+    });
+
+    it('aria-describedby props と HelperMessage が結合されること', () => {
+      render(
+        <TextArea value="abc" aria-describedby="external" onChange={() => {}}>
+          <TextArea.HelperMessage id="helper-2">ヘルプ</TextArea.HelperMessage>
+        </TextArea>,
+      );
+
+      const textarea = screen.getByRole('textbox');
+      expect(textarea).toHaveAttribute('aria-describedby', 'external helper-2');
+    });
+
+    it('HelperMessage に id を渡さなくても aria-describedby に採番されること', () => {
+      render(
+        <TextArea value="abc" onChange={() => {}}>
+          <TextArea.HelperMessage>ヘルプ</TextArea.HelperMessage>
+        </TextArea>,
+      );
+
+      const textarea = screen.getByRole('textbox');
+      const describedBy = textarea.getAttribute('aria-describedby');
+
+      expect(describedBy).not.toBeNull();
+      expect(describedBy?.endsWith('-helper-1')).toBe(true);
+    });
+
+    it('ErrorMessage に id を渡さなくても aria-describedby に採番されること', () => {
+      render(
+        <TextArea value="abc" onChange={() => {}} isError>
+          <TextArea.ErrorMessage>エラー</TextArea.ErrorMessage>
+        </TextArea>,
+      );
+
+      const textarea = screen.getByRole('textbox');
+      const describedByList = textarea.getAttribute('aria-describedby')?.split(' ') ?? [];
+
+      expect(describedByList.some((id) => id.endsWith('-error-1'))).toBe(true);
+    });
+
+    it('isError=false では ErrorMessage が描画されないこと', () => {
+      render(
+        <TextArea value="abc" onChange={() => {}}>
+          <TextArea.ErrorMessage>エラー</TextArea.ErrorMessage>
+        </TextArea>,
+      );
+
+      expect(screen.queryByText('エラー')).toBeNull();
+    });
+
+    it('isError=true では ErrorMessage が描画され role/aria-live が付与されること', () => {
+      render(
+        <TextArea value="abc" onChange={() => {}} isError>
+          <TextArea.ErrorMessage>エラー</TextArea.ErrorMessage>
+        </TextArea>,
+      );
+
+      const error = screen.getByText('エラー');
+      expect(error).toBeInTheDocument();
+      expect(error).toHaveAttribute('aria-live', 'assertive');
+    });
+
+    it('isError またはエラー子要素がある場合に aria-invalid が true になること', () => {
+      render(
+        <TextArea value="abc" onChange={() => {}} isError>
+          <TextArea.ErrorMessage>エラー</TextArea.ErrorMessage>
+        </TextArea>,
+      );
+
+      const textarea = screen.getByRole('textbox');
+      expect(textarea).toHaveAttribute('aria-invalid', 'true');
+    });
+  });
+
   describe('コンテナ要素', () => {
     it('div要素でラップされていること', () => {
       const { container } = render(<TextArea value="" readOnly data-testid="textarea" />);
       const wrapper = container.firstChild as HTMLElement;
       expect(wrapper.tagName).toBe('DIV');
       expect(wrapper.className).toMatch(/flex/);
+      expect(wrapper.className).toMatch(/overflow-hidden/);
     });
   });
 });

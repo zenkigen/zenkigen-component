@@ -1,12 +1,99 @@
-import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/blocks';
+import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/addon-docs/blocks';
+import { Markdown } from '@storybook/addon-docs/blocks';
 import RadioStories, { Component } from './radio.stories';
+import spec from '../../../../docs/component/radio-specification.md?raw';
 
 <Meta title="Radio" of={RadioStories} />
 
 # Radio
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
 
 <Canvas>
   <Story of={Component} />
 </Canvas>
 
 <Controls of={Component} />
+
+### Code Example
+
+```typescript
+import { useState, ChangeEvent } from 'react';
+import { Radio } from '@zenkigen-inc/component-ui';
+
+const Example = () => {
+  const [value, setValue] = useState('foo');
+
+  const handleChange = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
+    setValue(value);
+  };
+
+  return (
+    <div className="flex flex-col gap-4">
+      <Radio
+        id="option-foo"
+        name="example-radio"
+        label="Foo"
+        value="foo"
+        isChecked={value === 'foo'}
+        onChange={handleChange}
+      />
+      <Radio
+        id="option-bar"
+        name="example-radio"
+        label="Bar"
+        value="bar"
+        isChecked={value === 'bar'}
+        onChange={handleChange}
+      />
+    </div>
+  );
+};
+```
+
+## 概要
+
+一覧で表示された複数の選択肢から1つだけを選択できるコンポーネントです。
+
+## 設計の原則（Do）
+
+### 選択可能なすべての選択肢を表示します
+
+選択肢が多く、折りたたむほうが最適な場合は、Selectを使用してください。
+
+### 選択肢は縦に並べるのが基本
+
+一般的に、選択肢は上から下へ視線が移動するため、縦並びが最も認識しやすくなります。各項目を左揃えにすることで、ユーザーは素早くスキャンして目的の項目を見つけられます。
+
+### ラジオボタンと一緒にラベル自体もクリック可能にします
+
+ユーザーが素早くクリックできるように、ラベル自体もクリック可能にします。視覚的に見てクリックできると判断できるエリアから数ピクセル外側までクリックできる場所が大きくなっている場合、ユーザによるエラーが大幅に減ることがわかっています。
+![設計の原則 その1](/storybook/images/radio_01.jpg)
+
+## 推奨しないこと（Don't）
+
+### 複数回答できるような質問へは使用しない
+
+複数の回答を選択させる場合は、CheckBoxを使います。
+![推奨しないこと その1](/storybook/images/radio_02.jpg)
+
+### 二者択一ではっきり示すことのできる場合は使用しない
+
+考えられるオプションが2つのみで、それらを1つの二者択一ではっきり示すことのできる場合(「オン/オフ」や「はい/いいえ」など)は、それらを1つのCheckBox、または、Toggleにまとめます。
+![推奨しないこと その2](/storybook/images/radio_03.jpg)
+
+### ネスティングは避ける
+
+他のRadioButtonあるいはCheckBoxにおいて、RadioButtonのネスティングを避けましょう。混乱を避けるためには、全選択肢を同レベルに保たなければなりません。
+![推奨しないこと その3](/storybook/images/radio_04.jpg)
+
+### ラジオボタン内に操作可能な要素を含めない
+
+ラジオボタン内にはリンクやInputなど、ユーザーが値を選択する以外の操作可能な要素は配置しないでください。これらを配置してしまうと、ユーザーがフォーム入力するための操作難易度が上がり、誤操作などにつながります。
+![推奨しないこと その4](/storybook/images/radio_05.jpg)

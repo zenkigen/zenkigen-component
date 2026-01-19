@@ -1,12 +1,72 @@
-import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/blocks';
+import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/addon-docs/blocks';
+import { Markdown } from '@storybook/addon-docs/blocks';
 import TagStories, { Component } from './tag.stories';
+import spec from '../../../../docs/component/tag-specification.md?raw';
 
 <Meta title="Tag" of={TagStories} />
 
 # Tag
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
 
 <Canvas>
   <Story of={Component} />
 </Canvas>
 
 <Controls of={Component} />
+
+## Code Examples
+
+```tsx
+import { useState } from 'react';
+import { Tag } from '@zenkigen-inc/component-ui';
+
+const TagListExample = () => {
+  const [removableTags, setRemovableTags] = useState([
+    { id: 'task-1', label: '優先', color: 'supportDanger' as const },
+    { id: 'task-2', label: '候補', color: 'userBlue' as const },
+  ]);
+
+  const handleDelete = (tagId: string) => {
+    setRemovableTags((prev) => prev.filter((tag) => tag.id !== tagId));
+  };
+
+  return (
+    <div className="flex flex-wrap gap-2">
+      <Tag id="status" color="supportSuccess" size="small">
+        完了
+      </Tag>
+      <Tag id="status-light" color="supportSuccess" variant="light" size="small">
+        Ready
+      </Tag>
+      {removableTags.map((tag) => (
+        <Tag key={tag.id} id={tag.id} color={tag.color} isEditable onDelete={handleDelete}>
+          {tag.label}
+        </Tag>
+      ))}
+    </div>
+  );
+};
+```
+
+## 概要
+
+アイテムを説明するキーワードを使用してラベル付け、分類、または整理することができます。
+
+## 設計の原則（Do）
+
+### 順番はありません
+
+タグの内容は基本的に並列となるため、掲載する順番を設ける必要はありません。
+
+## 推奨しないこと（Don’t）
+
+### 長すぎるラベルを設定しない
+
+ユーザーが全体を把握しやすいように短いラベルを使用します。

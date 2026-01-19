@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import React, { useState } from 'react';
 
 import { Button } from '../button';
@@ -89,6 +89,7 @@ export const Component: Story = {
             isSelected={selectedTab === 'tab1'}
             onClick={setSelectedTab}
             isDisabled={disabledTab === 'tab1'}
+            icon="list"
           >
             短い
           </Tab.Item>
@@ -97,6 +98,7 @@ export const Component: Story = {
             isSelected={selectedTab === 'tab2'}
             onClick={setSelectedTab}
             isDisabled={disabledTab === 'tab2'}
+            icon="list"
           >
             中程度のタブ
           </Tab.Item>
@@ -105,6 +107,7 @@ export const Component: Story = {
             isSelected={selectedTab === 'tab3'}
             onClick={setSelectedTab}
             isDisabled={disabledTab === 'tab3'}
+            icon="list"
           >
             とても長いタブのテキスト
           </Tab.Item>
@@ -209,6 +212,64 @@ export const LayoutEqualExample: Story = {
   ),
 };
 
+export const LayoutAutoWithIcon: Story = {
+  args: {
+    layout: 'auto',
+    children: <></>,
+  },
+  argTypes: {
+    children: {
+      table: {
+        disable: true,
+      },
+    },
+  },
+  render: (args) => (
+    <div className="flex items-center justify-center">
+      <TabExample {...args}>
+        <Tab.Item id="tab1" onClick={() => {}} icon="chart-bar" isSelected>
+          短い
+        </Tab.Item>
+        <Tab.Item id="tab2" onClick={() => {}} icon="calendar-check">
+          中程度のタブ
+        </Tab.Item>
+        <Tab.Item id="tab3" onClick={() => {}} icon="user">
+          とても長いタブのテキスト
+        </Tab.Item>
+      </TabExample>
+    </div>
+  ),
+};
+
+export const LayoutEqualWithIcon: Story = {
+  args: {
+    layout: 'equal',
+    children: <></>,
+  },
+  argTypes: {
+    children: {
+      table: {
+        disable: true,
+      },
+    },
+  },
+  render: (args) => (
+    <div className="flex items-center justify-center">
+      <TabExample {...args}>
+        <Tab.Item id="tab1" onClick={() => {}} icon="chart-bar" isSelected>
+          短い
+        </Tab.Item>
+        <Tab.Item id="tab2" onClick={() => {}} icon="calendar-check">
+          中程度のタブ
+        </Tab.Item>
+        <Tab.Item id="tab3" onClick={() => {}} icon="user">
+          とても長いタブのテキスト
+        </Tab.Item>
+      </TabExample>
+    </div>
+  ),
+};
+
 export const LayoutExamples: Story = {
   args: {
     layout: 'auto',
@@ -250,6 +311,29 @@ export const LayoutExamples: Story = {
             とても長いタブのテキスト
           </Tab.Item>
         </TabExample>
+        <TabExample layout="auto">
+          <Tab.Item id="tab1" onClick={() => {}} icon="chart-bar" isSelected>
+            短い
+          </Tab.Item>
+          <Tab.Item id="tab2" onClick={() => {}} icon="calendar-check">
+            中程度のタブ
+          </Tab.Item>
+          <Tab.Item id="tab3" onClick={() => {}} icon="user">
+            とても長いタブのテキスト
+          </Tab.Item>
+        </TabExample>
+
+        <TabExample layout="equal">
+          <Tab.Item id="tab1" onClick={() => {}} icon="chart-bar" isSelected>
+            短い
+          </Tab.Item>
+          <Tab.Item id="tab2" onClick={() => {}} icon="calendar-check">
+            中程度のタブ
+          </Tab.Item>
+          <Tab.Item id="tab3" onClick={() => {}} icon="user">
+            とても長いタブのテキスト
+          </Tab.Item>
+        </TabExample>
       </div>
       <div className="flex w-full flex-col gap-5 p-5">
         <TabExample layout="auto">
@@ -272,6 +356,30 @@ export const LayoutExamples: Story = {
             中程度のタブ
           </Tab.Item>
           <Tab.Item id="tab6" onClick={() => {}}>
+            とても長いタブのテキスト
+          </Tab.Item>
+        </TabExample>
+
+        <TabExample layout="auto">
+          <Tab.Item id="tab1" onClick={() => {}} icon="chart-bar" isSelected>
+            短い
+          </Tab.Item>
+          <Tab.Item id="tab2" onClick={() => {}} icon="calendar-check">
+            中程度のタブ
+          </Tab.Item>
+          <Tab.Item id="tab3" onClick={() => {}} icon="user">
+            とても長いタブのテキスト
+          </Tab.Item>
+        </TabExample>
+
+        <TabExample layout="equal">
+          <Tab.Item id="tab1" onClick={() => {}} icon="chart-bar" isSelected>
+            短い
+          </Tab.Item>
+          <Tab.Item id="tab2" onClick={() => {}} icon="calendar-check">
+            中程度のタブ
+          </Tab.Item>
+          <Tab.Item id="tab3" onClick={() => {}} icon="user">
             とても長いタブのテキスト
           </Tab.Item>
         </TabExample>

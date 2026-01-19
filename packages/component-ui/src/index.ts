@@ -15,6 +15,8 @@ export * from './notification-inline';
 export * from './pagination';
 export * from './pagination-select';
 export * from './password-input';
+export * from './popover';
+export * from './popup';
 export * from './radio';
 export * from './search';
 export * from './segmented-control';

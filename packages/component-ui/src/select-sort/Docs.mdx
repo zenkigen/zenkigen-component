@@ -1,12 +1,41 @@
-import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/blocks';
+import { Canvas, Meta, ArgTypes, Story, Controls, Source, Markdown } from '@storybook/addon-docs/blocks';
 import SelectSortStories, { Component } from './select-sort.stories';
+import spec from '../../../../docs/component/select-sort-specification.md?raw';
 
 <Meta title="SelectSort" of={SelectSortStories} />
 
 # SelectSort
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
 
 <Canvas>
   <Story of={Component} />
 </Canvas>
 
 <Controls of={Component} />
+
+## 概要
+
+テーブルのヘッダーをクリックすることで、指定されたキーに基づいて行を昇順・降順に並べ替えるUIコンポーネントです。
+
+## 設計の原則（Do）
+
+### Listと組み合わせて使用します
+
+選択肢にはListを使用してください。Listには「昇順で並べ替え」「降順で並べ替え」を使用します。
+
+### 操作後にアクションが発生します
+
+選択肢の中から1つを選択すると、それに伴い並べ替えのアクションがすぐに実行されます。
+
+## 推奨しないこと（Don’t）
+
+### 複数条件で絞り込みをする場合は使用しない
+
+条件の掛け合わせで実行をさせたい場合は[Select](/docs/components-select--docs)を使用する。
