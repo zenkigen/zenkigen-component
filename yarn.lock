@@ -2512,12 +2512,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:20.19.7":
-  version: 20.19.7
-  resolution: "@types/node@npm:20.19.7"
+"@types/node@npm:20.19.30":
+  version: 20.19.30
+  resolution: "@types/node@npm:20.19.30"
   dependencies:
     undici-types: "npm:~6.21.0"
-  checksum: 10c0/bd97ed8db9eaab0f66ff066944923bae3baf51c98b603be9f30ea53f2ceeb6ae6fb4bc5bda3d3cd54c90c2ddc146f2117287f42e64fdcac493790c28dd759763
+  checksum: 10c0/23dbea652727d947ea35fc1c4e8acb7e1c535e85f6c139c3a4697864a5af164655ce305ab0877ea4cca537deee0405bf56aeac714f236ae1a3dd0fa6b87cc860
   languageName: node
   linkType: hard
 
@@ -2871,11 +2871,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zenkigen-inc/component-config@npm:1.18.4, @zenkigen-inc/component-config@workspace:packages/component-config":
+"@zenkigen-inc/component-config@npm:1.18.5, @zenkigen-inc/component-config@workspace:packages/component-config":
   version: 0.0.0-use.local
   resolution: "@zenkigen-inc/component-config@workspace:packages/component-config"
   dependencies:
-    "@zenkigen-inc/component-theme": "npm:1.18.4"
+    "@zenkigen-inc/component-theme": "npm:1.18.5"
     style-dictionary: "npm:5.1.1"
     tailwindcss: "npm:3.4.17"
     token-transformer: "npm:0.0.33"
@@ -2884,7 +2884,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zenkigen-inc/component-icons@npm:1.18.4, @zenkigen-inc/component-icons@workspace:packages/component-icons":
+"@zenkigen-inc/component-icons@npm:1.18.5, @zenkigen-inc/component-icons@workspace:packages/component-icons":
   version: 0.0.0-use.local
   resolution: "@zenkigen-inc/component-icons@workspace:packages/component-icons"
   dependencies:
@@ -2898,7 +2898,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zenkigen-inc/component-theme@npm:1.18.4, @zenkigen-inc/component-theme@workspace:packages/component-theme":
+"@zenkigen-inc/component-theme@npm:1.18.5, @zenkigen-inc/component-theme@workspace:packages/component-theme":
   version: 0.0.0-use.local
   resolution: "@zenkigen-inc/component-theme@workspace:packages/component-theme"
   dependencies:
@@ -2916,9 +2916,9 @@ __metadata:
     "@testing-library/jest-dom": "npm:6.4.0"
     "@testing-library/react": "npm:16.3.0"
     "@testing-library/user-event": "npm:14.6.1"
-    "@zenkigen-inc/component-config": "npm:1.18.4"
-    "@zenkigen-inc/component-icons": "npm:1.18.4"
-    "@zenkigen-inc/component-theme": "npm:1.18.4"
+    "@zenkigen-inc/component-config": "npm:1.18.5"
+    "@zenkigen-inc/component-icons": "npm:1.18.5"
+    "@zenkigen-inc/component-theme": "npm:1.18.5"
     clsx: "npm:2.1.1"
     hygen: "npm:6.2.11"
     tsup: "npm:8.5.0"
@@ -9584,7 +9584,7 @@ __metadata:
     "@testing-library/react": "npm:16.3.0"
     "@testing-library/user-event": "npm:14.6.1"
     "@types/babel__preset-env": "npm:7.10.0"
-    "@types/node": "npm:20.19.7"
+    "@types/node": "npm:20.19.30"
     "@types/react": "npm:19.1.8"
     "@types/react-dom": "npm:19.2.2"
     "@typescript-eslint/eslint-plugin": "npm:8.36.0"
