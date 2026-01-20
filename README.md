@@ -160,6 +160,13 @@ yarn list --pattern "@zenkigen-inc/component-*"
 - Tooltip
 - Typography
 
+## ユーティリティ一覧・仕様書
+
+以下は利用可能なユーティリティの一覧です。リンクがある項目は詳細な仕様書が参照できます。
+
+- [Color](./docs/component/color-specification.md)
+- Typography
+
 ## Storybook
 
 各コンポーネントの実装例とインタラクティブなデモは、Storybookで確認できます：

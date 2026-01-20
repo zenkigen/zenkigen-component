@@ -2,83 +2,103 @@
   "User": {
     "Red": {
       "value": "#f88282",
-      "type": "color"
+      "type": "color",
+      "rawValue": "#f88282"
     },
     "Pink": {
       "value": "#f191dd",
-      "type": "color"
+      "type": "color",
+      "rawValue": "#f191dd"
     },
     "Purple": {
       "value": "#c88ae5",
-      "type": "color"
+      "type": "color",
+      "rawValue": "#c88ae5"
     },
     "Turquoise": {
       "value": "#86cee5",
-      "type": "color"
+      "type": "color",
+      "rawValue": "#86cee5"
     },
     "RoyalBlue": {
       "value": "#93b3f2",
-      "type": "color"
+      "type": "color",
+      "rawValue": "#93b3f2"
     },
     "Blue": {
       "value": "#7ecaf5",
-      "type": "color"
+      "type": "color",
+      "rawValue": "#7ecaf5"
     },
     "Aquamarine": {
       "value": "#79ebda",
-      "type": "color"
+      "type": "color",
+      "rawValue": "#79ebda"
     },
     "YellowGreen": {
       "value": "#8ae58b",
-      "type": "color"
+      "type": "color",
+      "rawValue": "#8ae58b"
     },
     "Yellow": {
       "value": "#f3c90a",
-      "type": "color"
+      "type": "color",
+      "rawValue": "#f3c90a"
     },
     "Orange": {
       "value": "#f9b12c",
-      "type": "color"
+      "type": "color",
+      "rawValue": "#f9b12c"
     },
     "RedLight": {
       "value": "#FDDADA",
-      "type": "color"
+      "type": "color",
+      "rawValue": "#FDDADA"
     },
     "PinkLight": {
       "value": "#FBDEF5",
-      "type": "color"
+      "type": "color",
+      "rawValue": "#FBDEF5"
     },
     "PurpleLight": {
       "value": "#EFDCF7",
-      "type": "color"
+      "type": "color",
+      "rawValue": "#EFDCF7"
     },
     "TurquoiseLight": {
       "value": "#DBF0F7",
-      "type": "color"
+      "type": "color",
+      "rawValue": "#DBF0F7"
     },
     "RoyalBlueLight": {
       "value": "#DFE8FB",
-      "type": "color"
+      "type": "color",
+      "rawValue": "#DFE8FB"
     },
     "BlueLight": {
       "value": "#D8EFFC",
-      "type": "color"
+      "type": "color",
+      "rawValue": "#D8EFFC"
     },
     "AquamarineLight": {
       "value": "#D7F9F4",
-      "type": "color"
+      "type": "color",
+      "rawValue": "#D7F9F4"
     },
     "YellowGreenLight": {
       "value": "#DCF7DC",
-      "type": "color"
+      "type": "color",
+      "rawValue": "#DCF7DC"
     },
     "YellowLight": {
       "value": "#FCEFB6",
-      "type": "color"
+      "type": "color",
+      "rawValue": "#FCEFB6"
     },
     "OrangeLight": {
       "value": "#FDE8C0",
-      "type": "color"
+      "type": "color",
+      "rawValue": "#FDE8C0"
     }
   },
   "Tokens": {
@@ -86,899 +106,1073 @@
       "Text01": {
         "value": "#1F2121",
         "type": "color",
-        "description": "Primary text, Body copy, Headers"
+        "description": "Primary text, Body copy, Headers",
+        "rawValue": "$Colors.Gray.Gray100"
       },
       "Text02": {
         "value": "#5C6366",
         "type": "color",
-        "description": "Secondary text, Input labels"
+        "description": "Secondary text, Input labels",
+        "rawValue": "$Colors.Gray.Gray80"
       },
       "Text03": {
         "value": "#838789",
         "type": "color",
-        "description": "Tertiary text"
+        "description": "Tertiary text",
+        "rawValue": "$Colors.Gray.Gray60"
       },
       "TextPlaceholder": {
         "value": "#A4A5A6",
         "type": "color",
-        "description": "Placeholder text"
+        "description": "Placeholder text",
+        "rawValue": "$Colors.Gray.Gray50"
       },
       "TextOnColor": {
         "value": "#FFFFFF",
         "type": "color",
-        "description": "Text on interactive colors"
+        "description": "Text on interactive colors",
+        "rawValue": "$Colors.White"
       },
       "TextBlack": {
         "value": "#000000",
         "type": "color",
-        "description": "Title text"
+        "description": "Title text",
+        "rawValue": "$Colors.Black"
       }
     },
     "Link": {
       "Link01": {
         "value": "#0077D9",
         "type": "color",
-        "description": "Primary links"
+        "description": "Primary links",
+        "rawValue": "$Colors.Blue.Blue50"
       },
       "Link02": {
         "value": "#A4A5A6",
         "type": "color",
-        "description": "Secondary links"
+        "description": "Secondary links",
+        "rawValue": "$Colors.Gray.Gray50"
       }
     },
     "Border": {
       "UiBorder01": {
         "value": "#DEDFE0",
         "type": "color",
-        "description": "List border color, Container border"
+        "description": "List border color, Container border",
+        "rawValue": "$Colors.Gray.Gray30"
       },
       "UiBorder02": {
         "value": "#CACCCD",
         "type": "color",
-        "description": "Button border, Input border"
+        "description": "Button border, Input border",
+        "rawValue": "$Colors.Gray.Gray40"
       },
       "UiBorder03": {
         "value": "#A4A5A6",
         "type": "color",
-        "description": "Checkbox border, Input border"
+        "description": "Checkbox border, Input border",
+        "rawValue": "$Colors.Gray.Gray50"
       },
       "UiBorder04": {
         "value": "#838789",
         "type": "color",
-        "description": "Button border, Checkbox border, Input border"
+        "description": "Button border, Checkbox border, Input border",
+        "rawValue": "$Colors.Gray.Gray60"
       }
     },
     "Background": {
       "UiBackground01": {
         "value": "#FFFFFF",
         "type": "color",
-        "description": "Default page background"
+        "description": "Default page background",
+        "rawValue": "$Colors.White"
       },
       "UiBackground02": {
         "value": "#F3F4F5",
         "type": "color",
-        "description": "Side navigation background"
+        "description": "Side navigation background",
+        "rawValue": "$Colors.Gray.Gray10"
       },
       "UiBackground02Light": {
         "value": "#FAFAFA",
         "type": "color",
-        "description": "Side navigation background in lighter hue"
+        "description": "Side navigation background in lighter hue",
+        "rawValue": "$Colors.Gray.Gray05"
       },
       "UiBackground02Blue": {
         "value": "#F1F7FD",
         "type": "color",
-        "description": "Side navigation background, checked background - Blue"
+        "description": "Side navigation background, checked background - Blue",
+        "rawValue": "$Colors.Blue.Blue10"
       },
       "UiBackgroundBlue": {
         "value": "#F1F7FD",
         "type": "color",
-        "description": "info message background"
+        "description": "info message background",
+        "rawValue": "$Colors.Blue.Blue10"
       },
       "UiBackgroundGray": {
         "value": "#F3F4F5",
         "type": "color",
-        "description": "message background"
+        "description": "message background",
+        "rawValue": "$Colors.Gray.Gray10"
       },
       "UiBackgroundSuccess": {
         "value": "#ECFBF4",
         "type": "color",
-        "description": "Success message background"
+        "description": "Success message background",
+        "rawValue": "$Colors.Green.Green10"
       },
       "UiBackgroundError": {
         "value": "#FCEFF3",
         "type": "color",
-        "description": "Error message background"
+        "description": "Error message background",
+        "rawValue": "$Colors.Red.Red10"
       },
       "UiBackgroundWarning": {
         "value": "#FFFADC",
         "type": "color",
-        "description": "Warning message background"
+        "description": "Warning message background",
+        "rawValue": "$Colors.Yellow.Yellow10"
       },
       "UiBackgroundTooltip": {
         "value": "#1F2121",
         "type": "color",
-        "description": "ToolTip background"
+        "description": "ToolTip background",
+        "rawValue": "$Colors.Gray.Gray100"
       },
       "BackgroundOverlayGray": {
         "value": "#1f212180",
         "type": "color",
-        "description": "Background overlay"
+        "description": "Background overlay",
+        "rawValue": "rgba($Colors.Gray.Gray100, 0.5)"
       },
       "BackgroundOverlayBlack": {
         "value": "#00000099",
         "type": "color",
-        "description": "Background overlay"
+        "description": "Background overlay",
+        "rawValue": "rgba($Colors.Black, 0.6)"
       }
     },
     "Icon": {
       "Icon01": {
         "value": "#5C6366",
         "type": "color",
-        "description": "Primary icons"
+        "description": "Primary icons",
+        "rawValue": "$Colors.Gray.Gray80"
       },
       "Icon02": {
         "value": "#A4A5A6",
         "type": "color",
-        "description": "Secondary icons"
+        "description": "Secondary icons",
+        "rawValue": "$Colors.Gray.Gray50"
       },
       "Icon03": {
         "value": "#CACCCD",
         "type": "color",
-        "description": "Tertiary icons, icon button default state"
+        "description": "Tertiary icons, icon button default state",
+        "rawValue": "$Colors.Gray.Gray40"
       },
       "IconOnColor": {
         "value": "#FFFFFF",
         "type": "color",
-        "description": "Icons on interactive colors"
+        "description": "Icons on interactive colors",
+        "rawValue": "$Colors.White"
       }
     },
     "Interactive": {
       "Interactive01": {
         "value": "#0077D9",
         "type": "color",
-        "description": "Primary Interactive color, Primary buttons"
+        "description": "Primary Interactive color, Primary buttons",
+        "rawValue": "$Colors.Blue.Blue50"
       },
       "InteractiveBg01": {
         "value": "#0077D9",
         "type": "color",
-        "description": "Primary Interactive color on background, Primary fill buttons"
+        "description": "Primary Interactive color on background, Primary fill buttons",
+        "rawValue": "$Colors.Blue.Blue50"
       },
       "Interactive02": {
         "value": "#5C6366",
         "type": "color",
-        "description": "Secondary Interactive color, Secondary buttons"
+        "description": "Secondary Interactive color, Secondary buttons",
+        "rawValue": "$Colors.Gray.Gray80"
       },
       "Interactive03": {
         "value": "#0077D9",
         "type": "color",
-        "description": "Tertiary button, Selected elements, Active elements, Accent icon"
+        "description": "Tertiary button, Selected elements, Active elements, Accent icon",
+        "rawValue": "$Colors.Blue.Blue50"
       },
       "Interactive04": {
         "value": "#CACCCD",
         "type": "color",
-        "description": "Quaternary Interactive color, Quaternary buttons"
+        "description": "Quaternary Interactive color, Quaternary buttons",
+        "rawValue": "$Colors.Gray.Gray40"
       }
     },
     "Field": {
       "FieldInput": {
         "value": "#FFFFFF",
         "type": "color",
-        "description": "Default input fields"
+        "description": "Default input fields",
+        "rawValue": "$Colors.White"
       },
       "FieldSearch": {
         "value": "#FFFFFF",
         "type": "color",
-        "description": "Search input fields"
+        "description": "Search input fields",
+        "rawValue": "$Colors.White"
       }
     },
     "Focus": {
       "Focus": {
         "value": "#0077D9",
         "type": "color",
-        "description": "Focus border, Focus underline"
+        "description": "Focus border, Focus underline",
+        "rawValue": "$Colors.Blue.Blue50"
       }
     },
     "Hover": {
       "Hover01": {
         "value": "#1366B9",
         "type": "color",
-        "description": "$interactive-01 hover"
+        "description": "$interactive-01 hover",
+        "rawValue": "$Colors.Blue.Blue70"
       },
       "Hover02": {
         "value": "#E9EAEB",
         "type": "color",
-        "description": "$interactive-02 hover"
+        "description": "$interactive-02 hover",
+        "rawValue": "$Colors.Gray.Gray20"
       },
       "Hover02Background": {
         "value": "#E9EAEB",
         "type": "color",
-        "description": "$interactive-02 hover on background"
+        "description": "$interactive-02 hover on background",
+        "rawValue": "$Colors.Gray.Gray20"
       },
       "HoverUi": {
         "value": "#E9EAEB",
         "type": "color",
-        "description": "hover ui background"
+        "description": "hover ui background",
+        "rawValue": "$Colors.Gray.Gray20"
       },
       "HoverUi02": {
         "value": "#F3F4F5",
         "type": "color",
-        "description": "hover ui background with lighter color"
+        "description": "hover ui background with lighter color",
+        "rawValue": "$Colors.Gray.Gray10"
       },
       "HoverUiBorder": {
         "value": "#6F7476",
         "type": "color",
-        "description": "hover ui border"
+        "description": "hover ui border",
+        "rawValue": "$Colors.Gray.Gray70"
       },
       "HoverSelectedUi": {
         "value": "#CACCCD",
         "type": "color",
-        "description": "Checkbox border color"
+        "description": "Checkbox border color",
+        "rawValue": "$Colors.Gray.Gray40"
       },
       "HoverDanger": {
         "value": "#B22045",
         "type": "color",
-        "description": "Danger hover"
+        "description": "Danger hover",
+        "rawValue": "$Colors.Red.Red70"
       },
       "HoverError": {
         "value": "#B22045",
         "type": "color",
-        "description": "Error hover"
+        "description": "Error hover",
+        "rawValue": "$Colors.Red.Red70"
       },
       "HoverInput": {
         "value": "#6F7476",
         "type": "color",
-        "description": "hover input"
+        "description": "hover input",
+        "rawValue": "$Colors.Gray.Gray70"
       },
       "HoverLink01": {
         "value": "#1366B9",
         "type": "color",
-        "description": "hover primary link"
+        "description": "hover primary link",
+        "rawValue": "$Colors.Blue.Blue70"
       },
       "HoverLink02": {
         "value": "#6F7476",
         "type": "color",
-        "description": "hover secondary link"
+        "description": "hover secondary link",
+        "rawValue": "$Colors.Gray.Gray70"
       },
       "HoverGray": {
         "value": "#454A4D",
         "type": "color",
-        "description": "Hover Checkbox, Toggle"
+        "description": "Hover Checkbox, Toggle",
+        "rawValue": "$Colors.Gray.Gray90"
       },
       "HoverUiError": {
         "value": "#FCEFF3",
         "type": "color",
-        "description": "Hover error ui background"
+        "description": "Hover error ui background",
+        "rawValue": "$Colors.Red.Red10"
       }
     },
     "Active": {
       "Active01": {
         "value": "#0E4B87",
         "type": "color",
-        "description": "$interactive-01 active"
+        "description": "$interactive-01 active",
+        "rawValue": "$Colors.Blue.Blue100"
       },
       "Active02": {
         "value": "#CACCCD",
         "type": "color",
-        "description": "$interactive-02 active"
+        "description": "$interactive-02 active",
+        "rawValue": "$Colors.Gray.Gray40"
       },
       "Active02Background": {
         "value": "#DEDFE0",
         "type": "color",
-        "description": "$interactive-02 active on background"
+        "description": "$interactive-02 active on background",
+        "rawValue": "$Colors.Gray.Gray30"
       },
       "ActiveUi": {
         "value": "#D9EAFB",
         "type": "color",
-        "description": "Active List background color"
+        "description": "Active List background color",
+        "rawValue": "$Colors.Blue.Blue20"
       },
       "ActiveSelectedUi": {
         "value": "#0077D9",
         "type": "color",
-        "description": "Checkbox background color, Select border color"
+        "description": "Checkbox background color, Select border color",
+        "rawValue": "$Colors.Blue.Blue50"
       },
       "ActiveDanger": {
         "value": "#821732",
         "type": "color",
-        "description": "Danger active"
+        "description": "Danger active",
+        "rawValue": "$Colors.Red.Red100"
       },
       "ActiveInput": {
         "value": "#1366B9",
         "type": "color",
-        "description": "Active input"
+        "description": "Active input",
+        "rawValue": "$Colors.Blue.Blue70"
       },
       "ActiveLink01": {
         "value": "#0E4B87",
         "type": "color",
-        "description": "active primary link"
+        "description": "active primary link",
+        "rawValue": "$Colors.Blue.Blue100"
       },
       "ActiveLink02": {
         "value": "#1F2121",
         "type": "color",
-        "description": "active secondary link"
+        "description": "active secondary link",
+        "rawValue": "$Colors.Gray.Gray100"
       },
       "ActiveUiError": {
         "value": "#F9E0E6",
         "type": "color",
-        "description": "Active error ui background"
+        "description": "Active error ui background",
+        "rawValue": "$Colors.Red.Red20"
       }
     },
     "Selected": {
       "SelectedUi": {
         "value": "#F1F7FD",
         "type": "color",
-        "description": "Selected List Navigation"
+        "description": "Selected List Navigation",
+        "rawValue": "$Colors.Blue.Blue10"
       },
       "SelectedUiGray": {
         "value": "#DEDFE0",
         "type": "color",
-        "description": "Selected List Navigation Gray"
+        "description": "Selected List Navigation Gray",
+        "rawValue": "$Colors.Gray.Gray30"
       },
       "SelectedUiOnColor": {
         "value": "#FFFFFF",
         "type": "color",
-        "description": "Selected List Navigation on Color"
+        "description": "Selected List Navigation on Color",
+        "rawValue": "$Colors.White"
       },
       "SelectedUiBorder": {
         "value": "#0077D9",
         "type": "color",
-        "description": "Selected Button Border"
+        "description": "Selected Button Border",
+        "rawValue": "$Colors.Blue.Blue50"
       },
       "SelectedUiDark": {
         "value": "#1366B9",
         "type": "color",
-        "description": "Selected List Navigation on Dark Color"
+        "description": "Selected List Navigation on Dark Color",
+        "rawValue": "$Colors.Blue.Blue70"
       }
     },
     "Disabled": {
       "Disabled01": {
         "value": "#DEDFE0",
         "type": "color",
-        "description": "Disabled text, Disabled border"
+        "description": "Disabled text, Disabled border",
+        "rawValue": "$Colors.Gray.Gray30"
       },
       "Disabled02": {
         "value": "#F3F4F5",
         "type": "color",
-        "description": "Text on disabled button"
+        "description": "Text on disabled button",
+        "rawValue": "$Colors.Gray.Gray10"
       },
       "Disabled03": {
         "value": "#454A4D",
         "type": "color",
-        "description": "Inverse Disabled fields"
+        "description": "Inverse Disabled fields",
+        "rawValue": "$Colors.Gray.Gray90"
       },
       "Disabled04": {
         "value": "#0E4B87",
         "type": "color",
-        "description": "Inverse Disabled primary button"
+        "description": "Inverse Disabled primary button",
+        "rawValue": "$Colors.Blue.Blue100"
       },
       "DisabledLink01": {
         "value": "#DEDFE0",
         "type": "color",
-        "description": "Disabled primary links"
+        "description": "Disabled primary links",
+        "rawValue": "$Colors.Gray.Gray30"
       },
       "DisabledLink02": {
         "value": "#DEDFE0",
         "type": "color",
-        "description": "Disabled secondary links"
+        "description": "Disabled secondary links",
+        "rawValue": "$Colors.Gray.Gray30"
       },
       "DisabledOn": {
         "value": "#D9EAFB",
         "type": "color",
-        "description": "Disabled on state"
+        "description": "Disabled on state",
+        "rawValue": "$Colors.Blue.Blue20"
       }
     },
     "Support": {
       "SupportError": {
         "value": "#C6244D",
         "type": "color",
-        "description": "Error text, Icon with error, error element border"
+        "description": "Error text, Icon with error, error element border",
+        "rawValue": "$Colors.Red.Red60"
       },
       "SupportErrorLight": {
         "value": "#F4BFCD",
         "type": "color",
-        "description": "Error light color"
+        "description": "Error light color",
+        "rawValue": "#F4BFCD"
       },
       "SupportSuccess": {
         "value": "#2DC87D",
         "type": "color",
-        "description": "Success text, button background, button border"
+        "description": "Success text, button background, button border",
+        "rawValue": "$Colors.Green.Green50"
       },
       "SupportSuccessLight": {
         "value": "#CCF4E1",
         "type": "color",
-        "description": "Success light color"
+        "description": "Success light color",
+        "rawValue": "#CCF4E1"
       },
       "SupportInfo": {
         "value": "#0077D9",
         "type": "color",
-        "description": "Information text, button background, button border"
+        "description": "Information text, button background, button border",
+        "rawValue": "$Colors.Blue.Blue50"
       },
       "SupportInfoLight": {
         "value": "#B9D8F7",
         "type": "color",
-        "description": "Information light color"
+        "description": "Information light color",
+        "rawValue": "#B9D8F7"
       },
       "SupportWarning": {
         "value": "#FCD200",
         "type": "color",
-        "description": "Warning text, Icon with error, error element border"
+        "description": "Warning text, Icon with error, error element border",
+        "rawValue": "$Colors.Yellow.Yellow60"
       },
       "SupportWarningLight": {
         "value": "#FFF4BA",
         "type": "color",
-        "description": "Warning light color"
+        "description": "Warning light color",
+        "rawValue": "#FFF4BA"
       },
       "SupportDanger": {
         "value": "#C6244D",
         "type": "color",
-        "description": "Danger text, button background, button border"
+        "description": "Danger text, button background, button border",
+        "rawValue": "$Colors.Red.Red60"
       },
       "SupportDangerLight": {
         "value": "#F4BFCD",
         "type": "color",
-        "description": "Danger light color"
+        "description": "Danger light color",
+        "rawValue": "#F4BFCD"
       }
     }
   },
   "Colors": {
     "Black": {
       "value": "#000000",
-      "type": "color"
+      "type": "color",
+      "rawValue": "#000000"
     },
     "White": {
       "value": "#FFFFFF",
       "type": "color",
-      "description": ""
+      "description": "",
+      "rawValue": "#FFFFFF"
     },
     "Blue": {
       "Blue10": {
         "value": "#F1F7FD",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#F1F7FD"
       },
       "Blue20": {
         "value": "#D9EAFB",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#D9EAFB"
       },
       "Blue30": {
         "value": "#9FCBF5",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#9FCBF5"
       },
       "Blue40": {
         "value": "#60A8EF",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#60A8EF"
       },
       "Blue50": {
         "value": "#0077D9",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#0077D9"
       },
       "Blue60": {
         "value": "#1571CE",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#1571CE"
       },
       "Blue70": {
         "value": "#1366B9",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#1366B9"
       },
       "Blue80": {
         "value": "#115CA7",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#115CA7"
       },
       "Blue90": {
         "value": "#0F5396",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#0F5396"
       },
       "Blue100": {
         "value": "#0E4B87",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#0E4B87"
       }
     },
     "Gray": {
       "Gray05": {
         "value": "#FAFAFA",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#FAFAFA"
       },
       "Gray10": {
         "value": "#F3F4F5",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#F3F4F5"
       },
       "Gray20": {
         "value": "#E9EAEB",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#E9EAEB"
       },
       "Gray30": {
         "value": "#DEDFE0",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#DEDFE0"
       },
       "Gray40": {
         "value": "#CACCCD",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#CACCCD"
       },
       "Gray50": {
         "value": "#A4A5A6",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#A4A5A6"
       },
       "Gray60": {
         "value": "#838789",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#838789"
       },
       "Gray70": {
         "value": "#6F7476",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#6F7476"
       },
       "Gray80": {
         "value": "#5C6366",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#5C6366"
       },
       "Gray90": {
         "value": "#454A4D",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#454A4D"
       },
       "Gray100": {
         "value": "#1F2121",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#1F2121"
       }
     },
     "Red": {
       "Red10": {
         "value": "#FCEFF3",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#FCEFF3"
       },
       "Red20": {
         "value": "#F9E0E6",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#F9E0E6"
       },
       "Red30": {
         "value": "#F1B1C1",
-        "type": "color"
+        "type": "color",
+        "rawValue": "#F1B1C1"
       },
       "Red40": {
         "value": "#E67490",
-        "type": "color"
+        "type": "color",
+        "rawValue": "#E67490"
       },
       "Red50": {
         "value": "#D92B57",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#D92B57"
       },
       "Red60": {
         "value": "#C6244D",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#C6244D"
       },
       "Red70": {
         "value": "#B22045",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#B22045"
       },
       "Red80": {
         "value": "#A01D3E",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#A01D3E"
       },
       "Red90": {
         "value": "#901A38",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#901A38"
       },
       "Red100": {
         "value": "#821732",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#821732"
       }
     },
     "Yellow": {
       "Yellow10": {
         "value": "#FFFADC",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#FFFADC"
       },
       "Yellow20": {
         "value": "#FFF6C4",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#FFF6C4"
       },
       "Yellow30": {
         "value": "#FFEF9B",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#FFEF9B"
       },
       "Yellow40": {
         "value": "#FFE976",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#FFE976"
       },
       "Yellow50": {
         "value": "#FFD919",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#FFD919"
       },
       "Yellow60": {
         "value": "#FCD200",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#FCD200"
       },
       "Yellow70": {
         "value": "#E3BD00",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#E3BD00"
       },
       "Yellow80": {
         "value": "#CCAA00",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#CCAA00"
       },
       "Yellow90": {
         "value": "#B89900",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#B89900"
       },
       "Yellow100": {
         "value": "#A68A00",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#A68A00"
       }
     },
     "Green": {
       "Green10": {
         "value": "#ECFBF4",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#ECFBF4"
       },
       "Green20": {
         "value": "#D0F4E3",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#D0F4E3"
       },
       "Green30": {
         "value": "#A1EAC7",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#A1EAC7"
       },
       "Green40": {
         "value": "#69DDA5",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#69DDA5"
       },
       "Green50": {
         "value": "#2DC87D",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#2DC87D"
       },
       "Green60": {
         "value": "#29B471",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#29B471"
       },
       "Green70": {
         "value": "#25A266",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#25A266"
       },
       "Green80": {
         "value": "#21925C",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#21925C"
       },
       "Green90": {
         "value": "#1E8353",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#1E8353"
       },
       "Green100": {
         "value": "#1B764B",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#1B764B"
       }
     },
     "Purple": {
       "Purple10": {
         "value": "#F3F3FF",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#F3F3FF"
       },
       "Purple20": {
         "value": "#E0E1FF",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#E0E1FF"
       },
       "Purple30": {
         "value": "#C1C3FF",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#C1C3FF"
       },
       "Purple40": {
         "value": "#989CFF",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#989CFF"
       },
       "Purple50": {
         "value": "#7379FF",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#7379FF"
       },
       "Purple60": {
         "value": "#4E56FF",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#4E56FF"
       },
       "Purple70": {
         "value": "#3F46DF",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#3F46DF"
       },
       "Purple80": {
         "value": "#3338BE",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#3338BE"
       },
       "Purple90": {
         "value": "#2B30AA",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#2B30AA"
       },
       "Purple100": {
         "value": "#22278E",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#22278E"
       }
     },
     "BlueGreen": {
       "BlueGreen10": {
         "value": "#ECFCFD",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#ECFCFD"
       },
       "BlueGreen20": {
         "value": "#CFF6FA",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#CFF6FA"
       },
       "BlueGreen30": {
         "value": "#9FEEF5",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#9FEEF5"
       },
       "BlueGreen40": {
         "value": "#60E3EF",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#60E3EF"
       },
       "BlueGreen50": {
         "value": "#17D4E5",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#17D4E5"
       },
       "BlueGreen60": {
         "value": "#15BFCE",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#15BFCE"
       },
       "BlueGreen70": {
         "value": "#13ACB9",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#13ACB9"
       },
       "BlueGreen80": {
         "value": "#119BA7",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#119BA7"
       },
       "BlueGreen90": {
         "value": "#0F8C96",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#0F8C96"
       },
       "BlueGreen100": {
         "value": "#0E7E87",
         "type": "color",
-        "description": ""
+        "description": "",
+        "rawValue": "#0E7E87"
       }
     }
   },
   "fontFamilies": {
     "helvetica": {
       "value": "Helvetica",
-      "type": "fontFamilies"
+      "type": "fontFamilies",
+      "rawValue": "Helvetica"
     }
   },
   "lineHeights": {
     "0": {
       "value": "125%",
-      "type": "lineHeights"
+      "type": "lineHeights",
+      "rawValue": "125%"
     },
     "1": {
       "value": "133%",
-      "type": "lineHeights"
+      "type": "lineHeights",
+      "rawValue": "133%"
     },
     "2": {
       "value": "160%",
-      "type": "lineHeights"
+      "type": "lineHeights",
+      "rawValue": "160%"
     },
     "3": {
       "value": "150%",
-      "type": "lineHeights"
+      "type": "lineHeights",
+      "rawValue": "150%"
     },
     "4": {
       "value": "171%",
-      "type": "lineHeights"
+      "type": "lineHeights",
+      "rawValue": "171%"
     },
     "5": {
       "value": "153%",
-      "type": "lineHeights"
+      "type": "lineHeights",
+      "rawValue": "153%"
     },
     "6": {
       "value": "100%",
-      "type": "lineHeights"
+      "type": "lineHeights",
+      "rawValue": "100%"
     },
     "7": {
       "value": "180%",
-      "type": "lineHeights"
+      "type": "lineHeights",
+      "rawValue": "180%"
     }
   },
   "fontWeights": {
     "helvetica-0": {
       "value": "Bold",
-      "type": "fontWeights"
+      "type": "fontWeights",
+      "rawValue": "Bold"
     },
     "helvetica-1": {
       "value": "Regular",
-      "type": "fontWeights"
+      "type": "fontWeights",
+      "rawValue": "Regular"
     }
   },
   "fontSize": {
     "0": {
       "value": 11,
-      "type": "fontSizes"
+      "type": "fontSizes",
+      "rawValue": "11"
     },
     "1": {
       "value": 12,
-      "type": "fontSizes"
+      "type": "fontSizes",
+      "rawValue": "12"
     },
     "2": {
       "value": 13,
-      "type": "fontSizes"
+      "type": "fontSizes",
+      "rawValue": "13"
     },
     "3": {
       "value": 14,
-      "type": "fontSizes"
+      "type": "fontSizes",
+      "rawValue": "14"
     },
     "4": {
       "value": 16,
-      "type": "fontSizes"
+      "type": "fontSizes",
+      "rawValue": "16"
     },
     "5": {
       "value": 20,
-      "type": "fontSizes"
+      "type": "fontSizes",
+      "rawValue": "20"
     },
     "6": {
       "value": 24,
-      "type": "fontSizes"
+      "type": "fontSizes",
+      "rawValue": "24"
     },
     "7": {
       "value": 32,
-      "type": "fontSizes"
+      "type": "fontSizes",
+      "rawValue": "32"
     }
   },
   "Heading": {
@@ -993,7 +1187,17 @@
         "textCase": "none",
         "textDecoration": "none"
       },
-      "type": "typography"
+      "type": "typography",
+      "rawValue": {
+        "fontFamily": "{fontFamilies.helvetica}",
+        "fontWeight": "{fontWeights.helvetica-0}",
+        "lineHeight": "{lineHeights.0}",
+        "fontSize": "{fontSize.7}",
+        "letterSpacing": "{letterSpacing.0}",
+        "paragraphSpacing": "{paragraphSpacing.0}",
+        "textCase": "{textCase.none}",
+        "textDecoration": "{textDecoration.none}"
+      }
     },
     "H2": {
       "value": {
@@ -1006,7 +1210,17 @@
         "textCase": "none",
         "textDecoration": "none"
       },
-      "type": "typography"
+      "type": "typography",
+      "rawValue": {
+        "fontFamily": "{fontFamilies.helvetica}",
+        "fontWeight": "{fontWeights.helvetica-0}",
+        "lineHeight": "{lineHeights.1}",
+        "fontSize": "{fontSize.6}",
+        "letterSpacing": "{letterSpacing.0}",
+        "paragraphSpacing": "{paragraphSpacing.0}",
+        "textCase": "{textCase.none}",
+        "textDecoration": "{textDecoration.none}"
+      }
     },
     "H3": {
       "value": {
@@ -1019,7 +1233,17 @@
         "textCase": "none",
         "textDecoration": "none"
       },
-      "type": "typography"
+      "type": "typography",
+      "rawValue": {
+        "fontFamily": "{fontFamilies.helvetica}",
+        "fontWeight": "{fontWeights.helvetica-0}",
+        "lineHeight": "{lineHeights.2}",
+        "fontSize": "{fontSize.5}",
+        "letterSpacing": "{letterSpacing.1}",
+        "paragraphSpacing": "{paragraphSpacing.0}",
+        "textCase": "{textCase.none}",
+        "textDecoration": "{textDecoration.none}"
+      }
     },
     "H4": {
       "value": {
@@ -1032,7 +1256,17 @@
         "textCase": "none",
         "textDecoration": "none"
       },
-      "type": "typography"
+      "type": "typography",
+      "rawValue": {
+        "fontFamily": "{fontFamilies.helvetica}",
+        "fontWeight": "{fontWeights.helvetica-0}",
+        "lineHeight": "{lineHeights.3}",
+        "fontSize": "{fontSize.4}",
+        "letterSpacing": "{letterSpacing.0}",
+        "paragraphSpacing": "{paragraphSpacing.0}",
+        "textCase": "{textCase.none}",
+        "textDecoration": "{textDecoration.none}"
+      }
     },
     "H5": {
       "value": {
@@ -1045,7 +1279,17 @@
         "textCase": "none",
         "textDecoration": "none"
       },
-      "type": "typography"
+      "type": "typography",
+      "rawValue": {
+        "fontFamily": "{fontFamilies.helvetica}",
+        "fontWeight": "{fontWeights.helvetica-0}",
+        "lineHeight": "{lineHeights.4}",
+        "fontSize": "{fontSize.3}",
+        "letterSpacing": "{letterSpacing.0}",
+        "paragraphSpacing": "{paragraphSpacing.0}",
+        "textCase": "{textCase.none}",
+        "textDecoration": "{textDecoration.none}"
+      }
     }
   },
   "Body": {
@@ -1060,7 +1304,17 @@
         "textCase": "none",
         "textDecoration": "none"
       },
-      "type": "typography"
+      "type": "typography",
+      "rawValue": {
+        "fontFamily": "{fontFamilies.helvetica}",
+        "fontWeight": "{fontWeights.helvetica-1}",
+        "lineHeight": "{lineHeights.7}",
+        "fontSize": "{fontSize.4}",
+        "letterSpacing": "{letterSpacing.0}",
+        "paragraphSpacing": "{paragraphSpacing.0}",
+        "textCase": "{textCase.none}",
+        "textDecoration": "{textDecoration.none}"
+      }
     },
     "Body16_Bold": {
       "value": {
@@ -1073,7 +1327,17 @@
         "textCase": "none",
         "textDecoration": "none"
       },
-      "type": "typography"
+      "type": "typography",
+      "rawValue": {
+        "fontFamily": "{fontFamilies.helvetica}",
+        "fontWeight": "{fontWeights.helvetica-0}",
+        "lineHeight": "{lineHeights.7}",
+        "fontSize": "{fontSize.4}",
+        "letterSpacing": "{letterSpacing.0}",
+        "paragraphSpacing": "{paragraphSpacing.0}",
+        "textCase": "{textCase.none}",
+        "textDecoration": "{textDecoration.none}"
+      }
     },
     "Body14_Regular": {
       "value": {
@@ -1086,7 +1350,17 @@
         "textCase": "none",
         "textDecoration": "none"
       },
-      "type": "typography"
+      "type": "typography",
+      "rawValue": {
+        "fontFamily": "{fontFamilies.helvetica}",
+        "fontWeight": "{fontWeights.helvetica-1}",
+        "lineHeight": "{lineHeights.4}",
+        "fontSize": "{fontSize.3}",
+        "letterSpacing": "{letterSpacing.0}",
+        "paragraphSpacing": "{paragraphSpacing.0}",
+        "textCase": "{textCase.none}",
+        "textDecoration": "{textDecoration.none}"
+      }
     },
     "Body14_Bold": {
       "value": {
@@ -1099,7 +1373,17 @@
         "textCase": "none",
         "textDecoration": "none"
       },
-      "type": "typography"
+      "type": "typography",
+      "rawValue": {
+        "fontFamily": "{fontFamilies.helvetica}",
+        "fontWeight": "{fontWeights.helvetica-0}",
+        "lineHeight": "{lineHeights.4}",
+        "fontSize": "{fontSize.3}",
+        "letterSpacing": "{letterSpacing.0}",
+        "paragraphSpacing": "{paragraphSpacing.0}",
+        "textCase": "{textCase.none}",
+        "textDecoration": "{textDecoration.none}"
+      }
     },
     "Body13_Regular": {
       "value": {
@@ -1112,7 +1396,17 @@
         "textCase": "none",
         "textDecoration": "none"
       },
-      "type": "typography"
+      "type": "typography",
+      "rawValue": {
+        "fontFamily": "{fontFamilies.helvetica}",
+        "fontWeight": "{fontWeights.helvetica-1}",
+        "lineHeight": "{lineHeights.5}",
+        "fontSize": "{fontSize.2}",
+        "letterSpacing": "{letterSpacing.1}",
+        "paragraphSpacing": "{paragraphSpacing.0}",
+        "textCase": "{textCase.none}",
+        "textDecoration": "{textDecoration.none}"
+      }
     },
     "Body13_Bold": {
       "value": {
@@ -1125,7 +1419,17 @@
         "textCase": "none",
         "textDecoration": "none"
       },
-      "type": "typography"
+      "type": "typography",
+      "rawValue": {
+        "fontFamily": "{fontFamilies.helvetica}",
+        "fontWeight": "{fontWeights.helvetica-0}",
+        "lineHeight": "{lineHeights.5}",
+        "fontSize": "{fontSize.2}",
+        "letterSpacing": "{letterSpacing.1}",
+        "paragraphSpacing": "{paragraphSpacing.0}",
+        "textCase": "{textCase.none}",
+        "textDecoration": "{textDecoration.none}"
+      }
     },
     "Body12_Regular": {
       "value": {
@@ -1138,7 +1442,17 @@
         "textCase": "none",
         "textDecoration": "none"
       },
-      "type": "typography"
+      "type": "typography",
+      "rawValue": {
+        "fontFamily": "{fontFamilies.helvetica}",
+        "fontWeight": "{fontWeights.helvetica-1}",
+        "lineHeight": "{lineHeights.1}",
+        "fontSize": "{fontSize.1}",
+        "letterSpacing": "{letterSpacing.1}",
+        "paragraphSpacing": "{paragraphSpacing.0}",
+        "textCase": "{textCase.none}",
+        "textDecoration": "{textDecoration.none}"
+      }
     },
     "Body12_Bold": {
       "value": {
@@ -1151,7 +1465,17 @@
         "textCase": "none",
         "textDecoration": "none"
       },
-      "type": "typography"
+      "type": "typography",
+      "rawValue": {
+        "fontFamily": "{fontFamilies.helvetica}",
+        "fontWeight": "{fontWeights.helvetica-0}",
+        "lineHeight": "{lineHeights.1}",
+        "fontSize": "{fontSize.1}",
+        "letterSpacing": "{letterSpacing.1}",
+        "paragraphSpacing": "{paragraphSpacing.0}",
+        "textCase": "{textCase.none}",
+        "textDecoration": "{textDecoration.none}"
+      }
     }
   },
   "Label": {
@@ -1166,7 +1490,17 @@
         "textCase": "none",
         "textDecoration": "none"
       },
-      "type": "typography"
+      "type": "typography",
+      "rawValue": {
+        "fontFamily": "{fontFamilies.helvetica}",
+        "fontWeight": "{fontWeights.helvetica-0}",
+        "lineHeight": "{lineHeights.6}",
+        "fontSize": "{fontSize.4}",
+        "letterSpacing": "{letterSpacing.0}",
+        "paragraphSpacing": "{paragraphSpacing.0}",
+        "textCase": "{textCase.none}",
+        "textDecoration": "{textDecoration.none}"
+      }
     },
     "Label16_Regular": {
       "value": {
@@ -1179,7 +1513,17 @@
         "textCase": "none",
         "textDecoration": "none"
       },
-      "type": "typography"
+      "type": "typography",
+      "rawValue": {
+        "fontFamily": "{fontFamilies.helvetica}",
+        "fontWeight": "{fontWeights.helvetica-1}",
+        "lineHeight": "{lineHeights.6}",
+        "fontSize": "{fontSize.4}",
+        "letterSpacing": "{letterSpacing.0}",
+        "paragraphSpacing": "{paragraphSpacing.0}",
+        "textCase": "{textCase.none}",
+        "textDecoration": "{textDecoration.none}"
+      }
     },
     "Label14_Bold": {
       "value": {
@@ -1192,7 +1536,17 @@
         "textCase": "none",
         "textDecoration": "none"
       },
-      "type": "typography"
+      "type": "typography",
+      "rawValue": {
+        "fontFamily": "{fontFamilies.helvetica}",
+        "fontWeight": "{fontWeights.helvetica-0}",
+        "lineHeight": "{lineHeights.6}",
+        "fontSize": "{fontSize.3}",
+        "letterSpacing": "{letterSpacing.0}",
+        "paragraphSpacing": "{paragraphSpacing.0}",
+        "textCase": "{textCase.none}",
+        "textDecoration": "{textDecoration.none}"
+      }
     },
     "Label14_Regular": {
       "value": {
@@ -1205,7 +1559,17 @@
         "textCase": "none",
         "textDecoration": "none"
       },
-      "type": "typography"
+      "type": "typography",
+      "rawValue": {
+        "fontFamily": "{fontFamilies.helvetica}",
+        "fontWeight": "{fontWeights.helvetica-1}",
+        "lineHeight": "{lineHeights.6}",
+        "fontSize": "{fontSize.3}",
+        "letterSpacing": "{letterSpacing.0}",
+        "paragraphSpacing": "{paragraphSpacing.0}",
+        "textCase": "{textCase.none}",
+        "textDecoration": "{textDecoration.none}"
+      }
     },
     "Label12_Bold": {
       "value": {
@@ -1218,7 +1582,17 @@
         "textCase": "none",
         "textDecoration": "none"
       },
-      "type": "typography"
+      "type": "typography",
+      "rawValue": {
+        "fontFamily": "{fontFamilies.helvetica}",
+        "fontWeight": "{fontWeights.helvetica-0}",
+        "lineHeight": "{lineHeights.6}",
+        "fontSize": "{fontSize.1}",
+        "letterSpacing": "{letterSpacing.0}",
+        "paragraphSpacing": "{paragraphSpacing.0}",
+        "textCase": "{textCase.none}",
+        "textDecoration": "{textDecoration.none}"
+      }
     },
     "Label12_Regular": {
       "value": {
@@ -1231,7 +1605,17 @@
         "textCase": "none",
         "textDecoration": "none"
       },
-      "type": "typography"
+      "type": "typography",
+      "rawValue": {
+        "fontFamily": "{fontFamilies.helvetica}",
+        "fontWeight": "{fontWeights.helvetica-1}",
+        "lineHeight": "{lineHeights.6}",
+        "fontSize": "{fontSize.1}",
+        "letterSpacing": "{letterSpacing.0}",
+        "paragraphSpacing": "{paragraphSpacing.0}",
+        "textCase": "{textCase.none}",
+        "textDecoration": "{textDecoration.none}"
+      }
     },
     "Label11_Bold": {
       "value": {
@@ -1244,7 +1628,17 @@
         "textCase": "none",
         "textDecoration": "none"
       },
-      "type": "typography"
+      "type": "typography",
+      "rawValue": {
+        "fontFamily": "{fontFamilies.helvetica}",
+        "fontWeight": "{fontWeights.helvetica-0}",
+        "lineHeight": "{lineHeights.6}",
+        "fontSize": "{fontSize.0}",
+        "letterSpacing": "{letterSpacing.0}",
+        "paragraphSpacing": "{paragraphSpacing.0}",
+        "textCase": "{textCase.none}",
+        "textDecoration": "{textDecoration.none}"
+      }
     },
     "Label11_Regular": {
       "value": {
@@ -1257,52 +1651,70 @@
         "textCase": "none",
         "textDecoration": "none"
       },
-      "type": "typography"
+      "type": "typography",
+      "rawValue": {
+        "fontFamily": "{fontFamilies.helvetica}",
+        "fontWeight": "{fontWeights.helvetica-1}",
+        "lineHeight": "{lineHeights.6}",
+        "fontSize": "{fontSize.0}",
+        "letterSpacing": "{letterSpacing.0}",
+        "paragraphSpacing": "{paragraphSpacing.0}",
+        "textCase": "{textCase.none}",
+        "textDecoration": "{textDecoration.none}"
+      }
     }
   },
   "letterSpacing": {
     "0": {
       "value": 0,
-      "type": "letterSpacing"
+      "type": "letterSpacing",
+      "rawValue": "0"
     },
     "1": {
       "value": "0%",
-      "type": "letterSpacing"
+      "type": "letterSpacing",
+      "rawValue": "0%"
     }
   },
   "paragraphSpacing": {
     "0": {
       "value": 0,
-      "type": "paragraphSpacing"
+      "type": "paragraphSpacing",
+      "rawValue": "0"
     }
   },
   "textCase": {
     "none": {
       "value": "none",
-      "type": "textCase"
+      "type": "textCase",
+      "rawValue": "none"
     }
   },
   "textDecoration": {
     "none": {
       "value": "none",
-      "type": "textDecoration"
+      "type": "textDecoration",
+      "rawValue": "none"
     }
   },
   "Shadow": {
     "ModalShadow": {
       "value": "0 0 0 0 #0000001a, 0 9px 20px 0 #0000001a, 0 37px 37px 0 #00000017, 0 84px 50px 0 #0000000d, 0 149px 60px 0 #00000003, 0 232px 65px 0 #00000000",
       "type": "boxShadow",
-      "description": "Modalで使用"
+      "description": "Modalで使用",
+      "rawValue": "0 0 0 0 rgba(0, 0, 0, 0.1), 0 9px 20px 0 rgba(0, 0, 0, 0.1), 0 37px 37px 0 rgba(0, 0, 0, 0.09), 0 84px 50px 0 rgba(0, 0, 0, 0.05), 0 149px 60px 0 rgba(0, 0, 0, 0.01), 0 232px 65px 0 rgba(0, 0, 0, 0)"
     },
     "FloatingShadow": {
       "value": "0 4px 20px 0 #00000014",
       "type": "boxShadow",
-      "description": "Toast/Popup/Popover/Accordion/List/SliderなどUI上に重ねて表示する要素に使用"
+      "description": "Toast/Popup/Popover/Accordion/List/SliderなどUI上に重ねて表示する要素に使用",
+      "rawValue": "0 4px 20px 0 rgba(0, 0, 0, 0.08)"
     },
     "LayoutShadow": {
       "value": "0 4px 10px 0 #00000014",
       "type": "boxShadow",
-      "description": "FixedMenuなどレイアウト用に使用"
+      "description": "FixedMenuなどレイアウト用に使用",
+      "rawValue": "0 4px 10px 0 rgba(0, 0, 0, 0.08)"
     }
   }
 }

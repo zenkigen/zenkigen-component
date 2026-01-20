@@ -1,2 +1,2 @@
 export { tailwindConfig as default } from './tailwind-config';
-export { tokens } from './tokens/tokens';
+export { tokens, tokensWithMeta } from './tokens/tokens';
