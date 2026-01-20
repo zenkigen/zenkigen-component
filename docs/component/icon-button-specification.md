@@ -74,7 +74,7 @@ const MyComponent = () => {
 | `isDisabled`      | `boolean`                        | `false`      | ボタンが無効かどうか                       |
 | `isSelected`      | `boolean`                        | `false`      | ボタンが選択されているかどうか             |
 | `isNoPadding`     | `boolean`                        | `false`      | パディングを無効にするかどうか             |
-| `iconAccentColor` | `ColorToken`                     | `undefined`  | アイコンのアクセントカラー（一部アイコン） |
+| `iconAccentColor` | `ColorToken`                     | `undefined`  | アイコンのアクセントカラー（一部アイコン）。`isSelected=true`の場合は無視される |
 
 #### `ColorToken` について
 
@@ -343,6 +343,7 @@ IconButtonは使用方法に応じて、ボタンまたはアンカーリンク�
 2. アイコンのみのボタンは視覚的に機能が分かりにくいため、ツールチップやaria-labelの使用を推奨
 3. `isSelected`状態は見た目の変更のみで、動作ロジックは実装側で制御する必要がある
 4. `iconAccentColor`は一部のアイコン（`calendar-today`等）でのみ有効である。対応していないアイコンでは効果がない
+5. `isSelected=true`の場合、`iconAccentColor`の指定は無視される。選択状態のアイコンカラーはテーマで定義されたスタイルが優先される
 
 ## スタイルのカスタマイズ
 
@@ -350,8 +351,9 @@ IconButtonは使用方法に応じて、ボタンまたはアンカーリンク�
 
 ## 更新履歴
 
-| 日付                 | 内容                              | 担当者 |
-| -------------------- | --------------------------------- | ------ |
-| 2026-01-16 08:22 JST | `iconAccentColor`プロパティを追加 | -      |
+| 日付                 | 内容                                                            | 担当者 |
+| -------------------- | --------------------------------------------------------------- | ------ |
+| 2026-01-20           | `isSelected=true`時に`iconAccentColor`を無視する動作を追加      | -      |
+| 2026-01-16 08:22 JST | `iconAccentColor`プロパティを追加                               | -      |
 | 2025-10-27           | onClickプロパティの扱いを変更     | -      |
 | 2025-09-09           | 新規作成                          | -      |

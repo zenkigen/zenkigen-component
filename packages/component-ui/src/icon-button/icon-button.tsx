@@ -64,6 +64,7 @@ export function IconButton({
   );
 
   const iconSize = size === 'small' ? 'small' : 'medium';
+  const iconAccentColorProps = !isSelected && iconAccentColor ? { accentColor: iconAccentColor } : {};
 
   if (props.isAnchor === true) {
     const buttonProps = Object.fromEntries(Object.entries(props).filter(([key]) => key !== 'isAnchor')) as Omit<
@@ -73,7 +74,7 @@ export function IconButton({
 
     return (
       <a className={baseClasses} {...buttonProps}>
-        <Icon name={icon} size={iconSize} accentColor={iconAccentColor} />
+        <Icon name={icon} size={iconSize} {...iconAccentColorProps} />
       </a>
     );
   } else {
@@ -84,7 +85,7 @@ export function IconButton({
 
     return (
       <button type="button" className={baseClasses} disabled={isDisabled} {...buttonProps}>
-        <Icon name={icon} size={iconSize} accentColor={iconAccentColor} />
+        <Icon name={icon} size={iconSize} {...iconAccentColorProps} />
       </button>
     );
   }
