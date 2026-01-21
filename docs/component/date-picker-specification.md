@@ -79,8 +79,8 @@ const MyComponent = () => {
 | `placeholder` | `string`                         | `'日付を選択'` | 未選択時に表示されるテキスト         |
 | `isDisabled`  | `boolean`                        | `false`        | 無効状態かどうか                     |
 | `isError`     | `boolean`                        | `false`        | エラー状態かどうか                   |
-| `min`         | `Date`                           | `undefined`    | 選択可能な最小日付                   |
-| `max`         | `Date`                           | `undefined`    | 選択可能な最大日付                   |
+| `minDate`     | `Date`                           | `undefined`    | 選択可能な最小日付                   |
+| `maxDate`     | `Date`                           | `undefined`    | 選択可能な最大日付                   |
 | `timeZone`    | `'UTC' \| 'Asia/Tokyo'`          | `'Asia/Tokyo'` | 日付変換に使用するタイムゾーン       |
 | `children`    | `ReactNode`                      | `undefined`    | Compound Component（ErrorMessage等） |
 
@@ -177,7 +177,7 @@ const MyComponent = () => {
 - カーソル: `cursor-default`
 - クリック不可
 
-#### min/max制限日
+#### minDate/maxDate制限日
 
 - テキスト色: `text-disabled01`
 - カーソル: `cursor-not-allowed`
@@ -272,8 +272,8 @@ oneMonthLater.setMonth(today.getMonth() + 1);
 <DatePicker
   value={date}
   onChange={setDate}
-  min={today}
-  max={oneMonthLater}
+  minDate={today}
+  maxDate={oneMonthLater}
 />
 ```
 
@@ -348,9 +348,9 @@ formatDateKey(new Date('2026-01-15T00:00:00Z'), 'Asia/Tokyo'); // → '2026-01-1
 
 ## 注意事項
 
-1. **タイムゾーンの一貫性**: `value`、`min`、`max`、`onChange`で返されるDateは、すべて同じ`timeZone`設定で解釈される
+1. **タイムゾーンの一貫性**: `value`、`minDate`、`maxDate`、`onChange`で返されるDateは、すべて同じ`timeZone`設定で解釈される
 2. **日付の時刻部分**: 選択された日付は、指定タイムゾーンの00:00:00として返される
-3. **min/maxの境界**: `min`と`max`は、それぞれの日付を含む（inclusive）
+3. **minDate/maxDateの境界**: `minDate`と`maxDate`は、それぞれの日付を含む（inclusive）
 4. **カレンダーの週開始日**: 日曜日始まり（`weekStartsOn={0}`）
 5. **固定週表示**: カレンダーは常に6週分を表示する（`fixedWeeks`）
 6. **前後月の日付表示**: 前後月の日付も表示されるが、クリック不可（`showOutsideDays`）
@@ -383,5 +383,6 @@ const dayPickerStyle = {
 
 | 日付                 | 内容                                            | 担当者 |
 | -------------------- | ----------------------------------------------- | ------ |
+| 2026-01-21           | `min`, `max` を `minDate`, `maxDate` に変更     | -      |
 | 2026-01-19 10:06 JST | `timeZone` のデフォルト値を `Asia/Tokyo` に変更 | -      |
 | 2026-01-16 11:09 JST | 新規作成                                        | -      |

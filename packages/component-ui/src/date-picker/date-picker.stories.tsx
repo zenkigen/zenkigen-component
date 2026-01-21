@@ -48,26 +48,8 @@ export const Component: Story = {
     value: null,
     placeholder: '日付を選択',
     size: 'medium',
-    timeZone: 'UTC',
     isDisabled: false,
     isError: false,
-  },
-  parameters: {
-    chromatic: { disable: true },
-  },
-  render: (args) => (
-    <div className="flex">
-      <DatePickerStory {...args} />
-    </div>
-  ),
-};
-
-export const Default: Story = {
-  args: {
-    value: null,
-    placeholder: '日付を選択',
-    size: 'medium',
-    timeZone: 'UTC',
   },
   render: (args) => (
     <div className="flex">
@@ -81,7 +63,6 @@ export const Open: Story = {
     value: null,
     placeholder: '日付を選択',
     size: 'medium',
-    timeZone: 'UTC',
   },
   render: function OpenStory({ value: initialValue = null, ...args }) {
     const [value, setValue] = useState<Date | null>(initialValue);
@@ -114,7 +95,6 @@ export const Selected: Story = {
   args: {
     value: new Date('2026-01-12T00:00:00Z'),
     size: 'medium',
-    timeZone: 'UTC',
   },
   render: (args) => (
     <div className="flex">
@@ -128,7 +108,6 @@ export const Disabled: Story = {
     value: null,
     isDisabled: true,
     size: 'medium',
-    timeZone: 'UTC',
   },
   render: (args) => (
     <div className="flex">
@@ -142,7 +121,6 @@ export const SelectedDisabled: Story = {
     value: new Date('2026-01-12T00:00:00Z'),
     isDisabled: true,
     size: 'medium',
-    timeZone: 'UTC',
   },
   render: (args) => (
     <div className="flex">
@@ -155,7 +133,6 @@ export const Error: Story = {
     value: new Date('2026-01-12T00:00:00Z'),
     isError: true,
     size: 'medium',
-    timeZone: 'UTC',
   },
   render: (args) => (
     <div className="flex">
@@ -164,13 +141,12 @@ export const Error: Story = {
   ),
 };
 
-export const MinMax: Story = {
+export const MinMaxDate: Story = {
   args: {
     value: new Date('2026-01-12T00:00:00Z'),
-    min: new Date('2026-01-05T00:00:00Z'),
-    max: new Date('2026-01-20T00:00:00Z'),
+    minDate: new Date('2026-01-05T00:00:00Z'),
+    maxDate: new Date('2026-01-20T00:00:00Z'),
     size: 'medium',
-    timeZone: 'UTC',
   },
   render: (args) => (
     <div className="flex">

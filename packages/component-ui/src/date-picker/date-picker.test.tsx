@@ -98,14 +98,14 @@ describe('DatePicker', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
-  it('min/max 範囲外の日付が無効化されること', () => {
+  it('minDate/maxDate 範囲外の日付が無効化されること', () => {
     render(
       <DatePicker
         value={new Date('2026-01-12T00:00:00Z')}
         onChange={vi.fn()}
         timeZone="UTC"
-        min={new Date('2026-01-10T00:00:00Z')}
-        max={new Date('2026-01-20T00:00:00Z')}
+        minDate={new Date('2026-01-10T00:00:00Z')}
+        maxDate={new Date('2026-01-20T00:00:00Z')}
       />,
     );
 

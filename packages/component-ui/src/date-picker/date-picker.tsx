@@ -50,9 +50,9 @@ export type DatePickerProps = DatePickerButtonProps & {
   /** エラー状態かどうか。`true` の場合、トリガーボタンが `outlineDanger` バリアントで表示される @default false */
   isError?: boolean;
   /** 選択可能な最小日付。この日付より前の日付は選択不可になる */
-  min?: Date;
+  minDate?: Date;
   /** 選択可能な最大日付。この日付より後の日付は選択不可になる */
-  max?: Date;
+  maxDate?: Date;
   /** 未選択時に表示されるプレースホルダーテキスト @default '日付を選択' */
   placeholder?: string;
   /** トリガーボタンのサイズ @default 'medium' */
@@ -150,7 +150,7 @@ const CustomDayButton = ({ day, modifiers, className, ...buttonProps }: DayButto
         dayButtonBaseClass,
         // 共通: フォーカスリング（有効な日のみ）
         !isDisabledDay && focusVisible.normal,
-        // min/max 制限日
+        // minDate/maxDate 制限日
         isMinMaxDisabled && '!cursor-not-allowed !border-transparent !text-disabled01',
         // 範囲外の日（前後月）
         isOutside && !isMinMaxDisabled && '!border-transparent !text-interactive04',
@@ -187,8 +187,8 @@ export const DatePicker: DatePickerComponent = ({
   onChange,
   isDisabled = false,
   isError = false,
-  min,
-  max,
+  minDate,
+  maxDate,
   placeholder = '日付を選択',
   size = 'medium',
   timeZone = 'Asia/Tokyo',
@@ -220,8 +220,8 @@ export const DatePicker: DatePickerComponent = ({
 
     return createLocalDateFromKey(selectedKey);
   }, [selectedKey]);
-  const minKey = useMemo(() => (min == null ? null : formatDateKey(min, timeZone)), [min, timeZone]);
-  const maxKey = useMemo(() => (max == null ? null : formatDateKey(max, timeZone)), [max, timeZone]);
+  const minKey = useMemo(() => (minDate == null ? null : formatDateKey(minDate, timeZone)), [minDate, timeZone]);
+  const maxKey = useMemo(() => (maxDate == null ? null : formatDateKey(maxDate, timeZone)), [maxDate, timeZone]);
 
   // 日付の有効/無効判定
   const currentMonthKey = useMemo(() => formatLocalDateKey(displayMonth).slice(0, 7), [displayMonth]);
@@ -232,7 +232,7 @@ export const DatePicker: DatePickerComponent = ({
     [currentMonthKey],
   );
 
-  // min/max 範囲外かどうかを判定（カスタム modifier として DayPicker に渡す）
+  // minDate/maxDate 範囲外かどうかを判定（カスタム modifier として DayPicker に渡す）
   const isMinMaxDisabled = useCallback(
     (date: Date) => {
       const dateKey = formatLocalDateKey(date);
@@ -248,7 +248,7 @@ export const DatePicker: DatePickerComponent = ({
     [maxKey, minKey],
   );
 
-  // DayPicker の disabled 判定（範囲外 or min/max 制限）
+  // DayPicker の disabled 判定（範囲外 or minDate/maxDate 制限）
   const disabledDays = useCallback(
     (date: Date) => {
       if (isOutsideMonth(date)) {
