@@ -72,9 +72,18 @@ export const createDateFromKey = (dateKey: string, timeZone: DatePickerTimeZone)
 /**
  * 日付キー → Date（ローカルタイムゾーン、カレンダー表示用）
  * react-day-picker はローカル日付として扱うため、この関数で変換する
+ * @param dateKey "YYYY-MM-DD" 形式の日付文字列
+ * @throws 不正な形式の場合はエラーをスロー
  */
 export const createLocalDateFromKey = (dateKey: string): Date => {
-  const [year = '0', month = '1', day = '1'] = dateKey.split('-');
+  const parts = dateKey.split('-');
+  const year = parts[0];
+  const month = parts[1];
+  const day = parts[2];
+
+  if (year == null || month == null || day == null) {
+    throw new Error(`Invalid dateKey format: "${dateKey}". Expected "YYYY-MM-DD".`);
+  }
 
   return new Date(Number(year), Number(month) - 1, Number(day));
 };
@@ -83,7 +92,13 @@ export const createLocalDateFromKey = (dateKey: string): Date => {
  * Date から月初日を取得（カレンダーの表示月計算用）
  */
 export const getMonthStartDate = (date: Date, timeZone: DatePickerTimeZone): Date => {
-  const [year = '0', month = '1'] = formatDateKey(date, timeZone).split('-');
+  const parts = formatDateKey(date, timeZone).split('-');
+  const year = parts[0];
+  const month = parts[1];
+
+  if (year == null || month == null) {
+    throw new Error('Invalid date format from formatDateKey.');
+  }
 
   return new Date(Number(year), Number(month) - 1, 1);
 };

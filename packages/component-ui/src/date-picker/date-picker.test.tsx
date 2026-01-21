@@ -1,11 +1,12 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
 import { DatePicker } from './date-picker';
 
-const openPopover = () => {
+const openPopover = async (user: ReturnType<typeof userEvent.setup>) => {
   const trigger = screen.getByRole('button');
-  fireEvent.click(trigger);
+  await user.click(trigger);
 
   return screen.getByRole('dialog', { name: '日付選択' });
 };
@@ -42,27 +43,30 @@ describe('DatePicker', () => {
     expect(trigger.getAttribute('aria-describedby')).not.toBeNull();
   });
 
-  it('isDisabled=true の場合、Popover が開かないこと', () => {
+  it('isDisabled=true の場合、Popover が開かないこと', async () => {
+    const user = userEvent.setup();
     render(<DatePicker value={null} onChange={vi.fn()} isDisabled />);
 
-    fireEvent.click(screen.getByRole('button'));
+    await user.click(screen.getByRole('button'));
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
-  it('Escape キーで Popover が閉じること', () => {
+  it('Escape キーで Popover が閉じること', async () => {
+    const user = userEvent.setup();
     render(<DatePicker value={null} onChange={vi.fn()} />);
 
-    const dialog = openPopover();
-    fireEvent.keyDown(dialog, { key: 'Escape' });
+    await openPopover(user);
+    await user.keyboard('{Escape}');
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
-  it('日付選択で onChange が呼ばれ、Popover が閉じること', () => {
+  it('日付選択で onChange が呼ばれ、Popover が閉じること', async () => {
+    const user = userEvent.setup();
     const handleChange = vi.fn();
     render(<DatePicker value={new Date('2026-01-01T00:00:00Z')} onChange={handleChange} timeZone="UTC" />);
 
-    const dialog = openPopover();
+    const dialog = await openPopover(user);
     const dayButton = findDayButton(dialog, '15');
 
     expect(dayButton).not.toBeNull();
@@ -70,7 +74,7 @@ describe('DatePicker', () => {
       return;
     }
 
-    fireEvent.click(dayButton);
+    await user.click(dayButton);
 
     expect(handleChange).toHaveBeenCalledTimes(1);
     const firstCall = handleChange.mock.calls[0];
@@ -80,11 +84,12 @@ describe('DatePicker', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
-  it('クリア操作で onChange(null) が呼ばれ、Popover が閉じること', () => {
+  it('クリア操作で onChange(null) が呼ばれ、Popover が閉じること', async () => {
+    const user = userEvent.setup();
     const handleChange = vi.fn();
     render(<DatePicker value={new Date('2026-01-12T00:00:00Z')} onChange={handleChange} timeZone="UTC" />);
 
-    const dialog = openPopover();
+    const dialog = await openPopover(user);
     const clearButton = findDayButton(dialog, 'クリア');
 
     expect(clearButton).not.toBeNull();
@@ -92,13 +97,14 @@ describe('DatePicker', () => {
       return;
     }
 
-    fireEvent.click(clearButton);
+    await user.click(clearButton);
 
     expect(handleChange).toHaveBeenCalledWith(null);
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
-  it('minDate/maxDate 範囲外の日付が無効化されること', () => {
+  it('minDate/maxDate 範囲外の日付が無効化されること', async () => {
+    const user = userEvent.setup();
     render(
       <DatePicker
         value={new Date('2026-01-12T00:00:00Z')}
@@ -109,7 +115,7 @@ describe('DatePicker', () => {
       />,
     );
 
-    const dialog = openPopover();
+    const dialog = await openPopover(user);
     const dayButton = findDayButton(dialog, '5');
 
     expect(dayButton).not.toBeNull();

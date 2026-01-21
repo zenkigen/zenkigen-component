@@ -1,8 +1,6 @@
 import 'react-day-picker/style.css';
 
-import { focusVisible } from '@zenkigen-inc/component-theme';
-import { clsx } from 'clsx';
-import type { ButtonHTMLAttributes, CSSProperties, MouseEventHandler, ReactElement, ReactNode } from 'react';
+import type { ButtonHTMLAttributes, MouseEventHandler, ReactElement, ReactNode } from 'react';
 import {
   Children,
   cloneElement,
@@ -14,16 +12,18 @@ import {
   useRef,
   useState,
 } from 'react';
-import type { DayButtonProps, MonthCaptionProps, WeekdayProps } from 'react-day-picker';
-import { DayPicker, getDefaultClassNames, useDayPicker } from 'react-day-picker';
+import { DayPicker } from 'react-day-picker';
 
 import { Button, InternalButton } from '../button/button';
 import { Icon } from '../icon';
 import { IconButton } from '../icon-button';
 import { Popover } from '../popover';
 import { DatePickerCompoundContext } from './date-picker-context';
+import { CustomDayButton } from './date-picker-day-button';
 import type { DatePickerErrorMessageProps } from './date-picker-error-message';
 import { DatePickerErrorMessage } from './date-picker-error-message';
+import { CustomMonthCaption } from './date-picker-month-caption';
+import { dayPickerClassNames, dayPickerStyle } from './date-picker-styles';
 import {
   createDateFromKey,
   createLocalDateFromKey,
@@ -34,6 +34,7 @@ import {
   formatMonthLabel,
   getMonthStartDate,
 } from './date-picker-utils';
+import { CustomWeekday } from './date-picker-weekday';
 
 type DatePickerButtonProps = Omit<
   ButtonHTMLAttributes<HTMLButtonElement>,
@@ -66,120 +67,6 @@ export type DatePickerProps = DatePickerButtonProps & {
 type DatePickerComponent = ((props: DatePickerProps) => ReactElement) & {
   ErrorMessage: typeof DatePickerErrorMessage;
   displayName?: string;
-};
-
-// react-day-picker のスタイル設定
-const defaultDayPickerClassNames = getDefaultClassNames();
-
-/** react-day-picker の CSS 変数によるスタイル上書き */
-const dayPickerStyle = {
-  '--rdp-font-family': "Arial, 'Noto Sans JP', sans-serif",
-  '--rdp-nav-height': '30px',
-  '--rdp-day-font': "700 12px/1 'Arial', 'Noto Sans JP', sans-serif",
-  '--rdp-selected-font': "700 12px/1 'Arial', 'Noto Sans JP', sans-serif",
-  '--rdp-weekday-font': "700 12px/1 'Arial', 'Noto Sans JP', sans-serif",
-  '--rdp-day-width': '30px',
-  '--rdp-day-height': '30px',
-  '--rdp-day_button-width': '28px',
-  '--rdp-day_button-height': '28px',
-  '--rdp-day_button-border': '1px solid transparent',
-  '--rdp-weekday-padding': '0px',
-} as CSSProperties;
-
-/** react-day-picker のクラス名上書き */
-const dayPickerClassNames = {
-  month: clsx(defaultDayPickerClassNames.month, 'flex flex-col px-[7px] py-2'),
-};
-
-/**
- * カレンダーヘッダー（月表示と前後月ナビゲーション）
- */
-const CustomMonthCaption = ({ calendarMonth, className, ...props }: MonthCaptionProps) => {
-  const { goToMonth, nextMonth, previousMonth } = useDayPicker();
-  const captionMonth = calendarMonth.date;
-
-  return (
-    <div className={clsx('flex items-center justify-between px-1 pb-0.5', className)} {...props}>
-      <IconButton
-        icon="angle-left"
-        size="small"
-        variant="text"
-        isDisabled={!previousMonth}
-        aria-label="前の月"
-        onClick={() => previousMonth && goToMonth(previousMonth)}
-      />
-      <span className="typography-label12bold text-text02">{formatMonthLabel(captionMonth)}</span>
-      <IconButton
-        icon="angle-right"
-        size="small"
-        variant="text"
-        isDisabled={!nextMonth}
-        aria-label="次の月"
-        onClick={() => nextMonth && goToMonth(nextMonth)}
-      />
-    </div>
-  );
-};
-
-const dayButtonBaseClass = 'relative grid size-full place-items-center rounded-full !border !border-solid';
-
-/**
- * カレンダーの日付ボタン
- *
- * 日付の状態に応じてスタイルを切り替える
- */
-const CustomDayButton = ({ day, modifiers, className, ...buttonProps }: DayButtonProps) => {
-  const isSelected = Boolean(modifiers.selected);
-  const isOutside = Boolean(modifiers.outside);
-  const isMinMaxDisabled = Boolean(modifiers.minMaxDisabled);
-  const now = new Date();
-  const isToday =
-    day.date.getFullYear() === now.getFullYear() &&
-    day.date.getMonth() === now.getMonth() &&
-    day.date.getDate() === now.getDate();
-
-  const isDisabledDay = isMinMaxDisabled;
-
-  return (
-    <button
-      type="button"
-      {...buttonProps}
-      disabled={isDisabledDay}
-      className={clsx(
-        className,
-        dayButtonBaseClass,
-        // 共通: フォーカスリング（有効な日のみ）
-        !isDisabledDay && focusVisible.normal,
-        // minDate/maxDate 制限日
-        isMinMaxDisabled && '!cursor-not-allowed !border-transparent !text-disabled01',
-        // 範囲外の日（前後月）
-        isOutside && !isMinMaxDisabled && '!border-transparent !text-interactive04',
-        // 通常の日
-        !isDisabledDay && !isSelected && '!border-transparent',
-        !isDisabledDay && !isToday && '!text-interactive02 hover:!bg-hoverUi',
-        // 今日
-        !isDisabledDay && isToday && !isSelected && '!border-selectedUiBorder !bg-interactive01 !text-textOnColor',
-        // 選択された日
-        isSelected && '!border-selectedUiBorder !bg-uiBackgroundBlue',
-      )}
-    >
-      {buttonProps.children}
-    </button>
-  );
-};
-
-/**
- * カレンダーの曜日ヘッダー（日〜土）
- */
-const CustomWeekday = ({ className, children, ...props }: WeekdayProps) => {
-  return (
-    <th
-      {...props}
-      className={clsx(className, 'm-0 flex size-7 items-center justify-center p-0 text-center text-text02')}
-    >
-      {children}
-    </th>
-  );
 };
 
 export const DatePicker: DatePickerComponent = ({
@@ -420,7 +307,6 @@ export const DatePicker: DatePickerComponent = ({
           onClick={handleTriggerClick}
         >
           <span className={displayTextClasses}>{displayText}</span>
-          {/* {displayText} */}
         </InternalButton>
       </Popover.Trigger>
       <Popover.Content>
