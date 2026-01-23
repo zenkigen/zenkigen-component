@@ -1,6 +1,6 @@
 import { focusVisible } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
-import type { DayButtonProps } from 'react-day-picker';
+import { DayButton, type DayButtonProps } from 'react-day-picker';
 
 import { dayButtonBaseClass } from './date-picker-styles';
 
@@ -8,13 +8,9 @@ import { dayButtonBaseClass } from './date-picker-styles';
  * カレンダーの日付ボタン
  *
  * 日付の状態に応じてスタイルを切り替える
+ * react-day-picker の DayButton を使用してキーボードナビゲーションを維持
  */
-export const CustomDayButton = ({ day, modifiers, className, displayIndex, ...buttonProps }: DayButtonProps) => {
-  // displayIndex は react-day-picker が複数月表示時に使用する内部インデックス。
-  // カスタムコンポーネントでは不要だが、rest spread で DOM に渡ると React 警告が出るため、
-  // ここで明示的に取り出して除外する。
-  void displayIndex;
-
+export const CustomDayButton = ({ day, modifiers, className, ...buttonProps }: DayButtonProps) => {
   const isSelected = Boolean(modifiers.selected);
   const isOutside = Boolean(modifiers.outside);
   const isMinMaxDisabled = Boolean(modifiers.minMaxDisabled);
@@ -27,15 +23,16 @@ export const CustomDayButton = ({ day, modifiers, className, displayIndex, ...bu
   const isDisabledDay = isMinMaxDisabled;
 
   return (
-    <button
-      type="button"
+    <DayButton
       {...buttonProps}
-      disabled={isDisabledDay}
+      day={day}
+      modifiers={modifiers}
       className={clsx(
         className,
         dayButtonBaseClass,
         // 共通: フォーカスリング（有効な日のみ）
-        !isDisabledDay && focusVisible.normal,
+        // react-day-picker の rdp-day_button クラスが outline: none を設定しているため、!important で上書き
+        !isDisabledDay && focusVisible.normalImportant,
         // minDate/maxDate 制限日
         isMinMaxDisabled && '!cursor-not-allowed !border-transparent !text-disabled01',
         // 範囲外の日（前後月）
@@ -48,8 +45,6 @@ export const CustomDayButton = ({ day, modifiers, className, displayIndex, ...bu
         // 選択された日
         isSelected && '!border-selectedUiBorder !bg-uiBackgroundBlue',
       )}
-    >
-      {buttonProps.children}
-    </button>
+    />
   );
 };
