@@ -23,6 +23,7 @@
    - [日付範囲制限](#日付範囲制限)
    - [タイムゾーン指定](#タイムゾーン指定)
 8. [アクセシビリティ](#アクセシビリティ)
+   - [キーボードナビゲーション](#キーボードナビゲーション)
 9. [技術的な詳細](#技術的な詳細)
    - [実装について](#実装について)
    - [タイムゾーン処理](#タイムゾーン処理)
@@ -158,7 +159,7 @@ const MyComponent = () => {
 - ボーダー: 透明
 - テキスト色: `text-interactive02`
 - ホバー時背景: `bg-hoverUi`
-- フォーカス時: `ring-2 ring-interactive01`
+- フォーカス時: `focusVisible.normalImportant`（`outline-2 outline-focus-focus outline-offset-1`）
 
 #### 今日（選択されていない場合）
 
@@ -308,6 +309,19 @@ oneMonthLater.setMonth(today.getMonth() + 1);
 - `Escape`キーでカレンダーを閉じることができる
 - 日付ボタンは`focus-visible`でフォーカスリングが表示される
 
+### キーボードナビゲーション
+
+カレンダー内の日付間を矢印キーで移動できる:
+
+| キー         | 動作                     |
+| ------------ | ------------------------ |
+| `ArrowLeft`  | 前日に移動               |
+| `ArrowRight` | 翌日に移動               |
+| `ArrowUp`    | 1週間前に移動            |
+| `ArrowDown`  | 1週間後に移動            |
+| `Enter`      | フォーカス中の日付を選択 |
+| `Escape`     | カレンダーを閉じる       |
+
 ## 技術的な詳細
 
 ### 実装について
@@ -317,6 +331,8 @@ oneMonthLater.setMonth(today.getMonth() + 1);
 - Compound Componentパターンで`ErrorMessage`を提供
 - `useMemo`/`useCallback`による最適化
 - カスタムコンポーネント（`MonthCaption`、`DayButton`、`Weekday`）でスタイルを上書き
+- `DayButton`は`react-day-picker`の`DayButton`コンポーネントを継承し、キーボードナビゲーション機能を維持
+- フォーカスリングは`@zenkigen-inc/component-theme`の`focusVisible.normalImportant`を使用（react-day-pickerの`outline: none`を上書き）
 
 ### タイムゾーン処理
 
