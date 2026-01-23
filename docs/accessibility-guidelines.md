@@ -141,6 +141,10 @@ Stories を作成したら、以下を確認します:
 
 ## 6. 参考リンク
 
+### 関連ドキュメント
+
+- [テスト実装ガイドライン](./testing-guidelines.md) - アクセシビリティ属性のテスト方法
+
 ### WCAG・WAI-ARIA
 
 - [WCAG 2.1 日本語訳](https://waic.jp/translations/WCAG21/)

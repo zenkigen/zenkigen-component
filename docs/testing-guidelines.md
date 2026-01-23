@@ -154,6 +154,12 @@ Visual Regression Testing (VRT) は、UI の見た目が意図せず変更され
 
 ## 3. 参考リンク
 
+### 関連ドキュメント
+
+- [アクセシビリティガイドライン](./accessibility-guidelines.md) - アクセシビリティテストの観点
+
+### 外部リンク
+
 - [Vitest 公式ドキュメント](https://vitest.dev/)
 - [React Testing Library 公式](https://testing-library.com/docs/react-testing-library/intro/)
 - [Chromatic ドキュメント](https://www.chromatic.com/docs/)
