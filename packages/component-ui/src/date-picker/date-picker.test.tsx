@@ -311,6 +311,123 @@ describe('DatePicker', () => {
     });
   });
 
+  describe('キーボードナビゲーション', () => {
+    it('矢印キー（右）で次の日にフォーカスが移動すること', async () => {
+      const user = userEvent.setup();
+      render(<DatePicker value={new Date('2026-01-15T00:00:00Z')} onChange={vi.fn()} timeZone="UTC" />);
+
+      const dialog = await openPopover(user);
+      const day15 = findDayButton(dialog, '15');
+
+      expect(day15).not.toBeNull();
+      if (!day15) {
+        return;
+      }
+
+      // 15日にフォーカス
+      day15.focus();
+      expect(document.activeElement).toBe(day15);
+
+      // 右矢印キーで16日に移動
+      await user.keyboard('{ArrowRight}');
+      const day16 = findDayButton(dialog, '16');
+      expect(document.activeElement).toBe(day16);
+    });
+
+    it('矢印キー（左）で前の日にフォーカスが移動すること', async () => {
+      const user = userEvent.setup();
+      render(<DatePicker value={new Date('2026-01-15T00:00:00Z')} onChange={vi.fn()} timeZone="UTC" />);
+
+      const dialog = await openPopover(user);
+      const day15 = findDayButton(dialog, '15');
+
+      expect(day15).not.toBeNull();
+      if (!day15) {
+        return;
+      }
+
+      // 15日にフォーカス
+      day15.focus();
+      expect(document.activeElement).toBe(day15);
+
+      // 左矢印キーで14日に移動
+      await user.keyboard('{ArrowLeft}');
+      const day14 = findDayButton(dialog, '14');
+      expect(document.activeElement).toBe(day14);
+    });
+
+    it('矢印キー（下）で1週間後の日にフォーカスが移動すること', async () => {
+      const user = userEvent.setup();
+      render(<DatePicker value={new Date('2026-01-15T00:00:00Z')} onChange={vi.fn()} timeZone="UTC" />);
+
+      const dialog = await openPopover(user);
+      const day15 = findDayButton(dialog, '15');
+
+      expect(day15).not.toBeNull();
+      if (!day15) {
+        return;
+      }
+
+      // 15日にフォーカス
+      day15.focus();
+      expect(document.activeElement).toBe(day15);
+
+      // 下矢印キーで22日に移動（1週間後）
+      await user.keyboard('{ArrowDown}');
+      const day22 = findDayButton(dialog, '22');
+      expect(document.activeElement).toBe(day22);
+    });
+
+    it('矢印キー（上）で1週間前の日にフォーカスが移動すること', async () => {
+      const user = userEvent.setup();
+      render(<DatePicker value={new Date('2026-01-15T00:00:00Z')} onChange={vi.fn()} timeZone="UTC" />);
+
+      const dialog = await openPopover(user);
+      const day15 = findDayButton(dialog, '15');
+
+      expect(day15).not.toBeNull();
+      if (!day15) {
+        return;
+      }
+
+      // 15日にフォーカス
+      day15.focus();
+      expect(document.activeElement).toBe(day15);
+
+      // 上矢印キーで8日に移動（1週間前）
+      await user.keyboard('{ArrowUp}');
+      const day8 = findDayButton(dialog, '8');
+      expect(document.activeElement).toBe(day8);
+    });
+
+    it('Enter キーでフォーカス中の日付が選択されること', async () => {
+      const user = userEvent.setup();
+      const handleChange = vi.fn();
+      render(<DatePicker value={new Date('2026-01-15T00:00:00Z')} onChange={handleChange} timeZone="UTC" />);
+
+      const dialog = await openPopover(user);
+      const day15 = findDayButton(dialog, '15');
+
+      expect(day15).not.toBeNull();
+      if (!day15) {
+        return;
+      }
+
+      // 15日にフォーカスして右に移動
+      day15.focus();
+      await user.keyboard('{ArrowRight}');
+
+      // Enter キーで16日を選択
+      await user.keyboard('{Enter}');
+
+      expect(handleChange).toHaveBeenCalledTimes(1);
+      const firstCall = handleChange.mock.calls[0];
+      expect(firstCall).toBeDefined();
+      const selected = firstCall![0];
+      expect(selected?.toISOString()).toBe('2026-01-16T00:00:00.000Z');
+    });
+  });
+
   describe('value 変更時の displayMonth 同期', () => {
     it('value が変更されると表示月が同期されること', async () => {
       const user = userEvent.setup();
