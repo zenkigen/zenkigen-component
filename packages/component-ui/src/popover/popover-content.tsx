@@ -1,6 +1,6 @@
 import { FloatingPortal, useDismiss, useInteractions, useRole } from '@floating-ui/react';
 import * as React from 'react';
-import { forwardRef, useCallback, useEffect } from 'react';
+import { forwardRef, useCallback, useEffect, useRef } from 'react';
 
 import { composeRefs, isElement } from '../utils';
 import { usePopoverContext } from './popover-context';
@@ -65,8 +65,13 @@ export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(fu
   }, [isOpen, floating.refs.floating]);
 
   // Popover非表示時にトリガーにフォーカスを戻す
+  // 初回マウント時ではなく、isOpen が true → false に変わったときのみ実行
+  const prevIsOpenRef = useRef(isOpen);
   useEffect(() => {
-    if (!isOpen) {
+    const hasPreviouslyBeenOpen = prevIsOpenRef.current;
+    prevIsOpenRef.current = isOpen;
+
+    if (hasPreviouslyBeenOpen && !isOpen) {
       triggerRef.current?.focus({ preventScroll: true });
     }
   }, [isOpen, triggerRef]);
