@@ -50,7 +50,12 @@ const toIsoOffset = (timeZone: DatePickerTimeZone) => (timeZone === 'UTC' ? 'Z' 
  * @example formatDateKey(new Date('2026-01-15T00:00:00Z'), 'UTC') → '2026-01-15'
  */
 export const formatDateKey = (date: Date, timeZone: DatePickerTimeZone): string => {
-  return timeZoneFormatters[timeZone].format(date);
+  const parts = timeZoneFormatters[timeZone].formatToParts(date);
+  const year = parts.find((p) => p.type === 'year')?.value;
+  const month = parts.find((p) => p.type === 'month')?.value;
+  const day = parts.find((p) => p.type === 'day')?.value;
+
+  return `${year}-${month}-${day}`;
 };
 
 /**
