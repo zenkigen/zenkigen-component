@@ -7,7 +7,7 @@ type BreadcrumbItemProps = {
 
 export const BreadcrumbItem = ({ children }: BreadcrumbItemProps) => {
   return (
-    <li className="flex gap-2 after:content-['/'] last:after:content-none [&_a]:text-interactive02 [&_a]:hover:underline [&_a]:active:underline [&_a]:active:text-activeLink02">
+    <li className="flex gap-2 after:content-['/'] last:after:content-none [&_a]:text-interactive02 [&_a]:hover:underline [&_a]:active:text-activeLink02 [&_a]:active:underline">
       {children}
     </li>
   );
