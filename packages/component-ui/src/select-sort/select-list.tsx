@@ -5,10 +5,15 @@ import { SelectItem } from './select-item';
 import type { SortOrder } from './type';
 
 type Props = {
+  /** 表示中の SelectSort と同期させるサイズ。リストの高さや位置に反映される。 */
   size: 'x-small' | 'small' | 'medium' | 'large';
+  /** ドロップダウンのボーダー有無を決めるバリアント。 */
   variant: 'text' | 'outline';
+  /** 現在の並び替え方向。選択中の項目をハイライトする。 */
   sortOrder: SortOrder;
+  /** 昇順・降順を選んだときに呼び出すハンドラー。 */
   onClickItem: (value: SortOrder) => void;
+  /** 選択解除ボタンを押したときに呼び出すハンドラー。 */
   onClickDeselect?: () => void;
 };
 
