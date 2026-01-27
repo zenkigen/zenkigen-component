@@ -20,6 +20,7 @@
    - [バリアント指定](#バリアント指定)
    - [特殊な状態](#特殊な状態)
    - [アンカーとして使用](#アンカーとして使用)
+   - [アイコンアクセントカラー指定](#アイコンアクセントカラー指定)
 7. [アクセシビリティ](#アクセシビリティ)
 8. [技術的な詳細](#技術的な詳細)
 9. [注意事項](#注意事項)
@@ -66,13 +67,22 @@ const MyComponent = () => {
 
 ### オプションプロパティ
 
-| プロパティ    | 型                               | デフォルト値 | 説明                           |
-| ------------- | -------------------------------- | ------------ | ------------------------------ |
-| `size`        | `'small' \| 'medium' \| 'large'` | `'medium'`   | ボタンのサイズ                 |
-| `variant`     | `'outline' \| 'text'`            | `'outline'`  | ボタンのバリアント             |
-| `isDisabled`  | `boolean`                        | `false`      | ボタンが無効かどうか           |
-| `isSelected`  | `boolean`                        | `false`      | ボタンが選択されているかどうか |
-| `isNoPadding` | `boolean`                        | `false`      | パディングを無効にするかどうか |
+| プロパティ        | 型                               | デフォルト値 | 説明                                                                            |
+| ----------------- | -------------------------------- | ------------ | ------------------------------------------------------------------------------- |
+| `size`            | `'small' \| 'medium' \| 'large'` | `'medium'`   | ボタンのサイズ                                                                  |
+| `variant`         | `'outline' \| 'text'`            | `'outline'`  | ボタンのバリアント                                                              |
+| `isDisabled`      | `boolean`                        | `false`      | ボタンが無効かどうか                                                            |
+| `isSelected`      | `boolean`                        | `false`      | ボタンが選択されているかどうか                                                  |
+| `isNoPadding`     | `boolean`                        | `false`      | パディングを無効にするかどうか                                                  |
+| `iconAccentColor` | `ColorToken`                     | `undefined`  | アイコンのアクセントカラー（一部アイコン）。`isSelected=true`の場合は無視される |
+
+#### `ColorToken` について
+
+`iconAccentColor` で指定可能な `ColorToken` は、以下のカテゴリのトークンを含む：
+
+- **Zenkigenデザイントークン**: `text*`, `link*`, `background*`, `border*`, `icon*`, `interactive*`, `field*`, `focus*`, `hover*`, `active*`, `selected*`, `disabled*`, `support*`
+- **ベースカラー**: `blue-blue100`, `gray-gray100`, `red-red100`, `yellow-yellow100`, `green-green100`, `purple-purple100`, `blueGreen-blueGreen100`, `black`, `white`
+- **Tailwind標準色**: `slate-50`, `gray-100`, `red-500` など（50〜950の範囲）
 
 ### 排他的プロパティグループ
 
@@ -260,6 +270,23 @@ IconButtonは使用方法に応じて、ボタンまたはアンカーリンク�
 />
 ```
 
+### アイコンアクセントカラー指定
+
+```typescript
+// アクセントカラーを指定（対応アイコンのみ）
+<IconButton
+  icon="calendar-today"
+  iconAccentColor="supportInfo"
+  onClick={handleClick}
+/>
+
+<IconButton
+  icon="calendar-today"
+  iconAccentColor="supportError"
+  onClick={handleClick}
+/>
+```
+
 ## アクセシビリティ
 
 - 標準的な`<button>`要素または`<a>`要素のすべてのアクセシビリティ機能を継承
@@ -315,6 +342,8 @@ IconButtonは使用方法に応じて、ボタンまたはアンカーリンク�
 1. `isNoPadding`はボタンサイズを最小化するため、タッチ操作では十分なタップエリアを確保することを推奨
 2. アイコンのみのボタンは視覚的に機能が分かりにくいため、ツールチップやaria-labelの使用を推奨
 3. `isSelected`状態は見た目の変更のみで、動作ロジックは実装側で制御する必要がある
+4. `iconAccentColor`は一部のアイコン（`calendar-today`等）でのみ有効である。対応していないアイコンでは効果がない
+5. `isSelected=true`の場合、`iconAccentColor`の指定は無視される。選択状態のアイコンカラーはテーマで定義されたスタイルが優先される
 
 ## スタイルのカスタマイズ
 
@@ -322,7 +351,9 @@ IconButtonは使用方法に応じて、ボタンまたはアンカーリンク�
 
 ## 更新履歴
 
-| 日付       | 内容                          | 担当者 |
-| ---------- | ----------------------------- | ------ |
-| 2025-10-27 | onClickプロパティの扱いを変更 | -      |
-| 2025-09-09 | 新規作成                      | -      |
+| 日付                 | 内容                                                       | 担当者 |
+| -------------------- | ---------------------------------------------------------- | ------ |
+| 2026-01-20           | `isSelected=true`時に`iconAccentColor`を無視する動作を追加 | -      |
+| 2026-01-16 08:22 JST | `iconAccentColor`プロパティを追加                          | -      |
+| 2025-10-27           | onClickプロパティの扱いを変更                              | -      |
+| 2025-09-09           | 新規作成                                                   | -      |
