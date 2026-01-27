@@ -71,21 +71,21 @@ const [selectedOption, setSelectedOption] = useState<SelectOption | null>(null);
 
 ### オプションプロパティ
 
-| プロパティ            | 型                                            | デフォルト値 | 説明                               |
-| --------------------- | --------------------------------------------- | ------------ | ---------------------------------- |
-| `size`                | `'x-small' \| 'small' \| 'medium' \| 'large'` | `'medium'`   | コンポーネントのサイズ             |
-| `variant`             | `'outline' \| 'text'`                         | `'outline'`  | 表示スタイルのバリエーション       |
-| `width`               | `CSSProperties['width']`                      | -            | コンポーネントの幅                 |
-| `maxWidth`            | `CSSProperties['maxWidth']`                   | -            | コンポーネントの最大幅             |
-| `placeholder`         | `string`                                      | -            | 未選択時に表示されるテキスト       |
-| `placeholderIcon`     | `IconName`                                    | -            | プレースホルダー表示時のアイコン   |
-| `selectedOption`      | `SelectOption \| null`                        | `null`       | 現在選択されているオプション       |
-| `optionListMaxHeight` | `CSSProperties['height']`                     | -            | オプションリストの最大高さ         |
-| `isDisabled`          | `boolean`                                     | `false`      | 無効状態の制御                                       |
-| `isError`             | `boolean`                                     | `false`      | エラー状態の制御                                     |
-| `isOptionSelected`    | `boolean`                                     | `false`      | 選択状態の見た目を適用するかどうか                   |
+| プロパティ            | 型                                            | デフォルト値 | 説明                                                   |
+| --------------------- | --------------------------------------------- | ------------ | ------------------------------------------------------ |
+| `size`                | `'x-small' \| 'small' \| 'medium' \| 'large'` | `'medium'`   | コンポーネントのサイズ                                 |
+| `variant`             | `'outline' \| 'text'`                         | `'outline'`  | 表示スタイルのバリエーション                           |
+| `width`               | `CSSProperties['width']`                      | -            | コンポーネントの幅                                     |
+| `maxWidth`            | `CSSProperties['maxWidth']`                   | -            | コンポーネントの最大幅                                 |
+| `placeholder`         | `string`                                      | -            | 未選択時に表示されるテキスト                           |
+| `placeholderIcon`     | `IconName`                                    | -            | プレースホルダー表示時のアイコン                       |
+| `selectedOption`      | `SelectOption \| null`                        | `null`       | 現在選択されているオプション                           |
+| `optionListMaxHeight` | `CSSProperties['height']`                     | -            | オプションリストの最大高さ                             |
+| `isDisabled`          | `boolean`                                     | `false`      | 無効状態の制御                                         |
+| `isError`             | `boolean`                                     | `false`      | エラー状態の制御                                       |
+| `isOptionSelected`    | `boolean`                                     | `false`      | 選択状態の見た目を適用するかどうか                     |
 | `matchListToTrigger`  | `boolean`                                     | `false`      | ドロップダウンリストの幅をトリガーボタンの幅に合わせる |
-| `onChange`            | `(option: SelectOption \| null) => void`      | -            | 選択変更時のコールバック関数                         |
+| `onChange`            | `(option: SelectOption \| null) => void`      | -            | 選択変更時のコールバック関数                           |
 
 ### 継承プロパティ
 
@@ -347,8 +347,8 @@ Selectコンポーネントのスタイルは`@zenkigen-inc/component-theme`のT
 
 ## 更新履歴
 
-| 日付       | 内容                                       | 担当者 |
-| ---------- | ------------------------------------------ | ------ |
-| 2026-01-27 | `matchListToTrigger` プロパティを追加      | -      |
-| 2025-10-10 | 親要素の`overflow`設定の影響回避           | -      |
-| 2025-08-18 | 新規作成                                   | -      |
+| 日付       | 内容                                  | 担当者 |
+| ---------- | ------------------------------------- | ------ |
+| 2026-01-27 | `matchListToTrigger` プロパティを追加 | -      |
+| 2025-10-10 | 親要素の`overflow`設定の影響回避      | -      |
+| 2025-08-18 | 新規作成                              | -      |
