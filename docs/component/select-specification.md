@@ -81,10 +81,11 @@ const [selectedOption, setSelectedOption] = useState<SelectOption | null>(null);
 | `placeholderIcon`     | `IconName`                                    | -            | プレースホルダー表示時のアイコン   |
 | `selectedOption`      | `SelectOption \| null`                        | `null`       | 現在選択されているオプション       |
 | `optionListMaxHeight` | `CSSProperties['height']`                     | -            | オプションリストの最大高さ         |
-| `isDisabled`          | `boolean`                                     | `false`      | 無効状態の制御                     |
-| `isError`             | `boolean`                                     | `false`      | エラー状態の制御                   |
-| `isOptionSelected`    | `boolean`                                     | `false`      | 選択状態の見た目を適用するかどうか |
-| `onChange`            | `(option: SelectOption \| null) => void`      | -            | 選択変更時のコールバック関数       |
+| `isDisabled`          | `boolean`                                     | `false`      | 無効状態の制御                                       |
+| `isError`             | `boolean`                                     | `false`      | エラー状態の制御                                     |
+| `isOptionSelected`    | `boolean`                                     | `false`      | 選択状態の見た目を適用するかどうか                   |
+| `matchListToTrigger`  | `boolean`                                     | `false`      | ドロップダウンリストの幅をトリガーボタンの幅に合わせる |
+| `onChange`            | `(option: SelectOption \| null) => void`      | -            | 選択変更時のコールバック関数                         |
 
 ### 継承プロパティ
 
@@ -283,6 +284,18 @@ const optionsWithIcons = [
     <Select.Option key={option.id} option={option} />
   ))}
 </Select>
+
+// ドロップダウンリストの幅をトリガーボタンに合わせる
+<Select
+  width={200}
+  matchListToTrigger
+  selectedOption={selectedOption}
+  onChange={(option) => setSelectedOption(option)}
+>
+  {options.map((option) => (
+    <Select.Option key={option.id} option={option} />
+  ))}
+</Select>
 ```
 
 ### オプションリストの高さ制御
@@ -334,7 +347,8 @@ Selectコンポーネントのスタイルは`@zenkigen-inc/component-theme`のT
 
 ## 更新履歴
 
-| 日付       | 内容                             | 担当者 |
-| ---------- | -------------------------------- | ------ |
-| 2025-10-10 | 親要素の`overflow`設定の影響回避 | -      |
-| 2025-08-18 | 新規作成                         | -      |
+| 日付       | 内容                                       | 担当者 |
+| ---------- | ------------------------------------------ | ------ |
+| 2026-01-27 | `matchListToTrigger` プロパティを追加      | -      |
+| 2025-10-10 | 親要素の`overflow`設定の影響回避           | -      |
+| 2025-08-18 | 新規作成                                   | -      |

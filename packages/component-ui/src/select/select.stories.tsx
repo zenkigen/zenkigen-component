@@ -768,3 +768,55 @@ export function MaxWidth() {
     </>
   );
 }
+
+export function MatchListToTrigger() {
+  const [selectedOption1, setSelectedOption1] = useState<SelectOption | null>(null);
+  const [selectedOption2, setSelectedOption2] = useState<SelectOption | null>(null);
+
+  const longLabelOptions = [
+    { id: '1', label: '選択肢A 長いラベルのテスト用テキスト', value: 'A' },
+    { id: '2', label: '選択肢B さらに長いラベルのテスト用テキストです', value: 'B' },
+    { id: '3', label: '選択肢C', value: 'C' },
+    { id: '4', label: '選択肢D 短め', value: 'D' },
+  ];
+
+  return (
+    <div className="flex flex-col gap-8">
+      <div>
+        <p className="typography-label14regular mb-2 text-text01">
+          matchListToTrigger: false（デフォルト）- リストはコンテンツに応じて広がる
+        </p>
+        <Select
+          size="medium"
+          variant="outline"
+          placeholder="選択"
+          selectedOption={selectedOption1}
+          onChange={(option) => setSelectedOption1(option)}
+          width={200}
+        >
+          {longLabelOptions.map((option) => (
+            <Select.Option key={option.id} option={option} />
+          ))}
+        </Select>
+      </div>
+      <div>
+        <p className="typography-label14regular mb-2 text-text01">
+          matchListToTrigger: true - リストはトリガーボタンの幅に固定
+        </p>
+        <Select
+          size="medium"
+          variant="outline"
+          placeholder="選択"
+          selectedOption={selectedOption2}
+          onChange={(option) => setSelectedOption2(option)}
+          width={200}
+          matchListToTrigger
+        >
+          {longLabelOptions.map((option) => (
+            <Select.Option key={option.id} option={option} />
+          ))}
+        </Select>
+      </div>
+    </div>
+  );
+}
