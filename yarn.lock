@@ -3149,7 +3149,7 @@ __metadata:
   resolution: "@zenkigen-inc/component-icons@workspace:packages/component-icons"
   dependencies:
     cheerio: "npm:1.1.0"
-    ejs: "npm:3.1.10"
+    ejs: "npm:4.0.1"
     tsup: "npm:8.5.0"
     typescript: "npm:5.8.3"
   peerDependencies:
@@ -4508,7 +4508,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ejs@npm:3.1.10, ejs@npm:^3.1.6":
+"ejs@npm:4.0.1":
+  version: 4.0.1
+  resolution: "ejs@npm:4.0.1"
+  dependencies:
+    jake: "npm:^10.9.1"
+  bin:
+    ejs: bin/cli.js
+  checksum: 10c0/e937a011c5776e6a4775d79317caa9d5b4c64331d62214ff82de97de555ed338bc435d4fa54798ccc0a6e8a2e9096395cbeb79940ab2c3b29f11213ea79b48d6
+  languageName: node
+  linkType: hard
+
+"ejs@npm:^3.1.6":
   version: 3.1.10
   resolution: "ejs@npm:3.1.10"
   dependencies:
@@ -6307,7 +6318,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jake@npm:^10.8.5":
+"jake@npm:^10.8.5, jake@npm:^10.9.1":
   version: 10.9.4
   resolution: "jake@npm:10.9.4"
   dependencies:
