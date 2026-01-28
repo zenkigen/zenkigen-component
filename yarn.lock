@@ -3181,7 +3181,7 @@ __metadata:
     "@zenkigen-inc/component-theme": "npm:1.19.0"
     clsx: "npm:2.1.1"
     hygen: "npm:6.2.11"
-    react-day-picker: "npm:^9.13.0"
+    react-day-picker: "npm:9.13.0"
     tsup: "npm:8.5.0"
     typescript: "npm:5.8.3"
   peerDependencies:
@@ -7728,7 +7728,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-day-picker@npm:^9.13.0":
+"react-day-picker@npm:9.13.0":
   version: 9.13.0
   resolution: "react-day-picker@npm:9.13.0"
   dependencies:
