@@ -59,6 +59,49 @@ Zenkigen Component のテーマシステムは、`@zenkigen-inc/component-theme`
 - **アニメーション**: keyframes, animation
 - **z-index**: zIndex（レイヤー順序の管理）
 
+### z-index レイヤーシステム
+
+z-index はコンポーネントの重なり順を制御するために使用します。以下の階層が定義されており、Tailwind CSS のユーティリティクラスとして使用できます。
+
+#### レイヤー階層一覧
+
+| レベル    | 値   | 用途                   | Tailwind クラス |
+| --------- | ---- | ---------------------- | --------------- |
+| hide      | -1   | 非表示要素             | `z-hide`        |
+| base      | 0    | 基本レイヤー           | `z-base`        |
+| badge     | 10   | バッジ                 | `z-badge`       |
+| header    | 100  | ヘッダー               | `z-header`      |
+| dropdown  | 300  | ドロップダウンメニュー | `z-dropdown`    |
+| overlay   | 1000 | オーバーレイ背景       | `z-overlay`     |
+| modal     | 1100 | モーダルダイアログ     | `z-modal`       |
+| popover   | 1150 | ポップオーバー         | `z-popover`     |
+| preloader | 1200 | ローディング表示       | `z-preloader`   |
+| toast     | 1300 | トースト通知           | `z-toast`       |
+| tooltip   | 1400 | ツールチップ           | `z-tooltip`     |
+
+#### 設計思想
+
+- **Modal 内の Popover**: `z-popover`（1150）は `z-modal`（1100）より上に配置されているため、Modal 内で DatePicker や Dropdown を使用した場合でも正しく前面に表示されます
+- **最上位レイヤー**: ツールチップ（1400）は常に最前面に表示されます
+- **FloatingPortal**: Popover、Tooltip などの浮遊要素は `FloatingPortal` を使用して DOM 階層外にレンダリングされるため、親要素の `overflow: hidden` や z-index の影響を受けません
+
+#### 使用例
+
+```tsx
+// ドロップダウンメニュー
+<div className="z-dropdown">...</div>
+
+// モーダルのオーバーレイ
+<div className="z-overlay">...</div>
+
+// ポップオーバーコンテンツ
+<div className="z-popover">...</div>
+```
+
+#### 定義場所
+
+z-index の値は `packages/component-config/src/tailwind-config.ts` で定義されています。
+
 ## Tailwind CSS設定
 
 ### 設定のカスタマイズ
