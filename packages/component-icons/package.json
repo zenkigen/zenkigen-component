@@ -22,10 +22,10 @@
     "build-lib": "rimraf dist && yarn generate && tsup"
   },
   "devDependencies": {
-    "cheerio": "1.1.0",
+    "cheerio": "1.2.0",
     "ejs": "3.1.10",
-    "tsup": "8.5.0",
-    "typescript": "5.8.3"
+    "tsup": "8.5.1",
+    "typescript": "5.9.3"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
