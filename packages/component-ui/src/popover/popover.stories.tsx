@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useRef, useState } from 'react';
+import type { Decorator } from '@storybook/react-vite';
+import MockDate from 'mockdate';
+import { useEffect, useRef, useState } from 'react';
 
 import { Button } from '../button';
 import { DatePicker } from '../date-picker';
@@ -332,8 +334,22 @@ const selectOptions: SelectOption[] = [
 ];
 
 const PopoverWithSelectStory = (args: Story['args']) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const [selectedOption, setSelectedOption] = useState<SelectOption | null>(null);
+  const selectContainerRef = useRef<HTMLDivElement>(null);
+
+  // Popover が開いた後に Select のドロップダウンも開く
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const container = selectContainerRef.current;
+      if (container !== null) {
+        const selectTrigger = container.querySelector<HTMLButtonElement>('button');
+        selectTrigger?.click();
+      }
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className="flex min-h-[700px] flex-col items-center justify-center gap-4">
@@ -357,7 +373,7 @@ const PopoverWithSelectStory = (args: Story['args']) => {
                   Popover 内に Select を配置した例です。Select のドロップダウンを開いてオプションを選択しても、Popover
                   は閉じません。
                 </p>
-                <div className="flex flex-col gap-2">
+                <div ref={selectContainerRef} className="flex flex-col gap-2">
                   <label className="typography-label12regular text-text02">オプションを選択</label>
                   <Select
                     size="medium"
@@ -405,9 +421,32 @@ export const WithSelect: Story = {
 };
 
 // Popover + DatePicker 連携ストーリー（ネストされたFloating UI要素）
+// VRT 用に日付を固定
+const MOCK_TODAY = '2026-01-15T00:00:00Z';
+
+const withMockedDate: Decorator = (Story) => {
+  MockDate.set(MOCK_TODAY);
+
+  return <Story />;
+};
+
 const PopoverWithDatePickerStory = (args: Story['args']) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const datePickerContainerRef = useRef<HTMLDivElement>(null);
+
+  // Popover が開いた後に DatePicker のカレンダーも開く
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const container = datePickerContainerRef.current;
+      if (container !== null) {
+        const datePickerTrigger = container.querySelector<HTMLButtonElement>('button');
+        datePickerTrigger?.click();
+      }
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className="flex min-h-[700px] flex-col items-center justify-center gap-4">
@@ -432,7 +471,7 @@ const PopoverWithDatePickerStory = (args: Story['args']) => {
                   のカレンダーを開いて日付を選択したり、カレンダー外側をクリックしてカレンダーを閉じても、Popover
                   は閉じません。
                 </p>
-                <div className="flex flex-col gap-2">
+                <div ref={datePickerContainerRef} className="flex flex-col gap-2">
                   <label className="typography-label12regular text-text02">日付を選択</label>
                   <DatePicker
                     size="medium"
@@ -461,6 +500,7 @@ const PopoverWithDatePickerStory = (args: Story['args']) => {
 };
 
 export const WithDatePicker: Story = {
+  decorators: [withMockedDate],
   args: {
     placement: 'bottom',
   },
