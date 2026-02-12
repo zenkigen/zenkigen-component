@@ -9,7 +9,7 @@ export type TextAreaErrorMessageProps = Omit<HTMLAttributes<HTMLDivElement>, 'cl
 export const TextAreaErrorMessage = forwardRef<HTMLDivElement, TextAreaErrorMessageProps>(
   ({ 'aria-live': ariaLive = 'assertive', ...props }, ref) => {
     const { textAreaProps } = useTextAreaCompoundContext('TextArea.ErrorMessage');
-    const typographyClass = textAreaProps.size === 'large' ? 'typography-label12regular' : 'typography-label11regular';
+    const typographyClass = textAreaProps.size === 'large' ? 'typography-label13regular' : 'typography-label12regular';
     const shouldRender = textAreaProps.isError === true;
 
     if (!shouldRender) {

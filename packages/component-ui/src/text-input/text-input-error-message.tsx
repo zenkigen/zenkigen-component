@@ -9,7 +9,7 @@ export type TextInputErrorMessageProps = Omit<HTMLAttributes<HTMLDivElement>, 'c
 export const TextInputErrorMessage = forwardRef<HTMLDivElement, TextInputErrorMessageProps>(
   ({ 'aria-live': ariaLive = 'assertive', ...props }, ref) => {
     const { inputProps } = useTextInputCompoundContext('TextInput.ErrorMessage');
-    const typographyClass = inputProps.size === 'large' ? 'typography-label12regular' : 'typography-label11regular';
+    const typographyClass = inputProps.size === 'large' ? 'typography-label13regular' : 'typography-label12regular';
     const shouldRender = inputProps.isError === true;
 
     if (!shouldRender) {
