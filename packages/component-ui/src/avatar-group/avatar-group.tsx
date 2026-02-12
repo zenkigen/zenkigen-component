@@ -1,5 +1,5 @@
 import { clsx } from 'clsx';
-import type { ReactNode } from 'react';
+import type { ReactElement, ReactNode } from 'react';
 import { Children, forwardRef, isValidElement } from 'react';
 
 import { AvatarGroupContext, useAvatarGroupContext } from './avatar-group-context';
@@ -30,16 +30,72 @@ const COUNTER_SIZE_CLASSES: Record<AvatarSize, string> = {
   'x-large': 'h-16 w-16 typography-label16regular',
 };
 
-function isNonAvatarElement(child: ReactNode): boolean {
-  if (!isValidElement(child)) {
-    return false;
+const DISPLAY_NAMES = {
+  remain: 'AvatarGroup.Remain',
+  counter: 'AvatarGroup.Counter',
+  label: 'AvatarGroup.Label',
+} as const;
+
+type ComponentType = (typeof DISPLAY_NAMES)[keyof typeof DISPLAY_NAMES];
+
+function getDisplayName(element: ReactElement): string | null {
+  const type = element.type;
+  if (typeof type === 'function' || typeof type === 'object') {
+    return (type as { displayName?: string }).displayName ?? null;
   }
 
-  return child.type === Remain || child.type === Counter || child.type === Label;
+  return null;
 }
 
-function isLabelElement(child: ReactNode): boolean {
-  return isValidElement(child) && child.type === Label;
+function findComponentType(child: ReactNode): ComponentType | null {
+  if (!isValidElement(child)) {
+    return null;
+  }
+
+  const displayName = getDisplayName(child);
+  if (displayName !== null && Object.values(DISPLAY_NAMES).includes(displayName as ComponentType)) {
+    return displayName as ComponentType;
+  }
+
+  const childProps = child.props as { children?: ReactNode };
+  if (childProps.children != null) {
+    const nestedChildren = Children.toArray(childProps.children);
+    for (const nestedChild of nestedChildren) {
+      const found = findComponentType(nestedChild);
+      if (found !== null) {
+        return found;
+      }
+    }
+  }
+
+  return null;
+}
+
+function classifyChildren(children: ReactNode) {
+  const childArray = Children.toArray(children);
+  const avatarChildren: ReactNode[] = [];
+  const remainChildren: ReactNode[] = [];
+  const counterChildren: ReactNode[] = [];
+  const labelChildren: ReactNode[] = [];
+
+  for (const child of childArray) {
+    const componentType = findComponentType(child);
+    switch (componentType) {
+      case DISPLAY_NAMES.remain:
+        remainChildren.push(child);
+        break;
+      case DISPLAY_NAMES.counter:
+        counterChildren.push(child);
+        break;
+      case DISPLAY_NAMES.label:
+        labelChildren.push(child);
+        break;
+      default:
+        avatarChildren.push(child);
+    }
+  }
+
+  return { avatarChildren, remainChildren, counterChildren, labelChildren };
 }
 
 type AvatarGroupProps = {
@@ -49,10 +105,7 @@ type AvatarGroupProps = {
 };
 
 function AvatarGroupRoot({ children, size = 'medium', max = 5 }: AvatarGroupProps) {
-  const childArray = Children.toArray(children);
-  const avatarChildren = childArray.filter((child) => !isNonAvatarElement(child));
-  const counterChildren = childArray.filter((child) => isNonAvatarElement(child) && !isLabelElement(child));
-  const labelChildren = childArray.filter((child) => isLabelElement(child));
+  const { avatarChildren, remainChildren, counterChildren, labelChildren } = classifyChildren(children);
   const total = avatarChildren.length;
   const isOverflow = total > max;
   const remain = isOverflow ? total - max : 0;
@@ -66,7 +119,7 @@ function AvatarGroupRoot({ children, size = 'medium', max = 5 }: AvatarGroupProp
     remain,
   };
 
-  const trailingElements = [...(isOverflow ? counterChildren : []), ...labelChildren];
+  const trailingElements = [...(isOverflow ? [...remainChildren, ...counterChildren] : []), ...labelChildren];
 
   return (
     <AvatarGroupContext.Provider value={contextValue}>
@@ -112,6 +165,7 @@ const Remain = forwardRef<HTMLSpanElement>(function Remain(_props, ref) {
     </span>
   );
 });
+Remain.displayName = DISPLAY_NAMES.remain;
 
 const Counter = forwardRef<HTMLSpanElement>(function Counter(_props, ref) {
   const { size, total, isOverflow } = useAvatarGroupContext();
@@ -131,6 +185,7 @@ const Counter = forwardRef<HTMLSpanElement>(function Counter(_props, ref) {
     </span>
   );
 });
+Counter.displayName = DISPLAY_NAMES.counter;
 
 type LabelProps = {
   children: ReactNode;
@@ -150,6 +205,7 @@ const Label = forwardRef<HTMLSpanElement, LabelProps>(function Label({ children 
     </span>
   );
 });
+Label.displayName = DISPLAY_NAMES.label;
 
 export const AvatarGroup = Object.assign(AvatarGroupRoot, {
   Remain,

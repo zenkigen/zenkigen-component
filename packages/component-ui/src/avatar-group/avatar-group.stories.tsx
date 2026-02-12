@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Avatar } from '../avatar';
+import { Tooltip } from '../tooltip';
 import { AvatarGroup } from '.';
 
 const meta: Meta<typeof AvatarGroup> = {
@@ -125,3 +126,99 @@ export function Base() {
     </div>
   );
 }
+
+export const LayoutExample: Story = {
+  parameters: {
+    layout: 'centered',
+    chromatic: { disable: true },
+  },
+  render: () => (
+    <div className="flex flex-col gap-6">
+      {/* Tooltip との組み合わせ（Remain に全員の名前を表示） */}
+      <div className="flex flex-col gap-2">
+        <p className="typography-label14regular text-text02">Tooltip との組み合わせ</p>
+        <AvatarGroup max={4} size="medium">
+          {avatarData.slice(0, 6).map((data) => (
+            <Avatar key={data.userId} userId={data.userId} firstName={data.firstName} lastName={data.lastName} />
+          ))}
+          <Tooltip
+            content={
+              <div className="flex flex-col">
+                {avatarData.slice(0, 6).map((data) => (
+                  <span key={data.userId}>{`${data.lastName} ${data.firstName}`}</span>
+                ))}
+              </div>
+            }
+            verticalPosition="top"
+            portalTarget={document.body}
+          >
+            <AvatarGroup.Remain />
+          </Tooltip>
+        </AvatarGroup>
+      </div>
+
+      {/* サイズバリエーション + Tooltip */}
+      <div className="flex flex-col gap-2">
+        <p className="typography-label14regular text-text02">サイズバリエーション + Tooltip</p>
+        {(['small', 'medium', 'large'] as const).map((size) => (
+          <AvatarGroup key={size} size={size} max={3}>
+            {avatarData.slice(0, 5).map((data) => (
+              <Tooltip
+                key={data.userId}
+                content={`${data.lastName} ${data.firstName}`}
+                verticalPosition="top"
+                portalTarget={document.body}
+              >
+                <Avatar userId={data.userId} firstName={data.firstName} lastName={data.lastName} />
+              </Tooltip>
+            ))}
+            <Tooltip
+              content={
+                <div className="flex flex-col">
+                  {avatarData.slice(3, 5).map((data) => (
+                    <span key={data.userId}>{`${data.lastName} ${data.firstName}`}</span>
+                  ))}
+                </div>
+              }
+              verticalPosition="top"
+              portalTarget={document.body}
+            >
+              <AvatarGroup.Remain />
+            </Tooltip>
+          </AvatarGroup>
+        ))}
+      </div>
+
+      {/* Label + Tooltip */}
+      <div className="flex flex-col gap-2">
+        <p className="typography-label14regular text-text02">Label + Tooltip（大量データ想定）</p>
+        <AvatarGroup size="small">
+          {avatarData.slice(0, 5).map((data) => (
+            <Tooltip
+              key={data.userId}
+              content={`${data.lastName} ${data.firstName}`}
+              verticalPosition="top"
+              portalTarget={document.body}
+            >
+              <Avatar userId={data.userId} firstName={data.firstName} lastName={data.lastName} />
+            </Tooltip>
+          ))}
+          <Tooltip
+            content={
+              <div className="flex flex-col">
+                {avatarData.slice(0, 5).map((data) => (
+                  <span key={data.userId}>{`${data.lastName} ${data.firstName}`}</span>
+                ))}
+                <span>...</span>
+              </div>
+            }
+            verticalPosition="top"
+            portalTarget={document.body}
+          >
+            <AvatarGroup.Label>+995</AvatarGroup.Label>
+          </Tooltip>
+        </AvatarGroup>
+      </div>
+    </div>
+  ),
+};
