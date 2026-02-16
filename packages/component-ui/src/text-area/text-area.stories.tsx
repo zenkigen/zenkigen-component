@@ -31,6 +31,10 @@ const meta: Meta<typeof TextArea> = {
       description:
         'カウンター用の上限文字数（ソフトリミット）。超過時にカウンターがエラー色になるが入力はブロックしない',
     },
+    maxLength: {
+      control: 'number',
+      description: 'HTML ネイティブの最大文字数（ハードリミット）。入力をブロックする',
+    },
   },
 };
 
@@ -50,17 +54,28 @@ export const Component: Story = {
   parameters: {
     chromatic: { disable: true },
   },
-  render: (args) => (
-    <div className="flex items-center gap-4">
-      <div style={{ flex: 1 }}>
-        <TextArea {...args}>
-          <TextArea.HelperMessage>○文字以内で入力してください</TextArea.HelperMessage>
-          <TextArea.ErrorMessage>入力内容にエラーがあります</TextArea.ErrorMessage>
-        </TextArea>
+  render: function MyFunc({ ...args }) {
+    const [value, setValue] = useState('');
+
+    return (
+      <div className="flex items-center gap-4">
+        <div style={{ flex: 1 }}>
+          <TextArea
+            {...args}
+            value={value}
+            onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+              action('onChange')(e);
+              setValue(e.target.value);
+            }}
+          >
+            <TextArea.HelperMessage>○文字以内で入力してください</TextArea.HelperMessage>
+            <TextArea.ErrorMessage>入力内容にエラーがあります</TextArea.ErrorMessage>
+          </TextArea>
+        </div>
+        <div style={{ flex: 1 }}></div>
       </div>
-      <div style={{ flex: 1 }}></div>
-    </div>
-  ),
+    );
+  },
 };
 
 type ErrorTextProps = {
