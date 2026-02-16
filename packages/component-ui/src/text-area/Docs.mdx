@@ -52,6 +52,43 @@ const CompositionExample = () => {
 };
 ```
 
+## 文字数カウンター付きの使用例
+
+```tsx
+import { useState, type ChangeEvent } from 'react';
+import { TextArea } from '@zenkigen-inc/component-ui';
+
+// ソフトリミット（超過許容、カウンター赤字）
+const SoftLimitExample = () => {
+  const [value, setValue] = useState('');
+
+  return (
+    <TextArea
+      value={value}
+      placeholder="入力してください"
+      isCounterVisible={true}
+      counterMaxLength={2000}
+      onChange={(event: ChangeEvent<HTMLTextAreaElement>) => setValue(event.target.value)}
+    />
+  );
+};
+
+// ハードリミット（入力ブロック + カウンター表示）
+const HardLimitExample = () => {
+  const [value, setValue] = useState('');
+
+  return (
+    <TextArea
+      value={value}
+      placeholder="入力してください"
+      isCounterVisible={true}
+      maxLength={2000}
+      onChange={(event: ChangeEvent<HTMLTextAreaElement>) => setValue(event.target.value)}
+    />
+  );
+};
+```
+
 ## 概要
 
 複数行のテキストを入力するためのフィールドを提供するコンポーネントです。

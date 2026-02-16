@@ -25,6 +25,12 @@ const meta: Meta<typeof TextArea> = {
     isResizable: { control: 'boolean', description: 'リサイズ可能かどうか（autoHeightがtrueの場合は無効）' },
     isError: { control: 'boolean', description: 'エラーかどうか' },
     disabled: { control: 'boolean', description: '無効かどうか' },
+    isCounterVisible: { control: 'boolean', description: '文字数カウンターの表示/非表示' },
+    counterMaxLength: {
+      control: 'number',
+      description:
+        'カウンター用の上限文字数（ソフトリミット）。超過時にカウンターがエラー色になるが入力はブロックしない',
+    },
   },
 };
 
@@ -277,6 +283,76 @@ export const AutoHeight: Story = {
             setValue(e.target.value);
           }}
         />
+      </div>
+    );
+  },
+};
+
+export const Counter: Story = {
+  args: {},
+  render: function CounterStory() {
+    const [softValue, setSoftValue] = useState('');
+    const [hardValue, setHardValue] = useState('');
+    const [countOnlyValue, setCountOnlyValue] = useState('');
+    const [helperValue, setHelperValue] = useState('');
+
+    return (
+      <div className="flex gap-10">
+        <div style={{ width: 400 }} className="flex flex-col gap-12">
+          <div>
+            <p className="typography-label12regular mb-2 text-text02">ソフトリミット（counterMaxLength=50）</p>
+            <TextArea
+              value={softValue}
+              placeholder="超過しても入力可能"
+              size="medium"
+              height={100}
+              isCounterVisible
+              counterMaxLength={50}
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setSoftValue(e.target.value)}
+            />
+          </div>
+          <div>
+            <p className="typography-label12regular mb-2 text-text02">ハードリミット（maxLength=50）</p>
+            <TextArea
+              value={hardValue}
+              placeholder="50文字で入力ブロック"
+              size="medium"
+              height={100}
+              isCounterVisible
+              maxLength={50}
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setHardValue(e.target.value)}
+            />
+          </div>
+          <div>
+            <p className="typography-label12regular mb-2 text-text02">カウンターのみ（上限なし）</p>
+            <TextArea
+              value={countOnlyValue}
+              placeholder="文字数のみ表示"
+              size="medium"
+              height={100}
+              isCounterVisible
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setCountOnlyValue(e.target.value)}
+            />
+          </div>
+          <div>
+            <p className="typography-label12regular mb-2 text-text02">
+              HelperMessage + カウンター（counterMaxLength=100）
+            </p>
+            <TextArea
+              value={helperValue}
+              placeholder="ヘルプメッセージ付き"
+              size="medium"
+              height={100}
+              isCounterVisible
+              counterMaxLength={100}
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setHelperValue(e.target.value)}
+            >
+              <TextArea.HelperMessage>
+                100文字以内で入力してください。長いヘルプメッセージは折り返されます。
+              </TextArea.HelperMessage>
+            </TextArea>
+          </div>
+        </div>
       </div>
     );
   },
