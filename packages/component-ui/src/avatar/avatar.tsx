@@ -1,6 +1,7 @@
 import { userColors } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
 
+import type { AvatarSize } from '../avatar-group/avatar-group-context';
 import { useAvatarGroupSize } from '../avatar-group/avatar-group-context';
 import { Icon } from '../icon';
 
@@ -9,7 +10,7 @@ export const isAsciiString = (str: string) => {
 };
 
 type Props = {
-  size?: 'x-small' | 'small' | 'medium' | 'large' | 'x-large';
+  size?: AvatarSize;
   userId?: number;
   firstName?: string;
   lastName?: string;

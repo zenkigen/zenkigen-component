@@ -2,9 +2,8 @@ import { clsx } from 'clsx';
 import type { ReactElement, ReactNode } from 'react';
 import { Children, forwardRef, isValidElement } from 'react';
 
+import type { AvatarSize } from './avatar-group-context';
 import { AvatarGroupContext, useAvatarGroupContext } from './avatar-group-context';
-
-type AvatarSize = 'x-small' | 'small' | 'medium' | 'large' | 'x-large';
 
 const OVERLAP_CLASSES: Record<AvatarSize, string> = {
   'x-small': '-ml-1.5',

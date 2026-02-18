@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 
-type AvatarSize = 'x-small' | 'small' | 'medium' | 'large' | 'x-large';
+export type AvatarSize = 'x-small' | 'small' | 'medium' | 'large' | 'x-large';
 
 export type AvatarGroupContextValue = {
   size: AvatarSize;
