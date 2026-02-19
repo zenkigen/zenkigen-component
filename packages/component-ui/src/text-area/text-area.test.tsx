@@ -303,4 +303,127 @@ describe('TextArea', () => {
       expect(wrapper.className).toMatch(/overflow-hidden/);
     });
   });
+
+  describe('文字数カウンター', () => {
+    describe('表示・非表示', () => {
+      it('isCounterVisible + counterMaxLength でカウンターが表示されること', () => {
+        render(<TextArea value="テスト" isCounterVisible counterMaxLength={100} readOnly />);
+        expect(screen.getByText('3/100')).toBeInTheDocument();
+      });
+
+      it('isCounterVisible + maxLength でカウンターが表示されること', () => {
+        render(<TextArea value="テスト" isCounterVisible maxLength={100} readOnly />);
+        expect(screen.getByText('3/100')).toBeInTheDocument();
+      });
+
+      it('isCounterVisible + 上限なしでカウンターのみ表示されること', () => {
+        render(<TextArea value="テスト" isCounterVisible readOnly />);
+        expect(screen.getByText('3')).toBeInTheDocument();
+      });
+
+      it('isCounterVisible={false}（デフォルト）でカウンターが非表示であること', () => {
+        render(<TextArea value="テスト" readOnly />);
+        expect(screen.queryByText('3')).toBeNull();
+      });
+    });
+
+    describe('maxLength の挙動', () => {
+      it('counterMaxLength 指定時に HTML maxlength が渡されないこと', () => {
+        render(<TextArea value="テスト" isCounterVisible counterMaxLength={100} readOnly data-testid="textarea" />);
+        const textarea = screen.getByTestId('textarea');
+        expect(textarea).not.toHaveAttribute('maxlength');
+      });
+
+      it('isCounterVisible + maxLength 指定時に HTML maxlength が渡されること', () => {
+        render(<TextArea value="テスト" isCounterVisible maxLength={100} readOnly data-testid="textarea" />);
+        const textarea = screen.getByTestId('textarea');
+        expect(textarea).toHaveAttribute('maxlength', '100');
+      });
+
+      it('maxLength のみ（カウンターなし）は従来通り HTML に渡されること', () => {
+        render(<TextArea value="テスト" maxLength={100} readOnly data-testid="textarea" />);
+        const textarea = screen.getByTestId('textarea');
+        expect(textarea).toHaveAttribute('maxlength', '100');
+      });
+    });
+
+    describe('エラースタイル', () => {
+      it('counterMaxLength 超過時にエラースタイルが適用されること', () => {
+        render(<TextArea value="あいうえお" isCounterVisible counterMaxLength={3} readOnly />);
+        const counter = screen.getByText('5/3');
+        expect(counter.className).toMatch(/text-supportError/);
+      });
+
+      it('maxLength 以内のときは通常スタイルであること', () => {
+        render(<TextArea value="あ" isCounterVisible maxLength={100} readOnly />);
+        const counter = screen.getByText('1/100');
+        expect(counter.className).toMatch(/text-text02/);
+        expect(counter.className).not.toMatch(/text-supportError/);
+      });
+
+      it('isError={true} でも上限未超過ならカウンターは通常スタイルであること', () => {
+        render(<TextArea value="テスト" isCounterVisible counterMaxLength={100} isError readOnly />);
+        const counter = screen.getByText('3/100');
+        expect(counter.className).toMatch(/text-text02/);
+        expect(counter.className).not.toMatch(/text-supportError/);
+      });
+    });
+
+    describe('アクセシビリティ', () => {
+      it('カウンターに aria-live="polite" が付与されること', () => {
+        render(<TextArea value="テスト" isCounterVisible counterMaxLength={100} readOnly />);
+        const counter = screen.getByText('3/100');
+        expect(counter).toHaveAttribute('aria-live', 'polite');
+      });
+
+      it('カウンターの id が aria-describedby に追加されること', () => {
+        render(<TextArea value="テスト" isCounterVisible counterMaxLength={100} readOnly data-testid="textarea" />);
+        const textarea = screen.getByTestId('textarea');
+        const describedBy = textarea.getAttribute('aria-describedby') ?? '';
+        expect(describedBy).toMatch(/-counter$/);
+      });
+    });
+
+    describe('HelperMessage との共存', () => {
+      it('HelperMessage とカウンターが同時に表示されること', () => {
+        render(
+          <TextArea value="テスト" isCounterVisible counterMaxLength={100} onChange={() => {}}>
+            <TextArea.HelperMessage>ヘルプ</TextArea.HelperMessage>
+          </TextArea>,
+        );
+        expect(screen.getByText('ヘルプ')).toBeInTheDocument();
+        expect(screen.getByText('3/100')).toBeInTheDocument();
+      });
+    });
+
+    describe('disabled 状態', () => {
+      it('disabled + isError でもカウンターが通常スタイルであること', () => {
+        render(<TextArea value="テスト" isCounterVisible counterMaxLength={100} isError disabled readOnly />);
+        const counter = screen.getByText('3/100');
+        expect(counter.className).toMatch(/text-text02/);
+        expect(counter.className).not.toMatch(/text-supportError/);
+      });
+
+      it('disabled + 超過時でもカウンターが通常スタイルであること', () => {
+        render(<TextArea value="あいうえお" isCounterVisible counterMaxLength={3} disabled readOnly />);
+        const counter = screen.getByText('5/3');
+        expect(counter.className).toMatch(/text-text02/);
+        expect(counter.className).not.toMatch(/text-supportError/);
+      });
+    });
+
+    describe('サイズ別タイポグラフィ', () => {
+      it('medium サイズで typography-label12regular が適用されること', () => {
+        render(<TextArea value="テスト" size="medium" isCounterVisible counterMaxLength={100} readOnly />);
+        const counter = screen.getByText('3/100');
+        expect(counter.className).toMatch(/typography-label12regular/);
+      });
+
+      it('large サイズで typography-label13regular が適用されること', () => {
+        render(<TextArea value="テスト" size="large" isCounterVisible counterMaxLength={100} readOnly />);
+        const counter = screen.getByText('3/100');
+        expect(counter.className).toMatch(/typography-label13regular/);
+      });
+    });
+  });
 });

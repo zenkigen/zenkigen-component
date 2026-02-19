@@ -25,6 +25,9 @@ function TextAreaInner(
     height,
     children,
     className,
+    isCounterVisible = false,
+    counterMaxLength,
+    maxLength,
     ...props
   }: TextAreaProps,
   ref: ForwardedRef<HTMLTextAreaElement>,
@@ -74,8 +77,14 @@ function TextAreaInner(
     return child;
   });
 
+  // カウンター用の値を算出
+  const counterLimit = counterMaxLength ?? maxLength;
+  const counterId = isCounterVisible ? `${describedByBaseId}-counter` : null;
+  const currentLength = typeof props.value === 'string' ? props.value.length : 0;
+  const isExceeded = counterLimit != null && currentLength > counterLimit;
+
   const describedByFromProps = typeof props['aria-describedby'] === 'string' ? props['aria-describedby'] : null;
-  const describedByList = [describedByFromProps, ...helperMessageIds, ...errorIds].filter(
+  const describedByList = [describedByFromProps, ...helperMessageIds, ...errorIds, counterId].filter(
     (id): id is string => typeof id === 'string' && id.trim().length > 0,
   );
   const describedByProps =
@@ -90,10 +99,14 @@ function TextAreaInner(
   const ariaInvalidValue = ariaInvalidFromProps != null ? ariaInvalidFromProps : shouldMarkInvalid ? true : null;
   const ariaInvalidProps = ariaInvalidValue == null ? {} : { 'aria-invalid': ariaInvalidValue };
 
+  // counterMaxLength 使用時は HTML の maxlength を渡さない（超過を許容するため）
+  const maxLengthProps = counterMaxLength != null ? {} : maxLength != null ? { maxLength } : {};
+
   const mergedTextAreaProps = {
     ...props,
     ...describedByProps,
     ...ariaInvalidProps,
+    ...maxLengthProps,
   };
 
   const textAreaWrapperClassName = clsx(
@@ -147,10 +160,26 @@ function TextAreaInner(
     </div>
   );
 
+  // カウンター要素の生成
+  const counterElement = isCounterVisible ? (
+    <div
+      id={counterId as string}
+      className={clsx(
+        'shrink-0',
+        size === 'large' ? 'typography-label13regular' : 'typography-label12regular',
+        !disabled && isExceeded ? 'text-supportError' : 'text-text02',
+      )}
+      aria-live="polite"
+    >
+      {counterLimit != null ? `${currentLength}/${counterLimit}` : `${currentLength}`}
+    </div>
+  ) : null;
+
   const stackedChildren = enhancedChildren == null ? [] : Children.toArray(enhancedChildren);
   const hasMessageChildren = stackedChildren.length > 0;
+  const hasBottomContent = hasMessageChildren || counterElement != null;
 
-  if (!hasMessageChildren) {
+  if (!hasBottomContent) {
     return <TextAreaCompoundContext.Provider value={contextValue}>{textAreaElement}</TextAreaCompoundContext.Provider>;
   }
 
@@ -158,7 +187,11 @@ function TextAreaInner(
     <TextAreaCompoundContext.Provider value={contextValue}>
       <div className="flex flex-col gap-2">
         {textAreaElement}
-        {stackedChildren}
+        <div className="flex items-start justify-between gap-2">
+          {hasMessageChildren && <div className="flex min-w-0 flex-1 flex-col">{stackedChildren}</div>}
+          {!hasMessageChildren && counterElement != null && <div className="flex-1" />}
+          {counterElement}
+        </div>
       </div>
     </TextAreaCompoundContext.Provider>
   );
