@@ -167,7 +167,7 @@ function TextAreaInner(
       className={clsx(
         'shrink-0',
         size === 'large' ? 'typography-label13regular' : 'typography-label12regular',
-        !disabled && (isExceeded || isError) ? 'text-supportError' : 'text-text02',
+        !disabled && isExceeded ? 'text-supportError' : 'text-text02',
       )}
       aria-live="polite"
     >

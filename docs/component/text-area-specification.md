@@ -111,8 +111,7 @@ HelperMessage と同一のタイポグラフィを適用:
 
 カウンターがエラー色（`text-supportError`）になる条件:
 
-- `counterMaxLength` または `maxLength` を超過した場合
-- `isError` が `true` の場合
+- `counterMaxLength` または `maxLength` を超過した場合（`disabled` 時を除く）
 
 #### レイアウト
 

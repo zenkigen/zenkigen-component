@@ -361,10 +361,11 @@ describe('TextArea', () => {
         expect(counter.className).not.toMatch(/text-supportError/);
       });
 
-      it('isError={true} でカウンターにエラースタイルが適用されること', () => {
+      it('isError={true} でも上限未超過ならカウンターは通常スタイルであること', () => {
         render(<TextArea value="テスト" isCounterVisible counterMaxLength={100} isError readOnly />);
         const counter = screen.getByText('3/100');
-        expect(counter.className).toMatch(/text-supportError/);
+        expect(counter.className).toMatch(/text-text02/);
+        expect(counter.className).not.toMatch(/text-supportError/);
       });
     });
 
