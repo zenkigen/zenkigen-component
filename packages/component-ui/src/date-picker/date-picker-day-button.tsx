@@ -2,7 +2,7 @@ import { focusVisible } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
 import { DayButton, type DayButtonProps } from 'react-day-picker';
 
-import { dayButtonBaseClass } from './date-picker-styles';
+import { DAY_PICKER_FONT_SIZE, dayButtonBaseClass } from './date-picker-styles';
 
 /**
  * カレンダーの日付ボタン
@@ -10,7 +10,7 @@ import { dayButtonBaseClass } from './date-picker-styles';
  * 日付の状態に応じてスタイルを切り替える
  * react-day-picker の DayButton を使用してキーボードナビゲーションを維持
  */
-export const CustomDayButton = ({ day, modifiers, className, ...buttonProps }: DayButtonProps) => {
+export const CustomDayButton = ({ day, modifiers, className, style, ...buttonProps }: DayButtonProps) => {
   const isSelected = Boolean(modifiers.selected);
   const isOutside = Boolean(modifiers.outside);
   const isMinMaxDisabled = Boolean(modifiers.minMaxDisabled);
@@ -27,6 +27,7 @@ export const CustomDayButton = ({ day, modifiers, className, ...buttonProps }: D
       {...buttonProps}
       day={day}
       modifiers={modifiers}
+      style={{ ...style, fontSize: DAY_PICKER_FONT_SIZE }}
       className={clsx(
         className,
         dayButtonBaseClass,
