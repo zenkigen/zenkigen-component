@@ -35,6 +35,15 @@ describe('AvatarGroup', () => {
       );
       expect(screen.getByRole('group')).toBeInTheDocument();
     });
+
+    it('aria-label が設定できること', () => {
+      render(
+        <AvatarGroup aria-label="参加者一覧">
+          <Avatar userId={1} firstName="太郎" lastName="田中" />
+        </AvatarGroup>,
+      );
+      expect(screen.getByRole('group', { name: '参加者一覧' })).toBeInTheDocument();
+    });
   });
 
   describe('最大表示数', () => {

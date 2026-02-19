@@ -103,9 +103,10 @@ type AvatarGroupProps = {
   children: ReactNode;
   size?: AvatarSize;
   max?: number;
+  'aria-label'?: string;
 };
 
-function AvatarGroupRoot({ children, size = 'medium', max: maxProp = 5 }: AvatarGroupProps) {
+function AvatarGroupRoot({ children, size = 'medium', max: maxProp = 5, 'aria-label': ariaLabel }: AvatarGroupProps) {
   const max = Math.max(1, maxProp);
   const { avatarChildren, remainChildren, counterChildren, labelChildren } = classifyChildren(children);
   const total = avatarChildren.length;
@@ -125,7 +126,7 @@ function AvatarGroupRoot({ children, size = 'medium', max: maxProp = 5 }: Avatar
 
   return (
     <AvatarGroupContext.Provider value={contextValue}>
-      <div role="group" className="flex items-center">
+      <div role="group" aria-label={ariaLabel} className="flex items-center">
         {visibleAvatars.map((child, index) => (
           <div
             key={index}
