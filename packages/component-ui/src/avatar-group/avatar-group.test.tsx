@@ -1,8 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { Avatar } from '../avatar';
+import { Tooltip } from '../tooltip';
 import { AvatarGroup } from './avatar-group';
 
 describe('AvatarGroup', () => {
@@ -220,6 +221,111 @@ describe('AvatarGroup', () => {
       expect((children?.[0] as HTMLElement).style.zIndex).toBe('1');
       expect((children?.[1] as HTMLElement).style.zIndex).toBe('2');
       expect((children?.[2] as HTMLElement).style.zIndex).toBe('3');
+    });
+  });
+
+  describe('Tooltip ラップ', () => {
+    it('Tooltip でラップされた Remain が正しく認識されること', () => {
+      render(
+        <AvatarGroup max={1}>
+          <Avatar userId={1} firstName="太郎" lastName="田中" />
+          <Avatar userId={2} firstName="花子" lastName="鈴木" />
+          <Tooltip content="残り1名" verticalPosition="top">
+            <AvatarGroup.Remain />
+          </Tooltip>
+        </AvatarGroup>,
+      );
+      expect(screen.getByText('+1')).toBeInTheDocument();
+      expect(screen.queryByText('鈴木')).not.toBeInTheDocument();
+    });
+
+    it('Tooltip でラップされた Counter が正しく認識されること', () => {
+      render(
+        <AvatarGroup max={1}>
+          <Avatar userId={1} firstName="太郎" lastName="田中" />
+          <Avatar userId={2} firstName="花子" lastName="鈴木" />
+          <Tooltip content="合計2名" verticalPosition="top">
+            <AvatarGroup.Counter />
+          </Tooltip>
+        </AvatarGroup>,
+      );
+      expect(screen.getByText('2')).toBeInTheDocument();
+    });
+
+    it('Tooltip でラップされた Label が正しく認識されること', () => {
+      render(
+        <AvatarGroup max={5}>
+          <Avatar userId={1} firstName="太郎" lastName="田中" />
+          <Tooltip content="詳細" verticalPosition="top">
+            <AvatarGroup.Label>+999</AvatarGroup.Label>
+          </Tooltip>
+        </AvatarGroup>,
+      );
+      expect(screen.getByText('+999')).toBeInTheDocument();
+    });
+  });
+
+  describe('サイズ連携', () => {
+    it('AvatarGroup の size が Avatar に伝搬すること', () => {
+      render(
+        <AvatarGroup size="x-small">
+          <Avatar userId={1} firstName="太郎" lastName="田中" />
+        </AvatarGroup>,
+      );
+      const avatar = screen.getByText('田中');
+      expect(avatar).toHaveClass('w-6', 'h-6');
+    });
+
+    it('Avatar 個別の size 指定より AvatarGroup の size が優先されること', () => {
+      render(
+        <AvatarGroup size="x-small">
+          <Avatar size="x-large" userId={1} firstName="太郎" lastName="田中" />
+        </AvatarGroup>,
+      );
+      const avatar = screen.getByText('田中');
+      expect(avatar).toHaveClass('w-6', 'h-6');
+      expect(avatar).not.toHaveClass('w-16', 'h-16');
+    });
+  });
+
+  describe('エラーハンドリング', () => {
+    it('AvatarGroup 外で Remain を使用するとエラーが発生すること', () => {
+      const spy = vi.spyOn(console, 'error').mockImplementation(() => null);
+      expect(() => render(<AvatarGroup.Remain />)).toThrow(
+        'AvatarGroup のサブコンポーネントは AvatarGroup 内で使用してください',
+      );
+      spy.mockRestore();
+    });
+
+    it('AvatarGroup 外で Counter を使用するとエラーが発生すること', () => {
+      const spy = vi.spyOn(console, 'error').mockImplementation(() => null);
+      expect(() => render(<AvatarGroup.Counter />)).toThrow(
+        'AvatarGroup のサブコンポーネントは AvatarGroup 内で使用してください',
+      );
+      spy.mockRestore();
+    });
+
+    it('AvatarGroup 外で Label を使用するとエラーが発生すること', () => {
+      const spy = vi.spyOn(console, 'error').mockImplementation(() => null);
+      expect(() => render(<AvatarGroup.Label>テスト</AvatarGroup.Label>)).toThrow(
+        'AvatarGroup のサブコンポーネントは AvatarGroup 内で使用してください',
+      );
+      spy.mockRestore();
+    });
+  });
+
+  describe('Remain と Counter の同時使用', () => {
+    it('両方が表示されること', () => {
+      render(
+        <AvatarGroup max={1}>
+          <Avatar userId={1} firstName="太郎" lastName="田中" />
+          <Avatar userId={2} firstName="花子" lastName="鈴木" />
+          <AvatarGroup.Remain />
+          <AvatarGroup.Counter />
+        </AvatarGroup>,
+      );
+      expect(screen.getByText('+1')).toBeInTheDocument();
+      expect(screen.getByText('2')).toBeInTheDocument();
     });
   });
 });
