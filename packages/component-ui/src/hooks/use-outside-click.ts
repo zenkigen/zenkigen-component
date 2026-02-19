@@ -9,7 +9,11 @@ export const useOutsideClick = <T extends HTMLElement = HTMLElement>(
   useEffect(() => {
     const listener = (event: Event) => {
       const element = ref?.current;
-      if (element == null || Boolean(element.contains((event?.target as Node) ?? null))) {
+      const target = event.target as Node | null;
+      if (target instanceof Node && target.isConnected === false) {
+        return;
+      }
+      if (element == null || Boolean(element.contains(target ?? null))) {
         return;
       }
       handler(event);
