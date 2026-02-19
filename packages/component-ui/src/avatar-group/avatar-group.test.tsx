@@ -81,6 +81,31 @@ describe('AvatarGroup', () => {
       expect(screen.getByText('渡辺')).toBeInTheDocument();
       expect(screen.queryByText('伊藤')).not.toBeInTheDocument();
     });
+
+    it('max に 0 が渡された場合、最低1つは Avatar が表示されること', () => {
+      render(
+        <AvatarGroup max={0}>
+          <Avatar userId={1} firstName="太郎" lastName="田中" />
+          <Avatar userId={2} firstName="花子" lastName="鈴木" />
+          <AvatarGroup.Remain />
+        </AvatarGroup>,
+      );
+      expect(screen.getByText('田中')).toBeInTheDocument();
+      expect(screen.queryByText('鈴木')).not.toBeInTheDocument();
+      expect(screen.getByText('+1')).toBeInTheDocument();
+    });
+
+    it('max に負値が渡された場合、最低1つは Avatar が表示されること', () => {
+      render(
+        <AvatarGroup max={-3}>
+          <Avatar userId={1} firstName="太郎" lastName="田中" />
+          <Avatar userId={2} firstName="花子" lastName="鈴木" />
+          <AvatarGroup.Remain />
+        </AvatarGroup>,
+      );
+      expect(screen.getByText('田中')).toBeInTheDocument();
+      expect(screen.queryByText('鈴木')).not.toBeInTheDocument();
+    });
   });
 
   describe('カウンター表示', () => {

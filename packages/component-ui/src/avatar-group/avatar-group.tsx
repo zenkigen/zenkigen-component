@@ -105,7 +105,8 @@ type AvatarGroupProps = {
   max?: number;
 };
 
-function AvatarGroupRoot({ children, size = 'medium', max = 5 }: AvatarGroupProps) {
+function AvatarGroupRoot({ children, size = 'medium', max: maxProp = 5 }: AvatarGroupProps) {
+  const max = Math.max(1, maxProp);
   const { avatarChildren, remainChildren, counterChildren, labelChildren } = classifyChildren(children);
   const total = avatarChildren.length;
   const isOverflow = total > max;
