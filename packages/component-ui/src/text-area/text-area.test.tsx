@@ -395,6 +395,22 @@ describe('TextArea', () => {
       });
     });
 
+    describe('disabled 状態', () => {
+      it('disabled + isError でもカウンターが通常スタイルであること', () => {
+        render(<TextArea value="テスト" isCounterVisible counterMaxLength={100} isError disabled readOnly />);
+        const counter = screen.getByText('3/100');
+        expect(counter.className).toMatch(/text-text02/);
+        expect(counter.className).not.toMatch(/text-supportError/);
+      });
+
+      it('disabled + 超過時でもカウンターが通常スタイルであること', () => {
+        render(<TextArea value="あいうえお" isCounterVisible counterMaxLength={3} disabled readOnly />);
+        const counter = screen.getByText('5/3');
+        expect(counter.className).toMatch(/text-text02/);
+        expect(counter.className).not.toMatch(/text-supportError/);
+      });
+    });
+
     describe('サイズ別タイポグラフィ', () => {
       it('medium サイズで typography-label12regular が適用されること', () => {
         render(<TextArea value="テスト" size="medium" isCounterVisible counterMaxLength={100} readOnly />);
