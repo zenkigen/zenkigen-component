@@ -171,7 +171,7 @@ function TextAreaInner(
       )}
       aria-live="polite"
     >
-      {counterLimit != null ? `${currentLength}/${counterLimit}` : `${currentLength}`}
+      {counterLimit != null ? `${currentLength}/${counterLimit}文字` : `${currentLength}文字`}
     </div>
   ) : null;
 
