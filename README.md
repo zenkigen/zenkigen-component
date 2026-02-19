@@ -43,6 +43,37 @@ module.exports = {
 };
 ```
 
+### 3. Webフォント Noto Sans JP の読み込み設定
+
+以下のコードを適切な位置に設定し、Webフォント Noto Sans JP の読み込み設定を行ってください：
+
+※ ZENKIGENのコンポーネントライブラリのインストールを行うことで component-config が提供する設定により fontFamily に Noto Sans JP が指定されます。
+
+```
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+```
+
+**Next.js の場合**
+
+```tsx src/app/layout.tsx
+...
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="ja">
+      <head>
+        ...
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+      </head>
+      ...
+    </html>
+  );
+}
+```
+
 ## 基本的な使い方
 
 ```tsx
