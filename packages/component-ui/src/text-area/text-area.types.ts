@@ -31,13 +31,13 @@ type CounterUnion =
       maxLength?: number;
     }
   | {
-      /** カウンターを表示 + ソフトリミット */
+      /** カウンターを表示 + 超過を許容する上限（警告のみ） */
       isCounterVisible: true;
       counterMaxLength?: number;
       maxLength?: never;
     }
   | {
-      /** カウンターを表示 + ハードリミット */
+      /** カウンターを表示 + 入力を制限する上限（入力ブロック） */
       isCounterVisible: true;
       counterMaxLength?: never;
       maxLength?: number;

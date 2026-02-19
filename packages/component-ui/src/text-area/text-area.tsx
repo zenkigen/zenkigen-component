@@ -99,7 +99,7 @@ function TextAreaInner(
   const ariaInvalidValue = ariaInvalidFromProps != null ? ariaInvalidFromProps : shouldMarkInvalid ? true : null;
   const ariaInvalidProps = ariaInvalidValue == null ? {} : { 'aria-invalid': ariaInvalidValue };
 
-  // counterMaxLength 使用時は HTML の maxlength を渡さない（ソフトリミット）
+  // counterMaxLength 使用時は HTML の maxlength を渡さない（超過を許容するため）
   const maxLengthProps = counterMaxLength != null ? {} : maxLength != null ? { maxLength } : {};
 
   const mergedTextAreaProps = {

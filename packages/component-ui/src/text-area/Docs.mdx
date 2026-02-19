@@ -58,7 +58,7 @@ const CompositionExample = () => {
 import { useState, type ChangeEvent } from 'react';
 import { TextArea } from '@zenkigen-inc/component-ui';
 
-// ソフトリミット（超過許容、カウンター赤字）
+// 超過を許容する上限（上限を超えるとカウンターがエラー色になるが入力は可能）
 const SoftLimitExample = () => {
   const [value, setValue] = useState('');
 
@@ -73,7 +73,7 @@ const SoftLimitExample = () => {
   );
 };
 
-// ハードリミット（入力ブロック + カウンター表示）
+// 入力をブロックする上限（上限を超える入力を制限 + カウンター表示）
 const HardLimitExample = () => {
   const [value, setValue] = useState('');
 

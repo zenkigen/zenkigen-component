@@ -28,12 +28,11 @@ const meta: Meta<typeof TextArea> = {
     isCounterVisible: { control: 'boolean', description: '文字数カウンターの表示/非表示' },
     counterMaxLength: {
       control: 'number',
-      description:
-        'カウンター用の上限文字数（ソフトリミット）。超過時にカウンターがエラー色になるが入力はブロックしない',
+      description: 'カウンター用の上限文字数。超過しても入力可能だが、カウンターがエラー色になる',
     },
     maxLength: {
       control: 'number',
-      description: 'HTML ネイティブの最大文字数（ハードリミット）。入力をブロックする',
+      description: 'HTML ネイティブの最大文字数。上限を超える入力をブロックする',
     },
   },
 };
@@ -315,7 +314,7 @@ export const Counter: Story = {
       <div className="flex gap-10">
         <div style={{ width: 400 }} className="flex flex-col gap-12">
           <div>
-            <p className="typography-label12regular mb-2 text-text02">ソフトリミット（counterMaxLength=50）</p>
+            <p className="typography-label12regular mb-2 text-text02">超過を許容する上限（counterMaxLength=50）</p>
             <TextArea
               value={softValue}
               placeholder="超過しても入力可能"
@@ -327,7 +326,7 @@ export const Counter: Story = {
             />
           </div>
           <div>
-            <p className="typography-label12regular mb-2 text-text02">ハードリミット（maxLength=50）</p>
+            <p className="typography-label12regular mb-2 text-text02">入力をブロックする上限（maxLength=50）</p>
             <TextArea
               value={hardValue}
               placeholder="50文字で入力ブロック"
