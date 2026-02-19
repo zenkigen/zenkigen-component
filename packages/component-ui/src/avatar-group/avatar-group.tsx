@@ -46,8 +46,10 @@ function getDisplayName(element: ReactElement): string | null {
   return null;
 }
 
-function findComponentType(child: ReactNode): ComponentType | null {
-  if (!isValidElement(child)) {
+const MAX_SEARCH_DEPTH = 3;
+
+function findComponentType(child: ReactNode, depth = 0): ComponentType | null {
+  if (!isValidElement(child) || depth > MAX_SEARCH_DEPTH) {
     return null;
   }
 
@@ -60,7 +62,7 @@ function findComponentType(child: ReactNode): ComponentType | null {
   if (childProps.children != null) {
     const nestedChildren = Children.toArray(childProps.children);
     for (const nestedChild of nestedChildren) {
-      const found = findComponentType(nestedChild);
+      const found = findComponentType(nestedChild, depth + 1);
       if (found !== null) {
         return found;
       }
