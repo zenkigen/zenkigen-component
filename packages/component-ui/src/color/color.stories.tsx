@@ -66,221 +66,25 @@ function ColorItem({ colorKey, value }: { colorKey: string; value: string }) {
   );
 }
 
-export const UserColors: Story = {
+export const PrimitiveColors: Story = {
   render: () => (
     <>
       <div className="flex flex-col gap-2">
-        <div style={{ fontSize: 24 }}>User Colors</div>
+        <div style={{ fontSize: 24 }}>Primitive/Colors</div>
         <div className="flex flex-wrap gap-x-1 gap-y-2">
-          {Object.entries(tokens.user).map(([key, value]) => (
-            <ColorItem key={key} colorKey={key} value={value} />
-          ))}
+          <ColorItem colorKey="black" value={tokens.colors.black} />
+          <ColorItem colorKey="white" value={tokens.colors.white} />
         </div>
       </div>
     </>
   ),
 };
 
-export const TextColors: Story = {
+export const PrimitiveColorsBlue: Story = {
   render: () => (
     <>
       <div className="flex flex-col gap-2">
-        <div style={{ fontSize: 24 }}>Text Colors</div>
-        <div className="flex flex-wrap gap-x-1 gap-y-2">
-          {Object.entries(tokens.tokens.text).map(([key, value]) => (
-            <ColorItem key={key} colorKey={key} value={value} />
-          ))}
-        </div>
-      </div>
-    </>
-  ),
-};
-
-export const LinkColors: Story = {
-  render: () => (
-    <>
-      <div className="flex flex-col gap-2">
-        <div style={{ fontSize: 24 }}>Link Colors</div>
-        <div className="flex flex-wrap gap-x-1 gap-y-2">
-          {Object.entries(tokens.tokens.link).map(([key, value]) => (
-            <ColorItem key={key} colorKey={key} value={value} />
-          ))}
-        </div>
-      </div>
-    </>
-  ),
-};
-
-export const BorderColors: Story = {
-  render: () => (
-    <>
-      <div className="flex flex-col gap-2">
-        <div style={{ fontSize: 24 }}>Border Colors</div>
-        <div className="flex flex-wrap gap-x-1 gap-y-2">
-          {Object.entries(tokens.tokens.border).map(([key, value]) => (
-            <ColorItem key={key} colorKey={key} value={value} />
-          ))}
-        </div>
-      </div>
-    </>
-  ),
-};
-
-export const BackgroundColors: Story = {
-  render: () => (
-    <>
-      <div className="flex flex-col gap-2">
-        <div style={{ fontSize: 24 }}>Background Colors</div>
-        <div className="flex flex-wrap gap-x-1 gap-y-2">
-          {Object.entries(tokens.tokens.background).map(([key, value]) => (
-            <ColorItem key={key} colorKey={key} value={value} />
-          ))}
-        </div>
-      </div>
-    </>
-  ),
-};
-
-export const IconColors: Story = {
-  render: () => (
-    <>
-      <div className="flex flex-col gap-2">
-        <div style={{ fontSize: 24 }}>Icon Colors</div>
-        <div className="flex flex-wrap gap-x-1 gap-y-2">
-          {Object.entries(tokens.tokens.icon).map(([key, value]) => (
-            <ColorItem key={key} colorKey={key} value={value} />
-          ))}
-        </div>
-      </div>
-    </>
-  ),
-};
-
-export const InteractiveColors: Story = {
-  render: () => (
-    <>
-      <div className="flex flex-col gap-2">
-        <div style={{ fontSize: 24 }}>Interactive Colors</div>
-        <div className="flex flex-wrap gap-x-1 gap-y-2">
-          {Object.entries(tokens.tokens.interactive).map(([key, value]) => (
-            <ColorItem key={key} colorKey={key} value={value} />
-          ))}
-        </div>
-      </div>
-    </>
-  ),
-};
-
-export const FieldColors: Story = {
-  render: () => (
-    <>
-      <div className="flex flex-col gap-2">
-        <div style={{ fontSize: 24 }}>Field Colors</div>
-        <div className="flex flex-wrap gap-x-1 gap-y-2">
-          {Object.entries(tokens.tokens.field).map(([key, value]) => (
-            <ColorItem key={key} colorKey={key} value={value} />
-          ))}
-        </div>
-      </div>
-    </>
-  ),
-};
-
-export const FocusColors: Story = {
-  render: () => (
-    <>
-      <div className="flex flex-col gap-2">
-        <div style={{ fontSize: 24 }}>Focus Colors</div>
-        <div className="flex flex-wrap gap-x-1 gap-y-2">
-          {Object.entries(tokens.tokens.focus).map(([key, value]) => (
-            <ColorItem key={key} colorKey={key} value={value} />
-          ))}
-        </div>
-      </div>
-    </>
-  ),
-};
-
-export const HoverColors: Story = {
-  render: () => (
-    <>
-      <div className="flex flex-col gap-2">
-        <div style={{ fontSize: 24 }}>Hover Colors</div>
-        <div className="flex flex-wrap gap-x-1 gap-y-2">
-          {Object.entries(tokens.tokens.hover).map(([key, value]) => (
-            <ColorItem key={key} colorKey={key} value={value} />
-          ))}
-        </div>
-      </div>
-    </>
-  ),
-};
-
-export const ActiveColors: Story = {
-  render: () => (
-    <>
-      <div className="flex flex-col gap-2">
-        <div style={{ fontSize: 24 }}>Active Colors</div>
-        <div className="flex flex-wrap gap-x-1 gap-y-2">
-          {Object.entries(tokens.tokens.active).map(([key, value]) => (
-            <ColorItem key={key} colorKey={key} value={value} />
-          ))}
-        </div>
-      </div>
-    </>
-  ),
-};
-
-export const SelectedColors: Story = {
-  render: () => (
-    <>
-      <div className="flex flex-col gap-2">
-        <div style={{ fontSize: 24 }}>Selected Colors</div>
-        <div className="flex flex-wrap gap-x-1 gap-y-2">
-          {Object.entries(tokens.tokens.selected).map(([key, value]) => (
-            <ColorItem key={key} colorKey={key} value={value} />
-          ))}
-        </div>
-      </div>
-    </>
-  ),
-};
-
-export const DisabledColors: Story = {
-  render: () => (
-    <>
-      <div className="flex flex-col gap-2">
-        <div style={{ fontSize: 24 }}>Disabled Colors</div>
-        <div className="flex flex-wrap gap-x-1 gap-y-2">
-          {Object.entries(tokens.tokens.disabled).map(([key, value]) => (
-            <ColorItem key={key} colorKey={key} value={value} />
-          ))}
-        </div>
-      </div>
-    </>
-  ),
-};
-
-export const SupportColors: Story = {
-  render: () => (
-    <>
-      <div className="flex flex-col gap-2">
-        <div style={{ fontSize: 24 }}>Support Colors</div>
-        <div className="flex flex-wrap gap-x-1 gap-y-2">
-          {Object.entries(tokens.tokens.support).map(([key, value]) => (
-            <ColorItem key={key} colorKey={key} value={value} />
-          ))}
-        </div>
-      </div>
-    </>
-  ),
-};
-
-export const BlueScale: Story = {
-  render: () => (
-    <>
-      <div className="flex flex-col gap-2">
-        <div style={{ fontSize: 24 }}>Blue Scale</div>
+        <div style={{ fontSize: 24 }}>Primitive/Colors/Blue</div>
         <div className="flex flex-wrap gap-x-1 gap-y-2">
           {Object.entries(tokens.colors.blue).map(([key, value]) => (
             <ColorItem key={key} colorKey={key} value={value} />
@@ -291,11 +95,11 @@ export const BlueScale: Story = {
   ),
 };
 
-export const GrayScale: Story = {
+export const PrimitiveColorsGray: Story = {
   render: () => (
     <>
       <div className="flex flex-col gap-2">
-        <div style={{ fontSize: 24 }}>Gray Scale</div>
+        <div style={{ fontSize: 24 }}>Primitive/Colors/Gray</div>
         <div className="flex flex-wrap gap-x-1 gap-y-2">
           {Object.entries(tokens.colors.gray).map(([key, value]) => (
             <ColorItem key={key} colorKey={key} value={value} />
@@ -306,11 +110,11 @@ export const GrayScale: Story = {
   ),
 };
 
-export const RedScale: Story = {
+export const PrimitiveColorsRed: Story = {
   render: () => (
     <>
       <div className="flex flex-col gap-2">
-        <div style={{ fontSize: 24 }}>Red Scale</div>
+        <div style={{ fontSize: 24 }}>Primitive/Colors/Red</div>
         <div className="flex flex-wrap gap-x-1 gap-y-2">
           {Object.entries(tokens.colors.red).map(([key, value]) => (
             <ColorItem key={key} colorKey={key} value={value} />
@@ -321,11 +125,11 @@ export const RedScale: Story = {
   ),
 };
 
-export const YellowScale: Story = {
+export const PrimitiveColorsYellow: Story = {
   render: () => (
     <>
       <div className="flex flex-col gap-2">
-        <div style={{ fontSize: 24 }}>Yellow Scale</div>
+        <div style={{ fontSize: 24 }}>Primitive/Colors/Yellow</div>
         <div className="flex flex-wrap gap-x-1 gap-y-2">
           {Object.entries(tokens.colors.yellow).map(([key, value]) => (
             <ColorItem key={key} colorKey={key} value={value} />
@@ -336,11 +140,11 @@ export const YellowScale: Story = {
   ),
 };
 
-export const GreenScale: Story = {
+export const PrimitiveColorsGreen: Story = {
   render: () => (
     <>
       <div className="flex flex-col gap-2">
-        <div style={{ fontSize: 24 }}>Green Scale</div>
+        <div style={{ fontSize: 24 }}>Primitive/Colors/Green</div>
         <div className="flex flex-wrap gap-x-1 gap-y-2">
           {Object.entries(tokens.colors.green).map(([key, value]) => (
             <ColorItem key={key} colorKey={key} value={value} />
@@ -351,11 +155,11 @@ export const GreenScale: Story = {
   ),
 };
 
-export const PurpleScale: Story = {
+export const PrimitiveColorsPurple: Story = {
   render: () => (
     <>
       <div className="flex flex-col gap-2">
-        <div style={{ fontSize: 24 }}>Purple Scale</div>
+        <div style={{ fontSize: 24 }}>Primitive/Colors/Purple</div>
         <div className="flex flex-wrap gap-x-1 gap-y-2">
           {Object.entries(tokens.colors.purple).map(([key, value]) => (
             <ColorItem key={key} colorKey={key} value={value} />
@@ -366,11 +170,11 @@ export const PurpleScale: Story = {
   ),
 };
 
-export const BlueGreenScale: Story = {
+export const PrimitiveColorsBlueGreen: Story = {
   render: () => (
     <>
       <div className="flex flex-col gap-2">
-        <div style={{ fontSize: 24 }}>Blue Green Scale</div>
+        <div style={{ fontSize: 24 }}>Primitive/Colors/BlueGreen</div>
         <div className="flex flex-wrap gap-x-1 gap-y-2">
           {Object.entries(tokens.colors.blueGreen).map(([key, value]) => (
             <ColorItem key={key} colorKey={key} value={value} />
@@ -381,14 +185,210 @@ export const BlueGreenScale: Story = {
   ),
 };
 
-export const BasicColors: Story = {
+export const SemanticText: Story = {
   render: () => (
     <>
       <div className="flex flex-col gap-2">
-        <div style={{ fontSize: 24 }}>Basic Colors</div>
+        <div style={{ fontSize: 24 }}>Semantic/Text</div>
         <div className="flex flex-wrap gap-x-1 gap-y-2">
-          <ColorItem colorKey="black" value={tokens.colors.black} />
-          <ColorItem colorKey="white" value={tokens.colors.white} />
+          {Object.entries(tokens.tokens.text).map(([key, value]) => (
+            <ColorItem key={key} colorKey={key} value={value} />
+          ))}
+        </div>
+      </div>
+    </>
+  ),
+};
+
+export const SemanticLink: Story = {
+  render: () => (
+    <>
+      <div className="flex flex-col gap-2">
+        <div style={{ fontSize: 24 }}>Semantic/Link</div>
+        <div className="flex flex-wrap gap-x-1 gap-y-2">
+          {Object.entries(tokens.tokens.link).map(([key, value]) => (
+            <ColorItem key={key} colorKey={key} value={value} />
+          ))}
+        </div>
+      </div>
+    </>
+  ),
+};
+
+export const SemanticBorder: Story = {
+  render: () => (
+    <>
+      <div className="flex flex-col gap-2">
+        <div style={{ fontSize: 24 }}>Semantic/Border</div>
+        <div className="flex flex-wrap gap-x-1 gap-y-2">
+          {Object.entries(tokens.tokens.border).map(([key, value]) => (
+            <ColorItem key={key} colorKey={key} value={value} />
+          ))}
+        </div>
+      </div>
+    </>
+  ),
+};
+
+export const SemanticBackground: Story = {
+  render: () => (
+    <>
+      <div className="flex flex-col gap-2">
+        <div style={{ fontSize: 24 }}>Semantic/Background</div>
+        <div className="flex flex-wrap gap-x-1 gap-y-2">
+          {Object.entries(tokens.tokens.background).map(([key, value]) => (
+            <ColorItem key={key} colorKey={key} value={value} />
+          ))}
+        </div>
+      </div>
+    </>
+  ),
+};
+
+export const SemanticIcon: Story = {
+  render: () => (
+    <>
+      <div className="flex flex-col gap-2">
+        <div style={{ fontSize: 24 }}>Semantic/Icon</div>
+        <div className="flex flex-wrap gap-x-1 gap-y-2">
+          {Object.entries(tokens.tokens.icon).map(([key, value]) => (
+            <ColorItem key={key} colorKey={key} value={value} />
+          ))}
+        </div>
+      </div>
+    </>
+  ),
+};
+
+export const SemanticInteractive: Story = {
+  render: () => (
+    <>
+      <div className="flex flex-col gap-2">
+        <div style={{ fontSize: 24 }}>Semantic/Interactive</div>
+        <div className="flex flex-wrap gap-x-1 gap-y-2">
+          {Object.entries(tokens.tokens.interactive).map(([key, value]) => (
+            <ColorItem key={key} colorKey={key} value={value} />
+          ))}
+        </div>
+      </div>
+    </>
+  ),
+};
+
+export const SemanticField: Story = {
+  render: () => (
+    <>
+      <div className="flex flex-col gap-2">
+        <div style={{ fontSize: 24 }}>Semantic/Field</div>
+        <div className="flex flex-wrap gap-x-1 gap-y-2">
+          {Object.entries(tokens.tokens.field).map(([key, value]) => (
+            <ColorItem key={key} colorKey={key} value={value} />
+          ))}
+        </div>
+      </div>
+    </>
+  ),
+};
+
+export const SemanticFocus: Story = {
+  render: () => (
+    <>
+      <div className="flex flex-col gap-2">
+        <div style={{ fontSize: 24 }}>Semantic/Focus</div>
+        <div className="flex flex-wrap gap-x-1 gap-y-2">
+          {Object.entries(tokens.tokens.focus).map(([key, value]) => (
+            <ColorItem key={key} colorKey={key} value={value} />
+          ))}
+        </div>
+      </div>
+    </>
+  ),
+};
+
+export const SemanticHover: Story = {
+  render: () => (
+    <>
+      <div className="flex flex-col gap-2">
+        <div style={{ fontSize: 24 }}>Semantic/Hover</div>
+        <div className="flex flex-wrap gap-x-1 gap-y-2">
+          {Object.entries(tokens.tokens.hover).map(([key, value]) => (
+            <ColorItem key={key} colorKey={key} value={value} />
+          ))}
+        </div>
+      </div>
+    </>
+  ),
+};
+
+export const SemanticActive: Story = {
+  render: () => (
+    <>
+      <div className="flex flex-col gap-2">
+        <div style={{ fontSize: 24 }}>Semantic/Active</div>
+        <div className="flex flex-wrap gap-x-1 gap-y-2">
+          {Object.entries(tokens.tokens.active).map(([key, value]) => (
+            <ColorItem key={key} colorKey={key} value={value} />
+          ))}
+        </div>
+      </div>
+    </>
+  ),
+};
+
+export const SemanticSelected: Story = {
+  render: () => (
+    <>
+      <div className="flex flex-col gap-2">
+        <div style={{ fontSize: 24 }}>Semantic/Selected</div>
+        <div className="flex flex-wrap gap-x-1 gap-y-2">
+          {Object.entries(tokens.tokens.selected).map(([key, value]) => (
+            <ColorItem key={key} colorKey={key} value={value} />
+          ))}
+        </div>
+      </div>
+    </>
+  ),
+};
+
+export const SemanticSupport: Story = {
+  render: () => (
+    <>
+      <div className="flex flex-col gap-2">
+        <div style={{ fontSize: 24 }}>Semantic/Support</div>
+        <div className="flex flex-wrap gap-x-1 gap-y-2">
+          {Object.entries(tokens.tokens.support).map(([key, value]) => (
+            <ColorItem key={key} colorKey={key} value={value} />
+          ))}
+        </div>
+      </div>
+    </>
+  ),
+};
+
+export const SemanticUser: Story = {
+  render: () => (
+    <>
+      <div className="flex flex-col gap-2">
+        <div style={{ fontSize: 24 }}>Semantic/User</div>
+        <div className="flex flex-wrap gap-x-1 gap-y-2">
+          {Object.entries(tokens.user).map(([key, value]) => (
+            <ColorItem key={key} colorKey={key} value={value} />
+          ))}
+        </div>
+      </div>
+    </>
+  ),
+};
+
+export const SemanticDisabled: Story = {
+  render: () => (
+    <>
+      <div className="flex flex-col gap-2">
+        <div style={{ fontSize: 24 }}>Disabled Colors</div>
+        <div className="flex flex-wrap gap-x-1 gap-y-2">
+          {Object.entries(tokens.tokens.disabled).map(([key, value]) => (
+            <ColorItem key={key} colorKey={key} value={value} />
+          ))}
         </div>
       </div>
     </>
