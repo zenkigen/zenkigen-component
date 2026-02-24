@@ -4,6 +4,11 @@ import MockDate from 'mockdate';
 import { useEffect, useRef, useState } from 'react';
 import { action } from 'storybook/actions';
 
+import { Button } from '../button';
+import { Modal } from '../modal';
+import { DatePicker } from '.';
+import type { DatePickerProps } from './date-picker';
+
 /**
  * VRT 用に日付を固定するデコレーター
  * Chromatic での VRT 実行時に「今日」の日付が変わることによる差分を防ぐ
@@ -15,9 +20,6 @@ const withMockedDate: Decorator = (Story) => {
 
   return <Story />;
 };
-
-import { DatePicker } from '.';
-import type { DatePickerProps } from './date-picker';
 
 const meta: Meta<typeof DatePicker> = {
   title: 'Components/DatePicker',
@@ -242,4 +244,86 @@ export const LayoutExamplesWithError: Story = {
       </div>
     </div>
   ),
+};
+
+/**
+ * Modal 内で DatePicker のカレンダーを開いた状態
+ * VRT 用: z-index の重なり順が正しいことを確認
+ */
+export const OpenInModal: Story = {
+  decorators: [withMockedDate],
+  args: {
+    value: new Date('2026-01-20T00:00:00Z'),
+    maxDate: new Date('2026-01-25T00:00:00Z'),
+  },
+  render: function OpenInModalStory({ value: initialValue = null, maxDate }) {
+    const [value, setValue] = useState<Date | null>(initialValue);
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+      // Modal のレンダリング完了を待ってからクリック
+      const timer = setTimeout(() => {
+        const container = containerRef.current;
+        if (container) {
+          const trigger = container.querySelector<HTMLButtonElement>('button');
+          trigger?.click();
+        }
+      }, 100);
+
+      return () => clearTimeout(timer);
+    }, []);
+
+    return (
+      <Modal isOpen width={480}>
+        <Modal.Header>Modal 内の DatePicker</Modal.Header>
+        <Modal.Body>
+          <div ref={containerRef} className="flex min-h-[200px] flex-col gap-4 px-6 pt-4">
+            <p className="typography-body14regular text-text02">日付を選択してください</p>
+            <div className="flex gap-4">
+              <div className="flex-1">
+                <DatePicker
+                  value={value}
+                  maxDate={maxDate}
+                  size="large"
+                  onChange={(nextValue) => {
+                    action('onChange')(nextValue);
+                    setValue(nextValue);
+                  }}
+                />
+              </div>
+              <div className="flex-1">
+                <DatePicker
+                  value={value}
+                  maxDate={maxDate}
+                  size="large"
+                  onChange={(nextValue) => {
+                    action('onChange')(nextValue);
+                    setValue(nextValue);
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <div className="flex w-full items-center justify-end gap-4">
+            <Button variant="outline" size="medium">
+              キャンセル
+            </Button>
+            <Button variant="fill" size="medium">
+              保存
+            </Button>
+          </div>
+        </Modal.Footer>
+      </Modal>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Modal内でDatePickerのカレンダーを開いた状態。z-indexの重なり順が正しいことを確認するためのVRT用ストーリー。',
+      },
+    },
+  },
 };

@@ -27,6 +27,8 @@ export default [
       'packages/component-icons/dist',
       'packages/component-icons/src/icon.tsx',
       'packages/component-icons/src/icons/*.tsx',
+      // tsconfigに含まれない設定ファイル
+      '.storybook',
     ],
   },
   ...fixupConfigRules(

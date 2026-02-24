@@ -51,7 +51,7 @@ const PopoverTestWrapper = ({
       anchorRef={anchorRef}
     >
       <Popover.Trigger>
-        <Button onClick={() => setIsOpen((prev) => !prev)}>{triggerText}</Button>
+        <Button onClick={() => setIsOpen((prev) => prev === false)}>{triggerText}</Button>
       </Popover.Trigger>
       <Popover.Content>
         <div data-testid="popover-content">{contentText}</div>

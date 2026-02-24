@@ -12,14 +12,19 @@ type SampleTextProps = {
   label: string;
   className: string;
   height?: CSSProperties['height'];
+  children?: React.ReactNode;
 };
 
-function SampleText({ label, className, height = 279 }: SampleTextProps) {
+function SampleText({ label, className, height = 279, children }: SampleTextProps) {
   return (
     <div className="flex-1">
       <div style={{ fontSize: 14 }}>{label}</div>
       <div className={className} style={{ height }}>
-        あのイーハトーヴォのすきとおった風、夏でも底に冷たさをもつ青いそら、うつくしい森で飾られたモリーオ市、郊外のぎらぎらひかる草の波。またそのなかでいっしょになったたくさんのひとたち、ファゼーロとロザーロ、羊飼のミーロや、顔の赤いこどもたち、地主のテーモ、山猫博士のボーガント・デストゥパーゴなど、いまこの暗い巨きな石の建物のなかで考えていると、みんなむかし風のなつかしい青い幻燈のように思われます。
+        {children ?? (
+          <>
+            あのイーハトーヴォのすきとおった風、夏でも底に冷たさをもつ青いそら、うつくしい森で飾られたモリーオ市、郊外のぎらぎらひかる草の波。またそのなかでいっしょになったたくさんのひとたち、ファゼーロとロザーロ、羊飼のミーロや、顔の赤いこどもたち、地主のテーモ、山猫博士のボーガント・デストゥパーゴなど、いまこの暗い巨きな石の建物のなかで考えていると、みんなむかし風のなつかしい青い幻燈のように思われます。
+          </>
+        )}
       </div>
     </div>
   );
@@ -71,6 +76,40 @@ export const Component: Story = {
     </>
   ),
 };
+
+export function Heading() {
+  const classes = 'flex gap-4';
+
+  return (
+    <div className="flex flex-col">
+      <div className={classes} style={{ width: WIDTH }}>
+        <SampleText label="h1" className="typography-h1" height={75}>
+          見出しタイトル h1
+        </SampleText>
+      </div>
+      <div className={classes} style={{ width: WIDTH }}>
+        <SampleText label="h2" className="typography-h2" height={75}>
+          見出しタイトル h2
+        </SampleText>
+      </div>
+      <div className={classes} style={{ width: WIDTH }}>
+        <SampleText label="h3" className="typography-h3" height={75}>
+          見出しタイトル h3
+        </SampleText>
+      </div>
+      <div className={classes} style={{ width: WIDTH }}>
+        <SampleText label="h4" className="typography-h4" height={75}>
+          見出しタイトル h4
+        </SampleText>
+      </div>
+      <div className={classes} style={{ width: WIDTH }}>
+        <SampleText label="h5" className="typography-h5" height={75}>
+          見出しタイトル h5
+        </SampleText>
+      </div>
+    </div>
+  );
+}
 
 export function Body() {
   const classes = 'flex gap-4';
