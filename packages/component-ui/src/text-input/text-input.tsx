@@ -124,7 +124,7 @@ function TextInputInner(
     'pr-3': size === 'large' && hasTrailingElement,
   });
 
-  const inputClasses = clsx('flex-1 outline-0 placeholder:text-textPlaceholder disabled:text-textPlaceholder', {
+  const inputClasses = clsx('flex-1 outline-none placeholder:text-textPlaceholder disabled:text-textPlaceholder', {
     ['typography-label14regular min-h-8 px-2']: size === 'medium',
     ['typography-label16regular min-h-10 px-3']: size === 'large',
     'text-text01': !isError,

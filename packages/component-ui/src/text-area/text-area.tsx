@@ -110,7 +110,7 @@ function TextAreaInner(
   );
 
   const textAreaClassName = clsx(
-    'w-full border-none bg-uiBackground01 outline-0 placeholder:text-textPlaceholder disabled:text-textPlaceholder',
+    'w-full border-none bg-uiBackground01 outline-none placeholder:text-textPlaceholder disabled:text-textPlaceholder',
     {
       'typography-body14regular px-2 py-2': size === 'medium',
       'typography-body16regular px-3 py-2': size === 'large',

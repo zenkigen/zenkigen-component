@@ -29,7 +29,7 @@ export const Search = forwardRef<HTMLDivElement, Props>(({ width = '100%', size 
     { 'h-10 px-4': size === 'large' },
   );
 
-  const inputClasses = clsx('mx-2 h-full flex-1 text-text01 outline-0 placeholder:text-textPlaceholder', {
+  const inputClasses = clsx('mx-2 h-full flex-1 text-text01 outline-none placeholder:text-textPlaceholder', {
     ['typography-label14regular']: size === 'medium',
     ['typography-label16regular']: size === 'large',
   });
