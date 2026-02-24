@@ -22,7 +22,7 @@
     "build-lib": "rimraf dist && tsup src/index.ts --format cjs,esm --dts"
   },
   "devDependencies": {
-    "tailwindcss": "3.4.17",
+    "tailwindcss": "4.2.1",
     "tsup": "8.5.0",
     "typescript": "5.8.3"
   }
