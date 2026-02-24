@@ -209,6 +209,57 @@ describe('TextArea', () => {
     });
   });
 
+  describe('variant', () => {
+    it('デフォルトで outline スタイルが適用されること', () => {
+      render(<TextArea value="" readOnly data-testid="textarea" />);
+      const textarea = screen.getByTestId('textarea');
+      const wrapper = textarea.parentElement as HTMLElement;
+
+      expect(wrapper.className).toMatch(/border-uiBorder02/);
+      expect(wrapper.className).not.toMatch(/border-transparent/);
+    });
+
+    it('variant="text" で border-transparent が適用されること', () => {
+      render(<TextArea value="" variant="text" readOnly data-testid="textarea" />);
+      const textarea = screen.getByTestId('textarea');
+      const wrapper = textarea.parentElement as HTMLElement;
+
+      expect(wrapper.className).toMatch(/border-transparent/);
+      expect(wrapper.className).not.toMatch(/border-uiBorder02/);
+    });
+
+    it('variant="text" で padding がないこと', () => {
+      render(<TextArea value="" variant="text" readOnly data-testid="textarea" />);
+      const textarea = screen.getByTestId('textarea');
+
+      expect(textarea.className).not.toMatch(/px-2/);
+      expect(textarea.className).not.toMatch(/px-3/);
+      expect(textarea.className).not.toMatch(/py-2/);
+    });
+
+    it('variant="text" でエラー時もボーダーが透明のままであること', () => {
+      render(<TextArea value="" variant="text" isError readOnly data-testid="textarea" />);
+      const textarea = screen.getByTestId('textarea');
+      const wrapper = textarea.parentElement as HTMLElement;
+
+      expect(wrapper.className).toMatch(/border-transparent/);
+      expect(wrapper.className).not.toMatch(/border-supportError/);
+      expect(textarea.className).toMatch(/text-supportError/);
+      expect(textarea.className).toMatch(/placeholder:text-supportErrorLight/);
+    });
+
+    it('variant="text" で無効時に bg-disabled02 が適用されないこと', () => {
+      render(<TextArea value="" variant="text" disabled data-testid="textarea" />);
+      const textarea = screen.getByTestId('textarea');
+      const wrapper = textarea.parentElement as HTMLElement;
+
+      expect(wrapper.className).toMatch(/border-transparent/);
+      expect(wrapper.className).not.toMatch(/bg-disabled02/);
+      expect(wrapper.className).not.toMatch(/border-disabled01/);
+      expect(textarea.className).not.toMatch(/bg-disabled02/);
+    });
+  });
+
   describe('HelperMessage / ErrorMessage', () => {
     it('HelperMessage を指定すると aria-describedby に連結されること', () => {
       render(

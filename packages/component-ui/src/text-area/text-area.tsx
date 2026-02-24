@@ -17,6 +17,7 @@ type TextAreaComponent = ForwardRefExoticComponent<TextAreaProps & RefAttributes
 function TextAreaInner(
   {
     size = 'medium',
+    variant = 'outline',
     isResizable = false,
     autoHeight = false,
     maxHeight,
@@ -33,9 +34,10 @@ function TextAreaInner(
   const textAreaPropsForContext = useMemo(
     () => ({
       size,
+      variant,
       isError,
     }),
-    [size, isError],
+    [size, variant, isError],
   );
 
   const contextValue = useMemo(
@@ -96,15 +98,20 @@ function TextAreaInner(
     ...ariaInvalidProps,
   };
 
+  const isBorderless = variant === 'text';
+
   const textAreaWrapperClassName = clsx(
     'box-border flex w-full overflow-hidden rounded border',
     {
-      'border-supportError': isError && !disabled,
-      'border-uiBorder02': !isError && !disabled,
-      'hover:border-hoverInput': !disabled && !isError,
-      'hover:focus-within:border-activeInput': !isError,
-      'focus-within:border-activeInput': !isError,
-      'bg-disabled02 border-disabled01': disabled,
+      // outline variant
+      'border-supportError': !isBorderless && isError && !disabled,
+      'border-uiBorder02': !isBorderless && !isError && !disabled,
+      'hover:border-hoverInput': !isBorderless && !disabled && !isError,
+      'hover:focus-within:border-activeInput': !isBorderless && !isError,
+      'focus-within:border-activeInput': !isBorderless && !isError,
+      'bg-disabled02 border-disabled01': !isBorderless && disabled,
+      // text variant
+      'border-transparent': isBorderless,
     },
     className,
   );
@@ -112,12 +119,17 @@ function TextAreaInner(
   const textAreaClassName = clsx(
     'w-full border-none bg-uiBackground01 outline-none placeholder:text-textPlaceholder disabled:text-textPlaceholder',
     {
-      'typography-body14regular px-2 py-2': size === 'medium',
-      'typography-body16regular px-3 py-2': size === 'large',
+      // outline: 従来の padding
+      'typography-body14regular px-2 py-2': !isBorderless && size === 'medium',
+      'typography-body16regular px-3 py-2': !isBorderless && size === 'large',
+      // text: padding なし
+      'typography-body14regular': isBorderless && size === 'medium',
+      'typography-body16regular': isBorderless && size === 'large',
       'field-sizing-content': autoHeight,
       'text-text01': !isError,
-      'text-supportError': isError,
-      'bg-disabled02': disabled,
+      'text-supportError': !isBorderless && isError,
+      'text-supportError placeholder:text-supportErrorLight': isBorderless && isError,
+      'bg-disabled02': !isBorderless && disabled,
       'resize-none': !isResizable,
     },
   );

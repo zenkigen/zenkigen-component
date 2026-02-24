@@ -18,6 +18,7 @@ const meta: Meta<typeof TextArea> = {
   },
   argTypes: {
     size: { control: 'select', options: ['medium', 'large'], description: 'サイズ' },
+    variant: { control: 'select', options: ['outline', 'text'], description: 'バリアント' },
     value: { control: 'text', description: '値' },
     height: { control: 'text', description: '高さ' },
     autoHeight: { control: 'boolean', description: '自動リサイズ' },
@@ -239,6 +240,201 @@ export const Base: Story = {
               value={value2}
               placeholder="入力してください"
               size="large"
+              height={120}
+              disabled
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue2(e.target.value);
+              }}
+            />
+            <ErrorText>入力済み ＋ disabled</ErrorText>
+          </div>
+        </div>
+      </div>
+    );
+  },
+};
+
+export const Text: Story = {
+  args: {},
+  render: function TextVariantStory({ ...args }) {
+    const [value, setValue] = useState<string>(args.value);
+    const [value2, setValue2] = useState<string>('入力した文字列。');
+
+    return (
+      <div className="flex gap-10">
+        <div style={{ width: 400 }} className="flex flex-col gap-12">
+          <div>
+            <TextArea
+              value={value}
+              placeholder="入力してください"
+              size="medium"
+              variant="text"
+              height={120}
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+            />
+            <ErrorText></ErrorText>
+          </div>
+          <div>
+            <TextArea
+              value={value}
+              placeholder="入力してください"
+              size="medium"
+              variant="text"
+              height={120}
+              isResizable
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+            />
+            <ErrorText>リサイズ可能</ErrorText>
+          </div>
+          <div>
+            <TextArea
+              value={value}
+              placeholder="入力してください"
+              size="medium"
+              variant="text"
+              height={120}
+              isError
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+            />
+            <ErrorText isError>未入力 ＋ エラー</ErrorText>
+          </div>
+          <div>
+            <TextArea
+              value={value2}
+              placeholder="入力してください"
+              size="medium"
+              variant="text"
+              height={120}
+              isError
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue2(e.target.value);
+              }}
+            />
+            <ErrorText isError>入力済み ＋ エラー</ErrorText>
+          </div>
+          <div>
+            <TextArea
+              value={value}
+              placeholder="入力してください"
+              size="medium"
+              variant="text"
+              height={120}
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+              disabled
+            />
+            <ErrorText>未入力 ＋ disabled</ErrorText>
+          </div>
+          <div>
+            <TextArea
+              value={value2}
+              placeholder="入力してください"
+              size="medium"
+              variant="text"
+              height={120}
+              disabled
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue2(e.target.value);
+              }}
+            />
+            <ErrorText>入力済み ＋ disabled</ErrorText>
+          </div>
+        </div>
+        <div style={{ width: 400 }} className="flex flex-col gap-12">
+          <div>
+            <TextArea
+              value={value}
+              placeholder="入力してください"
+              size="large"
+              variant="text"
+              height={120}
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+            />
+            <ErrorText></ErrorText>
+          </div>
+          <div>
+            <TextArea
+              value={value}
+              placeholder="入力してください"
+              size="large"
+              variant="text"
+              height={120}
+              isResizable
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+            />
+            <ErrorText>リサイズ可能</ErrorText>
+          </div>
+          <div>
+            <TextArea
+              value={value}
+              placeholder="入力してください"
+              size="large"
+              variant="text"
+              height={120}
+              isError
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+            />
+            <ErrorText isError>未入力 ＋ エラー</ErrorText>
+          </div>
+          <div>
+            <TextArea
+              value={value2}
+              placeholder="入力してください"
+              size="large"
+              variant="text"
+              height={120}
+              isError
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue2(e.target.value);
+              }}
+            />
+            <ErrorText isError>入力済み ＋ エラー</ErrorText>
+          </div>
+          <div>
+            <TextArea
+              value={value}
+              placeholder="入力してください"
+              size="large"
+              variant="text"
+              height={120}
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+              disabled
+            />
+            <ErrorText>未入力 ＋ disabled</ErrorText>
+          </div>
+          <div>
+            <TextArea
+              value={value2}
+              placeholder="入力してください"
+              size="large"
+              variant="text"
               height={120}
               disabled
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {

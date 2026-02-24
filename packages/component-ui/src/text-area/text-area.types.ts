@@ -2,6 +2,7 @@ import type { CSSProperties, TextareaHTMLAttributes } from 'react';
 
 export type TextAreaProps = Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'className'> & {
   size?: 'medium' | 'large';
+  variant?: 'outline' | 'text';
   value: string;
   height?: CSSProperties['height'];
   isError?: boolean;

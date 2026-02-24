@@ -25,6 +25,7 @@ type TextInputInternalComponent = ForwardRefExoticComponent<
 function TextInputInner(
   {
     size = 'medium',
+    variant = 'outline',
     isError = false,
     disabled = false,
     onClickClearButton,
@@ -113,22 +114,35 @@ function TextInputInner(
   const isShowClearButton = !!onClickClearButton && restInputProps.value.length !== 0 && !disabled;
   const hasTrailingElement = isShowClearButton || after != null;
 
+  const isBorderless = variant === 'text';
+
   const inputWrapClasses = clsx('relative flex items-center gap-2 overflow-hidden rounded border', {
-    'border-uiBorder02': !isError && !disabled,
-    'border-supportError': isError && !disabled,
-    'hover:border-hoverInput': !disabled && !isError,
-    'hover:focus-within:border-activeInput': !isError,
-    'focus-within:border-activeInput': !isError,
-    'bg-disabled02 border-disabled01': disabled,
+    // outline variant
+    'border-uiBorder02': !isBorderless && !isError && !disabled,
+    'border-supportError': !isBorderless && isError && !disabled,
+    'hover:border-hoverInput': !isBorderless && !disabled && !isError,
+    'hover:focus-within:border-activeInput': !isBorderless && !isError,
+    'focus-within:border-activeInput': !isBorderless && !isError,
+    'bg-disabled02 border-disabled01': !isBorderless && disabled,
+    // text variant
+    'border-transparent': isBorderless,
+    // 共通
     'pr-2': size === 'medium' && hasTrailingElement,
     'pr-3': size === 'large' && hasTrailingElement,
   });
 
   const inputClasses = clsx('flex-1 outline-none placeholder:text-textPlaceholder disabled:text-textPlaceholder', {
-    ['typography-label14regular min-h-8 px-2']: size === 'medium',
-    ['typography-label16regular min-h-10 px-3']: size === 'large',
+    // outline: 従来の padding
+    'typography-label14regular min-h-8 px-2': !isBorderless && size === 'medium',
+    'typography-label16regular min-h-10 px-3': !isBorderless && size === 'large',
+    // text: padding なし
+    'typography-label14regular min-h-8': isBorderless && size === 'medium',
+    'typography-label16regular min-h-10': isBorderless && size === 'large',
+    // テキスト色
     'text-text01': !isError,
     'text-supportError': isError,
+    // placeholder 色（text variant エラー時のみ上書き）
+    'placeholder:text-supportErrorLight': isBorderless && isError,
     'pr-0': hasTrailingElement,
   });
 
