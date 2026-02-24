@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "style-dictionary": "5.1.1",
-    "tailwindcss": "3.4.17",
+    "tailwindcss": "4.2.1",
     "token-transformer": "0.0.33",
     "tsup": "8.5.0",
     "typescript": "5.8.3"
