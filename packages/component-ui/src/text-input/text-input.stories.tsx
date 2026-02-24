@@ -325,6 +325,32 @@ export const Base: Story = {
   },
 };
 
+export const Focused: Story = {
+  args: {
+    value: '',
+  },
+  render: function FocusedStory({ ...args }) {
+    const [value, setValue] = useState<string>(args.value);
+
+    return (
+      <div style={{ width: 300 }}>
+        <TextInput
+          value={value}
+          placeholder="フォーカス状態"
+          size="medium"
+          autoFocus
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            setValue(e.target.value);
+          }}
+          onClickClearButton={() => {
+            setValue('');
+          }}
+        />
+      </div>
+    );
+  },
+};
+
 export const Composition: Story = {
   render: function CompositionStory() {
     const [value, setValue] = useState<string>('');
