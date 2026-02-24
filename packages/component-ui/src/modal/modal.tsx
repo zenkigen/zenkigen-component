@@ -45,6 +45,8 @@ export function Modal({
         <ModalContext.Provider value={{ onClose }}>
           <div className="fixed left-0 top-0 z-overlay flex size-full items-center justify-center bg-backgroundOverlayBlack py-4">
             <div
+              role="dialog"
+              aria-modal="true"
               className="grid max-h-full min-h-[120px] grid-rows-[max-content_1fr_max-content] flex-col rounded-lg bg-uiBackground01 shadow-modalShadow"
               style={{ width: renderWidth, height: renderHeight, maxWidth }}
             >

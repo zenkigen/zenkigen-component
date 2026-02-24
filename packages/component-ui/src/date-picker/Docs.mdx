@@ -1,0 +1,82 @@
+import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/addon-docs/blocks';
+import { Markdown } from '@storybook/addon-docs/blocks';
+import DatePickerStories, { Component } from './date-picker.stories';
+import spec from '../../../../docs/component/date-picker-specification.md?raw';
+
+<Meta title="DatePicker" of={DatePickerStories} />
+
+# DatePicker
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
+
+<Canvas>
+  <Story of={Component} />
+</Canvas>
+
+<Controls of={Component} />
+
+## Code Examples
+
+```tsx
+import { useState } from 'react';
+import { DatePicker } from '@zenkigen-inc/component-ui';
+
+const BasicExample = () => {
+  const [date, setDate] = useState<Date | null>(null);
+
+  return (
+    <>
+      <label htmlFor="date-input">日付</label>
+      <DatePicker value={date} onChange={(newDate) => setDate(newDate)} placeholder="日付を選択" id="date-input" />
+    </>
+  );
+};
+```
+
+### エラー状態の例
+
+```tsx
+import { useState } from 'react';
+import { DatePicker } from '@zenkigen-inc/component-ui';
+
+const ErrorExample = () => {
+  const [date, setDate] = useState<Date | null>(null);
+  const isError = date === null;
+
+  return (
+    <DatePicker value={date} onChange={(newDate) => setDate(newDate)} isError={isError}>
+      <DatePicker.ErrorMessage>日付を選択してください</DatePicker.ErrorMessage>
+    </DatePicker>
+  );
+};
+```
+
+### 日付範囲制限の例
+
+```tsx
+import { useState } from 'react';
+import { DatePicker } from '@zenkigen-inc/component-ui';
+
+const MinMaxExample = () => {
+  const [date, setDate] = useState<Date | null>(null);
+  const today = new Date();
+  const oneMonthLater = new Date(today);
+  oneMonthLater.setMonth(today.getMonth() + 1);
+
+  return (
+    <DatePicker
+      value={date}
+      onChange={(newDate) => setDate(newDate)}
+      minDate={today}
+      maxDate={oneMonthLater}
+      timeZone="Asia/Tokyo"
+    />
+  );
+};
+```

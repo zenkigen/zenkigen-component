@@ -1,6 +1,6 @@
 {
   "name": "@zenkigen-inc/component-ui",
-  "version": "1.18.5",
+  "version": "1.19.3",
   "repository": "https://github.com/zenkigen/zenkigen-component",
   "license": "MIT",
   "publishConfig": {
@@ -38,9 +38,10 @@
   },
   "dependencies": {
     "@floating-ui/react": "0.27.16",
-    "@zenkigen-inc/component-config": "1.18.5",
-    "@zenkigen-inc/component-icons": "1.18.5",
-    "@zenkigen-inc/component-theme": "1.18.5",
-    "clsx": "2.1.1"
+    "@zenkigen-inc/component-config": "1.19.3",
+    "@zenkigen-inc/component-icons": "1.19.3",
+    "@zenkigen-inc/component-theme": "1.19.3",
+    "clsx": "2.1.1",
+    "react-day-picker": "9.13.0"
   }
 }

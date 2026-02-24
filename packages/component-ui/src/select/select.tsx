@@ -16,18 +16,32 @@ import type { SelectOption } from './type';
 const FLOATING_OFFSET = 4;
 
 type Props = {
+  /** コンポーネントのサイズ */
   size?: 'x-small' | 'small' | 'medium' | 'large';
+  /** 表示スタイルのバリエーション */
   variant?: 'outline' | 'text';
+  /** コンポーネントの幅 */
   width?: CSSProperties['width'];
+  /** コンポーネントの最大幅 */
   maxWidth?: CSSProperties['maxWidth'];
+  /** 未選択時に表示されるテキスト */
   placeholder?: string;
+  /** プレースホルダー表示時のアイコン */
   placeholderIcon?: IconName;
+  /** 現在選択されているオプション */
   selectedOption?: SelectOption | null;
+  /** オプションリストの最大高さ */
   optionListMaxHeight?: CSSProperties['height'];
+  /** 無効状態の制御 */
   isDisabled?: boolean;
+  /** エラー状態の制御 */
   isError?: boolean;
+  /** 選択状態の見た目を適用するかどうか */
   isOptionSelected?: boolean;
+  /** 選択変更時のコールバック関数 */
   onChange?: (option: SelectOption | null) => void;
+  /** ドロップダウンリストの幅をトリガーボタンの幅に合わせる */
+  matchListToTrigger?: boolean;
 };
 
 export function Select({
@@ -44,6 +58,7 @@ export function Select({
   isOptionSelected = false,
   onChange,
   optionListMaxHeight,
+  matchListToTrigger = false,
 }: PropsWithChildren<Props>) {
   const [isOptionListOpen, setIsOptionListOpen] = useState(false);
   const targetRef = useRef<HTMLDivElement>(null);
@@ -59,9 +74,14 @@ export function Select({
       sizeMiddleware({
         apply({ availableWidth, elements, rects }) {
           const referenceWidth = rects.reference.width;
-          // トリガーボタンが小さい場合は最小幅を保証し、大きい場合はトリガーボタンに合わせる
-          elements.floating.style.minWidth = `${referenceWidth}px`;
-          elements.floating.style.maxWidth = `${availableWidth}px`;
+          if (matchListToTrigger) {
+            // トリガーボタンの幅に固定
+            elements.floating.style.width = `${referenceWidth}px`;
+          } else {
+            // コンテンツに応じて幅が広がる（トリガーボタン幅が最小、ビューポート幅が最大）
+            elements.floating.style.minWidth = `${referenceWidth}px`;
+            elements.floating.style.maxWidth = `${availableWidth}px`;
+          }
         },
       }),
     ],
