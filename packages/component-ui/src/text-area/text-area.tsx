@@ -113,7 +113,7 @@ function TextAreaInner(
     'w-full border-none bg-uiBackground01 outline-0 placeholder:text-textPlaceholder disabled:text-textPlaceholder',
     {
       'typography-body14regular px-2 py-2': size === 'medium',
-      'text-4 leading-normal px-3.5 py-2.5': size === 'large',
+      'typography-body16regular px-3 py-2': size === 'large',
       'field-sizing-content': autoHeight,
       'text-text01': !isError,
       'text-supportError': isError,
