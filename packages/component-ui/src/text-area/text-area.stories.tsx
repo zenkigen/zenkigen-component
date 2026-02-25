@@ -932,15 +932,17 @@ export const LayoutExample: Story = {
                 setInputValue(e.target.value);
               }}
             />
-            <IconButton
-              variant="text"
-              icon="send"
-              size="small"
-              onClick={() => {
-                action('onSend')(inputValue);
-                setInputValue('');
-              }}
-            />
+            <div className="pb-2 pr-2">
+              <IconButton
+                variant="text"
+                icon="send"
+                size="small"
+                onClick={() => {
+                  action('onSend')(inputValue);
+                  setInputValue('');
+                }}
+              />
+            </div>
           </div>
           <div className="relative rounded border border-uiBorder01 pr-0 focus-within:border-activeInput hover:border-hoverInput hover:focus-within:border-activeInput">
             <TextArea
