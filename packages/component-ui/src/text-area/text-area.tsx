@@ -128,7 +128,7 @@ function TextAreaInner(
     'field-sizing-content': autoHeight,
     'text-text01': !isError,
     'text-supportError': !isBorderless && isError,
-    'text-supportError placeholder:text-supportErrorLight': isBorderless && isError,
+    'text-supportError placeholder:text-supportErrorLight': isBorderless && isError && !disabled,
     'bg-disabled02': !isBorderless && disabled,
     'resize-none': !isResizable,
   });

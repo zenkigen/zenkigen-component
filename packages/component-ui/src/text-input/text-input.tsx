@@ -144,8 +144,8 @@ function TextInputInner(
     // テキスト色
     'text-text01': !isError,
     'text-supportError': isError,
-    // placeholder 色（text variant エラー時のみ上書き）
-    'placeholder:text-supportErrorLight': isBorderless && isError,
+    // placeholder 色（text variant エラー時のみ上書き、disabled 時は除外）
+    'placeholder:text-supportErrorLight': isBorderless && isError && !disabled,
     'pr-0': hasTrailingElement,
   });
 

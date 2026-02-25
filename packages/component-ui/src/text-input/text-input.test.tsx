@@ -274,6 +274,13 @@ describe('TextInput', () => {
       expect(wrapper.className).not.toMatch(/bg-disabled02/);
       expect(wrapper.className).not.toMatch(/border-disabled01/);
     });
+
+    it('variant="text" で disabled + isError 時にエラー placeholder 色が適用されないこと', () => {
+      render(<TextInput value="" variant="text" disabled isError data-testid="text-input" />);
+      const input = screen.getByTestId('text-input');
+
+      expect(input.className).not.toMatch(/placeholder:text-supportErrorLight/);
+    });
   });
 
   describe('HelperMessage / ErrorMessage', () => {
