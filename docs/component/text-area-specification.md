@@ -13,6 +13,7 @@
    - [継承プロパティ](#継承プロパティ)
 5. [状態とスタイル](#状態とスタイル)
    - [サイズバリエーション](#サイズバリエーション)
+   - [バリアントによるスタイル](#バリアントによるスタイル)
    - [状態に応じたスタイル](#状態に応じたスタイル)
    - [プレースホルダー](#プレースホルダー)
 6. [使用例](#使用例)
@@ -21,6 +22,7 @@
    - [自動高さ調整](#自動高さ調整)
    - [エラー状態](#エラー状態)
    - [無効状態](#無効状態)
+   - [Text バリアント（枠無し）](#text-バリアント枠無し)
 7. [アクセシビリティ](#アクセシビリティ)
 8. [技術的な詳細](#技術的な詳細)
    - [実装について](#実装について)
@@ -70,14 +72,15 @@ const MyComponent = () => {
 
 ### オプションプロパティ
 
-| プロパティ    | 型                        | デフォルト値 | 説明                                                       |
-| ------------- | ------------------------- | ------------ | ---------------------------------------------------------- |
-| `size`        | `'medium' \| 'large'`     | `'medium'`   | コンポーネントのサイズ                                     |
-| `height`      | `CSSProperties['height']` | `undefined`  | 高さの指定                                                 |
-| `isError`     | `boolean`                 | `false`      | エラー状態かどうか                                         |
-| `disabled`    | `boolean`                 | `false`      | 無効状態かどうか                                           |
-| `placeholder` | `string`                  | `undefined`  | プレースホルダーテキスト                                   |
-| `className`   | `string`                  | `undefined`  | 外部クラスの付与（後方互換目的の非推奨 API。将来削除予定） |
+| プロパティ    | 型                        | デフォルト値 | 説明                                                              |
+| ------------- | ------------------------- | ------------ | ----------------------------------------------------------------- |
+| `size`        | `'medium' \| 'large'`     | `'medium'`   | コンポーネントのサイズ                                            |
+| `variant`     | `'outline' \| 'text'`     | `'outline'`  | 表示バリアントを指定する。`'text'` はボーダーなしの枠無しスタイル |
+| `height`      | `CSSProperties['height']` | `undefined`  | 高さの指定                                                        |
+| `isError`     | `boolean`                 | `false`      | エラー状態かどうか                                                |
+| `disabled`    | `boolean`                 | `false`      | 無効状態かどうか                                                  |
+| `placeholder` | `string`                  | `undefined`  | プレースホルダーテキスト                                          |
+| `className`   | `string`                  | `undefined`  | 外部クラスの付与（後方互換目的の非推奨 API。将来削除予定）        |
 
 ### 排他的プロパティグループ
 
@@ -130,13 +133,13 @@ const MyComponent = () => {
 
 #### Medium（デフォルト）
 
-- パディング: `px-2 py-2` (8px)
+- パディング: `px-2 py-2` (8px)（`variant="outline"` のみ。`variant="text"` ではパディングなし）
 - タイポグラフィ: `typography-body14regular`
 - ヘルパー/エラーメッセージ: `typography-label11regular`
 
 #### Large
 
-- パディング: `px-3 py-2` (12px 8px)
+- パディング: `px-3 py-2` (12px 8px)（`variant="outline"` のみ。`variant="text"` ではパディングなし）
 - タイポグラフィ: `typography-body16regular`
 - ヘルパー/エラーメッセージ: `typography-label12regular`
 
@@ -144,26 +147,70 @@ const MyComponent = () => {
 
 - textarea と ヘルパー/エラーメッセージの間隔: `gap-2` (8px)
 
+### バリアントによるスタイル
+
+#### Outline（デフォルト）
+
+従来どおりのボーダー付きスタイル。
+
+#### Text
+
+ボーダーなし（`border-transparent`）の枠無しスタイル。テキストエリアのパディングは 0 となる。チャット入力欄やインライン編集など、枠を持たない UI に適する。
+
+Outline との主な差分:
+
+| 項目                     | Outline                                     | Text                                   |
+| ------------------------ | ------------------------------------------- | -------------------------------------- |
+| ボーダー                 | 状態に応じて変化                            | 常に `border-transparent`              |
+| テキストエリアパディング | `px-2 py-2`（medium）/ `px-3 py-2`（large） | なし                                   |
+| 背景（通常）             | `bg-uiBackground01`                         | `bg-uiBackground01`                    |
+| 背景（無効）             | `bg-disabled02`                             | 変更なし（`bg-uiBackground01` のまま） |
+| 無効時テキスト色         | `text-textPlaceholder`                      | `text-disabled01`                      |
+| エラー時テキスト色       | `text-supportError`                         | `text-supportError`                    |
+| エラー時placeholder色    | `placeholder:text-textPlaceholder`          | `placeholder:text-supportErrorLight`   |
+
 ### 状態に応じたスタイル
 
-#### 通常状態
+#### Outline バリアント
+
+##### 通常状態
 
 - ボーダー: `border-uiBorder02`
 - ホバー時: `hover:border-hoverInput`
 - フォーカス時: `focus-within:border-activeInput`
 - テキスト色: `text-text01`
 
-#### エラー状態（isError: true）
+##### エラー状態（isError: true）
 
 - ボーダー: `border-supportError`
 - テキスト色: `text-supportError`
 - 無効時はエラースタイルが適用されない
 
-#### 無効状態（disabled: true）
+##### 無効状態（disabled: true）
 
 - 背景: `bg-disabled02`
 - ボーダー: `border-disabled01`
 - テキスト色: `text-textPlaceholder`
+
+#### Text バリアント
+
+##### 通常状態
+
+- ボーダー: `border-transparent`
+- テキスト色: `text-text01`
+
+##### エラー状態（isError: true）
+
+- ボーダー: `border-transparent`（変化なし）
+- テキスト色: `text-supportError`
+- プレースホルダー色: `placeholder:text-supportErrorLight`
+
+##### 無効状態（disabled: true）
+
+- ボーダー: `border-transparent`（変化なし）
+- 背景: 変更なし（`bg-uiBackground01` のまま）
+- テキスト色: `text-disabled01`
+- エラースタイルは適用されない
 
 ### プレースホルダー
 
@@ -240,6 +287,19 @@ const MyComponent = () => {
 />
 ```
 
+### Text バリアント（枠無し）
+
+```typescript
+<TextArea
+  value={value}
+  variant="text"
+  onChange={(e) => setValue(e.target.value)}
+  placeholder="枠無しスタイルです"
+  autoHeight={true}
+  maxHeight="200px"
+/>
+```
+
 ## アクセシビリティ
 
 - `forwardRef`を使用してDOM要素への参照をサポート
@@ -288,9 +348,10 @@ const MyComponent = () => {
 
 ## 更新履歴
 
-| 日付                 | 内容                                                          | 担当者 |
-| -------------------- | ------------------------------------------------------------- | ------ |
-| 2026-01-26           | Large サイズのスタイル仕様を修正（padding、タイポグラフィ）   | -      |
-| 2025-11-26 07:15 UTC | `className` の後方互換利用を非推奨として明記し仕様を更新      | -      |
-| 2025-11-26 10:36 JST | ヘルパー/エラーメッセージを追加し、アクセシビリティ仕様を更新 | -      |
-| 2025-08-18           | 新規作成                                                      | -      |
+| 日付                 | 内容                                                            | 担当者 |
+| -------------------- | --------------------------------------------------------------- | ------ |
+| 2026-02-25 13:00 JST | `variant` プロパティ（`'outline' \| 'text'`）を追加し仕様を更新 | -      |
+| 2026-01-26           | Large サイズのスタイル仕様を修正（padding、タイポグラフィ）     | -      |
+| 2025-11-26 07:15 UTC | `className` の後方互換利用を非推奨として明記し仕様を更新        | -      |
+| 2025-11-26 10:36 JST | ヘルパー/エラーメッセージを追加し、アクセシビリティ仕様を更新   | -      |
+| 2025-08-18           | 新規作成                                                        | -      |
