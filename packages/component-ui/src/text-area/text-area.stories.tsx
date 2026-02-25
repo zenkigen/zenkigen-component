@@ -919,6 +919,29 @@ export const LayoutExample: Story = {
               />
             </div>
           </div>
+          <div className="flex items-end gap-1 rounded border border-uiBorder01 pr-0 focus-within:border-activeInput hover:border-hoverInput hover:focus-within:border-activeInput">
+            <TextArea
+              value={inputValue}
+              variant="text"
+              placeholder="応募者へメッセージ"
+              size="medium"
+              autoHeight
+              maxHeight="120px"
+              className="p-2"
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                setInputValue(e.target.value);
+              }}
+            />
+            <IconButton
+              variant="text"
+              icon="send"
+              size="small"
+              onClick={() => {
+                action('onSend')(inputValue);
+                setInputValue('');
+              }}
+            />
+          </div>
           <div className="relative rounded border border-uiBorder01 pr-0 focus-within:border-activeInput hover:border-hoverInput hover:focus-within:border-activeInput">
             <TextArea
               value={inputValue}
