@@ -127,11 +127,14 @@ function TextInputInner(
     // text variant
     'border-transparent': isBorderless,
     // 共通
-    'pr-2': size === 'medium' && hasTrailingElement,
-    'pr-3': size === 'large' && hasTrailingElement,
+    'bg-uiBackground01': !disabled || isBorderless,
+    'pr-2': !isBorderless && size === 'medium' && hasTrailingElement,
+    'pr-3': !isBorderless && size === 'large' && hasTrailingElement,
   });
 
-  const inputClasses = clsx('flex-1 outline-none placeholder:text-textPlaceholder disabled:text-textPlaceholder', {
+  const inputClasses = clsx('flex-1 bg-transparent outline-none placeholder:text-textPlaceholder', {
+    'disabled:text-textPlaceholder': !isBorderless,
+    'disabled:text-disabled01': isBorderless,
     // outline: 従来の padding
     'typography-label14regular min-h-8 px-2': !isBorderless && size === 'medium',
     'typography-label16regular min-h-10 px-3': !isBorderless && size === 'large',
