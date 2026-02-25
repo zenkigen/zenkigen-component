@@ -219,6 +219,8 @@ export const tailwindConfig = {
     'bg-user-yellowLight',
     'bg-user-orangeLight',
     'bg-supportInfoLight',
+    // textInput / textArea (text variant)
+    'placeholder:text-supportErrorLight',
     // selectColors
     'border-uiBorder02',
     'bg-uiBackground01',
