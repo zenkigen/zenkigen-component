@@ -834,7 +834,9 @@ export const LayoutExample: Story = {
     chromatic: { disable: true },
   },
   render: function LayoutExampleStory() {
-    const [inputValue, setInputValue] = useState('');
+    const [inputValue, setInputValue] = useState(
+      'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+    );
 
     return (
       <div className="relative flex h-[720px] w-[400px] flex-col justify-between bg-uiBackground01 p-6">
@@ -901,6 +903,31 @@ export const LayoutExample: Story = {
               size="medium"
               autoHeight
               maxHeight="120px"
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                setInputValue(e.target.value);
+              }}
+            />
+            <div className="absolute bottom-2 right-2">
+              <IconButton
+                variant="text"
+                icon="send"
+                size="small"
+                onClick={() => {
+                  action('onSend')(inputValue);
+                  setInputValue('');
+                }}
+              />
+            </div>
+          </div>
+          <div className="relative rounded border border-uiBorder01 pr-0 focus-within:border-activeInput hover:border-hoverInput hover:focus-within:border-activeInput">
+            <TextArea
+              value={inputValue}
+              variant="text"
+              placeholder="応募者へメッセージ"
+              size="medium"
+              autoHeight
+              maxHeight="120px"
+              className="p-2 pr-8"
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                 setInputValue(e.target.value);
               }}

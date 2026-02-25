@@ -100,38 +100,38 @@ function TextAreaInner(
 
   const isBorderless = variant === 'text';
 
-  const textAreaWrapperClassName = clsx(
-    'box-border flex w-full overflow-hidden rounded border',
-    {
-      // outline variant
-      'border-supportError': !isBorderless && isError && !disabled,
-      'border-uiBorder02': !isBorderless && !isError && !disabled,
-      'hover:border-hoverInput': !isBorderless && !disabled && !isError,
-      'hover:focus-within:border-activeInput': !isBorderless && !isError,
-      'focus-within:border-activeInput': !isBorderless && !isError,
-      'bg-disabled02 border-disabled01': !isBorderless && disabled,
-      // text variant
-      'border-transparent': isBorderless,
-    },
-    className,
-  );
-
-  const textAreaClassName = clsx('w-full border-none bg-uiBackground01 outline-none placeholder:text-textPlaceholder', {
-    // outline: 従来の padding
-    'typography-body14regular px-2 py-2': !isBorderless && size === 'medium',
-    'typography-body16regular px-3 py-2': !isBorderless && size === 'large',
-    // text: padding なし
-    'typography-body14regular': isBorderless && size === 'medium',
-    'typography-body16regular': isBorderless && size === 'large',
-    'disabled:text-textPlaceholder': !isBorderless,
-    'disabled:text-disabled01': isBorderless,
-    'field-sizing-content': autoHeight,
-    'text-text01': !isError,
-    'text-supportError': !isBorderless && isError,
-    'text-supportError placeholder:text-supportErrorLight': isBorderless && isError && !disabled,
-    'bg-disabled02': !isBorderless && disabled,
-    'resize-none': !isResizable,
+  const textAreaWrapperClassName = clsx('box-border flex w-full overflow-hidden rounded border', {
+    // outline variant
+    'border-supportError': !isBorderless && isError && !disabled,
+    'border-uiBorder02': !isBorderless && !isError && !disabled,
+    'hover:border-hoverInput': !isBorderless && !disabled && !isError,
+    'hover:focus-within:border-activeInput': !isBorderless && !isError,
+    'focus-within:border-activeInput': !isBorderless && !isError,
+    'bg-disabled02 border-disabled01': !isBorderless && disabled,
+    // text variant
+    'border-transparent': isBorderless,
   });
+
+  const textAreaClassName = clsx(
+    'w-full border-none bg-uiBackground01 outline-none placeholder:text-textPlaceholder',
+    className,
+    {
+      // outline: 従来の padding
+      'typography-body14regular px-2 py-2': !isBorderless && size === 'medium',
+      'typography-body16regular px-3 py-2': !isBorderless && size === 'large',
+      // text: padding なし
+      'typography-body14regular': isBorderless && size === 'medium',
+      'typography-body16regular': isBorderless && size === 'large',
+      'disabled:text-textPlaceholder': !isBorderless,
+      'disabled:text-disabled01': isBorderless,
+      'field-sizing-content': autoHeight,
+      'text-text01': !isError,
+      'text-supportError': !isBorderless && isError,
+      'text-supportError placeholder:text-supportErrorLight': isBorderless && isError && !disabled,
+      'bg-disabled02': !isBorderless && disabled,
+      'resize-none': !isResizable,
+    },
+  );
 
   const hasHeight = height != null && String(height).trim().length > 0;
 
