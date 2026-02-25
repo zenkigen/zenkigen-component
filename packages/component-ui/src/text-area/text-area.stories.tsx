@@ -4,6 +4,8 @@ import type { ChangeEvent, ReactNode } from 'react';
 import { useState } from 'react';
 import { action } from 'storybook/actions';
 
+import { Avatar } from '../avatar';
+import { IconButton } from '../icon-button';
 import { TextArea } from '.';
 
 const meta: Meta<typeof TextArea> = {
@@ -790,6 +792,130 @@ export const CompositionText: Story = {
                 setValue2(e.target.value);
               }}
             ></TextArea>
+          </div>
+        </div>
+      </div>
+    );
+  },
+};
+
+type ChatMessageProps = {
+  userId: number;
+  firstName: string;
+  lastName: string;
+  time: string;
+  children: ReactNode;
+};
+
+const ChatMessage = ({ userId, firstName, lastName, time, children }: ChatMessageProps) => (
+  <div className="flex flex-col gap-2">
+    <div className="flex items-center gap-4">
+      <div className="flex items-center gap-1">
+        <Avatar size="small" userId={userId} firstName={firstName} lastName={lastName} />
+        <span className="typography-label14bold text-text01">
+          {lastName} {firstName}
+        </span>
+      </div>
+      <span className="typography-body12regular text-text02">{time}</span>
+    </div>
+    {children}
+  </div>
+);
+
+const ChatText = ({ children }: { children: ReactNode }) => (
+  <p className="typography-body14regular leading-6 text-text01">{children}</p>
+);
+
+export const LayoutExample: Story = {
+  args: {
+    value: '',
+  },
+  parameters: {
+    chromatic: { disable: true },
+  },
+  render: function LayoutExampleStory() {
+    const [inputValue, setInputValue] = useState('');
+
+    return (
+      <div className="relative flex h-[720px] w-[400px] flex-col justify-between bg-uiBackground01 p-6">
+        {/* 閉じるボタン */}
+        <div className="absolute right-1 top-1">
+          <IconButton variant="text" icon="close" size="small" onClick={action('onClose')} />
+        </div>
+
+        {/* チャットメッセージ一覧 */}
+        <div className="flex min-h-0 flex-1 flex-col gap-8 overflow-y-auto">
+          <ChatMessage userId={1} lastName="川上" firstName="直子" time="2分前">
+            <ChatText>今、音声聞こえてますでしょうか？</ChatText>
+          </ChatMessage>
+          <ChatMessage userId={2} lastName="松井" firstName="麻衣" time="1分前">
+            <ChatText>すみません、聞こえないです。</ChatText>
+          </ChatMessage>
+          <ChatMessage userId={1} lastName="川上" firstName="直子" time="1分前">
+            <ChatText>少々お待ちください。</ChatText>
+            <ChatText>ちょっと設定を直しますね。</ChatText>
+          </ChatMessage>
+          <div className="rounded-lg bg-uiBackgroundGray p-4">
+            <p className="typography-body14regular leading-6 text-text01">川上 直子 が入室しました</p>
+          </div>
+          <ChatMessage userId={2} lastName="松井" firstName="麻衣" time="1分前">
+            <ChatText>ありがとうございます。</ChatText>
+          </ChatMessage>
+          <ChatMessage userId={2} lastName="松井" firstName="麻衣" time="1分前">
+            <ChatText>ポートフォリオリンク</ChatText>
+            <p className="typography-body14regular leading-6 text-supportInfo underline">
+              https://www.example.com/portfolio
+            </p>
+          </ChatMessage>
+        </div>
+
+        {/* チャット入力エリア: variant="text" の利用例 */}
+        <div className="flex flex-col gap-2 pt-2">
+          <div className="flex items-end gap-1 rounded border border-uiBorder01 p-2 focus-within:border-activeInput hover:border-hoverInput hover:focus-within:border-activeInput">
+            <TextArea
+              value={inputValue}
+              variant="text"
+              placeholder="応募者へメッセージ"
+              size="medium"
+              autoHeight
+              maxHeight="120px"
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                setInputValue(e.target.value);
+              }}
+            />
+            <IconButton
+              variant="text"
+              icon="send"
+              size="small"
+              onClick={() => {
+                action('onSend')(inputValue);
+                setInputValue('');
+              }}
+            />
+          </div>
+          <div className="relative rounded border border-uiBorder01 p-2 pr-0 focus-within:border-activeInput hover:border-hoverInput hover:focus-within:border-activeInput">
+            <TextArea
+              value={inputValue}
+              variant="text"
+              placeholder="応募者へメッセージ"
+              size="medium"
+              autoHeight
+              maxHeight="120px"
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                setInputValue(e.target.value);
+              }}
+            />
+            <div className="absolute bottom-2 right-2">
+              <IconButton
+                variant="text"
+                icon="send"
+                size="small"
+                onClick={() => {
+                  action('onSend')(inputValue);
+                  setInputValue('');
+                }}
+              />
+            </div>
           </div>
         </div>
       </div>
