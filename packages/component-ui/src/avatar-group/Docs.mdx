@@ -1,0 +1,72 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/addon-docs/blocks';
+import { Markdown } from '@storybook/addon-docs/blocks';
+import AvatarGroupStories, { Component, Base } from './avatar-group.stories';
+import spec from '../../../../docs/component/avatar-group-specification.md?raw';
+
+<Meta title="AvatarGroup" of={AvatarGroupStories} />
+
+# AvatarGroup
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
+
+<Canvas>
+  <Story of={Component} />
+</Canvas>
+
+<Controls of={Component} />
+
+## 概要
+
+複数のアバターを水平に重ねて表示するための Compound コンポーネントです。
+`Avatar` コンポーネントと組み合わせて使用します。
+
+## 基本的な使い方
+
+```tsx
+<AvatarGroup max={5} size="medium">
+  <Avatar userId={1} firstName="太郎" lastName="田中" />
+  <Avatar userId={2} firstName="花子" lastName="鈴木" />
+  {/* ... */}
+  <AvatarGroup.Remain />
+</AvatarGroup>
+```
+
+## サブコンポーネント
+
+### AvatarGroup.Remain
+
+`max` を超えた場合に、残り人数を `+N` 形式で表示します。
+`max` 以下の場合は自動的に非表示になります。
+
+### AvatarGroup.Counter
+
+`max` を超えた場合に、総人数を表示します。
+`max` 以下の場合は自動的に非表示になります。
+
+## Tooltip との組み合わせ
+
+個別の Avatar やカウンターに `Tooltip` を付与できます。
+
+```tsx
+<AvatarGroup max={4} size="small">
+  <Tooltip content="田中太郎">
+    <Avatar userId={1} firstName="太郎" lastName="田中" />
+  </Tooltip>
+  <Avatar userId={2} firstName="花子" lastName="鈴木" />
+  <Tooltip content="他3名">
+    <AvatarGroup.Remain />
+  </Tooltip>
+</AvatarGroup>
+```
+
+## すべてのバリエーション
+
+<Canvas>
+  <Story of={Base} />
+</Canvas>
