@@ -25,23 +25,23 @@
     "test:ci": "vitest run"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "6.4.0",
-    "@testing-library/react": "16.3.0",
+    "@testing-library/jest-dom": "6.9.1",
+    "@testing-library/react": "16.3.2",
     "@testing-library/user-event": "14.6.1",
     "hygen": "6.2.11",
-    "tsup": "8.5.0",
-    "typescript": "5.8.3"
+    "tsup": "8.5.1",
+    "typescript": "5.9.3"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
     "react-dom": "^18.0.0 || ^19.0.0"
   },
   "dependencies": {
-    "@floating-ui/react": "0.27.16",
+    "@floating-ui/react": "0.27.18",
     "@zenkigen-inc/component-config": "1.19.4",
     "@zenkigen-inc/component-icons": "1.19.4",
     "@zenkigen-inc/component-theme": "1.19.4",
     "clsx": "2.1.1",
-    "react-day-picker": "9.13.0"
+    "react-day-picker": "9.14.0"
   }
 }
