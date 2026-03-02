@@ -129,7 +129,7 @@ export const Component: Story = {
 const DropdownBasic = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', margin: '0 100px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', columnGap: '100px', marginBottom: '150px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', columnGap: '100px', marginBottom: '158px' }}>
         <Dropdown
           variant="text"
           size="small"

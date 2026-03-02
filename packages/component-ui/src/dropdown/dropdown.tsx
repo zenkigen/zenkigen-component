@@ -5,6 +5,7 @@ import type { MutableRefObject, PropsWithChildren, ReactElement } from 'react';
 import { useCallback, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
+import { Avatar } from '../avatar';
 import { useOutsideClick } from '../hooks/use-outside-click';
 import { Icon } from '../icon';
 import { DropdownContext } from './dropdown-context';
@@ -85,14 +86,14 @@ export function Dropdown({
     'cursor-not-allowed': isDisabled,
   });
 
-  const childrenButtonClasses = clsx(
-    'flex items-center justify-center rounded bg-uiBackground01 p-1 hover:bg-hover02 active:bg-active02',
-    focusVisible.normal,
-    {
-      'pointer-events-none': isDisabled,
-      'border border-uiBorder02': variant === 'outline',
-    },
-  );
+  const isAvatarTarget = target != null && target.type === Avatar;
+
+  const childrenButtonClasses = clsx('flex items-center justify-center rounded', focusVisible.normal, {
+    'pointer-events-none': isDisabled,
+    'bg-uiBackground01 p-1 hover:bg-hover02 active:bg-active02': !isAvatarTarget,
+    'hover:opacity-70 active:opacity-50': isAvatarTarget,
+    'border border-uiBorder02': variant === 'outline',
+  });
 
   const buttonClasses = clsx(
     'flex items-center rounded bg-uiBackground01',

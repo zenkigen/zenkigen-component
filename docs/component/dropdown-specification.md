@@ -137,6 +137,7 @@ const items: DropdownItemType[] = [
 - 通常: `bg-uiBackground01` にテーマカラーを重ね、`focusVisible.normal` でキーボードフォーカスを描画する。
 - ホバー: `buttonColors[variant].hover` またはターゲットボタン用の `hover:bg-hover02` を適用し、ポインター操作を明示する。
 - アクティブ: `buttonColors[variant].active` で押下状態を再現する。
+- Avatar ターゲット: `target` に `Avatar` コンポーネントを渡した場合、パディング（`p-1`）と背景色（`bg-uiBackground01`）を除去する。ホバー時は `opacity-70`、アクティブ時は `opacity-50` を適用する。
 - 無効（`isDisabled: true`）: `buttonColors[variant].disabled` と `cursor-not-allowed` を適用し、`pointer-events-none` によりクリックできなくなる。
 - 矢印（`isArrowHidden: false`）: `Icon` を末尾に描画し、開閉状態で `angle-small-up`/`angle-small-down` を切り替える。
 
