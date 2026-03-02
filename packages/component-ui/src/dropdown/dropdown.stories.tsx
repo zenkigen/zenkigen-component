@@ -10,6 +10,7 @@ import { Avatar } from '../avatar';
 import { Button } from '../button';
 import { Heading } from '../heading';
 import { Icon } from '../icon';
+import { TextInput } from '../text-input';
 import { Toggle } from '../toggle';
 import { Dropdown } from './dropdown';
 import type { DropdownItemType } from './type';
@@ -675,4 +676,33 @@ const DropdownWithPortal = () => {
 
 export const WithPortal: Story = {
   render: () => <DropdownWithPortal />,
+};
+
+export const LayoutExample: Story = {
+  parameters: {
+    chromatic: { disable: true },
+  },
+  render: () => (
+    <div className="m-5 flex h-[250px] w-[320px] items-center gap-2">
+      <div className="flex-1">
+        <TextInput size="large" value="" placeholder="入力してください" />
+      </div>
+      <Dropdown variant="text" target={<Icon name="more" size="medium" color="icon01" />} isArrowHidden>
+        <Dropdown.Menu horizontalAlign="right">
+          <Dropdown.Item onClick={action('add')}>
+            <div className="flex items-center gap-2 ">
+              <Icon name="add" size="small" />
+              項目を複製
+            </div>
+          </Dropdown.Item>
+          <Dropdown.Item color="red" onClick={action('delete')}>
+            <div className="flex items-center gap-2 text-supportDanger">
+              <Icon name="delete" size="small" />
+              項目を削除
+            </div>
+          </Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
+    </div>
+  ),
 };
