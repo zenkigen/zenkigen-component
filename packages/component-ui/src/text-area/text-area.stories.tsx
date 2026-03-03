@@ -155,7 +155,6 @@ export const Base: Story = {
               placeholder="入力してください"
               size="medium"
               height={120}
-              isError
               disabled
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                 action('onChange')(e);
@@ -250,6 +249,30 @@ export const Base: Story = {
             <ErrorText>入力済み ＋ disabled</ErrorText>
           </div>
         </div>
+      </div>
+    );
+  },
+};
+
+export const Focused: Story = {
+  args: {
+    value: '',
+  },
+  render: function FocusedStory({ ...args }) {
+    const [value, setValue] = useState<string>(args.value);
+
+    return (
+      <div style={{ width: 400 }}>
+        <TextArea
+          value={value}
+          placeholder="フォーカス状態"
+          size="medium"
+          height={120}
+          autoFocus
+          onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+            setValue(e.target.value);
+          }}
+        />
       </div>
     );
   },

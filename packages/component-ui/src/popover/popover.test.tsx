@@ -51,7 +51,7 @@ const PopoverTestWrapper = ({
       anchorRef={anchorRef}
     >
       <Popover.Trigger>
-        <Button onClick={() => setIsOpen((prev) => !prev)}>{triggerText}</Button>
+        <Button onClick={() => setIsOpen((prev) => prev === false)}>{triggerText}</Button>
       </Popover.Trigger>
       <Popover.Content>
         <div data-testid="popover-content">{contentText}</div>
@@ -282,6 +282,55 @@ describe('Popover', () => {
 
       await waitFor(() => {
         expect(screen.queryByTestId('popover-content')).not.toBeInTheDocument();
+      });
+    });
+
+    it('初回マウント時にトリガーへフォーカスが当たらないこと', () => {
+      render(
+        <Popover isOpen={false}>
+          <Popover.Trigger>
+            <Button data-testid="trigger-button">Open</Button>
+          </Popover.Trigger>
+          <Popover.Content>
+            <div data-testid="popover-content">Content</div>
+          </Popover.Content>
+        </Popover>,
+      );
+
+      const trigger = screen.getByTestId('trigger-button');
+      expect(trigger).not.toHaveFocus();
+    });
+
+    it('Popoverが閉じたときにトリガーへフォーカスが戻ること', async () => {
+      const { rerender } = render(
+        <Popover isOpen>
+          <Popover.Trigger>
+            <Button data-testid="trigger-button">Open</Button>
+          </Popover.Trigger>
+          <Popover.Content>
+            <div data-testid="popover-content">Content</div>
+          </Popover.Content>
+        </Popover>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByTestId('popover-content')).toBeInTheDocument();
+      });
+
+      rerender(
+        <Popover isOpen={false}>
+          <Popover.Trigger>
+            <Button data-testid="trigger-button">Open</Button>
+          </Popover.Trigger>
+          <Popover.Content>
+            <div data-testid="popover-content">Content</div>
+          </Popover.Content>
+        </Popover>,
+      );
+
+      await waitFor(() => {
+        const trigger = screen.getByTestId('trigger-button');
+        expect(trigger).toHaveFocus();
       });
     });
   });

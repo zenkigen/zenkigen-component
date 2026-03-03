@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ChangeEvent, FormEvent } from 'react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { action } from 'storybook/actions';
 
 import { Search } from '.';
@@ -24,6 +24,33 @@ export const Component: Story = {
     chromatic: { disable: true },
   },
 };
+
+export function Focused() {
+  const [value, setValue] = useState('');
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    ref.current?.querySelector('input')?.focus();
+  }, []);
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+      <div style={{ backgroundColor: 'white' }}>
+        <Search
+          ref={ref}
+          placeholder="フォーカス状態"
+          value={value}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            setValue(e.target.value);
+          }}
+          onClickClearButton={() => {
+            setValue('');
+          }}
+        />
+      </div>
+    </div>
+  );
+}
 
 export function Base() {
   const [value, setValue] = useState('');

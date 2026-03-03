@@ -1,15 +1,43 @@
 import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/addon-docs/blocks';
+import { Markdown } from '@storybook/addon-docs/blocks';
 import DropdownStories, { Component } from './dropdown.stories';
+import spec from '../../../../docs/component/dropdown-specification.md?raw';
 
 <Meta title="Dropdown" of={DropdownStories} />
 
 # Dropdown
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
 
 <Canvas>
   <Story of={Component} />
 </Canvas>
 
 <Controls of={Component} />
+
+## Code Examples
+
+```tsx
+import { Dropdown } from '@zenkigen-inc/component-ui';
+
+const BasicDropdown = () => (
+  <Dropdown label="操作" icon="more" size="small">
+    <Dropdown.Menu horizontalAlign="left" maxHeight={160}>
+      <Dropdown.Item onClick={() => console.log('rename')}>名前を変更</Dropdown.Item>
+      <Dropdown.Item onClick={() => console.log('duplicate')}>複製</Dropdown.Item>
+      <Dropdown.Item color="red" onClick={() => console.log('delete')}>
+        削除
+      </Dropdown.Item>
+    </Dropdown.Menu>
+  </Dropdown>
+);
+```
 
 ## 概要
 

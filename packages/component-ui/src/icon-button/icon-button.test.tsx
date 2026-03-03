@@ -74,6 +74,32 @@ describe('IconButton', () => {
       // selectedクラスが含まれていないことを確認
       expect(button.className).not.toMatch(/selected/);
     });
+
+    describe('iconAccentColor', () => {
+      // aiAgent アイコンは accentClassName を実際に使用するアイコン
+      it('iconAccentColorを指定した場合、アイコンにアクセントカラーが適用されること', () => {
+        render(<IconButton icon="ai-agent" iconAccentColor="blue" data-testid="icon-button" />);
+        const button = screen.getByTestId('icon-button');
+        const svg = button.querySelector('svg');
+        // accentColor は SVG 内部の要素に fill-{color} として適用される
+        expect(svg?.innerHTML).toMatch(/fill-blue/);
+      });
+
+      it('isSelected=trueの場合、iconAccentColorの指定が無視されること', () => {
+        render(<IconButton icon="ai-agent" isSelected iconAccentColor="blue" data-testid="icon-button" />);
+        const button = screen.getByTestId('icon-button');
+        const svg = button.querySelector('svg');
+        // isSelected=true の場合は accentColor が適用されない
+        expect(svg?.innerHTML).not.toMatch(/fill-blue/);
+      });
+
+      it('isSelected=falseの場合、iconAccentColorが適用されること', () => {
+        render(<IconButton icon="ai-agent" isSelected={false} iconAccentColor="blue" data-testid="icon-button" />);
+        const button = screen.getByTestId('icon-button');
+        const svg = button.querySelector('svg');
+        expect(svg?.innerHTML).toMatch(/fill-blue/);
+      });
+    });
   });
 
   describe('プロパティ反映', () => {

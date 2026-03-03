@@ -1,8 +1,11 @@
 import clsx from 'clsx';
 
 type Props = {
+  /** インジケーターのサイズ。small=16px / medium=32px / large=64px */
   size?: 'small' | 'medium' | 'large';
+  /** Loading を重ねる位置。Tailwind の position ユーティリティを切り替えます */
   position?: 'fixed' | 'absolute' | 'static';
+  /** ラッパー要素の高さ。ビュー全体を覆う場合は `100%` や `100vh` を指定します */
   height?: string;
 };
 

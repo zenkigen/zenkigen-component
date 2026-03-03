@@ -5,8 +5,11 @@ import { useContext } from 'react';
 
 import { DropdownContext } from './dropdown-context';
 
+/** Dropdown.Item コンポーネントのプロパティ */
 type Props = {
+  /** 項目の配色。red は破壊的アクションに用いる。 */
   color?: 'gray' | 'red';
+  /** 項目をクリックしたときに呼び出されるハンドラ。 */
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
 };
 

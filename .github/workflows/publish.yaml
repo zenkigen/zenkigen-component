@@ -9,14 +9,14 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Read Node version from .node-version
         run: echo "node_version=$(cat .node-version)" >> $GITHUB_OUTPUT
         id: node-version
 
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ steps.node-version.outputs.node_version }}
           registry-url: 'https://registry.npmjs.org'

@@ -5,13 +5,21 @@ import { Icon } from '../icon';
 import { IconButton } from '../icon-button';
 
 type Props = {
+  /** 通知の状態を表す。表示する背景色とアイコンが切り替わる。 */
   state?: 'success' | 'warning' | 'information' | 'attention' | 'default';
+  /** コンポーネントの縦サイズとパディングを制御する。 */
   size?: 'small' | 'medium';
+  /** 通知に表示するメッセージ本体。 */
   children?: ReactNode;
 } & (
-  | { showClose?: false }
   | {
+      /** 閉じるボタンを表示しない場合の設定。 */
+      showClose?: false;
+    }
+  | {
+      /** 閉じるボタンを表示する場合の設定。 */
       showClose: true;
+      /** 閉じるボタンがクリックされたときのハンドラ。 */
       onClickClose: () => void;
     }
 );
@@ -56,7 +64,7 @@ export function NotificationInline({ state = 'default', size = 'medium', ...prop
       <p className="flex-1">{props.children}</p>
       {props.showClose === true && (
         <div className="flex items-center">
-          <IconButton icon="close" size="small" variant="text" />
+          <IconButton icon="close" size="small" variant="text" onClick={props.onClickClose} />
         </div>
       )}
     </div>

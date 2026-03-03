@@ -351,11 +351,23 @@ Popoverコンポーネントは[@floating-ui/react](https://floating-ui.com/)を
 
 `FloatingPortal`を使用してPopoverコンテンツをDOM階層の外部に描画します。これにより、親要素の`overflow: hidden`やz-indexの影響を受けずに表示できます。
 
+**z-index の設定**
+
+Popoverコンテンツには `z-popover`（値: 1150）クラスが適用されます。これは `z-modal`（値: 1100）より上に設定されているため、**Modal内でPopoverを使用した場合でも正しく前面に表示**されます。
+
+```tsx
+// PopoverContent の wrapper div に z-popover が適用される
+<div className="z-popover" style={{ position: floating.strategy, ... }}>
+  {children}
+</div>
+```
+
 **メリット**
 
 - 親要素の`overflow`設定の影響を回避
 - z-indexの階層構造から独立
 - スクロール可能な領域内でも適切に表示
+- Modal内でも正しく前面に表示
 
 ### フォーカス管理
 
