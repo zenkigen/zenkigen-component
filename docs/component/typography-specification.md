@@ -83,6 +83,8 @@ export const Example = () => (
 | `typography-label16bold`    | `16px`    | `100%`      | `bold`      | 強調ラベルの強調 |
 | `typography-label14regular` | `14px`    | `100%`      | `normal`    | 標準ラベル       |
 | `typography-label14bold`    | `14px`    | `100%`      | `bold`      | 標準ラベルの強調 |
+| `typography-label13regular` | `13px`    | `100%`      | `normal`    | 中間ラベル       |
+| `typography-label13bold`    | `13px`    | `100%`      | `bold`      | 中間ラベルの強調 |
 | `typography-label12regular` | `12px`    | `100%`      | `normal`    | 補足ラベル       |
 | `typography-label12bold`    | `12px`    | `100%`      | `bold`      | 補足ラベルの強調 |
 | `typography-label11regular` | `11px`    | `100%`      | `normal`    | 最小ラベル       |
@@ -155,6 +157,7 @@ Typography の変更は `@zenkigen-inc/component-theme` と `@zenkigen-inc/compo
 
 ## 更新履歴
 
-| 日付                 | 内容     | 担当者 |
-| -------------------- | -------- | ------ |
-| 2026-01-06 08:26 JST | 新規作成 | -      |
+| 日付                 | 内容                              | 担当者 |
+| -------------------- | --------------------------------- | ------ |
+| 2026-02-12           | label13regular/label13bold を追加 | -      |
+| 2026-01-06 08:26 JST | 新規作成                          | -      |

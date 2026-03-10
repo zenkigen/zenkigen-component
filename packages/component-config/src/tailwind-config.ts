@@ -139,7 +139,7 @@ export const tailwindConfig = {
         badge: 10,
         header: 100,
         dropdown: 300,
-        popover: 500,
+        popover: 1150,
         overlay: 1000,
         modal: 1100,
         preloader: 1200,

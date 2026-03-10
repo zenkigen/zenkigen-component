@@ -235,9 +235,9 @@ export const FileInput = forwardRef<FileInputRef, FileInputProps>(
       {
         'border-uiBorder03 bg-white text-text01': !isDisabled && !isDragOver && !hasErrors,
         'border-activeInput bg-activeInput/5': !isDisabled && isDragOver && !hasErrors,
-        'border-supportDanger bg-white': hasErrors && !isDisabled,
+        'border-supportDanger bg-uiBackground01': hasErrors && !isDisabled,
         'cursor-pointer hover:bg-hover02 active:bg-active02': !isDisabled,
-        'hover:bg-uiBackgroundError active:bg-red-red20': !isDisabled && hasErrors,
+        'hover:bg-hoverUiError active:bg-activeUiError': !isDisabled && hasErrors,
         'border-disabled01 bg-disabled02 text-textPlaceholder cursor-not-allowed': isDisabled,
       },
     );

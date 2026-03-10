@@ -4,19 +4,21 @@ import { getDefaultClassNames } from 'react-day-picker';
 
 const defaultDayPickerClassNames = getDefaultClassNames();
 
-/** react-day-picker の CSS 変数によるスタイル上書き */
+/** カレンダー内の基本フォントサイズ */
+export const DAY_PICKER_FONT_SIZE = '12px';
+
+/** react-day-picker の CSS 変数およびフォントの上書き */
 export const dayPickerStyle = {
-  '--rdp-font-family': "Arial, 'Noto Sans JP', sans-serif",
   '--rdp-nav-height': '30px',
-  '--rdp-day-font': "700 12px/1 'Arial', 'Noto Sans JP', sans-serif",
-  '--rdp-selected-font': "700 12px/1 'Arial', 'Noto Sans JP', sans-serif",
-  '--rdp-weekday-font': "700 12px/1 'Arial', 'Noto Sans JP', sans-serif",
   '--rdp-day-width': '30px',
   '--rdp-day-height': '30px',
   '--rdp-day_button-width': '28px',
   '--rdp-day_button-height': '28px',
   '--rdp-day_button-border': '1px solid transparent',
   '--rdp-weekday-padding': '0px',
+  fontFamily: "Arial, 'Noto Sans JP', sans-serif",
+  fontSize: DAY_PICKER_FONT_SIZE,
+  fontWeight: 700,
 } as CSSProperties;
 
 /** react-day-picker のクラス名上書き */

@@ -107,6 +107,7 @@ export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(fu
             ref: composeRefs(floating.refs.setFloating, ref),
             tabIndex: -1,
             onKeyDown: handleKeyDown,
+            className: 'z-popover',
             style: {
               position: floating.strategy,
               top: floating.y ?? 0,
