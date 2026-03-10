@@ -176,13 +176,7 @@ yarn list --pattern "@zenkigen-inc/component-*"
 
 ### プロジェクト詳細ドキュメント
 
-プロジェクトの詳細な技術資料は以下のドキュメントを参照してください：
-
-- [プロジェクト概要](./docs/README.md) - ドキュメント全体の概要
-- [プロジェクト構造](./docs/project-structure.md) - パッケージ構成と相互関係
-- [コンポーネント実装パターン](./docs/component-patterns.md) - 設計パターンと実装方針
-- [テーマシステム](./docs/theme-system.md) - テーマとTailwind CSS設定
-- [コーディングガイドライン](./docs/coding-guidelines.md) - 開発時のコーディング標準と規約
+プロジェクトの詳細な技術資料は [プロジェクト概要](./docs/README.md) を参照してください。
 
 ### ローカル開発環境でのStorybook
 
