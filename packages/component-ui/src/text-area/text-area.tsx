@@ -123,10 +123,10 @@ function TextAreaInner(
     'disabled:text-disabled01': isBorderless,
     'field-sizing-content': autoHeight,
     'text-text01': !isError,
-    'text-supportError': !isBorderless && isError,
+    'text-supportError': isError,
     // placeholder 色（text variant エラー時のみ上書き）
     'placeholder:text-textPlaceholder': !(isBorderless && isError && !disabled),
-    'text-supportError placeholder:text-supportErrorLight': isBorderless && isError && !disabled,
+    'placeholder:text-supportErrorLight': isBorderless && isError && !disabled,
     'bg-disabled02': !isBorderless && disabled,
     'resize-none': !isResizable,
   });
