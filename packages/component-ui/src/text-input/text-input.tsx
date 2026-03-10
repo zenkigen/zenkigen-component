@@ -132,7 +132,7 @@ function TextInputInner(
     'pr-3': !isBorderless && size === 'large' && hasTrailingElement,
   });
 
-  const inputClasses = clsx('flex-1 bg-transparent outline-none placeholder:text-textPlaceholder', {
+  const inputClasses = clsx('flex-1 bg-transparent outline-none', {
     'disabled:text-textPlaceholder': !isBorderless,
     'disabled:text-disabled01': isBorderless,
     // outline: 従来の padding
@@ -144,7 +144,8 @@ function TextInputInner(
     // テキスト色
     'text-text01': !isError,
     'text-supportError': isError,
-    // placeholder 色（text variant エラー時のみ上書き、disabled 時は除外）
+    // placeholder 色（text variant エラー時のみ上書き）
+    'placeholder:text-textPlaceholder': !(isBorderless && isError && !disabled),
     'placeholder:text-supportErrorLight': isBorderless && isError && !disabled,
     'pr-0': hasTrailingElement,
   });
