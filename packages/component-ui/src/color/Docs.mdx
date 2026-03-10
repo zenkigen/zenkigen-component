@@ -68,7 +68,7 @@ return (
     {rawValue ? (
       <div className="flex bg-white rounded-sm px-1 py-0.5">
         <Icon name="link" size="small" color="icon01" />
-        <span style={{ fontSize: '12px', fontWeight: 'bold' }}>{rawValue.replace('$Colors.', '')}</span>
+        <span style={{ fontSize: '12px', fontWeight: 'bold' }}>{rawValue.replaceAll('$Colors.', '')}</span>
       </div>
     ) : null}
   </div>

@@ -709,12 +709,14 @@ export const tokensWithMeta = {
       "backgroundOverlayGray": {
         "value": "#1f212180",
         "description": "Background overlay",
-        "type": "color"
+        "type": "color",
+        "rawValue": "rgba($Colors.Gray.Gray100, 0.5)"
       },
       "backgroundOverlayBlack": {
         "value": "#00000099",
         "description": "Background overlay",
-        "type": "color"
+        "type": "color",
+        "rawValue": "rgba($Colors.Black, 0.6)"
       }
     },
     "icon": {

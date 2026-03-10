@@ -38,7 +38,7 @@
         if (typeof tokenType !== 'undefined') {
           meta.type = tokenType;
         }
-        if (tokenType === 'color' && typeof rawValue === 'string' && rawValue.startsWith('$Colors.')) {
+        if (tokenType === 'color' && typeof rawValue === 'string' && rawValue.includes('$Colors.')) {
           meta.rawValue = rawValue;
         }
 
