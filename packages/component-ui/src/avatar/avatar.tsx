@@ -1,6 +1,8 @@
 import { userColors } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
 
+import type { AvatarSize } from '../avatar-group/avatar-group-context';
+import { useAvatarGroupSize } from '../avatar-group/avatar-group-context';
 import { Icon } from '../icon';
 
 export const isAsciiString = (str: string) => {
@@ -8,14 +10,16 @@ export const isAsciiString = (str: string) => {
 };
 
 type Props = {
-  size?: 'x-small' | 'small' | 'medium' | 'large' | 'x-large';
+  size?: AvatarSize;
   userId?: number;
   firstName?: string;
   lastName?: string;
   isDisabled?: boolean;
 };
 
-export function Avatar({ size = 'medium', ...props }: Props) {
+export function Avatar({ size: sizeProp = 'medium', ...props }: Props) {
+  const groupSize = useAvatarGroupSize();
+  const size = groupSize ?? sizeProp;
   const classes = clsx('flex items-center justify-center rounded-full text-textOnColor', {
     'w-16 h-16 typography-label16regular': size === 'x-large',
     'w-12 h-12 typography-label14regular': size === 'large',
