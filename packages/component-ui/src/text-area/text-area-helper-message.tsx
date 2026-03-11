@@ -8,7 +8,7 @@ export type TextAreaHelperMessageProps = Omit<HTMLAttributes<HTMLDivElement>, 'c
 
 export const TextAreaHelperMessage = forwardRef<HTMLDivElement, TextAreaHelperMessageProps>((props, ref) => {
   const { textAreaProps } = useTextAreaCompoundContext('TextArea.HelperMessage');
-  const typographyClass = textAreaProps.size === 'large' ? 'typography-label12regular' : 'typography-label11regular';
+  const typographyClass = textAreaProps.size === 'large' ? 'typography-label13regular' : 'typography-label12regular';
   const helperMessageClassName = clsx(typographyClass, 'text-text02');
 
   return <div ref={ref} className={helperMessageClassName} {...props} />;

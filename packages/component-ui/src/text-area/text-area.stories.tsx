@@ -254,6 +254,30 @@ export const Base: Story = {
   },
 };
 
+export const Focused: Story = {
+  args: {
+    value: '',
+  },
+  render: function FocusedStory({ ...args }) {
+    const [value, setValue] = useState<string>(args.value);
+
+    return (
+      <div style={{ width: 400 }}>
+        <TextArea
+          value={value}
+          placeholder="フォーカス状態"
+          size="medium"
+          height={120}
+          autoFocus
+          onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+            setValue(e.target.value);
+          }}
+        />
+      </div>
+    );
+  },
+};
+
 export const AutoHeight: Story = {
   args: {
     size: 'large',

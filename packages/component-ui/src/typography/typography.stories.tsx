@@ -65,6 +65,10 @@ export const Component: Story = {
           <SampleText label="label12bold" className="typography-label12bold" height="auto" />
         </div>
         <div className="flex w-full gap-4">
+          <SampleText label="label13regular" className="typography-label13regular" height="auto" />
+          <SampleText label="label13bold" className="typography-label13bold" height="auto" />
+        </div>
+        <div className="flex w-full gap-4">
           <SampleText label="label14regular" className="typography-label14regular" height="auto" />
           <SampleText label="label14bold" className="typography-label14bold" height="auto" />
         </div>
@@ -148,6 +152,10 @@ export function Label() {
       <div className={classes} style={{ width: WIDTH }}>
         <SampleText label="label12regular" className="typography-label12regular" />
         <SampleText label="label12bold" className="typography-label12bold" />
+      </div>
+      <div className={classes} style={{ width: WIDTH }}>
+        <SampleText label="label13regular" className="typography-label13regular" />
+        <SampleText label="label13bold" className="typography-label13bold" />
       </div>
       <div className={classes} style={{ width: WIDTH }}>
         <SampleText label="label14regular" className="typography-label14regular" />

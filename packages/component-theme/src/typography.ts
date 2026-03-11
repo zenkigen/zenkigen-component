@@ -21,6 +21,8 @@ export const typography = {
     label16regular: 'font-normal leading-6 text-4 tracking-normal no-underline',
     label14bold: 'font-bold leading-6 text-3 tracking-normal no-underline',
     label14regular: 'font-normal leading-6 text-3 tracking-normal no-underline',
+    label13bold: 'font-bold leading-6 text-2 tracking-normal no-underline',
+    label13regular: 'font-normal leading-6 text-2 tracking-normal no-underline',
     label12bold: 'font-bold leading-6 text-1 tracking-normal no-underline',
     label12regular: 'font-normal leading-6 text-1 tracking-normal no-underline',
     label11bold: 'font-bold leading-6 text-0 tracking-normal no-underline',
