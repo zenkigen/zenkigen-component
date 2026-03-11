@@ -388,6 +388,9 @@ export const Counter: Story = {
               <TextArea.HelperMessage>
                 100文字以内で入力してください。長いヘルプメッセージは折り返されます。
               </TextArea.HelperMessage>
+              <TextArea.HelperMessage>
+                100文字以内で入力してください。長いヘルプメッセージは折り返されます。
+              </TextArea.HelperMessage>
             </TextArea>
           </div>
         </div>

@@ -188,7 +188,7 @@ function TextAreaInner(
       <div className="flex flex-col gap-2">
         {textAreaElement}
         <div className="flex items-start justify-between gap-2">
-          {hasMessageChildren && <div className="flex min-w-0 flex-1 flex-col">{stackedChildren}</div>}
+          {hasMessageChildren && <div className="flex min-w-0 flex-1 flex-col gap-2">{stackedChildren}</div>}
           {!hasMessageChildren && counterElement != null && <div className="flex-1" />}
           {counterElement}
         </div>
