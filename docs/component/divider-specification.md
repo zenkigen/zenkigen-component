@@ -71,13 +71,13 @@ export function SectionList() {
 ### リスト項目間の区切り
 
 ```tsx
-<ul className="flex flex-col">
-  <li>項目 1</li>
+<div className="flex flex-col" role="list">
+  <div role="listitem">項目 1</div>
   <Divider />
-  <li>項目 2</li>
+  <div role="listitem">項目 2</div>
   <Divider />
-  <li>項目 3</li>
-</ul>
+  <div role="listitem">項目 3</div>
+</div>
 ```
 
 ## アクセシビリティ
