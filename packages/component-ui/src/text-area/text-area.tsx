@@ -152,7 +152,8 @@ function TextAreaInner(
       style={{
         ...{ maxHeight },
         // height/minHeight はラッパに適用し、外形を揃える
-        ...(!autoHeight && hasHeight ? { height } : {}),
+        // isResizable 時はラッパに固定高さを設定しない（textarea のリサイズに追従させるため）
+        ...(!autoHeight && hasHeight && !isResizable ? { height } : {}),
         ...(autoHeight && hasHeight ? { minHeight: height } : {}),
       }}
     >
@@ -162,7 +163,8 @@ function TextAreaInner(
         {...mergedTextAreaProps}
         disabled={disabled}
         style={{
-          height: autoHeight ? 'auto' : '100%',
+          // isResizable 時は height を textarea の初期高さとして直接設定し、リサイズ起点にする
+          height: autoHeight ? 'auto' : isResizable && hasHeight ? height : '100%',
           minHeight: autoHeight && hasHeight ? '100%' : 'auto',
         }}
       />
