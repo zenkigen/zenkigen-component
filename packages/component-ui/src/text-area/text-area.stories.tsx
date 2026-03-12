@@ -928,11 +928,11 @@ export const LayoutExample: Story = {
   },
   render: function LayoutExampleStory() {
     const [inputValue, setInputValue] = useState(
-      'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+      'お疲れさまです。先ほどの面接についてフィードバックを共有します。\nコミュニケーション能力が高く、技術的な質問にも的確に回答されていました。',
     );
 
     return (
-      <div className="relative flex h-[720px] w-[400px] flex-col justify-between bg-uiBackground01 p-6">
+      <div className="relative flex h-[640px] w-[400px] flex-col justify-between bg-uiBackground01 p-6">
         {/* 閉じるボタン */}
         <div className="absolute right-1 top-1">
           <IconButton variant="text" icon="close" size="small" onClick={action('onClose')} />
@@ -966,52 +966,6 @@ export const LayoutExample: Story = {
 
         {/* チャット入力エリア: variant="text" の利用例 */}
         <div className="flex flex-col gap-2 pt-2">
-          <div className="flex items-end gap-1 rounded border border-uiBorder01 p-2 focus-within:border-activeInput hover:border-hoverInput hover:focus-within:border-activeInput">
-            <TextArea
-              value={inputValue}
-              variant="text"
-              placeholder="応募者へメッセージ"
-              size="medium"
-              autoHeight
-              maxHeight="120px"
-              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
-                setInputValue(e.target.value);
-              }}
-            />
-            <IconButton
-              variant="text"
-              icon="send"
-              size="small"
-              onClick={() => {
-                action('onSend')(inputValue);
-                setInputValue('');
-              }}
-            />
-          </div>
-          <div className="relative rounded border border-uiBorder01 p-2 pr-0 focus-within:border-activeInput hover:border-hoverInput hover:focus-within:border-activeInput">
-            <TextArea
-              value={inputValue}
-              variant="text"
-              placeholder="応募者へメッセージ"
-              size="medium"
-              autoHeight
-              maxHeight="120px"
-              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
-                setInputValue(e.target.value);
-              }}
-            />
-            <div className="absolute bottom-2 right-2">
-              <IconButton
-                variant="text"
-                icon="send"
-                size="small"
-                onClick={() => {
-                  action('onSend')(inputValue);
-                  setInputValue('');
-                }}
-              />
-            </div>
-          </div>
           <div className="flex items-end gap-1 rounded border border-uiBorder01 pr-0 focus-within:border-activeInput hover:border-hoverInput hover:focus-within:border-activeInput">
             <TextArea
               value={inputValue}
@@ -1026,31 +980,6 @@ export const LayoutExample: Story = {
               }}
             />
             <div className="pb-2 pr-2">
-              <IconButton
-                variant="text"
-                icon="send"
-                size="small"
-                onClick={() => {
-                  action('onSend')(inputValue);
-                  setInputValue('');
-                }}
-              />
-            </div>
-          </div>
-          <div className="relative rounded border border-uiBorder01 pr-0 focus-within:border-activeInput hover:border-hoverInput hover:focus-within:border-activeInput">
-            <TextArea
-              value={inputValue}
-              variant="text"
-              placeholder="応募者へメッセージ"
-              size="medium"
-              autoHeight
-              maxHeight="120px"
-              className="p-2 pr-8"
-              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
-                setInputValue(e.target.value);
-              }}
-            />
-            <div className="absolute bottom-2 right-2">
               <IconButton
                 variant="text"
                 icon="send"
