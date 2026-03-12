@@ -24,8 +24,16 @@ const meta: Meta<typeof TextArea> = {
     value: { control: 'text', description: '値' },
     height: { control: 'text', description: '高さ' },
     autoHeight: { control: 'boolean', description: '自動リサイズ' },
-    maxHeight: { control: 'text', description: '最大高さ（autoHeightがtrueの場合のみ有効）' },
-    isResizable: { control: 'boolean', description: 'リサイズ可能かどうか（autoHeightがtrueの場合は無効）' },
+    maxHeight: {
+      control: 'text',
+      description: '最大高さ（autoHeightがtrueの場合のみ有効）',
+      if: { arg: 'autoHeight' },
+    },
+    isResizable: {
+      control: 'boolean',
+      description: 'リサイズ可能かどうか（autoHeightがtrueの場合は無効）',
+      if: { arg: 'autoHeight', truthy: false },
+    },
     isError: { control: 'boolean', description: 'エラーかどうか' },
     disabled: { control: 'boolean', description: '無効かどうか' },
     isCounterVisible: { control: 'boolean', description: '文字数カウンターの表示/非表示' },
