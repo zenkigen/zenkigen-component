@@ -129,6 +129,7 @@ yarn list --pattern "@zenkigen-inc/component-*"
 - [Breadcrumb](./docs/component/breadcrumb-specification.md)
 - [Button](./docs/component/button-specification.md)
 - [Checkbox](./docs/component/checkbox-specification.md)
+- [Divider](./docs/component/divider-specification.md)
 - [Dropdown](./docs/component/dropdown-specification.md)
 - [Evaluation Star](./docs/component/evaluation-star-specification.md)
 - [File Input](./docs/component/file-input-specification.md)
@@ -165,6 +166,13 @@ yarn list --pattern "@zenkigen-inc/component-*"
 
 - Color
 - [Typography](./docs/component/typography-specification.md)
+
+## ユーティリティ一覧・仕様書
+
+以下は利用可能なユーティリティの一覧です。リンクがある項目は詳細な仕様書が参照できます。
+
+- [Color](./docs/component/color-specification.md)
+- Typography
 
 ## Storybook
 
