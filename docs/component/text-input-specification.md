@@ -12,6 +12,7 @@
 5. [コンポジション（子コンポーネント）](#コンポジション子コンポーネント)
 6. [状態とスタイル](#状態とスタイル)
    - [サイズバリエーション](#サイズバリエーション)
+   - [バリアントによるスタイル](#バリアントによるスタイル)
    - [状態に応じたスタイル](#状態に応じたスタイル)
    - [その他のスタイル仕様](#その他のスタイル仕様)
 7. [使用例](#使用例)
@@ -20,6 +21,7 @@
    - [エラー状態](#エラー状態)
    - [ヘルパー/エラーメッセージ](#ヘルパーエラーメッセージ)
    - [無効状態](#無効状態)
+   - [Text バリアント（枠無し）](#text-バリアント枠無し)
    - [数値入力](#数値入力)
    - [パスワード入力](#パスワード入力)
    - [クリアボタンなし](#クリアボタンなし)
@@ -74,6 +76,7 @@ const MyComponent = () => {
 | プロパティ           | 型                                              | デフォルト値 | 説明                                                                 |
 | -------------------- | ----------------------------------------------- | ------------ | -------------------------------------------------------------------- |
 | `size`               | `'medium' \| 'large'`                           | `'medium'`   | コンポーネントのサイズを指定する                                     |
+| `variant`            | `'outline' \| 'text'`                           | `'outline'`  | 表示バリアントを指定する。`'text'` はボーダーなしの枠無しスタイル    |
 | `isError`            | `boolean`                                       | `false`      | エラー状態かどうかを指定する                                         |
 | `disabled`           | `boolean`                                       | `false`      | 入力を無効化するかどうかを指定する（継承）                           |
 | `placeholder`        | `string`                                        | `undefined`  | プレースホルダーテキストを指定する（継承）                           |
@@ -103,13 +106,37 @@ TextInput は子要素としてメッセージコンポーネントを受け取�
 - `medium`（デフォルト）
   - タイポグラフィ: `typography-label14regular`
   - 高さ: `min-h-8`
-  - パディング: `px-2`
+  - パディング: `px-2`（`variant="outline"` のみ。`variant="text"` ではパディングなし）
 - `large`
   - タイポグラフィ: `typography-label16regular`
   - 高さ: `min-h-10`
-  - パディング: `px-3`
+  - パディング: `px-3`（`variant="outline"` のみ。`variant="text"` ではパディングなし）
+
+### バリアントによるスタイル
+
+#### Outline（デフォルト）
+
+従来どおりのボーダー付きスタイル。
+
+#### Text
+
+ボーダーなし（`border-transparent`）の枠無しスタイル。入力欄のパディングは 0 となる。チャット入力欄やインライン編集など、枠を持たない UI に適する。
+
+Outline との主な差分:
+
+| 項目                  | Outline                            | Text                                   |
+| --------------------- | ---------------------------------- | -------------------------------------- |
+| ボーダー              | 状態に応じて変化                   | 常に `border-transparent`              |
+| 入力パディング        | `px-2`（medium）/ `px-3`（large）  | なし                                   |
+| 背景（通常）          | `bg-uiBackground01`                | `bg-uiBackground01`                    |
+| 背景（無効）          | `bg-disabled02`                    | 変更なし（`bg-uiBackground01` のまま） |
+| 無効時テキスト色      | `text-textPlaceholder`             | `text-disabled01`                      |
+| エラー時placeholder色 | `placeholder:text-textPlaceholder` | `placeholder:text-supportErrorLight`   |
+| クリアボタン右余白    | `pr-2`（medium）/ `pr-3`（large）  | なし                                   |
 
 ### 状態に応じたスタイル
+
+#### Outline バリアント
 
 - 通常状態
   - ボーダー: `border-uiBorder02`
@@ -123,14 +150,30 @@ TextInput は子要素としてメッセージコンポーネントを受け取�
 - 無効状態（`disabled: true`）
   - 背景: `bg-disabled02`
   - ボーダー: `border-disabled01`
+  - テキスト色: `text-textPlaceholder`
   - プレースホルダー色: `placeholder:text-textPlaceholder`
+  - エラースタイルは適用されない
+
+#### Text バリアント
+
+- 通常状態
+  - ボーダー: `border-transparent`
+  - テキスト色: `text-text01`
+- エラー状態（`isError: true`）
+  - ボーダー: `border-transparent`（変化なし）
+  - テキスト色: `text-supportError`
+  - プレースホルダー色: `placeholder:text-supportErrorLight`
+- 無効状態（`disabled: true`）
+  - ボーダー: `border-transparent`（変化なし）
+  - 背景: 変更なし（`bg-uiBackground01` のまま）
+  - テキスト色: `text-disabled01`
   - エラースタイルは適用されない
 
 ### その他のスタイル仕様
 
 - コンテナ: `relative flex items-center gap-2 overflow-hidden rounded border`
-- 入力: `flex-1 outline-0 placeholder:text-textPlaceholder disabled:text-textPlaceholder`
-- クリアボタン表示時、右側パディングを調整する（`pr-2`/`pr-3` 付与、入力側は `pr-0`）
+- 入力: `flex-1 bg-transparent outline-none placeholder:text-textPlaceholder`
+- クリアボタン表示時（Outline バリアント）、コンテナに右側パディングを付与する（`pr-2`/`pr-3`）。入力側は `pr-0` となる
 
 ## 使用例
 
@@ -187,6 +230,18 @@ TextInput は子要素としてメッセージコンポーネントを受け取�
 
 ```typescript
 <TextInput value={value} disabled={true} placeholder="編集できません" onChange={(e) => setValue(e.target.value)} />
+```
+
+### Text バリアント（枠無し）
+
+```typescript
+<TextInput
+  value={value}
+  variant="text"
+  onChange={(e) => setValue(e.target.value)}
+  placeholder="枠無しスタイルです"
+  onClickClearButton={() => setValue('')}
+/>
 ```
 
 ### 数値入力
@@ -251,6 +306,7 @@ TextInput は子要素としてメッセージコンポーネントを受け取�
 
 | 日付                 | 内容                                                               | 担当者 |
 | -------------------- | ------------------------------------------------------------------ | ------ |
+| 2026-02-25 13:00 JST | `variant` プロパティ（`'outline' \| 'text'`）を追加し仕様を更新    | -      |
 | 2025-11-25 11:23 JST | `className` によるスタイル上書きを不可とし仕様を追記               | -      |
 | 2025-11-25 10:02 JST | 公開APIから `after` を除外した構成を反映し、内部専用である旨を明記 | -      |
 | 2025-11-19 13:51 JST | ヘルパー/エラーメッセージのコンポジションAPIを反映                 | -      |

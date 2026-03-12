@@ -2,6 +2,7 @@ import type { InputHTMLAttributes, ReactNode } from 'react';
 
 export type TextInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'className'> & {
   size?: 'medium' | 'large';
+  variant?: 'outline' | 'text';
   value: string;
   isError?: boolean;
   onClickClearButton?: () => void;
