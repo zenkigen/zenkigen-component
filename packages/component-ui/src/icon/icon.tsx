@@ -1,18 +1,15 @@
 import type { IconName } from '@zenkigen-inc/component-icons';
 import { iconElements } from '@zenkigen-inc/component-icons';
-import { iconColors } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
 
 import type { ColorToken } from '../color-types';
 
 type Size = 'x-small' | 'small' | 'medium' | 'large' | 'x-large';
 
-type Color = keyof typeof iconColors;
-
 type Props = {
   name: IconName;
   size?: Size;
-  color?: Color;
+  color?: ColorToken;
   accentColor?: ColorToken;
   isDisabled?: boolean;
   className?: string;
@@ -23,10 +20,7 @@ export const Icon = ({ size = 'medium', isDisabled = false, ...props }: Props) =
     'inline-block shrink-0',
     {
       'fill-disabled01': isDisabled,
-      [iconColors.icon01]: !isDisabled && props.color === 'icon01',
-      [iconColors.icon02]: !isDisabled && props.color === 'icon02',
-      [iconColors.icon03]: !isDisabled && props.color === 'icon03',
-      [iconColors.iconOnColor]: !isDisabled && props.color === 'iconOnColor',
+      [`fill-${props.color}`]: !isDisabled && props.color != null,
       'w-3 h-3': size === 'x-small',
       'w-4 h-4': size === 'small',
       'w-6 h-6': size === 'medium',
