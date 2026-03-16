@@ -1,11 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { iconElements } from '@zenkigen-inc/component-icons';
-import type { iconColors } from '@zenkigen-inc/component-theme';
 
 import type { ColorToken } from '../color-types';
 import { Icon } from '.';
-
-type Color = keyof typeof iconColors;
 
 const meta: Meta<typeof Icon> = {
   title: 'Components/Icon',
@@ -20,7 +17,10 @@ const meta: Meta<typeof Icon> = {
   argTypes: {
     name: { control: 'select', options: Object.keys(iconElements) },
     size: { control: 'select', options: ['x-small', 'small', 'medium', 'large', 'x-large'] },
-    color: { control: 'select', options: ['icon01', 'icon02', 'icon03', 'iconOnColor'] },
+    color: {
+      control: 'text',
+      description: 'Color token (e.g. "icon01", "interactive01", "supportError")',
+    },
     className: {
       control: 'text',
     },
@@ -74,7 +74,7 @@ export const Component: Story = {
 };
 
 type Props = {
-  color?: Color;
+  color?: ColorToken;
   className?: string;
   accentColor?: ColorToken;
 };
@@ -196,6 +196,15 @@ export function AccentColorFill() {
       <IconList color="icon01" accentColor="green-green100" />
       <IconList color="icon01" accentColor="purple-purple100" />
       <IconList color="icon01" accentColor="blueGreen-blueGreen100" />
+    </div>
+  );
+}
+
+export function SingleIconNoColor() {
+  return (
+    <div className="flex items-center gap-4 p-8">
+      <Icon name="search" size="x-large" />
+      <span>color 未指定</span>
     </div>
   );
 }
