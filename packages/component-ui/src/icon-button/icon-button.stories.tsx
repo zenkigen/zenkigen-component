@@ -28,6 +28,9 @@ const meta: Meta<typeof IconButton> = {
     isNoPadding: {
       control: 'boolean',
     },
+    iconColor: {
+      control: 'text',
+    },
     iconAccentColor: {
       control: 'text',
     },
