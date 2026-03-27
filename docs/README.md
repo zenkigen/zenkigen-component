@@ -9,6 +9,8 @@
 - [プロジェクト構造](./project-structure.md) - プロジェクト全体の構造とパッケージ間の関係性
 - [コンポーネント実装パターン](./component-patterns.md) - コンポーネントの設計パターンと実装方針
 - [テーマシステム](./theme-system.md) - テーマシステムとTailwind CSS設定
+- [テスト実装ガイドライン](./testing-guidelines.md) - ユニットテスト・VRT・E2E の実装ルール
+- [アクセシビリティガイドライン](./accessibility-guidelines.md) - ARIA属性・キーボード操作・フォーカス管理
 
 ## プロジェクト概要
 
