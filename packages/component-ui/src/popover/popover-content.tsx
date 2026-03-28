@@ -34,7 +34,7 @@ export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(fu
       // クリックされた要素が別のFloating UI要素内にあるかチェック
       // 自分自身のfloating elementではなく、他のz-overlayやz-dropdown要素内のクリックを除外
       const floatingElement = floating.refs.floating.current;
-      const closestOverlay = target.closest('.z-overlay, .z-dropdown');
+      const closestOverlay = target.closest('.z-popover, .z-dropdown');
 
       if (closestOverlay !== null && floatingElement instanceof Element) {
         const isInsideOwnFloating = floatingElement.contains(closestOverlay);
