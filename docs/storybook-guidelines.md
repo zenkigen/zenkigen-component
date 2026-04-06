@@ -55,37 +55,52 @@ import { expect, fn, waitFor } from '@storybook/test';
 
 ## Story の分割方針
 
-### 原則: variant ごとに独立した Story を作成する
+### 原則: Chromatic 差分を最小化する単位で Story を分割する
 
-1 つの Story に全バリエーションを詰め込まない。variant（見た目の種類）ごとに独立した Story に分割する。
+1 つの Story に全バリエーションを詰め込まない。コンポーネントの主要な軸（variant、状態、構成パターン等）ごとに独立した Story に分割する。
 
 **理由**: Chromatic のビジュアルリグレッションテストで、変更の影響範囲を最小限に抑えるため。
 
 ```
-# NG: 全 variant を 1 つの Story に詰め込む
+# NG: 全バリエーションを 1 つの Story に詰め込む
 Base
 ├── fill: small / medium / large
 ├── fillDanger: small / medium / large
 ├── outline: small / medium / large
 └── text: small / medium / large
 
-# OK: variant ごとに分割
+# OK: variant を持つコンポーネント → variant ごとに分割
 Component  ← args 駆動（Controls 操作用）
 Fill       ← fill variant の全 size × 状態
 FillDanger ← fillDanger variant の全 size × 状態
 Outline    ← outline variant の全 size × 状態
 Text       ← text variant の全 size × 状態
 Custom     ← 特殊パターン（borderRadius, elementAs 等）
+
+# OK: フォーム要素（variant なし）→ 状態ごとに分割
+Component    ← args 駆動（Controls 操作用）
+Default      ← デフォルト状態の全 size（placeholder / 入力済み / クリアボタン有無）
+Error        ← エラー状態の全 size
+Disabled     ← 無効状態の全 size（disabled && isError 等の掛け合わせ含む）
+Types        ← type バリエーション（number / password）の全 size
+WithMessages ← Compound パターン（HelperMessage / ErrorMessage）の全 size
 ```
 
 ### 分割単位のガイドライン
 
-| コンポーネントの特徴 | 分割単位          | 例                                    |
-| -------------------- | ----------------- | ------------------------------------- |
-| variant を持つ       | variant ごと      | Button: Fill / Outline / Text         |
-| size のみ            | 状態ごと          | Loading: Sizes / States               |
-| 複合コンポーネント   | 構成パターンごと  | Modal: Base / WithTabs / WithCheckbox |
-| 単純なコンポーネント | 1〜2 Story で十分 | Heading: Component / AllLevels        |
+| コンポーネントの特徴         | 分割単位          | 例                                                           |
+| ---------------------------- | ----------------- | ------------------------------------------------------------ |
+| variant を持つ               | variant ごと      | Button: Fill / Outline / Text                                |
+| フォーム要素（variant なし） | 状態ごと          | TextInput: Default / Error / Disabled / Types / WithMessages |
+| 複合コンポーネント           | 構成パターンごと  | Modal: Base / WithTabs / WithCheckbox                        |
+| 単純なコンポーネント         | 1〜2 Story で十分 | Heading: Component / AllLevels                               |
+
+### メッセージスロット型 Compound の扱い
+
+`TextInput.HelperMessage` / `TextInput.ErrorMessage` のようなメッセージスロット型の Compound パターンは、以下のルールで配置する:
+
+- **状態と密結合するメッセージ**: Error Story 内に `ErrorMessage` の表示を含めてよい
+- **メッセージの組み合わせバリエーション**: 独立した Story（例: `WithMessages`）にまとめる（複数メッセージ、長文折り返し等）
 
 ### 各 Story 内の構成
 
@@ -153,6 +168,35 @@ export const Component: Story = {
 export const Fill: Story = {
   render: () => <div className="flex flex-col gap-2">{/* size × 状態の組み合わせ */}</div>,
 };
+```
+
+### render 固定型（Controlled Component）
+
+`value` が必須の controlled component（TextInput, TextArea, Select 等）は、固定値を渡して静的にレンダリングする。操作不要な入力欄には `readOnly` を付与して React の controlled input 警告を防ぐ。`disabled` な入力欄は `readOnly` 不要（disabled 自体が書き込みを防ぐため警告が出ない）。
+
+```tsx
+// OK: readOnly で警告を防ぐ
+<TextInput value="入力済みテキスト" size="medium" readOnly />
+
+// OK: disabled は readOnly 不要
+<TextInput value="入力済みテキスト" size="medium" disabled />
+
+// NG: onChange も readOnly もないと React 警告
+<TextInput value="入力済みテキスト" size="medium" />
+```
+
+### 可変幅コンポーネントのレイアウト
+
+Button のように intrinsic width を持つコンポーネントはそのまま `flex gap-*` で並べる。TextInput, TextArea, Select のように親幅に追従するコンポーネントは、固定幅コンテナで囲む。
+
+```tsx
+// OK: 固定幅コンテナで囲む
+<div className="w-[300px]">
+  <TextInput value="" placeholder="入力してください" readOnly />
+</div>
+
+// NG: 幅制御なしだと全幅に広がり、VRT 差分が不安定になる
+<TextInput value="" placeholder="入力してください" readOnly />
 ```
 
 ### state 管理型
@@ -290,10 +334,11 @@ const meta: Meta<typeof DatePicker> = {
 ### 必須
 
 - [ ] **Component**: args 駆動の基本 Story（Controls 操作用）
-- [ ] **variant 別**: 各 variant を独立した Story で網羅
+- [ ] **主要軸の分割**: variant ごと、または状態ごとに独立した Story で網羅
 - [ ] **size**: 各 size を含める
 - [ ] **disabled**: 無効状態
 - [ ] **error**: エラー状態（該当する場合）
+- [ ] **状態の掛け合わせ**: 優先ルールがある組み合わせ（例: disabled && isError）
 
 ### 推奨
 
@@ -308,7 +353,7 @@ const meta: Meta<typeof DatePicker> = {
 
 ## 避けるべきこと
 
-1. **1 つの Story に全 variant × 全 size を詰め込む**: Chromatic で巨大な差分が出る
+1. **1 つの Story に全バリエーション（variant × size × 状態）を詰め込む**: Chromatic で巨大な差分が出る
 2. **`within(canvas)` を使う**: `canvas` に直接クエリメソッドがある
 3. **`@storybook/test` からインポート**: `storybook/test` が正しい
 4. **同じロジックを見せる冗長な Story**: 意味のある差分だけを Story にする
