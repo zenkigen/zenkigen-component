@@ -575,7 +575,7 @@
         "value": "#29B471",
         "type": "color",
         "description": "Success text, button background, button border",
-        "rawValue": "$Colors.Green.Green50"
+        "rawValue": "$Colors.Green.Green60"
       },
       "SupportSuccessLight": {
         "value": "#CCF4E1",
