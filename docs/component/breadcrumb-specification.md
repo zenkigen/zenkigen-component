@@ -82,7 +82,12 @@ const items = [
 
 ### 状態に応じたスタイル
 
-- リンクが含まれる場合、リンクは `text-interactive02` で表示され、ホバー時に下線が付く。
+| 状態   | スタイル                                           |
+| ------ | -------------------------------------------------- |
+| 通常   | `text-interactive02`                               |
+| hover  | `underline`（下線追加）                            |
+| active | `underline` + `text-activeLink02`（下線 + 色変更） |
+
 - 非リンクのテキストは `text-text01` のまま表示される。
 
 ### その他のスタイル仕様
@@ -135,7 +140,10 @@ const items = [
 
 - `Breadcrumb.Item` を `Breadcrumb.Item = BreadcrumbItem` として公開し、`Breadcrumb` の名前空間配下で利用できるようにしている。
 - セパレーターは `after:content-['/']` と `last:after:content-none` を組み合わせて実装している。
-- リンク色とホバー時の下線は Tailwind クラス `[&_a]:text-interactive02` および `[&_a]:hover:underline` により適用される。
+- リンクのスタイルは Tailwind クラスにより適用される:
+  - 通常時: `[&_a]:text-interactive02`
+  - ホバー時: `[&_a]:hover:underline`
+  - アクティブ時: `[&_a]:active:underline [&_a]:active:text-activeLink02`
 
 ## 注意事項
 
@@ -150,6 +158,7 @@ const items = [
 
 ## 更新履歴
 
-| 日付                 | 内容     | 担当者 |
-| -------------------- | -------- | ------ |
-| 2025-12-03 08:41 JST | 新規作成 | -      |
+| 日付                 | 内容                               | 担当者 |
+| -------------------- | ---------------------------------- | ------ |
+| 2026-01-26           | リンクの active 状態スタイルを追加 | -      |
+| 2025-12-03 08:41 JST | 新規作成                           | -      |

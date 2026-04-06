@@ -1,6 +1,6 @@
 {
   "name": "@zenkigen-inc/component-config",
-  "version": "1.18.5",
+  "version": "1.20.0",
   "repository": "https://github.com/zenkigen/zenkigen-component",
   "license": "MIT",
   "publishConfig": {
@@ -18,7 +18,7 @@
   },
   "scripts": {
     "type-check": "tsc --noEmit",
-    "build:tokens": "token-transformer style-dictionary/tokens.json style-dictionary/transformed-tokens.json && node build.cjs",
+    "build:tokens": "token-transformer style-dictionary/tokens.json style-dictionary/transformed-tokens.json --preserveRawValue=true && node build.cjs",
     "build": "rimraf dist && tsup src/index.ts --format cjs,esm --dts",
     "build-lib": "rimraf dist && tsup src/index.ts --format cjs,esm --dts"
   },
@@ -30,6 +30,6 @@
     "typescript": "5.8.3"
   },
   "dependencies": {
-    "@zenkigen-inc/component-theme": "1.18.5"
+    "@zenkigen-inc/component-theme": "1.20.0"
   }
 }

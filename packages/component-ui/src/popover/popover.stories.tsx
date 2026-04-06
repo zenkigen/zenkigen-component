@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useRef, useState } from 'react';
 
 import { Button } from '../button';
+import { Modal } from '../modal';
 import { Popup } from '../popup';
 import { Popover } from '.';
 
@@ -266,6 +267,53 @@ export const WithPopupNoClose: Story = {
       description: {
         story:
           'Popover内にPopupを配置し、閉じるボタンなし、外部クリック・Escapeキーで閉じない例です。フッターのボタンでのみ閉じることができます。',
+      },
+    },
+  },
+};
+
+/**
+ * Modal 内で Popover を開いた状態
+ * VRT 用: z-index の重なり順が正しいことを確認
+ */
+const PopoverInModalStory = () => {
+  // VRT 用に初期状態で開いた状態にする
+  const [isPopoverOpen, setIsPopoverOpen] = useState(true);
+
+  return (
+    <Modal isOpen width={480}>
+      <Modal.Header>Modal 内の Popover</Modal.Header>
+      <Modal.Body>
+        <div className="flex min-h-[200px] flex-col items-center justify-center gap-4 pb-4">
+          <Popover isOpen={isPopoverOpen} placement="top" offset={8} onClose={() => setIsPopoverOpen(false)}>
+            <Popover.Trigger>
+              <Button variant="fill" onClick={() => setIsPopoverOpen((v) => !v)}>
+                {isPopoverOpen ? 'Popoverを非表示' : 'Popoverを表示'}
+              </Button>
+            </Popover.Trigger>
+            <Popover.Content>
+              <SamplePopoverContent />
+            </Popover.Content>
+          </Popover>
+        </div>
+      </Modal.Body>
+      <Modal.Footer>
+        <div className="flex w-full items-center justify-end">
+          <Button variant="outline" size="medium">
+            閉じる
+          </Button>
+        </div>
+      </Modal.Footer>
+    </Modal>
+  );
+};
+
+export const OpenInModal: Story = {
+  render: PopoverInModalStory,
+  parameters: {
+    docs: {
+      description: {
+        story: 'Modal内でPopoverを開いた状態。z-indexの重なり順が正しいことを確認するためのVRT用ストーリー。',
       },
     },
   },

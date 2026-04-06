@@ -339,6 +339,32 @@ describe('Select', () => {
       const wrapper = selectContainer.querySelector('div');
       expect(wrapper?.style.maxWidth).toBe('150px');
     });
+
+    // Floating UI の sizeMiddleware は実際のブラウザのレイアウト計算に依存するため、
+    // jsdom 環境ではスタイルが適用されない。E2E テストまたは Storybook で確認すること。
+    it.skip('matchListToTrigger が true の場合、オプションリストの幅がトリガーに固定されること', () => {
+      render(<SelectTestComponent width="200px" matchListToTrigger />);
+      const selectButton = screen.getByRole('button');
+
+      fireEvent.click(selectButton);
+
+      const optionList = screen.getByRole('list');
+      // matchListToTrigger が true の場合、width スタイルが設定される
+      expect(optionList.style.width).toBe('200px');
+    });
+
+    // Floating UI の sizeMiddleware は実際のブラウザのレイアウト計算に依存するため、
+    // jsdom 環境ではスタイルが適用されない。E2E テストまたは Storybook で確認すること。
+    it.skip('matchListToTrigger が false（デフォルト）の場合、オプションリストの幅がコンテンツに応じて広がること', () => {
+      render(<SelectTestComponent width="200px" />);
+      const selectButton = screen.getByRole('button');
+
+      fireEvent.click(selectButton);
+
+      const optionList = screen.getByRole('list');
+      // matchListToTrigger が false の場合、minWidth スタイルが設定される
+      expect(optionList.style.minWidth).toBe('200px');
+    });
   });
 
   describe('オプションリスト高さ制御', () => {
