@@ -161,6 +161,25 @@ describe('DatePicker', () => {
       expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     });
 
+    it('同じ日付を再選択した場合、onChange が呼ばれずに Popover が閉じること', async () => {
+      const user = userEvent.setup();
+      const handleChange = vi.fn();
+      render(<DatePicker value={new Date('2026-01-15T00:00:00Z')} onChange={handleChange} timeZone="UTC" />);
+
+      const dialog = await openPopover(user);
+      const dayButton = findDayButton(dialog, '15');
+
+      expect(dayButton).not.toBeNull();
+      if (!dayButton) {
+        return;
+      }
+
+      await user.click(dayButton);
+
+      expect(handleChange).not.toHaveBeenCalled();
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    });
+
     it('クリア操作で onChange(null) が呼ばれ、Popover が閉じること', async () => {
       const user = userEvent.setup();
       const handleChange = vi.fn();
