@@ -17,6 +17,8 @@ type Props = {
   isChecked?: boolean;
   /** 色バリエーション。default: インタラクティブ色 / gray: グレー系 / error: エラー色 */
   color?: 'default' | 'gray' | 'error';
+  /** サイズバリエーション。medium: box 20px / large: box 24px */
+  size?: 'medium' | 'large';
   /** インデターミネイト表示を行うか（表示時は isChecked も true を推奨） */
   isIndeterminate?: boolean;
   /** 無効状態にするか */
@@ -37,6 +39,7 @@ export function Checkbox({
   onChange,
   label,
   color = 'default',
+  size = 'medium',
 }: Props) {
   const [isMouseOver, setIsMouseOver] = useState(false);
 
@@ -53,13 +56,16 @@ export function Checkbox({
     [isDisabled, onChange],
   );
 
-  const baseInputClasses = clsx('peer absolute z-[1] size-5 opacity-0', {
+  const sizeBox = size === 'large' ? 'size-6' : 'size-5';
+
+  const baseInputClasses = clsx('peer absolute inset-0 z-[1] opacity-0', {
     'cursor-not-allowed': isDisabled,
     'cursor-pointer': !isDisabled,
   });
 
   const boxClasses = clsx(
-    'inline-flex size-5 items-center justify-center rounded-sm border bg-white',
+    'inline-flex items-center justify-center rounded-sm border bg-white',
+    sizeBox,
     focusVisible.normalPeer,
     {
       'border-disabled01': isDisabled,
@@ -71,7 +77,7 @@ export function Checkbox({
     },
   );
 
-  const indicatorClasses = clsx('relative flex size-5 flex-[0_0_auto] items-center justify-center', {
+  const indicatorClasses = clsx('relative flex flex-[0_0_auto] items-center justify-center', sizeBox, {
     'bg-disabled01': isDisabled && isChecked,
     'border-disabled01': isDisabled,
   });
@@ -88,18 +94,27 @@ export function Checkbox({
     'scale-100': isChecked,
   });
 
-  const hoverIndicatorClasses = clsx('inline-block size-3 rounded-[1px]', {
+  const hoverIndicatorClasses = clsx('inline-block rounded-[1px]', {
+    'size-3': size === 'medium',
+    'size-4': size === 'large',
     'bg-hoverUi': !isDisabled && !isChecked && isMouseOver,
   });
 
-  const labelClasses = clsx('typography-label14regular ml-2 flex-[1_0_0] break-all', {
+  const labelClasses = clsx('ml-2 flex-[1_0_0] break-all', {
+    'typography-label14regular': size === 'medium',
+    'typography-label16regular': size === 'large',
     'pointer-events-none cursor-not-allowed text-disabled01': isDisabled,
     'cursor-pointer text-text01': !isDisabled,
   });
 
+  const outerWrapperClasses = clsx('relative flex items-center justify-center', {
+    'size-6': size === 'medium',
+    'h-8 w-7': size === 'large',
+  });
+
   return (
     <div className="flex items-center">
-      <div className="relative flex size-6 items-center justify-center">
+      <div className={outerWrapperClasses}>
         <input
           type="checkbox"
           value={value}
@@ -115,8 +130,8 @@ export function Checkbox({
         <div className={boxClasses}>
           <div className={indicatorClasses}>
             <span className={afterClasses}>
-              {isChecked && !isIndeterminate && <CheckedIcon />}
-              {isIndeterminate && <MinusIcon />}
+              {isChecked && !isIndeterminate && <CheckedIcon size={size} />}
+              {isIndeterminate && <MinusIcon size={size} />}
             </span>
             <span className={hoverIndicatorClasses} />
           </div>
