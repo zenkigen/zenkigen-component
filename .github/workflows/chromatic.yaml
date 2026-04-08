@@ -31,8 +31,7 @@ jobs:
         uses: chromaui/action@v13
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          onlyChanged: false
-          ignoreLastBuildOnBranch: feat/radio-add-size-large
+          onlyChanged: true
         env:
           IS_CHROMATIC: 'true'
 
