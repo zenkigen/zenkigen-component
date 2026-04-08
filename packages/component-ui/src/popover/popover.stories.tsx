@@ -1,9 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useRef, useState } from 'react';
+import type { Decorator } from '@storybook/react-vite';
+import MockDate from 'mockdate';
+import { useEffect, useRef, useState } from 'react';
 
 import { Button } from '../button';
+import { DatePicker } from '../date-picker';
 import { Modal } from '../modal';
 import { Popup } from '../popup';
+import { Select } from '../select';
+import type { SelectOption } from '../select/type';
 import { Popover } from '.';
 
 // 定数の抽出
@@ -314,6 +319,197 @@ export const OpenInModal: Story = {
     docs: {
       description: {
         story: 'Modal内でPopoverを開いた状態。z-indexの重なり順が正しいことを確認するためのVRT用ストーリー。',
+      },
+    },
+  },
+};
+
+// Popover + Select 連携ストーリー（ネストされたFloating UI要素）
+const selectOptions: SelectOption[] = [
+  { id: '1', value: '1', label: 'オプション 1' },
+  { id: '2', value: '2', label: 'オプション 2' },
+  { id: '3', value: '3', label: 'オプション 3' },
+  { id: '4', value: '4', label: 'オプション 4' },
+  { id: '5', value: '5', label: 'オプション 5' },
+];
+
+const PopoverWithSelectStory = (args: Story['args']) => {
+  const [isOpen, setIsOpen] = useState(true);
+  const [selectedOption, setSelectedOption] = useState<SelectOption | null>(null);
+  const selectContainerRef = useRef<HTMLDivElement>(null);
+
+  // Popover が開いた後に Select のドロップダウンも開く
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const container = selectContainerRef.current;
+      if (container !== null) {
+        const selectTrigger = container.querySelector<HTMLButtonElement>('button');
+        selectTrigger?.click();
+      }
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <div className="flex min-h-[700px] flex-col items-center justify-center gap-4">
+      <Popover
+        isOpen={isOpen}
+        placement={args?.placement ?? 'bottom'}
+        offset={args?.offset ?? 8}
+        onClose={() => setIsOpen(false)}
+      >
+        <Popover.Trigger>
+          <Button variant="fill" onClick={() => setIsOpen((value) => !value)}>
+            {isOpen ? 'Popoverを非表示' : 'Popoverを表示'}
+          </Button>
+        </Popover.Trigger>
+        <Popover.Content>
+          <Popup width={400} onClose={() => setIsOpen(false)}>
+            <Popup.Header>Popover with Select</Popup.Header>
+            <Popup.Body>
+              <div className="flex w-full flex-col gap-4 px-6">
+                <p className="typography-body14regular text-text01">
+                  Popover 内に Select を配置した例です。Select のドロップダウンを開いてオプションを選択しても、Popover
+                  は閉じません。
+                </p>
+                <div ref={selectContainerRef} className="flex flex-col gap-2">
+                  <label className="typography-label12regular text-text02">オプションを選択</label>
+                  <Select
+                    size="medium"
+                    placeholder="選択してください"
+                    selectedOption={selectedOption}
+                    onChange={(option) => setSelectedOption(option)}
+                  >
+                    {selectOptions.map((option) => (
+                      <Select.Option key={option.id} option={option} />
+                    ))}
+                  </Select>
+                </div>
+              </div>
+            </Popup.Body>
+            <Popup.Footer>
+              <div className="flex w-full flex-wrap items-center justify-end gap-4">
+                <Button variant="outline" size="medium" onClick={() => setIsOpen(false)}>
+                  キャンセル
+                </Button>
+                <Button variant="fill" size="medium" onClick={() => setIsOpen(false)}>
+                  保存
+                </Button>
+              </div>
+            </Popup.Footer>
+          </Popup>
+        </Popover.Content>
+      </Popover>
+    </div>
+  );
+};
+
+export const WithSelect: Story = {
+  args: {
+    placement: 'bottom',
+  },
+  render: PopoverWithSelectStory,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Popover内にSelectを配置した例。Selectのドロップダウンを開いてオプションを選択しても、Popoverは閉じません（ネストされたFloating UI要素の動作確認用）。',
+      },
+    },
+  },
+};
+
+// Popover + DatePicker 連携ストーリー（ネストされたFloating UI要素）
+// VRT 用に日付を固定
+const MOCK_TODAY = '2026-01-15T00:00:00Z';
+
+const withMockedDate: Decorator = (Story) => {
+  MockDate.set(MOCK_TODAY);
+
+  return <Story />;
+};
+
+const PopoverWithDatePickerStory = (args: Story['args']) => {
+  const [isOpen, setIsOpen] = useState(true);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const datePickerContainerRef = useRef<HTMLDivElement>(null);
+
+  // Popover が開いた後に DatePicker のカレンダーも開く
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const container = datePickerContainerRef.current;
+      if (container !== null) {
+        const datePickerTrigger = container.querySelector<HTMLButtonElement>('button');
+        datePickerTrigger?.click();
+      }
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <div className="flex min-h-[700px] flex-col items-center justify-center gap-4">
+      <Popover
+        isOpen={isOpen}
+        placement={args?.placement ?? 'bottom'}
+        offset={args?.offset ?? 8}
+        onClose={() => setIsOpen(false)}
+      >
+        <Popover.Trigger>
+          <Button variant="fill" onClick={() => setIsOpen((value) => !value)}>
+            {isOpen ? 'Popoverを非表示' : 'Popoverを表示'}
+          </Button>
+        </Popover.Trigger>
+        <Popover.Content>
+          <Popup width={400} onClose={() => setIsOpen(false)}>
+            <Popup.Header>Popover with DatePicker</Popup.Header>
+            <Popup.Body>
+              <div className="flex w-full flex-col gap-4 px-6">
+                <p className="typography-body14regular text-text01">
+                  Popover 内に DatePicker を配置した例です。DatePicker
+                  のカレンダーを開いて日付を選択したり、カレンダー外側をクリックしてカレンダーを閉じても、Popover
+                  は閉じません。
+                </p>
+                <div ref={datePickerContainerRef} className="flex flex-col gap-2">
+                  <label className="typography-label12regular text-text02">日付を選択</label>
+                  <DatePicker
+                    size="medium"
+                    placeholder="日付を選択してください"
+                    value={selectedDate}
+                    onChange={(date) => setSelectedDate(date)}
+                  />
+                </div>
+              </div>
+            </Popup.Body>
+            <Popup.Footer>
+              <div className="flex w-full flex-wrap items-center justify-end gap-4">
+                <Button variant="outline" size="medium" onClick={() => setIsOpen(false)}>
+                  キャンセル
+                </Button>
+                <Button variant="fill" size="medium" onClick={() => setIsOpen(false)}>
+                  保存
+                </Button>
+              </div>
+            </Popup.Footer>
+          </Popup>
+        </Popover.Content>
+      </Popover>
+    </div>
+  );
+};
+
+export const WithDatePicker: Story = {
+  decorators: [withMockedDate],
+  args: {
+    placement: 'bottom',
+  },
+  render: PopoverWithDatePickerStory,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Popover内にDatePickerを配置した例。DatePickerのカレンダーを開いて日付を選択したり、カレンダー外側をクリックしてカレンダーを閉じても、Popoverは閉じません（ネストされたFloating UI要素の動作確認用）。',
       },
     },
   },
