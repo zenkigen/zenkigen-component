@@ -88,13 +88,28 @@ WithMessages ← Compound パターン（HelperMessage / ErrorMessage）の全 s
 
 ### 分割単位のガイドライン
 
-| コンポーネントの特徴                     | 分割単位              | 例                                                           |
-| ---------------------------------------- | --------------------- | ------------------------------------------------------------ |
-| variant を持つ                           | variant ごと          | Button: Fill / Outline / Text                                |
-| フォーム要素（variant なし）             | 状態ごと              | TextInput: Default / Error / Disabled / Types / WithMessages |
-| フォーム要素で主要軸（`color` 等）を持つ | 主要軸ごと + 状態独立 | Checkbox: Default / Gray / Error / Disabled（`color` 軸）    |
-| 複合コンポーネント                       | 構成パターンごと      | Modal: Base / WithTabs / WithCheckbox                        |
-| 単純なコンポーネント                     | 1〜2 Story で十分     | Heading: Component / AllLevels                               |
+| コンポーネントの特徴                     | 分割単位               | 例                                                           |
+| ---------------------------------------- | ---------------------- | ------------------------------------------------------------ |
+| variant を持つ                           | variant ごと           | Button: Fill / Outline / Text                                |
+| フォーム要素（variant なし）             | 状態ごと               | TextInput: Default / Error / Disabled / Types / WithMessages |
+| フォーム要素で主要軸（`color` 等）を持つ | 主要軸ごと + 状態独立  | Checkbox: Default / Gray / Error / Disabled（`color` 軸）    |
+| 主要軸の値が多い（10 種以上）            | 軸の意味カテゴリで分割 | Tag: Support / User / Basic（`color` 16 種を意味グループ別） |
+| 複合コンポーネント                       | 構成パターンごと       | Modal: Base / WithTabs / WithCheckbox                        |
+| 単純なコンポーネント                     | 1〜2 Story で十分      | Heading: Component / AllLevels                               |
+
+### 主要軸の値が多い場合の分割
+
+主要軸（`color` / `type` 等）の値が 10 種類以上あるコンポーネントは、全値を 1 つの Story に詰め込むと Chromatic スナップショットが巨大化し、軸内の 1 値を変更しただけでも全体に差分が広がる。**軸の値を意味カテゴリでグループ化し、グループごとに Story を分割する**。
+
+例: Tag は `color` を 16 種類持つが、これを以下のカテゴリで 3 つの Story に分割している。
+
+- `Support` — 状態色（`supportError` / `supportSuccess` / `supportWarning` / `supportDanger`）
+- `User` — ユーザー識別色（`userRed` / `userPink` / ... の 10 色）
+- `Basic` — 基本色（`default` / `gray`）
+
+これにより、特定カテゴリの色を 1 つ追加・修正した際の Chromatic 差分がそのカテゴリ内に閉じる。各 Story 内では `size 行 × color 列` のマトリクスで全値を網羅する。
+
+先例: `tag.stories.tsx` — 16 色を 3 カテゴリの Story に分割し、各 Story 内で `variant`（normal/light）× `size`（x-small/small/medium）のマトリクスを構築。
 
 ### 状態によって主要軸が視覚的に潰れる場合
 
@@ -331,13 +346,42 @@ export const SubmittedForm: Story = {
 };
 ```
 
-### play function を付けるべきケース
+### play function とユニットテストの使い分け
 
-- ドロップダウン / セレクトの開閉
-- フォーム入力 → 送信
-- トグル / チェックボックスの切り替え
-- キーボード操作（Tab, Enter, Escape）
+インタラクション検証は、**ユニットテスト（`*.test.tsx`）と play function のどちらかに集約する**。両方に同じ内容を書くと二重メンテになるため、以下の基準で振り分ける。
+
+#### ユニットテスト（`*.test.tsx`）で十分なケース
+
+- 単一コンポーネントの単純なイベント検証（クリック → コールバック呼び出し、引数の確認）
+- props 反映の検証（クラス名、属性、子要素の有無）
+- 同期的な状態変化（disabled / checked 等）
+- アクセシビリティ属性（aria-\*, role, focus 順）
+
+→ ユニットテストの方がセットアップが軽量で実行も速いため、**まずはこちらで検証する**。
+
+#### play function を付けるべきケース
+
+- ドロップダウン / セレクトの開閉など、**Storybook 上の visual state（hover / focus / open）を Chromatic スナップショットに残したい**操作
+- フォーム入力 → 送信のような**複数ステップ・複数コンポーネント連携**のフロー
+- キーボード操作（Tab, Enter, Escape）の連続操作
 - 非同期操作の結果表示
+- play 実行後の状態を VRT で固定したいケース
+
+→ **「Storybook 上で実際に操作した結果のスナップショットを残すこと」自体に価値があるケース**で使う。単に「クリックしたらコールバックが呼ばれる」だけならユニットテストで十分。
+
+#### 判断フロー
+
+```
+インタラクションを検証したい
+  ├─ Storybook の visual state を Chromatic に残したいか？
+  │    ├─ Yes → play function
+  │    └─ No
+  │         └─ 単純なイベント・props 検証か？
+  │              ├─ Yes → ユニットテスト
+  │              └─ No（複数コンポーネント連携・複雑なフロー）→ play function
+```
+
+先例: `tag.test.tsx` — 削除ボタンの `onDelete` 呼び出しはユニットテストで検証し、Storybook 側の `Editable` Story には play function を付けず、`action()` で Actions パネルに流すのみ。
 
 ---
 
