@@ -9,7 +9,7 @@ const meta: Meta<typeof Tag> = {
   argTypes: {
     variant: {
       options: ['normal', 'light'],
-      control: { type: 'select' },
+      control: { type: 'radio' },
       description: '濃色(normal) / 淡色(light)のスタイル',
       table: {
         type: { summary: `'normal' | 'light'` },
@@ -18,7 +18,7 @@ const meta: Meta<typeof Tag> = {
     },
     size: {
       options: ['x-small', 'small', 'medium'],
-      control: { type: 'select' },
+      control: { type: 'radio' },
       description: '標準タグのサイズ。編集可能タグは常にmedium固定。',
       table: {
         type: { summary: `'x-small' | 'small' | 'medium'` },
@@ -44,7 +44,7 @@ const meta: Meta<typeof Tag> = {
         'default',
         'gray',
       ],
-      control: { type: 'select' },
+      control: { type: 'radio' },
       description: 'tagColors / tagLightColors で定義されたカラートークン',
     },
     children: {

@@ -38,12 +38,11 @@ export function Tag({ id, children, color, variant = 'normal', size = 'medium', 
     [tagLightColors[color]]: variant === 'light',
     'h-[14px] typography-label11regular': !isEditable && size === 'x-small',
     'h-4 typography-label12regular': !isEditable && size === 'small',
-    'h-[18px] typography-label14regular': !isEditable && size === 'medium',
-    'h-[22px] typography-label14regular': isEditable && size === 'medium',
+    'h-5 typography-label14regular': size === 'medium',
     'rounded-full': isEditable,
     rounded: !isEditable,
-    'py-0.5 px-1': !isEditable,
-    'py-1 px-2': isEditable,
+    'px-1': !isEditable,
+    'px-2': isEditable,
   });
 
   return (
