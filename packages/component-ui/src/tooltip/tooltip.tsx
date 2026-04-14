@@ -85,6 +85,32 @@ export function Tooltip({
     setTooltipPosition(position);
   }, [calculatePosition, horizontalAlign, maxWidth, size, verticalPosition]);
 
+  useEffect(() => {
+    if (!isVisible) return;
+
+    const updatePosition = () => {
+      if (targetRef.current === null) return;
+      const dimensions = targetRef.current.getBoundingClientRect();
+      const position = calculatePosition({
+        dimensions,
+        maxWidth,
+        verticalPosition,
+        horizontalAlign,
+        tooltipSize: size,
+      });
+
+      setTooltipPosition(position);
+    };
+
+    window.addEventListener('scroll', updatePosition, { capture: true, passive: true });
+    window.addEventListener('resize', updatePosition, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', updatePosition, { capture: true });
+      window.removeEventListener('resize', updatePosition);
+    };
+  }, [isVisible, calculatePosition, maxWidth, verticalPosition, horizontalAlign, size]);
+
   return (
     <div
       ref={targetRef}

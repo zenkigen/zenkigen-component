@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -161,6 +161,100 @@ describe('Tooltip', () => {
       const secondTop = screen.getByText('tooltip-content').parentElement?.style.top;
 
       expect(secondTop).not.toEqual(firstTop);
+    });
+
+    it('表示中のスクロールで位置が追従する', async () => {
+      const user = userEvent.setup();
+
+      const makeRect = (top: number): DOMRect =>
+        ({
+          top,
+          bottom: top + 40,
+          left: 0,
+          right: 100,
+          width: 100,
+          height: 40,
+          x: 0,
+          y: top,
+          toJSON: () => ({}),
+        }) as DOMRect;
+
+      const queue: DOMRect[] = [makeRect(100), makeRect(100), makeRect(20)];
+      vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(() => {
+        return queue.shift() ?? makeRect(20);
+      });
+
+      render(
+        <Tooltip content="tooltip-content" portalTarget={document.body} verticalPosition="bottom">
+          <button type="button">trigger</button>
+        </Tooltip>,
+      );
+
+      await user.hover(screen.getByRole('button', { name: 'trigger' }));
+      const initialTop = screen.getByText('tooltip-content').parentElement?.style.top;
+
+      await act(async () => {
+        window.dispatchEvent(new Event('scroll'));
+      });
+
+      const updatedTop = screen.getByText('tooltip-content').parentElement?.style.top;
+      expect(updatedTop).not.toEqual(initialTop);
+    });
+
+    it('表示中のリサイズで位置が追従する', async () => {
+      const user = userEvent.setup();
+
+      const makeRect = (top: number): DOMRect =>
+        ({
+          top,
+          bottom: top + 40,
+          left: 0,
+          right: 100,
+          width: 100,
+          height: 40,
+          x: 0,
+          y: top,
+          toJSON: () => ({}),
+        }) as DOMRect;
+
+      const queue: DOMRect[] = [makeRect(100), makeRect(100), makeRect(20)];
+      vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(() => {
+        return queue.shift() ?? makeRect(20);
+      });
+
+      render(
+        <Tooltip content="tooltip-content" portalTarget={document.body} verticalPosition="bottom">
+          <button type="button">trigger</button>
+        </Tooltip>,
+      );
+
+      await user.hover(screen.getByRole('button', { name: 'trigger' }));
+      const initialTop = screen.getByText('tooltip-content').parentElement?.style.top;
+
+      await act(async () => {
+        window.dispatchEvent(new Event('resize'));
+      });
+
+      const updatedTop = screen.getByText('tooltip-content').parentElement?.style.top;
+      expect(updatedTop).not.toEqual(initialTop);
+    });
+
+    it('非表示時にスクロールしても再計算されない', async () => {
+      const getBoundingClientRectSpy = vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect');
+
+      render(
+        <Tooltip content="tooltip-content" portalTarget={document.body}>
+          <button type="button">trigger</button>
+        </Tooltip>,
+      );
+
+      const callCountBeforeScroll = getBoundingClientRectSpy.mock.calls.length;
+
+      await act(async () => {
+        window.dispatchEvent(new Event('scroll'));
+      });
+
+      expect(getBoundingClientRectSpy.mock.calls.length).toBe(callCountBeforeScroll);
     });
   });
 });
