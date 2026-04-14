@@ -57,8 +57,20 @@ export function Tooltip({
     if (isDisabledHover) {
       return;
     }
+    if (targetRef.current !== null) {
+      const dimensions = targetRef.current.getBoundingClientRect();
+      const position = calculatePosition({
+        dimensions,
+        maxWidth,
+        verticalPosition,
+        horizontalAlign,
+        tooltipSize: size,
+      });
+
+      setTooltipPosition(position);
+    }
     setIsVisible(true);
-  }, [isDisabledHover]);
+  }, [isDisabledHover, calculatePosition, maxWidth, verticalPosition, horizontalAlign, size]);
 
   const handleMouseOutWrapper = useCallback(() => {
     setIsVisible(false);
