@@ -167,3 +167,33 @@ export const PortalWithLayoutShift: Story = {
     );
   },
 };
+
+/**
+ * `portalTarget` 指定時に、window 自体をスクロールした場合でも、
+ * Tooltip が target に追従することを確認する再現用ストーリー。
+ *
+ * 確認手順:
+ * 1. window をスクロール（ページを下方向に動かす）
+ * 2. target にホバーする
+ * 3. Tooltip が target の直上に表示されればOK
+ * 4. さらにホバー中にスクロールしても追従することを確認
+ */
+export const PortalWithWindowScroll: Story = {
+  parameters: {
+    chromatic: { disable: true },
+  },
+  render: () => (
+    <div className="px-20 py-10">
+      <p className="typography-body14regular mb-2 text-text02">
+        ページ全体をスクロールしてから target にホバーしてください。
+      </p>
+      <div className="h-[800px] bg-uiBackground02" />
+      <div className="flex items-center justify-center py-4">
+        <Tooltip content="内容説明テキスト" portalTarget={document.body} verticalPosition="top">
+          <div className="flex h-10 w-[240px] items-center justify-center rounded border border-gray-400">target</div>
+        </Tooltip>
+      </div>
+      <div className="h-[800px] bg-uiBackground02" />
+    </div>
+  ),
+};
