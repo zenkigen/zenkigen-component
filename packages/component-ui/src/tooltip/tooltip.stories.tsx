@@ -223,7 +223,7 @@ export const ReproLayoutShift: Story = {
     const [isWide, setIsWide] = useState(false);
 
     return (
-      <div className="flex flex-col gap-2 px-20 py-10">
+      <div className="flex flex-col items-start gap-2 px-20 py-10">
         <p className="typography-body14regular text-text02">ボタンで幅を切り替えてから target にホバーしてください。</p>
         <Button variant="outline" size="small" onClick={() => setIsWide((prev) => !prev)}>
           幅を切り替える（現在: {isWide ? 'wide' : 'narrow'}）
