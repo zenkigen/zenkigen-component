@@ -1,24 +1,21 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 
+import { Button } from '../button';
 import { Tooltip } from './tooltip';
 
 const meta: Meta<typeof Tooltip> = {
   title: 'Components/Tooltip',
   component: Tooltip,
   argTypes: {
-    size: {
-      options: ['small', 'medium'],
-      control: 'select',
-    },
-    verticalPosition: {
-      options: ['top', 'bottom'],
-      control: 'select',
-    },
-    horizontalAlign: {
-      options: ['left', 'center', 'right'],
-      control: 'select',
-    },
+    size: { control: 'select', options: ['small', 'medium'] },
+    verticalPosition: { control: 'radio', options: ['top', 'bottom'] },
+    horizontalAlign: { control: 'radio', options: ['left', 'center', 'right'] },
+    content: { control: 'text' },
+    maxWidth: { control: 'number' },
+    isDisabledHover: { control: 'boolean' },
+    portalTarget: { control: false },
+    children: { control: false },
   },
 };
 
@@ -28,6 +25,8 @@ type Story = StoryObj<typeof Tooltip>;
 export const Component: Story = {
   args: {
     size: 'small',
+    verticalPosition: 'bottom',
+    horizontalAlign: 'center',
     content: (
       <>
         内容説明テキスト1
@@ -40,10 +39,12 @@ export const Component: Story = {
     chromatic: { disable: true },
   },
   render: (args) => (
-    <div className="grid gap-10 px-20 py-10">
+    <div className="flex flex-col gap-10 px-20 py-10">
       <div className="flex items-center gap-20">
         <Tooltip {...args}>
-          <div className="flex h-10 w-[240px] items-center justify-center rounded border border-gray-400">target</div>
+          <Button variant="outline" size="small">
+            ラベル
+          </Button>
         </Tooltip>
       </div>
     </div>
@@ -51,25 +52,30 @@ export const Component: Story = {
 };
 
 export const Base: Story = {
-  args: {
-    content: (
-      <>
-        内容説明テキスト1
-        <br />
-        内容説明テキスト2
-      </>
-    ),
-  },
-  render: (args) => (
-    <div className="grid gap-10 px-20 py-10">
+  render: () => (
+    <div className="flex flex-col gap-16 p-20">
       <div className="flex items-center gap-20">
-        <Tooltip {...args}>
-          <div className="flex h-10 w-24 items-center justify-center rounded border border-gray-400">target</div>
+        <Tooltip content="内容説明テキスト" size="small" verticalPosition="top">
+          <Button variant="outline" size="small">
+            small / top
+          </Button>
+        </Tooltip>
+        <Tooltip content="内容説明テキスト" size="small" verticalPosition="bottom">
+          <Button variant="outline" size="small">
+            small / bottom
+          </Button>
         </Tooltip>
       </div>
       <div className="flex items-center gap-20">
-        <Tooltip {...args}>
-          <div className="flex h-10 w-[240px] items-center justify-center rounded border border-gray-400">target</div>
+        <Tooltip content="内容説明テキスト" size="medium" verticalPosition="top">
+          <Button variant="outline" size="medium">
+            medium / top
+          </Button>
+        </Tooltip>
+        <Tooltip content="内容説明テキスト" size="medium" verticalPosition="bottom">
+          <Button variant="outline" size="medium">
+            medium / bottom
+          </Button>
         </Tooltip>
       </div>
     </div>
@@ -77,20 +83,88 @@ export const Base: Story = {
 };
 
 export const Portal: Story = {
-  args: {
-    portalTarget: document.body,
-    content: '内容説明テキスト',
-  },
-  render: (args) => (
-    <div className="grid gap-10 px-20 py-10">
+  render: () => (
+    <div className="flex flex-col gap-16 p-20">
       <div className="flex items-center gap-20">
-        <Tooltip {...args}>
-          <div className="flex h-10 w-24 items-center justify-center rounded border border-gray-400">target</div>
+        <Tooltip content="内容説明テキスト" size="small" horizontalAlign="left" portalTarget={document.body}>
+          <Button variant="outline" size="small">
+            small / left
+          </Button>
+        </Tooltip>
+        <Tooltip content="内容説明テキスト" size="small" horizontalAlign="center" portalTarget={document.body}>
+          <Button variant="outline" size="small">
+            small / center
+          </Button>
+        </Tooltip>
+        <Tooltip content="内容説明テキスト" size="small" horizontalAlign="right" portalTarget={document.body}>
+          <Button variant="outline" size="small">
+            small / right
+          </Button>
         </Tooltip>
       </div>
       <div className="flex items-center gap-20">
-        <Tooltip {...args}>
-          <div className="flex h-10 w-[240px] items-center justify-center rounded border border-gray-400">target</div>
+        <Tooltip content="内容説明テキスト" size="medium" horizontalAlign="left" portalTarget={document.body}>
+          <Button variant="outline" size="medium">
+            medium / left
+          </Button>
+        </Tooltip>
+        <Tooltip content="内容説明テキスト" size="medium" horizontalAlign="center" portalTarget={document.body}>
+          <Button variant="outline" size="medium">
+            medium / center
+          </Button>
+        </Tooltip>
+        <Tooltip content="内容説明テキスト" size="medium" horizontalAlign="right" portalTarget={document.body}>
+          <Button variant="outline" size="medium">
+            medium / right
+          </Button>
+        </Tooltip>
+      </div>
+    </div>
+  ),
+};
+
+export const WithMaxWidth: Story = {
+  render: () => (
+    <div className="flex flex-col gap-16 p-20">
+      <div className="flex items-center gap-20">
+        <Tooltip
+          content="とても長いツールチップの説明テキストで自動的に折り返されることを確認する"
+          size="small"
+          maxWidth={120}
+        >
+          <Button variant="outline" size="small">
+            small / maxWidth 120
+          </Button>
+        </Tooltip>
+        <Tooltip content="とても長いツールチップの説明テキストで折り返しが発生しない例" size="small">
+          <Button variant="outline" size="small">
+            small / maxWidth 未指定
+          </Button>
+        </Tooltip>
+      </div>
+      <div className="flex items-center gap-20">
+        <Tooltip
+          content="とても長いツールチップの説明テキストで自動的に折り返されることを確認する"
+          size="medium"
+          maxWidth={200}
+        >
+          <Button variant="outline" size="medium">
+            medium / maxWidth 200
+          </Button>
+        </Tooltip>
+        <Tooltip
+          content={
+            <>
+              改行を含む説明テキストの1行目
+              <br />
+              改行を含む説明テキストの2行目
+            </>
+          }
+          size="medium"
+        >
+          <Button variant="outline" size="medium">
+            medium / 改行content
+          </Button>
         </Tooltip>
       </div>
     </div>
@@ -106,20 +180,22 @@ export const Portal: Story = {
  * 2. target にホバーする
  * 3. Tooltip が target の直上（または直下）に表示されればOK
  */
-export const PortalWithInnerScroll: Story = {
+export const ReproInnerScroll: Story = {
   parameters: {
     chromatic: { disable: true },
   },
   render: () => (
-    <div className="px-20 py-10">
-      <p className="typography-body14regular mb-2 text-text02">
+    <div className="flex flex-col gap-2 px-20 py-10">
+      <p className="typography-body14regular text-text02">
         内側のコンテナをスクロールしてから target にホバーしてください。
       </p>
       <div className="h-[300px] w-[400px] overflow-y-auto border border-uiBorder01">
         <div className="h-[200px] bg-uiBackground02" />
         <div className="flex items-center justify-center p-4">
           <Tooltip content="内容説明テキスト" portalTarget={document.body} verticalPosition="top">
-            <div className="flex h-10 w-[240px] items-center justify-center rounded border border-gray-400">target</div>
+            <Button variant="outline" size="small">
+              ラベル
+            </Button>
           </Tooltip>
         </div>
         <div className="h-[600px] bg-uiBackground02" />
@@ -139,7 +215,7 @@ export const PortalWithInnerScroll: Story = {
  * 2. target にホバーする
  * 3. Tooltip が target の直上に表示されればOK
  */
-export const PortalWithLayoutShift: Story = {
+export const ReproLayoutShift: Story = {
   parameters: {
     chromatic: { disable: true },
   },
@@ -147,20 +223,16 @@ export const PortalWithLayoutShift: Story = {
     const [isWide, setIsWide] = useState(false);
 
     return (
-      <div className="px-20 py-10">
-        <p className="typography-body14regular mb-2 text-text02">
-          ボタンで幅を切り替えてから target にホバーしてください。
-        </p>
-        <button
-          type="button"
-          onClick={() => setIsWide((prev) => !prev)}
-          className="mb-4 rounded border border-uiBorder02 px-3 py-1 text-text01"
-        >
+      <div className="flex flex-col gap-2 px-20 py-10">
+        <p className="typography-body14regular text-text02">ボタンで幅を切り替えてから target にホバーしてください。</p>
+        <Button variant="outline" size="small" onClick={() => setIsWide((prev) => !prev)}>
           幅を切り替える（現在: {isWide ? 'wide' : 'narrow'}）
-        </button>
+        </Button>
         <div style={{ width: isWide ? 600 : 300 }} className="border border-uiBorder01 p-4">
           <Tooltip content="内容説明テキスト" portalTarget={document.body} verticalPosition="top">
-            <div className="flex h-10 w-full items-center justify-center rounded border border-gray-400">target</div>
+            <Button variant="outline" size="small">
+              ラベル
+            </Button>
           </Tooltip>
         </div>
       </div>
@@ -178,19 +250,21 @@ export const PortalWithLayoutShift: Story = {
  * 3. Tooltip が target の直上に表示されればOK
  * 4. さらにホバー中にスクロールしても追従することを確認
  */
-export const PortalWithWindowScroll: Story = {
+export const ReproWindowScroll: Story = {
   parameters: {
     chromatic: { disable: true },
   },
   render: () => (
-    <div className="px-20 py-10">
-      <p className="typography-body14regular mb-2 text-text02">
+    <div className="flex flex-col gap-2 px-20 py-10">
+      <p className="typography-body14regular text-text02">
         ページ全体をスクロールしてから target にホバーしてください。
       </p>
       <div className="h-[800px] bg-uiBackground02" />
       <div className="flex items-center justify-center py-4">
         <Tooltip content="内容説明テキスト" portalTarget={document.body} verticalPosition="top">
-          <div className="flex h-10 w-[240px] items-center justify-center rounded border border-gray-400">target</div>
+          <Button variant="outline" size="small">
+            ラベル
+          </Button>
         </Tooltip>
       </div>
       <div className="h-[800px] bg-uiBackground02" />
