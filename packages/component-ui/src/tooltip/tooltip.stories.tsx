@@ -8,7 +8,7 @@ const meta: Meta<typeof Tooltip> = {
   title: 'Components/Tooltip',
   component: Tooltip,
   argTypes: {
-    size: { control: 'select', options: ['small', 'medium'] },
+    size: { control: 'radio', options: ['small', 'medium'] },
     verticalPosition: { control: 'radio', options: ['top', 'bottom'] },
     horizontalAlign: { control: 'radio', options: ['left', 'center', 'right'] },
     content: { control: 'text' },
