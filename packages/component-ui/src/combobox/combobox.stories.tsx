@@ -71,7 +71,6 @@ export const Component: Story = {
     placeholder: '果物を検索...',
     isError: false,
     isDisabled: false,
-    width: '300px',
   },
   parameters: {
     chromatic: { disable: true },
