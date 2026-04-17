@@ -19,16 +19,47 @@ const meta: Meta<typeof TextArea> = {
     },
   },
   argTypes: {
-    size: { control: 'select', options: ['medium', 'large'], description: 'サイズ' },
-    variant: { control: 'select', options: ['outline', 'text'], description: 'バリアント' },
+    variant: {
+      control: 'radio',
+      options: ['outline', 'text'],
+      description: 'バリアント',
+      table: { defaultValue: { summary: 'outline' } },
+    },
+    size: {
+      control: 'radio',
+      options: ['medium', 'large'],
+      description: 'サイズ',
+      table: { defaultValue: { summary: 'medium' } },
+    },
     value: { control: 'text', description: '値' },
+    placeholder: { control: 'text', description: 'プレースホルダー' },
+    isError: {
+      control: 'boolean',
+      description: 'エラーかどうか',
+      table: { defaultValue: { summary: 'false' } },
+    },
+    disabled: {
+      control: 'boolean',
+      description: '無効かどうか',
+      table: { defaultValue: { summary: 'false' } },
+    },
     height: { control: 'text', description: '高さ' },
-    autoHeight: { control: 'boolean', description: '自動リサイズ' },
+    autoHeight: {
+      control: 'boolean',
+      description: '自動リサイズ',
+      table: { defaultValue: { summary: 'false' } },
+    },
     maxHeight: { control: 'text', description: '最大高さ（autoHeightがtrueの場合のみ有効）' },
-    isResizable: { control: 'boolean', description: 'リサイズ可能かどうか（autoHeightがtrueの場合は無効）' },
-    isError: { control: 'boolean', description: 'エラーかどうか' },
-    disabled: { control: 'boolean', description: '無効かどうか' },
-    isCounterVisible: { control: 'boolean', description: '文字数カウンターの表示/非表示' },
+    isResizable: {
+      control: 'boolean',
+      description: 'リサイズ可能かどうか（autoHeightがtrueの場合は無効）',
+      table: { defaultValue: { summary: 'false' } },
+    },
+    isCounterVisible: {
+      control: 'boolean',
+      description: '文字数カウンターの表示/非表示',
+      table: { defaultValue: { summary: 'false' } },
+    },
     counterMaxLength: {
       control: 'number',
       description: 'カウンター用の上限文字数。超過しても入力可能だが、カウンターがエラー色になる',
@@ -45,13 +76,14 @@ type Story = StoryObj<typeof TextArea>;
 
 export const Component: Story = {
   args: {
+    variant: 'outline',
     size: 'medium',
     placeholder: 'placeholder',
+    isError: false,
+    disabled: false,
     height: 'auto',
     autoHeight: false,
     isResizable: false,
-    isError: false,
-    disabled: false,
   },
   parameters: {
     chromatic: { disable: true },
