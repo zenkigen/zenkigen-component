@@ -9,6 +9,7 @@
 - [プロジェクト構造](./project-structure.md) - プロジェクト全体の構造とパッケージ間の関係性
 - [コンポーネント実装パターン](./component-patterns.md) - コンポーネントの設計パターンと実装方針
 - [テーマシステム](./theme-system.md) - テーマシステムとTailwind CSS設定
+- [Storybook ガイドライン](./storybook-guidelines.md) - Story の作成・構成に関する規約
 
 ## プロジェクト概要
 
