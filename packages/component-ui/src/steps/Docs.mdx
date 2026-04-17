@@ -1,0 +1,53 @@
+import { Canvas, Controls, Markdown, Meta, Source, Story } from '@storybook/addon-docs/blocks';
+import StepsStories, { BoldHorizontal, Component, Interactive } from './steps.stories';
+import spec from '../../../../docs/component/steps-specification.md?raw';
+
+<Meta title="Steps" of={StepsStories} />
+
+# Steps
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
+
+<Canvas>
+  <Story of={BoldHorizontal} />
+</Canvas>
+
+<Controls of={Component} />
+
+### Code Example
+
+- `Steps.Item` を子要素として順に並べる。
+- `currentStep` に現在のステップ index（0 始まり）を渡す。
+- 各ステップの状態（completed / current / upcoming）は `currentStep` から自動算出される。
+
+<Source of={Interactive} />
+
+## 概要
+
+長時間かかるタスクや複数工程のフローにおいて、ユーザーの現在位置と進捗を視覚的に伝えるコンポーネントである。
+
+## 設計の原則（Do）
+
+### 完了までのステップを線形に示す
+
+`Steps` は順序を持った進捗を表す。completed → current → upcoming の並びを自動的に保証し、非線形な状態指定は許容しない。
+
+### 各ステップの幅を揃える
+
+水平レイアウトでは等幅グリッドを採用しており、ラベルの長短によってレイアウトが崩れないようにしている。
+
+## 推奨しないこと（Don’t）
+
+### 状態を個別に上書きしない
+
+特定のステップだけ飛ばして completed にするなど、順序を崩す使い方は想定していない。`currentStep` 以外で状態を制御しない。
+
+### 単一工程のフローでは使用しない
+
+ステップが 1 つしかない場合は Steps を使う意義が薄い。通知や Heading で表現する方が適切である。

@@ -25,6 +25,7 @@ export * from './segmented-control';
 export * from './select';
 export * from './select-sort';
 export * from './sort-button';
+export * from './steps';
 export * from './tab';
 export * from './table';
 export * from './tag';
