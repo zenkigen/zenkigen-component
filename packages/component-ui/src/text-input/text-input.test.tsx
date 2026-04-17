@@ -227,6 +227,62 @@ describe('TextInput', () => {
     });
   });
 
+  describe('variant', () => {
+    it('デフォルトで outline スタイルが適用されること', () => {
+      render(<TextInput value="" readOnly data-testid="text-input" />);
+      const input = screen.getByTestId('text-input');
+      const wrapper = input.parentElement as HTMLElement;
+
+      expect(wrapper.className).toMatch(/border-uiBorder02/);
+      expect(wrapper.className).not.toMatch(/border-transparent/);
+    });
+
+    it('variant="text" で border-transparent が適用されること', () => {
+      render(<TextInput value="" variant="text" readOnly data-testid="text-input" />);
+      const input = screen.getByTestId('text-input');
+      const wrapper = input.parentElement as HTMLElement;
+
+      expect(wrapper.className).toMatch(/border-transparent/);
+      expect(wrapper.className).not.toMatch(/border-uiBorder02/);
+    });
+
+    it('variant="text" で padding がないこと', () => {
+      render(<TextInput value="" variant="text" readOnly data-testid="text-input" />);
+      const input = screen.getByTestId('text-input');
+
+      expect(input.className).not.toMatch(/px-2/);
+      expect(input.className).not.toMatch(/px-3/);
+    });
+
+    it('variant="text" でエラー時もボーダーが透明のままであること', () => {
+      render(<TextInput value="" variant="text" isError readOnly data-testid="text-input" />);
+      const input = screen.getByTestId('text-input');
+      const wrapper = input.parentElement as HTMLElement;
+
+      expect(wrapper.className).toMatch(/border-transparent/);
+      expect(wrapper.className).not.toMatch(/border-supportError/);
+      expect(input.className).toMatch(/text-supportError/);
+      expect(input.className).toMatch(/placeholder:text-supportErrorLight/);
+    });
+
+    it('variant="text" で無効時に bg-disabled02 が適用されないこと', () => {
+      render(<TextInput value="" variant="text" disabled data-testid="text-input" />);
+      const input = screen.getByTestId('text-input');
+      const wrapper = input.parentElement as HTMLElement;
+
+      expect(wrapper.className).toMatch(/border-transparent/);
+      expect(wrapper.className).not.toMatch(/bg-disabled02/);
+      expect(wrapper.className).not.toMatch(/border-disabled01/);
+    });
+
+    it('variant="text" で disabled + isError 時にエラー placeholder 色が適用されないこと', () => {
+      render(<TextInput value="" variant="text" disabled isError data-testid="text-input" />);
+      const input = screen.getByTestId('text-input');
+
+      expect(input.className).not.toMatch(/placeholder:text-supportErrorLight/);
+    });
+  });
+
   describe('HelperMessage / ErrorMessage', () => {
     it('HelperMessage を指定すると aria-describedby に連結されること', () => {
       render(
