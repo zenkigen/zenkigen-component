@@ -1036,10 +1036,10 @@ export const tokensWithMeta = {
         "type": "color"
       },
       "supportSuccess": {
-        "value": "#2dc87d",
+        "value": "#29b471",
         "description": "Success text, button background, button border",
         "type": "color",
-        "rawValue": "$Colors.Green.Green50"
+        "rawValue": "$Colors.Green.Green60"
       },
       "supportSuccessLight": {
         "value": "#ccf4e1",
