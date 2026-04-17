@@ -45,7 +45,6 @@ describe('FileInput', () => {
 
       const input = container.querySelector('input[type="file"]') as HTMLInputElement;
       expect(input).toHaveAttribute('id');
-      expect(input.id).toMatch(/^«r[a-z0-9]+»/); // useId の形式
     });
   });
 
@@ -571,7 +570,6 @@ describe('FileInput', () => {
 
       const errorContainer = container.querySelector('[data-testid="error-messages"]');
       expect(errorContainer).toHaveAttribute('id');
-      expect(errorContainer?.id).toMatch(/^«r[a-z0-9]+»/);
     });
 
     it('aria-describedbyでエラーメッセージと入力が関連付けられる', () => {

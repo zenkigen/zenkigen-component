@@ -177,6 +177,7 @@ const PortalTooltip = () => (
 - `Tooltip` は内部で `useState` により `isVisible` を保持し、`onMouseOver`/`onMouseLeave` で開閉を切り替える。制御用のAPIは提供していない。
 - 表示座標は `useTooltip` フックの `calculatePosition` で算出する。`DOMRect` からターゲットの中心/端を求め、`horizontalAlign` と `verticalPosition` に応じて `left/top/bottom/translate` を定義する。
 - `window.scrollY` を参照してページスクロール分を補正し、ポータル描画時にも正しいY座標を確保する。
+- 位置計算は (1) props (`maxWidth` / `size` / `verticalPosition` / `horizontalAlign`) 変更時、(2) ホバー開始時、(3) 表示中の `scroll` / `resize` イベント発火時の3つのタイミングで実行する。表示中は `window` に `scroll` (`capture: true, passive: true`) と `resize` のリスナーを登録し、ドロワー開閉・内部スクロール・ウィンドウリサイズなどで target の位置が変わっても Tooltip が追従するようにしている。非表示時はリスナーを解除する。
 - `TooltipContent` は `isPortal` フラグで分岐し、ポータル時のみ `style` に `transform: translate(...)` と算出済み座標をマージする。
 - `TailIcon` はサイズ別のSVGを返し、`clsx` で上下左右のオフセットを切り替えることで常に吹き出しの端点とトリガーが繋がるように実装している。
 
@@ -188,7 +189,8 @@ const PortalTooltip = () => (
 ## 注意事項
 
 - Tooltipはホバー中のみ一時的に表示されるため、ユーザーが情報を保持できない。入力必須項目や警告など、恒常表示が必要な情報を配置してはならない。
-- サイズ計算は`useEffect`で `maxWidth`, `size`, `verticalPosition`, `horizontalAlign` が変化した時のみ再計算される。ターゲットが動的にサイズ変更される場合は再レンダーを行い計算を更新すること。
+- 位置計算は props 変更時に加え、ホバー開始時と表示中の `scroll` / `resize` で自動的に再計算される。レイアウト変化後や表示中のスクロールにも追従するため、呼び出し側で明示的に再計算をトリガーする必要はない。
+- 位置計算はグローバルの `window.scrollY` / `window.scrollX` に依存する。ページ全体とは別の document を持つ iframe 内など、独自の document を portal 先に指定するケースは想定していない。
 - `portalTarget` 未指定で `overflow: hidden` な親要素内に配置した場合、Tooltipが切り取られる。必要に応じてポータル先を指定する。
 
 ## スタイルのカスタマイズ
@@ -199,6 +201,7 @@ const PortalTooltip = () => (
 
 ## 更新履歴
 
-| 日付                 | 内容                                                     | 担当者 |
-| -------------------- | -------------------------------------------------------- | ------ |
-| 2025-12-03 09:23 JST | Tooltip仕様書を新規作成し、Props/使用例/注意事項を整理。 | -      |
+| 日付                 | 内容                                                                                             | 担当者 |
+| -------------------- | ------------------------------------------------------------------------------------------------ | ------ |
+| 2025-12-03 09:23 JST | Tooltip仕様書を新規作成し、Props/使用例/注意事項を整理。                                         | -      |
+| 2026-04-14 15:30 JST | ホバー開始時と表示中の `scroll` / `resize` で位置を再計算する挙動を追加し、実装/注意事項に反映。 | -      |
