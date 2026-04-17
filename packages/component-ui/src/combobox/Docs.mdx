@@ -38,10 +38,7 @@ const MyForm = () => {
   const [value, setValue] = useState<string | null>(null);
   const [inputText, setInputText] = useState('');
 
-  const filtered = useMemo(
-    () => options.filter((o) => o.label.includes(inputText)),
-    [inputText],
-  );
+  const filtered = useMemo(() => options.filter((o) => o.label.includes(inputText)), [inputText]);
 
   return (
     <Combobox
@@ -107,7 +104,7 @@ const filtered = useMemo(() => {
       </Combobox.Item>
     ))}
   </Combobox.List>
-</Combobox>
+</Combobox>;
 ```
 
 ### カスタムアイテム描画
@@ -139,4 +136,3 @@ const filtered = useMemo(() => {
   <Combobox.List>{/* ... */}</Combobox.List>
 </Combobox>
 ```
-
