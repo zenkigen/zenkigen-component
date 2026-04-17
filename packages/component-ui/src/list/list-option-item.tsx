@@ -1,0 +1,77 @@
+import { focusVisible } from '@zenkigen-inc/component-theme';
+import clsx from 'clsx';
+import type { MouseEvent } from 'react';
+
+import type { ListOptionItemProps } from './list.types';
+import { useListContext } from './list-context';
+
+export function ListOptionItem({
+  children,
+  id,
+  isActive = false,
+  isSelected = false,
+  isDisabled = false,
+  isError = false,
+  onClick,
+  onMouseEnter,
+  'aria-selected': ariaSelected,
+  'aria-disabled': ariaDisabled,
+}: ListOptionItemProps) {
+  const { size } = useListContext('List.OptionItem');
+
+  const classes = clsx('flex w-full items-center px-3', focusVisible.inset, {
+    // sizes
+    'h-8 typography-label14regular': size === 'medium',
+    'h-10 typography-label16regular': size === 'large',
+
+    // disabled (最優先)
+    'cursor-not-allowed bg-uiBackground01 text-disabled01 fill-disabled01': isDisabled,
+
+    // selected + error
+    'cursor-pointer bg-uiBackgroundError text-supportError fill-supportError': !isDisabled && isSelected && isError,
+
+    // selected (default)
+    'cursor-pointer bg-selectedUi text-interactive01 fill-interactive01': !isDisabled && isSelected && !isError,
+
+    // active (キーボードフォーカス中)
+    'cursor-pointer bg-hover02 text-interactive02 fill-icon01': !isDisabled && !isSelected && isActive,
+
+    // base
+    'cursor-pointer bg-uiBackground01 text-interactive02 fill-icon01 hover:bg-hover02 active:bg-active02':
+      !isDisabled && !isSelected && !isActive,
+  });
+
+  const handleMouseDown = (event: MouseEvent<HTMLLIElement>) => {
+    // input フォーカスを失わないため preventDefault
+    event.preventDefault();
+  };
+
+  const handleClick = (event: MouseEvent<HTMLLIElement>) => {
+    if (isDisabled) {
+      return;
+    }
+    onClick?.(event);
+  };
+
+  const handleMouseEnter = () => {
+    if (isDisabled) {
+      return;
+    }
+    onMouseEnter?.();
+  };
+
+  return (
+    <li
+      id={id}
+      role="option"
+      aria-selected={ariaSelected ?? isSelected}
+      aria-disabled={ariaDisabled ?? isDisabled}
+      onMouseDown={handleMouseDown}
+      onClick={handleClick}
+      onMouseEnter={handleMouseEnter}
+      className={classes}
+    >
+      {children}
+    </li>
+  );
+}
