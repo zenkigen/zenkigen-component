@@ -128,30 +128,30 @@ export const Progress: Story = {
   ),
 };
 
-const itemsWithDescription = [
-  { label: '申込情報入力', description: 'お名前・メール' },
-  { label: '配送先', description: '住所入力' },
-  { label: 'お支払い', description: 'カード情報' },
-  { label: '確認', description: '内容の確認' },
-];
-
-export const WithDescription: Story = {
-  args: Component.args,
-  render: () => (
-    <div className="flex w-[720px] flex-col gap-8">
-      {sizes.map((size) => (
-        <div key={size} className="flex flex-col gap-2">
-          <div className="typography-label12regular text-text02">size: {size}</div>
-          <Steps currentStep={1} size={size} aria-label={`description ${size}`}>
-            {itemsWithDescription.map((item) => (
-              <Steps.Item key={item.label} label={item.label} description={item.description} />
-            ))}
-          </Steps>
-        </div>
-      ))}
-    </div>
-  ),
-};
+// const itemsWithDescription = [
+//   { label: '申込情報入力', description: 'お名前・メール' },
+//   { label: '配送先', description: '住所入力' },
+//   { label: 'お支払い', description: 'カード情報' },
+//   { label: '確認', description: '内容の確認' },
+// ];
+//
+// export const WithDescription: Story = {
+//   args: Component.args,
+//   render: () => (
+//     <div className="flex w-[720px] flex-col gap-8">
+//       {sizes.map((size) => (
+//         <div key={size} className="flex flex-col gap-2">
+//           <div className="typography-label12regular text-text02">size: {size}</div>
+//           <Steps currentStep={1} size={size} aria-label={`description ${size}`}>
+//             {itemsWithDescription.map((item) => (
+//               <Steps.Item key={item.label} label={item.label} description={item.description} />
+//             ))}
+//           </Steps>
+//         </div>
+//       ))}
+//     </div>
+//   ),
+// };
 
 export const Interactive: Story = {
   args: Component.args,
