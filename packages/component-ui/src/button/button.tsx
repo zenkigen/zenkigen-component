@@ -2,7 +2,7 @@ import { buttonColors, focusVisible } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
 import type { ComponentPropsWithoutRef, CSSProperties, ElementType, PropsWithChildren, ReactNode } from 'react';
 
-type Size = 'small' | 'medium' | 'large';
+type Size = 'small' | 'medium' | 'large' | 'x-large';
 type Variant = 'fill' | 'fillDanger' | 'outline' | 'text';
 type JustifyContent = 'start' | 'center';
 
@@ -79,6 +79,7 @@ const createButton = <T extends ElementAs = 'button'>(props: InternalProps<T>) =
       'h-6 px-2': size === 'small',
       'h-8 px-3': size === 'medium',
       'h-10 px-4 leading-[24px]': size === 'large',
+      'h-12 px-4 leading-[24px]': size === 'x-large',
       'inline-flex': elementAs === 'a',
       [buttonColors[variant].selected]: isSelected,
       [buttonColors[variant].base]: !isSelected,
@@ -88,8 +89,8 @@ const createButton = <T extends ElementAs = 'button'>(props: InternalProps<T>) =
       'rounded-button': borderRadius == null,
       'justify-start': justifyContent === 'start',
       'justify-center': justifyContent === 'center',
-      'typography-label16regular': size === 'large',
-      'typography-label14regular': size !== 'large',
+      'typography-label16regular': size === 'large' || size === 'x-large',
+      'typography-label14regular': size !== 'large' && size !== 'x-large',
     },
   );
 

@@ -8,7 +8,7 @@ const meta: Meta<typeof Button> = {
   component: Button,
   argTypes: {
     size: {
-      options: ['small', 'medium', 'large'],
+      options: ['small', 'medium', 'large', 'x-large'],
       control: { type: 'radio' },
     },
     variant: {
@@ -89,6 +89,21 @@ export const Fill: Story = {
           ボタンラベル
         </Button>
       </div>
+      <div className="flex items-center gap-2">
+        <Button size="x-large">ボタンラベル</Button>
+        <Button size="x-large" before={<Icon name="add" size="medium" />}>
+          ボタンラベル
+        </Button>
+        <Button size="x-large" after={<Icon name="add" size="medium" />}>
+          ボタンラベル
+        </Button>
+        <Button size="x-large" isDisabled>
+          ボタンラベル
+        </Button>
+        <Button size="x-large" before={<Icon name="add" size="medium" />} isSelected>
+          ボタンラベル
+        </Button>
+      </div>
     </div>
   ),
 };
@@ -142,6 +157,23 @@ export const FillDanger: Story = {
           ボタンラベル
         </Button>
         <Button size="large" variant="fillDanger" before={<Icon name="add" size="small" />} isSelected>
+          ボタンラベル
+        </Button>
+      </div>
+      <div className="flex items-center gap-2">
+        <Button size="x-large" variant="fillDanger">
+          ボタンラベル
+        </Button>
+        <Button size="x-large" variant="fillDanger" before={<Icon name="add" size="medium" />}>
+          ボタンラベル
+        </Button>
+        <Button size="x-large" variant="fillDanger" after={<Icon name="add" size="medium" />}>
+          ボタンラベル
+        </Button>
+        <Button size="x-large" variant="fillDanger" isDisabled>
+          ボタンラベル
+        </Button>
+        <Button size="x-large" variant="fillDanger" before={<Icon name="add" size="medium" />} isSelected>
           ボタンラベル
         </Button>
       </div>
@@ -201,6 +233,23 @@ export const Outline: Story = {
           ボタンラベル
         </Button>
       </div>
+      <div className="flex items-center gap-2">
+        <Button variant="outline" size="x-large">
+          ボタンラベル
+        </Button>
+        <Button variant="outline" size="x-large" before={<Icon name="add" size="medium" />}>
+          ボタンラベル
+        </Button>
+        <Button variant="outline" size="x-large" after={<Icon name="add" size="medium" />}>
+          ボタンラベル
+        </Button>
+        <Button variant="outline" size="x-large" isDisabled>
+          ボタンラベル
+        </Button>
+        <Button variant="outline" size="x-large" before={<Icon name="add" size="medium" />} isSelected>
+          ボタンラベル
+        </Button>
+      </div>
     </div>
   ),
 };
@@ -254,6 +303,23 @@ export const Text: Story = {
           ボタンラベル
         </Button>
         <Button variant="text" size="large" before={<Icon name="add" size="small" />} isSelected>
+          ボタンラベル
+        </Button>
+      </div>
+      <div className="flex items-center gap-2">
+        <Button variant="text" size="x-large">
+          ボタンラベル
+        </Button>
+        <Button variant="text" size="x-large" before={<Icon name="add" size="medium" />}>
+          ボタンラベル
+        </Button>
+        <Button variant="text" size="x-large" after={<Icon name="add" size="medium" />}>
+          ボタンラベル
+        </Button>
+        <Button variant="text" size="x-large" isDisabled>
+          ボタンラベル
+        </Button>
+        <Button variant="text" size="x-large" before={<Icon name="add" size="medium" />} isSelected>
           ボタンラベル
         </Button>
       </div>
