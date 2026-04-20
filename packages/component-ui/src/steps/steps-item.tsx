@@ -109,7 +109,7 @@ export function StepsItem({ label, description, _index, _status, _isLast }: Step
         <div className="col-start-1 row-start-1 flex items-center">{circle}</div>
         <div className="col-start-2 row-start-1 flex items-center pb-1">{labelBlock}</div>
         {!isLast && (
-          <div className="col-start-1 row-start-2 flex items-stretch justify-center self-stretch">
+          <div className="col-start-1 row-start-2 flex items-stretch justify-center self-stretch py-2">
             <StepsSeparator status={status} />
           </div>
         )}
@@ -122,7 +122,7 @@ export function StepsItem({ label, description, _index, _status, _isLast }: Step
       {circle}
       {labelBlock}
       {!isLast && (
-        <div className="flex items-stretch self-stretch">
+        <div className="flex items-stretch self-stretch py-2">
           <StepsSeparator status={status} />
         </div>
       )}
