@@ -51,12 +51,18 @@ export function StepsItem({ label, description, _index, _status, _isLast }: Step
   const isLast = _isLast;
 
   const isCircleFilled = status === 'completed';
-  const iconColor = variant === 'solid' ? 'iconOnColor' : 'icon01';
   const circleClasses = getCircleClasses(size, variant, status);
+
+  const checkIcon =
+    variant === 'solid' ? (
+      <Icon name="check" size={getIconSize(size)} color="iconOnColor" />
+    ) : (
+      <Icon name="check" size={getIconSize(size)} className="fill-text01" />
+    );
 
   const circle = (
     <span aria-hidden="true" className={circleClasses}>
-      {isCircleFilled ? <Icon name="check" size={getIconSize(size)} color={iconColor} /> : <span>{index + 1}</span>}
+      {isCircleFilled ? checkIcon : <span>{index + 1}</span>}
     </span>
   );
 
