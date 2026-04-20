@@ -43,7 +43,7 @@ export function StepsItem({ label, _index, _status, _isLast }: StepsItemProps) {
   const { size, orientation, textOrientation, variant } = useStepsContext();
 
   if (_status == null || _index == null || _isLast == null) {
-    throw new Error('Steps.Item must be rendered as a direct child of <Steps>');
+    throw new Error('Steps.Item must be rendered inside a <Steps> component');
   }
 
   const status = _status;

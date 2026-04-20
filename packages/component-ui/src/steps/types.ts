@@ -21,7 +21,7 @@ export type StepsContextValue = {
 export type StepsProps = {
   children: ReactNode;
   currentStep?: number;
-  defaultCurrentStep?: number;
+  initialCurrentStep?: number;
   size?: StepsSize;
   orientation?: StepsOrientation;
   textOrientation?: StepsTextOrientation;

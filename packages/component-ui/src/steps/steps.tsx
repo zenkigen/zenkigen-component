@@ -56,14 +56,14 @@ function collectStepsItems(children: ReactNode): ReactElement<StepsItemProps>[] 
 function StepsRoot({
   children,
   currentStep,
-  defaultCurrentStep,
+  initialCurrentStep,
   size = 'medium',
   orientation = 'horizontal',
   textOrientation = 'horizontal',
   variant = 'solid',
   'aria-label': ariaLabel,
 }: StepsProps) {
-  const [internalStep] = useState<number>(defaultCurrentStep ?? 0);
+  const [internalStep] = useState<number>(initialCurrentStep ?? 0);
   const resolvedCurrentStep = currentStep ?? internalStep;
 
   const itemElements = useMemo(() => collectStepsItems(children), [children]);

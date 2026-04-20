@@ -50,8 +50,8 @@ describe('Steps', () => {
     expect(upcomingCount).toBe(labels.length - 1);
   });
 
-  it('defaultCurrentStep のみを指定した uncontrolled モードで初期 current が反映される', () => {
-    renderSteps({ defaultCurrentStep: 2 });
+  it('initialCurrentStep のみを指定した場合に初期 current が反映される', () => {
+    renderSteps({ initialCurrentStep: 2 });
     const items = screen.getAllByRole('listitem');
     expect(items[2]).toHaveAttribute('aria-current', 'step');
   });
