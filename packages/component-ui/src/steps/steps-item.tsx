@@ -2,6 +2,7 @@ import { clsx } from 'clsx';
 
 import { Icon } from '../icon';
 import { useStepsContext } from './steps-context';
+import { useStepsItemContext } from './steps-item-context';
 import { StepsSeparator } from './steps-separator';
 import type { StepsItemProps, StepsSize, StepStatus, StepsVariant } from './types';
 
@@ -39,16 +40,9 @@ function getIconSize(size: StepsSize): 'medium' | 'large' | 'x-large' {
   return 'x-large';
 }
 
-export function StepsItem({ label, _index, _status, _isLast }: StepsItemProps) {
+export function StepsItem({ label }: StepsItemProps) {
   const { size, orientation, textOrientation, variant } = useStepsContext();
-
-  if (_status == null || _index == null || _isLast == null) {
-    throw new Error('Steps.Item must be rendered inside a <Steps> component');
-  }
-
-  const status = _status;
-  const index = _index;
-  const isLast = _isLast;
+  const { index, status, isLast } = useStepsItemContext();
 
   const isCircleFilled = status === 'completed';
   const circleClasses = getCircleClasses(size, variant, status);

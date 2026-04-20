@@ -1,9 +1,10 @@
 import { clsx } from 'clsx';
 import type { ReactElement, ReactNode } from 'react';
-import { Children, cloneElement, Fragment, isValidElement, useMemo, useState } from 'react';
+import { Children, Fragment, isValidElement, useMemo, useState } from 'react';
 
 import { StepsContext } from './steps-context';
 import { StepsItem } from './steps-item';
+import { StepsItemContext } from './steps-item-context';
 import { StepsSeparator } from './steps-separator';
 import type { StepsItemProps, StepsProps, StepsSize, StepStatus, StepsTextOrientation } from './types';
 
@@ -88,17 +89,21 @@ function StepsRoot({
     index < resolvedCurrentStep ? 'completed' : index === resolvedCurrentStep ? 'current' : 'upcoming',
   );
 
+  const wrapItem = (item: ReactElement<StepsItemProps>, index: number): ReactNode => {
+    const status = statuses[index] ?? 'upcoming';
+    const isLast = index === stepsCount - 1;
+
+    return (
+      <StepsItemContext.Provider key={item.key ?? `item-${index}`} value={{ index, status, isLast }}>
+        {item}
+      </StepsItemContext.Provider>
+    );
+  };
+
   const renderedChildren: ReactNode[] =
     orientation === 'horizontal'
       ? itemElements.flatMap((item, index) => {
-          const nodes: ReactNode[] = [
-            cloneElement<StepsItemProps>(item, {
-              key: item.key ?? `item-${index}`,
-              _index: index,
-              _status: statuses[index],
-              _isLast: index === stepsCount - 1,
-            }),
-          ];
+          const nodes: ReactNode[] = [wrapItem(item, index)];
           if (index < stepsCount - 1) {
             nodes.push(
               <HorizontalSeparatorCell
@@ -112,14 +117,7 @@ function StepsRoot({
 
           return nodes;
         })
-      : itemElements.map((item, index) =>
-          cloneElement<StepsItemProps>(item, {
-            key: item.key ?? `item-${index}`,
-            _index: index,
-            _status: statuses[index],
-            _isLast: index === stepsCount - 1,
-          }),
-        );
+      : itemElements.map((item, index) => wrapItem(item, index));
 
   const listClassName = clsx(
     orientation === 'horizontal'
