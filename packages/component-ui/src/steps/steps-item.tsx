@@ -32,11 +32,11 @@ function getCircleClasses(size: StepsSize, variant: StepsVariant, status: StepSt
   return clsx('box-border flex items-center justify-center rounded-full border-2', sizeClass, stateClass);
 }
 
-function getIconSize(size: StepsSize): 'small' | 'medium' | 'large' {
-  if (size === 'small') return 'small';
-  if (size === 'medium') return 'medium';
+function getIconSize(size: StepsSize): 'medium' | 'large' | 'x-large' {
+  if (size === 'small') return 'medium';
+  if (size === 'medium') return 'large';
 
-  return 'large';
+  return 'x-large';
 }
 
 export function StepsItem({ label, description, _index, _status, _isLast }: StepsItemProps) {
