@@ -67,11 +67,13 @@ import { Steps } from '@zenkigen-inc/component-ui';
 
 ### サイズバリエーション
 
-| サイズ   | 円サイズ | 番号フォント                | ラベルフォント              |
-| -------- | -------- | --------------------------- | --------------------------- |
-| `small`  | 24px     | `typography-label12regular` | `typography-label14regular` |
-| `medium` | 32px     | `typography-label12regular` | `typography-label14regular` |
-| `large`  | 40px     | `typography-label16regular` | `typography-label16regular` |
+| サイズ   | 円サイズ | 番号フォント                | ラベルフォント             |
+| -------- | -------- | --------------------------- | -------------------------- |
+| `small`  | 24px     | `typography-label12regular` | `typography-body14regular` |
+| `medium` | 32px     | `typography-label12regular` | `typography-body14regular` |
+| `large`  | 40px     | `typography-label16regular` | `typography-body16regular` |
+
+description は `typography-body12regular` (12px / line-height 133%) で統一する。
 
 ### ステップ状態
 

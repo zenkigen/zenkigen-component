@@ -71,14 +71,14 @@ export function StepsItem({ label, description, _index, _status, _isLast }: Step
       <span
         className={clsx(
           'whitespace-nowrap text-text01',
-          size === 'large' ? 'typography-label16regular' : 'typography-label14regular',
+          size === 'large' ? 'typography-body16regular' : 'typography-body14regular',
         )}
       >
         <span className="sr-only">{statusSrOnlyLabel[status]}</span>
         {label}
       </span>
       {description != null && description !== '' && (
-        <span className="typography-label12regular text-text02">{description}</span>
+        <span className="typography-body12regular text-text02">{description}</span>
       )}
     </span>
   );
