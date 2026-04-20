@@ -25,7 +25,7 @@ function getCircleClasses(size: StepsSize, variant: StepsVariant, status: StepSt
     'bg-supportInfoLight text-text01': variant === 'subtle' && status === 'completed',
     // solid
     'bg-uiBackground01 text-text01 border-uiBorder01': variant === 'solid' && status === 'upcoming',
-    'bg-activeUi text-interactive01 border-interactive01': variant === 'solid' && status === 'current',
+    'bg-activeUi text-text01 border-interactive01': variant === 'solid' && status === 'current',
     'bg-interactive01 text-iconOnColor': variant === 'solid' && status === 'completed',
   });
 
