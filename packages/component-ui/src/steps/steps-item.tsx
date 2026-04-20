@@ -105,7 +105,7 @@ export function StepsItem({ label, description, _index, _status, _isLast }: Step
 
   if (orientation === 'vertical' && textOrientation === 'horizontal') {
     return (
-      <li {...ariaCurrentProps} className="grid grid-cols-[min-content_1fr] grid-rows-[auto_1fr] items-start gap-x-2">
+      <li {...ariaCurrentProps} className="grid grid-cols-[min-content_1fr] grid-rows-[auto_1fr] items-center gap-x-2">
         <div className="col-start-1 row-start-1 flex items-center">{circle}</div>
         <div className="col-start-2 row-start-1 flex items-center">{labelBlock}</div>
         {!isLast && (
