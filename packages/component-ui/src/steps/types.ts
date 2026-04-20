@@ -31,7 +31,6 @@ export type StepsProps = {
 
 export type StepsItemProps = {
   label: string;
-  description?: string;
   /**
    * Steps が自動で注入する内部 props。外部から直接渡すことは想定していない。
    */

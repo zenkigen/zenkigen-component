@@ -39,7 +39,7 @@ function getIconSize(size: StepsSize): 'medium' | 'large' | 'x-large' {
   return 'x-large';
 }
 
-export function StepsItem({ label, description, _index, _status, _isLast }: StepsItemProps) {
+export function StepsItem({ label, _index, _status, _isLast }: StepsItemProps) {
   const { size, orientation, textOrientation, variant } = useStepsContext();
 
   if (_status == null || _index == null || _isLast == null) {
@@ -67,19 +67,15 @@ export function StepsItem({ label, description, _index, _status, _isLast }: Step
   );
 
   const labelBlock = (
-    <span className={clsx('flex flex-col gap-1', textOrientation === 'vertical' && 'items-center text-center')}>
-      <span
-        className={clsx(
-          'whitespace-nowrap text-text01',
-          size === 'large' ? 'typography-body16regular' : 'typography-body14regular',
-        )}
-      >
-        <span className="sr-only">{statusSrOnlyLabel[status]}</span>
-        {label}
-      </span>
-      {description != null && description !== '' && (
-        <span className="typography-body12regular text-text02">{description}</span>
+    <span
+      className={clsx(
+        'whitespace-nowrap text-text01',
+        textOrientation === 'vertical' && 'text-center',
+        size === 'large' ? 'typography-body16regular' : 'typography-body14regular',
       )}
+    >
+      <span className="sr-only">{statusSrOnlyLabel[status]}</span>
+      {label}
     </span>
   );
 

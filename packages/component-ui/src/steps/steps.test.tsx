@@ -50,14 +50,6 @@ describe('Steps', () => {
     expect(upcomingCount).toBe(labels.length - 1);
   });
 
-  it('description を渡したステップでは description テキストが表示される', () => {
-    renderSteps({ currentStep: 0 }, [
-      <Steps.Item key="a" label="申込" description="説明テキスト" />,
-      <Steps.Item key="b" label="確認" />,
-    ]);
-    expect(screen.getByText('説明テキスト')).toBeInTheDocument();
-  });
-
   it('defaultCurrentStep のみを指定した uncontrolled モードで初期 current が反映される', () => {
     renderSteps({ defaultCurrentStep: 2 });
     const items = screen.getAllByRole('listitem');
