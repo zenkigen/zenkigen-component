@@ -185,3 +185,81 @@ export const Interactive: Story = {
     );
   },
 };
+
+const applicationFlowItems = [
+  { label: '申込情報入力', description: 'お名前・メール' },
+  { label: '配送先', description: '住所入力' },
+  { label: 'お支払い', description: 'カード情報' },
+  { label: '確認', description: '内容の確認' },
+];
+
+const onboardingItems = [
+  { label: 'ようこそ' },
+  { label: 'プロフィール' },
+  { label: '通知設定' },
+  { label: '連携' },
+  { label: '完了' },
+];
+
+export const LayoutExample: Story = {
+  args: Component.args,
+  parameters: {
+    chromatic: { disable: true },
+  },
+  render: () => (
+    <div className="flex flex-col gap-12 p-4">
+      {/* 1. 申込フォームヘッダー */}
+      <section className="flex flex-col gap-4">
+        <h3 className="typography-h5 text-text01">申込フォーム（水平・description あり）</h3>
+        <div className="rounded border border-uiBorder01 bg-uiBackground01 p-6">
+          <Steps currentStep={2} aria-label="申込フロー">
+            {applicationFlowItems.map((item) => (
+              <Steps.Item key={item.label} label={item.label} description={item.description} />
+            ))}
+          </Steps>
+        </div>
+      </section>
+
+      {/* 2. オンボーディング（円下テキスト） */}
+      <section className="flex flex-col gap-4">
+        <h3 className="typography-h5 text-text01">オンボーディング（水平・円下テキスト）</h3>
+        <div className="rounded border border-uiBorder01 bg-uiBackground01 p-6">
+          <Steps currentStep={1} size="large" textOrientation="vertical" aria-label="オンボーディング">
+            {onboardingItems.map((item) => (
+              <Steps.Item key={item.label} label={item.label} />
+            ))}
+          </Steps>
+        </div>
+      </section>
+
+      {/* 3. サイドバー型 垂直ナビ */}
+      <section className="flex flex-col gap-4">
+        <h3 className="typography-h5 text-text01">サイドバー型（垂直・description あり）</h3>
+        <div className="flex gap-6">
+          <aside className="w-64 rounded border border-uiBorder01 bg-uiBackground02 p-6">
+            <Steps currentStep={1} orientation="vertical" aria-label="導入ステップ">
+              {applicationFlowItems.map((item) => (
+                <Steps.Item key={item.label} label={item.label} description={item.description} />
+              ))}
+            </Steps>
+          </aside>
+          <div className="flex flex-1 items-center justify-center rounded border border-uiBorder01 bg-uiBackground01 p-6">
+            <p className="typography-body14regular text-text02">選択中のステップのコンテンツ領域</p>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. subtle variant を使った地味めの進捗 */}
+      <section className="flex flex-col gap-4">
+        <h3 className="typography-h5 text-text01">subtle variant（控えめな進捗表示）</h3>
+        <div className="rounded border border-uiBorder01 bg-uiBackground01 p-6">
+          <Steps currentStep={1} variant="subtle" size="small" aria-label="subtle progress">
+            {defaultLabels.map((label) => (
+              <Steps.Item key={label} label={label} />
+            ))}
+          </Steps>
+        </div>
+      </section>
+    </div>
+  ),
+};
