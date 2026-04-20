@@ -19,7 +19,7 @@ const meta = {
       options: ['horizontal', 'vertical'],
       description: 'テキストを円の横(horizontal)か下(vertical)に並べるか',
     },
-    variant: { control: 'radio', options: ['subtle', 'bold'], description: 'ステップの表現強弱' },
+    variant: { control: 'radio', options: ['subtle', 'solid'], description: 'ステップの表現強弱' },
     'aria-label': { control: 'text', description: 'ステップ群の意味を伝えるラベル' },
     children: { table: { disable: true } },
   },
@@ -76,7 +76,7 @@ export const Component: Story = {
     size: 'medium',
     orientation: 'horizontal',
     textOrientation: 'horizontal',
-    variant: 'bold',
+    variant: 'solid',
     'aria-label': 'ステップのサンプル',
     children: defaultItems,
   },
@@ -90,9 +90,9 @@ export const Component: Story = {
   ),
 };
 
-export const BoldHorizontal: Story = {
-  args: { ...Component.args, variant: 'bold', orientation: 'horizontal' },
-  render: () => <div className="w-[720px]">{renderVariantMatrix('bold', 'horizontal')}</div>,
+export const SolidHorizontal: Story = {
+  args: { ...Component.args, variant: 'solid', orientation: 'horizontal' },
+  render: () => <div className="w-[720px]">{renderVariantMatrix('solid', 'horizontal')}</div>,
 };
 
 export const SubtleHorizontal: Story = {
@@ -100,9 +100,9 @@ export const SubtleHorizontal: Story = {
   render: () => <div className="w-[720px]">{renderVariantMatrix('subtle', 'horizontal')}</div>,
 };
 
-export const BoldVertical: Story = {
-  args: { ...Component.args, variant: 'bold', orientation: 'vertical' },
-  render: () => <div>{renderVariantMatrix('bold', 'vertical')}</div>,
+export const SolidVertical: Story = {
+  args: { ...Component.args, variant: 'solid', orientation: 'vertical' },
+  render: () => <div>{renderVariantMatrix('solid', 'vertical')}</div>,
 };
 
 export const SubtleVertical: Story = {

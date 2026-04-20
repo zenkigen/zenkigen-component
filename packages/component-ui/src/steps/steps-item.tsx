@@ -18,14 +18,15 @@ function getCircleClasses(size: StepsSize, variant: StepsVariant, status: StepSt
     'size-10 typography-label16regular': size === 'large',
   });
 
-  const isSubtleNonCompleted = variant === 'subtle' && (status === 'upcoming' || status === 'current');
-  const isBoldUpcoming = variant === 'bold' && status === 'upcoming';
-
   const stateClass = clsx({
-    'bg-disabled01 text-text01': isSubtleNonCompleted || isBoldUpcoming,
-    'bg-uiBackground02Blue text-interactive01': variant === 'subtle' && status === 'completed',
-    'bg-interactive01 text-iconOnColor': variant === 'bold' && status === 'completed',
-    'bg-uiBackground01 text-interactive03 border-interactive03': variant === 'bold' && status === 'current',
+    // subtle
+    'bg-uiBackground02 text-text01': variant === 'subtle' && status === 'upcoming',
+    'bg-activeUi text-text01': variant === 'subtle' && status === 'current',
+    'bg-supportInfoLight text-text01': variant === 'subtle' && status === 'completed',
+    // solid
+    'bg-uiBackground01 text-text01 border-uiBorder01': variant === 'solid' && status === 'upcoming',
+    'bg-activeUi text-text01 border-interactive01': variant === 'solid' && status === 'current',
+    'bg-interactive01 text-iconOnColor': variant === 'solid' && status === 'completed',
   });
 
   return clsx(
@@ -54,7 +55,7 @@ export function StepsItem({ label, description, _index, _status, _isLast }: Step
   const isLast = _isLast;
 
   const isCircleFilled = status === 'completed';
-  const iconColor = variant === 'bold' ? 'iconOnColor' : 'icon01';
+  const iconColor = variant === 'solid' ? 'iconOnColor' : 'icon01';
   const circleClasses = getCircleClasses(size, variant, status);
 
   const circle = (

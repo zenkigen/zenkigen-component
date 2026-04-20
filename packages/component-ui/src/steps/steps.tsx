@@ -60,7 +60,7 @@ function StepsRoot({
   size = 'medium',
   orientation = 'horizontal',
   textOrientation = 'horizontal',
-  variant = 'bold',
+  variant = 'solid',
   'aria-label': ariaLabel,
 }: StepsProps) {
   const [internalStep] = useState<number>(defaultCurrentStep ?? 0);

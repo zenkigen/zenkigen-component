@@ -6,7 +6,7 @@ export type StepsOrientation = 'horizontal' | 'vertical';
 
 export type StepsTextOrientation = 'horizontal' | 'vertical';
 
-export type StepsVariant = 'subtle' | 'bold';
+export type StepsVariant = 'subtle' | 'solid';
 
 export type StepStatus = 'completed' | 'current' | 'upcoming';
 

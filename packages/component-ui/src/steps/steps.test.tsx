@@ -83,18 +83,18 @@ describe('Steps', () => {
     });
   });
 
-  it('variant="bold" の current ステップは border-interactive03 クラスを持つ', () => {
-    renderSteps({ currentStep: 1, variant: 'bold' });
+  it('variant="solid" の current ステップは border-interactive01 クラスを持つ', () => {
+    renderSteps({ currentStep: 1, variant: 'solid' });
     const items = screen.getAllByRole('listitem');
     const circle = items[1]?.querySelector('span[aria-hidden="true"]');
-    expect(circle?.className).toContain('border-interactive03');
+    expect(circle?.className).toContain('border-interactive01');
   });
 
-  it('variant="subtle" の completed ステップは bg-uiBackground02Blue クラスを持つ', () => {
+  it('variant="subtle" の completed ステップは bg-supportInfoLight クラスを持つ', () => {
     renderSteps({ currentStep: 2, variant: 'subtle' });
     const items = screen.getAllByRole('listitem');
     const circle = items[0]?.querySelector('span[aria-hidden="true"]');
-    expect(circle?.className).toContain('bg-uiBackground02Blue');
+    expect(circle?.className).toContain('bg-supportInfoLight');
   });
 
   it('orientation="horizontal" のときにルート ol は grid で item=max-content / separator=1fr を交互に並べる', () => {

@@ -51,7 +51,7 @@ import { Steps } from '@zenkigen-inc/component-ui';
 | `size`               | `'small' \| 'medium' \| 'large'` | `'medium'`     | 円とテキストのサイズ                        |
 | `orientation`        | `'horizontal' \| 'vertical'`     | `'horizontal'` | ステップの並ぶ方向                          |
 | `textOrientation`    | `'horizontal' \| 'vertical'`     | `'horizontal'` | テキストを円の横に並べるか下に並べるか      |
-| `variant`            | `'subtle' \| 'bold'`             | `'bold'`       | 完了/現在のステップの表現強弱               |
+| `variant`            | `'subtle' \| 'solid'`            | `'solid'`      | 完了/現在のステップの表現強弱               |
 | `aria-label`         | `string`                         | `undefined`    | ステップ群の意味を支援技術へ伝えるラベル    |
 
 ### Steps.Item Props
@@ -85,14 +85,14 @@ import { Steps } from '@zenkigen-inc/component-ui';
 
 - `completed`: チェックアイコンで表示、セパレータは `bg-interactive01`（青）
 - `current`: 現在のステップ。`aria-current="step"` が付与される
-- `upcoming`: グレーの円、セパレータは `bg-uiBorder01`
+- `upcoming`: 円は薄く表示、セパレータは `bg-uiBorder01`
 
 ### バリアント
 
-| variant  | completed                                      | current                                                             | upcoming                        |
-| -------- | ---------------------------------------------- | ------------------------------------------------------------------- | ------------------------------- |
-| `subtle` | `bg-uiBackground02Blue` + `text-interactive01` | `bg-disabled01` + `text-text01`（upcoming と同じ）                  | `bg-disabled01` + `text-text01` |
-| `bold`   | `bg-interactive01` + `text-iconOnColor`        | `bg-uiBackground01` + `text-interactive03` + `border-interactive03` | `bg-disabled01` + `text-text01` |
+| variant  | completed                               | current                                                | upcoming                                                  |
+| -------- | --------------------------------------- | ------------------------------------------------------ | --------------------------------------------------------- |
+| `subtle` | `bg-supportInfoLight` + `text-text01`   | `bg-activeUi` + `text-text01`                          | `bg-uiBackground02` + `text-text01`                       |
+| `solid`  | `bg-interactive01` + `text-iconOnColor` | `bg-activeUi` + `text-text01` + `border-interactive01` | `bg-uiBackground01` + `text-text01` + `border-uiBorder01` |
 
 ## 使用例
 
@@ -160,7 +160,7 @@ import { Steps } from '@zenkigen-inc/component-ui';
 
 - ステップの状態は `currentStep` から自動算出する。個別指定は提供しない（順序性を保証）
 - Separator は Steps が内部で自動配置する。利用者が手動で挟む API は提供しない
-- 水平レイアウトは `grid grid-template-columns: repeat(N, minmax(0, 1fr))` で各ステップが等幅になる。ラベル長が違っても位置がガタつかない
+- 水平レイアウトは `grid` の `grid-template-columns` を `max-content 1fr max-content 1fr ...` と組み、ステップ本体（ACEG）を `max-content`、セパレータ（BDF）を `1fr` で均等配分する。ステップ本体同士、セパレータ同士がそれぞれ同じ幅で揃い、列間に 8px の gap を入れる
 - 垂直レイアウトは Item 内部の grid/flex で縦線を描画し、Item 間で視覚的に連続する
 
 ## 注意事項
