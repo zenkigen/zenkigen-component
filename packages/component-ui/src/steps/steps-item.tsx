@@ -107,7 +107,7 @@ export function StepsItem({ label, description, _index, _status, _isLast }: Step
     return (
       <li {...ariaCurrentProps} className="grid grid-cols-[min-content_1fr] grid-rows-[auto_1fr] items-start gap-x-2">
         <div className="col-start-1 row-start-1 flex items-center">{circle}</div>
-        <div className="col-start-2 row-start-1 flex items-center pb-1">{labelBlock}</div>
+        <div className="col-start-2 row-start-1 flex items-center">{labelBlock}</div>
         {!isLast && (
           <div className="col-start-1 row-start-2 flex items-stretch justify-center self-stretch py-2">
             <StepsSeparator status={status} />
