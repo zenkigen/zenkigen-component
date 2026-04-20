@@ -18,7 +18,7 @@ export function StepsSeparator({ status }: Props) {
     const minHeightClass = clsx({
       'min-h-6': size === 'small',
       'min-h-8': size === 'medium',
-      'min-h-12': size === 'large',
+      'min-h-10': size === 'large',
     });
 
     return <div aria-hidden="true" className={clsx('mx-auto h-full w-px', minHeightClass, colorClass)} />;
