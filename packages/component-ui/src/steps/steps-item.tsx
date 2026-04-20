@@ -57,7 +57,7 @@ export function StepsItem({ label, description, _index, _status, _isLast }: Step
     variant === 'solid' ? (
       <Icon name="check" size={getIconSize(size)} color="iconOnColor" />
     ) : (
-      <Icon name="check" size={getIconSize(size)} className="fill-text01" />
+      <Icon name="check" size={getIconSize(size)} className="fill-gray-gray100" />
     );
 
   const circle = (
