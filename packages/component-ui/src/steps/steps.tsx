@@ -72,13 +72,12 @@ function StepsRoot({
 
   const contextValue = useMemo(
     () => ({
-      currentStep: resolvedCurrentStep,
       size,
       orientation,
       textOrientation,
       variant,
     }),
-    [resolvedCurrentStep, size, orientation, textOrientation, variant],
+    [size, orientation, textOrientation, variant],
   );
 
   if (stepsCount === 0) {

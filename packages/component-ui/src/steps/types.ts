@@ -11,7 +11,6 @@ export type StepsVariant = 'subtle' | 'solid';
 export type StepStatus = 'completed' | 'current' | 'upcoming';
 
 export type StepsContextValue = {
-  currentStep: number;
   size: StepsSize;
   orientation: StepsOrientation;
   textOrientation: StepsTextOrientation;
