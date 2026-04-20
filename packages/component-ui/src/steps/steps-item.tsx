@@ -105,7 +105,13 @@ export function StepsItem({ label, description, _index, _status, _isLast }: Step
 
   if (orientation === 'vertical' && textOrientation === 'horizontal') {
     return (
-      <li {...ariaCurrentProps} className="grid grid-cols-[min-content_1fr] grid-rows-[auto_1fr] items-center gap-x-2">
+      <li
+        {...ariaCurrentProps}
+        className={clsx(
+          'grid grid-cols-[min-content_1fr] grid-rows-[auto_1fr] items-center gap-x-2',
+          !isLast && 'flex-1',
+        )}
+      >
         <div className="col-start-1 row-start-1 flex items-center">{circle}</div>
         <div className="col-start-2 row-start-1 flex items-center">{labelBlock}</div>
         {!isLast && (
@@ -118,11 +124,11 @@ export function StepsItem({ label, description, _index, _status, _isLast }: Step
   }
 
   return (
-    <li {...ariaCurrentProps} className="flex flex-col items-center gap-1">
+    <li {...ariaCurrentProps} className={clsx('flex flex-col items-center gap-1', !isLast && 'flex-1')}>
       {circle}
       {labelBlock}
       {!isLast && (
-        <div className="flex items-stretch self-stretch py-2">
+        <div className="flex flex-1 items-stretch self-stretch py-2">
           <StepsSeparator status={status} />
         </div>
       )}
