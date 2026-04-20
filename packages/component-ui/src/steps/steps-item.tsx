@@ -19,21 +19,17 @@ function getCircleClasses(size: StepsSize, variant: StepsVariant, status: StepSt
   });
 
   const stateClass = clsx({
-    // subtle
-    'bg-uiBackground02 text-text01': variant === 'subtle' && status === 'upcoming',
-    'bg-activeUi text-text01': variant === 'subtle' && status === 'current',
-    'bg-supportInfoLight text-text01': variant === 'subtle' && status === 'completed',
+    // subtle（全 state border-transparent で box-sizing を揃える）
+    'bg-uiBackground02 text-text01 border-transparent': variant === 'subtle' && status === 'upcoming',
+    'bg-activeUi text-text01 border-transparent': variant === 'subtle' && status === 'current',
+    'bg-supportInfoLight text-text01 border-transparent': variant === 'subtle' && status === 'completed',
     // solid
     'bg-uiBackground01 text-text01 border-uiBorder01': variant === 'solid' && status === 'upcoming',
     'bg-activeUi text-text01 border-interactive01': variant === 'solid' && status === 'current',
-    'bg-interactive01 text-iconOnColor': variant === 'solid' && status === 'completed',
+    'bg-interactive01 text-iconOnColor border-transparent': variant === 'solid' && status === 'completed',
   });
 
-  return clsx(
-    'box-border flex items-center justify-center rounded-full border-2 border-transparent',
-    sizeClass,
-    stateClass,
-  );
+  return clsx('box-border flex items-center justify-center rounded-full border-2', sizeClass, stateClass);
 }
 
 function getIconSize(size: StepsSize): 'small' | 'medium' | 'large' {
