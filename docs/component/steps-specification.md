@@ -89,10 +89,10 @@ import { Steps } from '@zenkigen-inc/component-ui';
 
 ### バリアント
 
-| variant  | completed                               | current                                                | upcoming                                                  |
-| -------- | --------------------------------------- | ------------------------------------------------------ | --------------------------------------------------------- |
-| `subtle` | `bg-supportInfoLight` + `text-text01`   | `bg-activeUi` + `text-text01`                          | `bg-uiBackground02` + `text-text01`                       |
-| `solid`  | `bg-interactive01` + `text-iconOnColor` | `bg-activeUi` + `text-text01` + `border-interactive01` | `bg-uiBackground01` + `text-text01` + `border-uiBorder01` |
+| variant  | completed                               | current                                                       | upcoming                                                  |
+| -------- | --------------------------------------- | ------------------------------------------------------------- | --------------------------------------------------------- |
+| `subtle` | `bg-supportInfoLight` + `text-text01`   | `bg-activeUi` + `text-text01`                                 | `bg-uiBackground02` + `text-text01`                       |
+| `solid`  | `bg-interactive01` + `text-iconOnColor` | `bg-activeUi` + `text-interactive01` + `border-interactive01` | `bg-uiBackground01` + `text-text01` + `border-uiBorder01` |
 
 ## 使用例
 
