@@ -1,18 +1,18 @@
 import { clsx } from 'clsx';
 
 import { useStepsContext } from './steps-context';
-import type { StepStatus } from './types';
+import type { StepProgress } from './types';
 
 type Props = {
-  status: StepStatus;
+  progress: StepProgress;
 };
 
-export function StepsSeparator({ status }: Props) {
+export function StepsSeparator({ progress }: Props) {
   const { orientation, size } = useStepsContext();
 
   const isVerticalLine = orientation === 'vertical';
 
-  const colorClass = status === 'completed' ? 'bg-interactive01' : 'bg-uiBorder01';
+  const colorClass = progress === 'completed' ? 'bg-interactive01' : 'bg-uiBorder01';
 
   if (isVerticalLine) {
     const minHeightClass = clsx({

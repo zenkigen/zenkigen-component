@@ -8,7 +8,11 @@ export type StepsTextOrientation = 'horizontal' | 'vertical';
 
 export type StepsVariant = 'subtle' | 'solid';
 
-export type StepStatus = 'completed' | 'current' | 'upcoming';
+export type StepProgress = 'completed' | 'current' | 'upcoming';
+
+export type StepState = {
+  progress: StepProgress;
+};
 
 export type StepsContextValue = {
   size: StepsSize;
@@ -29,5 +33,5 @@ export type StepsProps = {
 };
 
 export type StepsItemProps = {
-  label: string;
+  label: ReactNode;
 };

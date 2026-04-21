@@ -4,33 +4,43 @@ import { Icon } from '../icon';
 import { useStepsContext } from './steps-context';
 import { useStepsItemContext } from './steps-item-context';
 import { StepsSeparator } from './steps-separator';
-import type { StepsItemProps, StepsSize, StepStatus, StepsVariant } from './types';
+import type { StepProgress, StepsItemProps, StepsSize, StepState, StepsVariant } from './types';
 
-const statusSrOnlyLabel: Record<StepStatus, string> = {
+const progressSrOnlyLabel: Record<StepProgress, string> = {
   completed: '完了: ',
   current: '現在のステップ: ',
   upcoming: '未着手: ',
 };
 
-function getCircleClasses(size: StepsSize, variant: StepsVariant, status: StepStatus): string {
-  const sizeClass = clsx({
+function getCircleSizeClass(size: StepsSize): string {
+  return clsx({
     'size-6 typography-label12regular': size === 'small',
     'size-8 typography-label12regular': size === 'medium',
     'size-10 typography-label16regular': size === 'large',
   });
+}
 
-  const stateClass = clsx({
+function getCircleVariantProgressClass(variant: StepsVariant, progress: StepProgress): string {
+  return clsx({
     // subtle（全 state border-transparent で box-sizing を揃える）
-    'bg-uiBackground02 text-text01 border-transparent': variant === 'subtle' && status === 'upcoming',
-    'bg-activeUi text-text01 border-transparent': variant === 'subtle' && status === 'current',
-    'bg-supportInfoLight text-text01 border-transparent': variant === 'subtle' && status === 'completed',
+    'bg-uiBackground02 text-text01 border-transparent': variant === 'subtle' && progress === 'upcoming',
+    'bg-activeUi text-text01 border-transparent': variant === 'subtle' && progress === 'current',
+    'bg-supportInfoLight text-text01 border-transparent': variant === 'subtle' && progress === 'completed',
     // solid
-    'bg-uiBackground01 text-text01 border-uiBorder01': variant === 'solid' && status === 'upcoming',
-    'bg-activeUi text-text01 border-interactive01': variant === 'solid' && status === 'current',
-    'bg-interactive01 text-iconOnColor border-transparent': variant === 'solid' && status === 'completed',
+    'bg-uiBackground01 text-text01 border-uiBorder01': variant === 'solid' && progress === 'upcoming',
+    'bg-activeUi text-text01 border-interactive01': variant === 'solid' && progress === 'current',
+    'bg-interactive01 text-iconOnColor border-transparent': variant === 'solid' && progress === 'completed',
   });
+}
 
-  return clsx('box-border flex items-center justify-center rounded-full border-2', sizeClass, stateClass);
+function getCircleClasses(size: StepsSize, variant: StepsVariant, state: StepState): string {
+  return clsx(
+    'box-border flex items-center justify-center rounded-full border-2',
+    getCircleSizeClass(size),
+    getCircleVariantProgressClass(variant, state.progress),
+    // 将来追加: state.isError && getCircleErrorOverlay(variant)
+    // 将来追加: state.isDisabled && getCircleDisabledOverlay()
+  );
 }
 
 function getIconSize(size: StepsSize): 'medium' | 'large' | 'x-large' {
@@ -42,10 +52,10 @@ function getIconSize(size: StepsSize): 'medium' | 'large' | 'x-large' {
 
 export function StepsItem({ label }: StepsItemProps) {
   const { size, orientation, textOrientation, variant } = useStepsContext();
-  const { index, status, isLast } = useStepsItemContext();
+  const { state, index, isLast, id } = useStepsItemContext();
 
-  const isCircleFilled = status === 'completed';
-  const circleClasses = getCircleClasses(size, variant, status);
+  const isCircleFilled = state.progress === 'completed';
+  const circleClasses = getCircleClasses(size, variant, state);
 
   const checkIcon =
     variant === 'solid' ? (
@@ -68,27 +78,31 @@ export function StepsItem({ label }: StepsItemProps) {
         size === 'large' ? 'typography-body16regular' : 'typography-body14regular',
       )}
     >
-      <span className="sr-only">{statusSrOnlyLabel[status]}</span>
+      <span className="sr-only">{progressSrOnlyLabel[state.progress]}</span>
       {label}
     </span>
   );
 
-  const ariaCurrentProps = status === 'current' ? ({ 'aria-current': 'step' } as const) : {};
+  const ariaCurrentProps = state.progress === 'current' ? ({ 'aria-current': 'step' } as const) : {};
 
   if (orientation === 'horizontal' && textOrientation === 'horizontal') {
     return (
-      <li {...ariaCurrentProps} className="flex items-center gap-2">
-        {circle}
-        {labelBlock}
+      <li {...ariaCurrentProps} id={id}>
+        <div className="flex items-center gap-2">
+          {circle}
+          {labelBlock}
+        </div>
       </li>
     );
   }
 
   if (orientation === 'horizontal' && textOrientation === 'vertical') {
     return (
-      <li {...ariaCurrentProps} className="flex flex-col items-center gap-1">
-        {circle}
-        {labelBlock}
+      <li {...ariaCurrentProps} id={id}>
+        <div className="flex flex-col items-center gap-1">
+          {circle}
+          {labelBlock}
+        </div>
       </li>
     );
   }
@@ -101,12 +115,13 @@ export function StepsItem({ label }: StepsItemProps) {
           'grid grid-cols-[min-content_1fr] grid-rows-[auto_1fr] items-center gap-x-2',
           !isLast && 'flex-1',
         )}
+        id={id}
       >
         <div className="col-start-1 row-start-1 flex items-center">{circle}</div>
         <div className="col-start-2 row-start-1 flex items-center">{labelBlock}</div>
         {!isLast && (
           <div className="col-start-1 row-start-2 flex items-stretch justify-center self-stretch py-2">
-            <StepsSeparator status={status} />
+            <StepsSeparator progress={state.progress} />
           </div>
         )}
       </li>
@@ -114,12 +129,12 @@ export function StepsItem({ label }: StepsItemProps) {
   }
 
   return (
-    <li {...ariaCurrentProps} className={clsx('flex flex-col items-center gap-1', !isLast && 'flex-1')}>
+    <li {...ariaCurrentProps} className={clsx('flex flex-col items-center gap-1', !isLast && 'flex-1')} id={id}>
       {circle}
       {labelBlock}
       {!isLast && (
         <div className="flex flex-1 items-stretch self-stretch py-2">
-          <StepsSeparator status={status} />
+          <StepsSeparator progress={state.progress} />
         </div>
       )}
     </li>

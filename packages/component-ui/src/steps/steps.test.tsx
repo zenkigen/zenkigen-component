@@ -147,4 +147,28 @@ describe('Steps', () => {
     expect(() => render(<StepsItem label="単独" />)).toThrow(/Steps/);
     spy.mockRestore();
   });
+
+  it('label に JSX(ReactNode)を渡せる', () => {
+    render(
+      <Steps aria-label="JSX label" currentStep={0}>
+        <Steps.Item
+          label={
+            <>
+              申込 <span data-testid="label-badge">必須</span>
+            </>
+          }
+        />
+        <Steps.Item label="完了" />
+      </Steps>,
+    );
+    expect(screen.getByTestId('label-badge')).toHaveTextContent('必須');
+  });
+
+  it('各 listitem に一意な id 属性が付与される', () => {
+    renderSteps({ currentStep: 0 });
+    const items = screen.getAllByRole('listitem');
+    const ids = items.map((item) => item.getAttribute('id'));
+    ids.forEach((id) => expect(id).toBeTruthy());
+    expect(new Set(ids).size).toBe(items.length);
+  });
 });

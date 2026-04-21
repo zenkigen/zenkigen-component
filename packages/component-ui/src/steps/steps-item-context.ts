@@ -1,11 +1,12 @@
 import { createContext, useContext } from 'react';
 
-import type { StepStatus } from './types';
+import type { StepState } from './types';
 
 export type StepsItemContextValue = {
   index: number;
-  status: StepStatus;
+  state: StepState;
   isLast: boolean;
+  id: string;
 };
 
 export const StepsItemContext = createContext<StepsItemContextValue | null>(null);

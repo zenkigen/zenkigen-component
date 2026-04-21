@@ -1,2 +1,10 @@
 export { Steps } from './steps';
-export type { StepsOrientation, StepsProps, StepsSize, StepStatus, StepsTextOrientation, StepsVariant } from './types';
+export type {
+  StepProgress,
+  StepsOrientation,
+  StepsProps,
+  StepsSize,
+  StepState,
+  StepsTextOrientation,
+  StepsVariant,
+} from './types';

@@ -1,12 +1,12 @@
 import { clsx } from 'clsx';
 import type { ReactElement, ReactNode } from 'react';
-import { Children, Fragment, isValidElement, useMemo, useState } from 'react';
+import { Children, Fragment, isValidElement, useId, useMemo, useState } from 'react';
 
 import { StepsContext } from './steps-context';
 import { StepsItem } from './steps-item';
 import { StepsItemContext } from './steps-item-context';
 import { StepsSeparator } from './steps-separator';
-import type { StepsItemProps, StepsProps, StepsSize, StepStatus, StepsTextOrientation } from './types';
+import type { StepProgress, StepsItemProps, StepsProps, StepsSize, StepState, StepsTextOrientation } from './types';
 
 function getSeparatorCellHeightClass(size: StepsSize): string {
   if (size === 'small') return 'h-6';
@@ -16,11 +16,11 @@ function getSeparatorCellHeightClass(size: StepsSize): string {
 }
 
 function HorizontalSeparatorCell({
-  status,
+  progress,
   size,
   textOrientation,
 }: {
-  status: StepStatus;
+  progress: StepProgress;
   size: StepsSize;
   textOrientation: StepsTextOrientation;
 }) {
@@ -29,7 +29,7 @@ function HorizontalSeparatorCell({
 
   return (
     <li aria-hidden="true" className={clsx('flex items-center', heightClass, alignClass)} role="presentation">
-      <StepsSeparator status={status} />
+      <StepsSeparator progress={progress} />
     </li>
   );
 }
@@ -64,6 +64,7 @@ function StepsRoot({
   variant = 'solid',
   'aria-label': ariaLabel,
 }: StepsProps) {
+  const baseId = useId();
   const [internalStep] = useState<number>(initialCurrentStep ?? 0);
   const resolvedCurrentStep = currentStep ?? internalStep;
 
@@ -85,16 +86,17 @@ function StepsRoot({
     return null;
   }
 
-  const statuses: StepStatus[] = itemElements.map((_item, index) =>
-    index < resolvedCurrentStep ? 'completed' : index === resolvedCurrentStep ? 'current' : 'upcoming',
-  );
+  const states: StepState[] = itemElements.map((_item, index) => ({
+    progress: index < resolvedCurrentStep ? 'completed' : index === resolvedCurrentStep ? 'current' : 'upcoming',
+  }));
 
   const wrapItem = (item: ReactElement<StepsItemProps>, index: number): ReactNode => {
-    const status = statuses[index] ?? 'upcoming';
+    const state: StepState = states[index] ?? { progress: 'upcoming' };
     const isLast = index === stepsCount - 1;
+    const id = `${baseId}-item-${index}`;
 
     return (
-      <StepsItemContext.Provider key={item.key ?? `item-${index}`} value={{ index, status, isLast }}>
+      <StepsItemContext.Provider key={item.key ?? `item-${index}`} value={{ index, state, isLast, id }}>
         {item}
       </StepsItemContext.Provider>
     );
@@ -108,8 +110,8 @@ function StepsRoot({
             nodes.push(
               <HorizontalSeparatorCell
                 key={`sep-${index}`}
+                progress={states[index]?.progress ?? 'upcoming'}
                 size={size}
-                status={statuses[index] ?? 'upcoming'}
                 textOrientation={textOrientation}
               />,
             );
