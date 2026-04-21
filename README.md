@@ -126,6 +126,7 @@ yarn list --pattern "@zenkigen-inc/component-*"
 以下は利用可能なコンポーネントの一覧です。リンクがあるコンポーネントは詳細な仕様書が参照できます。
 
 - [Avatar](./docs/component/avatar-specification.md)
+- [AvatarGroup](./docs/component/avatar-group-specification.md)
 - [Breadcrumb](./docs/component/breadcrumb-specification.md)
 - [Button](./docs/component/button-specification.md)
 - [Checkbox](./docs/component/checkbox-specification.md)
