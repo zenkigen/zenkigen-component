@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react';
-import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { Avatar } from '../avatar';
@@ -66,7 +65,6 @@ describe('AvatarGroup', () => {
           <Avatar userId={1} firstName="太郎" lastName="田中" />
           <Avatar userId={2} firstName="花子" lastName="鈴木" />
           <Avatar userId={3} firstName="一郎" lastName="佐藤" />
-          <AvatarGroup.Remain />
         </AvatarGroup>,
       );
       expect(screen.getByText('田中')).toBeInTheDocument();
@@ -83,7 +81,6 @@ describe('AvatarGroup', () => {
           <Avatar userId={4} firstName="次郎" lastName="高橋" />
           <Avatar userId={5} firstName="三郎" lastName="渡辺" />
           <Avatar userId={6} firstName="四郎" lastName="伊藤" />
-          <AvatarGroup.Remain />
         </AvatarGroup>,
       );
       expect(screen.getByText('田中')).toBeInTheDocument();
@@ -96,7 +93,6 @@ describe('AvatarGroup', () => {
         <AvatarGroup max={0}>
           <Avatar userId={1} firstName="太郎" lastName="田中" />
           <Avatar userId={2} firstName="花子" lastName="鈴木" />
-          <AvatarGroup.Remain />
         </AvatarGroup>,
       );
       expect(screen.getByText('田中')).toBeInTheDocument();
@@ -109,7 +105,6 @@ describe('AvatarGroup', () => {
         <AvatarGroup max={-3}>
           <Avatar userId={1} firstName="太郎" lastName="田中" />
           <Avatar userId={2} firstName="花子" lastName="鈴木" />
-          <AvatarGroup.Remain />
         </AvatarGroup>,
       );
       expect(screen.getByText('田中')).toBeInTheDocument();
@@ -117,51 +112,178 @@ describe('AvatarGroup', () => {
     });
   });
 
-  describe('カウンター表示', () => {
-    it('AvatarGroup.Remain が +N 形式で残り人数を表示すること', () => {
+  describe('デフォルトのサプライズバッジ', () => {
+    it('max を超える場合、デフォルトで +N バッジが自動表示されること', () => {
       render(
         <AvatarGroup max={2}>
           <Avatar userId={1} firstName="太郎" lastName="田中" />
           <Avatar userId={2} firstName="花子" lastName="鈴木" />
           <Avatar userId={3} firstName="一郎" lastName="佐藤" />
-          <AvatarGroup.Remain />
         </AvatarGroup>,
       );
       expect(screen.getByText('+1')).toBeInTheDocument();
     });
 
-    it('AvatarGroup.Counter が総数を表示すること', () => {
+    it('max 以下の場合、+N バッジは表示されないこと', () => {
+      render(
+        <AvatarGroup max={5}>
+          <Avatar userId={1} firstName="太郎" lastName="田中" />
+          <Avatar userId={2} firstName="花子" lastName="鈴木" />
+        </AvatarGroup>,
+      );
+      expect(screen.queryByText('+0')).not.toBeInTheDocument();
+      expect(screen.queryByLabelText(/残り/)).not.toBeInTheDocument();
+    });
+
+    it('デフォルトバッジに aria-label="残りN人" が付与されること', () => {
       render(
         <AvatarGroup max={2}>
           <Avatar userId={1} firstName="太郎" lastName="田中" />
           <Avatar userId={2} firstName="花子" lastName="鈴木" />
           <Avatar userId={3} firstName="一郎" lastName="佐藤" />
-          <AvatarGroup.Counter />
+          <Avatar userId={4} firstName="次郎" lastName="高橋" />
         </AvatarGroup>,
       );
-      expect(screen.getByText('3')).toBeInTheDocument();
+      expect(screen.getByLabelText('残り2人')).toBeInTheDocument();
     });
+  });
 
-    it('max 以下の場合、Remain が非表示になること', () => {
+  describe('total prop', () => {
+    it('total を指定すると total - max の値が +N で表示されること', () => {
       render(
-        <AvatarGroup max={5}>
+        <AvatarGroup max={5} total={1000}>
           <Avatar userId={1} firstName="太郎" lastName="田中" />
           <Avatar userId={2} firstName="花子" lastName="鈴木" />
-          <AvatarGroup.Remain />
+          <Avatar userId={3} firstName="一郎" lastName="佐藤" />
+          <Avatar userId={4} firstName="次郎" lastName="高橋" />
+          <Avatar userId={5} firstName="三郎" lastName="渡辺" />
         </AvatarGroup>,
       );
-      expect(screen.queryByText('+0')).not.toBeInTheDocument();
+      expect(screen.getByText('+995')).toBeInTheDocument();
     });
 
-    it('max 以下の場合、Counter が非表示になること', () => {
+    it('total 未指定時は children.length - max が表示されること', () => {
       render(
-        <AvatarGroup max={5}>
+        <AvatarGroup max={2}>
           <Avatar userId={1} firstName="太郎" lastName="田中" />
           <Avatar userId={2} firstName="花子" lastName="鈴木" />
-          <AvatarGroup.Counter />
+          <Avatar userId={3} firstName="一郎" lastName="佐藤" />
+          <Avatar userId={4} firstName="次郎" lastName="高橋" />
         </AvatarGroup>,
       );
-      expect(screen.queryByText('2')).not.toBeInTheDocument();
+      expect(screen.getByText('+2')).toBeInTheDocument();
+    });
+
+    it('total が children 件数以下の場合は +N が表示されないこと', () => {
+      render(
+        <AvatarGroup max={5} total={3}>
+          <Avatar userId={1} firstName="太郎" lastName="田中" />
+          <Avatar userId={2} firstName="花子" lastName="鈴木" />
+          <Avatar userId={3} firstName="一郎" lastName="佐藤" />
+        </AvatarGroup>,
+      );
+      expect(screen.queryByLabelText(/残り/)).not.toBeInTheDocument();
+    });
+  });
+
+  describe('条件付きレンダリング', () => {
+    it('null / false が children に混在しても件数・描画が一致すること', () => {
+      const shouldShow = false;
+      render(
+        <AvatarGroup max={3}>
+          <Avatar userId={1} firstName="太郎" lastName="田中" />
+          {shouldShow && <Avatar userId={2} firstName="花子" lastName="鈴木" />}
+          {null}
+          <Avatar userId={3} firstName="一郎" lastName="佐藤" />
+        </AvatarGroup>,
+      );
+      expect(screen.getByText('田中')).toBeInTheDocument();
+      expect(screen.getByText('佐藤')).toBeInTheDocument();
+      expect(screen.queryByLabelText(/残り/)).not.toBeInTheDocument();
+    });
+  });
+
+  describe('renderSurplus', () => {
+    it('renderSurplus が指定されたときに呼び出され、返した ReactNode が描画されること', () => {
+      render(
+        <AvatarGroup max={2} renderSurplus={({ remain }) => <span>custom+{remain}</span>}>
+          <Avatar userId={1} firstName="太郎" lastName="田中" />
+          <Avatar userId={2} firstName="花子" lastName="鈴木" />
+          <Avatar userId={3} firstName="一郎" lastName="佐藤" />
+          <Avatar userId={4} firstName="次郎" lastName="高橋" />
+        </AvatarGroup>,
+      );
+      expect(screen.getByText('custom+2')).toBeInTheDocument();
+    });
+
+    it('renderSurplus に渡る remain / total が正しいこと', () => {
+      const renderSurplus = vi.fn(() => <span>custom</span>);
+      render(
+        <AvatarGroup max={2} total={10} renderSurplus={renderSurplus}>
+          <Avatar userId={1} firstName="太郎" lastName="田中" />
+          <Avatar userId={2} firstName="花子" lastName="鈴木" />
+          <Avatar userId={3} firstName="一郎" lastName="佐藤" />
+        </AvatarGroup>,
+      );
+      expect(renderSurplus).toHaveBeenCalledWith(expect.objectContaining({ remain: 8, total: 10 }));
+    });
+
+    it('renderSurplus に渡る defaultBadge をそのまま描画するとデフォルトと同等の内容になること', () => {
+      render(
+        <AvatarGroup max={2} renderSurplus={({ defaultBadge }) => <div data-testid="wrap">{defaultBadge}</div>}>
+          <Avatar userId={1} firstName="太郎" lastName="田中" />
+          <Avatar userId={2} firstName="花子" lastName="鈴木" />
+          <Avatar userId={3} firstName="一郎" lastName="佐藤" />
+        </AvatarGroup>,
+      );
+      const wrap = screen.getByTestId('wrap');
+      expect(wrap).toHaveTextContent('+1');
+      expect(wrap.querySelector('[aria-label="残り1人"]')).not.toBeNull();
+    });
+
+    it('max 以下の場合、renderSurplus は呼ばれないこと', () => {
+      const renderSurplus = vi.fn(() => <span>custom</span>);
+      render(
+        <AvatarGroup max={5} renderSurplus={renderSurplus}>
+          <Avatar userId={1} firstName="太郎" lastName="田中" />
+          <Avatar userId={2} firstName="花子" lastName="鈴木" />
+        </AvatarGroup>,
+      );
+      expect(renderSurplus).not.toHaveBeenCalled();
+    });
+
+    it('renderSurplus が null を返した場合、何も描画されないこと', () => {
+      render(
+        <AvatarGroup max={2} renderSurplus={() => null}>
+          <Avatar userId={1} firstName="太郎" lastName="田中" />
+          <Avatar userId={2} firstName="花子" lastName="鈴木" />
+          <Avatar userId={3} firstName="一郎" lastName="佐藤" />
+        </AvatarGroup>,
+      );
+      expect(screen.queryByLabelText(/残り/)).not.toBeInTheDocument();
+      expect(screen.queryByText('+1')).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Tooltip ラップ', () => {
+    it('Tooltip でラップされた Avatar を children に入れても max / slice / +N 計算が正しく動くこと', () => {
+      render(
+        <AvatarGroup max={2}>
+          <Tooltip content="田中 太郎" verticalPosition="top">
+            <Avatar userId={1} firstName="太郎" lastName="田中" />
+          </Tooltip>
+          <Tooltip content="鈴木 花子" verticalPosition="top">
+            <Avatar userId={2} firstName="花子" lastName="鈴木" />
+          </Tooltip>
+          <Tooltip content="佐藤 一郎" verticalPosition="top">
+            <Avatar userId={3} firstName="一郎" lastName="佐藤" />
+          </Tooltip>
+        </AvatarGroup>,
+      );
+      expect(screen.getByText('田中')).toBeInTheDocument();
+      expect(screen.getByText('鈴木')).toBeInTheDocument();
+      expect(screen.queryByText('佐藤')).not.toBeInTheDocument();
+      expect(screen.getByText('+1')).toBeInTheDocument();
     });
   });
 
@@ -176,18 +298,6 @@ describe('AvatarGroup', () => {
       expect(wrapper).not.toHaveClass('-ml-1.5');
       expect(wrapper).not.toHaveClass('-ml-2');
     });
-
-    it('カウンターにサイズに応じたスタイルが適用されること', () => {
-      render(
-        <AvatarGroup max={1} size="x-small">
-          <Avatar userId={1} firstName="太郎" lastName="田中" />
-          <Avatar userId={2} firstName="花子" lastName="鈴木" />
-          <AvatarGroup.Remain />
-        </AvatarGroup>,
-      );
-      const counter = screen.getByText('+1');
-      expect(counter).toBeInTheDocument();
-    });
   });
 
   describe('ボーダー', () => {
@@ -200,44 +310,6 @@ describe('AvatarGroup', () => {
       const wrapper = container.querySelector('[role="group"]')?.firstChild as HTMLElement;
       expect(wrapper).toHaveClass('rounded-full');
       expect(wrapper).toHaveClass('border-white');
-    });
-  });
-
-  describe('Label', () => {
-    it('AvatarGroup.Label が渡されたテキストを表示すること', () => {
-      render(
-        <AvatarGroup max={5}>
-          <Avatar userId={1} firstName="太郎" lastName="田中" />
-          <Avatar userId={2} firstName="花子" lastName="鈴木" />
-          <AvatarGroup.Label>+995</AvatarGroup.Label>
-        </AvatarGroup>,
-      );
-      expect(screen.getByText('+995')).toBeInTheDocument();
-    });
-
-    it('Label は max の計算に含まれないこと', () => {
-      render(
-        <AvatarGroup max={2}>
-          <Avatar userId={1} firstName="太郎" lastName="田中" />
-          <Avatar userId={2} firstName="花子" lastName="鈴木" />
-          <Avatar userId={3} firstName="一郎" lastName="佐藤" />
-          <AvatarGroup.Label>1000</AvatarGroup.Label>
-        </AvatarGroup>,
-      );
-      expect(screen.getByText('田中')).toBeInTheDocument();
-      expect(screen.getByText('鈴木')).toBeInTheDocument();
-      expect(screen.queryByText('佐藤')).not.toBeInTheDocument();
-      expect(screen.getByText('1000')).toBeInTheDocument();
-    });
-
-    it('Label は isOverflow に関係なく常に表示されること', () => {
-      render(
-        <AvatarGroup max={5}>
-          <Avatar userId={1} firstName="太郎" lastName="田中" />
-          <AvatarGroup.Label>+999</AvatarGroup.Label>
-        </AvatarGroup>,
-      );
-      expect(screen.getByText('+999')).toBeInTheDocument();
     });
   });
 
@@ -255,47 +327,6 @@ describe('AvatarGroup', () => {
       expect((children?.[0] as HTMLElement).style.zIndex).toBe('1');
       expect((children?.[1] as HTMLElement).style.zIndex).toBe('2');
       expect((children?.[2] as HTMLElement).style.zIndex).toBe('3');
-    });
-  });
-
-  describe('Tooltip ラップ', () => {
-    it('Tooltip でラップされた Remain が正しく認識されること', () => {
-      render(
-        <AvatarGroup max={1}>
-          <Avatar userId={1} firstName="太郎" lastName="田中" />
-          <Avatar userId={2} firstName="花子" lastName="鈴木" />
-          <Tooltip content="残り1名" verticalPosition="top">
-            <AvatarGroup.Remain />
-          </Tooltip>
-        </AvatarGroup>,
-      );
-      expect(screen.getByText('+1')).toBeInTheDocument();
-      expect(screen.queryByText('鈴木')).not.toBeInTheDocument();
-    });
-
-    it('Tooltip でラップされた Counter が正しく認識されること', () => {
-      render(
-        <AvatarGroup max={1}>
-          <Avatar userId={1} firstName="太郎" lastName="田中" />
-          <Avatar userId={2} firstName="花子" lastName="鈴木" />
-          <Tooltip content="合計2名" verticalPosition="top">
-            <AvatarGroup.Counter />
-          </Tooltip>
-        </AvatarGroup>,
-      );
-      expect(screen.getByText('2')).toBeInTheDocument();
-    });
-
-    it('Tooltip でラップされた Label が正しく認識されること', () => {
-      render(
-        <AvatarGroup max={5}>
-          <Avatar userId={1} firstName="太郎" lastName="田中" />
-          <Tooltip content="詳細" verticalPosition="top">
-            <AvatarGroup.Label>+999</AvatarGroup.Label>
-          </Tooltip>
-        </AvatarGroup>,
-      );
-      expect(screen.getByText('+999')).toBeInTheDocument();
     });
   });
 
@@ -319,47 +350,6 @@ describe('AvatarGroup', () => {
       const avatar = screen.getByText('田中');
       expect(avatar).toHaveClass('w-6', 'h-6');
       expect(avatar).not.toHaveClass('w-16', 'h-16');
-    });
-  });
-
-  describe('エラーハンドリング', () => {
-    it('AvatarGroup 外で Remain を使用するとエラーが発生すること', () => {
-      const spy = vi.spyOn(console, 'error').mockImplementation(() => null);
-      expect(() => render(<AvatarGroup.Remain />)).toThrow(
-        'AvatarGroup のサブコンポーネントは AvatarGroup 内で使用してください',
-      );
-      spy.mockRestore();
-    });
-
-    it('AvatarGroup 外で Counter を使用するとエラーが発生すること', () => {
-      const spy = vi.spyOn(console, 'error').mockImplementation(() => null);
-      expect(() => render(<AvatarGroup.Counter />)).toThrow(
-        'AvatarGroup のサブコンポーネントは AvatarGroup 内で使用してください',
-      );
-      spy.mockRestore();
-    });
-
-    it('AvatarGroup 外で Label を使用するとエラーが発生すること', () => {
-      const spy = vi.spyOn(console, 'error').mockImplementation(() => null);
-      expect(() => render(<AvatarGroup.Label>テスト</AvatarGroup.Label>)).toThrow(
-        'AvatarGroup のサブコンポーネントは AvatarGroup 内で使用してください',
-      );
-      spy.mockRestore();
-    });
-  });
-
-  describe('Remain と Counter の同時使用', () => {
-    it('両方が表示されること', () => {
-      render(
-        <AvatarGroup max={1}>
-          <Avatar userId={1} firstName="太郎" lastName="田中" />
-          <Avatar userId={2} firstName="花子" lastName="鈴木" />
-          <AvatarGroup.Remain />
-          <AvatarGroup.Counter />
-        </AvatarGroup>,
-      );
-      expect(screen.getByText('+1')).toBeInTheDocument();
-      expect(screen.getByText('2')).toBeInTheDocument();
     });
   });
 });

@@ -35,7 +35,6 @@ export const Component: Story = {
       {avatarData.map((data) => (
         <Avatar key={data.userId} userId={data.userId} firstName={data.firstName} lastName={data.lastName} />
       ))}
-      <AvatarGroup.Remain />
     </AvatarGroup>
   ),
   parameters: {
@@ -54,62 +53,55 @@ export function Base() {
             {avatarData.map((data) => (
               <Avatar key={data.userId} userId={data.userId} firstName={data.firstName} lastName={data.lastName} />
             ))}
-            <AvatarGroup.Remain />
           </AvatarGroup>
         ))}
       </div>
 
-      {/* Remain（+N 形式） */}
+      {/* デフォルト（+N 自動表示） */}
       <div className="flex flex-col gap-2">
-        <p className="typography-label14regular text-text02">Remain（+N 形式）</p>
+        <p className="typography-label14regular text-text02">デフォルト（+N 自動表示）</p>
         <AvatarGroup max={4} size="small">
           {avatarData.map((data) => (
             <Avatar key={data.userId} userId={data.userId} firstName={data.firstName} lastName={data.lastName} />
           ))}
-          <AvatarGroup.Remain />
         </AvatarGroup>
       </div>
 
-      {/* Counter（総数形式） */}
+      {/* 総数を表示（renderSurplus でカスタム） */}
       <div className="flex flex-col gap-2">
-        <p className="typography-label14regular text-text02">Counter（総数形式）</p>
-        <AvatarGroup max={4} size="small">
+        <p className="typography-label14regular text-text02">総数を表示（renderSurplus でカスタム）</p>
+        <AvatarGroup
+          max={4}
+          size="small"
+          renderSurplus={({ total }) => (
+            <span className="typography-label11regular flex size-8 items-center justify-center rounded-full bg-uiBackground02 text-text02">
+              {total}
+            </span>
+          )}
+        >
           {avatarData.map((data) => (
             <Avatar key={data.userId} userId={data.userId} firstName={data.firstName} lastName={data.lastName} />
           ))}
-          <AvatarGroup.Counter />
         </AvatarGroup>
       </div>
 
-      {/* max 以下の場合（カウンター非表示） */}
+      {/* max 以下の場合（+N 非表示） */}
       <div className="flex flex-col gap-2">
-        <p className="typography-label14regular text-text02">max 以下の場合（カウンター非表示）</p>
+        <p className="typography-label14regular text-text02">max 以下の場合（+N 非表示）</p>
         <AvatarGroup max={5} size="small">
           <Avatar userId={1} firstName="太郎" lastName="田中" />
           <Avatar userId={2} firstName="花子" lastName="鈴木" />
           <Avatar userId={3} firstName="一郎" lastName="佐藤" />
-          <AvatarGroup.Remain />
         </AvatarGroup>
       </div>
 
-      {/* Label（大量データ想定） */}
+      {/* 大量データ（total prop で +N 自動計算） */}
       <div className="flex flex-col gap-2">
-        <p className="typography-label14regular text-text02">Label（大量データ想定：+N 形式）</p>
-        <AvatarGroup size="small">
+        <p className="typography-label14regular text-text02">大量データ（total prop で +N 自動計算）</p>
+        <AvatarGroup size="small" max={5} total={1000}>
           {avatarData.slice(0, 5).map((data) => (
             <Avatar key={data.userId} userId={data.userId} firstName={data.firstName} lastName={data.lastName} />
           ))}
-          <AvatarGroup.Label>+995</AvatarGroup.Label>
-        </AvatarGroup>
-      </div>
-
-      <div className="flex flex-col gap-2">
-        <p className="typography-label14regular text-text02">Label（大量データ想定：総数形式）</p>
-        <AvatarGroup size="small">
-          {avatarData.slice(0, 5).map((data) => (
-            <Avatar key={data.userId} userId={data.userId} firstName={data.firstName} lastName={data.lastName} />
-          ))}
-          <AvatarGroup.Label>1000</AvatarGroup.Label>
         </AvatarGroup>
       </div>
 
@@ -121,7 +113,6 @@ export function Base() {
           <Avatar userId={2} />
           <Avatar userId={3} />
           <Avatar userId={4} />
-          <AvatarGroup.Remain />
         </AvatarGroup>
       </div>
     </div>
@@ -198,18 +189,10 @@ function Status({ avatars }: { avatars: AvatarWithStatus[] }) {
 
   return (
     <div className="flex cursor-default items-center gap-2">
-      <AvatarGroup max={4} size="x-small">
-        {avatars.map((data) => (
-          <Tooltip
-            key={data.userId}
-            content={`${data.lastName} ${data.firstName}：${data.status}`}
-            verticalPosition="top"
-            portalTarget={document.body}
-          >
-            <Avatar userId={data.userId} firstName={data.firstName} lastName={data.lastName} />
-          </Tooltip>
-        ))}
-        {avatars.length > 4 && (
+      <AvatarGroup
+        max={4}
+        size="x-small"
+        renderSurplus={({ defaultBadge }) => (
           <Tooltip
             content={
               <div className="flex flex-col">
@@ -221,9 +204,20 @@ function Status({ avatars }: { avatars: AvatarWithStatus[] }) {
             verticalPosition="top"
             portalTarget={document.body}
           >
-            <AvatarGroup.Remain />
+            {defaultBadge}
           </Tooltip>
         )}
+      >
+        {avatars.map((data) => (
+          <Tooltip
+            key={data.userId}
+            content={`${data.lastName} ${data.firstName}：${data.status}`}
+            verticalPosition="top"
+            portalTarget={document.body}
+          >
+            <Avatar userId={data.userId} firstName={data.firstName} lastName={data.lastName} />
+          </Tooltip>
+        ))}
       </AvatarGroup>
     </div>
   );
@@ -282,34 +276,58 @@ export const LayoutExample: Story = {
   },
   render: () => (
     <div className="flex flex-col gap-6">
-      {/* Tooltip との組み合わせ（Remain に全員の名前を表示） */}
+      {/* Tooltip との組み合わせ（+N に残り一覧の Tooltip を付与） */}
       <div className="flex flex-col gap-2">
-        <p className="typography-label14regular text-text02">Tooltip との組み合わせ</p>
-        <AvatarGroup max={4} size="medium">
+        <p className="typography-label14regular text-text02">Tooltip との組み合わせ（+N に残り一覧）</p>
+        <AvatarGroup
+          max={4}
+          size="medium"
+          renderSurplus={({ defaultBadge }) => (
+            <Tooltip
+              content={
+                <div className="flex flex-col">
+                  {avatarData.slice(4, 6).map((data) => (
+                    <span key={data.userId}>{`${data.lastName} ${data.firstName}`}</span>
+                  ))}
+                </div>
+              }
+              verticalPosition="top"
+              portalTarget={document.body}
+            >
+              {defaultBadge}
+            </Tooltip>
+          )}
+        >
           {avatarData.slice(0, 6).map((data) => (
             <Avatar key={data.userId} userId={data.userId} firstName={data.firstName} lastName={data.lastName} />
           ))}
-          <Tooltip
-            content={
-              <div className="flex flex-col">
-                {avatarData.slice(0, 6).map((data) => (
-                  <span key={data.userId}>{`${data.lastName} ${data.firstName}`}</span>
-                ))}
-              </div>
-            }
-            verticalPosition="top"
-            portalTarget={document.body}
-          >
-            <AvatarGroup.Remain />
-          </Tooltip>
         </AvatarGroup>
       </div>
 
-      {/* サイズバリエーション + Tooltip */}
+      {/* サイズバリエーション + Tooltip（各 Avatar ラップ + renderSurplus） */}
       <div className="flex flex-col gap-2">
         <p className="typography-label14regular text-text02">サイズバリエーション + Tooltip</p>
         {(['small', 'medium', 'large'] as const).map((size) => (
-          <AvatarGroup key={size} size={size} max={3}>
+          <AvatarGroup
+            key={size}
+            size={size}
+            max={3}
+            renderSurplus={({ defaultBadge }) => (
+              <Tooltip
+                content={
+                  <div className="flex flex-col">
+                    {avatarData.slice(3, 5).map((data) => (
+                      <span key={data.userId}>{`${data.lastName} ${data.firstName}`}</span>
+                    ))}
+                  </div>
+                }
+                verticalPosition="top"
+                portalTarget={document.body}
+              >
+                {defaultBadge}
+              </Tooltip>
+            )}
+          >
             {avatarData.slice(0, 5).map((data) => (
               <Tooltip
                 key={data.userId}
@@ -320,27 +338,34 @@ export const LayoutExample: Story = {
                 <Avatar userId={data.userId} firstName={data.firstName} lastName={data.lastName} />
               </Tooltip>
             ))}
+          </AvatarGroup>
+        ))}
+      </div>
+
+      {/* 大量データ（total + Tooltip 付き renderSurplus） */}
+      <div className="flex flex-col gap-2">
+        <p className="typography-label14regular text-text02">大量データ（total + renderSurplus）</p>
+        <AvatarGroup
+          size="small"
+          max={5}
+          total={1000}
+          renderSurplus={({ defaultBadge }) => (
             <Tooltip
               content={
                 <div className="flex flex-col">
-                  {avatarData.slice(3, 5).map((data) => (
+                  {avatarData.slice(0, 5).map((data) => (
                     <span key={data.userId}>{`${data.lastName} ${data.firstName}`}</span>
                   ))}
+                  <span>...</span>
                 </div>
               }
               verticalPosition="top"
               portalTarget={document.body}
             >
-              <AvatarGroup.Remain />
+              {defaultBadge}
             </Tooltip>
-          </AvatarGroup>
-        ))}
-      </div>
-
-      {/* Label + Tooltip */}
-      <div className="flex flex-col gap-2">
-        <p className="typography-label14regular text-text02">Label + Tooltip（大量データ想定）</p>
-        <AvatarGroup size="small">
+          )}
+        >
           {avatarData.slice(0, 5).map((data) => (
             <Tooltip
               key={data.userId}
@@ -351,20 +376,6 @@ export const LayoutExample: Story = {
               <Avatar userId={data.userId} firstName={data.firstName} lastName={data.lastName} />
             </Tooltip>
           ))}
-          <Tooltip
-            content={
-              <div className="flex flex-col">
-                {avatarData.slice(0, 5).map((data) => (
-                  <span key={data.userId}>{`${data.lastName} ${data.firstName}`}</span>
-                ))}
-                <span>...</span>
-              </div>
-            }
-            verticalPosition="top"
-            portalTarget={document.body}
-          >
-            <AvatarGroup.Label>+995</AvatarGroup.Label>
-          </Tooltip>
         </AvatarGroup>
       </div>
     </div>

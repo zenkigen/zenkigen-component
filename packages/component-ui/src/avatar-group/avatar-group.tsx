@@ -1,9 +1,9 @@
 import { clsx } from 'clsx';
-import type { ReactElement, ReactNode } from 'react';
-import { Children, forwardRef, isValidElement } from 'react';
+import type { ReactNode } from 'react';
+import { Children, isValidElement } from 'react';
 
 import type { AvatarSize } from './avatar-group-context';
-import { AvatarGroupContext, useAvatarGroupContext } from './avatar-group-context';
+import { AvatarGroupContext } from './avatar-group-context';
 
 const OVERLAP_CLASSES: Record<AvatarSize, string> = {
   'x-small': '-ml-1.5',
@@ -29,103 +29,60 @@ const COUNTER_SIZE_CLASSES: Record<AvatarSize, string> = {
   'x-large': 'h-16 w-16 typography-label16regular',
 };
 
-const DISPLAY_NAMES = {
-  remain: 'AvatarGroup.Remain',
-  counter: 'AvatarGroup.Counter',
-  label: 'AvatarGroup.Label',
-} as const;
-
-type ComponentType = (typeof DISPLAY_NAMES)[keyof typeof DISPLAY_NAMES];
-
-function getDisplayName(element: ReactElement): string | null {
-  const type = element.type;
-  if (typeof type === 'function' || typeof type === 'object') {
-    return (type as { displayName?: string }).displayName ?? null;
-  }
-
-  return null;
-}
-
-const MAX_SEARCH_DEPTH = 3;
-
-function findComponentType(child: ReactNode, depth = 0): ComponentType | null {
-  if (!isValidElement(child) || depth > MAX_SEARCH_DEPTH) {
-    return null;
-  }
-
-  const displayName = getDisplayName(child);
-  if (displayName !== null && Object.values(DISPLAY_NAMES).includes(displayName as ComponentType)) {
-    return displayName as ComponentType;
-  }
-
-  const childProps = child.props as { children?: ReactNode };
-  if (childProps.children != null) {
-    const nestedChildren = Children.toArray(childProps.children);
-    for (const nestedChild of nestedChildren) {
-      const found = findComponentType(nestedChild, depth + 1);
-      if (found !== null) {
-        return found;
-      }
-    }
-  }
-
-  return null;
-}
-
-function classifyChildren(children: ReactNode) {
-  const childArray = Children.toArray(children);
-  const avatarChildren: ReactNode[] = [];
-  const remainChildren: ReactNode[] = [];
-  const counterChildren: ReactNode[] = [];
-  const labelChildren: ReactNode[] = [];
-
-  for (const child of childArray) {
-    const componentType = findComponentType(child);
-    switch (componentType) {
-      case DISPLAY_NAMES.remain:
-        remainChildren.push(child);
-        break;
-      case DISPLAY_NAMES.counter:
-        counterChildren.push(child);
-        break;
-      case DISPLAY_NAMES.label:
-        labelChildren.push(child);
-        break;
-      default:
-        avatarChildren.push(child);
-    }
-  }
-
-  return { avatarChildren, remainChildren, counterChildren, labelChildren };
-}
+export type RenderSurplusContext = {
+  remain: number;
+  total: number;
+  defaultBadge: ReactNode;
+};
 
 type AvatarGroupProps = {
   children: ReactNode;
   size?: AvatarSize;
   max?: number;
+  total?: number;
+  renderSurplus?: (ctx: RenderSurplusContext) => ReactNode;
   'aria-label'?: string;
 };
 
-function AvatarGroupRoot({ children, size = 'medium', max: maxProp = 5, 'aria-label': ariaLabel }: AvatarGroupProps) {
+function DefaultSurplus({ remain, size }: { remain: number; size: AvatarSize }) {
+  return (
+    <span
+      className={clsx(
+        'flex items-center justify-center rounded-full bg-uiBackground02 text-text02',
+        COUNTER_SIZE_CLASSES[size],
+      )}
+      aria-label={`残り${remain}人`}
+    >
+      +{remain}
+    </span>
+  );
+}
+
+export function AvatarGroup({
+  children,
+  size = 'medium',
+  max: maxProp = 5,
+  total,
+  renderSurplus,
+  'aria-label': ariaLabel,
+}: AvatarGroupProps) {
   const max = Math.max(1, maxProp);
-  const { avatarChildren, remainChildren, counterChildren, labelChildren } = classifyChildren(children);
-  const total = avatarChildren.length;
-  const isOverflow = total > max;
-  const remain = isOverflow ? total - max : 0;
-  const visibleAvatars = isOverflow ? avatarChildren.slice(0, max) : avatarChildren;
+  const avatarNodes = Children.toArray(children).filter(isValidElement);
+  const childrenCount = avatarNodes.length;
+  const displayedTotal = total ?? childrenCount;
+  const remain = Math.max(displayedTotal - max, 0);
+  const visibleAvatars = avatarNodes.slice(0, max);
 
-  const contextValue = {
-    size,
-    total,
-    max,
-    isOverflow,
-    remain,
-  };
-
-  const trailingElements = [...(isOverflow ? [...remainChildren, ...counterChildren] : []), ...labelChildren];
+  const defaultBadge = remain > 0 ? <DefaultSurplus remain={remain} size={size} /> : null;
+  const surplusNode =
+    remain > 0
+      ? typeof renderSurplus === 'function'
+        ? renderSurplus({ remain, total: displayedTotal, defaultBadge })
+        : defaultBadge
+      : null;
 
   return (
-    <AvatarGroupContext.Provider value={contextValue}>
+    <AvatarGroupContext.Provider value={{ size }}>
       <div role="group" aria-label={ariaLabel} className="flex items-center">
         {visibleAvatars.map((child, index) => (
           <div
@@ -136,82 +93,15 @@ function AvatarGroupRoot({ children, size = 'medium', max: maxProp = 5, 'aria-la
             {child}
           </div>
         ))}
-        {trailingElements.map((child, index) => (
+        {surplusNode != null && (
           <div
-            key={`trailing-${index}`}
             className={clsx('relative rounded-full', BORDER_CLASSES[size], OVERLAP_CLASSES[size])}
-            style={{ zIndex: visibleAvatars.length + index + 1 }}
+            style={{ zIndex: visibleAvatars.length + 1 }}
           >
-            {child}
+            {surplusNode}
           </div>
-        ))}
+        )}
       </div>
     </AvatarGroupContext.Provider>
   );
 }
-
-const Remain = forwardRef<HTMLSpanElement>(function Remain(_props, ref) {
-  const { size, remain, isOverflow } = useAvatarGroupContext();
-
-  if (!isOverflow) {
-    return null;
-  }
-
-  const classes = clsx(
-    'flex items-center justify-center rounded-full bg-uiBackground02 text-text02',
-    COUNTER_SIZE_CLASSES[size],
-  );
-
-  return (
-    <span ref={ref} className={classes}>
-      +{remain}
-    </span>
-  );
-});
-Remain.displayName = DISPLAY_NAMES.remain;
-
-const Counter = forwardRef<HTMLSpanElement>(function Counter(_props, ref) {
-  const { size, total, isOverflow } = useAvatarGroupContext();
-
-  if (!isOverflow) {
-    return null;
-  }
-
-  const classes = clsx(
-    'flex items-center justify-center rounded-full bg-uiBackground02 text-text02',
-    COUNTER_SIZE_CLASSES[size],
-  );
-
-  return (
-    <span ref={ref} className={classes}>
-      {total}
-    </span>
-  );
-});
-Counter.displayName = DISPLAY_NAMES.counter;
-
-type LabelProps = {
-  children: ReactNode;
-};
-
-const Label = forwardRef<HTMLSpanElement, LabelProps>(function Label({ children }, ref) {
-  const { size } = useAvatarGroupContext();
-
-  const classes = clsx(
-    'flex items-center justify-center rounded-full bg-uiBackground02 text-text02',
-    COUNTER_SIZE_CLASSES[size],
-  );
-
-  return (
-    <span ref={ref} className={classes}>
-      {children}
-    </span>
-  );
-});
-Label.displayName = DISPLAY_NAMES.label;
-
-export const AvatarGroup = Object.assign(AvatarGroupRoot, {
-  Remain,
-  Counter,
-  Label,
-});
