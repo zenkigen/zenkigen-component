@@ -1,7 +1,7 @@
 import { Meta } from '@storybook/addon-docs/blocks';
-import { tokens } from '@zenkigen-inc/component-config';
+import { tokensWithMeta } from '@zenkigen-inc/component-config';
 import { useState } from 'react';
-import { IconButton } from '@zenkigen-inc/component-ui';
+import { IconButton, Icon } from '@zenkigen-inc/component-ui';
 
 <style>
   {`
@@ -15,13 +15,31 @@ import { IconButton } from '@zenkigen-inc/component-ui';
 
 <Meta title="Tokens/Color" />
 
-<div style={{ width: '100%', maxWidth: 'none' }}>
-
 # Color Tokens
 
-export function ColorItem({ colorKey, value }) {
-  const [copiedName, setCopiedName] = useState(false);
-  const [copiedValue, setCopiedValue] = useState(false);
+Design Token（デザイントークン）は、デザインのスタイル（色、タイポグラフィ、スペーシング、シャドウなど）をコードとして定義し、再利用しやすくするための仕組みです。これにより、一貫性のあるUIデザインを提供できます。
+デザイントークンは [**Primitive Token（プリミティブトークン）**](#primitive-token) と [**Semantic Token（セマンティックトークン）**](#semantic-token) の 2 つの種類に分かれます。
+
+### Code Example
+
+- Color Token は Tailwind の色系ユーティリティ（text / bg / border / ring / fill / stroke など）から参照できます。
+
+```html
+<div className="text-text02">こんにちは。この要素の文字が、Semantic/Text text02 で着色されます。</div>
+<div className="bg-uiBackground02">
+  こんにちは。この要素の背景が、Semantic/Background uiBackground02 で着色されます。
+</div>
+<div className="border border-uiBorder01">
+  こんにちは。この要素のボーダーが、Semantic/Border uiBorder04 で着色されます。
+</div>
+```
+
+<div style={{ width: '100%', maxWidth: 'none' }}>
+
+export function ColorItem({ colorKey, value, description, rawValue }) {
+
+const [copiedName, setCopiedName] = useState(false);
+const [copiedValue, setCopiedValue] = useState(false);
 
 const handleCopyName = async () => {
 try {
@@ -46,8 +64,15 @@ console.error('Failed to copy: ', err);
 return (
 
 <div className="flex flex-col items-left gap-2 flex-shrink-0">
-  <div className="w-full" style={{ backgroundColor: value, height: 170 }} />
-  <div className="flex flex-col gap-1 text-xs text-left pr-1" style={{ minWidth: 170 }}>
+  <div className="flex w-full p-1 justify-end items-end" style={{ backgroundColor: value, height: 170 }}>
+    {rawValue ? (
+      <div className="flex bg-white rounded-sm px-1 py-0.5">
+        <Icon name="link" size="small" color="icon01" />
+        <span style={{ fontSize: '12px', fontWeight: 'bold' }}>{rawValue.replaceAll('$Colors.', '')}</span>
+      </div>
+    ) : null}
+  </div>
+  <div className="flex flex-col gap-1 text-left pr-1" style={{ minWidth: 170 }}>
     <div className="flex items-center">
       <div className="typography-label11bold">{colorKey}</div>
       <IconButton
@@ -68,229 +93,257 @@ return (
         variant="text"
       />
     </div>
+    {description ? (
+      <div className="typography-label14regular" style={{ fontSize: '14px', maxWidth: 150 }}>
+        {description}
+      </div>
+    ) : null}
   </div>
 </div>
 ); }
 
-## User Colors
+## Primitive Token
 
-<div style={{ overflowX: 'auto', width: '100%', minHeight: 260 }}>
+Primitive Token は、デザインの基礎となる原子的な値 を定義します。これは特定の用途を持たない、純粋なスタイル値を表します。
+
+- 生の値（数値やカラーコードなど） を定義する
+- 直接 UI に適用せず、Semantic Token によって参照される
+- デザイントークンの管理をしやすくする
+- グローバルに再利用可能
+
+### Primitive/Colors
+
+<div style={{ overflowX: 'auto', width: '100%', minHeight: 300 }}>
   <div className="flex gap-1">
-    {Object.entries(tokens.user).map(([key, value]) => (
-      <ColorItem key={key} colorKey={key} value={value} />
+    <ColorItem
+      colorKey="black"
+      value={tokensWithMeta.colors.black.value}
+      description={tokensWithMeta.colors.black.description}
+    />
+    <ColorItem
+      colorKey="white"
+      value={tokensWithMeta.colors.white.value}
+      description={tokensWithMeta.colors.white.description}
+    />
+  </div>
+</div>
+
+### Primitive/Colors/Blue
+
+<div style={{ overflowX: 'auto', width: '100%', minHeight: 300 }}>
+  <div className="flex gap-1">
+    {Object.entries(tokensWithMeta.colors.blue).map(([key, meta]) => (
+      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} />
     ))}
   </div>
 </div>
 
-## Text Colors
+### Primitive/Colors/Gray
 
-<div style={{ overflowX: 'auto', width: '100%', minHeight: 260 }}>
+<div style={{ overflowX: 'auto', width: '100%', minHeight: 300 }}>
   <div className="flex gap-1">
-    {Object.entries(tokens.tokens.text).map(([key, value]) => (
-      <ColorItem key={key} colorKey={key} value={value} />
+    {Object.entries(tokensWithMeta.colors.gray).map(([key, meta]) => (
+      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} />
     ))}
   </div>
 </div>
 
-## Link Colors
+### Primitive/Colors/Red
 
-<div style={{ overflowX: 'auto', width: '100%', minHeight: 260 }}>
+<div style={{ overflowX: 'auto', width: '100%', minHeight: 300 }}>
   <div className="flex gap-1">
-    {Object.entries(tokens.tokens.link).map(([key, value]) => (
-      <ColorItem key={key} colorKey={key} value={value} />
+    {Object.entries(tokensWithMeta.colors.red).map(([key, meta]) => (
+      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} />
     ))}
   </div>
 </div>
 
-## Border Colors
+### Primitive/Colors/Yellow
 
-<div style={{ overflowX: 'auto', width: '100%', minHeight: 260 }}>
+<div style={{ overflowX: 'auto', width: '100%', minHeight: 300 }}>
   <div className="flex gap-1">
-    {Object.entries(tokens.tokens.border).map(([key, value]) => (
-      <ColorItem key={key} colorKey={key} value={value} />
+    {Object.entries(tokensWithMeta.colors.yellow).map(([key, meta]) => (
+      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} />
     ))}
   </div>
 </div>
 
-## Background Colors
+### Primitive/Colors/Green
 
-<div style={{ overflowX: 'auto', width: '100%', minHeight: 260 }}>
+<div style={{ overflowX: 'auto', width: '100%', minHeight: 300 }}>
   <div className="flex gap-1">
-    {Object.entries(tokens.tokens.background).map(([key, value]) => (
-      <ColorItem key={key} colorKey={key} value={value} />
+    {Object.entries(tokensWithMeta.colors.green).map(([key, meta]) => (
+      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} />
     ))}
   </div>
 </div>
 
-## Icon Colors
+### Primitive/Colors/Purple
 
-<div style={{ overflowX: 'auto', width: '100%', minHeight: 260 }}>
+<div style={{ overflowX: 'auto', width: '100%', minHeight: 300 }}>
   <div className="flex gap-1">
-    {Object.entries(tokens.tokens.icon).map(([key, value]) => (
-      <ColorItem key={key} colorKey={key} value={value} />
+    {Object.entries(tokensWithMeta.colors.purple).map(([key, meta]) => (
+      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} />
     ))}
   </div>
 </div>
 
-## Interactive Colors
+### Primitive/Colors/BlueGreen
 
-<div style={{ overflowX: 'auto', width: '100%', minHeight: 260 }}>
+<div style={{ overflowX: 'auto', width: '100%', minHeight: 300 }}>
   <div className="flex gap-1">
-    {Object.entries(tokens.tokens.interactive).map(([key, value]) => (
-      <ColorItem key={key} colorKey={key} value={value} />
+    {Object.entries(tokensWithMeta.colors.blueGreen).map(([key, meta]) => (
+      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} />
     ))}
   </div>
 </div>
 
-## Field Colors
+## Semantic Token
 
-<div style={{ overflowX: 'auto', width: '100%', minHeight: 260 }}>
+Semantic Token は、コンポーネントや UI の意味に応じたデザインスタイル を定義します。これは、Primitive Token を組み合わせて使います。
+
+- 意味（セマンティクス）に基づいて命名される
+- コンポーネントや UI の文脈に応じたスタイルを表現する
+- デザイン変更時に一括で更新しやすい
+- ブランディングやテーマ適用を柔軟に管理できる
+
+### Semantic/Text
+
+<div style={{ overflowX: 'auto', width: '100%', minHeight: 300 }}>
   <div className="flex gap-1">
-    {Object.entries(tokens.tokens.field).map(([key, value]) => (
-      <ColorItem key={key} colorKey={key} value={value} />
+    {Object.entries(tokensWithMeta.tokens.text).map(([key, meta]) => (
+      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} rawValue={meta.rawValue} />
     ))}
   </div>
 </div>
 
-## Focus Colors
+### Semantic/Link
 
-<div style={{ overflowX: 'auto', width: '100%', minHeight: 260 }}>
+<div style={{ overflowX: 'auto', width: '100%', minHeight: 300 }}>
   <div className="flex gap-1">
-    {Object.entries(tokens.tokens.focus).map(([key, value]) => (
-      <ColorItem key={key} colorKey={key} value={value} />
+    {Object.entries(tokensWithMeta.tokens.link).map(([key, meta]) => (
+      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} rawValue={meta.rawValue} />
     ))}
   </div>
 </div>
 
-## Hover Colors
+### Semantic/Border
 
-<div style={{ overflowX: 'auto', width: '100%', minHeight: 260 }}>
+<div style={{ overflowX: 'auto', width: '100%', minHeight: 300 }}>
   <div className="flex gap-1">
-    {Object.entries(tokens.tokens.hover).map(([key, value]) => (
-      <ColorItem key={key} colorKey={key} value={value} />
+    {Object.entries(tokensWithMeta.tokens.border).map(([key, meta]) => (
+      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} rawValue={meta.rawValue} />
     ))}
   </div>
 </div>
 
-## Active Colors
+### Semantic/Background
 
-<div style={{ overflowX: 'auto', width: '100%', minHeight: 260 }}>
+<div style={{ overflowX: 'auto', width: '100%', minHeight: 300 }}>
   <div className="flex gap-1">
-    {Object.entries(tokens.tokens.active).map(([key, value]) => (
-      <ColorItem key={key} colorKey={key} value={value} />
+    {Object.entries(tokensWithMeta.tokens.background).map(([key, meta]) => (
+      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} rawValue={meta.rawValue} />
     ))}
   </div>
 </div>
 
-## Selected Colors
+### Semantic/Icon
 
-<div style={{ overflowX: 'auto', width: '100%', minHeight: 260 }}>
+<div style={{ overflowX: 'auto', width: '100%', minHeight: 300 }}>
   <div className="flex gap-1">
-    {Object.entries(tokens.tokens.selected).map(([key, value]) => (
-      <ColorItem key={key} colorKey={key} value={value} />
+    {Object.entries(tokensWithMeta.tokens.icon).map(([key, meta]) => (
+      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} rawValue={meta.rawValue} />
     ))}
   </div>
 </div>
 
-## Disabled Colors
+### Semantic/Interactive
 
-<div style={{ overflowX: 'auto', width: '100%', minHeight: 260 }}>
+<div style={{ overflowX: 'auto', width: '100%', minHeight: 300 }}>
   <div className="flex gap-1">
-    {Object.entries(tokens.tokens.disabled).map(([key, value]) => (
-      <ColorItem key={key} colorKey={key} value={value} />
+    {Object.entries(tokensWithMeta.tokens.interactive).map(([key, meta]) => (
+      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} rawValue={meta.rawValue} />
     ))}
   </div>
 </div>
 
-## Support Colors
+### Semantic/Field
 
-<div style={{ overflowX: 'auto', width: '100%', minHeight: 260 }}>
+<div style={{ overflowX: 'auto', width: '100%', minHeight: 300 }}>
   <div className="flex gap-1">
-    {Object.entries(tokens.tokens.support).map(([key, value]) => (
-      <ColorItem key={key} colorKey={key} value={value} />
+    {Object.entries(tokensWithMeta.tokens.field).map(([key, meta]) => (
+      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} rawValue={meta.rawValue} />
     ))}
   </div>
 </div>
 
-## Base Color Scales
+### Semantic/Focus
 
-### Blue Scale
-
-<div style={{ overflowX: 'auto', width: '100%', minHeight: 260 }}>
+<div style={{ overflowX: 'auto', width: '100%', minHeight: 300 }}>
   <div className="flex gap-1">
-    {Object.entries(tokens.colors.blue).map(([key, value]) => (
-      <ColorItem key={key} colorKey={key} value={value} />
+    {Object.entries(tokensWithMeta.tokens.focus).map(([key, meta]) => (
+      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} rawValue={meta.rawValue} />
     ))}
   </div>
 </div>
 
-### Gray Scale
+### Semantic/Hover
 
-<div style={{ overflowX: 'auto', width: '100%', minHeight: 260 }}>
+<div style={{ overflowX: 'auto', width: '100%', minHeight: 300 }}>
   <div className="flex gap-1">
-    {Object.entries(tokens.colors.gray).map(([key, value]) => (
-      <ColorItem key={key} colorKey={key} value={value} />
+    {Object.entries(tokensWithMeta.tokens.hover).map(([key, meta]) => (
+      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} rawValue={meta.rawValue} />
     ))}
   </div>
 </div>
 
-### Red Scale
+### Semantic/Active
 
-<div style={{ overflowX: 'auto', width: '100%', minHeight: 260 }}>
+<div style={{ overflowX: 'auto', width: '100%', minHeight: 300 }}>
   <div className="flex gap-1">
-    {Object.entries(tokens.colors.red).map(([key, value]) => (
-      <ColorItem key={key} colorKey={key} value={value} />
+    {Object.entries(tokensWithMeta.tokens.active).map(([key, meta]) => (
+      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} rawValue={meta.rawValue} />
     ))}
   </div>
 </div>
 
-### Yellow Scale
+### Semantic/Selected
 
-<div style={{ overflowX: 'auto', width: '100%', minHeight: 260 }}>
+<div style={{ overflowX: 'auto', width: '100%', minHeight: 300 }}>
   <div className="flex gap-1">
-    {Object.entries(tokens.colors.yellow).map(([key, value]) => (
-      <ColorItem key={key} colorKey={key} value={value} />
+    {Object.entries(tokensWithMeta.tokens.selected).map(([key, meta]) => (
+      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} rawValue={meta.rawValue} />
     ))}
   </div>
 </div>
 
-### Green Scale
+### Semantic/Support
 
-<div style={{ overflowX: 'auto', width: '100%', minHeight: 260 }}>
+<div style={{ overflowX: 'auto', width: '100%', minHeight: 300 }}>
   <div className="flex gap-1">
-    {Object.entries(tokens.colors.green).map(([key, value]) => (
-      <ColorItem key={key} colorKey={key} value={value} />
+    {Object.entries(tokensWithMeta.tokens.support).map(([key, meta]) => (
+      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} rawValue={meta.rawValue} />
     ))}
   </div>
 </div>
 
-### Purple Scale
+### Semantic/User
 
-<div style={{ overflowX: 'auto', width: '100%', minHeight: 260 }}>
+<div style={{ overflowX: 'auto', width: '100%', minHeight: 300 }}>
   <div className="flex gap-1">
-    {Object.entries(tokens.colors.purple).map(([key, value]) => (
-      <ColorItem key={key} colorKey={key} value={value} />
+    {Object.entries(tokensWithMeta.user).map(([key, meta]) => (
+      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} />
     ))}
   </div>
 </div>
 
-### Blue Green Scale
+### Semantic/Disabled
 
-<div style={{ overflowX: 'auto', width: '100%', minHeight: 260 }}>
+<div style={{ overflowX: 'auto', width: '100%', minHeight: 300 }}>
   <div className="flex gap-1">
-    {Object.entries(tokens.colors.blueGreen).map(([key, value]) => (
-      <ColorItem key={key} colorKey={key} value={value} />
+    {Object.entries(tokensWithMeta.tokens.disabled).map(([key, meta]) => (
+      <ColorItem key={key} colorKey={key} value={meta.value} description={meta.description} rawValue={meta.rawValue} />
     ))}
   </div>
 </div>
-
-## Basic Colors
-
-<div style={{ overflowX: 'auto', width: '100%', minHeight: 260 }}>
-  <div className="flex gap-1">
-    <ColorItem colorKey="black" value={tokens.colors.black} />
-    <ColorItem colorKey="white" value={tokens.colors.white} />
-  </div>
-</div>
-
 </div>

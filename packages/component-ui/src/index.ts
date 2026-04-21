@@ -4,6 +4,7 @@ export * from './breadcrumb';
 export * from './button';
 export * from './checkbox';
 export * from './date-picker';
+export * from './divider';
 export * from './dropdown';
 export * from './evaluation-star';
 export * from './file-input';
