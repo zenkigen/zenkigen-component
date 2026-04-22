@@ -50,6 +50,7 @@ export const Component: Story = {
     size: 'medium',
     variant: 'outline',
     role: 'listbox',
+    selectionIndicator: 'none',
     width: '240px',
   },
   parameters: {
