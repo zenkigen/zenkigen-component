@@ -74,7 +74,13 @@ export const ListOptionItem = forwardRef<HTMLLIElement, ListOptionItemProps>(fun
 
   const indicator =
     selectionIndicator === 'none' ? null : (
-      <span className="flex size-4 shrink-0 items-center justify-center" aria-hidden="true" data-selection-indicator>
+      <span
+        className={clsx('flex size-4 shrink-0 items-center justify-center', {
+          'ml-auto': selectionIndicator === 'right',
+        })}
+        aria-hidden="true"
+        data-selection-indicator
+      >
         {isSelected && !isDisabled && <Icon name="check" size="small" />}
       </span>
     );
