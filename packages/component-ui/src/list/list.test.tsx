@@ -174,9 +174,8 @@ describe('List', () => {
       const indicator = option.querySelector('[data-selection-indicator]');
       expect(indicator).not.toBeNull();
       expect(indicator?.querySelector('svg')).toBeNull();
-      // 領域 16px (h-4 w-4)
-      expect(indicator?.className).toMatch(/h-4/);
-      expect(indicator?.className).toMatch(/w-4/);
+      // 領域 16px (size-4)
+      expect(indicator?.className).toMatch(/size-4/);
     });
 
     it("'right' + isSelected で children の後に check Icon が表示される", () => {
