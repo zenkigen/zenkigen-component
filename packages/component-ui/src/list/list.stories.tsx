@@ -169,6 +169,22 @@ export const WithMaxHeight: Story = {
   ),
 };
 
+export const SelectionIndicatorLongLabels: Story = {
+  parameters: { chromatic: { disable: true } },
+  render: () => (
+    <div style={{ width: 180 }}>
+      <List variant="outline" size="medium" selectionIndicator="right" aria-label="long labels">
+        <List.OptionItem id="ll-a">短い</List.OptionItem>
+        <List.OptionItem id="ll-b" isSelected>
+          とてもとても長いラベルの選択肢テキスト
+        </List.OptionItem>
+        <List.OptionItem id="ll-c">やや長めのラベル</List.OptionItem>
+        <List.OptionItem id="ll-d">日本語が続くサンプルテキストです</List.OptionItem>
+      </List>
+    </div>
+  ),
+};
+
 export const SelectionIndicator: Story = {
   render: () => (
     <div className="flex items-start gap-8">

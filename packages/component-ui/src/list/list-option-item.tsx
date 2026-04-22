@@ -85,6 +85,11 @@ export const ListOptionItem = forwardRef<HTMLLIElement, ListOptionItemProps>(fun
       </span>
     );
 
+  // string / number の children は自動で truncate span にラップする。
+  // カスタム JSX は利用者責務（flex レイアウトを壊さないため）。
+  const isPrimitiveChildren = typeof children === 'string' || typeof children === 'number';
+  const renderedChildren = isPrimitiveChildren ? <span className="min-w-0 flex-1 truncate">{children}</span> : children;
+
   return (
     <li
       ref={ref}
@@ -98,7 +103,7 @@ export const ListOptionItem = forwardRef<HTMLLIElement, ListOptionItemProps>(fun
       className={classes}
     >
       {selectionIndicator === 'left' && indicator}
-      {children}
+      {renderedChildren}
       {selectionIndicator === 'right' && indicator}
     </li>
   );
