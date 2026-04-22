@@ -4,7 +4,7 @@ import { ListOptionItem } from '../list/list-option-item';
 import type { ComboboxItemProps } from './combobox.types';
 import { useComboboxContext } from './combobox-context';
 
-export function ComboboxItem({ value, label: _label, isDisabled = false, children }: ComboboxItemProps) {
+export function ComboboxItem({ value, label, isDisabled = false, children }: ComboboxItemProps) {
   const { baseId, items, activeIndex, selectedValue, selectValue, setActiveIndex, inputMode, setInputMode } =
     useComboboxContext('Combobox.Item');
 
@@ -31,7 +31,7 @@ export function ComboboxItem({ value, label: _label, isDisabled = false, childre
     if (isDisabled) {
       return;
     }
-    selectValue(value, _label);
+    selectValue(value, label);
   };
 
   const handleMouseEnter = () => {
@@ -55,7 +55,7 @@ export function ComboboxItem({ value, label: _label, isDisabled = false, childre
       onClick={handleClick}
       onMouseEnter={handleMouseEnter}
     >
-      {children}
+      {children ?? <span className="min-w-0 flex-1 truncate">{label}</span>}
     </ListOptionItem>
   );
 }

@@ -320,17 +320,25 @@ const filtered = useMemo(() => {
 </Combobox>
 ```
 
+### アイテムの表示
+
+`Combobox.Item` の children は省略可能。未指定の場合、`label` を 1 行 `truncate` 表示で自動レンダリングする。
+
+```typescript
+<Combobox.Item value={opt.value} label={opt.label} />
+```
+
 ### カスタムアイテム描画
 
-`Combobox.Item` の children に任意 JSX を渡してアイコン + サブテキストなどを描画できる。`label` は input 復元に使うため別途必須。
+`Combobox.Item` の children に任意 JSX を渡してアイコン + サブテキストなどを描画できる。`label` は input 復元に使うため別途必須。長文 ellipsis を効かせたい場合は内部要素に `min-w-0` / `truncate` を付与する。
 
 ```typescript
 <Combobox.Item value={user.id} label={user.name}>
-  <div className="flex items-center gap-2">
+  <div className="flex min-w-0 flex-1 items-center gap-2">
     <Icon name="user" size="small" />
-    <div className="flex flex-col">
-      <span className="typography-label14regular">{user.name}</span>
-      <span className="typography-label12regular text-text02">{user.email}</span>
+    <div className="flex min-w-0 flex-col">
+      <span className="typography-label14regular truncate">{user.name}</span>
+      <span className="typography-label12regular truncate text-text02">{user.email}</span>
     </div>
   </div>
 </Combobox.Item>

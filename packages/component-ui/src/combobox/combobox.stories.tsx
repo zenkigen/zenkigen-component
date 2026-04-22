@@ -98,9 +98,7 @@ export const Component: Story = {
         <Combobox.List>
           {filtered.length === 0 && inputText.length > 0 && <Combobox.Empty />}
           {filtered.map((opt) => (
-            <Combobox.Item key={opt.value} value={opt.value} label={opt.label}>
-              {opt.label}
-            </Combobox.Item>
+            <Combobox.Item key={opt.value} value={opt.value} label={opt.label} />
           ))}
         </Combobox.List>
       </Combobox>
@@ -137,9 +135,7 @@ export const Synchronous: Story = {
           <Combobox.List>
             {filtered.length === 0 && inputText.length > 0 && <Combobox.Empty>該当なし</Combobox.Empty>}
             {filtered.map((opt) => (
-              <Combobox.Item key={opt.value} value={opt.value} label={opt.label}>
-                {opt.label}
-              </Combobox.Item>
+              <Combobox.Item key={opt.value} value={opt.value} label={opt.label} />
             ))}
           </Combobox.List>
         </Combobox>
@@ -194,12 +190,7 @@ export const Asynchronous: Story = {
             {!isLoading && inputText.length > 0 && results.length === 0 && (
               <Combobox.Empty>該当する候補はありません</Combobox.Empty>
             )}
-            {!isLoading &&
-              results.map((opt) => (
-                <Combobox.Item key={opt.value} value={opt.value} label={opt.label}>
-                  {opt.label}
-                </Combobox.Item>
-              ))}
+            {!isLoading && results.map((opt) => <Combobox.Item key={opt.value} value={opt.value} label={opt.label} />)}
           </Combobox.List>
         </Combobox>
       </div>
@@ -250,9 +241,7 @@ export const LargeDataset: Story = {
           <Combobox.List>
             {inputText.length >= 2 && filtered.length === 0 && <Combobox.Empty>該当なし</Combobox.Empty>}
             {filtered.map((opt) => (
-              <Combobox.Item key={opt.value} value={opt.value} label={opt.label}>
-                {opt.label}
-              </Combobox.Item>
+              <Combobox.Item key={opt.value} value={opt.value} label={opt.label} />
             ))}
           </Combobox.List>
         </Combobox>
@@ -297,11 +286,11 @@ export const WithCustomItem: Story = {
             {filtered.length === 0 && inputText.length > 0 && <Combobox.Empty>ユーザーが見つかりません</Combobox.Empty>}
             {filtered.map((user) => (
               <Combobox.Item key={user.value} value={user.value} label={user.label}>
-                <div className="flex items-center gap-2">
+                <div className="flex min-w-0 flex-1 items-center gap-2">
                   <Icon name={user.icon} size="small" />
-                  <div className="flex flex-col">
-                    <span className="typography-label14regular">{user.label}</span>
-                    <span className="typography-label12regular text-text02">{user.email}</span>
+                  <div className="flex min-w-0 flex-col">
+                    <span className="typography-label14regular truncate">{user.label}</span>
+                    <span className="typography-label12regular truncate text-text02">{user.email}</span>
                   </div>
                 </div>
               </Combobox.Item>
@@ -349,9 +338,7 @@ export const WithMessages: Story = {
           </Combobox.Input>
           <Combobox.List>
             {filtered.map((opt) => (
-              <Combobox.Item key={opt.value} value={opt.value} label={opt.label}>
-                {opt.label}
-              </Combobox.Item>
+              <Combobox.Item key={opt.value} value={opt.value} label={opt.label} />
             ))}
           </Combobox.List>
         </Combobox>
@@ -377,9 +364,7 @@ export const Disabled: Story = {
         >
           <Combobox.Input />
           <Combobox.List>
-            <Combobox.Item value="apple" label="りんご">
-              りんご
-            </Combobox.Item>
+            <Combobox.Item value="apple" label="りんご" />
           </Combobox.List>
         </Combobox>
       </div>

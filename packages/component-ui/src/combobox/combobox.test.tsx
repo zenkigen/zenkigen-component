@@ -536,6 +536,78 @@ describe('Combobox', () => {
     });
   });
 
+  describe('Combobox.Item の children 省略', () => {
+    it('children 未指定時は label を truncate span で自動レンダリング', async () => {
+      const user = userEvent.setup();
+
+      function SlimCombobox() {
+        const [value, setValue] = useState<string | null>(null);
+        const [inputValue, setInputValue] = useState('');
+
+        return (
+          <Combobox
+            value={value}
+            onChange={(next, meta) => {
+              setValue(next);
+              setInputValue(meta?.label ?? '');
+            }}
+            inputValue={inputValue}
+            onInputChange={setInputValue}
+          >
+            <Combobox.Input />
+            <Combobox.List>
+              <Combobox.Item value="apple" label="りんご" />
+            </Combobox.List>
+          </Combobox>
+        );
+      }
+
+      render(<SlimCombobox />);
+      await user.click(getCombobox());
+
+      const option = getOption('りんご');
+      // children 未指定なら li 直下に truncate span が生成される
+      const textSpan = option.querySelector('span');
+      expect(textSpan).not.toBeNull();
+      expect(textSpan?.textContent).toBe('りんご');
+      expect(textSpan?.className).toMatch(/truncate/);
+      expect(textSpan?.className).toMatch(/min-w-0/);
+    });
+
+    it('children 指定時は span を自動生成しない', async () => {
+      const user = userEvent.setup();
+
+      function CustomCombobox() {
+        const [value, setValue] = useState<string | null>(null);
+        const [inputValue, setInputValue] = useState('');
+
+        return (
+          <Combobox
+            value={value}
+            onChange={(next, meta) => {
+              setValue(next);
+              setInputValue(meta?.label ?? '');
+            }}
+            inputValue={inputValue}
+            onInputChange={setInputValue}
+          >
+            <Combobox.Input />
+            <Combobox.List>
+              <Combobox.Item value="apple" label="りんご">
+                <div data-testid="custom">custom content</div>
+              </Combobox.Item>
+            </Combobox.List>
+          </Combobox>
+        );
+      }
+
+      render(<CustomCombobox />);
+      await user.click(getCombobox());
+
+      expect(screen.getByTestId('custom')).toBeInTheDocument();
+    });
+  });
+
   describe('size の連動', () => {
     function ControlledWithSize({ size }: { size: 'medium' | 'large' }) {
       const [value, setValue] = useState<string | null>(null);
