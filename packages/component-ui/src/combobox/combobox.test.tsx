@@ -536,6 +536,53 @@ describe('Combobox', () => {
     });
   });
 
+  describe('size の連動', () => {
+    function ControlledWithSize({ size }: { size: 'medium' | 'large' }) {
+      const [value, setValue] = useState<string | null>(null);
+      const [inputValue, setInputValue] = useState('');
+
+      return (
+        <Combobox
+          value={value}
+          onChange={(next, meta) => {
+            setValue(next);
+            setInputValue(meta?.label ?? '');
+          }}
+          inputValue={inputValue}
+          onInputChange={setInputValue}
+          size={size}
+        >
+          <Combobox.Input />
+          <Combobox.List>
+            {defaultFruits.map((opt) => (
+              <Combobox.Item key={opt.value} value={opt.value} label={opt.label}>
+                {opt.label}
+              </Combobox.Item>
+            ))}
+          </Combobox.List>
+        </Combobox>
+      );
+    }
+
+    it('size=medium のとき Item の高さが h-8', async () => {
+      const user = userEvent.setup();
+      render(<ControlledWithSize size="medium" />);
+      await user.click(getCombobox());
+      const option = getOption('りんご');
+      expect(option.className).toMatch(/h-8/);
+      expect(option.className).toMatch(/typography-label14regular/);
+    });
+
+    it('size=large のとき Item の高さが h-10 (List に size が伝搬)', async () => {
+      const user = userEvent.setup();
+      render(<ControlledWithSize size="large" />);
+      await user.click(getCombobox());
+      const option = getOption('りんご');
+      expect(option.className).toMatch(/h-10/);
+      expect(option.className).toMatch(/typography-label16regular/);
+    });
+  });
+
   describe('状態', () => {
     it('isError の場合、input に error 用のクラスが付く', () => {
       render(<ControlledCombobox isError />);

@@ -43,7 +43,7 @@ function hasOpenableContent(children: ReactNode): boolean {
 }
 
 export function ComboboxList({ children, maxHeight: maxHeightProp }: ComboboxListProps) {
-  const { listId, isOpen, setItems, setListRef, floatingStyles, listMaxHeight, variant } =
+  const { listId, isOpen, setItems, setListRef, floatingStyles, listMaxHeight, variant, size } =
     useComboboxContext('Combobox.List');
 
   const items = useMemo(() => extractItems(children), [children]);
@@ -90,6 +90,7 @@ export function ComboboxList({ children, maxHeight: maxHeightProp }: ComboboxLis
         ref={ulRef}
         containerRef={mergedContainerRef}
         id={listId}
+        size={size}
         variant={variant === 'outline' ? 'outline' : 'borderless'}
         maxHeight={maxHeightProp ?? listMaxHeight}
         aria-label="候補一覧"
