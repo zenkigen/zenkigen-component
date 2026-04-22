@@ -94,7 +94,7 @@ function ComboboxBase({
     [combobox.inputRef],
   );
 
-  const setListRef = useCallback((node: HTMLUListElement | null) => {
+  const setListRef = useCallback((node: HTMLDivElement | null) => {
     refsRef.current.setFloating(node);
   }, []);
 

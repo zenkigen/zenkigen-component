@@ -54,21 +54,22 @@ export function ComboboxList({ children, maxHeight: maxHeightProp }: ComboboxLis
     setItems(items);
   }, [items, setItems]);
 
-  // List DOM への ref（scrollTop リセット用）と Floating UI 用 ref callback を統合
-  const listElementRef = useRef<HTMLUListElement | null>(null);
-  const mergedListRef = useCallback(
-    (node: HTMLUListElement | null) => {
-      listElementRef.current = node;
+  // scrollable な内側 ul への ref（scrollTop リセット用）
+  const ulRef = useRef<HTMLUListElement | null>(null);
+
+  // Floating UI の floating element として wrapper (List の containerRef) を渡す
+  const mergedContainerRef = useCallback(
+    (node: HTMLDivElement | null) => {
       setListRef(node);
     },
     [setListRef],
   );
 
-  // open false → true で scrollTop をリセット（前回 scroll 位置を持ち越さない）
+  // open false → true で内側 ul の scrollTop をリセット（前回 scroll 位置を持ち越さない）
   const prevOpenRef = useRef(isOpen);
   useEffect(() => {
-    if (!prevOpenRef.current && isOpen && listElementRef.current != null) {
-      listElementRef.current.scrollTop = 0;
+    if (!prevOpenRef.current && isOpen && ulRef.current != null) {
+      ulRef.current.scrollTop = 0;
     }
     prevOpenRef.current = isOpen;
   }, [isOpen]);
@@ -80,15 +81,14 @@ export function ComboboxList({ children, maxHeight: maxHeightProp }: ComboboxLis
 
   // Floating UI の floating element (= setFloating で参照される DOM) と
   // floatingStyles の適用先は同じ要素である必要がある。
-  // ここでは ul (List) 自身を floating element とし、floatingStyles を
-  // List に直接渡す。
-  // List 自体が position: absolute (floatingStyles) なので、z-index も List に直接当てる。
-  // 中間 div を挟むと position: static になり z-index が効かないか、relative にすると
-  // Floating UI の絶対座標計算とズレる。
+  // ここでは wrapper div (List の外側) を floating element とし、style は wrapper に適用される。
+  // wrapper: bg / rounded / shadow / overflow-hidden / maxHeight (macOS bounce 透過対策)
+  // 内側 ul: overflow-y-auto で実際の scroll を担当
   return (
     <FloatingPortal>
       <List
-        ref={mergedListRef}
+        ref={ulRef}
+        containerRef={mergedContainerRef}
         id={listId}
         variant={variant === 'outline' ? 'outline' : 'borderless'}
         maxHeight={maxHeightProp ?? listMaxHeight}

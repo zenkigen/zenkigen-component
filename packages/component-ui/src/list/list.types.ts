@@ -1,4 +1,4 @@
-import type { CSSProperties, MouseEvent, PropsWithChildren } from 'react';
+import type { CSSProperties, MouseEvent, PropsWithChildren, Ref } from 'react';
 
 export type ListSize = 'medium' | 'large';
 export type ListVariant = 'outline' | 'borderless';
@@ -25,6 +25,11 @@ export type ListProps = PropsWithChildren<{
   'aria-label'?: string;
   /** アクセシブルな名前（参照） */
   'aria-labelledby'?: string;
+  /**
+   * 外側 wrapper div への ref。Floating UI の floating element として扱う用途等。
+   * 通常は `ref` が内側の ul を指す。
+   */
+  containerRef?: Ref<HTMLDivElement>;
 }>;
 
 export type ListOptionItemProps = PropsWithChildren<{

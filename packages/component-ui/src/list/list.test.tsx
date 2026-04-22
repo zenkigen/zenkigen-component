@@ -59,41 +59,69 @@ describe('List', () => {
   });
 
   describe('variant', () => {
-    it('outline の時に border クラスが付く', () => {
+    it('outline の時に wrapper に border クラスが付く', () => {
       render(
         <List variant="outline" aria-label="テスト">
           <li id="x">item</li>
         </List>,
       );
-      const list = screen.getByRole('listbox');
-      expect(list.className).toMatch(/border/);
+      const wrapper = screen.getByRole('listbox').parentElement;
+      expect(wrapper?.className).toMatch(/border/);
     });
 
-    it('borderless の時に border クラスが付かない', () => {
+    it('borderless の時に wrapper に border クラスが付かない', () => {
       render(
         <List variant="borderless" aria-label="テスト">
           <li id="x">item</li>
         </List>,
       );
-      const list = screen.getByRole('listbox');
-      expect(list.className).not.toMatch(/border-uiBorder01/);
+      const wrapper = screen.getByRole('listbox').parentElement;
+      expect(wrapper?.className).not.toMatch(/border-uiBorder01/);
     });
   });
 
   describe('レイアウト制御', () => {
-    it('maxHeight / width を style に反映する', () => {
+    it('maxHeight / width を wrapper style に反映する', () => {
       render(
         <List maxHeight={200} width={300} aria-label="テスト">
           <li id="x">item</li>
         </List>,
       );
+      const wrapper = screen.getByRole('listbox').parentElement;
+      expect(wrapper).toHaveStyle({ maxHeight: '200px', width: '300px' });
+    });
+  });
+
+  describe('2 層構造 (macOS bounce 対策)', () => {
+    it('role=listbox の親が div で装飾クラスを持つ', () => {
+      render(
+        <List aria-label="テスト">
+          <li id="x">item</li>
+        </List>,
+      );
+      const wrapper = screen.getByRole('listbox').parentElement;
+      expect(wrapper?.tagName).toBe('DIV');
+      expect(wrapper?.className).toMatch(/bg-uiBackground01/);
+      expect(wrapper?.className).toMatch(/overflow-hidden/);
+      expect(wrapper?.className).toMatch(/rounded/);
+      expect(wrapper?.className).toMatch(/shadow-floatingShadow/);
+    });
+
+    it('ul は scrollable class (overflow-y-auto / flex-1 / min-h-0) を持つ', () => {
+      render(
+        <List aria-label="テスト">
+          <li id="x">item</li>
+        </List>,
+      );
       const list = screen.getByRole('listbox');
-      expect(list).toHaveStyle({ maxHeight: '200px', width: '300px' });
+      expect(list.className).toMatch(/overflow-y-auto/);
+      expect(list.className).toMatch(/flex-1/);
+      expect(list.className).toMatch(/min-h-0/);
     });
   });
 
   describe('forwardRef', () => {
-    it('ref に ul 要素を渡す', () => {
+    it('ref に ul 要素を渡す (公開 API 維持)', () => {
       const ref = { current: null as HTMLUListElement | null };
       render(
         <List ref={ref} aria-label="テスト">
@@ -101,6 +129,17 @@ describe('List', () => {
         </List>,
       );
       expect(ref.current).toBeInstanceOf(HTMLUListElement);
+    });
+
+    it('containerRef に wrapper div 要素を渡す', () => {
+      const containerRef = { current: null as HTMLDivElement | null };
+      render(
+        <List containerRef={containerRef} aria-label="テスト">
+          <li id="x">item</li>
+        </List>,
+      );
+      expect(containerRef.current).toBeInstanceOf(HTMLDivElement);
+      expect(containerRef.current?.className).toMatch(/bg-uiBackground01/);
     });
   });
 });

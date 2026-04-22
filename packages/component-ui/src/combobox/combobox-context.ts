@@ -55,8 +55,8 @@ export type ComboboxContextValue = {
   inputRef: RefObject<HTMLInputElement | null>;
   /** input への ref 設定関数（Floating UI の reference と統合） */
   setInputElementRef: (node: HTMLInputElement | null) => void;
-  /** 候補リスト ul への ref 設定関数（Floating UI と統合） */
-  setListRef: (node: HTMLUListElement | null) => void;
+  /** 候補リスト wrapper への ref 設定関数（Floating UI の floating element） */
+  setListRef: (node: HTMLDivElement | null) => void;
   /** Floating UI の style */
   floatingStyles: CSSProperties;
   /** 候補リストの最大高さ */
