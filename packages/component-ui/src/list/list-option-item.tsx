@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import type { MouseEvent } from 'react';
 import { forwardRef } from 'react';
 
+import { Icon } from '../icon';
 import type { ListOptionItemProps } from './list.types';
 import { useListContext } from './list-context';
 
@@ -21,10 +22,10 @@ export const ListOptionItem = forwardRef<HTMLLIElement, ListOptionItemProps>(fun
   },
   ref,
 ) {
-  const { size } = useListContext('List.OptionItem');
+  const { size, selectionIndicator } = useListContext('List.OptionItem');
 
   const classes = clsx(
-    'flex w-full items-center border-l-2 border-solid border-l-transparent pl-2.5 pr-3',
+    'flex w-full items-center gap-1 border-l-2 border-solid border-l-transparent pl-2.5 pr-3',
     focusVisible.inset,
     {
       // sizes
@@ -71,6 +72,13 @@ export const ListOptionItem = forwardRef<HTMLLIElement, ListOptionItemProps>(fun
     onMouseEnter?.();
   };
 
+  const indicator =
+    selectionIndicator === 'none' ? null : (
+      <span className="flex size-4 shrink-0 items-center justify-center" aria-hidden="true" data-selection-indicator>
+        {isSelected && !isDisabled && <Icon name="check" size="small" />}
+      </span>
+    );
+
   return (
     <li
       ref={ref}
@@ -83,7 +91,9 @@ export const ListOptionItem = forwardRef<HTMLLIElement, ListOptionItemProps>(fun
       onMouseEnter={handleMouseEnter}
       className={classes}
     >
+      {selectionIndicator === 'left' && indicator}
       {children}
+      {selectionIndicator === 'right' && indicator}
     </li>
   );
 });

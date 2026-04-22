@@ -24,6 +24,12 @@ const meta: Meta<typeof List> = {
       description: 'ARIA role',
       table: { defaultValue: { summary: 'listbox' } },
     },
+    selectionIndicator: {
+      control: 'radio',
+      options: ['none', 'left', 'right'],
+      description: '選択項目のチェックマーク位置',
+      table: { defaultValue: { summary: 'none' } },
+    },
     maxHeight: { control: 'text', description: '最大高さ' },
     width: { control: 'text', description: '幅' },
   },
@@ -158,6 +164,35 @@ export const WithMaxHeight: Story = {
           </List.OptionItem>
         ))}
       </List>
+    </div>
+  ),
+};
+
+export const SelectionIndicator: Story = {
+  render: () => (
+    <div className="flex items-start gap-8">
+      <div style={{ width: 240 }}>
+        <List variant="outline" size="medium" selectionIndicator="left" aria-label="左チェック">
+          <List.OptionItem id="left-1">選択項目1</List.OptionItem>
+          <List.OptionItem id="left-2">選択項目2</List.OptionItem>
+          <List.OptionItem id="left-3">選択項目3</List.OptionItem>
+          <List.OptionItem id="left-4">選択項目4</List.OptionItem>
+          <List.OptionItem id="left-5" isSelected>
+            選択項目5
+          </List.OptionItem>
+        </List>
+      </div>
+      <div style={{ width: 240 }}>
+        <List variant="outline" size="medium" selectionIndicator="right" aria-label="右チェック">
+          <List.OptionItem id="right-1">選択項目1</List.OptionItem>
+          <List.OptionItem id="right-2">選択項目2</List.OptionItem>
+          <List.OptionItem id="right-3">選択項目3</List.OptionItem>
+          <List.OptionItem id="right-4">選択項目4</List.OptionItem>
+          <List.OptionItem id="right-5" isSelected>
+            選択項目5
+          </List.OptionItem>
+        </List>
+      </div>
     </div>
   ),
 };

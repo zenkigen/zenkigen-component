@@ -1,10 +1,11 @@
 import { createContext, useContext } from 'react';
 
-import type { ListSize, ListVariant } from './list.types';
+import type { ListSelectionIndicator, ListSize, ListVariant } from './list.types';
 
 type ListContextValue = {
   size: ListSize;
   variant: ListVariant;
+  selectionIndicator: ListSelectionIndicator;
 };
 
 const ListContext = createContext<ListContextValue | null>(null);

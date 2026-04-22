@@ -35,6 +35,7 @@ const ListBase = forwardRef<HTMLUListElement, ListProps>(function List(
     'aria-label': ariaLabel,
     'aria-labelledby': ariaLabelledby,
     containerRef,
+    selectionIndicator = 'none',
   },
   ref,
 ) {
@@ -47,7 +48,7 @@ const ListBase = forwardRef<HTMLUListElement, ListProps>(function List(
   );
 
   return (
-    <ListContextProvider value={{ size, variant }}>
+    <ListContextProvider value={{ size, variant, selectionIndicator }}>
       <div ref={containerRef} style={{ maxHeight, width, ...style }} className={wrapperClasses}>
         <ul
           ref={ref}

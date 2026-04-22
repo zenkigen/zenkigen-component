@@ -3,6 +3,7 @@ import type { CSSProperties, MouseEvent, PropsWithChildren, Ref } from 'react';
 export type ListSize = 'medium' | 'large';
 export type ListVariant = 'outline' | 'borderless';
 export type ListRole = 'listbox' | 'menu';
+export type ListSelectionIndicator = 'left' | 'right' | 'none';
 
 export type ListProps = PropsWithChildren<{
   /** リストのサイズ */
@@ -30,6 +31,15 @@ export type ListProps = PropsWithChildren<{
    * 通常は `ref` が内側の ul を指す。
    */
   containerRef?: Ref<HTMLDivElement>;
+  /**
+   * 選択項目にチェックマークを表示する位置。
+   * - `'none'` (default): 表示しない
+   * - `'left'`: children の前に 16px のアイコンスペース。`isSelected` で check アイコン表示
+   * - `'right'`: children の後に 16px のアイコンスペース。`isSelected` で check アイコン表示
+   *
+   * 非選択項目でもアイコン領域 (16px) を占有するため、item 間で text 位置が揃う。
+   */
+  selectionIndicator?: ListSelectionIndicator;
 }>;
 
 export type ListOptionItemProps = PropsWithChildren<{

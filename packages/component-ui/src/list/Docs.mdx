@@ -52,6 +52,19 @@ import spec from '../../../../docs/component/list-specification.md?raw';
 </List>
 ```
 
+### 選択済みアイテムにチェックマークを表示する
+
+`selectionIndicator` に `'left'` or `'right'` を指定すると、`isSelected` な Item にチェックマークを表示します。非選択の Item でもアイコン領域 (16px) を確保するため、item 間でテキスト位置が揃います。
+
+```tsx
+<List variant="outline" size="medium" selectionIndicator="left" aria-label="選択肢">
+  <List.OptionItem id="1">選択項目1</List.OptionItem>
+  <List.OptionItem id="2" isSelected>
+    選択項目2
+  </List.OptionItem>
+</List>
+```
+
 ## 概要
 
 `<ul>` をベースに、ARIA role、border 有無、size、最大高さを統一的に扱うコンポーネントです。`List.OptionItem` は **`role="option"` 用途に特化**（`<li>` ベース、`<button>` を持たない）しています。Combobox の `aria-activedescendant` 方式と整合させるため、Item は **`onMouseDown` で preventDefault** を行い input フォーカスを失わないように設計されています。

@@ -60,16 +60,17 @@ import { List } from '@zenkigen-inc/component-ui';
 
 ### List のプロパティ
 
-| プロパティ        | 型                          | デフォルト値 | 説明                                        |
-| ----------------- | --------------------------- | ------------ | ------------------------------------------- |
-| `size`            | `'medium' \| 'large'`       | `'medium'`   | リスト全体のサイズ                          |
-| `variant`         | `'outline' \| 'borderless'` | `'outline'`  | 枠線の有無                                  |
-| `maxHeight`       | `CSSProperties['height']`   | `undefined`  | リストの最大高さ。指定時は内部スクロール    |
-| `width`           | `CSSProperties['width']`    | `undefined`  | リストの幅                                  |
-| `role`            | `'listbox' \| 'menu'`       | `'listbox'`  | ARIA role                                   |
-| `id`              | `string`                    | `undefined`  | 要素 ID（aria-controls のターゲットに使う） |
-| `aria-label`      | `string`                    | `undefined`  | アクセシブルな名前                          |
-| `aria-labelledby` | `string`                    | `undefined`  | アクセシブルな名前（参照）                  |
+| プロパティ           | 型                            | デフォルト値 | 説明                                                                                      |
+| -------------------- | ----------------------------- | ------------ | ----------------------------------------------------------------------------------------- |
+| `size`               | `'medium' \| 'large'`         | `'medium'`   | リスト全体のサイズ                                                                        |
+| `variant`            | `'outline' \| 'borderless'`   | `'outline'`  | 枠線の有無                                                                                |
+| `maxHeight`          | `CSSProperties['height']`     | `undefined`  | リストの最大高さ。指定時は内部スクロール                                                  |
+| `width`              | `CSSProperties['width']`      | `undefined`  | リストの幅                                                                                |
+| `role`               | `'listbox' \| 'menu'`         | `'listbox'`  | ARIA role                                                                                 |
+| `id`                 | `string`                      | `undefined`  | 要素 ID（aria-controls のターゲットに使う）                                               |
+| `aria-label`         | `string`                      | `undefined`  | アクセシブルな名前                                                                        |
+| `aria-labelledby`    | `string`                      | `undefined`  | アクセシブルな名前（参照）                                                                |
+| `selectionIndicator` | `'left' \| 'right' \| 'none'` | `'none'`     | 選択項目のチェックマーク位置。非選択項目もアイコン領域を占有し、item 間で text 位置が揃う |
 
 ### List.OptionItem のプロパティ
 

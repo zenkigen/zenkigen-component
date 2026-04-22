@@ -120,6 +120,93 @@ describe('List', () => {
     });
   });
 
+  describe('selectionIndicator', () => {
+    const renderWithIndicator = (indicator: 'left' | 'right' | 'none', item: React.ReactNode) =>
+      render(
+        <List aria-label="テスト" selectionIndicator={indicator}>
+          {item}
+        </List>,
+      );
+
+    it('default (指定なし) はチェックマーク領域を描画しない', () => {
+      render(
+        <List aria-label="テスト">
+          <ListOptionItem id="opt-1" isSelected>
+            選択項目
+          </ListOptionItem>
+        </List>,
+      );
+      const option = screen.getByRole('option');
+      expect(option.querySelector('[data-selection-indicator]')).toBeNull();
+    });
+
+    it("'none' 指定でもチェックマーク領域を描画しない", () => {
+      renderWithIndicator(
+        'none',
+        <ListOptionItem id="opt-1" isSelected>
+          選択項目
+        </ListOptionItem>,
+      );
+      const option = screen.getByRole('option');
+      expect(option.querySelector('[data-selection-indicator]')).toBeNull();
+    });
+
+    it("'left' + isSelected で children の前に check Icon が表示される", () => {
+      renderWithIndicator(
+        'left',
+        <ListOptionItem id="opt-1" isSelected>
+          選択項目
+        </ListOptionItem>,
+      );
+      const option = screen.getByRole('option');
+      const indicator = option.querySelector('[data-selection-indicator]');
+      expect(indicator).not.toBeNull();
+      expect(indicator).toHaveAttribute('aria-hidden', 'true');
+      // children の前に配置 (firstChild は indicator)
+      expect(option.firstElementChild).toBe(indicator);
+      // Icon (svg) が内部に存在
+      expect(indicator?.querySelector('svg')).not.toBeNull();
+    });
+
+    it("'left' + 非選択ではアイコン本体は描画されないが領域は確保される", () => {
+      renderWithIndicator('left', <ListOptionItem id="opt-1">通常項目</ListOptionItem>);
+      const option = screen.getByRole('option');
+      const indicator = option.querySelector('[data-selection-indicator]');
+      expect(indicator).not.toBeNull();
+      expect(indicator?.querySelector('svg')).toBeNull();
+      // 領域 16px (h-4 w-4)
+      expect(indicator?.className).toMatch(/h-4/);
+      expect(indicator?.className).toMatch(/w-4/);
+    });
+
+    it("'right' + isSelected で children の後に check Icon が表示される", () => {
+      renderWithIndicator(
+        'right',
+        <ListOptionItem id="opt-1" isSelected>
+          選択項目
+        </ListOptionItem>,
+      );
+      const option = screen.getByRole('option');
+      const indicator = option.querySelector('[data-selection-indicator]');
+      expect(indicator).not.toBeNull();
+      // children の後ろに配置
+      expect(option.lastElementChild).toBe(indicator);
+    });
+
+    it('isDisabled + isSelected でもチェックアイコン本体は非表示（領域は確保）', () => {
+      renderWithIndicator(
+        'left',
+        <ListOptionItem id="opt-1" isSelected isDisabled>
+          disabled selected
+        </ListOptionItem>,
+      );
+      const option = screen.getByRole('option');
+      const indicator = option.querySelector('[data-selection-indicator]');
+      expect(indicator).not.toBeNull();
+      expect(indicator?.querySelector('svg')).toBeNull();
+    });
+  });
+
   describe('forwardRef', () => {
     it('ref に ul 要素を渡す (公開 API 維持)', () => {
       const ref = { current: null as HTMLUListElement | null };
