@@ -59,8 +59,8 @@ export const Component: Story = {
   render: function ComponentRender(args) {
     return (
       <List {...args}>
-        {sampleItems.map((item) => (
-          <List.OptionItem key={item.id} id={item.id}>
+        {sampleItems.map((item, index) => (
+          <List.OptionItem key={item.id} id={item.id} isSelected={index === 1}>
             {item.label}
           </List.OptionItem>
         ))}

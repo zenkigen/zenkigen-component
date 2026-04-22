@@ -92,6 +92,7 @@ export function ComboboxList({ children, maxHeight: maxHeightProp }: ComboboxLis
         id={listId}
         size={size}
         variant={variant === 'outline' ? 'outline' : 'borderless'}
+        selectionIndicator="right"
         maxHeight={maxHeightProp ?? listMaxHeight}
         aria-label="候補一覧"
         className="z-popover"
