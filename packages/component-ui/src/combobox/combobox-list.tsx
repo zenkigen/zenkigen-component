@@ -1,6 +1,6 @@
 import { FloatingPortal } from '@floating-ui/react';
 import type { ReactNode } from 'react';
-import { Children, isValidElement, useEffect, useMemo } from 'react';
+import { Children, isValidElement, useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { List } from '../list/list';
 import type { ComboboxItemProps, ComboboxListProps } from './combobox.types';
@@ -54,6 +54,25 @@ export function ComboboxList({ children, maxHeight: maxHeightProp }: ComboboxLis
     setItems(items);
   }, [items, setItems]);
 
+  // List DOM への ref（scrollTop リセット用）と Floating UI 用 ref callback を統合
+  const listElementRef = useRef<HTMLUListElement | null>(null);
+  const mergedListRef = useCallback(
+    (node: HTMLUListElement | null) => {
+      listElementRef.current = node;
+      setListRef(node);
+    },
+    [setListRef],
+  );
+
+  // open false → true で scrollTop をリセット（前回 scroll 位置を持ち越さない）
+  const prevOpenRef = useRef(isOpen);
+  useEffect(() => {
+    if (!prevOpenRef.current && isOpen && listElementRef.current != null) {
+      listElementRef.current.scrollTop = 0;
+    }
+    prevOpenRef.current = isOpen;
+  }, [isOpen]);
+
   // popup を常時 DOM に残し visibility で制御する。
   // null で unmount すると Floating UI の autoUpdate が再起動する瞬間に
   // floatingStyles の初期値 (top:0, left:0) で 1 フレーム描画されてしまう。
@@ -69,7 +88,7 @@ export function ComboboxList({ children, maxHeight: maxHeightProp }: ComboboxLis
   return (
     <FloatingPortal>
       <List
-        ref={setListRef}
+        ref={mergedListRef}
         id={listId}
         variant={variant === 'outline' ? 'outline' : 'borderless'}
         maxHeight={maxHeightProp ?? listMaxHeight}

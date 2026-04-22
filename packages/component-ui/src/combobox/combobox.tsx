@@ -1,4 +1,4 @@
-import { autoUpdate, offset, size as sizeMiddleware, useFloating } from '@floating-ui/react';
+import { autoUpdate, flip, offset, size as sizeMiddleware, useFloating } from '@floating-ui/react';
 import { useCallback, useRef } from 'react';
 
 import { useOutsideClick } from '../hooks/use-outside-click';
@@ -13,6 +13,7 @@ import { ComboboxEmpty, ComboboxLoading } from './combobox-status';
 import { useCombobox } from './use-combobox';
 
 const FLOATING_OFFSET = 4;
+const FLOATING_VIEWPORT_PADDING = 8;
 
 function ComboboxBase({
   children,
@@ -52,7 +53,9 @@ function ComboboxBase({
     whileElementsMounted: autoUpdate,
     middleware: [
       offset(FLOATING_OFFSET),
+      flip({ padding: FLOATING_VIEWPORT_PADDING }),
       sizeMiddleware({
+        padding: FLOATING_VIEWPORT_PADDING,
         apply({ availableHeight, availableWidth, elements, rects }) {
           const referenceWidth = rects.reference.width;
           const allowedHeight =
@@ -114,6 +117,8 @@ function ComboboxBase({
         clearValue: combobox.clearValue,
         activeIndex: combobox.activeIndex,
         setActiveIndex: combobox.setActiveIndex,
+        inputMode: combobox.inputMode,
+        setInputMode: combobox.setInputMode,
         items: combobox.items,
         setItems: combobox.setItems,
         inputRef: combobox.inputRef,

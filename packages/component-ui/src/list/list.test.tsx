@@ -192,6 +192,31 @@ describe('List.OptionItem', () => {
       );
       expect(screen.getByRole('option').className).toMatch(/bg-hover02/);
     });
+
+    it('isActive で左 accent border (border-l-interactive03) が当たる', () => {
+      renderInList(
+        <ListOptionItem id="opt-1" isActive>
+          item
+        </ListOptionItem>,
+      );
+      expect(screen.getByRole('option').className).toMatch(/border-l-interactive03/);
+    });
+
+    it('isSelected + isActive で bg-selectedUi と border-l-interactive03 が同時に当たる', () => {
+      renderInList(
+        <ListOptionItem id="opt-1" isSelected isActive>
+          item
+        </ListOptionItem>,
+      );
+      const className = screen.getByRole('option').className;
+      expect(className).toMatch(/bg-selectedUi/);
+      expect(className).toMatch(/border-l-interactive03/);
+    });
+
+    it('非 active 時は border-l-transparent でレイアウト幅を維持する', () => {
+      renderInList(<ListOptionItem id="opt-1">item</ListOptionItem>);
+      expect(screen.getByRole('option').className).toMatch(/border-l-transparent/);
+    });
   });
 
   describe('イベント', () => {

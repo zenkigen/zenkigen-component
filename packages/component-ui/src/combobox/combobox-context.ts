@@ -2,6 +2,7 @@ import type { CSSProperties, KeyboardEvent, RefObject } from 'react';
 import { createContext, useContext } from 'react';
 
 import type { ComboboxSize, ComboboxVariant } from './combobox.types';
+import type { ComboboxInputMode } from './use-combobox';
 
 export type ComboboxItemMeta = {
   value: string;
@@ -40,8 +41,12 @@ export type ComboboxContextValue = {
   clearValue: () => void;
   /** キーボードフォーカス中の Item index（items 配列上） */
   activeIndex: number | null;
-  /** activeIndex を設定 */
+  /** activeIndex を設定（activeValueRef も同期される） */
   setActiveIndex: (index: number | null) => void;
+  /** キー / マウスの操作モード（keyboard 中のみ scrollIntoView が発動） */
+  inputMode: ComboboxInputMode;
+  /** inputMode を設定 */
+  setInputMode: (mode: ComboboxInputMode) => void;
   /** 走査済み Item 一覧 */
   items: ComboboxItemMeta[];
   /** items を Combobox.List から登録 */
