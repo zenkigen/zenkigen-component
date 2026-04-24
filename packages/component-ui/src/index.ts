@@ -12,7 +12,8 @@ export * from './heading';
 export * from './hooks';
 export * from './icon';
 export * from './icon-button';
-export * from './list';
+// List は現時点で非公開（Combobox 内部専用）。Storybook での単体確認は継続するため stories/docs は残す。
+// export * from './list';
 export * from './loading';
 export * from './modal';
 export * from './notification-inline';
