@@ -6,6 +6,5 @@ export type {
   ComboboxListProps,
   ComboboxProps,
   ComboboxSize,
-  ComboboxStatusProps,
   ComboboxVariant,
 } from './combobox.types';

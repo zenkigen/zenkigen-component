@@ -51,6 +51,10 @@ export type ComboboxContextValue = {
   items: ComboboxItemMeta[];
   /** items を Combobox.List から登録 */
   setItems: (items: ComboboxItemMeta[]) => void;
+  /** Combobox.List 直下に Item / Loading / Empty のいずれかが存在するか */
+  hasOpenableContent: boolean;
+  /** hasOpenableContent を Combobox.List から登録 */
+  setHasOpenableContent: (next: boolean) => void;
   /** input への ref */
   inputRef: RefObject<HTMLInputElement | null>;
   /** input への ref 設定関数（Floating UI の reference と統合） */

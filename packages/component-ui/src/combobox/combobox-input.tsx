@@ -21,6 +21,7 @@ export function ComboboxInput({ autoFocus, children }: ComboboxInputProps) {
     setIsOpen,
     activeIndex,
     items,
+    hasOpenableContent,
     inputRef,
     setInputElementRef,
     handleKeyDown,
@@ -29,10 +30,14 @@ export function ComboboxInput({ autoFocus, children }: ComboboxInputProps) {
 
   const isClearButtonVisible = inputValue.length > 0 && !isDisabled;
 
+  // List に Item/Loading/Empty のいずれも無い場合 popup は描画されない (visibility hidden)。
+  // 画面上の開閉状態と aria-expanded / aria-controls を一致させるため、両方の AND を「実効 open」として使う。
+  const isEffectivelyOpen = isOpen && hasOpenableContent;
+
   const activeItem = activeIndex !== null ? items[activeIndex] : null;
   const activeId = activeItem != null ? `${baseId}-option-${activeItem.value}` : null;
   const conditionalAriaProps = {
-    ...(isOpen ? { 'aria-controls': listId } : {}),
+    ...(isEffectivelyOpen ? { 'aria-controls': listId } : {}),
     ...(activeId !== null ? { 'aria-activedescendant': activeId } : {}),
   };
 
@@ -84,7 +89,7 @@ export function ComboboxInput({ autoFocus, children }: ComboboxInputProps) {
       disabled={isDisabled}
       placeholder={placeholder}
       role="combobox"
-      aria-expanded={isOpen}
+      aria-expanded={isEffectivelyOpen}
       aria-autocomplete="list"
       {...conditionalAriaProps}
       autoFocus={autoFocus}
@@ -110,7 +115,7 @@ export function ComboboxInput({ autoFocus, children }: ComboboxInputProps) {
             onMouseDown={preventBlur}
             aria-label={isOpen ? '候補を閉じる' : '候補を表示'}
             tabIndex={-1}
-            isDisabled={isDisabled}
+            isDisabled={isDisabled || !hasOpenableContent}
           />
         </>
       }

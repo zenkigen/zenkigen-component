@@ -1,5 +1,5 @@
 import { autoUpdate, flip, offset, size as sizeMiddleware, useFloating } from '@floating-ui/react';
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 import { useOutsideClick } from '../hooks/use-outside-click';
 import { TextInputErrorMessage } from '../text-input/text-input-error-message';
@@ -45,6 +45,11 @@ function ComboboxBase({
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   useOutsideClick(wrapperRef, () => combobox.setIsOpen(false));
+
+  // Combobox.List 直下の openable content (Item / Loading / Empty) の有無。
+  // List から setHasOpenableContent を経由して同期される。
+  // toggle ボタンの disable 判定に利用する。
+  const [hasOpenableContent, setHasOpenableContent] = useState(false);
 
   const { refs, floatingStyles } = useFloating({
     open: combobox.isOpen,
@@ -121,6 +126,8 @@ function ComboboxBase({
         setInputMode: combobox.setInputMode,
         items: combobox.items,
         setItems: combobox.setItems,
+        hasOpenableContent,
+        setHasOpenableContent,
         inputRef: combobox.inputRef,
         setInputElementRef,
         setListRef,

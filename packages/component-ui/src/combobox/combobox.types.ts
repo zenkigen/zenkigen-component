@@ -1,4 +1,4 @@
-import type { CSSProperties, PropsWithChildren, ReactNode } from 'react';
+import type { CSSProperties, PropsWithChildren } from 'react';
 
 export type ComboboxSize = 'medium' | 'large';
 export type ComboboxVariant = 'outline' | 'text';
@@ -51,18 +51,8 @@ export type ComboboxListProps = PropsWithChildren<{
 export type ComboboxItemProps = {
   /** 選択値として使う文字列（必須） */
   value: string;
-  /** input 表示・選択時の復元用文字列（必須） */
+  /** input 表示・選択時の復元用文字列（必須）。1 行 truncate 表示で自動レンダリングされる */
   label: string;
   /** 個別アイテムの無効化 */
   isDisabled?: boolean;
-  /**
-   * 表示内容。未指定時は `label` を 1 行 truncate 表示で自動レンダリング。
-   * カスタム JSX（例: icon + サブテキスト）を渡す場合は truncate 制御は利用者責務。
-   */
-  children?: ReactNode;
-};
-
-export type ComboboxStatusProps = {
-  /** 表示するコンテンツ。未指定時は各 Compound のデフォルト文言を表示 */
-  children?: ReactNode;
 };

@@ -43,7 +43,7 @@ function hasOpenableContent(children: ReactNode): boolean {
 }
 
 export function ComboboxList({ children, maxHeight: maxHeightProp }: ComboboxListProps) {
-  const { listId, isOpen, setItems, setListRef, floatingStyles, listMaxHeight, variant, size } =
+  const { listId, isOpen, setItems, setHasOpenableContent, setListRef, floatingStyles, listMaxHeight, variant, size } =
     useComboboxContext('Combobox.List');
 
   const items = useMemo(() => extractItems(children), [children]);
@@ -53,6 +53,11 @@ export function ComboboxList({ children, maxHeight: maxHeightProp }: ComboboxLis
   useEffect(() => {
     setItems(items);
   }, [items, setItems]);
+
+  // hasOpenableContent を Combobox 本体に通知（toggle ボタンの disable 判定に使う）
+  useEffect(() => {
+    setHasOpenableContent(hasContent);
+  }, [hasContent, setHasOpenableContent]);
 
   // scrollable な内側 ul への ref（scrollTop リセット用）
   const ulRef = useRef<HTMLUListElement | null>(null);

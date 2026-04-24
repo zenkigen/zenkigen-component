@@ -88,9 +88,7 @@ function ControlledCombobox({
       <Combobox.Input />
       <Combobox.List>
         {visibleItems.map((opt) => (
-          <Combobox.Item key={opt.value} value={opt.value} label={opt.label}>
-            {opt.label}
-          </Combobox.Item>
+          <Combobox.Item key={opt.value} value={opt.value} label={opt.label} />
         ))}
         {extraChildren}
       </Combobox.List>
@@ -222,12 +220,8 @@ describe('Combobox', () => {
           >
             <Combobox.Input />
             <Combobox.List>
-              <Combobox.Item value="a" label="A">
-                A
-              </Combobox.Item>
-              <Combobox.Item value="b" label="B (disabled)" isDisabled>
-                B (disabled)
-              </Combobox.Item>
+              <Combobox.Item value="a" label="A" />
+              <Combobox.Item value="b" label="B (disabled)" isDisabled />
             </Combobox.List>
           </Combobox>
         );
@@ -380,9 +374,7 @@ describe('Combobox', () => {
           <Combobox.Input />
           <Combobox.List>
             {visibleItems.map((opt) => (
-              <Combobox.Item key={opt.value} value={opt.value} label={opt.label}>
-                {opt.label}
-              </Combobox.Item>
+              <Combobox.Item key={opt.value} value={opt.value} label={opt.label} />
             ))}
           </Combobox.List>
         </Combobox>
@@ -447,9 +439,7 @@ describe('Combobox', () => {
             <Combobox.Input />
             <Combobox.List>
               {visibleItems.map((opt) => (
-                <Combobox.Item key={opt.value} value={opt.value} label={opt.label}>
-                  {opt.label}
-                </Combobox.Item>
+                <Combobox.Item key={opt.value} value={opt.value} label={opt.label} />
               ))}
             </Combobox.List>
           </Combobox>
@@ -536,8 +526,8 @@ describe('Combobox', () => {
     });
   });
 
-  describe('Combobox.Item の children 省略', () => {
-    it('children 未指定時は label を truncate span で自動レンダリング', async () => {
+  describe('Combobox.Item の label レンダリング', () => {
+    it('label を truncate span で自動レンダリングする', async () => {
       const user = userEvent.setup();
 
       function SlimCombobox() {
@@ -566,45 +556,11 @@ describe('Combobox', () => {
       await user.click(getCombobox());
 
       const option = getOption('りんご');
-      // children 未指定なら li 直下に truncate span が生成される
       const textSpan = option.querySelector('span');
       expect(textSpan).not.toBeNull();
       expect(textSpan?.textContent).toBe('りんご');
       expect(textSpan?.className).toMatch(/truncate/);
       expect(textSpan?.className).toMatch(/min-w-0/);
-    });
-
-    it('children 指定時は span を自動生成しない', async () => {
-      const user = userEvent.setup();
-
-      function CustomCombobox() {
-        const [value, setValue] = useState<string | null>(null);
-        const [inputValue, setInputValue] = useState('');
-
-        return (
-          <Combobox
-            value={value}
-            onChange={(next, meta) => {
-              setValue(next);
-              setInputValue(meta?.label ?? '');
-            }}
-            inputValue={inputValue}
-            onInputChange={setInputValue}
-          >
-            <Combobox.Input />
-            <Combobox.List>
-              <Combobox.Item value="apple" label="りんご">
-                <div data-testid="custom">custom content</div>
-              </Combobox.Item>
-            </Combobox.List>
-          </Combobox>
-        );
-      }
-
-      render(<CustomCombobox />);
-      await user.click(getCombobox());
-
-      expect(screen.getByTestId('custom')).toBeInTheDocument();
     });
   });
 
@@ -627,9 +583,7 @@ describe('Combobox', () => {
           <Combobox.Input />
           <Combobox.List>
             {defaultFruits.map((opt) => (
-              <Combobox.Item key={opt.value} value={opt.value} label={opt.label}>
-                {opt.label}
-              </Combobox.Item>
+              <Combobox.Item key={opt.value} value={opt.value} label={opt.label} />
             ))}
           </Combobox.List>
         </Combobox>
@@ -672,6 +626,146 @@ describe('Combobox', () => {
       // クリックしても open しない
       await user.click(input);
       expect(getListbox()).toHaveStyle({ visibility: 'hidden' });
+    });
+  });
+
+  describe('toggle ボタンの disable', () => {
+    function EmptyCombobox({ inputValue = '' }: { inputValue?: string }) {
+      const [value, setValue] = useState<string | null>(null);
+      const [input, setInput] = useState(inputValue);
+
+      return (
+        <Combobox
+          value={value}
+          onChange={(next, meta) => {
+            setValue(next);
+            setInput(meta?.label ?? '');
+          }}
+          inputValue={input}
+          onInputChange={setInput}
+        >
+          <Combobox.Input />
+          <Combobox.List>{/* Item/Loading/Empty いずれも無い */}</Combobox.List>
+        </Combobox>
+      );
+    }
+
+    it('List 直下に Item / Loading / Empty が無いとき toggle ボタンが disabled', () => {
+      render(<EmptyCombobox />);
+      const toggle = screen.getByRole('button', { name: '候補を表示' });
+      expect(toggle).toBeDisabled();
+    });
+
+    it('Loading が存在するときは toggle ボタンが有効（非同期ロード中を想定）', () => {
+      function LoadingCombobox() {
+        const [value, setValue] = useState<string | null>(null);
+        const [input, setInput] = useState('abc');
+
+        return (
+          <Combobox
+            value={value}
+            onChange={(next, meta) => {
+              setValue(next);
+              setInput(meta?.label ?? '');
+            }}
+            inputValue={input}
+            onInputChange={setInput}
+          >
+            <Combobox.Input />
+            <Combobox.List>
+              <Combobox.Loading />
+            </Combobox.List>
+          </Combobox>
+        );
+      }
+
+      render(<LoadingCombobox />);
+      const toggle = screen.getByRole('button', { name: '候補を表示' });
+      expect(toggle).not.toBeDisabled();
+    });
+
+    it('Empty が存在するときは toggle ボタンが有効（該当なし表示）', () => {
+      function EmptyLabelCombobox() {
+        const [value, setValue] = useState<string | null>(null);
+        const [input, setInput] = useState('xxx');
+
+        return (
+          <Combobox
+            value={value}
+            onChange={(next, meta) => {
+              setValue(next);
+              setInput(meta?.label ?? '');
+            }}
+            inputValue={input}
+            onInputChange={setInput}
+          >
+            <Combobox.Input />
+            <Combobox.List>
+              <Combobox.Empty />
+            </Combobox.List>
+          </Combobox>
+        );
+      }
+
+      render(<EmptyLabelCombobox />);
+      const toggle = screen.getByRole('button', { name: '候補を表示' });
+      expect(toggle).not.toBeDisabled();
+    });
+
+    it('Item があるときは toggle ボタンが有効', () => {
+      render(<ControlledCombobox />);
+      const toggle = screen.getByRole('button', { name: '候補を表示' });
+      expect(toggle).not.toBeDisabled();
+    });
+  });
+
+  describe('aria 属性と hasOpenableContent の連動', () => {
+    function EmptyListCombobox() {
+      const [value, setValue] = useState<string | null>(null);
+      const [input, setInput] = useState('');
+
+      return (
+        <Combobox
+          value={value}
+          onChange={(next, meta) => {
+            setValue(next);
+            setInput(meta?.label ?? '');
+          }}
+          inputValue={input}
+          onInputChange={setInput}
+        >
+          <Combobox.Input />
+          <Combobox.List>{/* 空 */}</Combobox.List>
+        </Combobox>
+      );
+    }
+
+    it('List が空のとき、input focus しても aria-expanded は false のまま', async () => {
+      const user = userEvent.setup();
+      render(<EmptyListCombobox />);
+      const input = getCombobox();
+
+      await user.click(input);
+      expect(input).toHaveAttribute('aria-expanded', 'false');
+    });
+
+    it('List が空のとき、aria-controls は付与されない', async () => {
+      const user = userEvent.setup();
+      render(<EmptyListCombobox />);
+      const input = getCombobox();
+
+      await user.click(input);
+      expect(input).not.toHaveAttribute('aria-controls');
+    });
+
+    it('Item があるときは focus 後に aria-expanded=true / aria-controls が付与される', async () => {
+      const user = userEvent.setup();
+      render(<ControlledCombobox />);
+      const input = getCombobox();
+
+      await user.click(input);
+      expect(input).toHaveAttribute('aria-expanded', 'true');
+      expect(input).toHaveAttribute('aria-controls', expect.any(String));
     });
   });
 });
