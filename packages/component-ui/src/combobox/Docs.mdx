@@ -54,9 +54,7 @@ const MyForm = () => {
       <Combobox.Input />
       <Combobox.List>
         {filtered.map((opt) => (
-          <Combobox.Item key={opt.value} value={opt.value} label={opt.label}>
-            {opt.label}
-          </Combobox.Item>
+          <Combobox.Item key={opt.value} value={opt.value} label={opt.label} />
         ))}
       </Combobox.List>
     </Combobox>
@@ -66,20 +64,16 @@ const MyForm = () => {
 
 ### 非同期サジェスト
 
-`Combobox.Loading` / `Combobox.Empty` を Compound として配置することで、ローディング表示と該当なし表示を制御します。本体に `isLoading` / `noOptionsMessage` のような prop はありません。
+`Combobox.Loading` / `Combobox.Empty` を Compound として配置することで、ローディング表示と該当なし表示を制御します。本体に `isLoading` / `noOptionsMessage` のような prop はありません。いずれも文言は固定（Loading: `読み込み中...` / Empty: `一致する情報が見つかりません`）で、現時点では children を渡せません。
 
 ```tsx
 <Combobox value={value} onChange={...} inputValue={inputText} onInputChange={setInputText}>
   <Combobox.Input />
   <Combobox.List>
-    {isLoading && <Combobox.Loading>読み込み中...</Combobox.Loading>}
-    {!isLoading && inputText.length > 0 && results.length === 0 && (
-      <Combobox.Empty>該当する候補はありません</Combobox.Empty>
-    )}
+    {isLoading && <Combobox.Loading />}
+    {!isLoading && inputText.length > 0 && results.length === 0 && <Combobox.Empty />}
     {!isLoading && results.map((opt) => (
-      <Combobox.Item key={opt.value} value={opt.value} label={opt.label}>
-        {opt.label}
-      </Combobox.Item>
+      <Combobox.Item key={opt.value} value={opt.value} label={opt.label} />
     ))}
   </Combobox.List>
 </Combobox>
@@ -105,23 +99,7 @@ const filtered = useMemo(() => {
 </Combobox>;
 ```
 
-`Combobox.Item` の children は省略可能です。未指定の場合、`label` を 1 行 `truncate` 表示で自動レンダリングします。
-
-### カスタムアイテム描画
-
-`Combobox.Item` の children に任意 JSX を渡すとカスタム描画できます。`label` prop は input 復元用に必須です。長文 ellipsis を効かせる場合は内部要素に `min-w-0` / `truncate` を付与してください。
-
-```tsx
-<Combobox.Item value={user.id} label={user.name}>
-  <div className="flex min-w-0 flex-1 items-center gap-2">
-    <Icon name="user" size="small" />
-    <div className="flex min-w-0 flex-col">
-      <span className="typography-label14regular truncate">{user.name}</span>
-      <span className="typography-label12regular truncate text-text02">{user.email}</span>
-    </div>
-  </div>
-</Combobox.Item>
-```
+`Combobox.Item` は `label` を 1 行 `truncate` 表示で自動レンダリングします。カスタム描画には現時点では対応していません。
 
 ### ヘルパー / エラーメッセージ
 

@@ -24,7 +24,6 @@
    - [基本的な使用例（同期データ）](#基本的な使用例同期データ)
    - [非同期サジェスト](#非同期サジェスト)
    - [大量データの popup 抑制](#大量データの-popup-抑制)
-   - [カスタムアイテム描画](#カスタムアイテム描画)
    - [ヘルパー/エラーメッセージ](#ヘルパーエラーメッセージ)
 8. [キーボード操作](#キーボード操作)
 9. [popup の開閉判定ルール](#popup-の開閉判定ルール)
@@ -81,9 +80,7 @@ const MyComponent = () => {
       <Combobox.Input />
       <Combobox.List>
         {filtered.map((opt) => (
-          <Combobox.Item key={opt.value} value={opt.value} label={opt.label}>
-            {opt.label}
-          </Combobox.Item>
+          <Combobox.Item key={opt.value} value={opt.value} label={opt.label} />
         ))}
       </Combobox.List>
     </Combobox>
@@ -104,17 +101,19 @@ const MyComponent = () => {
 
 ### オプションプロパティ
 
-| プロパティ      | 型                          | デフォルト値 | 説明                                                                       |
-| --------------- | --------------------------- | ------------ | -------------------------------------------------------------------------- |
-| `size`          | `'medium' \| 'large'`       | `'medium'`   | コンポーネントのサイズ                                                     |
-| `variant`       | `'outline' \| 'text'`       | `'outline'`  | バリアント。`'text'` は枠なしスタイル                                      |
-| `isOpen`        | `boolean`                   | `undefined`  | popup の開閉状態（任意、controlled）。指定時は `onOpenChange` と組で使う   |
-| `onOpenChange`  | `(isOpen: boolean) => void` | `undefined`  | popup 開閉変更時のコールバック                                             |
-| `placeholder`   | `string`                    | `undefined`  | プレースホルダーテキスト                                                   |
-| `isError`       | `boolean`                   | `false`      | エラー状態                                                                 |
-| `isDisabled`    | `boolean`                   | `false`      | 無効状態                                                                   |
-| `width`         | `CSSProperties['width']`    | `undefined`  | 全体の幅                                                                   |
-| `listMaxHeight` | `CSSProperties['height']`   | `undefined`  | 候補リストの最大高さ。Floating UI が利用可能高と比較して小さい方を採用する |
+| プロパティ           | 型                          | デフォルト値 | 説明                                                                                                                           |
+| -------------------- | --------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------ |
+| `size`               | `'medium' \| 'large'`       | `'medium'`   | コンポーネントのサイズ                                                                                                         |
+| `variant`            | `'outline' \| 'text'`       | `'outline'`  | バリアント。`'text'` は枠なしスタイル                                                                                          |
+| `isOpen`             | `boolean`                   | `undefined`  | popup の開閉状態（任意、controlled）。指定時は `onOpenChange` と組で使う                                                       |
+| `onOpenChange`       | `(isOpen: boolean) => void` | `undefined`  | popup 開閉変更時のコールバック                                                                                                 |
+| `placeholder`        | `string`                    | `undefined`  | プレースホルダーテキスト                                                                                                       |
+| `isError`            | `boolean`                   | `false`      | エラー状態                                                                                                                     |
+| `isDisabled`         | `boolean`                   | `false`      | 無効状態                                                                                                                       |
+| `width`              | `CSSProperties['width']`    | `undefined`  | 全体の幅                                                                                                                       |
+| `maxWidth`           | `CSSProperties['maxWidth']` | `undefined`  | 全体の最大幅                                                                                                                   |
+| `listMaxHeight`      | `CSSProperties['height']`   | `undefined`  | 候補リストの最大高さ。Floating UI が利用可能高と比較して小さい方を採用する                                                     |
+| `matchListToTrigger` | `boolean`                   | `false`      | `true` のとき候補リストの幅を input と一致させる。`false` のときコンテンツに応じて広がる（min: input 幅, max: ビューポート幅） |
 
 > 注: `value` / `inputValue` は完全 controlled として実装される（v2 で uncontrolled 対応を検討予定）。
 > 注: `isOpen` のみ hybrid（未指定時は内部 state、指定時は controlled）。
@@ -135,7 +134,7 @@ const MyComponent = () => {
 
 ### Combobox.Input
 
-入力欄を描画する。内部で `InternalTextInput` を利用し、末尾にクリアボタン（×）と矢印ボタン（▼/▲）を `IconButton` で配置する。children は TextInput の children（HelperMessage / ErrorMessage）として素通しされる。
+入力欄を描画する。内部で `InternalTextInput` を利用し、末尾にクリアボタン（×）と矢印ボタン（▼/▲）を `IconButton` で配置する。children は TextInput の children（HelperMessage / ErrorMessage）として素通しされる。矢印ボタンは **`Combobox.List` 直下に `Combobox.Item` / `Combobox.Loading` / `Combobox.Empty` のいずれも存在しない** とき自動で disabled になり、開いても何も表示されない dead click を防ぐ（`Combobox` 本体の `isDisabled` とも OR で連動）。
 
 | プロパティ  | 型        | デフォルト値 | 説明           |
 | ----------- | --------- | ------------ | -------------- |
@@ -151,22 +150,21 @@ const MyComponent = () => {
 
 ### Combobox.Item
 
-個別の候補を表す。`value` と `label` は必須。`children` で任意の JSX を描画できる（アイコン + サブテキスト等）。
+個別の候補を表す。`value` と `label` は必須。`label` を 1 行 `truncate` 表示で自動レンダリングする（任意 JSX のカスタム描画には現時点では対応しない）。
 
-| プロパティ   | 型          | 必須 | 説明                                                   |
-| ------------ | ----------- | :--: | ------------------------------------------------------ |
-| `value`      | `string`    |  ✓   | 選択時に onChange へ渡す値                             |
-| `label`      | `string`    |  ✓   | input 表示・選択時の復元用テキスト                     |
-| `isDisabled` | `boolean`   |      | 個別アイテムの無効化（キーボード巡回でスキップされる） |
-| `children`   | `ReactNode` |  ✓   | リスト内の描画                                         |
+| プロパティ   | 型        | 必須 | 説明                                                             |
+| ------------ | --------- | :--: | ---------------------------------------------------------------- |
+| `value`      | `string`  |  ✓   | 選択時に onChange へ渡す値                                       |
+| `label`      | `string`  |  ✓   | input 表示・選択時の復元用テキスト。truncate span で自動描画する |
+| `isDisabled` | `boolean` |      | 個別アイテムの無効化（キーボード巡回でスキップされる）           |
 
 ### Combobox.Loading
 
-ローディング表示用。中央寄せのテキストを描画する。`role="presentation"` で配置され、キーボード巡回対象外。
+ローディング表示用。中央寄せのテキストとして固定文言 `読み込み中...` を描画する。`role="presentation"` で配置され、キーボード巡回対象外。props は取らない（children / 文言差し替えは現時点では非対応）。
 
 ### Combobox.Empty
 
-該当なし表示用。中央寄せのテキストを描画する。`role="presentation"` で配置され、キーボード巡回対象外。
+該当なし表示用。中央寄せのテキストとして固定文言 `一致する情報が見つかりません` を描画する。`role="presentation"` で配置され、キーボード巡回対象外。props は取らない（children / 文言差し替えは現時点では非対応）。
 
 ### Combobox.HelperMessage
 
@@ -234,9 +232,7 @@ const filtered = useMemo(
   <Combobox.Input />
   <Combobox.List>
     {filtered.map((opt) => (
-      <Combobox.Item key={opt.value} value={opt.value} label={opt.label}>
-        {opt.label}
-      </Combobox.Item>
+      <Combobox.Item key={opt.value} value={opt.value} label={opt.label} />
     ))}
   </Combobox.List>
 </Combobox>
@@ -273,15 +269,11 @@ useEffect(() => {
 >
   <Combobox.Input />
   <Combobox.List>
-    {isLoading && <Combobox.Loading>読み込み中...</Combobox.Loading>}
-    {!isLoading && inputText.length > 0 && results.length === 0 && (
-      <Combobox.Empty>該当する候補はありません</Combobox.Empty>
-    )}
+    {isLoading && <Combobox.Loading />}
+    {!isLoading && inputText.length > 0 && results.length === 0 && <Combobox.Empty />}
     {!isLoading &&
       results.map((opt) => (
-        <Combobox.Item key={opt.value} value={opt.value} label={opt.label}>
-          {opt.label}
-        </Combobox.Item>
+        <Combobox.Item key={opt.value} value={opt.value} label={opt.label} />
       ))}
   </Combobox.List>
 </Combobox>
@@ -312,36 +304,10 @@ const filtered = useMemo(() => {
   <Combobox.Input />
   <Combobox.List>
     {filtered.map((opt) => (
-      <Combobox.Item key={opt.value} value={opt.value} label={opt.label}>
-        {opt.label}
-      </Combobox.Item>
+      <Combobox.Item key={opt.value} value={opt.value} label={opt.label} />
     ))}
   </Combobox.List>
 </Combobox>
-```
-
-### アイテムの表示
-
-`Combobox.Item` の children は省略可能。未指定の場合、`label` を 1 行 `truncate` 表示で自動レンダリングする。
-
-```typescript
-<Combobox.Item value={opt.value} label={opt.label} />
-```
-
-### カスタムアイテム描画
-
-`Combobox.Item` の children に任意 JSX を渡してアイコン + サブテキストなどを描画できる。`label` は input 復元に使うため別途必須。長文 ellipsis を効かせたい場合は内部要素に `min-w-0` / `truncate` を付与する。
-
-```typescript
-<Combobox.Item value={user.id} label={user.name}>
-  <div className="flex min-w-0 flex-1 items-center gap-2">
-    <Icon name="user" size="small" />
-    <div className="flex min-w-0 flex-col">
-      <span className="typography-label14regular truncate">{user.name}</span>
-      <span className="typography-label12regular truncate text-text02">{user.email}</span>
-    </div>
-  </div>
-</Combobox.Item>
 ```
 
 ### ヘルパー/エラーメッセージ
@@ -382,11 +348,12 @@ DOM フォーカスは常に input に維持される（`aria-activedescendant` 
 - `Combobox.Loading`
 - `Combobox.Empty`
 
-いずれも含まれない場合、`isOpen === true` の状態でも popup は描画されない。これにより「未入力時は何も書かない」だけで popup を抑制できる。
+いずれも含まれない場合、`isOpen === true` の状態でも popup は描画されない。これにより「未入力時は何も書かない」だけで popup を抑制できる。さらに `Combobox.Input` の矢印（▼/▲）ボタンは自動で disabled になり、クリックしてもアイコンだけが反応して popup は出ない dead click を防ぐ。
 
 ## アクセシビリティ
 
 - 入力欄に `role="combobox"` / `aria-expanded` / `aria-autocomplete="list"` を付与する。
+- `aria-expanded` / `aria-controls` は **画面上で popup が実際に見えている状態** と連動する。`isOpen === true` でも `Combobox.List` 直下に `Combobox.Item` / `Combobox.Loading` / `Combobox.Empty` のいずれも無い場合（popup 非描画）は `aria-expanded=false` / `aria-controls` なし になる。
 - popup が開いている間は `aria-controls` で候補リストの `id` を指す。
 - アクティブ Item は `aria-activedescendant` で参照する（DOM フォーカスは input に残る）。
 - 候補リストは `role="listbox"` を持つ `<ul>`、各 Item は `role="option"` を持つ `<li>`。
@@ -410,8 +377,8 @@ DOM フォーカスは常に input に維持される（`aria-activedescendant` 
 1. `value` / `inputValue` は両方とも完全 controlled として渡すこと（v2 で uncontrolled 対応を検討中）。
 2. `Combobox.HelperMessage` / `Combobox.ErrorMessage` は **必ず `Combobox.Input` の direct children** に配置すること。`Combobox` 直下に置くと TextInput の `aria-describedby` 連携が成立しない。
 3. `Combobox.Item` / `Combobox.Loading` / `Combobox.Empty` は **必ず `Combobox.List` の direct children** に配置すること。Fragment や関数コンポーネントでラップすると走査されない。
-4. `value` を渡しても children 側に該当 `Combobox.Item` が無い場合、選択中ラベルの表示は `inputValue` の値に依存する。利用者は初期 `inputValue` を渡すか、`onChange` の meta から受け取った label を保持すること。
-5. フィルタリングはライブラリ側では行わない。利用者が `onInputChange` で受け取り、children を絞り込んで再レンダリングする。
+4. `value` を渡しても `Combobox.List` 直下に該当 `Combobox.Item` が無い場合、選択中ラベルの表示は `inputValue` の値に依存する。利用者は初期 `inputValue` を渡すか、`onChange` の meta から受け取った label を保持すること。
+5. フィルタリングはライブラリ側では行わない。利用者が `onInputChange` で受け取り、候補配列を絞り込んで再レンダリングする。
 6. Restricted モード（リスト外の値は確定不可）の挙動として、blur 時に `inputValue` がリスト内の label に一致しない場合の復元は **利用者責任**。
 7. 同じ `value` を持つ `Combobox.Item` を重複して配置しないこと（aria-activedescendant の一意性が崩れる）。
 
@@ -421,6 +388,10 @@ DOM フォーカスは常に input に維持される（`aria-activedescendant` 
 
 ## 更新履歴
 
-| 日付       | 内容     | 担当者 |
-| ---------- | -------- | ------ |
-| 2026-04-17 | 新規作成 | -      |
+| 日付       | 内容                                                                     | 担当者 |
+| ---------- | ------------------------------------------------------------------------ | ------ |
+| 2026-04-17 | 新規作成                                                                 | -      |
+| 2026-04-24 | `Combobox.Item` の `children` prop を廃止（label を自動 truncate 描画）  | -      |
+| 2026-04-24 | `Combobox.List` が空のとき矢印ボタンを自動 disable                       | -      |
+| 2026-04-24 | `Combobox.Loading` / `Combobox.Empty` の children を廃止（固定文言のみ） | -      |
+| 2026-04-24 | `aria-expanded` / `aria-controls` を popup 実描画状態と連動              | -      |
