@@ -4,7 +4,7 @@
 */
 import type React from 'react';
 
-export type IconName = 'add' | 'ai-agent' | 'ai' | 'angle-down' | 'angle-left' | 'angle-right' | 'angle-small-down' | 'angle-small-up' | 'angle-up' | 'arrow-down' | 'arrow-left' | 'arrow-right' | 'arrow-up' | 'attachment' | 'attention' | 'background-blur-strong' | 'background-blur-weak' | 'beginner' | 'block' | 'bookmark' | 'building' | 'calendar-attention' | 'calendar-check' | 'calendar-draft' | 'calendar-minus' | 'calendar-today' | 'calendar' | 'caret-down' | 'caret-right' | 'catch' | 'chart-bar' | 'chart-line' | 'check' | 'circle' | 'close' | 'comment' | 'contract' | 'copy' | 'delete' | 'display' | 'document-edit' | 'document' | 'documents' | 'double-circle' | 'download-document' | 'download' | 'edit' | 'email' | 'exit' | 'expand' | 'external-link' | 'feedback' | 'filter' | 'flag' | 'global' | 'graph-line' | 'guide' | 'hamburger-close' | 'hamburger-open' | 'hamburger' | 'handle' | 'harutaka' | 'help' | 'hint' | 'home' | 'image' | 'information-filled' | 'information' | 'input-delete' | 'link' | 'list' | 'live-background' | 'logout' | 'main-view' | 'message-text' | 'mic-off' | 'mic' | 'minus' | 'more' | 'movie' | 'network' | 'notification' | 'pause' | 'pdf' | 'picture-in-picture' | 'play-filled' | 'play' | 'plus' | 'presentation' | 'record' | 'reload' | 'remove' | 'repeat' | 'score' | 'screen-share' | 'search' | 'security' | 'send' | 'setting' | 'share' | 'shuffle' | 'sidebar' | 'signal-low' | 'signal-off' | 'signal' | 'slider-editing' | 'sort-down' | 'sort-up' | 'sort' | 'sparkle' | 'stamp' | 'star-filled' | 'star' | 'success-filled' | 'superadmin' | 'table-download' | 'table-upload' | 'table' | 'timer' | 'transcription' | 'triangle' | 'upload-document-success' | 'upload-document' | 'upload' | 'user-add' | 'user-group' | 'user-line' | 'user-multi' | 'user-one' | 'user-remove' | 'user-verified' | 'user' | 'video-off' | 'video' | 'visibility-off' | 'visibility' | 'volume-off' | 'volume' | 'warning';
+export type IconName = 'add' | 'ai-agent' | 'ai' | 'angle-down' | 'angle-left' | 'angle-right' | 'angle-small-down' | 'angle-small-up' | 'angle-up' | 'arrow-down' | 'arrow-left' | 'arrow-right' | 'arrow-up' | 'attachment' | 'attention' | 'background-blur-strong' | 'background-blur-weak' | 'beginner' | 'block' | 'bookmark' | 'building' | 'calendar-attention' | 'calendar-check' | 'calendar-draft' | 'calendar-minus' | 'calendar-today' | 'calendar' | 'caret-down' | 'caret-right' | 'catch' | 'chart-bar' | 'chart-line' | 'check' | 'circle' | 'close' | 'collapse-content' | 'comment' | 'contract' | 'copy' | 'delete' | 'display' | 'document-edit' | 'document' | 'documents' | 'double-circle' | 'download-document' | 'download' | 'edit' | 'email' | 'exit' | 'expand-content' | 'expand' | 'external-link' | 'feedback' | 'filter' | 'flag' | 'global' | 'graph-line' | 'guide' | 'hamburger-close' | 'hamburger-open' | 'hamburger' | 'handle' | 'harutaka' | 'help' | 'hint' | 'home' | 'image' | 'information-filled' | 'information' | 'input-delete' | 'link' | 'list' | 'live-background' | 'logout' | 'main-view' | 'message-text' | 'mic-off' | 'mic' | 'minus' | 'more' | 'movie' | 'network' | 'notification' | 'pause' | 'pdf' | 'picture-in-picture' | 'play-filled' | 'play' | 'plus' | 'presentation' | 'questionnaire' | 'record' | 'reload' | 'remove' | 'repeat' | 'score' | 'screen-share' | 'search' | 'security' | 'send' | 'setting' | 'share' | 'shuffle' | 'sidebar' | 'signal-low' | 'signal-off' | 'signal' | 'slider-editing' | 'sort-down' | 'sort-up' | 'sort' | 'sparkle' | 'stamp' | 'star-filled' | 'star' | 'success-filled' | 'superadmin' | 'table-download' | 'table-upload' | 'table' | 'timer' | 'transcription' | 'triangle' | 'upload-document-success' | 'upload-document' | 'upload' | 'user-add' | 'user-group' | 'user-line' | 'user-multi' | 'user-one' | 'user-remove' | 'user-verified' | 'user' | 'video-off' | 'video' | 'visibility-off' | 'visibility' | 'volume-off' | 'volume' | 'warning';
 
 export type IconComponent = React.FC<{ accentClassName?: string }>;
 
@@ -80,6 +80,8 @@ import { circleIcon } from './icons/circle';
 
 import { closeIcon } from './icons/close';
 
+import { collapsecontentIcon } from './icons/collapse-content';
+
 import { commentIcon } from './icons/comment';
 
 import { contractIcon } from './icons/contract';
@@ -107,6 +109,8 @@ import { editIcon } from './icons/edit';
 import { emailIcon } from './icons/email';
 
 import { exitIcon } from './icons/exit';
+
+import { expandcontentIcon } from './icons/expand-content';
 
 import { expandIcon } from './icons/expand';
 
@@ -187,6 +191,8 @@ import { playIcon } from './icons/play';
 import { plusIcon } from './icons/plus';
 
 import { presentationIcon } from './icons/presentation';
+
+import { questionnaireIcon } from './icons/questionnaire';
 
 import { recordIcon } from './icons/record';
 
@@ -362,6 +368,8 @@ export const iconElements = {
   
     'close': closeIcon,
   
+    'collapse-content': collapsecontentIcon,
+  
     'comment': commentIcon,
   
     'contract': contractIcon,
@@ -389,6 +397,8 @@ export const iconElements = {
     'email': emailIcon,
   
     'exit': exitIcon,
+  
+    'expand-content': expandcontentIcon,
   
     'expand': expandIcon,
   
@@ -469,6 +479,8 @@ export const iconElements = {
     'plus': plusIcon,
   
     'presentation': presentationIcon,
+  
+    'questionnaire': questionnaireIcon,
   
     'record': recordIcon,
   
