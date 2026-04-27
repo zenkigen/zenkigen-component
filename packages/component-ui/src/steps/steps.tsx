@@ -1,0 +1,150 @@
+import { clsx } from 'clsx';
+import type { ReactElement, ReactNode } from 'react';
+import { Children, Fragment, isValidElement, useId, useMemo, useState } from 'react';
+
+import { StepsContext } from './steps-context';
+import { StepsItem } from './steps-item';
+import { StepsItemContext } from './steps-item-context';
+import { StepsSeparator } from './steps-separator';
+import type { StepProgress, StepsItemProps, StepsProps, StepsSize, StepState, StepsTextOrientation } from './types';
+
+function getSeparatorCellHeightClass(size: StepsSize): string {
+  if (size === 'small') return 'h-6';
+  if (size === 'medium') return 'h-8';
+
+  return 'h-10';
+}
+
+function HorizontalSeparatorCell({
+  progress,
+  size,
+  textOrientation,
+}: {
+  progress: StepProgress;
+  size: StepsSize;
+  textOrientation: StepsTextOrientation;
+}) {
+  const heightClass = getSeparatorCellHeightClass(size);
+  const alignClass = textOrientation === 'vertical' ? 'self-start' : '';
+
+  return (
+    <li aria-hidden="true" className={clsx('flex items-center', heightClass, alignClass)} role="presentation">
+      <StepsSeparator progress={progress} />
+    </li>
+  );
+}
+
+function collectStepsItems(children: ReactNode): ReactElement<StepsItemProps>[] {
+  const result: ReactElement<StepsItemProps>[] = [];
+  Children.toArray(children).forEach((child) => {
+    if (!isValidElement(child)) {
+      return;
+    }
+    if (child.type === StepsItem) {
+      result.push(child as ReactElement<StepsItemProps>);
+
+      return;
+    }
+    if (child.type === Fragment) {
+      const fragmentChildren = (child.props as { children?: ReactNode }).children;
+      result.push(...collectStepsItems(fragmentChildren));
+    }
+  });
+
+  return result;
+}
+
+function StepsRoot({
+  children,
+  currentStep,
+  initialCurrentStep,
+  size = 'medium',
+  orientation = 'horizontal',
+  textOrientation = 'horizontal',
+  variant = 'solid',
+  'aria-label': ariaLabel,
+}: StepsProps) {
+  const baseId = useId();
+  const [internalStep] = useState<number>(initialCurrentStep ?? 0);
+  const resolvedCurrentStep = currentStep ?? internalStep;
+
+  const itemElements = useMemo(() => collectStepsItems(children), [children]);
+
+  const stepsCount = itemElements.length;
+
+  const contextValue = useMemo(
+    () => ({
+      size,
+      orientation,
+      textOrientation,
+      variant,
+    }),
+    [size, orientation, textOrientation, variant],
+  );
+
+  if (stepsCount === 0) {
+    return null;
+  }
+
+  const states: StepState[] = itemElements.map((_item, index) => ({
+    progress: index < resolvedCurrentStep ? 'completed' : index === resolvedCurrentStep ? 'current' : 'upcoming',
+  }));
+
+  const wrapItem = (item: ReactElement<StepsItemProps>, index: number): ReactNode => {
+    const state: StepState = states[index] ?? { progress: 'upcoming' };
+    const isLast = index === stepsCount - 1;
+    const id = `${baseId}-item-${index}`;
+
+    return (
+      <StepsItemContext.Provider key={item.key ?? `item-${index}`} value={{ index, state, isLast, id }}>
+        {item}
+      </StepsItemContext.Provider>
+    );
+  };
+
+  const renderedChildren: ReactNode[] =
+    orientation === 'horizontal'
+      ? itemElements.flatMap((item, index) => {
+          const nodes: ReactNode[] = [wrapItem(item, index)];
+          if (index < stepsCount - 1) {
+            nodes.push(
+              <HorizontalSeparatorCell
+                key={`sep-${index}`}
+                progress={states[index]?.progress ?? 'upcoming'}
+                size={size}
+                textOrientation={textOrientation}
+              />,
+            );
+          }
+
+          return nodes;
+        })
+      : itemElements.map((item, index) => wrapItem(item, index));
+
+  const listClassName = clsx(
+    orientation === 'horizontal'
+      ? ['grid w-full gap-x-2', textOrientation === 'vertical' ? 'items-start' : 'items-center']
+      : 'flex flex-col items-stretch',
+  );
+
+  const horizontalGridTemplate = Array.from({ length: stepsCount }, (_unused, index) =>
+    index === stepsCount - 1 ? 'max-content' : 'max-content 1fr',
+  ).join(' ');
+
+  const listStyleProps = orientation === 'horizontal' ? { style: { gridTemplateColumns: horizontalGridTemplate } } : {};
+
+  return (
+    <StepsContext.Provider value={contextValue}>
+      <ol aria-label={ariaLabel} className={listClassName} role="list" {...listStyleProps}>
+        {renderedChildren}
+      </ol>
+    </StepsContext.Provider>
+  );
+}
+
+type StepsComponent = typeof StepsRoot & {
+  Item: typeof StepsItem;
+};
+
+export const Steps = StepsRoot as StepsComponent;
+Steps.Item = StepsItem;
