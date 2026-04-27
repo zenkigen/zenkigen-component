@@ -1,0 +1,116 @@
+import { Canvas, Controls, Markdown, Meta, Story } from '@storybook/addon-docs/blocks';
+
+import ComboboxStories, { Component } from './combobox.stories';
+import spec from '../../../../docs/component/combobox-specification.md?raw';
+
+<Meta title="Combobox" of={ComboboxStories} />
+
+# Combobox
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
+
+<Canvas>
+  <Story of={Component} />
+</Canvas>
+
+<Controls of={Component} />
+
+## Code Examples
+
+### 基本利用（同期データ）
+
+```tsx
+import { useMemo, useState } from 'react';
+import { Combobox } from '@zenkigen-inc/component-ui';
+
+const options = [
+  { value: 'apple', label: 'りんご' },
+  { value: 'banana', label: 'バナナ' },
+];
+
+const MyForm = () => {
+  const [value, setValue] = useState<string | null>(null);
+  const [inputText, setInputText] = useState('');
+
+  const filtered = useMemo(() => options.filter((o) => o.label.includes(inputText)), [inputText]);
+
+  return (
+    <Combobox
+      value={value}
+      onChange={(next, meta) => {
+        setValue(next);
+        setInputText(meta?.label ?? '');
+      }}
+      inputValue={inputText}
+      onInputChange={setInputText}
+      placeholder="果物を検索..."
+    >
+      <Combobox.Input />
+      <Combobox.List>
+        {filtered.map((opt) => (
+          <Combobox.Item key={opt.value} value={opt.value} label={opt.label} />
+        ))}
+      </Combobox.List>
+    </Combobox>
+  );
+};
+```
+
+### 非同期サジェスト
+
+`Combobox.Loading` / `Combobox.Empty` を Compound として配置することで、ローディング表示と該当なし表示を制御します。本体に `isLoading` / `noOptionsMessage` のような prop はありません。いずれも文言は固定（Loading: `読み込み中...` / Empty: `一致する情報が見つかりません`）で、現時点では children を渡せません。
+
+```tsx
+<Combobox value={value} onChange={...} inputValue={inputText} onInputChange={setInputText}>
+  <Combobox.Input />
+  <Combobox.List>
+    {isLoading && <Combobox.Loading />}
+    {!isLoading && inputText.length > 0 && results.length === 0 && <Combobox.Empty />}
+    {!isLoading && results.map((opt) => (
+      <Combobox.Item key={opt.value} value={opt.value} label={opt.label} />
+    ))}
+  </Combobox.List>
+</Combobox>
+```
+
+### 大量データの popup 抑制
+
+未入力時は `Combobox.List` の中身を空にすることで popup を開きません。
+
+```tsx
+const filtered = useMemo(() => {
+  if (inputText.length < 2) return [];
+  return largeDataset.filter((item) => item.label.includes(inputText)).slice(0, 50);
+}, [inputText]);
+
+<Combobox /* ... */ listMaxHeight={240}>
+  <Combobox.Input />
+  <Combobox.List>
+    {filtered.map((opt) => (
+      <Combobox.Item key={opt.value} value={opt.value} label={opt.label} />
+    ))}
+  </Combobox.List>
+</Combobox>;
+```
+
+`Combobox.Item` は `label` を 1 行 `truncate` 表示で自動レンダリングします。カスタム描画には現時点では対応していません。
+
+### ヘルパー / エラーメッセージ
+
+`Combobox.HelperMessage` / `Combobox.ErrorMessage` は **`Combobox.Input` の direct children** に配置します（TextInput の aria-describedby 連携を使うため）。
+
+```tsx
+<Combobox /* ... */ isError={hasError}>
+  <Combobox.Input>
+    <Combobox.HelperMessage>選択中: {value ?? '未選択'}</Combobox.HelperMessage>
+    <Combobox.ErrorMessage>入力内容にエラーがあります</Combobox.ErrorMessage>
+  </Combobox.Input>
+  <Combobox.List>{/* ... */}</Combobox.List>
+</Combobox>
+```

@@ -1,0 +1,101 @@
+import { Canvas, Controls, Markdown, Meta, Story } from '@storybook/addon-docs/blocks';
+
+import ListStories, { Component } from './list.stories';
+import spec from '../../../../docs/component/list-specification.md?raw';
+
+<Meta title="List" of={ListStories} />
+
+# List
+
+候補リストやメニューなどの **オーバーレイリスト UI 全般の基盤** となるコンテナコンポーネントです。`<ul>` をベースに ARIA role・Outline / borderless・size を統一的に提供します。
+
+> ⚠️ **現時点では非公開（ライブラリの public export 対象外）です。`Combobox` 内部からのみ使用されます。公開 API として切り出す時期は別途設計で判断します。**
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
+
+<Canvas>
+  <Story of={Component} />
+</Canvas>
+
+<Controls of={Component} />
+
+## Code Examples
+
+### Combobox の候補リストとして使う
+
+```tsx
+<List role="listbox" aria-label="候補一覧" maxHeight={240}>
+  {options.map((opt) => (
+    <List.OptionItem
+      key={opt.value}
+      id={`combobox-option-${opt.value}`}
+      isActive={activeValue === opt.value}
+      isSelected={selectedValue === opt.value}
+      onClick={() => handleSelect(opt.value)}
+      onMouseEnter={() => setActiveValue(opt.value)}
+    >
+      {opt.label}
+    </List.OptionItem>
+  ))}
+</List>
+```
+
+### borderless variant（popup 内部での標準）
+
+```tsx
+<List variant="borderless" size="medium" aria-label="候補">
+  <List.OptionItem id="x">テキスト</List.OptionItem>
+</List>
+```
+
+### 選択済みアイテムにチェックマークを表示する
+
+`selectionIndicator` に `'left'` or `'right'` を指定すると、`isSelected` な Item にチェックマークを表示します。非選択の Item でもアイコン領域 (16px) を確保するため、item 間でテキスト位置が揃います。
+
+```tsx
+<List variant="outline" size="medium" selectionIndicator="left" aria-label="選択肢">
+  <List.OptionItem id="1">選択項目1</List.OptionItem>
+  <List.OptionItem id="2" isSelected>
+    選択項目2
+  </List.OptionItem>
+</List>
+```
+
+## 概要
+
+`<ul>` をベースに、ARIA role、border 有無、size、最大高さを統一的に扱うコンポーネントです。`List.OptionItem` は **`role="option"` 用途に特化**（`<li>` ベース、`<button>` を持たない）しています。Combobox の `aria-activedescendant` 方式と整合させるため、Item は **`onMouseDown` で preventDefault** を行い input フォーカスを失わないように設計されています。
+
+## 設計の原則 （Do）
+
+### `role` を明示してコンポーネントの意図を表現する
+
+Combobox の候補なら `role="listbox"`、Dropdown のメニュー（Phase 4 で追加予定）なら `role="menu"` を指定します。
+
+### 各 `List.OptionItem` には一意な `id` を必ず渡す
+
+`aria-activedescendant` のターゲット参照に使います。Combobox 側で id 採番し、Combobox.Item の Context bridge から渡す想定です。
+
+### `maxHeight` で長いリストはスクロール可能にする
+
+候補が多い場合は `maxHeight` を指定して、リスト内スクロールに切り替えます。
+
+## 推奨しないこと（Don't）
+
+### Item の中に `<button>` を入れない
+
+`List.OptionItem` 自体が li でクリック可能になっており、内部に button を入れると DOM フォーカスが button に移って `aria-activedescendant` 方式が破綻します。
+
+### List.OptionItem を `<List>` の外で使わない
+
+Context 経由で size を解決しているため、List 外で使うとエラーが投げられます。Dropdown のような role="menu" 用途には Phase 4 で追加予定の `List.MenuItem` を使ってください。
+
+## 関連コンポーネント
+
+- **Combobox** — List + List.OptionItem を内部で使用しています
+- **Select / Dropdown** — 将来的に List ベースに統合予定（Phase 3 / 4）
