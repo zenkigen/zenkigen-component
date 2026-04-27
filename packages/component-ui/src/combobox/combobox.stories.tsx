@@ -1,6 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
+import { Button } from '../button';
+import { Modal } from '../modal';
+import { Popover } from '../popover';
+import { Popup } from '../popup';
 import { Combobox } from './combobox';
 import type { ComboboxChangeMeta, ComboboxSize, ComboboxVariant } from './combobox.types';
 
@@ -897,6 +901,168 @@ export const ImeInputLog: Story = {
             )}
           </div>
         </div>
+      </div>
+    );
+  },
+};
+
+// Modal の中で Combobox が正しく動作するかを検証するための Story（VRT 除外）。
+// 確認観点:
+// - Combobox.List が Modal の上に表示される（z-index）
+// - 入力・候補選択・Escape で List のみ閉じる（Modal は閉じない）
+// - List の外側クリックで List のみ閉じる
+export const WithinModal: Story = {
+  parameters: {
+    chromatic: { disable: true },
+  },
+  render: function WithinModalRender() {
+    const [isModalOpen, setIsModalOpen] = useState(true);
+    const [value, setValue] = useState<string | null>(null);
+    const [inputText, setInputText] = useState('');
+
+    const filtered = useMemo(
+      () => fruits.filter((f) => f.label.toLowerCase().includes(inputText.toLowerCase())),
+      [inputText],
+    );
+
+    const handleCancel = () => {
+      setIsModalOpen(false);
+    };
+    const handleSave = () => {
+      setIsModalOpen(false);
+    };
+
+    return (
+      <div>
+        <Button variant="fill" size="large" onClick={() => setIsModalOpen(true)}>
+          open
+        </Button>
+        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} width={480}>
+          <Modal.Header>果物を登録</Modal.Header>
+          <Modal.Body>
+            <div className="flex w-full flex-col gap-6 p-6">
+              <div className="flex flex-col gap-2">
+                <label className="typography-label14regular text-text01" htmlFor="fruit-combobox">
+                  お気に入りの果物
+                </label>
+                <Combobox
+                  value={value}
+                  onChange={(next, meta) => {
+                    setValue(next);
+                    setInputText(meta?.label ?? '');
+                  }}
+                  inputValue={inputText}
+                  onInputChange={setInputText}
+                  placeholder="果物を検索..."
+                  width="100%"
+                >
+                  <Combobox.Input>
+                    <Combobox.HelperMessage>選択値: {value ?? '未選択'}</Combobox.HelperMessage>
+                  </Combobox.Input>
+                  <Combobox.List>
+                    {filtered.length === 0 && inputText.length > 0 && <Combobox.Empty />}
+                    {filtered.map((opt) => (
+                      <Combobox.Item key={opt.value} value={opt.value} label={opt.label} />
+                    ))}
+                  </Combobox.List>
+                </Combobox>
+              </div>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <div className="flex w-full flex-wrap items-center justify-end gap-4">
+              <Button variant="outline" size="large" onClick={handleCancel}>
+                キャンセル
+              </Button>
+              <Button variant="fill" size="large" onClick={handleSave}>
+                保存する
+              </Button>
+            </div>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    );
+  },
+};
+
+// Popover.Content の中で Combobox が正しく動作するかを検証するための Story（VRT 除外）。
+// 確認観点:
+// - Combobox.List クリックで Popover が閉じない（外側クリック誤判定の検証）
+// - 候補選択後、Combobox List のみ閉じ Popover は維持される
+// - Escape で Combobox List → Popover の順に閉じる
+export const WithinPopover: Story = {
+  parameters: {
+    chromatic: { disable: true },
+  },
+  render: function WithinPopoverRender() {
+    const [isPopoverOpen, setIsPopoverOpen] = useState(true);
+    const [value, setValue] = useState<string | null>(null);
+    const [inputText, setInputText] = useState('');
+
+    const filtered = useMemo(
+      () => fruits.filter((f) => f.label.toLowerCase().includes(inputText.toLowerCase())),
+      [inputText],
+    );
+
+    const handleCancel = () => {
+      setIsPopoverOpen(false);
+    };
+    const handleSave = () => {
+      setIsPopoverOpen(false);
+    };
+
+    return (
+      <div className="flex min-h-[640px] flex-col items-center pt-12">
+        <Popover isOpen={isPopoverOpen} placement="bottom" offset={8} onClose={() => setIsPopoverOpen(false)}>
+          <Popover.Trigger>
+            <Button variant="fill" size="medium" onClick={() => setIsPopoverOpen((v) => !v)}>
+              {isPopoverOpen ? 'close' : 'open'}
+            </Button>
+          </Popover.Trigger>
+          <Popover.Content>
+            <Popup width={400}>
+              <Popup.Header>果物を登録</Popup.Header>
+              <Popup.Body>
+                <div className="flex w-full flex-col gap-6 p-6">
+                  <div className="flex flex-col gap-2">
+                    <label className="typography-label14regular text-text01">お気に入りの果物</label>
+                    <Combobox
+                      value={value}
+                      onChange={(next, meta) => {
+                        setValue(next);
+                        setInputText(meta?.label ?? '');
+                      }}
+                      inputValue={inputText}
+                      onInputChange={setInputText}
+                      placeholder="果物を検索..."
+                      width="100%"
+                    >
+                      <Combobox.Input>
+                        <Combobox.HelperMessage>選択値: {value ?? '未選択'}</Combobox.HelperMessage>
+                      </Combobox.Input>
+                      <Combobox.List>
+                        {filtered.length === 0 && inputText.length > 0 && <Combobox.Empty />}
+                        {filtered.map((opt) => (
+                          <Combobox.Item key={opt.value} value={opt.value} label={opt.label} />
+                        ))}
+                      </Combobox.List>
+                    </Combobox>
+                  </div>
+                </div>
+              </Popup.Body>
+              <Popup.Footer>
+                <div className="flex w-full flex-wrap items-center justify-end gap-4">
+                  <Button variant="outline" size="medium" onClick={handleCancel}>
+                    キャンセル
+                  </Button>
+                  <Button variant="fill" size="medium" onClick={handleSave}>
+                    保存する
+                  </Button>
+                </div>
+              </Popup.Footer>
+            </Popup>
+          </Popover.Content>
+        </Popover>
       </div>
     );
   },

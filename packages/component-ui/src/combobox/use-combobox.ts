@@ -273,7 +273,10 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
 
       if (event.key === 'Escape') {
         if (isOpen) {
+          // List が開いているときの Escape は List のみを閉じる。
+          // 親要素（Popover / Modal 等）まで伝搬すると、それらも同時に閉じてしまうため stopPropagation する。
           event.preventDefault();
+          event.stopPropagation();
           setIsOpen(false);
         }
       }

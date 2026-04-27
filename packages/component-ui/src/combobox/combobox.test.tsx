@@ -156,6 +156,35 @@ describe('Combobox', () => {
       expect(getListbox()).toHaveStyle({ visibility: 'hidden' });
     });
 
+    it('open 中の Escape は親要素に伝搬しない（Popover/Modal の二重 close 防止）', async () => {
+      const user = userEvent.setup();
+      const handleParentEscape = vi.fn();
+      render(
+        <div onKeyDown={(e) => e.key === 'Escape' && handleParentEscape()}>
+          <ControlledCombobox />
+        </div>,
+      );
+      await user.click(getCombobox());
+      await user.keyboard('{Escape}');
+      expect(getListbox()).toHaveStyle({ visibility: 'hidden' });
+      expect(handleParentEscape).not.toHaveBeenCalled();
+    });
+
+    it('close 中の Escape は親要素に伝搬する（Popover/Modal を閉じられるように）', async () => {
+      const user = userEvent.setup();
+      const handleParentEscape = vi.fn();
+      render(
+        <div onKeyDown={(e) => e.key === 'Escape' && handleParentEscape()}>
+          <ControlledCombobox />
+        </div>,
+      );
+      // focus したあと Escape で List を閉じ、もう一度 Escape を押すと親に伝搬する
+      await user.click(getCombobox());
+      await user.keyboard('{Escape}');
+      await user.keyboard('{Escape}');
+      expect(handleParentEscape).toHaveBeenCalledTimes(1);
+    });
+
     it('候補外 click で close する', async () => {
       const user = userEvent.setup();
       render(
