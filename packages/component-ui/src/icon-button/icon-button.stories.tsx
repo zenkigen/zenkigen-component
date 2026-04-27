@@ -30,9 +30,11 @@ const meta: Meta<typeof IconButton> = {
     },
     iconColor: {
       control: 'text',
+      description: 'Color token (e.g. "icon01", "interactive01", "supportError")',
     },
     iconAccentColor: {
       control: 'text',
+      description: 'Color token (e.g. "icon01", "interactive01", "supportError")',
     },
   },
 };
