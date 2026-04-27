@@ -172,7 +172,7 @@ export function Select({
         </button>
         {isOptionListOpen && !isDisabled && (
           <FloatingPortal>
-            <div className="relative z-overlay">
+            <div className="relative z-popover">
               <SelectList ref={refs.setFloating} maxHeight={optionListMaxHeight}>
                 {children}
               </SelectList>
