@@ -128,6 +128,37 @@ export const Progress: Story = {
 
 const applicationFlowItems = [{ label: '申込情報入力' }, { label: '配送先' }, { label: 'お支払い' }, { label: '確認' }];
 
+const horizontalLayoutVariants: Array<{
+  size: StepsSize;
+  variant: StepsVariant;
+  textOrientation: StepsTextOrientation;
+}> = [
+  { size: 'small', variant: 'solid', textOrientation: 'horizontal' },
+  { size: 'medium', variant: 'solid', textOrientation: 'horizontal' },
+  { size: 'large', variant: 'solid', textOrientation: 'horizontal' },
+  { size: 'small', variant: 'subtle', textOrientation: 'horizontal' },
+  { size: 'medium', variant: 'subtle', textOrientation: 'horizontal' },
+  { size: 'large', variant: 'subtle', textOrientation: 'horizontal' },
+  { size: 'small', variant: 'solid', textOrientation: 'vertical' },
+  { size: 'medium', variant: 'solid', textOrientation: 'vertical' },
+  { size: 'large', variant: 'solid', textOrientation: 'vertical' },
+  { size: 'small', variant: 'subtle', textOrientation: 'vertical' },
+  { size: 'medium', variant: 'subtle', textOrientation: 'vertical' },
+  { size: 'large', variant: 'subtle', textOrientation: 'vertical' },
+];
+
+function renderHorizontalLayoutSteps(itemClassName: string) {
+  return horizontalLayoutVariants.map(({ size, variant, textOrientation }) => (
+    <div key={`${size}-${variant}-${textOrientation}`} className={itemClassName}>
+      <Steps currentStep={2} aria-label="申込フロー" size={size} variant={variant} textOrientation={textOrientation}>
+        {applicationFlowItems.map((item) => (
+          <Steps.Item key={item.label} label={item.label} />
+        ))}
+      </Steps>
+    </div>
+  ));
+}
+
 export const LayoutExampleHorizontal: Story = {
   args: Component.args,
   parameters: {
@@ -138,148 +169,19 @@ export const LayoutExampleHorizontal: Story = {
       <div className="flex flex-col gap-1">
         <h3 className="typography-h5 text-text01">水平 幅なし(flex flex-col items-center)</h3>
         <div className="flex items-stretch justify-center rounded border border-uiBorder01 bg-uiBackground01 p-6">
-          <div className="flex flex-col items-center gap-12 p-4">
-            <div className="flex">
-              <Steps currentStep={2} aria-label="申込フロー" size="small">
-                {applicationFlowItems.map((item) => (
-                  <Steps.Item key={item.label} label={item.label} />
-                ))}
-              </Steps>
-            </div>
-            <div className="flex">
-              <Steps currentStep={2} aria-label="申込フロー" size="medium">
-                {applicationFlowItems.map((item) => (
-                  <Steps.Item key={item.label} label={item.label} />
-                ))}
-              </Steps>
-            </div>
-            <div className="flex">
-              <Steps currentStep={2} aria-label="申込フロー" size="large">
-                {applicationFlowItems.map((item) => (
-                  <Steps.Item key={item.label} label={item.label} />
-                ))}
-              </Steps>
-            </div>
-            <div className="flex">
-              <Steps currentStep={2} aria-label="申込フロー" size="small" variant="subtle">
-                {applicationFlowItems.map((item) => (
-                  <Steps.Item key={item.label} label={item.label} />
-                ))}
-              </Steps>
-            </div>
-            <div className="flex">
-              <Steps currentStep={2} aria-label="申込フロー" size="medium" variant="subtle">
-                {applicationFlowItems.map((item) => (
-                  <Steps.Item key={item.label} label={item.label} />
-                ))}
-              </Steps>
-            </div>
-            <div className="flex">
-              <Steps currentStep={2} aria-label="申込フロー" size="large" variant="subtle">
-                {applicationFlowItems.map((item) => (
-                  <Steps.Item key={item.label} label={item.label} />
-                ))}
-              </Steps>
-            </div>
-          </div>
+          <div className="flex flex-col items-center gap-12 p-4">{renderHorizontalLayoutSteps('flex')}</div>
         </div>
       </div>
       <div className="flex flex-col gap-1">
         <h3 className="typography-h5 text-text01">水平 幅固定(flex w-[800px] flex-col)</h3>
         <div className="flex items-stretch justify-center rounded border border-uiBorder01 bg-uiBackground01 p-6">
-          <div className="flex w-[800px] flex-col gap-12 p-4">
-            <div className="flex flex-col gap-4">
-              <Steps currentStep={2} aria-label="申込フロー" size="small">
-                {applicationFlowItems.map((item) => (
-                  <Steps.Item key={item.label} label={item.label} />
-                ))}
-              </Steps>
-            </div>
-            <div className="flex flex-col gap-4">
-              <Steps currentStep={2} aria-label="申込フロー" size="medium">
-                {applicationFlowItems.map((item) => (
-                  <Steps.Item key={item.label} label={item.label} />
-                ))}
-              </Steps>
-            </div>
-            <div className="flex flex-col gap-4">
-              <Steps currentStep={2} aria-label="申込フロー" size="large">
-                {applicationFlowItems.map((item) => (
-                  <Steps.Item key={item.label} label={item.label} />
-                ))}
-              </Steps>
-            </div>
-            <div className="flex flex-col gap-4">
-              <Steps currentStep={2} aria-label="申込フロー" size="small" variant="subtle">
-                {applicationFlowItems.map((item) => (
-                  <Steps.Item key={item.label} label={item.label} />
-                ))}
-              </Steps>
-            </div>
-            <div className="flex flex-col gap-4">
-              <Steps currentStep={2} aria-label="申込フロー" size="medium" variant="subtle">
-                {applicationFlowItems.map((item) => (
-                  <Steps.Item key={item.label} label={item.label} />
-                ))}
-              </Steps>
-            </div>
-            <div className="flex flex-col gap-4">
-              <Steps currentStep={2} aria-label="申込フロー" size="large" variant="subtle">
-                {applicationFlowItems.map((item) => (
-                  <Steps.Item key={item.label} label={item.label} />
-                ))}
-              </Steps>
-            </div>
-          </div>
+          <div className="flex w-[800px] flex-col gap-12 p-4">{renderHorizontalLayoutSteps('flex flex-col gap-4')}</div>
         </div>
       </div>
       <div className="flex flex-col gap-1">
         <h3 className="typography-h5 text-text01">水平 幅100%(flex flex-col)</h3>
         <div className="flex items-stretch justify-center rounded border border-uiBorder01 bg-uiBackground01 p-6">
-          <div className="flex w-full flex-col gap-12 p-4">
-            <div className="flex flex-col gap-4">
-              <Steps currentStep={2} aria-label="申込フロー" size="small">
-                {applicationFlowItems.map((item) => (
-                  <Steps.Item key={item.label} label={item.label} />
-                ))}
-              </Steps>
-            </div>
-            <div className="flex flex-col gap-4">
-              <Steps currentStep={2} aria-label="申込フロー" size="medium">
-                {applicationFlowItems.map((item) => (
-                  <Steps.Item key={item.label} label={item.label} />
-                ))}
-              </Steps>
-            </div>
-            <div className="flex flex-col gap-4">
-              <Steps currentStep={2} aria-label="申込フロー" size="large">
-                {applicationFlowItems.map((item) => (
-                  <Steps.Item key={item.label} label={item.label} />
-                ))}
-              </Steps>
-            </div>
-            <div className="flex flex-col gap-4">
-              <Steps currentStep={2} aria-label="申込フロー" size="small" variant="subtle">
-                {applicationFlowItems.map((item) => (
-                  <Steps.Item key={item.label} label={item.label} />
-                ))}
-              </Steps>
-            </div>
-            <div className="flex flex-col gap-4">
-              <Steps currentStep={2} aria-label="申込フロー" size="medium" variant="subtle">
-                {applicationFlowItems.map((item) => (
-                  <Steps.Item key={item.label} label={item.label} />
-                ))}
-              </Steps>
-            </div>
-            <div className="flex flex-col gap-4">
-              <Steps currentStep={2} aria-label="申込フロー" size="large" variant="subtle">
-                {applicationFlowItems.map((item) => (
-                  <Steps.Item key={item.label} label={item.label} />
-                ))}
-              </Steps>
-            </div>
-          </div>
+          <div className="flex w-full flex-col gap-12 p-4">{renderHorizontalLayoutSteps('flex flex-col gap-4')}</div>
         </div>
       </div>
     </div>
