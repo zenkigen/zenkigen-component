@@ -9,15 +9,26 @@ export const useOutsideClick = <T extends HTMLElement = HTMLElement>(
   useEffect(() => {
     const listener = (event: Event) => {
       const element = ref?.current;
+      if (element == null) {
+        return;
+      }
+
       const target = event.target as Node | null;
-      // Reactの再レンダリングで要素が置換されDOMから切り離された場合は外部クリックと判定しない
-      if (target instanceof Node && target.isConnected === false) {
+      // ref要素内のクリックは外部クリックと判定しない
+      if (target != null && Boolean(element.contains(target))) {
         return;
       }
-      // ref要素内のクリック、またはrefが未設定の場合は外部クリックと判定しない
-      if (element == null || Boolean(element.contains(target ?? null))) {
+
+      // Reactの再レンダリングで target がDOMから切り離されているケースに備え、
+      // composedPath にイベント発火時点の祖先要素が残っているため、それを使って内側判定する。
+      // これにより自身のトグル ボタン押下で icon の svg が再生成されるケースを内側として扱いつつ、
+      // 他のフローティング要素のトグルを押した場合は外部クリックとして判定できる。
+      const path = typeof event.composedPath === 'function' ? event.composedPath() : [];
+      const isInsideViaPath = path.some((node) => node instanceof Node && Boolean(element.contains(node)));
+      if (isInsideViaPath) {
         return;
       }
+
       handler(event);
     };
 
