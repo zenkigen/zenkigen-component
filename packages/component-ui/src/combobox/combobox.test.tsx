@@ -199,6 +199,29 @@ describe('Combobox', () => {
       await user.click(screen.getByRole('button', { name: 'outside' }));
       expect(getListbox()).toHaveStyle({ visibility: 'hidden' });
     });
+
+    it('別の Combobox のトグルを押すと、先に開いていた Combobox が閉じる', async () => {
+      const user = userEvent.setup();
+      render(
+        <div>
+          <ControlledCombobox />
+          <ControlledCombobox />
+        </div>,
+      );
+      const inputs = screen.getAllByRole('combobox') as HTMLInputElement[];
+      const listboxes = screen.getAllByRole('listbox', { hidden: true });
+      const toggles = screen.getAllByRole('button', { name: '候補を表示' });
+
+      await user.click(toggles[0]!);
+      expect(inputs[0]).toHaveAttribute('aria-expanded', 'true');
+      expect(listboxes[0]).toHaveStyle({ visibility: 'visible' });
+
+      await user.click(toggles[1]!);
+      expect(inputs[0]).toHaveAttribute('aria-expanded', 'false');
+      expect(listboxes[0]).toHaveStyle({ visibility: 'hidden' });
+      expect(inputs[1]).toHaveAttribute('aria-expanded', 'true');
+      expect(listboxes[1]).toHaveStyle({ visibility: 'visible' });
+    });
   });
 
   describe('選択動作', () => {

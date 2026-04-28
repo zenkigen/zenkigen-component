@@ -132,4 +132,51 @@ describe('useOutsideClick', () => {
 
     document.body.removeChild(container);
   });
+
+  // bubbling 中に target が detach されるケース。
+  // 実環境では「ref 内のトグル ボタン押下 → React 再レンダリングで子の svg が unmount」のように、
+  // クリック処理中に target が DOM から切り離される。
+  // composedPath にはイベント発火時点の祖先が保持されるので、それを使って内側/外側を判定する必要がある。
+  describe('bubbling 中に target が DOM から切り離されるケース', () => {
+    it('ref 内部の要素を target にした click が bubbling 中に detach されても、composedPath で内側判定され handler が呼ばれないこと', () => {
+      const handler = vi.fn();
+      const container = document.createElement('div');
+      const button = document.createElement('button');
+      const span = document.createElement('span');
+      button.appendChild(span);
+      container.appendChild(button);
+      document.body.appendChild(container);
+
+      renderHook(() => useOutsideClick(createRef(container), handler));
+
+      // bubbling 中に target を detach する
+      span.addEventListener('click', () => span.remove(), { once: true });
+      span.dispatchEvent(new MouseEvent('click', { bubbles: true, composed: true }));
+
+      expect(handler).not.toHaveBeenCalled();
+
+      document.body.removeChild(container);
+    });
+
+    it('ref 外部の要素を target にした click が bubbling 中に detach されても、composedPath が ref を含まなければ handler が呼ばれること', () => {
+      const handler = vi.fn();
+      const container = document.createElement('div');
+      const outsideWrapper = document.createElement('div');
+      const span = document.createElement('span');
+      outsideWrapper.appendChild(span);
+      document.body.appendChild(container);
+      document.body.appendChild(outsideWrapper);
+
+      renderHook(() => useOutsideClick(createRef(container), handler));
+
+      // bubbling 中に target を detach する
+      span.addEventListener('click', () => span.remove(), { once: true });
+      span.dispatchEvent(new MouseEvent('click', { bubbles: true, composed: true }));
+
+      expect(handler).toHaveBeenCalledTimes(1);
+
+      document.body.removeChild(container);
+      document.body.removeChild(outsideWrapper);
+    });
+  });
 });
