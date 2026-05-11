@@ -285,7 +285,16 @@ const PopoverInModalStory = () => {
       <Modal.Header>Modal 内の Popover</Modal.Header>
       <Modal.Body>
         <div className="flex min-h-[200px] flex-col items-center justify-center gap-4 pb-4">
-          <Popover isOpen={isPopoverOpen} placement="top" offset={8} onClose={() => setIsPopoverOpen(false)}>
+          <Popover
+            isOpen={isPopoverOpen}
+            placement="top"
+            offset={8}
+            onClose={(event) => {
+              // Modal 表示時の自動 close は無視して、VRT 用に Popover を開いたまま維持
+              if (event.reason === 'modal-open') return;
+              setIsPopoverOpen(false);
+            }}
+          >
             <Popover.Trigger>
               <Button variant="fill" onClick={() => setIsPopoverOpen((v) => !v)}>
                 {isPopoverOpen ? 'Popoverを非表示' : 'Popoverを表示'}
