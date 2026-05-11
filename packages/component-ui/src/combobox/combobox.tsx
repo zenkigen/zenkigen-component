@@ -1,5 +1,5 @@
 import { autoUpdate, flip, offset, size as sizeMiddleware, useFloating } from '@floating-ui/react';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useOutsideClick } from '../hooks/use-outside-click';
 import { TextInputErrorMessage } from '../text-input/text-input-error-message';
@@ -14,6 +14,18 @@ import { useCombobox } from './use-combobox';
 
 const FLOATING_OFFSET = 4;
 const FLOATING_VIEWPORT_PADDING = 8;
+
+// CSSProperties['height'] は string | number | undefined を受ける。
+// 数値はそのまま使い、文字列は parseFloat で「200」「200px」「10rem」等から数値部分を抽出する。
+// 空文字や parse 失敗 (NaN) の場合は null を返し、利用可能高をそのまま使う。
+function parseListMaxHeight(value: string | number | undefined): number | null {
+  if (value == null || value === '') {
+    return null;
+  }
+  const numeric = typeof value === 'number' ? value : parseFloat(value);
+
+  return Number.isFinite(numeric) ? numeric : null;
+}
 
 function ComboboxBase({
   children,
@@ -51,21 +63,26 @@ function ComboboxBase({
   // toggle ボタンの disable 判定に利用する。
   const [hasOpenableContent, setHasOpenableContent] = useState(false);
 
-  const { refs, floatingStyles } = useFloating({
-    open: combobox.isOpen,
-    onOpenChange: combobox.setIsOpen,
-    placement: 'bottom-start',
-    whileElementsMounted: autoUpdate,
-    middleware: [
+  // Floating UI の middleware の apply は closure で props をキャプチャするため、
+  // 単に毎 render で middleware 配列を作り直しても、useFloating が新しい closure を採用しない。
+  // ref に最新値を保持して apply からは ref を参照することで、props 変更にも追従する。
+  const listMaxHeightRef = useRef(listMaxHeight);
+  listMaxHeightRef.current = listMaxHeight;
+  const matchListToTriggerRef = useRef(matchListToTrigger);
+  matchListToTriggerRef.current = matchListToTrigger;
+
+  // middleware 配列は stable に保ち、不要な useFloating 内の再構築を避ける。
+  const middleware = useMemo(
+    () => [
       offset(FLOATING_OFFSET),
       flip({ padding: FLOATING_VIEWPORT_PADDING }),
       sizeMiddleware({
         padding: FLOATING_VIEWPORT_PADDING,
         apply({ availableHeight, availableWidth, elements, rects }) {
           const referenceWidth = rects.reference.width;
-          const allowedHeight =
-            listMaxHeight == null ? availableHeight : Math.min(availableHeight, Number(listMaxHeight));
-          if (matchListToTrigger) {
+          const numericLimit = parseListMaxHeight(listMaxHeightRef.current);
+          const allowedHeight = numericLimit == null ? availableHeight : Math.min(availableHeight, numericLimit);
+          if (matchListToTriggerRef.current) {
             // input と同じ幅に固定
             elements.floating.style.width = `${referenceWidth}px`;
           } else {
@@ -77,7 +94,22 @@ function ComboboxBase({
         },
       }),
     ],
+    [],
+  );
+
+  const { refs, floatingStyles, update } = useFloating({
+    open: combobox.isOpen,
+    onOpenChange: combobox.setIsOpen,
+    placement: 'bottom-start',
+    whileElementsMounted: autoUpdate,
+    middleware,
   });
+
+  // listMaxHeight / matchListToTrigger 変更時、Floating UI に再計算を促す。
+  // (autoUpdate は要素サイズ変更しか検知しないため、props 変更には別途 update() が必要)
+  useEffect(() => {
+    update();
+  }, [listMaxHeight, matchListToTrigger, update]);
 
   // refs.setReference / setFloating は再レンダリングで identity が変わる可能性があるため、
   // ref に保持して ref callback の identity を完全に stable にする。

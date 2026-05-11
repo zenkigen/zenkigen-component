@@ -55,7 +55,7 @@ function ControlledCombobox({
   filterItems?: (inputValue: string, items: Fruit[]) => Fruit[];
   isError?: boolean;
   isDisabled?: boolean;
-  listMaxHeight?: number;
+  listMaxHeight?: string | number;
   extraChildren?: ReactNode;
   onSelectionChange?: (value: string | null) => void;
 }) {
@@ -104,6 +104,45 @@ const queryOptions = () => screen.queryAllByRole('option', { hidden: true });
 beforeEach(() => {
   // scrollIntoView は jsdom で未実装。spy で検証するため vitest mock を差す
   Element.prototype.scrollIntoView = vi.fn();
+
+  // jsdom では getBoundingClientRect が常に 0 を返すため、Floating UI の availableHeight が
+  // 負値になり listMaxHeight 等のテストが安定しない。要素別に意味のある rect を返す mock を入れる:
+  // - documentElement / body: viewport サイズ (clipping boundary 用)
+  // - その他: input の参照位置 (reference / floating 寸法用)
+  const viewportRect = {
+    width: 1024,
+    height: 768,
+    top: 0,
+    left: 0,
+    right: 1024,
+    bottom: 768,
+    x: 0,
+    y: 0,
+    toJSON: () => ({}),
+  } as DOMRect;
+  const referenceRect = {
+    width: 200,
+    height: 32,
+    top: 100,
+    left: 0,
+    right: 200,
+    bottom: 132,
+    x: 0,
+    y: 100,
+    toJSON: () => ({}),
+  } as DOMRect;
+  vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(function mocked(this: Element) {
+    if (this === document.documentElement || this === document.body) {
+      return viewportRect;
+    }
+
+    return referenceRect;
+  });
+
+  // Floating UI の clipping boundary 計算は document.documentElement.clientHeight / clientWidth を
+  // 参照する。jsdom はデフォルトで 0 を返すため明示的に viewport サイズを設定する。
+  Object.defineProperty(document.documentElement, 'clientHeight', { configurable: true, value: 768 });
+  Object.defineProperty(document.documentElement, 'clientWidth', { configurable: true, value: 1024 });
 });
 
 afterEach(() => {
@@ -552,6 +591,139 @@ describe('Combobox', () => {
       await user.keyboard('{ArrowDown}');
 
       expect(listbox.scrollTop).toBe(0);
+    });
+  });
+
+  describe('listMaxHeight', () => {
+    // listbox は内側 ul、その親 div が外側 wrapper。
+    // wrapper の inline style に maxHeight が Floating UI の size middleware 経由で反映される。
+    const getListWrapper = () => {
+      const wrapper = getListbox().parentElement;
+      if (wrapper == null) {
+        throw new Error('list wrapper not found');
+      }
+
+      return wrapper;
+    };
+
+    it('指定した listMaxHeight が候補リストの wrapper の maxHeight に反映される', async () => {
+      const user = userEvent.setup();
+      render(<ControlledCombobox listMaxHeight={200} />);
+
+      await user.click(getCombobox());
+
+      // 利用可能高 (>= 200) より listMaxHeight が小さいので 200px が採用される
+      await vi.waitFor(() => {
+        expect(getListWrapper().style.maxHeight).toBe('200px');
+      });
+    });
+
+    it('listMaxHeight が利用可能高より大きい場合は利用可能高が採用される', async () => {
+      const user = userEvent.setup();
+      render(<ControlledCombobox listMaxHeight={5000} />);
+
+      await user.click(getCombobox());
+
+      // viewport 高さ 768、reference の bottom 132、offset 4、padding 8 で availableHeight = 624。
+      // size middleware は min(availableHeight, listMaxHeight) を採用するため、
+      // listMaxHeight=5000 を渡しても availableHeight (624px) が上限となる。
+      await vi.waitFor(() => {
+        expect(getListWrapper().style.maxHeight).toBe('624px');
+      });
+    });
+
+    it('listMaxHeight に "200px" のような単位付き文字列を渡しても 200px が反映される', async () => {
+      const user = userEvent.setup();
+      render(<ControlledCombobox listMaxHeight="200px" />);
+
+      await user.click(getCombobox());
+
+      await vi.waitFor(() => {
+        expect(getListWrapper().style.maxHeight).toBe('200px');
+      });
+    });
+
+    it('listMaxHeight に "200" のような単位なし文字列を渡しても 200px が反映される', async () => {
+      const user = userEvent.setup();
+      render(<ControlledCombobox listMaxHeight="200" />);
+
+      await user.click(getCombobox());
+
+      await vi.waitFor(() => {
+        expect(getListWrapper().style.maxHeight).toBe('200px');
+      });
+    });
+
+    it('listMaxHeight に空文字を渡した場合は利用可能高が採用される (NaN ガード)', async () => {
+      const user = userEvent.setup();
+      render(<ControlledCombobox listMaxHeight="" />);
+
+      await user.click(getCombobox());
+
+      await vi.waitFor(() => {
+        expect(getListWrapper().style.maxHeight).toBe('624px');
+      });
+    });
+
+    it('listMaxHeight にパース不能な文字列を渡した場合は利用可能高が採用される (NaN ガード)', async () => {
+      const user = userEvent.setup();
+      render(<ControlledCombobox listMaxHeight="invalid" />);
+
+      await user.click(getCombobox());
+
+      await vi.waitFor(() => {
+        expect(getListWrapper().style.maxHeight).toBe('624px');
+      });
+    });
+
+    it('mount 後に listMaxHeight を変更すると候補リストの maxHeight が再計算される', async () => {
+      const user = userEvent.setup();
+
+      function DynamicCombobox() {
+        // eslint-disable-next-line no-undefined
+        const [maxH, setMaxH] = useState<number | undefined>(undefined);
+        const [value, setValue] = useState<string | null>(null);
+        const [inputValue, setInputValue] = useState('');
+
+        return (
+          <>
+            <button type="button" onClick={() => setMaxH(150)} data-testid="set-150">
+              set 150
+            </button>
+            <Combobox
+              value={value}
+              onChange={(next, meta) => {
+                setValue(next);
+                setInputValue(meta?.label ?? '');
+              }}
+              inputValue={inputValue}
+              onInputChange={setInputValue}
+              listMaxHeight={maxH}
+            >
+              <Combobox.Input />
+              <Combobox.List>
+                {defaultFruits.map((opt) => (
+                  <Combobox.Item key={opt.value} value={opt.value} label={opt.label} />
+                ))}
+              </Combobox.List>
+            </Combobox>
+          </>
+        );
+      }
+
+      render(<DynamicCombobox />);
+      await user.click(getCombobox());
+
+      // 初期は listMaxHeight 未指定なので availableHeight (624px) が採用される
+      await vi.waitFor(() => {
+        expect(getListWrapper().style.maxHeight).toBe('624px');
+      });
+
+      // listMaxHeight=150 に変更すると Floating UI が再計算され 150px が反映される
+      await user.click(screen.getByTestId('set-150'));
+      await vi.waitFor(() => {
+        expect(getListWrapper().style.maxHeight).toBe('150px');
+      });
     });
   });
 

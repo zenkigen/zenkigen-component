@@ -37,7 +37,7 @@ const meta: Meta<typeof Combobox> = {
     },
     width: { control: 'text', description: '幅' },
     maxWidth: { control: 'text', description: '最大幅' },
-    listMaxHeight: { control: 'text', description: '候補リストの最大高さ' },
+    listMaxHeight: { control: 'number', description: '候補リストの最大高さ (px)' },
     matchListToTrigger: {
       control: 'boolean',
       description: 'true のとき候補リストの幅を input と一致させる',
