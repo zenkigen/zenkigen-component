@@ -31,7 +31,8 @@
 11. [技術的な詳細](#技術的な詳細)
 12. [注意事項](#注意事項)
 13. [スタイルのカスタマイズ](#スタイルのカスタマイズ)
-14. [更新履歴](#更新履歴)
+14. [Q&A](#qa)
+15. [更新履歴](#更新履歴)
 
 ---
 
@@ -398,6 +399,44 @@ popup を開いた状態で items が変動した場合は、現在の active va
 ## スタイルのカスタマイズ
 
 このコンポーネントは Tailwind CSS のユーティリティクラスを使用しており、`@zenkigen-inc/component-config` で定義されたデザイントークンに依存している。カスタマイズする場合は、当該設定を参照すること。
+
+## Q&A
+
+### Q: フィルタリングはなぜライブラリ側でやらないのか？
+
+A: 候補の取得方法（同期 / 非同期）、マッチングアルゴリズム（前方一致 / 部分一致 / あいまい検索）、表示件数の制限などは利用シーンごとに大きく異なるため、Combobox 本体はヘッドレスに徹し、フィルタリングは利用者が `onInputChange` のコールバック内で実行する設計とした。`inputValue` を元に候補配列を絞り込み、絞り込み結果を `Combobox.List` の children として再レンダリングする。
+
+### Q: popup が開かないときに確認すべきことは？
+
+A: `Combobox.List` 直下に `Combobox.Item` / `Combobox.Loading` / `Combobox.Empty` のいずれかが存在するかを確認する。これらが 1 つも無いとき、`isOpen === true` でも popup は描画されず、矢印ボタンも自動で disabled になる。未入力時に何も表示したくない場合は、利用者側で `filtered` が空のとき children を空にすればよい。
+
+### Q: `value` を渡しているのに input に何も表示されないのはなぜ？
+
+A: input に表示されるテキストは `inputValue` で制御される（`value` ではない）。初期 `value` を渡す場合は、対応する label を初期 `inputValue` として一緒に渡すこと。選択時は `onChange` の第 2 引数 `meta.label` を `inputValue` に反映する運用にする。
+
+### Q: `Combobox.HelperMessage` / `Combobox.ErrorMessage` を `Combobox` 直下に置くとどうなる？
+
+A: TextInput の `aria-describedby` / `aria-invalid` 連携が成立せず、スクリーンリーダーが補助メッセージを読み上げなくなる。必ず `Combobox.Input` の direct children として配置すること。
+
+### Q: `matchListToTrigger` はどう使い分ければよい？
+
+A: 候補ラベルが短く幅が揃っていて、見た目を input 幅に揃えたい場合は `true` を指定する。候補ラベルの長さがバラつくケースや、長いラベルを省略せず表示したい場合はデフォルト（`false`）で、コンテンツに応じて popup 幅が広がる挙動が適切。
+
+### Q: Popover / Modal の中で Combobox を開いて Escape を押すと、外側まで一緒に閉じてしまわないか？
+
+A: popup が open のときの Escape は内部で `stopPropagation` されるため、Popover / Modal までは伝搬しない。Combobox の popup だけが閉じ、外側はそのまま残る。popup が閉じている状態の Escape は素通しするため、外側を Escape で閉じる挙動には影響しない。
+
+### Q: 大量データ（数千件以上）を扱う場合の推奨パターンは？
+
+A: `useMemo` 内で入力文字数が一定以上のときだけフィルタ結果を返し、未満のときは空配列を返すことで popup を抑制する。さらに `.slice(0, 50)` のように表示上限を設けて DOM ノード数を抑える。`listMaxHeight` で popup 自体の高さも制限する。これらを組み合わせると数千件オーダーでも実用的なパフォーマンスを得られる。
+
+### Q: 同じ `value` を持つ `Combobox.Item` を複数配置するとどうなる？
+
+A: `aria-activedescendant` のターゲット ID が衝突し、キーボード巡回や選択状態の判定が破綻する。表示用ラベル（`label`）が同じでも、必ず一意な `value` を割り当てること。
+
+### Q: Item をクリックすると input がフォーカスを失わないのはなぜ？
+
+A: 矢印 / クリアボタン / Item に `onMouseDown.preventDefault()` を実装しているため。WAI-ARIA Combobox の `aria-activedescendant` 方式では DOM フォーカスを常に input に保つ必要があるため、マウス操作でもフォーカスが移動しないように制御している。
 
 ## 更新履歴
 
