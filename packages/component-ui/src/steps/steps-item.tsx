@@ -71,7 +71,7 @@ export function StepsItem({ label, description }: StepsItemProps) {
   );
 
   const labelBlock = (
-    <span className={clsx('flex flex-col', textOrientation === 'vertical' && 'items-center text-center')}>
+    <span className={clsx('flex flex-col', textOrientation === 'horizontal' ? 'gap-1' : 'items-center text-center')}>
       <span
         className={clsx(
           'whitespace-nowrap text-text01',

@@ -1,13 +1,23 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { clsx } from 'clsx';
 
 import { Steps } from './steps';
 import type { StepsOrientation, StepsSize, StepsTextOrientation, StepsVariant } from './types';
 
-const defaultStepEntries = [
+type StepEntry = { label: string; description?: string };
+
+const defaultStepEntries: StepEntry[] = [
   { label: 'ステップ1', description: '基本情報' },
   { label: 'ステップ2', description: '詳細入力' },
   { label: 'ステップ3', description: '確認' },
   { label: 'ステップ4', description: '完了' },
+];
+
+const labelOnlyStepEntries: StepEntry[] = [
+  { label: 'ステップ1' },
+  { label: 'ステップ2' },
+  { label: 'ステップ3' },
+  { label: 'ステップ4' },
 ];
 
 const meta = {
@@ -42,29 +52,40 @@ const defaultItems = (
 const sizes: StepsSize[] = ['small', 'medium', 'large'];
 const textOrientations: StepsTextOrientation[] = ['horizontal', 'vertical'];
 
+const entryGroups: { title: string; entries: StepEntry[] }[] = [
+  { title: 'label のみ', entries: labelOnlyStepEntries },
+  { title: 'label + description', entries: defaultStepEntries },
+];
+
 function renderVariantMatrix(variant: StepsVariant, orientation: StepsOrientation) {
   return (
     <div className="flex flex-col gap-8">
       {sizes.map((size) => (
         <div key={size} className="flex flex-col gap-4">
           <div className="typography-label12regular text-text02">size: {size}</div>
-          <div className="flex flex-col gap-8 md:flex-row md:flex-wrap">
-            {textOrientations.map((textOrientation) => (
-              <div key={textOrientation} className="flex flex-col items-start gap-2">
-                <div className="typography-label12regular text-text02">textOrientation: {textOrientation}</div>
-                <div className="flex flex-col items-center">
-                  <Steps
-                    currentStep={2}
-                    size={size}
-                    orientation={orientation}
-                    textOrientation={textOrientation}
-                    variant={variant}
-                    aria-label={`${variant} ${orientation} ${textOrientation}`}
-                  >
-                    {defaultStepEntries.map((entry) => (
-                      <Steps.Item key={entry.label} description={entry.description} label={entry.label} />
-                    ))}
-                  </Steps>
+          <div className={clsx('flex items-start gap-12', orientation === 'horizontal' ? 'flex-col' : 'flex-row')}>
+            {entryGroups.map((group) => (
+              <div key={group.title} className="flex flex-col items-start gap-2">
+                <div className="flex flex-row items-start gap-8">
+                  {textOrientations.map((textOrientation) => (
+                    <div key={textOrientation} className="flex flex-col items-start gap-2">
+                      <div className="typography-label12regular text-text02">textOrientation: {textOrientation}</div>
+                      <div className="flex flex-col items-center">
+                        <Steps
+                          currentStep={2}
+                          size={size}
+                          orientation={orientation}
+                          textOrientation={textOrientation}
+                          variant={variant}
+                          aria-label={`${variant} ${orientation} ${textOrientation} ${group.title}`}
+                        >
+                          {group.entries.map((entry) => (
+                            <Steps.Item key={entry.label} description={entry.description} label={entry.label} />
+                          ))}
+                        </Steps>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             ))}
@@ -89,30 +110,39 @@ export const Component: Story = {
     chromatic: { disable: true },
   },
   render: (args) => (
-    <div className="flex w-full flex-col">
-      <Steps {...args}>{defaultItems}</Steps>
+    <div className="flex w-full flex-col gap-8">
+      <Steps {...args}>
+        {labelOnlyStepEntries.map((entry) => (
+          <Steps.Item key={entry.label} label={entry.label} />
+        ))}
+      </Steps>
+      <Steps {...args}>
+        {defaultStepEntries.map((entry) => (
+          <Steps.Item key={entry.label} description={entry.description} label={entry.label} />
+        ))}
+      </Steps>
     </div>
   ),
 };
 
 export const SolidHorizontal: Story = {
   args: { ...Component.args, variant: 'solid', orientation: 'horizontal' },
-  render: () => <div className="w-[720px]">{renderVariantMatrix('solid', 'horizontal')}</div>,
+  render: () => renderVariantMatrix('solid', 'horizontal'),
 };
 
 export const SubtleHorizontal: Story = {
   args: { ...Component.args, variant: 'subtle', orientation: 'horizontal' },
-  render: () => <div className="w-[720px]">{renderVariantMatrix('subtle', 'horizontal')}</div>,
+  render: () => renderVariantMatrix('subtle', 'horizontal'),
 };
 
 export const SolidVertical: Story = {
   args: { ...Component.args, variant: 'solid', orientation: 'vertical' },
-  render: () => <div>{renderVariantMatrix('solid', 'vertical')}</div>,
+  render: () => renderVariantMatrix('solid', 'vertical'),
 };
 
 export const SubtleVertical: Story = {
   args: { ...Component.args, variant: 'subtle', orientation: 'vertical' },
-  render: () => <div>{renderVariantMatrix('subtle', 'vertical')}</div>,
+  render: () => renderVariantMatrix('subtle', 'vertical'),
 };
 
 export const Progress: Story = {
