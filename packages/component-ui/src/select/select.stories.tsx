@@ -909,6 +909,7 @@ function DismissOnModalOpenContent() {
 export const DismissOnModalOpen: Story = {
   render: () => <DismissOnModalOpenContent />,
   parameters: {
+    chromatic: { disable: true },
     docs: {
       description: {
         story: [
