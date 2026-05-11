@@ -21,8 +21,7 @@
 9. [技術的な詳細](#技術的な詳細)
 10. [注意事項](#注意事項)
 11. [スタイルのカスタマイズ](#スタイルのカスタマイズ)
-12. [FAQ](#faq)
-13. [更新履歴](#更新履歴)
+12. [更新履歴](#更新履歴)
 
 ---
 
@@ -212,40 +211,6 @@ import { List } from '@zenkigen-inc/component-ui';
 ## スタイルのカスタマイズ
 
 このコンポーネントは Tailwind CSS のユーティリティクラスを使用しており、`@zenkigen-inc/component-config` で定義されたデザイントークンに依存している。カスタマイズする場合は、当該設定を参照すること。
-
-## FAQ
-
-### Q: `List` を直接使うべき場面は？通常は Combobox / Select 経由で十分か？
-
-A: 候補リスト UI は基本的に `Combobox` / `Select` 等のラッパー経由で使う。`List` を直接使うのは、独自の Floating UI コンポーネントを組み立てるケースや、候補表示以外のオーバーレイリスト UI を構築するケースに限られる。直接利用する場合は Floating UI の位置計算・外部クリック検知・キーボード操作などを利用者側で実装する必要がある。
-
-### Q: `selectionIndicator` の `'left'` と `'right'` はどう使い分ければよい？
-
-A: チェックリスト的に選択状態を強調したいときは `'left'`（アイコンが先頭に並び、選択状態を一覧で見渡しやすい）。検索結果のような「入力に対する候補表示」で、ラベルを優先的に視認させたいときは `'right'`（ラベルが左に揃い、選択 Item は右端のチェックで補足的に示す）。アイコン領域は非選択 Item でも 16px 確保されるため、いずれを選んでも Item 間で label の位置が揃う。
-
-### Q: `List.OptionItem` の中に `<button>` を入れてはいけないのはなぜ？
-
-A: Combobox の `aria-activedescendant` 方式では DOM フォーカスを常に input に保つ必要があり、Item 内に `<button>` などのフォーカス可能要素があると Tab キーやマウス操作でフォーカスが奪われて挙動が破綻する。Dropdown のような `role="menu"` で `<button>` ベースの Item が必要な場合は、Phase 4 で追加予定の `List.MenuItem`（仮）を待つこと。
-
-### Q: `id` を省略するとどうなる？
-
-A: `aria-activedescendant` のターゲットになれず、Combobox 等の親からキーボードによる active 表現ができなくなる。`List.OptionItem` の `id` は必須プロパティ。利用シーンに合わせてユニークな ID を割り当てること（例: `${baseId}-option-${value}`）。
-
-### Q: `outline` と `borderless` の使い分けは？
-
-A: ページ上に直接配置するインライン的なリスト（カードの中身として並べる等）は `outline`。Floating UI でオーバーレイとして表示する場合（Combobox / Select 等の候補リスト）は、Floating UI 側のシャドウのみで存在感を表現したいので `borderless` を選ぶ。
-
-### Q: `ref` と `containerRef` の違いは？
-
-A: `ref`（通常の forwardRef）は内側の `<ul>` を指す。スクロール制御（`scrollTop` リセットなど）に使う。`containerRef` は外側の wrapper `<div>` を指す。Floating UI の `floating element` として渡したい場合や、wrapper の DOM 寸法を測りたい場合に使う。Combobox は `containerRef` を Floating UI に渡し、`ref` で内部スクロール位置を管理している。
-
-### Q: `maxHeight` を超えたときの scroll の挙動は？
-
-A: 内側 `<ul>` が `overflow-y-auto` で縦スクロールを担当する。外側 wrapper は `overflow-hidden` でスクロールしないため、rounded 枠の外にコンテンツが漏れることはない。スクロールバーは内側 `<ul>` のみに表示される。
-
-### Q: `aria-label` / `aria-labelledby` を必ず指定しないといけないのはなぜ？
-
-A: スクリーンリーダー利用者にリストの目的（候補一覧 / メニュー等）を伝えるため。どちらか一方が指定されていれば十分。指定しないと List 全体がただの「list」としてアナウンスされ、コンテキストが伝わらない。
 
 ## 更新履歴
 
