@@ -50,7 +50,7 @@ function getIconSize(size: StepsSize): 'medium' | 'large' | 'x-large' {
   return 'x-large';
 }
 
-export function StepsItem({ label }: StepsItemProps) {
+export function StepsItem({ label, description }: StepsItemProps) {
   const { size, orientation, textOrientation, variant } = useStepsContext();
   const { state, index, isLast, id } = useStepsItemContext();
 
@@ -71,15 +71,19 @@ export function StepsItem({ label }: StepsItemProps) {
   );
 
   const labelBlock = (
-    <span
-      className={clsx(
-        'whitespace-nowrap text-text01',
-        textOrientation === 'vertical' && 'text-center',
-        size === 'large' ? 'typography-body16regular' : 'typography-body14regular',
+    <span className={clsx('flex flex-col', textOrientation === 'vertical' && 'items-center text-center')}>
+      <span
+        className={clsx(
+          'whitespace-nowrap text-text01',
+          size === 'large' ? 'typography-body16regular' : 'typography-body14regular',
+        )}
+      >
+        <span className="sr-only">{progressSrOnlyLabel[state.progress]}</span>
+        {label}
+      </span>
+      {description != null && (
+        <span className="typography-label12regular whitespace-nowrap text-text02">{description}</span>
       )}
-    >
-      <span className="sr-only">{progressSrOnlyLabel[state.progress]}</span>
-      {label}
     </span>
   );
 

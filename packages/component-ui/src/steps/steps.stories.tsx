@@ -3,7 +3,12 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Steps } from './steps';
 import type { StepsOrientation, StepsSize, StepsTextOrientation, StepsVariant } from './types';
 
-const defaultLabels = ['ステップ1', 'ステップ2', 'ステップ3', 'ステップ4'];
+const defaultStepEntries = [
+  { label: 'ステップ1', description: '基本情報' },
+  { label: 'ステップ2', description: '詳細入力' },
+  { label: 'ステップ3', description: '確認' },
+  { label: 'ステップ4', description: '完了' },
+];
 
 const meta = {
   title: 'Components/Steps',
@@ -28,8 +33,8 @@ type Story = StoryObj<typeof meta>;
 
 const defaultItems = (
   <>
-    {defaultLabels.map((label) => (
-      <Steps.Item key={label} label={label} />
+    {defaultStepEntries.map((entry) => (
+      <Steps.Item key={entry.label} description={entry.description} label={entry.label} />
     ))}
   </>
 );
@@ -45,20 +50,22 @@ function renderVariantMatrix(variant: StepsVariant, orientation: StepsOrientatio
           <div className="typography-label12regular text-text02">size: {size}</div>
           <div className="flex flex-col gap-8 md:flex-row md:flex-wrap">
             {textOrientations.map((textOrientation) => (
-              <div key={textOrientation} className="flex w-[480px] flex-col gap-2">
+              <div key={textOrientation} className="flex flex-col items-start gap-2">
                 <div className="typography-label12regular text-text02">textOrientation: {textOrientation}</div>
-                <Steps
-                  currentStep={2}
-                  size={size}
-                  orientation={orientation}
-                  textOrientation={textOrientation}
-                  variant={variant}
-                  aria-label={`${variant} ${orientation} ${textOrientation}`}
-                >
-                  {defaultLabels.map((label) => (
-                    <Steps.Item key={label} label={label} />
-                  ))}
-                </Steps>
+                <div className="flex flex-col items-center">
+                  <Steps
+                    currentStep={2}
+                    size={size}
+                    orientation={orientation}
+                    textOrientation={textOrientation}
+                    variant={variant}
+                    aria-label={`${variant} ${orientation} ${textOrientation}`}
+                  >
+                    {defaultStepEntries.map((entry) => (
+                      <Steps.Item key={entry.label} description={entry.description} label={entry.label} />
+                    ))}
+                  </Steps>
+                </div>
               </div>
             ))}
           </div>
@@ -116,8 +123,8 @@ export const Progress: Story = {
         <div key={step} className="flex flex-col gap-2">
           <div className="typography-label12regular text-text02">currentStep: {step}</div>
           <Steps currentStep={step} aria-label={`currentStep=${step}`}>
-            {defaultLabels.map((label) => (
-              <Steps.Item key={label} label={label} />
+            {defaultStepEntries.map((entry) => (
+              <Steps.Item key={entry.label} description={entry.description} label={entry.label} />
             ))}
           </Steps>
         </div>
@@ -126,7 +133,12 @@ export const Progress: Story = {
   ),
 };
 
-const applicationFlowItems = [{ label: '申込情報入力' }, { label: '配送先' }, { label: 'お支払い' }, { label: '確認' }];
+const applicationFlowItems = [
+  { label: '申込情報入力', description: 'お名前・メール' },
+  { label: '配送先', description: '住所入力' },
+  { label: 'お支払い', description: 'カード情報' },
+  { label: '確認', description: '内容確認' },
+];
 
 const horizontalLayoutVariants: Array<{
   size: StepsSize;
@@ -152,7 +164,7 @@ function renderHorizontalLayoutSteps(itemClassName: string) {
     <div key={`${size}-${variant}-${textOrientation}`} className={itemClassName}>
       <Steps currentStep={2} aria-label="申込フロー" size={size} variant={variant} textOrientation={textOrientation}>
         {applicationFlowItems.map((item) => (
-          <Steps.Item key={item.label} label={item.label} />
+          <Steps.Item key={item.label} description={item.description} label={item.label} />
         ))}
       </Steps>
     </div>
@@ -201,32 +213,32 @@ export const LayoutExampleVertical: Story = {
           <div className="flex flex-wrap items-start justify-center gap-12 p-4">
             <Steps currentStep={2} aria-label="申込フロー" size="small" orientation="vertical">
               {applicationFlowItems.map((item) => (
-                <Steps.Item key={item.label} label={item.label} />
+                <Steps.Item key={item.label} description={item.description} label={item.label} />
               ))}
             </Steps>
             <Steps currentStep={2} aria-label="申込フロー" size="medium" orientation="vertical">
               {applicationFlowItems.map((item) => (
-                <Steps.Item key={item.label} label={item.label} />
+                <Steps.Item key={item.label} description={item.description} label={item.label} />
               ))}
             </Steps>
             <Steps currentStep={2} aria-label="申込フロー" size="large" orientation="vertical">
               {applicationFlowItems.map((item) => (
-                <Steps.Item key={item.label} label={item.label} />
+                <Steps.Item key={item.label} description={item.description} label={item.label} />
               ))}
             </Steps>
             <Steps currentStep={2} aria-label="申込フロー" size="small" variant="subtle" orientation="vertical">
               {applicationFlowItems.map((item) => (
-                <Steps.Item key={item.label} label={item.label} />
+                <Steps.Item key={item.label} description={item.description} label={item.label} />
               ))}
             </Steps>
             <Steps currentStep={2} aria-label="申込フロー" size="medium" variant="subtle" orientation="vertical">
               {applicationFlowItems.map((item) => (
-                <Steps.Item key={item.label} label={item.label} />
+                <Steps.Item key={item.label} description={item.description} label={item.label} />
               ))}
             </Steps>
             <Steps currentStep={2} aria-label="申込フロー" size="large" variant="subtle" orientation="vertical">
               {applicationFlowItems.map((item) => (
-                <Steps.Item key={item.label} label={item.label} />
+                <Steps.Item key={item.label} description={item.description} label={item.label} />
               ))}
             </Steps>
           </div>
@@ -238,32 +250,32 @@ export const LayoutExampleVertical: Story = {
           <div className="flex h-[600px] items-stretch gap-12 p-4">
             <Steps currentStep={2} aria-label="申込フロー" size="small" orientation="vertical">
               {applicationFlowItems.map((item) => (
-                <Steps.Item key={item.label} label={item.label} />
+                <Steps.Item key={item.label} description={item.description} label={item.label} />
               ))}
             </Steps>
             <Steps currentStep={2} aria-label="申込フロー" size="medium" orientation="vertical">
               {applicationFlowItems.map((item) => (
-                <Steps.Item key={item.label} label={item.label} />
+                <Steps.Item key={item.label} description={item.description} label={item.label} />
               ))}
             </Steps>
             <Steps currentStep={2} aria-label="申込フロー" size="large" orientation="vertical">
               {applicationFlowItems.map((item) => (
-                <Steps.Item key={item.label} label={item.label} />
+                <Steps.Item key={item.label} description={item.description} label={item.label} />
               ))}
             </Steps>
             <Steps currentStep={2} aria-label="申込フロー" size="small" variant="subtle" orientation="vertical">
               {applicationFlowItems.map((item) => (
-                <Steps.Item key={item.label} label={item.label} />
+                <Steps.Item key={item.label} description={item.description} label={item.label} />
               ))}
             </Steps>
             <Steps currentStep={2} aria-label="申込フロー" size="medium" variant="subtle" orientation="vertical">
               {applicationFlowItems.map((item) => (
-                <Steps.Item key={item.label} label={item.label} />
+                <Steps.Item key={item.label} description={item.description} label={item.label} />
               ))}
             </Steps>
             <Steps currentStep={2} aria-label="申込フロー" size="large" variant="subtle" orientation="vertical">
               {applicationFlowItems.map((item) => (
-                <Steps.Item key={item.label} label={item.label} />
+                <Steps.Item key={item.label} description={item.description} label={item.label} />
               ))}
             </Steps>
           </div>
@@ -275,32 +287,32 @@ export const LayoutExampleVertical: Story = {
           <div className="flex h-full items-stretch gap-12 p-4">
             <Steps currentStep={2} aria-label="申込フロー" size="small" orientation="vertical">
               {applicationFlowItems.map((item) => (
-                <Steps.Item key={item.label} label={item.label} />
+                <Steps.Item key={item.label} description={item.description} label={item.label} />
               ))}
             </Steps>
             <Steps currentStep={2} aria-label="申込フロー" size="medium" orientation="vertical">
               {applicationFlowItems.map((item) => (
-                <Steps.Item key={item.label} label={item.label} />
+                <Steps.Item key={item.label} description={item.description} label={item.label} />
               ))}
             </Steps>
             <Steps currentStep={2} aria-label="申込フロー" size="large" orientation="vertical">
               {applicationFlowItems.map((item) => (
-                <Steps.Item key={item.label} label={item.label} />
+                <Steps.Item key={item.label} description={item.description} label={item.label} />
               ))}
             </Steps>
             <Steps currentStep={2} aria-label="申込フロー" size="small" variant="subtle" orientation="vertical">
               {applicationFlowItems.map((item) => (
-                <Steps.Item key={item.label} label={item.label} />
+                <Steps.Item key={item.label} description={item.description} label={item.label} />
               ))}
             </Steps>
             <Steps currentStep={2} aria-label="申込フロー" size="medium" variant="subtle" orientation="vertical">
               {applicationFlowItems.map((item) => (
-                <Steps.Item key={item.label} label={item.label} />
+                <Steps.Item key={item.label} description={item.description} label={item.label} />
               ))}
             </Steps>
             <Steps currentStep={2} aria-label="申込フロー" size="large" variant="subtle" orientation="vertical">
               {applicationFlowItems.map((item) => (
-                <Steps.Item key={item.label} label={item.label} />
+                <Steps.Item key={item.label} description={item.description} label={item.label} />
               ))}
             </Steps>
           </div>

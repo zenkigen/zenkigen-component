@@ -34,4 +34,5 @@ export type StepsProps = {
 
 export type StepsItemProps = {
   label: ReactNode;
+  description?: ReactNode;
 };
