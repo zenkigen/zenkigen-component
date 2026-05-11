@@ -89,13 +89,13 @@ describe('Steps', () => {
     expect(circle?.className).toContain('bg-supportInfoLight');
   });
 
-  it('orientation="horizontal" のときにルート ol は grid で item=max-content / separator=1fr を交互に並べる', () => {
+  it('orientation="horizontal" のときにルート ol は grid で item=max-content / separator=minmax(8px, 1fr) を交互に並べる', () => {
     renderSteps({ currentStep: 0, orientation: 'horizontal' });
     const ol = screen.getByRole('list');
     expect(ol.className).toContain('grid');
     const style = ol.getAttribute('style') ?? '';
     const expected = Array.from({ length: labels.length }, (_unused, i) =>
-      i === labels.length - 1 ? 'max-content' : 'max-content 1fr',
+      i === labels.length - 1 ? 'max-content' : 'max-content minmax(8px, 1fr)',
     ).join(' ');
     expect(style).toContain(expected);
   });

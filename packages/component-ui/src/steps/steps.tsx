@@ -128,7 +128,7 @@ function StepsRoot({
   );
 
   const horizontalGridTemplate = Array.from({ length: stepsCount }, (_unused, index) =>
-    index === stepsCount - 1 ? 'max-content' : 'max-content 1fr',
+    index === stepsCount - 1 ? 'max-content' : 'max-content minmax(8px, 1fr)',
   ).join(' ');
 
   const listStyleProps = orientation === 'horizontal' ? { style: { gridTemplateColumns: horizontalGridTemplate } } : {};
