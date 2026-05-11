@@ -23,10 +23,10 @@
 7. [使用例](#使用例)
    - [基本的な使用例（同期データ）](#基本的な使用例同期データ)
    - [非同期サジェスト](#非同期サジェスト)
-   - [大量データの popup 抑制](#大量データの-popup-抑制)
+   - [大量データの候補リスト表示抑制](#大量データの候補リスト表示抑制)
    - [ヘルパー/エラーメッセージ](#ヘルパーエラーメッセージ)
 8. [キーボード操作](#キーボード操作)
-9. [popup の開閉判定ルール](#popup-の開閉判定ルール)
+9. [候補リストの開閉判定ルール](#候補リストの開閉判定ルール)
 10. [アクセシビリティ](#アクセシビリティ)
 11. [技術的な詳細](#技術的な詳細)
 12. [注意事項](#注意事項)
@@ -38,7 +38,7 @@
 
 ## 概要
 
-Combobox コンポーネントは、ユーザーが入力したテキストに応じて候補リストから値を選択する単一選択 UI を提供する。WAI-ARIA 1.2 Combobox パターン（`aria-activedescendant` 方式）に準拠し、内部で TextInput と List コンポーネントを利用する。フィルタリングは利用者責任（ヘッドレス）で、非同期サジェストや大量データの popup 抑制に対応する。
+Combobox コンポーネントは、ユーザーが入力したテキストに応じて候補リストから値を選択する単一選択 UI を提供する。WAI-ARIA 1.2 Combobox パターン（`aria-activedescendant` 方式）に準拠し、内部で TextInput と List コンポーネントを利用する。フィルタリングは利用者責任（ヘッドレス）で、非同期サジェストや大量データの候補リスト表示抑制に対応する。
 
 ## インポート
 
@@ -106,8 +106,8 @@ const MyComponent = () => {
 | -------------------- | --------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------ |
 | `size`               | `'medium' \| 'large'`       | `'medium'`   | コンポーネントのサイズ                                                                                                         |
 | `variant`            | `'outline' \| 'text'`       | `'outline'`  | バリアント。`'text'` は枠なしスタイル                                                                                          |
-| `isOpen`             | `boolean`                   | `undefined`  | popup の開閉状態（任意、controlled）。指定時は `onOpenChange` と組で使う                                                       |
-| `onOpenChange`       | `(isOpen: boolean) => void` | `undefined`  | popup 開閉変更時のコールバック                                                                                                 |
+| `isOpen`             | `boolean`                   | `undefined`  | 候補リストの開閉状態（任意、controlled）。指定時は `onOpenChange` と組で使う                                                   |
+| `onOpenChange`       | `(isOpen: boolean) => void` | `undefined`  | 候補リストの開閉変更時のコールバック                                                                                           |
 | `placeholder`        | `string`                    | `undefined`  | プレースホルダーテキスト                                                                                                       |
 | `isError`            | `boolean`                   | `false`      | エラー状態                                                                                                                     |
 | `isDisabled`         | `boolean`                   | `false`      | 無効状態                                                                                                                       |
@@ -143,7 +143,7 @@ const MyComponent = () => {
 
 ### Combobox.List
 
-候補リストの container。children に `Combobox.Item` / `Combobox.Loading` / `Combobox.Empty` のいずれかが含まれる場合のみ popup を表示する。
+候補リストの container。children に `Combobox.Item` / `Combobox.Loading` / `Combobox.Empty` のいずれかが含まれる場合のみ候補リストを表示する。
 
 | プロパティ  | 型                        | デフォルト値                         | 説明                     |
 | ----------- | ------------------------- | ------------------------------------ | ------------------------ |
@@ -190,7 +190,7 @@ const MyComponent = () => {
 
 ### バリアントによるスタイル
 
-入力欄のスタイルは TextInput の `variant` 仕様を継承する。候補リスト（popup）は `variant` に関わらず常に borderless（枠なし）でレンダリングされ、Floating UI のシャドウのみが見た目を構成する。
+入力欄のスタイルは TextInput の `variant` 仕様を継承する。候補リストは `variant` に関わらず常に borderless（枠なし）でレンダリングされ、Floating UI のシャドウのみが見た目を構成する。
 
 | 項目                 | Outline                           | Text                      |
 | -------------------- | --------------------------------- | ------------------------- |
@@ -282,14 +282,14 @@ useEffect(() => {
 </Combobox>
 ```
 
-### 大量データの popup 抑制
+### 大量データの候補リスト表示抑制
 
-未入力時または入力文字数が閾値未満のとき、利用者が候補配列を空にすることで popup を開かないように制御する。
+未入力時または入力文字数が閾値未満のとき、利用者が候補配列を空にすることで候補リストを開かないように制御する。
 
 ```typescript
 const filtered = useMemo(() => {
   if (inputText.length < 2) {
-    return [];  // 候補ゼロ → Combobox.List に Item/Loading/Empty が無くなり popup 抑制
+    return [];  // 候補ゼロ → Combobox.List に Item/Loading/Empty が無いため候補リストは表示されない
   }
   return largeDataset.filter((item) => item.label.includes(inputText)).slice(0, 50);
 }, [inputText]);
@@ -331,41 +331,41 @@ const filtered = useMemo(() => {
 
 DOM フォーカスは常に input に維持される（`aria-activedescendant` 方式）。Item / Loading / Empty クリック時は `onMouseDown.preventDefault` でフォーカスを奪わない。
 
-| キー         | 動作                                                                                                  |
-| ------------ | ----------------------------------------------------------------------------------------------------- |
-| `↓`          | アクティブ Item を次の有効 Item へ。閉じている場合は popup を開く                                     |
-| `↑`          | アクティブ Item を前の有効 Item へ。閉じている場合は popup を開く                                     |
-| `Enter`      | アクティブ Item を選択する（popup が開いていてアクティブがあるときのみ）                              |
-| `Escape`     | popup を閉じる（inputValue は維持）。popup が開いているとき親要素（Popover / Modal 等）へは伝搬しない |
-| `Home`/`End` | input のカーソル移動（標準動作維持）                                                                  |
-| `Alt + ↓`    | popup を開く                                                                                          |
-| `Alt + ↑`    | popup を閉じる                                                                                        |
+| キー         | 動作                                                                                                          |
+| ------------ | ------------------------------------------------------------------------------------------------------------- |
+| `↓`          | アクティブ Item を次の有効 Item へ。閉じている場合は候補リストを開く                                          |
+| `↑`          | アクティブ Item を前の有効 Item へ。閉じている場合は候補リストを開く                                          |
+| `Enter`      | アクティブ Item を選択する（候補リストが開いていてアクティブがあるときのみ）                                  |
+| `Escape`     | 候補リストを閉じる（inputValue は維持）。候補リストが開いているとき親要素（Popover / Modal 等）へは伝搬しない |
+| `Home`/`End` | input のカーソル移動（標準動作維持）                                                                          |
+| `Alt + ↓`    | 候補リストを開く                                                                                              |
+| `Alt + ↑`    | 候補リストを閉じる                                                                                            |
 
 `↑` / `↓` は **`Combobox.Item` のみを巡回** する。`Combobox.Loading` / `Combobox.Empty` はスキップされる。`isDisabled` の Item もスキップされる。
 
-popup を新規に開いた瞬間の初期 active 位置は以下のように決まる:
+候補リストを新規に開いた瞬間の初期 active 位置は以下のように決まる:
 
 - `value` と一致する有効 Item があれば、その Item を active にする
 - 一致しない場合は先頭の有効 Item を active にする
 - 有効 Item が 1 件も無い場合は active なし（null）
 
-popup を開いた状態で items が変動した場合は、現在の active value が新 items に残っていれば維持され、残っていなければ先頭の有効 Item にフォールバックする。
+候補リストを開いた状態で items が変動した場合は、現在の active value が新 items に残っていれば維持され、残っていなければ先頭の有効 Item にフォールバックする。
 
-## popup の開閉判定ルール
+## 候補リストの開閉判定ルール
 
-`Combobox.List` の children を `React.Children.toArray` で走査し、以下のいずれかが含まれている場合のみ popup を開く:
+`Combobox.List` の children を `React.Children.toArray` で走査し、以下のいずれかが含まれている場合のみ候補リストを開く:
 
 - `Combobox.Item`
 - `Combobox.Loading`
 - `Combobox.Empty`
 
-いずれも含まれない場合、`isOpen === true` の状態でも popup は描画されない。これにより「未入力時は何も書かない」だけで popup を抑制できる。さらに `Combobox.Input` の矢印（▼/▲）ボタンは自動で disabled になり、クリックしてもアイコンだけが反応して popup は出ない dead click を防ぐ。
+いずれも含まれない場合、`isOpen === true` の状態でも候補リストは描画されない。これにより「未入力時は何も書かない」だけで候補リストを抑制できる。さらに `Combobox.Input` の矢印（▼/▲）ボタンは自動で disabled になり、クリックしてもアイコンだけが反応して候補リストは出ない dead click を防ぐ。
 
 ## アクセシビリティ
 
 - 入力欄に `role="combobox"` / `aria-expanded` / `aria-autocomplete="list"` を付与する。
-- `aria-expanded` / `aria-controls` は **画面上で popup が実際に見えている状態** と連動する。`isOpen === true` でも `Combobox.List` 直下に `Combobox.Item` / `Combobox.Loading` / `Combobox.Empty` のいずれも無い場合（popup 非描画）は `aria-expanded=false` / `aria-controls` なし になる。
-- popup が開いている間は `aria-controls` で候補リストの `id` を指す。
+- `aria-expanded` / `aria-controls` は **画面上で候補リストが実際に見えている状態** と連動する。`isOpen === true` でも `Combobox.List` 直下に `Combobox.Item` / `Combobox.Loading` / `Combobox.Empty` のいずれも無い場合（候補リスト非表示）は `aria-expanded=false` / `aria-controls` なし になる。
+- 候補リストが開いている間は `aria-controls` で候補リストの `id` を指す。
 - アクティブ Item は `aria-activedescendant` で参照する（DOM フォーカスは input に残る）。
 - 候補リストは `role="listbox"` を持つ `<ul>`、各 Item は `role="option"` を持つ `<li>`。
 - `Combobox.HelperMessage` / `Combobox.ErrorMessage` は TextInput と同じ仕組みで `aria-describedby` / `aria-invalid` を自動付与する。
@@ -376,7 +376,7 @@ popup を開いた状態で items が変動した場合は、現在の active va
 
 - 状態管理は `useCombobox` フックにまとめている（baseId / activeIndex / isOpen / items / キーボードハンドラ）。
 - 候補リストの位置計算は `@floating-ui/react` の `useFloating`（`autoUpdate`、`offset(4)`、`flip`、`size` middleware）を使う。`size` middleware で利用可能高と `listMaxHeight` の小さい方を `maxHeight` に適用し、`matchListToTrigger` 時は input 幅に固定、それ以外は `min-width = input 幅`・`max-width = ビューポート幅` を適用する。
-- 候補リストは `FloatingPortal` 経由で `z-popover` の階層に描画する。`Combobox.List` は popup を **常時 DOM に mount** し、`visibility: hidden` / `pointer-events: none` で開閉を表現する。
+- 候補リストは `FloatingPortal` 経由で `z-popover` の階層に描画する。`Combobox.List` は候補リストを **常時 DOM に mount** し、`visibility: hidden` / `pointer-events: none` で開閉を表現する。
 - Floating UI の `reference` は **input の親要素（TextInput 内部の inner wrap div）** にする。位置は input の枠を基準にし、幅は IconButton を含む input 全幅に揃う。
 - 外部クリック検知は `useOutsideClick` フックを使う。
 - `Combobox.Input` は内部で `InternalTextInput`（TextInput の internal API）を利用し、矢印・クリアボタンを `after` prop で差し込む。
@@ -384,7 +384,7 @@ popup を開いた状態で items が変動した場合は、現在の active va
 - `Combobox.List` は children を `React.Children.toArray` で走査し、`Combobox.Item` の `value` / `label` 配列を Context 経由で本体に通知する。
 - `activeIndex` は items 変動時に **value 基準で再引き当て** する。`useCombobox` 内で active Item の `value` を ref に保持し、新 items 内に同じ value の有効 Item が残っていれば該当 index を active にする。残っていない場合は先頭の有効 Item にフォールバックする。
 - 内部に `inputMode`（`'keyboard' | 'mouse'`）の状態を持ち、キーボード操作で active が変化したときのみ active Item を `scrollIntoView({ block: 'nearest' })` でスクロール表示する。マウスホバーで active が同期する場合はスクロールを発生させない。
-- popup が open のとき Escape は `event.stopPropagation()` で親要素（Popover / Modal 等）への伝搬を止める。Combobox を内包する Popover / Modal が Escape で同時に閉じる二重 close を防ぐためである。popup が closed のときは Escape を素通しする。
+- 候補リストが open のとき Escape は `event.stopPropagation()` で親要素（Popover / Modal 等）への伝搬を止める。Combobox を内包する Popover / Modal が Escape で同時に閉じる二重 close を防ぐためである。候補リストが closed のときは Escape を素通しする。
 
 ## 注意事項
 
@@ -406,9 +406,9 @@ popup を開いた状態で items が変動した場合は、現在の active va
 
 A: 候補の取得方法（同期 / 非同期）、マッチングアルゴリズム（前方一致 / 部分一致 / あいまい検索）、表示件数の制限などは利用シーンごとに大きく異なるため、Combobox 本体はヘッドレスに徹し、フィルタリングは利用者が `onInputChange` のコールバック内で実行する設計とした。`inputValue` を元に候補配列を絞り込み、絞り込み結果を `Combobox.List` の children として再レンダリングする。
 
-### Q: popup が開かないときに確認すべきことは？
+### Q: 候補リストが開かないときに確認すべきことは？
 
-A: `Combobox.List` 直下に `Combobox.Item` / `Combobox.Loading` / `Combobox.Empty` のいずれかが存在するかを確認する。これらが 1 つも無いとき、`isOpen === true` でも popup は描画されず、矢印ボタンも自動で disabled になる。未入力時に何も表示したくない場合は、利用者側で `filtered` が空のとき children を空にすればよい。
+A: `Combobox.List` 直下に `Combobox.Item` / `Combobox.Loading` / `Combobox.Empty` のいずれかが存在するかを確認する。これらが 1 つも無いとき、`isOpen === true` でも候補リストは描画されず、矢印ボタンも自動で disabled になる。未入力時に何も表示したくない場合は、利用者側で `filtered` が空のとき children を空にすればよい。
 
 ### Q: `value` を渡しているのに input に何も表示されないのはなぜ？
 
@@ -420,15 +420,15 @@ A: TextInput の `aria-describedby` / `aria-invalid` 連携が成立せず、ス
 
 ### Q: `matchListToTrigger` はどう使い分ければよい？
 
-A: 候補ラベルが短く幅が揃っていて、見た目を input 幅に揃えたい場合は `true` を指定する。候補ラベルの長さがバラつくケースや、長いラベルを省略せず表示したい場合はデフォルト（`false`）で、コンテンツに応じて popup 幅が広がる挙動が適切。
+A: 候補ラベルが短く幅が揃っていて、見た目を input 幅に揃えたい場合は `true` を指定する。候補ラベルの長さがバラつくケースや、長いラベルを省略せず表示したい場合はデフォルト（`false`）で、コンテンツに応じて候補リストの幅が広がる挙動が適切。
 
 ### Q: Popover / Modal の中で Combobox を開いて Escape を押すと、外側まで一緒に閉じてしまわないか？
 
-A: popup が open のときの Escape は内部で `stopPropagation` されるため、Popover / Modal までは伝搬しない。Combobox の popup だけが閉じ、外側はそのまま残る。popup が閉じている状態の Escape は素通しするため、外側を Escape で閉じる挙動には影響しない。
+A: 候補リストが open のときの Escape は内部で `stopPropagation` されるため、Popover / Modal までは伝搬しない。Combobox の候補リストだけが閉じ、外側はそのまま残る。候補リストが閉じている状態の Escape は素通しするため、外側を Escape で閉じる挙動には影響しない。
 
 ### Q: 大量データ（数千件以上）を扱う場合の推奨パターンは？
 
-A: `useMemo` 内で入力文字数が一定以上のときだけフィルタ結果を返し、未満のときは空配列を返すことで popup を抑制する。さらに `.slice(0, 50)` のように表示上限を設けて DOM ノード数を抑える。`listMaxHeight` で popup 自体の高さも制限する。これらを組み合わせると数千件オーダーでも実用的なパフォーマンスを得られる。
+A: `useMemo` 内で入力文字数が一定以上のときだけフィルタ結果を返し、未満のときは空配列を返すことで候補リストを抑制する。さらに `.slice(0, 50)` のように表示上限を設けて DOM ノード数を抑える。`listMaxHeight` で候補リスト自体の高さも制限する。これらを組み合わせると数千件オーダーでも実用的なパフォーマンスを得られる。
 
 ### Q: 同じ `value` を持つ `Combobox.Item` を複数配置するとどうなる？
 
