@@ -208,6 +208,8 @@ const MyComponent = () => {
 - 選択済み + isError: `bg-uiBackgroundError text-supportError fill-supportError`
 - 無効: `cursor-not-allowed text-disabled01 fill-disabled01`
 
+選択中の Item には label の右端に check アイコン（16px）が表示される。`Combobox.List` は内部で `List` の `selectionIndicator='right'` を固定で適用しているため、非選択 Item もアイコン領域を確保し、Item 間で label の開始位置が揃う。
+
 ## 使用例
 
 ### 基本的な使用例（同期データ）
@@ -328,17 +330,25 @@ const filtered = useMemo(() => {
 
 DOM フォーカスは常に input に維持される（`aria-activedescendant` 方式）。Item / Loading / Empty クリック時は `onMouseDown.preventDefault` でフォーカスを奪わない。
 
-| キー         | 動作                                                                     |
-| ------------ | ------------------------------------------------------------------------ |
-| `↓`          | アクティブ Item を次の有効 Item へ。閉じている場合は popup を開く        |
-| `↑`          | アクティブ Item を前の有効 Item へ。閉じている場合は popup を開く        |
-| `Enter`      | アクティブ Item を選択する（popup が開いていてアクティブがあるときのみ） |
-| `Escape`     | popup を閉じる（inputValue は維持）                                      |
-| `Home`/`End` | input のカーソル移動（標準動作維持）                                     |
-| `Alt + ↓`    | popup を開く                                                             |
-| `Alt + ↑`    | popup を閉じる                                                           |
+| キー         | 動作                                                                                                  |
+| ------------ | ----------------------------------------------------------------------------------------------------- |
+| `↓`          | アクティブ Item を次の有効 Item へ。閉じている場合は popup を開く                                     |
+| `↑`          | アクティブ Item を前の有効 Item へ。閉じている場合は popup を開く                                     |
+| `Enter`      | アクティブ Item を選択する（popup が開いていてアクティブがあるときのみ）                              |
+| `Escape`     | popup を閉じる（inputValue は維持）。popup が開いているとき親要素（Popover / Modal 等）へは伝搬しない |
+| `Home`/`End` | input のカーソル移動（標準動作維持）                                                                  |
+| `Alt + ↓`    | popup を開く                                                                                          |
+| `Alt + ↑`    | popup を閉じる                                                                                        |
 
 `↑` / `↓` は **`Combobox.Item` のみを巡回** する。`Combobox.Loading` / `Combobox.Empty` はスキップされる。`isDisabled` の Item もスキップされる。
+
+popup を新規に開いた瞬間の初期 active 位置は以下のように決まる:
+
+- `value` と一致する有効 Item があれば、その Item を active にする
+- 一致しない場合は先頭の有効 Item を active にする
+- 有効 Item が 1 件も無い場合は active なし（null）
+
+popup を開いた状態で items が変動した場合は、現在の active value が新 items に残っていれば維持され、残っていなければ先頭の有効 Item にフォールバックする（フィルタで絞り込んでも巡回位置が破綻しないようにするための挙動）。
 
 ## popup の開閉判定ルール
 
@@ -364,13 +374,16 @@ DOM フォーカスは常に input に維持される（`aria-activedescendant` 
 ## 技術的な詳細
 
 - 状態管理は `useCombobox` フックにまとめている（baseId / activeIndex / isOpen / items / キーボードハンドラ）。
-- 候補リストの位置計算は `@floating-ui/react` の `useFloating`（`autoUpdate`、`offset(4)`、`size` middleware）を使う。
-- 候補リストは `FloatingPortal` 経由で `z-popover` の階層に描画する。
+- 候補リストの位置計算は `@floating-ui/react` の `useFloating`（`autoUpdate`、`offset(4)`、`flip`、`size` middleware）を使う。`size` middleware で利用可能高と `listMaxHeight` の小さい方を `maxHeight` に適用し、`matchListToTrigger` 時は input 幅に固定、それ以外は `min-width = input 幅`・`max-width = ビューポート幅` を適用する。
+- 候補リストは `FloatingPortal` 経由で `z-popover` の階層に描画する。`Combobox.List` は popup を **常時 DOM に mount** し、`visibility: hidden` / `pointer-events: none` で開閉を表現する（`null` で unmount すると `autoUpdate` が再起動する瞬間に `top:0, left:0` で 1 フレーム描画されてしまう問題への対処）。
+- Floating UI の `reference` は input そのものではなく **input の親要素（TextInput 内部の inner wrap div）** にする。位置は input の枠を基準にしつつ、幅は IconButton を含む input 全幅に揃う。
 - 外部クリック検知は `useOutsideClick` フックを使う。
 - `Combobox.Input` は内部で `InternalTextInput`（TextInput の internal API）を利用し、矢印・クリアボタンを `after` prop で差し込む。
 - `Combobox.HelperMessage` / `Combobox.ErrorMessage` は `TextInput.HelperMessage` / `TextInput.ErrorMessage` をそのまま再エクスポートしている。
 - `Combobox.List` は children を `React.Children.toArray` で走査し、`Combobox.Item` の `value` / `label` 配列を Context 経由で本体に通知する。
-- `activeIndex` は items 変動時に「先頭の有効 Item」へリセットされる（`useEffect`）。
+- `activeIndex` は items 変動時に **value 基準で再引き当て** する。`useCombobox` 内で active Item の `value` を ref に保持し、新 items 内に同じ value の有効 Item が残っていれば該当 index を active にする。残っていない場合は先頭の有効 Item にフォールバックする。
+- 内部に `inputMode`（`'keyboard' | 'mouse'`）の状態を持ち、`↑` / `↓` / `Alt+↓` 等のキーボード操作で active が変化したときのみ active Item を `scrollIntoView({ block: 'nearest' })` でスクロール表示する。マウスホバーで active が同期する場合（既に視界内）はスクロールを発生させない。
+- popup が open のとき Escape は `event.stopPropagation()` で親要素（Popover / Modal 等）への伝搬を止める。これにより、Combobox を内包する Popover / Modal が Escape で同時に閉じる二重 close を防ぐ。popup が closed のときは Escape を素通しする。
 
 ## 注意事項
 
@@ -388,10 +401,14 @@ DOM フォーカスは常に input に維持される（`aria-activedescendant` 
 
 ## 更新履歴
 
-| 日付       | 内容                                                                     | 担当者 |
-| ---------- | ------------------------------------------------------------------------ | ------ |
-| 2026-04-17 | 新規作成                                                                 | -      |
-| 2026-04-24 | `Combobox.Item` の `children` prop を廃止（label を自動 truncate 描画）  | -      |
-| 2026-04-24 | `Combobox.List` が空のとき矢印ボタンを自動 disable                       | -      |
-| 2026-04-24 | `Combobox.Loading` / `Combobox.Empty` の children を廃止（固定文言のみ） | -      |
-| 2026-04-24 | `aria-expanded` / `aria-controls` を popup 実描画状態と連動              | -      |
+| 日付       | 内容                                                                                                                       | 担当者 |
+| ---------- | -------------------------------------------------------------------------------------------------------------------------- | ------ |
+| 2026-04-17 | 新規作成                                                                                                                   | -      |
+| 2026-04-24 | `Combobox.Item` の `children` prop を廃止（label を自動 truncate 描画）                                                    | -      |
+| 2026-04-24 | `Combobox.List` が空のとき矢印ボタンを自動 disable                                                                         | -      |
+| 2026-04-24 | `Combobox.Loading` / `Combobox.Empty` の children を廃止（固定文言のみ）                                                   | -      |
+| 2026-04-24 | `aria-expanded` / `aria-controls` を popup 実描画状態と連動                                                                | -      |
+| 2026-05-11 | open 中の `Escape` を `stopPropagation` する仕様を明文化（Popover/Modal との二重 close 防止）                              | -      |
+| 2026-05-11 | items 変動時の active 維持を value 基準の再引き当てに更新、open 時の初期 active 位置（selectedValue 優先）を明記           | -      |
+| 2026-05-11 | 選択中 Item の右側に check アイコンを表示する仕様（`selectionIndicator='right'` 固定）を「状態に応じたスタイル」に追記     | -      |
+| 2026-05-11 | popup 常時 mount + visibility 制御 / Floating UI reference を input 親に取る等の実装詳細を「技術的な詳細」セクションに追記 | -      |

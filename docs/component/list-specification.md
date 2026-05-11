@@ -60,17 +60,20 @@ import { List } from '@zenkigen-inc/component-ui';
 
 ### List のプロパティ
 
-| プロパティ           | 型                            | デフォルト値 | 説明                                                                                      |
-| -------------------- | ----------------------------- | ------------ | ----------------------------------------------------------------------------------------- |
-| `size`               | `'medium' \| 'large'`         | `'medium'`   | リスト全体のサイズ                                                                        |
-| `variant`            | `'outline' \| 'borderless'`   | `'outline'`  | 枠線の有無                                                                                |
-| `maxHeight`          | `CSSProperties['height']`     | `undefined`  | リストの最大高さ。指定時は内部スクロール                                                  |
-| `width`              | `CSSProperties['width']`      | `undefined`  | リストの幅                                                                                |
-| `role`               | `'listbox' \| 'menu'`         | `'listbox'`  | ARIA role                                                                                 |
-| `id`                 | `string`                      | `undefined`  | 要素 ID（aria-controls のターゲットに使う）                                               |
-| `aria-label`         | `string`                      | `undefined`  | アクセシブルな名前                                                                        |
-| `aria-labelledby`    | `string`                      | `undefined`  | アクセシブルな名前（参照）                                                                |
-| `selectionIndicator` | `'left' \| 'right' \| 'none'` | `'none'`     | 選択項目のチェックマーク位置。非選択項目もアイコン領域を占有し、item 間で text 位置が揃う |
+| プロパティ           | 型                            | デフォルト値 | 説明                                                                                                           |
+| -------------------- | ----------------------------- | ------------ | -------------------------------------------------------------------------------------------------------------- |
+| `size`               | `'medium' \| 'large'`         | `'medium'`   | リスト全体のサイズ                                                                                             |
+| `variant`            | `'outline' \| 'borderless'`   | `'outline'`  | 枠線の有無                                                                                                     |
+| `maxHeight`          | `CSSProperties['height']`     | `undefined`  | リストの最大高さ。指定時は内部スクロール                                                                       |
+| `width`              | `CSSProperties['width']`      | `undefined`  | リストの幅                                                                                                     |
+| `style`              | `CSSProperties`               | `undefined`  | 外側 wrapper に適用する追加 style。Floating UI の `floatingStyles` を渡す用途等                                |
+| `className`          | `string`                      | `undefined`  | 外側 wrapper に追加する className。`z-index` 制御等の用途                                                      |
+| `role`               | `'listbox' \| 'menu'`         | `'listbox'`  | ARIA role                                                                                                      |
+| `id`                 | `string`                      | `undefined`  | 要素 ID（aria-controls のターゲットに使う）                                                                    |
+| `aria-label`         | `string`                      | `undefined`  | アクセシブルな名前                                                                                             |
+| `aria-labelledby`    | `string`                      | `undefined`  | アクセシブルな名前（参照）                                                                                     |
+| `containerRef`       | `Ref<HTMLDivElement>`         | `undefined`  | 外側 wrapper div への ref。Floating UI の `floating element` として扱う用途等。通常の `ref` は内側 ul を指す。 |
+| `selectionIndicator` | `'left' \| 'right' \| 'none'` | `'none'`     | 選択項目のチェックマーク位置。非選択項目もアイコン領域を占有し、item 間で text 位置が揃う                      |
 
 ### List.OptionItem のプロパティ
 
@@ -190,7 +193,9 @@ popup 内部で利用する際は `variant="borderless"` を推奨する（Float
 ## 技術的な詳細
 
 - `List` は `forwardRef<HTMLUListElement, ListProps>` で実装され、`Object.assign` で `OptionItem` を Compound として attach する。
-- `size` / `variant` は React Context（`ListContext`）で `List.OptionItem` に伝播する。
+- DOM 構造は **2 層構造**: 外側 `<div>` (wrapper) が装飾 (bg / rounded / shadow / `overflow-hidden`) と `maxHeight` を担当し、内側 `<ul>` が scrollable 領域 (`overflow-y-auto`) と ARIA role を担当する。これは macOS の rubber-band bounce 時に List 内部が透過する問題への対処（wrapper の bg が bounce の裏に常に存在し、`overflow-hidden` で rounded 枠から漏れない）。
+- 外部公開する `ref` は内側 `<ul>` を指す。外側 wrapper への ref は `containerRef` で expose する。
+- `size` / `variant` / `selectionIndicator` は React Context（`ListContext`）で `List.OptionItem` に伝播する。
 - `List.OptionItem` は List 外で使用するとエラー（`<List.OptionItem> must be used inside <List>`）を投げる。
 - スタイル組み立てに `clsx` を使用する。
 - フォーカスリング（`focusVisible.inset`）は `@zenkigen-inc/component-theme` から流用する。
@@ -209,6 +214,7 @@ popup 内部で利用する際は `variant="borderless"` を推奨する（Float
 
 ## 更新履歴
 
-| 日付       | 内容     | 担当者 |
-| ---------- | -------- | ------ |
-| 2026-04-17 | 新規作成 | -      |
+| 日付       | 内容                                                                                                          | 担当者 |
+| ---------- | ------------------------------------------------------------------------------------------------------------- | ------ |
+| 2026-04-17 | 新規作成                                                                                                      | -      |
+| 2026-05-11 | `style` / `className` / `containerRef` プロパティを追加、2 層 DOM 構造（wrapper div + 内側 ul）の意図を明文化 | -      |
