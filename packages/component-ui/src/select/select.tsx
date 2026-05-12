@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import type { CSSProperties, PropsWithChildren, RefObject } from 'react';
 import { useRef, useState } from 'react';
 
+import { useDismissOnModalOpen } from '../hooks/use-dismiss-on-modal-open';
 import { useOutsideClick } from '../hooks/use-outside-click';
 import { Icon } from '../icon';
 import { SelectContext } from './select-context';
@@ -63,6 +64,11 @@ export function Select({
   const [isOptionListOpen, setIsOptionListOpen] = useState(false);
   const targetRef = useRef<HTMLDivElement>(null);
   useOutsideClick(targetRef, () => setIsOptionListOpen(false));
+  useDismissOnModalOpen(() => {
+    if (isOptionListOpen) {
+      setIsOptionListOpen(false);
+    }
+  });
 
   // Floating UI の設定
   const { refs, floatingStyles } = useFloating({
