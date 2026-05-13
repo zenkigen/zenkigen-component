@@ -113,19 +113,24 @@ function TextAreaInner(
 
   const isBorderless = variant === 'text';
 
-  const textAreaWrapperClassName = clsx('box-border flex w-full overflow-hidden rounded border', {
-    // outline variant
-    'border-supportError': !isBorderless && isError && !disabled,
-    'border-uiBorder02': !isBorderless && !isError && !disabled,
-    'hover:border-hoverInput': !isBorderless && !disabled && !isError,
-    'hover:focus-within:border-activeInput': !isBorderless && !isError,
-    'focus-within:border-activeInput': !isBorderless && !isError,
-    'bg-disabled02 border-disabled01': !isBorderless && disabled,
-    // text variant
-    'border-transparent': isBorderless,
-  });
+  const textAreaWrapperClassName = clsx(
+    'box-border flex w-full overflow-hidden rounded border',
+    {
+      // outline variant
+      'border-supportError': !isBorderless && isError && !disabled,
+      'border-uiBorder02': !isBorderless && !isError && !disabled,
+      'hover:border-hoverInput': !isBorderless && !disabled && !isError,
+      'hover:focus-within:border-activeInput': !isBorderless && !isError,
+      'focus-within:border-activeInput': !isBorderless && !isError,
+      'bg-disabled02 border-disabled01': !isBorderless && disabled,
+      // text variant
+      'border-transparent': isBorderless,
+    },
+    // className は variant="outline" のみ受け入れ、後方互換のため wrapper の末尾に合成（@deprecated）
+    !isBorderless && className,
+  );
 
-  const textAreaClassName = clsx('w-full border-none bg-uiBackground01 outline-none', className, {
+  const textAreaClassName = clsx('w-full border-none bg-uiBackground01 outline-none', {
     // outline: 従来の padding
     'typography-body14regular px-2 py-2': !isBorderless && size === 'medium',
     'typography-body16regular px-3 py-2': !isBorderless && size === 'large',

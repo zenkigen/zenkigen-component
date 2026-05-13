@@ -1,7 +1,8 @@
-import { render, screen } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
+import { MODAL_OPEN_EVENT } from '../hooks/use-dismiss-on-modal-open';
 import { DatePicker } from './date-picker';
 
 const openPopover = async (user: ReturnType<typeof userEvent.setup>) => {
@@ -135,6 +136,22 @@ describe('DatePicker', () => {
 
       expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     });
+
+    it('Modal が開かれたイベントを受けると Popover が閉じること', async () => {
+      const user = userEvent.setup();
+      render(<DatePicker value={null} onChange={vi.fn()} />);
+
+      await openPopover(user);
+      expect(screen.getByRole('dialog', { name: '日付選択' })).toBeInTheDocument();
+
+      act(() => {
+        window.dispatchEvent(new CustomEvent(MODAL_OPEN_EVENT));
+      });
+
+      await waitFor(() => {
+        expect(screen.queryByRole('dialog', { name: '日付選択' })).not.toBeInTheDocument();
+      });
+    });
   });
 
   describe('日付選択', () => {
@@ -158,6 +175,25 @@ describe('DatePicker', () => {
       expect(firstCall).toBeDefined();
       const selected = firstCall![0];
       expect(selected?.toISOString()).toBe('2026-01-15T00:00:00.000Z');
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    });
+
+    it('同じ日付を再選択した場合、onChange が呼ばれずに Popover が閉じること', async () => {
+      const user = userEvent.setup();
+      const handleChange = vi.fn();
+      render(<DatePicker value={new Date('2026-01-15T00:00:00Z')} onChange={handleChange} timeZone="UTC" />);
+
+      const dialog = await openPopover(user);
+      const dayButton = findDayButton(dialog, '15');
+
+      expect(dayButton).not.toBeNull();
+      if (!dayButton) {
+        return;
+      }
+
+      await user.click(dayButton);
+
+      expect(handleChange).not.toHaveBeenCalled();
       expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     });
 

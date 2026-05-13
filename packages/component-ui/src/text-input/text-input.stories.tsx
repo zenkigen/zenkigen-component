@@ -9,6 +9,32 @@ import { TextInput } from '.';
 const meta: Meta<typeof TextInput> = {
   title: 'Components/TextInput',
   component: TextInput,
+  argTypes: {
+    variant: {
+      control: 'radio',
+      options: ['outline', 'text'],
+      description: 'バリアント',
+      table: { defaultValue: { summary: 'outline' } },
+    },
+    size: {
+      control: 'radio',
+      options: ['medium', 'large'],
+      description: 'サイズ',
+      table: { defaultValue: { summary: 'medium' } },
+    },
+    value: { control: 'text', description: '値' },
+    placeholder: { control: 'text', description: 'プレースホルダー' },
+    isError: {
+      control: 'boolean',
+      description: 'エラーかどうか',
+      table: { defaultValue: { summary: 'false' } },
+    },
+    disabled: {
+      control: 'boolean',
+      description: '無効かどうか',
+      table: { defaultValue: { summary: 'false' } },
+    },
+  },
 };
 
 export default meta;
@@ -16,18 +42,16 @@ type Story = StoryObj<typeof TextInput>;
 
 export const Component: Story = {
   args: {
+    variant: 'outline',
+    size: 'medium',
     // eslint-disable-next-line no-undefined
     value: undefined,
-    size: 'medium',
     placeholder: 'placeholder',
     isError: false,
     disabled: false,
   },
   parameters: {
     chromatic: { disable: true },
-  },
-  argTypes: {
-    variant: { control: 'select', options: ['outline', 'text'], description: 'バリアント' },
   },
   render: function MyFunc({ ...args }) {
     const [value, setValue] = useState<string>('');

@@ -19,11 +19,36 @@ const meta: Meta<typeof TextArea> = {
     },
   },
   argTypes: {
-    size: { control: 'select', options: ['medium', 'large'], description: 'サイズ' },
-    variant: { control: 'select', options: ['outline', 'text'], description: 'バリアント' },
+    variant: {
+      control: 'radio',
+      options: ['outline', 'text'],
+      description: 'バリアント',
+      table: { defaultValue: { summary: 'outline' } },
+    },
+    size: {
+      control: 'radio',
+      options: ['medium', 'large'],
+      description: 'サイズ',
+      table: { defaultValue: { summary: 'medium' } },
+    },
     value: { control: 'text', description: '値' },
+    placeholder: { control: 'text', description: 'プレースホルダー' },
+    isError: {
+      control: 'boolean',
+      description: 'エラーかどうか',
+      table: { defaultValue: { summary: 'false' } },
+    },
+    disabled: {
+      control: 'boolean',
+      description: '無効かどうか',
+      table: { defaultValue: { summary: 'false' } },
+    },
     height: { control: 'text', description: '高さ' },
-    autoHeight: { control: 'boolean', description: '自動リサイズ' },
+    autoHeight: {
+      control: 'boolean',
+      description: '自動リサイズ',
+      table: { defaultValue: { summary: 'false' } },
+    },
     maxHeight: {
       control: 'text',
       description: '最大高さ（autoHeightがtrueの場合のみ有効）',
@@ -33,10 +58,13 @@ const meta: Meta<typeof TextArea> = {
       control: 'boolean',
       description: 'リサイズ可能かどうか（autoHeightがtrueの場合は無効）',
       if: { arg: 'autoHeight', truthy: false },
+      table: { defaultValue: { summary: 'false' } },
     },
-    isError: { control: 'boolean', description: 'エラーかどうか' },
-    disabled: { control: 'boolean', description: '無効かどうか' },
-    isCounterVisible: { control: 'boolean', description: '文字数カウンターの表示/非表示' },
+    isCounterVisible: {
+      control: 'boolean',
+      description: '文字数カウンターの表示/非表示',
+      table: { defaultValue: { summary: 'false' } },
+    },
     counterMaxLength: {
       control: 'number',
       description: 'カウンター用の上限文字数。超過しても入力可能だが、カウンターがエラー色になる',
@@ -53,13 +81,14 @@ type Story = StoryObj<typeof TextArea>;
 
 export const Component: Story = {
   args: {
+    variant: 'outline',
     size: 'medium',
     placeholder: 'placeholder',
+    isError: false,
+    disabled: false,
     height: 'auto',
     autoHeight: false,
     isResizable: false,
-    isError: false,
-    disabled: false,
   },
   parameters: {
     chromatic: { disable: true },
@@ -975,18 +1004,19 @@ export const LayoutExample: Story = {
         {/* チャット入力エリア: variant="text" の利用例 */}
         <div className="flex flex-col gap-2 pt-2">
           <div className="flex items-end gap-1 rounded border border-uiBorder01 pr-0 focus-within:border-activeInput hover:border-hoverInput hover:focus-within:border-activeInput">
-            <TextArea
-              value={inputValue}
-              variant="text"
-              placeholder="応募者へメッセージ"
-              size="medium"
-              autoHeight
-              maxHeight="120px"
-              className="p-2"
-              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
-                setInputValue(e.target.value);
-              }}
-            />
+            <div className="flex-1 p-2">
+              <TextArea
+                value={inputValue}
+                variant="text"
+                placeholder="応募者へメッセージ"
+                size="medium"
+                autoHeight
+                maxHeight="120px"
+                onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                  setInputValue(e.target.value);
+                }}
+              />
+            </div>
             <div className="pb-2 pr-2">
               <IconButton
                 variant="text"

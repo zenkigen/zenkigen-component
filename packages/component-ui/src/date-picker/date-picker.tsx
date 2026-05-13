@@ -207,12 +207,11 @@ export const DatePicker: DatePickerComponent = ({
   };
 
   const handleSelect = (selected: Date | undefined) => {
-    if (!selected) {
-      return;
+    if (selected != null) {
+      const selectedKey = formatLocalDateKey(selected);
+      onChange(createDateFromKey(selectedKey, timeZone));
     }
 
-    const selectedKey = formatLocalDateKey(selected);
-    onChange(createDateFromKey(selectedKey, timeZone));
     setIsOpen(false);
   };
 

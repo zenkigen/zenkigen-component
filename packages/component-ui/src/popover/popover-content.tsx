@@ -2,6 +2,7 @@ import { FloatingPortal, useDismiss, useInteractions, useRole } from '@floating-
 import * as React from 'react';
 import { forwardRef, useCallback, useEffect, useRef } from 'react';
 
+import { useDismissOnModalOpen } from '../hooks/use-dismiss-on-modal-open';
 import { composeRefs, isElement } from '../utils';
 import { usePopoverContext } from './popover-context';
 
@@ -34,7 +35,7 @@ export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(fu
       // クリックされた要素が別のFloating UI要素内にあるかチェック
       // 自分自身のfloating elementではなく、他のz-overlayやz-dropdown要素内のクリックを除外
       const floatingElement = floating.refs.floating.current;
-      const closestOverlay = target.closest('.z-overlay, .z-dropdown');
+      const closestOverlay = target.closest('.z-popover, .z-dropdown');
 
       if (closestOverlay !== null && floatingElement instanceof Element) {
         const isInsideOwnFloating = floatingElement.contains(closestOverlay);
@@ -55,6 +56,13 @@ export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(fu
   });
 
   const interactions = useInteractions([dismiss, useRole(floating.context, { role: 'dialog' })]);
+
+  // Modal が開かれた際に Popover を閉じる（利用側で reason='modal-open' を判定して挙動を変更可能）
+  useDismissOnModalOpen(() => {
+    if (isOpen && onClose != null) {
+      onClose({ reason: 'modal-open' });
+    }
+  });
 
   // Popover表示時にフォーカスを移動
   useEffect(() => {
