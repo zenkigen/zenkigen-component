@@ -1,8 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { IconName } from '@zenkigen-inc/component-icons';
 import { iconElements } from '@zenkigen-inc/component-icons';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
+import { Button } from '../button';
+import { Modal } from '../modal';
 import { Select } from './select';
 import type { SelectOption } from './type';
 
@@ -820,3 +822,104 @@ export function MatchListToTrigger() {
     </div>
   );
 }
+
+/**
+ * 裏側の非同期処理でエラーが発生し、Select 操作中に Modal が自動表示されるケースを想定した Story。
+ *
+ * Story が描画されると以下が自動的に進む:
+ * 1. 1秒後に Select の List が自動的に開く
+ * 2. 3秒後（Select 表示の2秒後）に Modal が自動的に表示される
+ * 3. Modal の表示と同時に Select の List が自動で閉じる
+ *
+ * 自動で閉じる仕組み:
+ * - Modal は `isOpen` が false → true に切り替わる瞬間に `window` へ
+ *   `zenkigen-modal-open` カスタムイベントを dispatch する
+ * - Select 内部の `useDismissOnModalOpen` フックがそのイベントを listen し、
+ *   受信時に自身の List を閉じる setter を呼び出す
+ * - 同じ仕組みで Dropdown / SelectSort / Popover / DatePicker（Popover 経由）も
+ *   Modal 表示時に自動で閉じる
+ *
+ * Modal を閉じてもう一度確認したい場合は、Storybook 側でこの Story を再描画する。
+ */
+function DismissOnModalOpenContent() {
+  const [selectedOption, setSelectedOption] = useState<SelectOption | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // 1秒後に Select を自動的に開く
+    const openSelectTimer = window.setTimeout(() => {
+      const selectButton = containerRef.current?.querySelector<HTMLButtonElement>('button[type="button"]');
+      selectButton?.click();
+    }, 1000);
+
+    // 3秒後（Select 表示の2秒後）に Modal を自動的に開く
+    const openModalTimer = window.setTimeout(() => {
+      setIsModalOpen(true);
+    }, 3000);
+
+    return () => {
+      window.clearTimeout(openSelectTimer);
+      window.clearTimeout(openModalTimer);
+    };
+  }, []);
+
+  return (
+    <div ref={containerRef} className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2 rounded border border-uiBorder01 bg-uiBackgroundBlue p-4">
+        <p className="typography-label14bold text-text01">Modal 表示時に Select の List が自動で閉じることを確認する</p>
+        <p className="typography-body14regular text-text01">
+          1秒後に Select が自動で開き、さらに 2秒後に Modal が表示される。Modal の表示と同時に Select の List
+          が閉じれば成功。
+        </p>
+      </div>
+      <Select
+        size="medium"
+        variant="outline"
+        placeholder="選択"
+        selectedOption={selectedOption}
+        onChange={(option) => setSelectedOption(option)}
+        width={240}
+      >
+        {optionsList.map((option) => (
+          <Select.Option key={option.id} option={option} />
+        ))}
+      </Select>
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} width={480}>
+        <Modal.Header>自動表示された Modal（デモ）</Modal.Header>
+        <Modal.Body>
+          <div className="px-6 pb-4">
+            <p className="typography-body14regular text-text01">
+              Modal が表示されました。背景の Select は自動的に閉じています。
+            </p>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <div className="flex w-full items-center justify-end">
+            <Button variant="outline" size="medium" onClick={() => setIsModalOpen(false)}>
+              閉じる
+            </Button>
+          </div>
+        </Modal.Footer>
+      </Modal>
+    </div>
+  );
+}
+
+export const DismissOnModalOpen: Story = {
+  render: () => <DismissOnModalOpenContent />,
+  parameters: {
+    chromatic: { disable: true },
+    docs: {
+      description: {
+        story: [
+          'Modal 表示時に Select の List が自動で閉じることを確認する Story。',
+          '',
+          '1秒後に Select が自動で開き、さらに 2秒後に Modal が表示される。Modal の表示と同時に Select の List が閉じれば成功。',
+          '',
+          '**仕組み**: Modal は `isOpen` が `true` に切り替わる瞬間に `window` へ `zenkigen-modal-open` カスタムイベントを dispatch する。Select 内部の `useDismissOnModalOpen` フックがそれを listen して List を閉じる。同じ仕組みが Dropdown / SelectSort / Popover / DatePicker（Popover 経由）にも横展開されている。',
+        ].join('\n'),
+      },
+    },
+  },
+};

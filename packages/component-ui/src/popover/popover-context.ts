@@ -5,7 +5,7 @@ import { createContext, useContext } from 'react';
 /**
  * Popoverが閉じられる理由を定義する型
  */
-export type CloseReason = 'outside-click' | 'escape-key-down';
+export type CloseReason = 'outside-click' | 'escape-key-down' | 'modal-open';
 
 /**
  * Popoverのクローズイベントの型定義

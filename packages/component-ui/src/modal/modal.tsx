@@ -2,6 +2,7 @@ import type { CSSProperties, MutableRefObject, PropsWithChildren } from 'react';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
+import { MODAL_OPEN_EVENT } from '../hooks/use-dismiss-on-modal-open';
 import { BodyScrollLock } from './body-scroll-lock';
 import { ModalBody } from './modal-body';
 import { ModalContext } from './modal-context';
@@ -37,6 +38,16 @@ export function Modal({
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  // Modal が表示された瞬間に、外側で開いている floating UI（Select / Dropdown / Popover 等）を閉じるためのイベント発行。
+  // `isOpen` が false → true の遷移時だけでなく、初回マウント時に isOpen=true で渡された場合や、
+  // Modal を unmount → 再 mount した場合の表示時にも発火する。
+  // いずれも「Modal が新たに前面へ出てきた瞬間」なので、背景の floating UI を閉じる対象として正しい挙動。
+  useEffect(() => {
+    if (isOpen) {
+      window.dispatchEvent(new CustomEvent(MODAL_OPEN_EVENT));
+    }
+  }, [isOpen]);
 
   return isMounted && isOpen ? (
     <>
