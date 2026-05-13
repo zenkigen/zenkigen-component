@@ -999,18 +999,19 @@ export const LayoutExample: Story = {
         {/* チャット入力エリア: variant="text" の利用例 */}
         <div className="flex flex-col gap-2 pt-2">
           <div className="flex items-end gap-1 rounded border border-uiBorder01 pr-0 focus-within:border-activeInput hover:border-hoverInput hover:focus-within:border-activeInput">
-            <TextArea
-              value={inputValue}
-              variant="text"
-              placeholder="応募者へメッセージ"
-              size="medium"
-              autoHeight
-              maxHeight="120px"
-              className="p-2"
-              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
-                setInputValue(e.target.value);
-              }}
-            />
+            <div className="flex-1 p-2">
+              <TextArea
+                value={inputValue}
+                variant="text"
+                placeholder="応募者へメッセージ"
+                size="medium"
+                autoHeight
+                maxHeight="120px"
+                onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                  setInputValue(e.target.value);
+                }}
+              />
+            </div>
             <div className="pb-2 pr-2">
               <IconButton
                 variant="text"
