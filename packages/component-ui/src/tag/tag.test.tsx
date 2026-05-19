@@ -66,7 +66,7 @@ describe('Tag', () => {
         </Tag>,
       );
       const wrapper = container.firstElementChild as HTMLElement;
-      expect(wrapper.className).toMatch(/h-\[18px\]/);
+      expect(wrapper.className).toMatch(/h-5/);
     });
 
     it('size 未指定時は medium がデフォルトになること', () => {
@@ -76,7 +76,7 @@ describe('Tag', () => {
         </Tag>,
       );
       const wrapper = container.firstElementChild as HTMLElement;
-      expect(wrapper.className).toMatch(/h-\[18px\]/);
+      expect(wrapper.className).toMatch(/h-5/);
     });
   });
 
@@ -142,7 +142,7 @@ describe('Tag', () => {
         </Tag>,
       );
       const wrapper = container.firstElementChild as HTMLElement;
-      expect(wrapper.className).toMatch(/h-\[22px\]/);
+      expect(wrapper.className).toMatch(/h-5/);
     });
   });
 
