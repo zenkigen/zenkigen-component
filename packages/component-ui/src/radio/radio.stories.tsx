@@ -1,6 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import type { ChangeEvent } from 'react';
-import { useCallback, useState } from 'react';
 
 import { Radio } from '.';
 
@@ -14,70 +12,43 @@ type Story = StoryObj<typeof Radio>;
 
 export const Component: Story = {
   args: {
-    label: 'label',
+    label: 'ラベル',
     isChecked: false,
     isDisabled: false,
-    name: 'name',
+    name: 'radio-component',
     value: 'value',
-    id: 'id',
+    id: 'radio-component',
   },
   parameters: {
     chromatic: { disable: true },
   },
 };
 
-export function Base() {
-  const [selectedValue, setSelectedValue] = useState('');
-
-  const handleChange = useCallback(
-    ({ target: { value } }: ChangeEvent<HTMLInputElement>) => setSelectedValue(value),
-    [],
-  );
-
-  return (
-    <ul>
-      <div className="mb-6">
-        <Radio
-          id="1"
-          name="radio-group"
-          label="Radio button 1"
-          value="foo"
-          onChange={handleChange}
-          isChecked={selectedValue === 'foo'}
-        />
+export const Default: Story = {
+  render: () => (
+    <div className="flex flex-col gap-2">
+      <div className="flex items-center gap-4">
+        <Radio id="default-unchecked" name="default-group" label="未選択" value="unchecked" />
+        <Radio id="default-checked" name="default-checked" label="選択済み" value="checked" isChecked />
       </div>
-      <div className="mb-6">
+    </div>
+  ),
+};
+
+export const Disabled: Story = {
+  render: () => (
+    <div className="flex flex-col gap-2">
+      <div className="flex items-center gap-4">
+        <Radio id="disabled-unchecked" name="disabled-group" label="無効（未選択）" value="unchecked" isDisabled />
         <Radio
-          id="2"
-          name="radio-group"
-          label="Radio button 2"
-          value="bar"
-          onChange={handleChange}
-          isChecked={selectedValue === 'bar'}
-        />
-      </div>
-      <div className="mb-6">
-        <Radio
-          id="1"
-          name="radio-group"
-          label="Radio button 1"
-          value="foo"
-          onChange={handleChange}
-          isChecked={selectedValue === 'foo'}
+          id="disabled-checked"
+          name="disabled-checked"
+          label="無効（選択済み）"
+          value="checked"
+          isChecked
           isDisabled
         />
       </div>
-      <div className="mb-6">
-        <Radio
-          id="2"
-          name="radio-group"
-          label="Radio button 2"
-          value="bar"
-          onChange={handleChange}
-          isChecked={selectedValue === 'bar'}
-          isDisabled
-        />
-      </div>
-    </ul>
-  );
-}
+    </div>
+  ),
+};
