@@ -297,7 +297,7 @@ export function WithLoading() {
         </div>
         <div>
           <div className="flex items-center gap-2">
-            <Button size="large" variant="outline" before={<Icon name="download" size="small" />}>
+            <Button size="large" variant="outline" before={<Icon name="download" size="medium" />}>
               ダウンロード
             </Button>
             <Button
@@ -360,7 +360,7 @@ function DownloadButtonDemo({ size }: { size: 'small' | 'medium' | 'large' }) {
             <Loading position="static" size="small" height="auto" />
           </div>
         ) : (
-          <Icon name="download" size="small" />
+          <Icon name="download" size={size === 'large' ? 'medium' : 'small'} />
         )
       }
     >
