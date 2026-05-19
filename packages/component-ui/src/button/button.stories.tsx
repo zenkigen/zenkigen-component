@@ -141,7 +141,7 @@ export const FillDanger: Story = {
         <Button size="large" variant="fillDanger" isDisabled>
           ボタンラベル
         </Button>
-        <Button size="large" variant="fillDanger" before={<Icon name="add" size="small" />} isSelected>
+        <Button size="large" variant="fillDanger" before={<Icon name="add" size="medium" />} isSelected>
           ボタンラベル
         </Button>
       </div>
@@ -197,7 +197,7 @@ export const Outline: Story = {
         <Button variant="outline" size="large" isDisabled>
           ボタンラベル
         </Button>
-        <Button variant="outline" size="large" before={<Icon name="add" size="small" />} isSelected>
+        <Button variant="outline" size="large" before={<Icon name="add" size="medium" />} isSelected>
           ボタンラベル
         </Button>
       </div>
@@ -253,7 +253,7 @@ export const Text: Story = {
         <Button variant="text" size="large" isDisabled>
           ボタンラベル
         </Button>
-        <Button variant="text" size="large" before={<Icon name="add" size="small" />} isSelected>
+        <Button variant="text" size="large" before={<Icon name="add" size="medium" />} isSelected>
           ボタンラベル
         </Button>
       </div>
