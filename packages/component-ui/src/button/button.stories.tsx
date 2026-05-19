@@ -47,10 +47,10 @@ export const Component: Story = {
   },
 };
 
-export function Base() {
-  return (
-    <div>
-      <div className="mt-2 flex items-center gap-2">
+export const Fill: Story = {
+  render: () => (
+    <div className="flex flex-col gap-2">
+      <div className="flex items-center gap-2">
         <Button size="small">ボタンラベル</Button>
         <Button size="small" before={<Icon name="add" size="small" />}>
           ボタンラベル
@@ -65,7 +65,7 @@ export function Base() {
           ボタンラベル
         </Button>
       </div>
-      <div className="mt-2 flex items-center gap-2">
+      <div className="flex items-center gap-2">
         <Button>ボタンラベル</Button>
         <Button before={<Icon name="add" size="small" />}>ボタンラベル</Button>
         <Button after={<Icon name="add" size="small" />}>ボタンラベル</Button>
@@ -74,7 +74,7 @@ export function Base() {
           ボタンラベル
         </Button>
       </div>
-      <div className="mt-2 flex items-center gap-2">
+      <div className="flex items-center gap-2">
         <Button size="large">ボタンラベル</Button>
         <Button size="large" before={<Icon name="add" size="medium" />}>
           ボタンラベル
@@ -89,7 +89,14 @@ export function Base() {
           ボタンラベル
         </Button>
       </div>
-      <div className="mt-2 flex items-center gap-2">
+    </div>
+  ),
+};
+
+export const FillDanger: Story = {
+  render: () => (
+    <div className="flex flex-col gap-2">
+      <div className="flex items-center gap-2">
         <Button size="small" variant="fillDanger">
           ボタンラベル
         </Button>
@@ -106,7 +113,7 @@ export function Base() {
           ボタンラベル
         </Button>
       </div>
-      <div className="mt-2 flex items-center gap-2">
+      <div className="flex items-center gap-2">
         <Button variant="fillDanger">ボタンラベル</Button>
         <Button variant="fillDanger" before={<Icon name="add" size="small" />}>
           ボタンラベル
@@ -121,7 +128,7 @@ export function Base() {
           ボタンラベル
         </Button>
       </div>
-      <div className="mt-2 flex items-center gap-2">
+      <div className="flex items-center gap-2">
         <Button size="large" variant="fillDanger">
           ボタンラベル
         </Button>
@@ -134,11 +141,18 @@ export function Base() {
         <Button size="large" variant="fillDanger" isDisabled>
           ボタンラベル
         </Button>
-        <Button size="large" variant="fillDanger" before={<Icon name="add" size="small" />} isSelected>
+        <Button size="large" variant="fillDanger" before={<Icon name="add" size="medium" />} isSelected>
           ボタンラベル
         </Button>
       </div>
-      <div className="mt-2 flex items-center gap-2">
+    </div>
+  ),
+};
+
+export const Outline: Story = {
+  render: () => (
+    <div className="flex flex-col gap-2">
+      <div className="flex items-center gap-2">
         <Button variant="outline" size="small">
           ボタンラベル
         </Button>
@@ -155,7 +169,7 @@ export function Base() {
           ボタンラベル
         </Button>
       </div>
-      <div className="mt-2 flex items-center gap-2">
+      <div className="flex items-center gap-2">
         <Button variant="outline">ボタンラベル</Button>
         <Button variant="outline" before={<Icon name="add" size="small" />}>
           ボタンラベル
@@ -170,7 +184,7 @@ export function Base() {
           ボタンラベル
         </Button>
       </div>
-      <div className="mt-2 flex items-center gap-2">
+      <div className="flex items-center gap-2">
         <Button variant="outline" size="large">
           ボタンラベル
         </Button>
@@ -183,11 +197,18 @@ export function Base() {
         <Button variant="outline" size="large" isDisabled>
           ボタンラベル
         </Button>
-        <Button variant="outline" size="large" before={<Icon name="add" size="small" />} isSelected>
+        <Button variant="outline" size="large" before={<Icon name="add" size="medium" />} isSelected>
           ボタンラベル
         </Button>
       </div>
-      <div className="mt-2 flex items-center gap-2">
+    </div>
+  ),
+};
+
+export const Text: Story = {
+  render: () => (
+    <div className="flex flex-col gap-2">
+      <div className="flex items-center gap-2">
         <Button variant="text" size="small">
           ボタンラベル
         </Button>
@@ -204,7 +225,7 @@ export function Base() {
           ボタンラベル
         </Button>
       </div>
-      <div className="mt-2 flex items-center gap-2">
+      <div className="flex items-center gap-2">
         <Button variant="text">ボタンラベル</Button>
         <Button variant="text" before={<Icon name="add" size="small" />}>
           ボタンラベル
@@ -219,7 +240,7 @@ export function Base() {
           ボタンラベル
         </Button>
       </div>
-      <div className="mt-2 flex items-center gap-2">
+      <div className="flex items-center gap-2">
         <Button variant="text" size="large">
           ボタンラベル
         </Button>
@@ -232,21 +253,10 @@ export function Base() {
         <Button variant="text" size="large" isDisabled>
           ボタンラベル
         </Button>
-        <Button variant="text" size="large" before={<Icon name="add" size="small" />} isSelected>
-          ボタンラベル
-        </Button>
-      </div>
-      <div className="mt-2 flex items-center gap-2">
-        <Button elementAs="button" width={300} borderRadius={9999}>
-          ボタンラベル
-        </Button>
-        <Button elementAs="button" type="submit" width={300} borderRadius={9999}>
-          ボタンラベル
-        </Button>
-        <Button elementAs="a" width={300} borderRadius={9999} href="">
+        <Button variant="text" size="large" before={<Icon name="add" size="medium" />} isSelected>
           ボタンラベル
         </Button>
       </div>
     </div>
-  );
-}
+  ),
+};
