@@ -49,10 +49,15 @@ const meta: Meta<typeof TextArea> = {
       description: '自動リサイズ',
       table: { defaultValue: { summary: 'false' } },
     },
-    maxHeight: { control: 'text', description: '最大高さ（autoHeightがtrueの場合のみ有効）' },
+    maxHeight: {
+      control: 'text',
+      description: '最大高さ（autoHeightがtrueの場合のみ有効）',
+      if: { arg: 'autoHeight' },
+    },
     isResizable: {
       control: 'boolean',
       description: 'リサイズ可能かどうか（autoHeightがtrueの場合は無効）',
+      if: { arg: 'autoHeight', truthy: false },
       table: { defaultValue: { summary: 'false' } },
     },
     isCounterVisible: {
