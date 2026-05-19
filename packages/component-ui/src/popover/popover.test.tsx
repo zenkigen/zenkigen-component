@@ -1,9 +1,10 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { Button } from '../button';
+import { MODAL_OPEN_EVENT } from '../hooks/use-dismiss-on-modal-open';
 import { Popover } from './popover';
 import type { PopoverCloseEvent } from './popover-context';
 
@@ -736,6 +737,52 @@ describe('Popover', () => {
           </Popover.Trigger>,
         );
       }).toThrow('Popover components must be used inside <Popover.Root>');
+    });
+  });
+
+  describe('Modal表示連動', () => {
+    it('Popover開いた状態でzenkigen-modal-openイベントを受けるとonCloseが呼ばれ、reasonが"modal-open"になること', async () => {
+      const onClose = vi.fn();
+      render(
+        <Popover isOpen onClose={onClose}>
+          <Popover.Trigger>
+            <Button>Open</Button>
+          </Popover.Trigger>
+          <Popover.Content>
+            <div data-testid="popover-content">Content</div>
+          </Popover.Content>
+        </Popover>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByTestId('popover-content')).toBeInTheDocument();
+      });
+
+      act(() => {
+        window.dispatchEvent(new CustomEvent(MODAL_OPEN_EVENT));
+      });
+
+      await waitFor(() => {
+        expect(onClose).toHaveBeenCalledWith({ reason: 'modal-open' });
+      });
+    });
+
+    it('Popoverが閉じた状態ではzenkigen-modal-openイベントを受けてもonCloseが呼ばれないこと', () => {
+      const onClose = vi.fn();
+      render(
+        <Popover isOpen={false} onClose={onClose}>
+          <Popover.Trigger>
+            <Button>Open</Button>
+          </Popover.Trigger>
+          <Popover.Content>
+            <div data-testid="popover-content">Content</div>
+          </Popover.Content>
+        </Popover>,
+      );
+
+      window.dispatchEvent(new CustomEvent(MODAL_OPEN_EVENT));
+
+      expect(onClose).not.toHaveBeenCalled();
     });
   });
 });
