@@ -416,7 +416,7 @@ const MicIcon = ({ isActive }: { isActive: boolean }) => (
 
 - `clsx`を使用した動的クラス名の生成
 - `@zenkigen-inc/component-icons`から提供される`iconElements`を使用
-- `@zenkigen-inc/component-theme`の`iconColors`を使用した色管理
+- `color`プロパティは、`ColorToken`型の値を受け取り、`fill-${color}`形式でクラス名を生成（`accentColor`と同じ方式）
 - `inline-block`と`shrink-0`による柔軟なレイアウト対応
 - `accentColor`プロパティは、`ColorToken`型の値を受け取り、`fill-${accentColor}`形式でクラス名を生成
 - アクセントカラーは、無効状態でない場合にのみ、アイコンコンポーネントに`accentClassName`として渡される
