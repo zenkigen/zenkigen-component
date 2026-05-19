@@ -154,7 +154,7 @@ const MyComponent = () => {
 
 - 基本スタイル: `inline-block shrink-0`
 - カラー: `color`プロパティに応じた色が適用
-- カラー未指定時: デフォルトの色（継承された色）
+- カラー未指定時: SVGのデフォルトfill（黒）が適用される。親要素に`fill-*`クラスがある場合はその色を継承する
 
 #### 無効状態（`isDisabled: true`）
 
@@ -416,7 +416,7 @@ const MicIcon = ({ isActive }: { isActive: boolean }) => (
 
 - `clsx`を使用した動的クラス名の生成
 - `@zenkigen-inc/component-icons`から提供される`iconElements`を使用
-- `@zenkigen-inc/component-theme`の`iconColors`を使用した色管理
+- `color`プロパティは、`ColorToken`型の値を受け取り、`fill-${color}`形式でクラス名を生成（`accentColor`と同じ方式）
 - `inline-block`と`shrink-0`による柔軟なレイアウト対応
 - `accentColor`プロパティは、`ColorToken`型の値を受け取り、`fill-${accentColor}`形式でクラス名を生成
 - アクセントカラーは、無効状態でない場合にのみ、アイコンコンポーネントに`accentClassName`として渡される
@@ -446,7 +446,7 @@ console.log(availableIcons);
 
 1. **アイコン名の型安全性**: `name`プロパティは`IconName`型で型付けされており、存在しないアイコン名を指定するとTypeScriptエラーになります
 2. **色の優先順位**: `isDisabled`が`true`の場合、`color`プロパティは無視され、常に`fill-disabled01`が適用されます
-3. **カラー未指定時**: `color`プロパティを指定しない場合、親要素から継承された色（通常はテキスト色）が適用されます
+3. **カラー未指定時**: `color`プロパティを指定しない場合、SVGのデフォルトfill（黒）が適用されます。ただし、親要素に`fill-*`クラスが設定されている場合はその色を継承します
 4. **サイズのカスタマイズ**: `className`で`w-*`や`h-*`クラスを指定した場合、`size`プロパティによるサイズ指定は上書きされます
 5. **fillプロパティ**: Tailwindの`fill-*`クラスを`className`で指定することで、`color`プロパティとは独立した色指定が可能です
 6. **アイコンの追加**: 新しいアイコンを追加する場合は、`@zenkigen-inc/component-icons`パッケージにSVGファイルを追加し、コード生成を実行する必要があります
