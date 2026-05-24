@@ -22,6 +22,8 @@ type Props = {
   isNoPadding?: boolean;
   /** ボタンのバリアント */
   variant?: Variant;
+  /** アイコンのカラー */
+  iconColor?: ColorToken;
   /** アイコンのアクセントカラー */
   iconAccentColor?: ColorToken;
 } & (
@@ -42,6 +44,7 @@ export function IconButton({
   isNoPadding = false,
   isDisabled = false,
   isSelected = false,
+  iconColor,
   iconAccentColor,
   ...props
 }: Props) {
@@ -64,6 +67,7 @@ export function IconButton({
   );
 
   const iconSize = size === 'small' ? 'small' : 'medium';
+  const iconColorProps = !isSelected && iconColor ? { color: iconColor } : {};
   const iconAccentColorProps = !isSelected && iconAccentColor ? { accentColor: iconAccentColor } : {};
 
   if (props.isAnchor === true) {
@@ -74,7 +78,7 @@ export function IconButton({
 
     return (
       <a className={baseClasses} {...buttonProps}>
-        <Icon name={icon} size={iconSize} {...iconAccentColorProps} />
+        <Icon name={icon} size={iconSize} {...iconColorProps} {...iconAccentColorProps} />
       </a>
     );
   } else {
@@ -85,7 +89,7 @@ export function IconButton({
 
     return (
       <button type="button" className={baseClasses} disabled={isDisabled} {...buttonProps}>
-        <Icon name={icon} size={iconSize} {...iconAccentColorProps} />
+        <Icon name={icon} size={iconSize} {...iconColorProps} {...iconAccentColorProps} />
       </button>
     );
   }

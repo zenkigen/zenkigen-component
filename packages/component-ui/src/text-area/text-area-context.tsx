@@ -4,6 +4,7 @@ import { createContext, useContext } from 'react';
 export type TextAreaContextValue = {
   textAreaProps: {
     size: 'medium' | 'large';
+    variant: 'outline' | 'text';
     isError: boolean;
   };
   forwardedRef: ForwardedRef<HTMLTextAreaElement>;

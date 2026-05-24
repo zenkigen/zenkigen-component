@@ -5,11 +5,19 @@ type TextAreaBaseProps = Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'clas
   value: string;
   height?: CSSProperties['height'];
   isError?: boolean;
-  /**
-   * @deprecated 外部から className を渡してスタイルを上書きすることは非推奨です。
-   */
-  className?: string;
-};
+} & (
+    | {
+        variant?: 'outline';
+        /**
+         * @deprecated 外部から className を渡してスタイルを上書きすることは非推奨です。
+         */
+        className?: string;
+      }
+    | {
+        variant: 'text';
+        className?: never;
+      }
+  );
 
 type AutoHeightUnion =
   | {

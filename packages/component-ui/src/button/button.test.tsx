@@ -56,6 +56,17 @@ describe('Button', () => {
     expect(button.style.width).toBe('200px');
   });
 
+  it('size="x-large" の場合、h-12 クラスが適用されること', () => {
+    render(
+      <Button size="x-large" data-testid="xl-button">
+        XLボタン
+      </Button>,
+    );
+    const button = screen.getByTestId('xl-button');
+    expect(button.className).toMatch(/h-12/);
+    expect(button.className).toMatch(/typography-label16regular/);
+  });
+
   it('before, afterの要素が表示されること', () => {
     render(
       <Button before={<span data-testid="before">前</span>} after={<span data-testid="after">後</span>}>
