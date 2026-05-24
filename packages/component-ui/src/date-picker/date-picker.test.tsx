@@ -1,7 +1,8 @@
-import { render, screen } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
+import { MODAL_OPEN_EVENT } from '../hooks/use-dismiss-on-modal-open';
 import { DatePicker } from './date-picker';
 
 const openPopover = async (user: ReturnType<typeof userEvent.setup>) => {
@@ -134,6 +135,22 @@ describe('DatePicker', () => {
       await user.keyboard('{Escape}');
 
       expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    });
+
+    it('Modal が開かれたイベントを受けると Popover が閉じること', async () => {
+      const user = userEvent.setup();
+      render(<DatePicker value={null} onChange={vi.fn()} />);
+
+      await openPopover(user);
+      expect(screen.getByRole('dialog', { name: '日付選択' })).toBeInTheDocument();
+
+      act(() => {
+        window.dispatchEvent(new CustomEvent(MODAL_OPEN_EVENT));
+      });
+
+      await waitFor(() => {
+        expect(screen.queryByRole('dialog', { name: '日付選択' })).not.toBeInTheDocument();
+      });
     });
   });
 

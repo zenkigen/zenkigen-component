@@ -5,6 +5,7 @@ import type { MutableRefObject, PropsWithChildren, ReactElement } from 'react';
 import { useCallback, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
+import { useDismissOnModalOpen } from '../hooks/use-dismiss-on-modal-open';
 import { useOutsideClick } from '../hooks/use-outside-click';
 import { Icon } from '../icon';
 import { DropdownContext } from './dropdown-context';
@@ -61,6 +62,11 @@ export function Dropdown({
 
   const targetRef = useRef<HTMLDivElement>(null);
   useOutsideClick(targetRef, () => setIsVisible(false));
+  useDismissOnModalOpen(() => {
+    if (isVisible) {
+      setIsVisible(false);
+    }
+  });
 
   const handleToggle = useCallback(() => {
     if (targetRef.current === null) {

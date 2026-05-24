@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import type { CSSProperties } from 'react';
 import { useCallback, useRef, useState } from 'react';
 
+import { useDismissOnModalOpen } from '../hooks/use-dismiss-on-modal-open';
 import { useOutsideClick } from '../hooks/use-outside-click';
 import { Icon } from '../icon';
 import { SelectList } from './select-list';
@@ -43,6 +44,11 @@ export function SelectSort({
   const [isOptionListOpen, setIsOptionListOpen] = useState(false);
   const targetRef = useRef<HTMLDivElement>(null);
   useOutsideClick(targetRef, () => setIsOptionListOpen(false));
+  useDismissOnModalOpen(() => {
+    if (isOptionListOpen) {
+      setIsOptionListOpen(false);
+    }
+  });
 
   const handleClickToggle = () => setIsOptionListOpen((prev) => !prev);
   const handleClickItem = useCallback(

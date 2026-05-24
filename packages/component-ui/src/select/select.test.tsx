@@ -1,7 +1,8 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React, { useState } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
+import { MODAL_OPEN_EVENT } from '../hooks/use-dismiss-on-modal-open';
 import { Select } from './select';
 import type { SelectOption } from './type';
 
@@ -154,6 +155,24 @@ describe('Select', () => {
       expect(screen.getByRole('list')).toBeInTheDocument();
 
       fireEvent.click(screen.getByTestId('outside'));
+
+      await waitFor(() => {
+        expect(screen.queryByRole('list')).not.toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Modal表示連動', () => {
+    it('Modalが開かれたイベントを受けるとオプションリストが閉じること', async () => {
+      render(<SelectTestComponent placeholder="選択" />);
+
+      const selectButton = screen.getByRole('button');
+      fireEvent.click(selectButton);
+      expect(screen.getByRole('list')).toBeInTheDocument();
+
+      act(() => {
+        window.dispatchEvent(new CustomEvent(MODAL_OPEN_EVENT));
+      });
 
       await waitFor(() => {
         expect(screen.queryByRole('list')).not.toBeInTheDocument();
