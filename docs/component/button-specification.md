@@ -73,7 +73,7 @@ const MyComponent = () => {
 
 | プロパティ       | 型                                              | デフォルト値 | 説明                           |
 | ---------------- | ----------------------------------------------- | ------------ | ------------------------------ |
-| `size`           | `'small' \| 'medium' \| 'large'`                | `'medium'`   | ボタンのサイズ                 |
+| `size`           | `'small' \| 'medium' \| 'large' \| 'x-large'`   | `'medium'`   | ボタンのサイズ                 |
 | `variant`        | `'fill' \| 'fillDanger' \| 'outline' \| 'text'` | `'fill'`     | ボタンのスタイルバリエーション |
 | `width`          | `CSSProperties['width']`                        | -            | ボタンの幅                     |
 | `isSelected`     | `boolean`                                       | `false`      | 選択状態の制御                 |
@@ -111,6 +111,14 @@ const MyComponent = () => {
 #### large
 
 - 高さ: `h-10` (40px)
+- パディング: `px-4`
+- 行の高さ: `leading-[24px]`
+- タイポグラフィ: `typography-label16regular`
+- アイコンサイズ: `medium`（推奨）
+
+#### x-large
+
+- 高さ: `h-12` (48px)
 - パディング: `px-4`
 - 行の高さ: `leading-[24px]`
 - タイポグラフィ: `typography-label16regular`
@@ -378,6 +386,7 @@ Buttonコンポーネントのスタイルは`@zenkigen-inc/component-theme`の`
 
 | 日付                 | 内容                                                                                    | 担当者 |
 | -------------------- | --------------------------------------------------------------------------------------- | ------ |
+| 2026-04-06           | `x-large` サイズバリアントを追加                                                        | -      |
 | 2025-11-26 15:53 JST | `className`プロパティの非推奨化を明記                                                   | -      |
 | 2025-10-29 10:28 JST | 内部実装の詳細を追加、InternalButtonコンポーネントとoutlineDangerバリアントの説明を追加 | -      |
 | 2025-10-29 10:16 JST | 新規作成                                                                                | -      |

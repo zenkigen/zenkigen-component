@@ -267,6 +267,32 @@ describe('TextArea', () => {
     });
   });
 
+  describe('className', () => {
+    it('variant="outline"（デフォルト）で className が wrapper に適用されること', () => {
+      render(<TextArea value="" className="mt-1" readOnly data-testid="textarea" />);
+      const textarea = screen.getByTestId('textarea');
+      const wrapper = textarea.parentElement as HTMLElement;
+
+      expect(wrapper.className).toMatch(/mt-1/);
+      expect(textarea.className).not.toMatch(/mt-1/);
+    });
+
+    it('variant="outline" を明示しても className が wrapper に適用されること', () => {
+      render(<TextArea value="" variant="outline" className="mt-1" readOnly data-testid="textarea" />);
+      const textarea = screen.getByTestId('textarea');
+      const wrapper = textarea.parentElement as HTMLElement;
+
+      expect(wrapper.className).toMatch(/mt-1/);
+      expect(textarea.className).not.toMatch(/mt-1/);
+    });
+
+    it('variant="text" に className を渡すと型エラーになること（コンパイル時検証）', () => {
+      // @ts-expect-error - variant="text" は className を受け付けない（discriminated union により never 型）
+      const _element = <TextArea value="" variant="text" className="mt-1" readOnly />;
+      expect(_element).toBeDefined();
+    });
+  });
+
   describe('HelperMessage / ErrorMessage', () => {
     it('HelperMessage を指定すると aria-describedby に連結されること', () => {
       render(
