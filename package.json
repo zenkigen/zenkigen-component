@@ -5,6 +5,11 @@
   "workspaces": [
     "packages/*"
   ],
+  "dependenciesMeta": {
+    "esbuild": {
+      "built": true
+    }
+  },
   "scripts": {
     "lint": "eslint './packages/**/*.ts{,x}' && prettier --check .",
     "lint:fix": "eslint './packages/**/*.ts{,x}' --fix && prettier --write .",
