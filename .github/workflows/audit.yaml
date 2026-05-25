@@ -1,0 +1,57 @@
+name: Audit
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+    paths:
+      - 'package.json'
+      - 'packages/**/package.json'
+      - 'yarn.lock'
+      - '.yarnrc.yml'
+      - '.github/workflows/audit.yaml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'package.json'
+      - 'packages/**/package.json'
+      - 'yarn.lock'
+      - '.yarnrc.yml'
+      - '.github/workflows/audit.yaml'
+  schedule:
+    # 毎日 09:00 JST (00:00 UTC) に実行: 上流の新規脆弱性を検知する
+    - cron: '0 0 * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@main
+
+      - name: Read Node version from .node-version
+        run: echo "node_version=$(cat .node-version)" >> $GITHUB_OUTPUT
+        id: node-version
+
+      - name: Use Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ steps.node-version.outputs.node_version }}
+
+      - name: Yarn install
+        uses: ./.github/actions/yarn-install
+
+      # 初回は報告のみ（continue-on-error）。Linux CI 上での実際の検出内容を確認し、
+      # dev / ビルドツール由来の確定誤検知を整理したうえで continue-on-error を外し、
+      # high 以上でジョブを失敗させるブロッキング運用へ切り替える。
+      - name: Audit production dependencies (high and above)
+        continue-on-error: true
+        run: yarn npm audit --all --recursive --environment production --severity high
