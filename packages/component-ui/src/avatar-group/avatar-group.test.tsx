@@ -314,7 +314,7 @@ describe('AvatarGroup', () => {
   });
 
   describe('z-index', () => {
-    it('左のアバターが前面に表示されるよう z-index が設定されること', () => {
+    it('右のアバターが前面に表示されるよう z-index が左から右へ増加すること', () => {
       const { container } = render(
         <AvatarGroup>
           <Avatar userId={1} firstName="太郎" lastName="田中" />
