@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@main
+      - uses: actions/checkout@v6
 
       - name: Read Node version from .node-version
         run: echo "node_version=$(cat .node-version)" >> $GITHUB_OUTPUT
