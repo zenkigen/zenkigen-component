@@ -49,9 +49,6 @@ jobs:
       - name: Yarn install
         uses: ./.github/actions/yarn-install
 
-      # 初回は報告のみ（continue-on-error）。Linux CI 上での実際の検出内容を確認し、
-      # dev / ビルドツール由来の確定誤検知を整理したうえで continue-on-error を外し、
-      # high 以上でジョブを失敗させるブロッキング運用へ切り替える。
+      # production 依存に high 以上の脆弱性が見つかった場合はジョブを失敗させる。
       - name: Audit production dependencies (high and above)
-        continue-on-error: true
         run: yarn npm audit --all --recursive --environment production --severity high
