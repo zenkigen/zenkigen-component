@@ -10155,5 +10155,8 @@ __metadata:
     typescript: "npm:5.9.3"
     vite: "npm:7.3.1"
     vitest: "npm:3.2.4"
+  dependenciesMeta:
+    esbuild:
+      built: true
   languageName: unknown
   linkType: soft
