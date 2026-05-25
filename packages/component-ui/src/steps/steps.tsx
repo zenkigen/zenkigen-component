@@ -27,6 +27,9 @@ function HorizontalSeparatorCell({
   const heightClass = getSeparatorCellHeightClass(size);
   const alignClass = textOrientation === 'vertical' ? 'self-start' : '';
 
+  // <ol> を grid コンテナにする都合上、直接の子は <li> である必要がある。
+  // セパレータはステップ項目ではないため、role="presentation"（リスト項目カウントから除外）と
+  // aria-hidden="true"（アクセシビリティツリーから配下ごと除外）を二重に付与し支援技術には読ませない。
   return (
     <li aria-hidden="true" className={clsx('flex items-center', heightClass, alignClass)} role="presentation">
       <StepsSeparator progress={progress} />
