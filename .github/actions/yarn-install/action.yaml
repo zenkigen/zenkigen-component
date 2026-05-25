@@ -15,6 +15,12 @@ runs:
         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
         restore-keys: ${{ runner.os }}-yarn-
 
+    # install を Takumi Guard（npm.flatt.tech）経由にし、既知の悪性パッケージをブロックする。
+    # 匿名モード（bot-id なし / Tier A ブロッキングのみ）のため id-token 権限は不要で、fork PR でも動作する。
+    # cache にある依存は再 fetch されないため、screen 対象は cache-miss する新規/更新依存（方針A）。
+    - name: Setup Takumi Guard (anonymous, blocking only)
+      uses: flatt-security/setup-takumi-guard-npm@9a5d797c2085b6326d3a2985c08e3a114b9b88c1 # v1.1.1
+
     - name: Install dependencies
       shell: bash
       run: yarn install
