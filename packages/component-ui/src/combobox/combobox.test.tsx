@@ -229,6 +229,32 @@ describe('Combobox', () => {
       expect(inputs[1]).toHaveAttribute('aria-expanded', 'true');
       expect(listboxes[1]).toHaveStyle({ visibility: 'visible' });
     });
+
+    // useOutsideClick の `isConnected` 早期 return を廃止したことで最も再発を警戒すべきは、
+    // 「自身のトグル押下時に icon の svg が再レンダリングで detach され、誤って外部クリック扱いになり
+    // 開いた直後に閉じてしまう」回帰（過去に PR #543 で `isConnected` を入れて直したバグ）。
+    // composedPath による内側判定でこれが防がれていることを結合レベルで担保する。
+    // （フック単体の本質的ガードは `hooks/use-outside-click.test.tsx` 側）
+    it('自身のトグルを押すと開閉が交互に切り替わり、開いた直後に即閉じしない', async () => {
+      const user = userEvent.setup();
+      render(<ControlledCombobox />);
+      const input = getCombobox();
+
+      // 1回目: トグルで open し、外部クリック誤検出で即閉じしないこと
+      await user.click(screen.getByRole('button', { name: '候補を表示' }));
+      expect(input).toHaveAttribute('aria-expanded', 'true');
+      expect(getListbox()).toHaveStyle({ visibility: 'visible' });
+
+      // 2回目: トグルで close すること
+      await user.click(screen.getByRole('button', { name: '候補を閉じる' }));
+      expect(input).toHaveAttribute('aria-expanded', 'false');
+      expect(getListbox()).toHaveStyle({ visibility: 'hidden' });
+
+      // 3回目: 再度トグルで open でき、繰り返しトグル可能なこと
+      await user.click(screen.getByRole('button', { name: '候補を表示' }));
+      expect(input).toHaveAttribute('aria-expanded', 'true');
+      expect(getListbox()).toHaveStyle({ visibility: 'visible' });
+    });
   });
 
   describe('選択動作', () => {
