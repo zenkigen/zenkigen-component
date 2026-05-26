@@ -13,9 +13,10 @@ export const useOutsideClick = <T extends HTMLElement = HTMLElement>(
         return;
       }
 
-      const target = event.target as Node | null;
+      const target = event.target;
       // ref要素内のクリックは外部クリックと判定しない
-      if (target != null && Boolean(element.contains(target))) {
+      // contains() の戻り値は strict-boolean-expressions 対策で Boolean() で明示変換する
+      if (target instanceof Node && Boolean(element.contains(target))) {
         return;
       }
 
