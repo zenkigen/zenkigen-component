@@ -200,6 +200,13 @@ describe('Combobox', () => {
       expect(getListbox()).toHaveStyle({ visibility: 'hidden' });
     });
 
+    // これは「複数 Combobox を並べて他方のトグルを押すと先に開いた側が閉じる」という
+    // ユーザー観点の正常系シナリオの確認。
+    // useOutsideClick の `isConnected` 早期 return 廃止に伴う回帰
+    //（再レンダリングで target が detach されたときの内側/外側判定）の本質的なガードは
+    // `hooks/use-outside-click.test.tsx` のフック単体テストが担う。
+    // jsdom + userEvent の同期ディスパッチでは svg の detach が再現されないため、
+    // この統合テスト単体ではバグの再現はできない点に注意。
     it('別の Combobox のトグルを押すと、先に開いていた Combobox が閉じる', async () => {
       const user = userEvent.setup();
       render(
