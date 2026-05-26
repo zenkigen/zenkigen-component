@@ -1,9 +1,18 @@
-export const CheckedIcon = () => {
+import clsx from 'clsx';
+
+type Props = {
+  size?: 'medium' | 'large';
+};
+
+export const CheckedIcon = ({ size = 'medium' }: Props) => {
   return (
     <svg
       viewBox="0 0 20 20"
       xmlns="http://www.w3.org/2000/svg"
-      className="absolute z-10 size-5 rounded-sm fill-iconOnColor hover:rounded-sm"
+      className={clsx('absolute z-10 rounded-sm fill-iconOnColor hover:rounded-sm', {
+        'size-5': size === 'medium',
+        'size-6': size === 'large',
+      })}
     >
       <path
         fillRule="evenodd"
