@@ -238,6 +238,62 @@ describe('Combobox', () => {
       await user.click(screen.getByRole('button', { name: 'outside' }));
       expect(getListbox()).toHaveStyle({ visibility: 'hidden' });
     });
+
+    // これは「複数 Combobox を並べて他方のトグルを押すと先に開いた側が閉じる」という
+    // ユーザー観点の正常系シナリオの確認。
+    // useOutsideClick の `isConnected` 早期 return 廃止に伴う回帰
+    //（再レンダリングで target が detach されたときの内側/外側判定）の本質的なガードは
+    // `hooks/use-outside-click.test.tsx` のフック単体テストが担う。
+    // jsdom + userEvent の同期ディスパッチでは svg の detach が再現されないため、
+    // この統合テスト単体ではバグの再現はできない点に注意。
+    it('別の Combobox のトグルを押すと、先に開いていた Combobox が閉じる', async () => {
+      const user = userEvent.setup();
+      render(
+        <div>
+          <ControlledCombobox />
+          <ControlledCombobox />
+        </div>,
+      );
+      const inputs = screen.getAllByRole('combobox') as HTMLInputElement[];
+      const listboxes = screen.getAllByRole('listbox', { hidden: true });
+      const toggles = screen.getAllByRole('button', { name: '候補を表示' });
+
+      await user.click(toggles[0]!);
+      expect(inputs[0]).toHaveAttribute('aria-expanded', 'true');
+      expect(listboxes[0]).toHaveStyle({ visibility: 'visible' });
+
+      await user.click(toggles[1]!);
+      expect(inputs[0]).toHaveAttribute('aria-expanded', 'false');
+      expect(listboxes[0]).toHaveStyle({ visibility: 'hidden' });
+      expect(inputs[1]).toHaveAttribute('aria-expanded', 'true');
+      expect(listboxes[1]).toHaveStyle({ visibility: 'visible' });
+    });
+
+    // useOutsideClick の `isConnected` 早期 return を廃止したことで最も再発を警戒すべきは、
+    // 「自身のトグル押下時に icon の svg が再レンダリングで detach され、誤って外部クリック扱いになり
+    // 開いた直後に閉じてしまう」回帰（過去に PR #543 で `isConnected` を入れて直したバグ）。
+    // composedPath による内側判定でこれが防がれていることを結合レベルで担保する。
+    // （フック単体の本質的ガードは `hooks/use-outside-click.test.tsx` 側）
+    it('自身のトグルを押すと開閉が交互に切り替わり、開いた直後に即閉じしない', async () => {
+      const user = userEvent.setup();
+      render(<ControlledCombobox />);
+      const input = getCombobox();
+
+      // 1回目: トグルで open し、外部クリック誤検出で即閉じしないこと
+      await user.click(screen.getByRole('button', { name: '候補を表示' }));
+      expect(input).toHaveAttribute('aria-expanded', 'true');
+      expect(getListbox()).toHaveStyle({ visibility: 'visible' });
+
+      // 2回目: トグルで close すること
+      await user.click(screen.getByRole('button', { name: '候補を閉じる' }));
+      expect(input).toHaveAttribute('aria-expanded', 'false');
+      expect(getListbox()).toHaveStyle({ visibility: 'hidden' });
+
+      // 3回目: 再度トグルで open でき、繰り返しトグル可能なこと
+      await user.click(screen.getByRole('button', { name: '候補を表示' }));
+      expect(input).toHaveAttribute('aria-expanded', 'true');
+      expect(getListbox()).toHaveStyle({ visibility: 'visible' });
+    });
   });
 
   describe('選択動作', () => {
