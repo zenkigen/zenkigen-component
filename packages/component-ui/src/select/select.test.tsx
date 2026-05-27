@@ -210,6 +210,63 @@ describe('Select', () => {
     });
   });
 
+  describe('オプションリストの item 高さ', () => {
+    it('largeサイズではオプションの高さが h-10 になること', () => {
+      render(<SelectTestComponent size="large" />);
+      const selectButton = screen.getByRole('button');
+
+      fireEvent.click(selectButton);
+
+      const optionButton = screen.getByText('選択肢A').closest('button');
+      expect(optionButton).toHaveClass('h-10');
+      expect(optionButton).not.toHaveClass('h-8');
+    });
+
+    it('mediumサイズ（デフォルト）ではオプションの高さが h-8 になること', () => {
+      render(<SelectTestComponent />);
+      const selectButton = screen.getByRole('button');
+
+      fireEvent.click(selectButton);
+
+      const optionButton = screen.getByText('選択肢A').closest('button');
+      expect(optionButton).toHaveClass('h-8');
+      expect(optionButton).not.toHaveClass('h-10');
+    });
+
+    it('smallサイズではオプションの高さが h-8 のまま維持されること', () => {
+      render(<SelectTestComponent size="small" />);
+      const selectButton = screen.getByRole('button');
+
+      fireEvent.click(selectButton);
+
+      const optionButton = screen.getByText('選択肢A').closest('button');
+      expect(optionButton).toHaveClass('h-8');
+      expect(optionButton).not.toHaveClass('h-10');
+    });
+
+    it('largeサイズでは選択解除ボタンの高さが h-10 になること', () => {
+      render(<SelectTestComponent size="large" placeholder="選択" initialOption={testOptions[1]} />);
+      const selectButton = screen.getByRole('button');
+
+      fireEvent.click(selectButton);
+
+      const deselectButton = screen.getByText('選択解除').closest('button');
+      expect(deselectButton).toHaveClass('h-10');
+      expect(deselectButton).not.toHaveClass('h-8');
+    });
+
+    it('mediumサイズでは選択解除ボタンの高さが h-8 のまま維持されること', () => {
+      render(<SelectTestComponent placeholder="選択" initialOption={testOptions[1]} />);
+      const selectButton = screen.getByRole('button');
+
+      fireEvent.click(selectButton);
+
+      const deselectButton = screen.getByText('選択解除').closest('button');
+      expect(deselectButton).toHaveClass('h-8');
+      expect(deselectButton).not.toHaveClass('h-10');
+    });
+  });
+
   describe('バリアント', () => {
     it('outlineバリアント（デフォルト）でボーダーが表示されること', () => {
       render(<SelectTestComponent />);

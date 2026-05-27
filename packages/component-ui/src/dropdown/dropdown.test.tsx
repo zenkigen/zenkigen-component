@@ -29,4 +29,54 @@ describe('Dropdown', () => {
       });
     });
   });
+
+  describe('メニュー item の高さ', () => {
+    it('largeサイズでは item の高さが h-10 になること', () => {
+      render(
+        <Dropdown label="メニュー" size="large">
+          <Dropdown.Menu>
+            <Dropdown.Item>項目1</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>,
+      );
+
+      fireEvent.click(screen.getByRole('button', { name: /メニュー/ }));
+
+      const itemButton = screen.getByText('項目1').closest('button');
+      expect(itemButton).toHaveClass('h-10');
+      expect(itemButton).not.toHaveClass('h-8');
+    });
+
+    it('mediumサイズ（デフォルト）では item の高さが h-8 になること', () => {
+      render(
+        <Dropdown label="メニュー">
+          <Dropdown.Menu>
+            <Dropdown.Item>項目1</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>,
+      );
+
+      fireEvent.click(screen.getByRole('button', { name: /メニュー/ }));
+
+      const itemButton = screen.getByText('項目1').closest('button');
+      expect(itemButton).toHaveClass('h-8');
+      expect(itemButton).not.toHaveClass('h-10');
+    });
+
+    it('smallサイズでは item の高さが h-8 のまま維持されること', () => {
+      render(
+        <Dropdown label="メニュー" size="small">
+          <Dropdown.Menu>
+            <Dropdown.Item>項目1</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>,
+      );
+
+      fireEvent.click(screen.getByRole('button', { name: /メニュー/ }));
+
+      const itemButton = screen.getByText('項目1').closest('button');
+      expect(itemButton).toHaveClass('h-8');
+      expect(itemButton).not.toHaveClass('h-10');
+    });
+  });
 });
