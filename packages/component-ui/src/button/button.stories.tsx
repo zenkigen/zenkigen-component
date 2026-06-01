@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useEffect, useState } from 'react';
 
 import { Icon } from '../icon';
+import { Loading } from '../loading';
 import { Button } from '.';
 
 const meta: Meta<typeof Button> = {
@@ -326,3 +328,118 @@ export const Text: Story = {
     </div>
   ),
 };
+
+export const WithLoading: Story = {
+  parameters: {
+    chromatic: { disable: true },
+  },
+  render: () => (
+    <div className="flex flex-col gap-6 p-4">
+      <section className="flex flex-col gap-2">
+        <div>
+          <div className="flex items-center gap-2">
+            <Button size="small" variant="outline" before={<Icon name="download" size="small" />}>
+              ダウンロード
+            </Button>
+            <Button
+              size="small"
+              variant="outline"
+              before={
+                <div className="w-6">
+                  <Loading position="static" size="small" height="auto" />
+                </div>
+              }
+              isDisabled
+            >
+              ダウンロード中
+            </Button>
+          </div>
+        </div>
+        <div>
+          <div className="flex items-center gap-2">
+            <Button size="medium" variant="outline" before={<Icon name="download" size="small" />}>
+              ダウンロード
+            </Button>
+            <Button
+              size="medium"
+              variant="outline"
+              before={
+                <div className="w-6">
+                  <Loading position="static" size="small" height="auto" />
+                </div>
+              }
+              isDisabled
+            >
+              ダウンロード中
+            </Button>
+          </div>
+        </div>
+        <div>
+          <div className="flex items-center gap-2">
+            <Button size="large" variant="outline" before={<Icon name="download" size="medium" />}>
+              ダウンロード
+            </Button>
+            <Button
+              size="large"
+              variant="outline"
+              before={
+                <div className="w-6">
+                  <Loading position="static" size="small" height="auto" />
+                </div>
+              }
+              isDisabled
+            >
+              ダウンロード中
+            </Button>
+          </div>
+        </div>
+      </section>
+      <hr />
+      <section className="flex flex-col gap-2">
+        <p className="typography-body12regular text-text02">
+          クリックすると 2 秒間「ダウンロード中」になり、その後元に戻ります。
+        </p>
+        <div className="flex flex-col items-start gap-2">
+          <DownloadButtonDemo size="small" />
+          <DownloadButtonDemo size="medium" />
+          <DownloadButtonDemo size="large" />
+        </div>
+      </section>
+    </div>
+  ),
+};
+
+function DownloadButtonDemo({ size }: { size: 'small' | 'medium' | 'large' }) {
+  const [isDownloading, setIsDownloading] = useState(false);
+
+  useEffect(() => {
+    if (!isDownloading) return;
+    const timer = setTimeout(() => setIsDownloading(false), 2000);
+
+    return () => clearTimeout(timer);
+  }, [isDownloading]);
+
+  const handleClick = () => {
+    setIsDownloading(true);
+  };
+
+  return (
+    <Button
+      size={size}
+      variant="outline"
+      isDisabled={isDownloading}
+      onClick={handleClick}
+      before={
+        isDownloading ? (
+          <div className="w-6">
+            <Loading position="static" size="small" height="auto" />
+          </div>
+        ) : (
+          <Icon name="download" size={size === 'large' ? 'medium' : 'small'} />
+        )
+      }
+    >
+      {isDownloading ? 'ダウンロード中' : 'ダウンロード'}
+    </Button>
+  );
+}
