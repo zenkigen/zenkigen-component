@@ -1,0 +1,99 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/addon-docs/blocks';
+import { Markdown } from '@storybook/addon-docs/blocks';
+import AvatarGroupStories, { Component, Base } from './avatar-group.stories';
+import spec from '../../../../docs/component/avatar-group-specification.md?raw';
+
+<Meta title="AvatarGroup" of={AvatarGroupStories} />
+
+# AvatarGroup
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
+
+<Canvas>
+  <Story of={Component} />
+</Canvas>
+
+<Controls of={Component} />
+
+## 概要
+
+複数のアバターを水平に重ねて表示するためのコンポーネントです。
+`Avatar` コンポーネントと組み合わせて使用します。`max` を超えた場合は自動的に `+N` バッジが表示されます。
+
+## 基本的な使い方
+
+```tsx
+<AvatarGroup max={5} size="medium">
+  <Avatar userId={1} firstName="太郎" lastName="田中" />
+  <Avatar userId={2} firstName="花子" lastName="鈴木" />
+  {/* 6人以上なら自動で +N が末尾に表示される */}
+</AvatarGroup>
+```
+
+## 大量データ（`total` prop で +N 自動計算）
+
+サーバーから取得した件数を `total` prop に渡すと、`total - max` が自動で `+N` として表示されます。
+
+```tsx
+<AvatarGroup size="small" max={5} total={1000}>
+  {users.slice(0, 5).map((user) => (
+    <Avatar key={user.id} userId={user.id} firstName={user.firstName} lastName={user.lastName} />
+  ))}
+</AvatarGroup>
+// → 表示: 5つの Avatar + "+995"
+```
+
+## `renderSurplus` で +N バッジをカスタマイズ
+
+`renderSurplus` prop を使うと、`+N` バッジ自体を差し替えたり、Tooltip などで装飾したりできます。
+`defaultBadge` には既定のスタイル付きバッジが渡されるので、そのまま流用することもできます。
+
+```tsx
+<AvatarGroup
+  max={4}
+  renderSurplus={({ defaultBadge, remain }) => (
+    <Tooltip content={`他${remain}名`} verticalPosition="top" portalTarget={document.body}>
+      {defaultBadge}
+    </Tooltip>
+  )}
+>
+  {users.map((u) => (
+    <Avatar key={u.id} userId={u.id} firstName={u.firstName} lastName={u.lastName} />
+  ))}
+</AvatarGroup>
+```
+
+総数を表示したいときは `renderSurplus` で `total` を描画します。
+
+```tsx
+<AvatarGroup max={4} renderSurplus={({ total }) => <span>{total}</span>}>
+  {/* ... */}
+</AvatarGroup>
+```
+
+## 各 Avatar に Tooltip を付与する
+
+`<Tooltip><Avatar /></Tooltip>` を children に直接入れられます。
+新設計ではラッパ要素の有無に関わらず、`max` / 並び順 / +N 計算が正しく動作します。
+
+```tsx
+<AvatarGroup max={4} size="small">
+  {users.map((user) => (
+    <Tooltip key={user.id} content={`${user.lastName} ${user.firstName}`}>
+      <Avatar userId={user.id} firstName={user.firstName} lastName={user.lastName} />
+    </Tooltip>
+  ))}
+</AvatarGroup>
+```
+
+## すべてのバリエーション
+
+<Canvas>
+  <Story of={Base} />
+</Canvas>
