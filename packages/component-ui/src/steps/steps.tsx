@@ -60,7 +60,7 @@ function collectStepsItems(children: ReactNode): ReactElement<StepsItemProps>[] 
 function StepsRoot({
   children,
   currentStep,
-  initialCurrentStep,
+  defaultCurrentStep,
   size = 'medium',
   orientation = 'horizontal',
   textOrientation = 'horizontal',
@@ -68,7 +68,7 @@ function StepsRoot({
   'aria-label': ariaLabel,
 }: StepsProps) {
   const baseId = useId();
-  const [internalStep] = useState<number>(initialCurrentStep ?? 0);
+  const [internalStep] = useState<number>(defaultCurrentStep ?? 0);
   const resolvedCurrentStep = currentStep ?? internalStep;
 
   const itemElements = useMemo(() => collectStepsItems(children), [children]);
