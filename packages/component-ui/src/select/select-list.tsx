@@ -10,7 +10,7 @@ type Props = {
 };
 
 export const SelectList = forwardRef<HTMLUListElement, PropsWithChildren<Props>>(({ children, maxHeight }, ref) => {
-  const { selectedOption, setIsOptionListOpen, variant, placeholder, onChange, floatingStyles, floatingRef } =
+  const { selectedOption, setIsOptionListOpen, variant, placeholder, onChange, floatingStyles, floatingRef, size } =
     useContext(SelectContext);
 
   const handleClickDeselect = () => {
@@ -48,8 +48,12 @@ export const SelectList = forwardRef<HTMLUListElement, PropsWithChildren<Props>>
   });
 
   const deselectButtonClasses = clsx(
-    'typography-label14regular flex h-8 w-full items-center px-3 text-interactive02 hover:bg-hover02 active:bg-active02',
+    'typography-label14regular flex w-full items-center px-3 text-interactive02 hover:bg-hover02 active:bg-active02',
     focusVisible.inset,
+    {
+      'h-8': size !== 'large',
+      'h-10': size === 'large',
+    },
   );
 
   return (

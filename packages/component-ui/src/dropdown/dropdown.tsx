@@ -125,7 +125,7 @@ export function Dropdown({
 
   return (
     <DropdownContext.Provider
-      value={{ isVisible, setIsVisible, isDisabled, targetDimensions, variant, portalTargetRef }}
+      value={{ isVisible, setIsVisible, isDisabled, targetDimensions, variant, size, portalTargetRef }}
     >
       <div ref={targetRef} className={wrapperClasses}>
         {target ? (

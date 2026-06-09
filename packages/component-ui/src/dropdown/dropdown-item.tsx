@@ -14,15 +14,17 @@ type Props = {
 };
 
 export function DropdownItem({ children, color = 'gray', onClick }: PropsWithChildren<Props>) {
-  const { setIsVisible } = useContext(DropdownContext);
+  const { setIsVisible, size } = useContext(DropdownContext);
   const handleClickItem = (event: MouseEvent<HTMLButtonElement>) => {
     setIsVisible(false);
     onClick?.(event);
   };
   const itemClasses = clsx(
-    'typography-label14regular flex h-8 w-full items-center px-3 hover:bg-hover02 active:bg-active02',
+    'typography-label14regular flex w-full items-center px-3 hover:bg-hover02 active:bg-active02',
     focusVisible.inset,
     {
+      'h-8': size !== 'large',
+      'h-10': size === 'large',
       'bg-uiBackground01 fill-icon01 text-interactive02': color === 'gray',
       'fill-supportDanger text-supportDanger': color === 'red',
     },

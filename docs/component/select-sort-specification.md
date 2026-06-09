@@ -125,8 +125,8 @@ export const SortableHeader = () => {
 ### その他のスタイル仕様
 
 - ドロップダウン本体 (`SelectList`) は `absolute` でラッパー直下に重ね、`z-dropdown` と `shadow-floatingShadow` を付与する。`variant === 'outline'` の場合はボーダーが付く。
-- 選択肢 (`SelectItem`) は `li > button` 構造で `focusVisible.inset` を共有し、選択中は `bg-selectedUi` と `Icon name="check"` を表示する。
-- 「選択解除」ボタンは `typography-label14regular` の行高 32px (`h-8`) で、ホバー/アクティブ時に `hover:bg-hover02` / `active:bg-active02` を適用する。
+- 選択肢 (`SelectItem`) は `li > button` 構造で `focusVisible.inset` を共有し、選択中は `bg-selectedUi` と `Icon name="check"` を表示する。item の高さは `size` に追従し、`size='large'` で `h-10`（40px）、それ以外（`x-small`/`small`/`medium`）では `h-8`（32px）となる。
+- 「選択解除」ボタンは `typography-label14regular` で、行高は選択肢と揃え `size='large'` で `h-10`（40px）・それ以外で `h-8`（32px）とし、ホバー/アクティブ時に `hover:bg-hover02` / `active:bg-active02` を適用する。
 
 ## 使用例
 
