@@ -63,6 +63,23 @@ describe('TextInput', () => {
       expect(input.className).toMatch(/min-h-10/);
       expect(input.className).toMatch(/px-3/);
     });
+
+    it('x-largeサイズのスタイルが適用されること', () => {
+      render(<TextInput value="" size="x-large" readOnly data-testid="text-input" />);
+      const input = screen.getByTestId('text-input');
+
+      expect(input.className).toMatch(/typography-label16regular/);
+      expect(input.className).toMatch(/min-h-12/);
+      expect(input.className).toMatch(/px-3/);
+    });
+
+    it('x-largeサイズかつvariant="text"のとき padding がないこと', () => {
+      render(<TextInput value="" size="x-large" variant="text" readOnly data-testid="text-input" />);
+      const input = screen.getByTestId('text-input');
+
+      expect(input.className).toMatch(/min-h-12/);
+      expect(input.className).not.toMatch(/px-3/);
+    });
   });
 
   describe('状態管理', () => {
@@ -364,6 +381,36 @@ describe('TextInput', () => {
 
       const input = screen.getByRole('textbox');
       expect(input).toHaveAttribute('aria-invalid', 'true');
+    });
+
+    it('size="large" の HelperMessage に label13regular が適用されること', () => {
+      render(
+        <TextInput value="abc" size="large" onChange={() => {}}>
+          <TextInput.HelperMessage data-testid="helper">ヘルプ</TextInput.HelperMessage>
+        </TextInput>,
+      );
+
+      expect(screen.getByTestId('helper').className).toMatch(/typography-label13regular/);
+    });
+
+    it('size="x-large" の HelperMessage に label13regular が適用されること', () => {
+      render(
+        <TextInput value="abc" size="x-large" onChange={() => {}}>
+          <TextInput.HelperMessage data-testid="helper">ヘルプ</TextInput.HelperMessage>
+        </TextInput>,
+      );
+
+      expect(screen.getByTestId('helper').className).toMatch(/typography-label13regular/);
+    });
+
+    it('size="x-large" の ErrorMessage に label13regular が適用されること', () => {
+      render(
+        <TextInput value="abc" size="x-large" isError onChange={() => {}}>
+          <TextInput.ErrorMessage data-testid="error">エラー</TextInput.ErrorMessage>
+        </TextInput>,
+      );
+
+      expect(screen.getByTestId('error').className).toMatch(/typography-label13regular/);
     });
 
     it('ErrorMessage/HelperMessage を指定しても after 要素（クリアボタン）が表示されること', () => {
