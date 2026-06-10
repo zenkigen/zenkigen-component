@@ -26,22 +26,20 @@ npm install @zenkigen-inc/component-ui @zenkigen-inc/component-config
 yarn add @zenkigen-inc/component-ui @zenkigen-inc/component-config
 ```
 
-### 2. Tailwind CSSの設定
+### 2. Tailwind CSS（v4）の設定
 
-`tailwind.config.js` に以下の設定を追加してください：
+**Tailwind CSS v4 が必須です。** CSS エントリ（例: `src/app/globals.css`）に以下を追加してください：
 
-```js
-module.exports = {
-  content: [
-    // 既存の設定...
-    './node_modules/@zenkigen-inc/**/*.{js,ts,tsx}',
-  ],
-  presets: [
-    // 既存のプリセット...
-    require('@zenkigen-inc/component-config'),
-  ],
-};
+```css
+@import 'tailwindcss';
+@import '@zenkigen-inc/component-config/styles';
+
+/* zenkigen-component の動的クラスを検出（globals.css から node_modules への相対パス。モノレポ/単体で異なる） */
+@source '../../node_modules/@zenkigen-inc/component-theme/dist/**/*.mjs';
+@source '../../node_modules/@zenkigen-inc/component-ui/dist/**/*.mjs';
 ```
+
+PostCSS プラグインは `@tailwindcss/postcss` を使用します（`autoprefixer` は不要）。`tailwind.config.js` の `presets` / `content` は不要になりました（v4 は CSS-first + 自動検出）。
 
 ## 基本的な使い方
 
