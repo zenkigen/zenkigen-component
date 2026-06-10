@@ -347,7 +347,9 @@ describe('Combobox', () => {
       const user = userEvent.setup();
       render(<ControlledCombobox />);
       const input = getCombobox();
-      input.focus();
+      act(() => {
+        input.focus();
+      });
       // focus で open してしまうので、一旦 Escape で閉じる
       await user.keyboard('{Escape}');
       expect(getListbox()).toHaveStyle({ visibility: 'hidden' });
