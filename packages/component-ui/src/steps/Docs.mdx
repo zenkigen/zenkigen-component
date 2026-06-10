@@ -1,0 +1,21 @@
+import { Canvas, Controls, Markdown, Meta, Source, Story } from '@storybook/addon-docs/blocks';
+import StepsStories, { SolidHorizontal, Component } from './steps.stories';
+import spec from '../../../../docs/component/steps-specification.md?raw';
+
+<Meta title="Steps" of={StepsStories} />
+
+# Steps
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
+
+<Canvas>
+  <Story of={SolidHorizontal} />
+</Canvas>
+
+<Controls of={Component} />
