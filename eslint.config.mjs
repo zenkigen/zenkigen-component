@@ -67,9 +67,16 @@ export default [
       react: {
         version: 'detect',
       },
+      // Tailwind v4 は CSS-first（tailwind.config.js なし）のため、テーマを解決する CSS エントリを指定する。
+      // eslint-plugin-tailwindcss の worker は相対パスを解決できないため、絶対パスで渡す。
+      tailwindcss: {
+        config: path.join(dirname, 'tailwind.css'),
+      },
     },
 
     rules: {
+      // Tailwind v4 の classnames-order は v3 と正規順が異なり大量の差分を生むため無効化（no-custom-classname の検証は維持）
+      'tailwindcss/classnames-order': 'off',
       'no-console': 'error',
       'no-alert': 'error',
       'no-undefined': 'error',

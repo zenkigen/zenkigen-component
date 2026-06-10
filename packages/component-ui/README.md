@@ -15,19 +15,18 @@
 yarn add @zenkigen-inc/component-ui @zenkigen-inc/component-config
 ```
 
-Tailwind CSSの設定に以下を追加する。
+**Tailwind CSS v4 が必須です。** CSS エントリ（例: `globals.css`）に以下を追加する。
 
-```diff
-{
+```css
+@import 'tailwindcss';
+@import '@zenkigen-inc/component-config/styles';
 
-  content: [
-+ './node_modules/@zenkigen-inc/**/*.{js,ts,tsx}',
-  ],
-  presets: [
-+    require('@zenkigen-inc/component-config')
-  ],
-}
+/* zenkigen-component の動的クラスを検出（パスは globals.css から node_modules への相対パス。アプリ構成依存） */
+@source '../../node_modules/@zenkigen-inc/component-theme/dist/**/*.mjs';
+@source '../../node_modules/@zenkigen-inc/component-ui/dist/**/*.mjs';
 ```
+
+PostCSS プラグインは `@tailwindcss/postcss` を使用する（`autoprefixer` は不要）。v1.x（Tailwind v3 / JS preset）からの移行手順は移行ガイドを参照。
 
 ## 利用方法
 
