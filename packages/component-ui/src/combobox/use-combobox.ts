@@ -38,6 +38,12 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
   const baseId = useId();
   const listId = `${baseId}-list`;
 
+  // params を ref に退避し、コールバック群を params の identity 変化から切り離す。
+  // 毎レンダー新規の params に依存すると setIsOpen / selectValue / clearValue が毎回再生成され、
+  // Combobox の context value も毎回変わって全 consumer（全 Item）が再レンダーするのを防ぐ。
+  const paramsRef = useRef(params);
+  paramsRef.current = params;
+
   const isOpenControlled = params.isOpen != null;
   const [isOpenInternal, setIsOpenInternal] = useState(false);
   const isOpen = isOpenControlled ? params.isOpen === true : isOpenInternal;
@@ -47,9 +53,9 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
       if (!isOpenControlled) {
         setIsOpenInternal(next);
       }
-      params.onOpenChange?.(next);
+      paramsRef.current.onOpenChange?.(next);
     },
-    [isOpenControlled, params],
+    [isOpenControlled],
   );
 
   const [activeIndex, setActiveIndexState] = useState<number | null>(null);
@@ -59,10 +65,6 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
 
   // 現 active item の value を ref で保持（items 変更時に再引き当てるための source of truth）
   const activeValueRef = useRef<string | null>(null);
-
-  // params.value を ref で保持（useEffect 内で最新値を参照するため）
-  const valueRef = useRef(params.value);
-  valueRef.current = params.value;
 
   // open セッションごとの初期化済みフラグ
   const hasInitializedActiveRef = useRef(false);
@@ -136,7 +138,7 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
 
     if (!hasInitializedActiveRef.current) {
       // 初回（この open セッションの最初）: selectedValue 優先で初期化
-      const selectedIdx = items.findIndex((item) => item.value === valueRef.current && !item.isDisabled);
+      const selectedIdx = items.findIndex((item) => item.value === paramsRef.current.value && !item.isDisabled);
       if (selectedIdx !== -1) {
         setActiveIndexState(selectedIdx);
         activeValueRef.current = items[selectedIdx]?.value ?? null;
@@ -166,21 +168,21 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
 
   const selectValue = useCallback(
     (value: string, label: string) => {
-      params.onChange(value, { label });
-      params.onInputChange(label);
+      paramsRef.current.onChange(value, { label });
+      paramsRef.current.onInputChange(label);
       setIsOpen(false);
       // isOpen useEffect 側で activeIndex / activeValueRef / hasInitializedActiveRef は null/false にリセットされる
     },
-    [params, setIsOpen],
+    [setIsOpen],
   );
 
   const clearValue = useCallback(() => {
-    params.onChange(null, null);
-    params.onInputChange('');
+    paramsRef.current.onChange(null, null);
+    paramsRef.current.onInputChange('');
     setActiveIndexState(null);
     activeValueRef.current = null;
     inputRef.current?.focus();
-  }, [params]);
+  }, []);
 
   const moveActive = useCallback((direction: 'next' | 'prev') => {
     const currentItems = itemsRef.current;
@@ -214,7 +216,7 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent<HTMLInputElement>) => {
-      if (params.isDisabled === true) {
+      if (paramsRef.current.isDisabled === true) {
         return;
       }
 
@@ -281,7 +283,7 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
         }
       }
     },
-    [params.isDisabled, isOpen, activeIndex, items, moveActive, setIsOpen, selectValue],
+    [isOpen, activeIndex, items, moveActive, setIsOpen, selectValue],
   );
 
   return {
