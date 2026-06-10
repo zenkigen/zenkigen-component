@@ -48,6 +48,7 @@ function ControlledCombobox({
   listMaxHeight,
   extraChildren,
   onSelectionChange,
+  onOpenChange,
 }: {
   items?: Fruit[];
   initialValue?: string | null;
@@ -58,6 +59,7 @@ function ControlledCombobox({
   listMaxHeight?: string | number;
   extraChildren?: ReactNode;
   onSelectionChange?: (value: string | null) => void;
+  onOpenChange?: (isOpen: boolean) => void;
 }) {
   const [value, setValue] = useState<string | null>(initialValue);
   const [inputValue, setInputValue] = useState(initialInputValue);
@@ -81,6 +83,7 @@ function ControlledCombobox({
       }}
       inputValue={inputValue}
       onInputChange={setInputValue}
+      onOpenChange={onOpenChange}
       isError={isError}
       isDisabled={isDisabled}
       listMaxHeight={listMaxHeight}
@@ -252,6 +255,22 @@ describe('Combobox', () => {
       expect(getCombobox()).toHaveValue('みかん');
       expect(onSelectionChange).toHaveBeenCalledWith('orange');
       expect(getListbox()).toHaveStyle({ visibility: 'hidden' });
+    });
+
+    it('option 選択時に onOpenChange(false) が二重発火しない', async () => {
+      const user = userEvent.setup();
+      const onOpenChange = vi.fn();
+      render(<ControlledCombobox onOpenChange={onOpenChange} />);
+
+      await user.click(getCombobox());
+      onOpenChange.mockClear();
+
+      await user.click(getOption('みかん'));
+
+      // 候補リストは FloatingPortal 経由で描画されるため、option クリックを「外部クリック」と
+      // 誤判定すると onClick 経由と outside-click で onOpenChange(false) が二重に飛ぶ。1 回だけを保証する。
+      expect(onOpenChange).toHaveBeenCalledTimes(1);
+      expect(onOpenChange).toHaveBeenCalledWith(false);
     });
 
     it('Enter で active の項目が選択される', async () => {

@@ -56,7 +56,6 @@ function ComboboxBase({
   });
 
   const wrapperRef = useRef<HTMLDivElement>(null);
-  useOutsideClick(wrapperRef, () => combobox.setIsOpen(false));
 
   // Combobox.List 直下の openable content (Item / Loading / Empty) の有無。
   // List から setHasOpenableContent を経由して同期される。
@@ -131,9 +130,29 @@ function ComboboxBase({
     [combobox.inputRef],
   );
 
+  // floating element（候補リスト wrapper）を outside-click 判定で参照するため自前 ref にも保持する。
+  const listElementRef = useRef<HTMLDivElement | null>(null);
   const setListRef = useCallback((node: HTMLDivElement | null) => {
+    listElementRef.current = node;
     refsRef.current.setFloating(node);
   }, []);
+
+  // 候補リストは FloatingPortal で wrapperRef の外（floating 要素配下）に描画される。
+  // option 選択クリックを「外部クリック」と誤判定すると、option の onClick 経由の
+  // setIsOpen(false) と二重に走り onOpenChange が 2 回飛ぶため、floating 要素内は除外する。
+  const { setIsOpen } = combobox;
+  const handleOutsideClick = useCallback(
+    (event: Event) => {
+      const floatingElement = listElementRef.current;
+      const target = event.target;
+      if (floatingElement != null && target instanceof Node && Boolean(floatingElement.contains(target))) {
+        return;
+      }
+      setIsOpen(false);
+    },
+    [setIsOpen],
+  );
+  useOutsideClick(wrapperRef, handleOutsideClick);
 
   return (
     <ComboboxContextProvider
