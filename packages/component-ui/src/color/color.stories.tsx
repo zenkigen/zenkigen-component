@@ -12,6 +12,56 @@ const version = 2;
 export default meta;
 type Story = StoryObj;
 
+// --- カラートークン棚卸し（docs/research/color-token-consolidation.md）の確認用マーキング。棚卸し完了後に削除予定 ---
+
+// TRUE DEAD 16: library・利用側ともに実装で未使用 → 削除候補（赤✕）
+const deletionCandidates = new Set([
+  'link02',
+  'hoverLink01',
+  'hoverLink02',
+  'activeLink01',
+  'disabledLink01',
+  'disabledLink02',
+  'fieldInput',
+  'fieldSearch',
+  'interactiveBg01',
+  'hover02Background',
+  'hoverSelectedUi',
+  'selectedUiGray',
+  'selectedUiOnColor',
+  'backgroundOverlayGray',
+  'interactive03',
+  'disabled04',
+]);
+
+// Tier 2 (24): library 実装でのみ使用 → 集約（統合）候補（橙△）。統合可否はデザイン意図の個別判断
+const consolidationCandidates = new Set([
+  'uiBorder03',
+  'uiBorder04',
+  'uiBackgroundWarning',
+  'uiBackgroundTooltip',
+  'interactive04',
+  'focus',
+  'hoverUi02',
+  'hoverUiBorder',
+  'hoverError',
+  'hoverGray',
+  'hoverInput',
+  'hoverUiError',
+  'active01',
+  'active02',
+  'activeLink02',
+  'activeInput',
+  'activeUiError',
+  'disabledOn',
+  'disabled02',
+  'supportErrorLight',
+  'supportSuccessLight',
+  'supportWarningLight',
+  'supportInfoLight',
+  'supportDangerLight',
+]);
+
 function ColorItem({ colorKey, value }: { colorKey: string; value: string }) {
   const [isCopiedName, setCopiedName] = useState(false);
   const [isCopiedValue, setCopiedValue] = useState(false);
@@ -36,10 +86,35 @@ function ColorItem({ colorKey, value }: { colorKey: string; value: string }) {
     }
   };
 
+  const isDeletionCandidate = deletionCandidates.has(colorKey);
+  const isConsolidationCandidate = consolidationCandidates.has(colorKey);
+
   return (
     <div className="flex shrink-0 flex-col gap-2">
-      <div className="w-full" style={{ backgroundColor: value, height: 170 }} />
+      <div className="relative w-full" style={{ height: 170 }}>
+        <div className="size-full" style={{ backgroundColor: value }} />
+        {isDeletionCandidate && (
+          <div
+            className="absolute inset-0 flex items-center justify-center"
+            style={{ backgroundColor: 'rgba(255, 255, 255, 0.6)' }}
+          >
+            <span style={{ color: '#d92b57', fontSize: 120, fontWeight: 'bold', lineHeight: 1 }}>✕</span>
+          </div>
+        )}
+        {isConsolidationCandidate && (
+          <div
+            className="absolute inset-0 flex items-center justify-center"
+            style={{ backgroundColor: 'rgba(255, 255, 255, 0.4)' }}
+          >
+            <span style={{ color: '#d97706', fontSize: 100, fontWeight: 'bold', lineHeight: 1 }}>△</span>
+          </div>
+        )}
+      </div>
       <div className="flex flex-col gap-0 pr-1 text-left text-xs" style={{ minWidth: 170 }}>
+        {isDeletionCandidate && <div style={{ color: '#d92b57', fontWeight: 'bold' }}>✕ 削除候補（未使用）</div>}
+        {isConsolidationCandidate && (
+          <div style={{ color: '#d97706', fontWeight: 'bold' }}>△ 統合候補（lib のみ使用）</div>
+        )}
         <div className="flex items-center">
           <div className="typography-label16bold">{colorKey}</div>
           <IconButton
