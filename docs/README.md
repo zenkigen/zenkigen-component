@@ -10,6 +10,7 @@
 - [コンポーネント実装パターン](./component-patterns.md) - コンポーネントの設計パターンと実装方針
 - [テーマシステム](./theme-system.md) - テーマシステムとTailwind CSS設定
 - [Storybook ガイドライン](./storybook-guidelines.md) - Story の作成・構成に関する規約
+- [リリース手順](./release-process.md) - npm publish の手順（version bump・タグ・CI publish・dist-tag）
 
 ## プロジェクト概要
 

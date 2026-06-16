@@ -144,4 +144,4 @@ component-theme
 1. **コンポーネント作成**: `yarn generate-component` コマンドを使用して雛形を生成
 2. **テスト**: Storybookを使用してコンポーネントをテスト
 3. **ビルド**: `yarn build` コマンドを使用してパッケージをビルド
-4. **公開**: `yarn publish:all` コマンドを使用してパッケージを公開
+4. **公開**: `v*` タグの push を起点に CI が npm publish する（詳細は[リリース手順](./release-process.md)を参照）
