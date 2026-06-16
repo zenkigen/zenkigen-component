@@ -18,7 +18,7 @@ const meta: Meta<typeof TextInput> = {
     },
     size: {
       control: 'radio',
-      options: ['medium', 'large'],
+      options: ['medium', 'large', 'x-large'],
       description: 'サイズ',
       table: { defaultValue: { summary: 'medium' } },
     },
@@ -346,6 +346,126 @@ export const Base: Story = {
             <ErrorText>クリアボタンなし</ErrorText>
           </div>
         </div>
+        {/* サイズ：x-large */}
+        <div style={{ width: 300 }} className="flex flex-col gap-10">
+          <div>
+            <TextInput
+              value={value}
+              placeholder="入力してください"
+              size="x-large"
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+              onClickClearButton={() => {
+                setValue('');
+              }}
+            />
+            <ErrorText>文字以内で入力してください</ErrorText>
+          </div>
+          <div>
+            <TextInput
+              value={value}
+              placeholder="入力してください"
+              size="x-large"
+              isError
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+              onClickClearButton={() => {
+                setValue('');
+              }}
+            />
+            <ErrorText isError>文字以内で入力してください</ErrorText>
+          </div>
+          <div>
+            <TextInput
+              value={value2}
+              placeholder="入力してください"
+              size="x-large"
+              isError
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                action('onChange')(e);
+                setValue2(e.target.value);
+              }}
+              onClickClearButton={() => {
+                setValue2('');
+              }}
+            />
+            <ErrorText isError>文字以内で入力してください</ErrorText>
+          </div>
+          <div>
+            <TextInput
+              value=""
+              placeholder="入力してください"
+              size="x-large"
+              isError
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                action('onChange')(e);
+                setValue2(e.target.value);
+              }}
+              onClickClearButton={() => {
+                setValue2('');
+              }}
+              disabled
+            />
+          </div>
+          <div>
+            <TextInput
+              value={value2}
+              placeholder="入力してください"
+              size="x-large"
+              disabled
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+              onClickClearButton={() => {
+                setValue('');
+              }}
+            />
+          </div>
+          <div>
+            <TextInput
+              value={valueNumber}
+              placeholder="入力してください"
+              size="x-large"
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                action('onChange')(e);
+                setValueNumber(e.target.value);
+              }}
+              type="number"
+            />
+          </div>
+          <div>
+            <TextInput
+              value={valuePassword}
+              placeholder="入力してください"
+              size="x-large"
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                action('onChange')(e);
+                setValuePassword(e.target.value);
+              }}
+              onClickClearButton={() => {
+                setValuePassword('');
+              }}
+              type="password"
+            />
+          </div>
+          <div>
+            <TextInput
+              value={value}
+              placeholder="入力してください"
+              size="x-large"
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                action('onChange')(e);
+                setValue(e.target.value);
+              }}
+            />
+            <ErrorText>クリアボタンなし</ErrorText>
+          </div>
+        </div>
       </div>
     );
   },
@@ -589,6 +709,100 @@ export const Composition: Story = {
             />
           </div>
         </div>
+        <div className={classNameLine}>
+          <div className={classNameCell}>
+            <TextInput
+              value={value}
+              placeholder="入力してください"
+              size="x-large"
+              onChange={handleChange(setValue)}
+              onClickClearButton={handleClear(setValue)}
+            >
+              <TextInput.HelperMessage>○文字以内で入力してください</TextInput.HelperMessage>
+            </TextInput>
+          </div>
+          <div className={classNameCell}>
+            <TextInput
+              value={value}
+              placeholder="入力してください"
+              size="x-large"
+              onChange={handleChange(setValue)}
+              onClickClearButton={handleClear(setValue)}
+            >
+              <TextInput.HelperMessage>
+                ○文字以内で入力してください ○文字以内で入力してください ○文字以内で入力してください
+              </TextInput.HelperMessage>
+              <TextInput.HelperMessage>○文字以内で入力してください</TextInput.HelperMessage>
+            </TextInput>
+          </div>
+          <div className={classNameCell}>
+            <TextInput
+              value={value}
+              placeholder="入力してください"
+              size="x-large"
+              isError
+              onChange={handleChange(setValue)}
+              onClickClearButton={handleClear(setValue)}
+            >
+              <TextInput.HelperMessage>○文字以内で入力してください</TextInput.HelperMessage>
+              <TextInput.ErrorMessage>入力内容にエラーがあります</TextInput.ErrorMessage>
+            </TextInput>
+          </div>
+          <div className={classNameCell}>
+            <TextInput
+              value={value}
+              placeholder="入力してください"
+              size="x-large"
+              isError
+              onChange={handleChange(setValue)}
+              onClickClearButton={handleClear(setValue)}
+            >
+              <TextInput.ErrorMessage>
+                入力内容にエラーがあります 入力内容にエラーがあります 入力内容にエラーがあります
+              </TextInput.ErrorMessage>
+              <TextInput.ErrorMessage>入力内容にエラーがあります</TextInput.ErrorMessage>
+            </TextInput>
+          </div>
+          <div className={classNameCell}>
+            <TextInput
+              value={value2}
+              placeholder="入力してください"
+              size="x-large"
+              isError
+              onChange={handleChange(setValue2)}
+              onClickClearButton={handleClear(setValue2)}
+            />
+          </div>
+          <div className={classNameCellS}>
+            <TextInput
+              value={value}
+              placeholder="入力してください"
+              size="x-large"
+              disabled
+              onChange={handleChange(setValue)}
+              onClickClearButton={handleClear(setValue)}
+            />
+          </div>
+          <div className={classNameCellS}>
+            <TextInput
+              value={value2}
+              placeholder="入力してください"
+              size="x-large"
+              disabled
+              onChange={handleChange(setValue2)}
+              onClickClearButton={handleClear(setValue2)}
+            />
+          </div>
+          <div className={classNameCellS}>
+            <TextInput
+              value={valueNumber}
+              placeholder="入力してください"
+              size="x-large"
+              type="number"
+              onChange={handleChange(setValueNumber)}
+            />
+          </div>
+        </div>
       </div>
     );
   },
@@ -816,6 +1030,108 @@ export const CompositionText: Story = {
               value={valueNumber}
               placeholder="入力してください"
               size="large"
+              variant="text"
+              type="number"
+              onChange={handleChange(setValueNumber)}
+            />
+          </div>
+        </div>
+        <div className={classNameLine}>
+          <div className={classNameCell}>
+            <TextInput
+              value={value}
+              placeholder="入力してください"
+              size="x-large"
+              variant="text"
+              onChange={handleChange(setValue)}
+              onClickClearButton={handleClear(setValue)}
+            >
+              <TextInput.HelperMessage>○文字以内で入力してください</TextInput.HelperMessage>
+            </TextInput>
+          </div>
+          <div className={classNameCell}>
+            <TextInput
+              value={value}
+              placeholder="入力してください"
+              size="x-large"
+              variant="text"
+              onChange={handleChange(setValue)}
+              onClickClearButton={handleClear(setValue)}
+            >
+              <TextInput.HelperMessage>
+                ○文字以内で入力してください ○文字以内で入力してください ○文字以内で入力してください
+              </TextInput.HelperMessage>
+              <TextInput.HelperMessage>○文字以内で入力してください</TextInput.HelperMessage>
+            </TextInput>
+          </div>
+          <div className={classNameCell}>
+            <TextInput
+              value={value}
+              placeholder="入力してください"
+              size="x-large"
+              variant="text"
+              isError
+              onChange={handleChange(setValue)}
+              onClickClearButton={handleClear(setValue)}
+            >
+              <TextInput.HelperMessage>○文字以内で入力してください</TextInput.HelperMessage>
+              <TextInput.ErrorMessage>入力内容にエラーがあります</TextInput.ErrorMessage>
+            </TextInput>
+          </div>
+          <div className={classNameCell}>
+            <TextInput
+              value={value}
+              placeholder="入力してください"
+              size="x-large"
+              variant="text"
+              isError
+              onChange={handleChange(setValue)}
+              onClickClearButton={handleClear(setValue)}
+            >
+              <TextInput.ErrorMessage>
+                入力内容にエラーがあります 入力内容にエラーがあります 入力内容にエラーがあります
+              </TextInput.ErrorMessage>
+              <TextInput.ErrorMessage>入力内容にエラーがあります</TextInput.ErrorMessage>
+            </TextInput>
+          </div>
+          <div className={classNameCell}>
+            <TextInput
+              value={value2}
+              placeholder="入力してください"
+              size="x-large"
+              variant="text"
+              isError
+              onChange={handleChange(setValue2)}
+              onClickClearButton={handleClear(setValue2)}
+            />
+          </div>
+          <div className={classNameCellS}>
+            <TextInput
+              value={value}
+              placeholder="入力してください"
+              size="x-large"
+              variant="text"
+              disabled
+              onChange={handleChange(setValue)}
+              onClickClearButton={handleClear(setValue)}
+            />
+          </div>
+          <div className={classNameCellS}>
+            <TextInput
+              value={value2}
+              placeholder="入力してください"
+              size="x-large"
+              variant="text"
+              disabled
+              onChange={handleChange(setValue2)}
+              onClickClearButton={handleClear(setValue2)}
+            />
+          </div>
+          <div className={classNameCellS}>
+            <TextInput
+              value={valueNumber}
+              placeholder="入力してください"
+              size="x-large"
               variant="text"
               type="number"
               onChange={handleChange(setValueNumber)}
