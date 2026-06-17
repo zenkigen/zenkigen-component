@@ -9,6 +9,8 @@
 - [バージョン同期ルール（重要）](#バージョン同期ルール重要)
 - [リリース手順（ステップ）](#リリース手順ステップ)
 - [具体例: 1.20.4 → 1.20.5 をリリースする](#具体例-1204--1205-をリリースする)
+- [dist-tag の判定ルール](#dist-tag-の判定ルール)
+- [プレリリースの公開（next dist-tag）](#プレリリースの公開next-dist-tag)
 - [publish 関連の設定](#publish-関連の設定)
 - [よくある落とし穴](#よくある落とし穴)
 
@@ -21,10 +23,12 @@ version bump + lockfile 更新（4 package.json + yarn.lock）
         ↓ commit（release: X.Y.Z）
 vX.Y.Z タグを作成・push
         ↓ publish.yaml が発火（on: push: tags: 'v*'）
-CI: yarn install → yarn build-lib:all → yarn publish:all
+CI: yarn install → yarn build-lib:all → yarn publish:all --tag <dist-tag>
         ↓
-npm に公開（dist-tag = latest）
+npm に公開（タグ名で dist-tag を判定: 安定版 → latest / プレリリース → next）
 ```
+
+dist-tag は**タグ名にハイフン（`-`）を含むか**で自動判定する（[dist-tag の判定ルール](#dist-tag-の判定ルール)）。通常の安定版リリース（`v1.20.5` 等、ハイフンなし）は従来どおり `latest` に公開されるため、**安定版のリリース手順・結果はこれまでと変わらない**。
 
 ## 公開対象パッケージ
 
@@ -64,8 +68,8 @@ npm に公開（dist-tag = latest）
 
 5. **CI publish（自動）**
    - `publish.yaml`（`on: push: tags: 'v*'`）が発火。
-   - `yarn install` → `yarn build-lib:all` → `yarn publish:all`。
-   - `publish:all` = `yarn workspaces foreach --all --exclude zenkigen-component npm publish`（**dist-tag 未指定 = latest**）。
+   - `yarn install` → `yarn build-lib:all` → `yarn publish:all --tag <dist-tag> --tolerate-republish`。
+   - `publish:all` = `yarn workspaces foreach --all --exclude zenkigen-component npm publish`。`--tag` は CI がタグ名から判定（安定版 → `latest` / プレリリース → `next`）。
 
 6. **確認**
    - `npm view @zenkigen-inc/component-ui version` で公開を確認。
@@ -99,6 +103,60 @@ git push origin v1.20.5                      # ← publish.yaml が発火
 npm view @zenkigen-inc/component-ui version  # 1.20.5 を確認
 ```
 
+## dist-tag の判定ルール
+
+publish.yaml はタグ名から npm の dist-tag を自動で決める。
+
+| タグ名の例      | ハイフン | dist-tag | 用途                                          |
+| --------------- | -------- | -------- | --------------------------------------------- |
+| `v1.20.5`       | なし     | `latest` | 通常の安定版リリース（`npm install` の既定）  |
+| `v2.0.0`        | なし     | `latest` | メジャー安定版リリース                        |
+| `v2.0.0-rc.0`   | あり     | `next`   | プレリリース（利用者は `@next` でオプトイン） |
+| `v2.0.0-beta.1` | あり     | `next`   | プレリリース                                  |
+
+判定ロジック（`publish.yaml` の `Determine npm dist-tag` step）:
+
+```bash
+if [[ "${GITHUB_REF_NAME}" == *-* ]]; then
+  echo "name=next"    # ハイフンを含む = プレリリース
+else
+  echo "name=latest"  # ハイフンなし = 安定版
+fi
+```
+
+- **安定版（ハイフンなし）は常に `latest`**。したがって既存の v1 リリースは手順・結果ともに従来どおりで、本仕組みの影響を受けない。
+- **プレリリース（ハイフンあり）は `next`**。`latest` を書き換えないため、安定版利用者を壊さずに先行版を並行公開できる。
+
+> ⚠️ 補足: この判定は「安定版か否か」だけを見る。将来 `latest` を別メジャー（例 v2）へ昇格させた後に旧メジャー（v1）の patch を出す場合、ハイフンなしタグは `latest` 判定になり昇格済みの `latest` を上書きしてしまう。その段階に至ったら、旧メジャーの保守リリースは手動 dist-tag（`legacy` 等）に切り替えるなど、別途運用を定める。現時点（v1 = `latest` 維持）では発生しない。
+
+## プレリリースの公開（next dist-tag）
+
+Tailwind v4 対応の v2 など、破壊的変更を含むメジャーを安定版より先に検証公開する場合の手順。`latest`（安定版利用者）を壊さないために `next` dist-tag を使う。
+
+### 手順
+
+安定版リリースとの違いは **version をプレリリース表記（ハイフン付き）にする**ことだけ。あとは同じ（version bump → `yarn install` → commit → tag push）。
+
+```bash
+# 例: 2.0.0-rc.0 を next で公開する
+# ① 4つの packages/*/package.json の version を "2.0.0-rc.0" に書き換え（手動編集）
+
+yarn install                                          # yarn.lock を更新
+git add packages/*/package.json yarn.lock
+git commit -m "release: 2.0.0-rc.0"
+git push origin <release ブランチ>
+
+git tag v2.0.0-rc.0
+git push origin v2.0.0-rc.0                           # ← publish.yaml が発火（ハイフンあり → next）
+
+# ② 確認
+npm dist-tag ls @zenkigen-inc/component-ui            # latest は据え置き / next=2.0.0-rc.0 を確認
+```
+
+- 反復は `2.0.0-rc.1`, `2.0.0-rc.2` … と version を上げて同様に。
+- 安定版へ昇格するときは、合意後に `-rc` を外した `2.0.0`（ハイフンなし）を tag すれば `latest` に公開される。
+- ⚠️ `.yarnrc.yml` の `npmMinimalAgeGate: '3d'` が効く環境では、公開直後3日間はそのバージョンの install がブロックされる（publish には無影響）。プレリリース検証時はこの待ち時間を考慮する。
+
 ## publish 関連の設定
 
 - `.github/workflows/publish.yaml`: `v*` タグ push で発火する CI。認証は `secrets.NPM_TOKEN`（`NODE_AUTH_TOKEN`）。
@@ -112,8 +170,11 @@ npm view @zenkigen-inc/component-ui version  # 1.20.5 を確認
   - `defaultSemverRangePrefix: ''` … `yarn add` 時のバージョンを exact 固定にする（`workspace:*` の publish 時変換結果も exact になる）。
 - 各 `package.json` の `publishConfig.access: public`。
 - パッケージマネージャ: `yarn@4.13.0`（Yarn Berry）。publish は `yarn npm publish` 実体。
-- **dist-tag**: 現状は `latest` のみ運用。`publish:all` は `--tag` 未指定で publish するため、release したバージョンに `latest`（= `npm install`（バージョン未指定）で入る既定を指すラベル）が付け替わる。
+- **dist-tag**: タグ名から自動判定する（[dist-tag の判定ルール](#dist-tag-の判定ルール)）。安定版（ハイフンなし）は `latest`、プレリリース（ハイフンあり）は `next`。`publish:all` には CI が `--tag <判定結果> --tolerate-republish` を付けて実行する。
+  - `--tolerate-republish`: `publish:all` は 4 パッケージを順次公開するため、途中で失敗して再実行すると公開済み version が `EPUBLISHCONFLICT` を起こす。これを許容し、未公開分のみ公開して 4 パッケージの version を揃えられるようにする。
 
 ## よくある落とし穴
 
 - **yarn.lock 更新漏れ**: package.json だけ更新して `yarn.lock` を更新しないと、CI の `yarn install`（GitHub Actions では `CI=true` により暗黙 immutable）が lockfile 不整合で失敗する。
+- **部分公開後の再実行**: `publish:all` の途中で失敗し一部パッケージだけ公開された状態で Actions を rerun すると、公開済み version が衝突して落ちる。`--tolerate-republish`（publish.yaml で付与済み）により公開済みは許容され未公開分のみ揃う。手動復旧する場合は `npm view <pkg> versions` で公開済みを確認し、未公開分だけ `yarn npm publish --tag <dist-tag>` する。
+- **プレリリースのつもりがハイフンを付け忘れ**: `v2.0.0`（ハイフンなし）で tag すると `latest` 判定になり安定版利用者に配信されてしまう。検証目的なら必ず `v2.0.0-rc.0` のようにハイフン付きにする。
