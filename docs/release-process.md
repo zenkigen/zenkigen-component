@@ -40,66 +40,43 @@ npm に公開（dist-tag = latest）
 ## バージョン同期ルール（重要）
 
 - **全パッケージの version を常に揃える**（部分的なバージョン更新はしない）。
-- 内部依存（`@zenkigen-inc/*`）は **固定バージョン文字列**で参照している（`workspace:*` ではない）。version を上げる際は **依存参照の version 文字列も同じ値に書き換える**。
-  - `component-config` → `component-theme`
-  - `component-ui` → `component-config` / `component-icons` / `component-theme`
-- version を変えたら **`yarn install` で `yarn.lock` を更新**し、同じコミットに含める（過去の `release:` コミットは 4 package.json + yarn.lock をセットで更新している）。
+- 内部依存（`@zenkigen-inc/*`）は **`workspace:*`** で参照している。Yarn が publish 時にその時点の version の exact 値へ自動変換する（`"workspace:*"` → `"1.20.5"`）ため、利用者が見る公開物は exact 固定になる。
+- version を変えたら **`yarn install` で `yarn.lock` を更新**し、同じコミットに含める。
 
 ## リリース手順（ステップ）
 
-> **ブランチ運用**: 機能開発・修正は PR 経由でマージするが、**リリース（version bump）コミットは `main` に直接 commit & push する**（PR を通さない）。タグはその release コミット自体に打つ。直近の `release: 1.20.4`（`1d836696`）も、マージコミットではなく main 直系に直接乗った単一コミットに `v1.20.4` タグが付いている。
+> **ブランチ運用**: 機能開発・修正は PR 経由でマージするが、**リリース（version bump）コミットは `main` に直接 commit & push する**（PR を通さない）。タグはその release コミット自体に打つ。
 
 1. **version bump**
-   - 4つの `packages/*/package.json` の `version` を新 version に更新。
-   - 各 package.json 内の内部依存（`@zenkigen-inc/*`）参照も同じ version に更新。
-   - 内部依存を持つのは `component-ui`（config / icons / theme の3つ）と `component-config`（theme の1つ）だけ。`component-icons` / `component-theme` は `version` 行のみ。
+   - 4つの `packages/*/package.json` の `version` 行を新 version に更新。
+
 2. **lockfile 更新**
    - `yarn install` を実行し `yarn.lock` の resolution を更新。
+
 3. **commit（main に直接）**
    - `main` 上で直接 commit する（PR を通さない）。
    - メッセージ形式: `release: X.Y.Z`
    - 対象: 4 package.json ＋ yarn.lock
+
 4. **push ＆ タグ作成・push**
    - `git push origin main` で release コミットを push。
    - `git tag vX.Y.Z` → `git push origin vX.Y.Z`（このタグ push が publish.yaml を発火させる）。
+
 5. **CI publish（自動）**
    - `publish.yaml`（`on: push: tags: 'v*'`）が発火。
    - `yarn install` → `yarn build-lib:all` → `yarn publish:all`。
    - `publish:all` = `yarn workspaces foreach --all --exclude zenkigen-component npm publish`（**dist-tag 未指定 = latest**）。
+
 6. **確認**
    - `npm view @zenkigen-inc/component-ui version` で公開を確認。
 
 ## 具体例: 1.20.4 → 1.20.5 をリリースする
 
-人が手を動かすのは「version 文字列の書き換え → `yarn install` → commit → tag push」だけ。ビルドや publish コマンドは打たない（CI が実施する）。
+人が手を動かすのは「4つの `version` 行の書き換え → `yarn install` → commit → tag push」だけ。ビルドや publish コマンドは打たない（CI が実施する）。
 
-### ① version を書き換える（手動編集）
+### ① version 行を書き換える（手動編集）
 
-`packages/component-ui/package.json`（version ＋ 内部依存3つ）:
-
-```diff
--  "version": "1.20.4",
-+  "version": "1.20.5",
-   ...
--    "@zenkigen-inc/component-config": "1.20.4",
--    "@zenkigen-inc/component-icons": "1.20.4",
--    "@zenkigen-inc/component-theme": "1.20.4",
-+    "@zenkigen-inc/component-config": "1.20.5",
-+    "@zenkigen-inc/component-icons": "1.20.5",
-+    "@zenkigen-inc/component-theme": "1.20.5",
-```
-
-`packages/component-config/package.json`（version ＋ 内部依存1つ）:
-
-```diff
--  "version": "1.20.4",
-+  "version": "1.20.5",
-   ...
--    "@zenkigen-inc/component-theme": "1.20.4",
-+    "@zenkigen-inc/component-theme": "1.20.5",
-```
-
-`packages/component-icons/package.json` / `packages/component-theme/package.json`（version 行のみ）:
+4つすべての `packages/*/package.json` で `version` 行を変更する。
 
 ```diff
 -  "version": "1.20.4",
@@ -129,14 +106,14 @@ npm view @zenkigen-inc/component-ui version  # 1.20.5 を確認
   - `build-lib:all`: 全パッケージのライブラリビルド。
   - `publish:all`: 全 workspace を npm publish（ルート除外）。
 - `.yarnrc.yml`:
-  - `npmPublishRegistry: 'https://registry.npmjs.org'` … publish 先を npmjs に固定。
+  - `npmScopes.zenkigen-inc.npmPublishRegistry: 'https://registry.npmjs.org'` … publish 先を npmjs に固定（`npmScopes` 配下の設定）。
   - `npmMinimalAgeGate: '3d'` … リリースから3日未満のバージョンは **install をブロック**（publish には影響しない）。
   - `enableScripts: false` … 依存の install スクリプトを既定で実行しない。
+  - `defaultSemverRangePrefix: ''` … `yarn add` 時のバージョンを exact 固定にする（`workspace:*` の publish 時変換結果も exact になる）。
 - 各 `package.json` の `publishConfig.access: public`。
 - パッケージマネージャ: `yarn@4.13.0`（Yarn Berry）。publish は `yarn npm publish` 実体。
 - **dist-tag**: 現状は `latest` のみ運用。`publish:all` は `--tag` 未指定で publish するため、release したバージョンに `latest`（= `npm install`（バージョン未指定）で入る既定を指すラベル）が付け替わる。
 
 ## よくある落とし穴
 
-- **内部依存の version 取り残し**: version を上げたのに `@zenkigen-inc/*` の依存参照が旧 version のままだと、利用者が新バージョンを入れても依存が旧版を引く。
 - **yarn.lock 更新漏れ**: package.json だけ更新して `yarn.lock` を更新しないと、CI の `yarn install`（GitHub Actions では `CI=true` により暗黙 immutable）が lockfile 不整合で失敗する。
