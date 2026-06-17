@@ -1,4 +1,4 @@
-import { act, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import type { ReactNode } from 'react';
 import { useMemo, useState } from 'react';
@@ -284,6 +284,23 @@ describe('Combobox', () => {
 
       expect(onSelectionChange).toHaveBeenLastCalledWith('orange');
       expect(getCombobox()).toHaveValue('みかん');
+    });
+
+    it('IME 変換確定の Enter（isComposing）では選択されない', async () => {
+      const user = userEvent.setup();
+      const onSelectionChange = vi.fn();
+      render(<ControlledCombobox onSelectionChange={onSelectionChange} />);
+
+      await user.click(getCombobox());
+      const input = getCombobox();
+      // 日本語入力の変換確定 Enter は keydown 時点で isComposing=true。
+      // これを選択として扱うと「(候補ラベル)(入力中の文字)」の二重入力になるため無視する。
+      fireEvent.keyDown(input, { key: 'Enter', isComposing: true });
+
+      expect(onSelectionChange).not.toHaveBeenCalled();
+      expect(getCombobox()).toHaveValue('');
+      // 候補リストも開いたままであること
+      expect(getListbox()).toHaveStyle({ visibility: 'visible' });
     });
 
     it('isDisabled な Item はクリックしても選択されない', async () => {

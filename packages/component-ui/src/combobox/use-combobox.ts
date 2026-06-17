@@ -261,6 +261,12 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
       }
 
       if (event.key === 'Enter') {
+        // IME 変換確定の Enter（keydown 時点で isComposing=true、一部環境では keyCode=229）は
+        // 候補選択として扱わない。選択すると input が controlled value（候補ラベル）に更新された直後、
+        // IME 確定文字が追記され「(候補ラベル)(入力中の文字)」の二重入力になるため。
+        if (event.nativeEvent.isComposing === true || event.nativeEvent.keyCode === 229) {
+          return;
+        }
         if (!isOpen || activeIndex === null) {
           return;
         }
