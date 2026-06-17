@@ -50,5 +50,8 @@ jobs:
         uses: ./.github/actions/yarn-install
 
       # production 依存に high 以上の脆弱性が見つかった場合はジョブを失敗させる。
+      # 1120679: esbuild@0.27.7 (GHSA-gv7w-rqvm-qjhr) — tsup@8.5.1 の依存。Deno 向けバイナリの問題で
+      # Node.js ビルドツールとしての利用には影響しない。tsup が esbuild@>=0.28.1 に対応した
+      # バージョンをリリースし Renovate が更新 PR を出したタイミングで除外を削除する。
       - name: Audit production dependencies (high and above)
-        run: yarn npm audit --all --recursive --environment production --severity high
+        run: yarn npm audit --all --recursive --environment production --severity high --ignore 1120679
