@@ -30,6 +30,8 @@ export type UseComboboxReturn = {
   setItems: (items: ComboboxItemMeta[]) => void;
   selectValue: (value: string, label: string) => void;
   clearValue: () => void;
+  /** 未確定入力を破棄し、最後に確定した表示テキストへ input を戻す（blur / Escape 用） */
+  revertInputToCommitted: () => void;
   inputRef: React.RefObject<HTMLInputElement | null>;
   handleKeyDown: (event: KeyboardEvent<HTMLInputElement>) => void;
 };
@@ -48,8 +50,19 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
   const [isOpenInternal, setIsOpenInternal] = useState(false);
   const isOpen = isOpenControlled ? params.isOpen === true : isOpenInternal;
 
+  // 「最後に要求 / 反映された open 状態」を即時追跡する ref。
+  // render 時に実際の isOpen（controlled の親更新・内部 state・isOpen useEffect の close 等）へ同期し、
+  // setIsOpen 内では onOpenChange の前に即時更新する。これにより blur → outside-click が再レンダー前に
+  // 連続しても 2 回目を no-op にでき、onOpenChange(false) の二重発火を防ぐ。
+  const openStateRef = useRef(isOpen);
+  openStateRef.current = isOpen;
+
   const setIsOpen = useCallback(
     (next: boolean) => {
+      if (openStateRef.current === next) {
+        return;
+      }
+      openStateRef.current = next;
       if (!isOpenControlled) {
         setIsOpenInternal(next);
       }
@@ -57,6 +70,22 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
     },
     [isOpenControlled],
   );
+
+  // blur / Escape で未確定入力を破棄して戻す先の表示テキスト。
+  // 不変条件: value===null のとき必ず ''、それ以外は最後に確定した label（＝確定時の inputValue）。
+  const committedInputValueRef = useRef(params.value === null ? '' : params.inputValue);
+
+  // 外部からの value 変更（プログラム的セット）に committed を追従させる。null は必ず空に正規化。
+  useEffect(() => {
+    committedInputValueRef.current = paramsRef.current.value === null ? '' : paramsRef.current.inputValue;
+  }, [params.value]);
+
+  const revertInputToCommitted = useCallback(() => {
+    const committed = committedInputValueRef.current;
+    if (paramsRef.current.inputValue !== committed) {
+      paramsRef.current.onInputChange(committed);
+    }
+  }, []);
 
   const [activeIndex, setActiveIndexState] = useState<number | null>(null);
   const [items, setItemsState] = useState<ComboboxItemMeta[]>([]);
@@ -168,6 +197,7 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
 
   const selectValue = useCallback(
     (value: string, label: string) => {
+      committedInputValueRef.current = label;
       paramsRef.current.onChange(value, { label });
       paramsRef.current.onInputChange(label);
       setIsOpen(false);
@@ -177,6 +207,7 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
   );
 
   const clearValue = useCallback(() => {
+    committedInputValueRef.current = '';
     paramsRef.current.onChange(null, null);
     paramsRef.current.onInputChange('');
     setActiveIndexState(null);
@@ -286,10 +317,12 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
           event.preventDefault();
           event.stopPropagation();
           setIsOpen(false);
+          // 未確定入力は破棄し、選択値の表示へ戻す（blur と同じ revert 挙動）。
+          revertInputToCommitted();
         }
       }
     },
-    [isOpen, activeIndex, items, moveActive, setIsOpen, selectValue],
+    [isOpen, activeIndex, items, moveActive, setIsOpen, selectValue, revertInputToCommitted],
   );
 
   return {
@@ -305,6 +338,7 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
     setItems,
     selectValue,
     clearValue,
+    revertInputToCommitted,
     inputRef,
     handleKeyDown,
   };

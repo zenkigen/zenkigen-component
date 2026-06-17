@@ -338,6 +338,117 @@ describe('Combobox', () => {
     });
   });
 
+  describe('未確定入力の取り消し (revert)', () => {
+    const filterByInclude = (input: string, items: Fruit[]) => items.filter((i) => i.label.includes(input));
+
+    it('未確定入力のまま外側をクリックすると選択値のラベルへ戻る', async () => {
+      const user = userEvent.setup();
+      render(
+        <div>
+          <ControlledCombobox filterItems={filterByInclude} />
+          <button type="button">outside</button>
+        </div>,
+      );
+      const input = getCombobox();
+
+      await user.click(input);
+      await user.click(getOption('りんご'));
+      expect(input).toHaveValue('りんご');
+
+      await user.click(input);
+      await user.clear(input);
+      await user.type(input, 'にんじん');
+      expect(input).toHaveValue('にんじん');
+
+      await user.click(screen.getByRole('button', { name: 'outside' }));
+      // 候補から確定していない入力は破棄され、選択値 (apple=りんご) の表示へ戻る
+      expect(input).toHaveValue('りんご');
+    });
+
+    it('未選択のまま入力して外側をクリックすると空に戻る', async () => {
+      const user = userEvent.setup();
+      render(
+        <div>
+          <ControlledCombobox filterItems={filterByInclude} />
+          <button type="button">outside</button>
+        </div>,
+      );
+      const input = getCombobox();
+
+      await user.click(input);
+      await user.type(input, 'にんじん');
+      expect(input).toHaveValue('にんじん');
+
+      await user.click(screen.getByRole('button', { name: 'outside' }));
+      // value=null（未選択）なので空に戻る
+      expect(input).toHaveValue('');
+    });
+
+    it('未確定入力のまま Escape すると選択値のラベルへ戻る', async () => {
+      const user = userEvent.setup();
+      render(<ControlledCombobox filterItems={filterByInclude} />);
+      const input = getCombobox();
+
+      await user.click(input);
+      await user.click(getOption('りんご'));
+      await user.click(input);
+      await user.clear(input);
+      await user.type(input, 'にん');
+      expect(input).toHaveValue('にん');
+
+      await user.keyboard('{Escape}');
+      expect(input).toHaveValue('りんご');
+    });
+
+    it('候補トグルボタン押下ではフォーカスが維持され revert されない', async () => {
+      const user = userEvent.setup();
+      render(<ControlledCombobox filterItems={filterByInclude} />);
+      const input = getCombobox();
+
+      await user.click(input);
+      await user.type(input, 'り'); // 「りんご」が候補に残る（未確定）
+      expect(input).toHaveValue('り');
+
+      await user.click(screen.getByRole('button', { name: '候補を閉じる' }));
+      // toggle は preventBlur でフォーカスを奪わないため revert されない
+      expect(input).toHaveValue('り');
+    });
+
+    it('外側クリックで close する際 onOpenChange(false) は 1 回だけ', async () => {
+      const user = userEvent.setup();
+      const onOpenChange = vi.fn();
+      render(
+        <div>
+          <ControlledCombobox onOpenChange={onOpenChange} />
+          <button type="button">outside</button>
+        </div>,
+      );
+
+      await user.click(getCombobox());
+      onOpenChange.mockClear();
+
+      await user.click(screen.getByRole('button', { name: 'outside' }));
+      // blur と outside-click が両方走っても idempotent な setIsOpen で 1 回だけ
+      expect(onOpenChange).toHaveBeenCalledTimes(1);
+      expect(onOpenChange).toHaveBeenCalledWith(false);
+    });
+
+    it('relatedTarget=null の blur でも revert される', async () => {
+      const user = userEvent.setup();
+      render(<ControlledCombobox filterItems={filterByInclude} />);
+      const input = getCombobox();
+
+      await user.click(input);
+      await user.click(getOption('りんご'));
+      await user.click(input);
+      await user.clear(input);
+      await user.type(input, 'にん');
+
+      fireEvent.blur(input, { relatedTarget: null });
+      expect(input).toHaveValue('りんご');
+    });
+  });
+
   describe('キーボード操作', () => {
     it('ArrowDown で次の enabled item が active になる', async () => {
       const user = userEvent.setup();

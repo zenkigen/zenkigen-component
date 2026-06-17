@@ -1,4 +1,4 @@
-import type { CSSProperties, KeyboardEvent, RefObject } from 'react';
+import type { CSSProperties, FocusEvent, KeyboardEvent, RefObject } from 'react';
 import { createContext, useContext } from 'react';
 
 import type { ComboboxSize, ComboboxVariant } from './combobox.types';
@@ -67,6 +67,8 @@ export type ComboboxContextValue = {
   listMaxHeight?: CSSProperties['height'];
   /** input の keydown ハンドラ */
   handleKeyDown: (event: KeyboardEvent<HTMLInputElement>) => void;
+  /** input の blur ハンドラ（Combobox 外へのフォーカス移動時に close + revert） */
+  handleInputBlur: (event: FocusEvent<HTMLInputElement>) => void;
 };
 
 const ComboboxContext = createContext<ComboboxContextValue | null>(null);

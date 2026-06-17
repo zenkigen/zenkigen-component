@@ -1,4 +1,5 @@
 import { autoUpdate, flip, offset, size as sizeMiddleware, useFloating } from '@floating-ui/react';
+import type { FocusEvent } from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useOutsideClick } from '../hooks/use-outside-click';
@@ -154,6 +155,29 @@ function ComboboxBase({
   );
   useOutsideClick(wrapperRef, handleOutsideClick);
 
+  // input が Combobox の外（wrapper / 候補リスト以外）へフォーカスを移したら close + revert する。
+  // - 候補リストは FloatingPortal で wrapper の DOM 外に描画されるため listElementRef でも判定する。
+  // - option / IconButton は preventBlur（onMouseDown.preventDefault）でフォーカスを奪わないため通常は到達しない。
+  // - relatedTarget=null（タッチ / 一部ブラウザ）は「外」とみなす。
+  // - setIsOpen は idempotent のため、outside-click と重なっても onOpenChange(false) は 1 回に収まる。
+  const { revertInputToCommitted } = combobox;
+  const handleInputBlur = useCallback(
+    (event: FocusEvent<HTMLInputElement>) => {
+      const next = event.relatedTarget;
+      if (next instanceof Node) {
+        if (wrapperRef.current?.contains(next) === true) {
+          return;
+        }
+        if (listElementRef.current?.contains(next) === true) {
+          return;
+        }
+      }
+      setIsOpen(false);
+      revertInputToCommitted();
+    },
+    [setIsOpen, revertInputToCommitted],
+  );
+
   // context value は useMemo で安定化する。毎レンダー新規だと全 consumer（Input / 全 Item）が
   // 無条件で再レンダーするため、依存が実際に変化したときのみ再生成する。
   const contextValue = useMemo(
@@ -186,6 +210,7 @@ function ComboboxBase({
       floatingStyles,
       listMaxHeight,
       handleKeyDown: combobox.handleKeyDown,
+      handleInputBlur,
     }),
     [
       combobox.baseId,
@@ -216,6 +241,7 @@ function ComboboxBase({
       floatingStyles,
       listMaxHeight,
       combobox.handleKeyDown,
+      handleInputBlur,
     ],
   );
 

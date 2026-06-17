@@ -25,6 +25,7 @@ export function ComboboxInput({ autoFocus, children }: ComboboxInputProps) {
     inputRef,
     setInputElementRef,
     handleKeyDown,
+    handleInputBlur,
     clearValue,
   } = useComboboxContext('Combobox.Input');
 
@@ -85,6 +86,7 @@ export function ComboboxInput({ autoFocus, children }: ComboboxInputProps) {
       onChange={handleChange}
       onFocus={handleFocus}
       onKeyDown={handleKeyDown}
+      onBlur={handleInputBlur}
       isError={isError}
       disabled={isDisabled}
       placeholder={placeholder}
