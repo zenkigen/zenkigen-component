@@ -140,7 +140,7 @@ const items: DropdownItemType[] = [
 - 無効（`isDisabled: true`）: `buttonColors[variant].disabled` と `cursor-not-allowed` を適用し、`pointer-events-none` によりクリックできなくなる。
 - 矢印（`isArrowHidden: false`）: `Icon` を末尾に描画し、開閉状態で `angle-small-up`/`angle-small-down` を切り替える。
 
-`Dropdown.Menu` は `bg-uiBackground01`、`shadow-floatingShadow`、および `border-uiBorder01`（outlineバリアント時）で描画され、`overflow-y-auto` によって長いリストもスクロールできる。`Dropdown.Item` は `typography-label14regular`、`h-8`、`px-3` を基準とし、`focusVisible.inset` でフォーカスインジケータを持つ。
+`Dropdown.Menu` は `bg-uiBackground01`、`shadow-floatingShadow`、および `border-uiBorder01`（outlineバリアント時）で描画され、`overflow-y-auto` によって長いリストもスクロールできる。`Dropdown.Item` は `typography-label14regular`、`px-3` を基準とし、`focusVisible.inset` でフォーカスインジケータを持つ。item の高さは `size` に追従し、`size='large'` で `h-10`（40px）、それ以外（`x-small`/`small`/`medium`）では `h-8`（32px）となる。
 
 ### メニュー配置
 

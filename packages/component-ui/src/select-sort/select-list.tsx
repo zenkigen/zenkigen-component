@@ -29,16 +29,20 @@ export function SelectList({ size, variant, sortOrder, onClickItem, onClickDesel
   );
 
   const deselectButtonClasses = clsx(
-    'typography-label14regular flex h-8 w-full items-center px-3 text-interactive02 hover:bg-hover02 active:bg-active02',
+    'typography-label14regular flex w-full items-center px-3 text-interactive02 hover:bg-hover02 active:bg-active02',
     focusVisible.inset,
+    {
+      'h-8': size !== 'large',
+      'h-10': size === 'large',
+    },
   );
 
   return (
     <ul className={listClasses}>
-      <SelectItem isSortKey={sortOrder === 'ascend'} onClickItem={() => onClickItem('ascend')}>
+      <SelectItem size={size} isSortKey={sortOrder === 'ascend'} onClickItem={() => onClickItem('ascend')}>
         昇順で並び替え
       </SelectItem>
-      <SelectItem isSortKey={sortOrder === 'descend'} onClickItem={() => onClickItem('descend')}>
+      <SelectItem size={size} isSortKey={sortOrder === 'descend'} onClickItem={() => onClickItem('descend')}>
         降順で並び替え
       </SelectItem>
       {sortOrder !== null && onClickDeselect && (

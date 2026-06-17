@@ -11,6 +11,7 @@ type UseDropdownReturnType = {
     height: number;
   };
   variant: 'text' | 'outline';
+  size: 'x-small' | 'small' | 'medium' | 'large';
 };
 
 export const DropdownContext = createContext<UseDropdownReturnType>({
@@ -19,4 +20,5 @@ export const DropdownContext = createContext<UseDropdownReturnType>({
   isDisabled: false,
   targetDimensions: { width: 0, height: 0 },
   variant: 'outline',
+  size: 'medium',
 });
