@@ -57,10 +57,6 @@ export const Component: Story = {
   },
 };
 
-export const Default: Story = {
-  render: () => <PlanSelect />,
-};
-
 export const WithoutDescription: Story = {
   render: function WithoutDescriptionStory() {
     const [value, setValue] = useState('a');
@@ -85,6 +81,24 @@ export const Error: Story = {
 
 export const Disabled: Story = {
   render: () => <PlanSelect isDisabled />,
+};
+
+export const Vertical: Story = {
+  render: function VerticalStory() {
+    const [value, setValue] = useState('basic');
+
+    return (
+      <div className="">
+        <RadioCard value={value} onChange={setValue} aria-label="プラン選択">
+          <RadioCard.Group orientation="vertical">
+            <RadioCard.Item value="basic" label="ベーシック" description="個人向け" />
+            <RadioCard.Item value="pro" label="プロ" description="チーム向け" />
+            <RadioCard.Item value="enterprise" label="エンタープライズ" description="大規模組織向け" />
+          </RadioCard.Group>
+        </RadioCard>
+      </div>
+    );
+  },
 };
 
 export const Horizontal: Story = {
@@ -141,8 +155,10 @@ export const CustomGrid: Story = {
 
       <section>
         <p className="typography-label14bold mb-2 text-text01">等幅の横並び（flex-1）</p>
-        <div className="w-[900px]">
-          <CustomLayoutSample className="flex gap-2 [&>*]:flex-1 [&>div>div]:h-full" />
+        <div className="w-full overflow-x-scroll pb-4">
+          <div className="w-[1200px]">
+            <CustomLayoutSample className="flex gap-2 [&>*]:flex-1 [&>div>div]:h-full" />
+          </div>
         </div>
       </section>
 
