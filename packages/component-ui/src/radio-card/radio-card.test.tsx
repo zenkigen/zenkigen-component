@@ -240,16 +240,42 @@ describe('RadioCard', () => {
   });
 
   describe('ホバー（input オーバーレイ対応）', () => {
-    it('通常カードに peer-hover の hover スタイルが付与されること', () => {
-      // input を全面オーバーレイする構造のため、カードの hover は peer-hover で表現する。
+    it('通常カードに group-hover のカード背景 hover スタイルが付与されること', () => {
+      // input を全面オーバーレイする構造のため、hover は card ルートの group-hover で表現する。
       // 素の hover: だとカードが pointer-events-none で発火しない（退行防止）。
       const { container } = render(<ControlledRadioCard />);
-      expect(container.querySelectorAll('.peer-hover\\:bg-hoverUi02')).toHaveLength(2);
+      expect(container.querySelectorAll('.group-hover\\:bg-hoverUi02')).toHaveLength(2);
     });
 
-    it('disabled 時は hover スタイルが付与されないこと', () => {
+    it('未選択カードの丸に group-hover のグレーインジケータが付与されること', () => {
+      const { container } = render(<ControlledRadioCard initialValue="a" />);
+      // a は選択済み（インジケータ無し）、b は未選択（インジケータ有り）→ 1個
+      expect(container.querySelectorAll('.group-hover\\:bg-hoverUi')).toHaveLength(1);
+    });
+
+    it('disabled 時は hover スタイル（カード背景・丸インジケータ）が付与されないこと', () => {
       const { container } = render(<ControlledRadioCard isDisabled />);
-      expect(container.querySelectorAll('.peer-hover\\:bg-hoverUi02')).toHaveLength(0);
+      expect(container.querySelectorAll('.group-hover\\:bg-hoverUi02')).toHaveLength(0);
+      expect(container.querySelectorAll('.group-hover\\:bg-hoverUi')).toHaveLength(0);
+    });
+  });
+
+  describe('エラー時の丸（ボーダー・ドット）', () => {
+    it('エラー時、丸のボーダーが supportError になること', () => {
+      const { container } = render(<ControlledRadioCard isError />);
+      // 丸（box）に border-supportError が付与される
+      expect(container.querySelectorAll('.border-supportError').length).toBeGreaterThan(0);
+    });
+
+    it('エラー＋選択時、中央ドットが supportError で着色されること', () => {
+      const { container } = render(<ControlledRadioCard initialValue="a" isError />);
+      expect(container.querySelectorAll('.bg-supportError').length).toBeGreaterThan(0);
+    });
+
+    it('通常選択時の中央ドットは activeSelectedUi（青）であること', () => {
+      const { container } = render(<ControlledRadioCard initialValue="a" />);
+      expect(container.querySelectorAll('.bg-activeSelectedUi').length).toBeGreaterThan(0);
+      expect(container.querySelectorAll('.bg-supportError')).toHaveLength(0);
     });
   });
 

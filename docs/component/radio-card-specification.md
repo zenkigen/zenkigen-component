@@ -112,18 +112,30 @@ const Example = () => {
 
 ## 状態とスタイル
 
-各カードの状態は Figma の状態マトリクスに対応する。`hover` は CSS の `hover:` で表現する。
+各カードの状態は Figma の状態マトリクスに対応する。input を全面オーバーレイする構造のため、`hover` は card ルートの `group-hover:` で表現する（`focus-visible` は input の兄弟「カード見た目」に `peer-focus-visible` で当てる）。
+
+### カードの背景・枠
 
 | 状態               | スタイル                                                                                               |
 | ------------------ | ------------------------------------------------------------------------------------------------------ |
 | 通常（未選択）     | `bg-uiBackground01` / `border-uiBorder02`                                                              |
 | 選択済み           | `bg-selectedUi` / `border-selectedUiBorder`                                                            |
-| ホバー             | `hover:bg-hoverUi02`                                                                                   |
+| ホバー             | `group-hover:bg-hoverUi02`                                                                             |
 | 無効               | `bg-uiBackground01` / `border-uiBorder02`、テキスト・丸は `disabled01` で淡色化、`pointer-events` 無効 |
 | エラー（グループ） | 全カードが `border-supportError`、各 input に `aria-invalid="true"`                                    |
 
+### 丸（ラジオ表示）の状態別スタイル
+
+| 状態             | 丸のボーダー                       | 中央ドット                      |
+| ---------------- | ---------------------------------- | ------------------------------- |
+| 通常（未選択）   | `border-uiBorder04`                | なし                            |
+| ホバー（未選択） | `group-hover:border-hoverUiBorder` | グレー `group-hover:bg-hoverUi` |
+| 選択済み（通常） | `border-uiBorder04`                | 青 `bg-activeSelectedUi`        |
+| エラー           | `border-supportError`              | （選択時）赤 `bg-supportError`  |
+| エラー＋ホバー   | `group-hover:border-hoverError`    | グレー（未選択）/ 赤（選択時）  |
+| 無効             | `border-disabled01`                | （選択時）`bg-disabled01`       |
+
 - カード形状は角丸（`rounded`）、パディングは `px-4 py-3`。
-- 丸（ラジオ表示）は `Radio` の描画を踏襲し、選択時は `bg-activeSelectedUi` のドットを表示する。
 - 間隔は Item 間・グループとエラー間ともに `gap-2`（8px）。
 
 ## 使用例

@@ -36,30 +36,40 @@ export function RadioCardItem({ value, label, description, isDisabled: itemDisab
     }
   };
 
+  // hover は丸（孫要素）にも効かせる必要があるため、card ルートを group にして group-hover で制御する。
+  // （peer-hover は input の直接の兄弟にしか効かない）。focus リングは input の兄弟である card 見た目に peer で当てる。
   const cardClasses = clsx(
     'pointer-events-none flex flex-col gap-2 rounded border border-solid px-4 py-3',
     focusVisible.normalPeer,
     {
       'border-uiBorder02 bg-uiBackground01': isDisabled,
-      'border-supportError bg-uiBackground01 peer-hover:bg-hoverUi02': isError,
-      'border-selectedUiBorder bg-selectedUi peer-hover:bg-hoverUi02': !isDisabled && !isError && isChecked,
-      'border-uiBorder02 bg-uiBackground01 peer-hover:bg-hoverUi02': !isDisabled && !isError && !isChecked,
+      'border-supportError bg-uiBackground01 group-hover:bg-hoverUi02': isError,
+      'border-selectedUiBorder bg-selectedUi group-hover:bg-hoverUi02': !isDisabled && !isError && isChecked,
+      'border-uiBorder02 bg-uiBackground01 group-hover:bg-hoverUi02': !isDisabled && !isError && !isChecked,
     },
   );
 
   const boxClasses = clsx(
-    'inline-flex size-5 shrink-0 items-center justify-center rounded-full border border-solid bg-white',
+    'relative inline-flex size-5 shrink-0 items-center justify-center rounded-full border border-solid bg-white',
     {
       'border-disabled01': isDisabled,
-      'border-uiBorder04': !isDisabled,
+      'border-supportError group-hover:border-hoverError': !isDisabled && isError,
+      'border-uiBorder04 group-hover:border-hoverUiBorder': !isDisabled && !isError,
     },
   );
 
-  const dotClasses = clsx('block size-3 rounded-full', {
+  // 選択時の中央ドット（色は状態別）。未選択時は scale-0 で隠す。
+  const dotClasses = clsx('absolute inset-0 m-auto size-3 rounded-full', {
     'scale-100': isChecked,
     'scale-0': !isChecked,
     'bg-disabled01': isDisabled && isChecked,
-    'bg-activeSelectedUi': !isDisabled && isChecked,
+    'bg-supportError': !isDisabled && isError && isChecked,
+    'bg-activeSelectedUi': !isDisabled && !isError && isChecked,
+  });
+
+  // 未選択かつ有効時、ホバーで中央にグレーのインジケータを表示する。
+  const hoverDotClasses = clsx('size-3 rounded-full bg-transparent', {
+    'group-hover:bg-hoverUi': !isDisabled && !isChecked,
   });
 
   const labelClasses = clsx('typography-label14regular ml-2 select-none break-all', {
@@ -73,7 +83,7 @@ export function RadioCardItem({ value, label, description, isDisabled: itemDisab
   });
 
   return (
-    <div className="relative">
+    <div className="group relative">
       <input
         type="radio"
         id={inputId}
@@ -91,6 +101,7 @@ export function RadioCardItem({ value, label, description, isDisabled: itemDisab
         <div className="flex items-center">
           <span className={boxClasses} aria-hidden="true">
             <span className={dotClasses} />
+            <span className={hoverDotClasses} />
           </span>
           <span id={labelId} className={labelClasses}>
             {label}
