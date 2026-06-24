@@ -132,7 +132,7 @@ function TextInputInner(
     'pr-3': !isBorderless && (size === 'large' || size === 'x-large') && hasTrailingElement,
   });
 
-  const inputClasses = clsx('flex-1 bg-transparent outline-none', {
+  const inputClasses = clsx('flex-1 bg-transparent outline-hidden', {
     'disabled:text-textPlaceholder': !isBorderless,
     'disabled:text-disabled01': isBorderless,
     // outline: 従来の padding

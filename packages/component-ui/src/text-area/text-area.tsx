@@ -130,7 +130,7 @@ function TextAreaInner(
     !isBorderless && className,
   );
 
-  const textAreaClassName = clsx('w-full border-none bg-uiBackground01 outline-none', {
+  const textAreaClassName = clsx('w-full border-none bg-uiBackground01 outline-hidden', {
     // outline: 従来の padding
     'typography-body14regular px-2 py-2': !isBorderless && size === 'medium',
     'typography-body16regular px-3 py-2': !isBorderless && size === 'large',
