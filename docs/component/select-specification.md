@@ -134,6 +134,8 @@ type SelectOption = {
 - タイポグラフィ: `typography-label16regular`
 - アイコンサイズ: `medium`
 
+上記の高さ・余白・タイポグラフィはトリガーボタンの仕様。オプションリストの各オプション (`Select.Option`) と「選択解除」ボタンの高さは `size` に追従し、`size='large'` で `h-10`（40px）、それ以外（`x-small`/`small`/`medium`）では `h-8`（32px）となる。
+
 ### バリアントスタイル
 
 #### outline（デフォルト）

@@ -7,15 +7,19 @@ import { Icon } from '../icon';
 type Props = {
   /** 選択済みの並び替え方向かどうか。チェックアイコンや背景色を切り替える。 */
   isSortKey: boolean;
+  /** 表示中の SelectSort と同期させるサイズ。リスト item の高さに反映される。 */
+  size: 'x-small' | 'small' | 'medium' | 'large';
   /** ボタンを押したときに並び替え方向を親へ通知する処理。 */
   onClickItem: () => void;
 };
 
-export function SelectItem({ children, isSortKey, onClickItem }: PropsWithChildren<Props>) {
+export function SelectItem({ children, isSortKey, size, onClickItem }: PropsWithChildren<Props>) {
   const itemClasses = clsx(
-    'typography-label14regular flex h-8 w-full items-center px-3 hover:bg-hover02 active:bg-active02',
+    'typography-label14regular flex w-full items-center px-3 hover:bg-hover02 active:bg-active02',
     focusVisible.inset,
     {
+      'h-8': size !== 'large',
+      'h-10': size === 'large',
       'bg-selectedUi fill-interactive01 text-interactive01': isSortKey,
       'bg-uiBackground01 fill-icon01 text-interactive02': !isSortKey,
     },

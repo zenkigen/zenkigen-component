@@ -129,7 +129,7 @@ function TextInputInner(
     // 共通
     'bg-uiBackground01': !disabled || isBorderless,
     'pr-2': !isBorderless && size === 'medium' && hasTrailingElement,
-    'pr-3': !isBorderless && size === 'large' && hasTrailingElement,
+    'pr-3': !isBorderless && (size === 'large' || size === 'x-large') && hasTrailingElement,
   });
 
   const inputClasses = clsx('flex-1 bg-transparent outline-hidden', {
@@ -138,9 +138,11 @@ function TextInputInner(
     // outline: 従来の padding
     'typography-label14regular min-h-8 px-2': !isBorderless && size === 'medium',
     'typography-label16regular min-h-10 px-3': !isBorderless && size === 'large',
+    'typography-label16regular min-h-12 px-3': !isBorderless && size === 'x-large',
     // text: padding なし
     'typography-label14regular min-h-8': isBorderless && size === 'medium',
     'typography-label16regular min-h-10': isBorderless && size === 'large',
+    'typography-label16regular min-h-12': isBorderless && size === 'x-large',
     // テキスト色
     'text-text01': !isError,
     'text-supportError': isError,
