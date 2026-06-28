@@ -7,7 +7,11 @@ const meta: Meta = {
   title: 'Tokens/Color',
 };
 
-const version = 2;
+// Chromatic の TurboSnap は変更ファイルに依存する Story のみ再撮影するため、
+// トークン定義（component-config）だけを変更するとこの Story の差分が検知されない。
+// トークンの色変更時にこの値をインクリメントして Story 自体に差分を作り、
+// 再撮影を強制するためのマーカー。
+const version = 3;
 
 export default meta;
 type Story = StoryObj;
