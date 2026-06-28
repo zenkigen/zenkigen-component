@@ -31,7 +31,7 @@ export const tokens = {
       "textBlack": "#000000"
     },
     "link": {
-      "link01": "#0077d9",
+      "link01": "#177ee5",
       "link02": "#a4a5a6"
     },
     "border": {
@@ -61,10 +61,10 @@ export const tokens = {
       "iconOnColor": "#ffffff"
     },
     "interactive": {
-      "interactive01": "#0077d9",
-      "interactiveBg01": "#0077d9",
+      "interactive01": "#177ee5",
+      "interactiveBg01": "#177ee5",
       "interactive02": "#5c6366",
-      "interactive03": "#0077d9",
+      "interactive03": "#177ee5",
       "interactive04": "#cacccd"
     },
     "field": {
@@ -72,7 +72,7 @@ export const tokens = {
       "fieldSearch": "#ffffff"
     },
     "focus": {
-      "focus": "#0077d9"
+      "focus": "#177ee5"
     },
     "hover": {
       "hover01": "#1366b9",
@@ -95,7 +95,7 @@ export const tokens = {
       "active02": "#cacccd",
       "active02Background": "#dedfe0",
       "activeUi": "#d9eafb",
-      "activeSelectedUi": "#0077d9",
+      "activeSelectedUi": "#177ee5",
       "activeDanger": "#821732",
       "activeInput": "#1366b9",
       "activeLink01": "#0e4b87",
@@ -106,7 +106,7 @@ export const tokens = {
       "selectedUi": "#f1f7fd",
       "selectedUiGray": "#dedfe0",
       "selectedUiOnColor": "#ffffff",
-      "selectedUiBorder": "#0077d9",
+      "selectedUiBorder": "#177ee5",
       "selectedUiDark": "#1366b9"
     },
     "disabled": {
@@ -123,7 +123,7 @@ export const tokens = {
       "supportErrorLight": "#f4bfcd",
       "supportSuccess": "#29b471",
       "supportSuccessLight": "#ccf4e1",
-      "supportInfo": "#0077d9",
+      "supportInfo": "#177ee5",
       "supportInfoLight": "#b9d8f7",
       "supportWarning": "#fcd200",
       "supportWarningLight": "#fff4ba",
@@ -139,7 +139,7 @@ export const tokens = {
       "blue20": "#d9eafb",
       "blue30": "#9fcbf5",
       "blue40": "#60a8ef",
-      "blue50": "#0077d9",
+      "blue50": "#177ee5",
       "blue60": "#1571ce",
       "blue70": "#1366b9",
       "blue80": "#115ca7",
@@ -607,7 +607,7 @@ export const tokensWithMeta = {
     },
     "link": {
       "link01": {
-        "value": "#0077d9",
+        "value": "#177ee5",
         "description": "Primary links",
         "type": "color",
         "rawValue": "$Colors.Blue.Blue50"
@@ -747,13 +747,13 @@ export const tokensWithMeta = {
     },
     "interactive": {
       "interactive01": {
-        "value": "#0077d9",
+        "value": "#177ee5",
         "description": "Primary Interactive color, Primary buttons",
         "type": "color",
         "rawValue": "$Colors.Blue.Blue50"
       },
       "interactiveBg01": {
-        "value": "#0077d9",
+        "value": "#177ee5",
         "description": "Primary Interactive color on background, Primary fill buttons",
         "type": "color",
         "rawValue": "$Colors.Blue.Blue50"
@@ -765,7 +765,7 @@ export const tokensWithMeta = {
         "rawValue": "$Colors.Gray.Gray80"
       },
       "interactive03": {
-        "value": "#0077d9",
+        "value": "#177ee5",
         "description": "Tertiary button, Selected elements, Active elements, Accent icon",
         "type": "color",
         "rawValue": "$Colors.Blue.Blue50"
@@ -793,7 +793,7 @@ export const tokensWithMeta = {
     },
     "focus": {
       "focus": {
-        "value": "#0077d9",
+        "value": "#177ee5",
         "description": "Focus border, Focus underline",
         "type": "color",
         "rawValue": "$Colors.Blue.Blue50"
@@ -911,7 +911,7 @@ export const tokensWithMeta = {
         "rawValue": "$Colors.Blue.Blue20"
       },
       "activeSelectedUi": {
-        "value": "#0077d9",
+        "value": "#177ee5",
         "description": "Checkbox background color, Select border color",
         "type": "color",
         "rawValue": "$Colors.Blue.Blue50"
@@ -967,7 +967,7 @@ export const tokensWithMeta = {
         "rawValue": "$Colors.White"
       },
       "selectedUiBorder": {
-        "value": "#0077d9",
+        "value": "#177ee5",
         "description": "Selected Button Border",
         "type": "color",
         "rawValue": "$Colors.Blue.Blue50"
@@ -1047,7 +1047,7 @@ export const tokensWithMeta = {
         "type": "color"
       },
       "supportInfo": {
-        "value": "#0077d9",
+        "value": "#177ee5",
         "description": "Information text, button background, button border",
         "type": "color",
         "rawValue": "$Colors.Blue.Blue50"
@@ -1113,7 +1113,7 @@ export const tokensWithMeta = {
         "type": "color"
       },
       "blue50": {
-        "value": "#0077d9",
+        "value": "#177ee5",
         "description": "",
         "type": "color"
       },

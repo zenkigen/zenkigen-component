@@ -142,7 +142,7 @@
     },
     "Link": {
       "Link01": {
-        "value": "#0077D9",
+        "value": "#177EE5",
         "type": "color",
         "description": "Primary links",
         "rawValue": "$Colors.Blue.Blue50"
@@ -282,13 +282,13 @@
     },
     "Interactive": {
       "Interactive01": {
-        "value": "#0077D9",
+        "value": "#177EE5",
         "type": "color",
         "description": "Primary Interactive color, Primary buttons",
         "rawValue": "$Colors.Blue.Blue50"
       },
       "InteractiveBg01": {
-        "value": "#0077D9",
+        "value": "#177EE5",
         "type": "color",
         "description": "Primary Interactive color on background, Primary fill buttons",
         "rawValue": "$Colors.Blue.Blue50"
@@ -300,7 +300,7 @@
         "rawValue": "$Colors.Gray.Gray80"
       },
       "Interactive03": {
-        "value": "#0077D9",
+        "value": "#177EE5",
         "type": "color",
         "description": "Tertiary button, Selected elements, Active elements, Accent icon",
         "rawValue": "$Colors.Blue.Blue50"
@@ -328,7 +328,7 @@
     },
     "Focus": {
       "Focus": {
-        "value": "#0077D9",
+        "value": "#177EE5",
         "type": "color",
         "description": "Focus border, Focus underline",
         "rawValue": "$Colors.Blue.Blue50"
@@ -446,7 +446,7 @@
         "rawValue": "$Colors.Blue.Blue20"
       },
       "ActiveSelectedUi": {
-        "value": "#0077D9",
+        "value": "#177EE5",
         "type": "color",
         "description": "Checkbox background color, Select border color",
         "rawValue": "$Colors.Blue.Blue50"
@@ -502,7 +502,7 @@
         "rawValue": "$Colors.White"
       },
       "SelectedUiBorder": {
-        "value": "#0077D9",
+        "value": "#177EE5",
         "type": "color",
         "description": "Selected Button Border",
         "rawValue": "$Colors.Blue.Blue50"
@@ -584,7 +584,7 @@
         "rawValue": "#CCF4E1"
       },
       "SupportInfo": {
-        "value": "#0077D9",
+        "value": "#177EE5",
         "type": "color",
         "description": "Information text, button background, button border",
         "rawValue": "$Colors.Blue.Blue50"
@@ -659,10 +659,10 @@
         "rawValue": "#60A8EF"
       },
       "Blue50": {
-        "value": "#0077D9",
+        "value": "#177EE5",
         "type": "color",
         "description": "",
-        "rawValue": "#0077D9"
+        "rawValue": "#177EE5"
       },
       "Blue60": {
         "value": "#1571CE",
