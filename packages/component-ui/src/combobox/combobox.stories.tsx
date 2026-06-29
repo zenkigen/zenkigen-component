@@ -121,6 +121,7 @@ function ClosedMatrixRow({ size, variant }: MatrixRowProps) {
           onChange={noop}
           inputValue="りんご"
           onInputChange={noop}
+          onClickClearButton={noop}
           placeholder="果物を検索..."
         >
           <Combobox.Input />
@@ -311,6 +312,7 @@ export const Error: Story = {
             onChange={noop}
             inputValue="xxx"
             onInputChange={noop}
+            onClickClearButton={noop}
             placeholder="果物を検索..."
             isError
           >
@@ -375,6 +377,7 @@ export const Error: Story = {
             onChange={noop}
             inputValue="xxx"
             onInputChange={noop}
+            onClickClearButton={noop}
             placeholder="果物を検索..."
             isError
           >
@@ -509,6 +512,7 @@ export const WithMessages: Story = {
           onChange={noop}
           inputValue="りんご"
           onInputChange={noop}
+          onClickClearButton={noop}
           placeholder="果物を検索..."
         >
           <Combobox.Input>
@@ -528,6 +532,7 @@ export const WithMessages: Story = {
           onChange={noop}
           inputValue="xxx"
           onInputChange={noop}
+          onClickClearButton={noop}
           placeholder="果物を検索..."
           isError
         >
@@ -587,6 +592,7 @@ export const OpenOutline: Story = {
           onChange={noop}
           inputValue="りんご"
           onInputChange={noop}
+          onClickClearButton={noop}
           isOpen
           onOpenChange={noop}
           placeholder="果物を検索..."
@@ -644,6 +650,7 @@ export const OpenText: Story = {
           onChange={noop}
           inputValue="りんご"
           onInputChange={noop}
+          onClickClearButton={noop}
           isOpen
           onOpenChange={noop}
           placeholder="果物を検索..."
@@ -677,6 +684,7 @@ function StatusMatrixRow({ variant, kind }: { variant: ComboboxVariant; kind: St
             onChange={noop}
             inputValue={inputValue}
             onInputChange={noop}
+            onClickClearButton={noop}
             isOpen
             onOpenChange={noop}
             placeholder="果物を検索..."
