@@ -14,6 +14,12 @@ export type ComboboxProps = PropsWithChildren<{
   inputValue: string;
   /** 入力変更時のコールバック */
   onInputChange: (value: string) => void;
+  /**
+   * クリアボタンのクリック時に呼ばれるコールバック。
+   * このコールバックを渡したときのみクリアボタンが表示される（TextInput と同一仕様）。
+   * 値のクリア（`onChange(null, null)` / `onInputChange('')`）は利用者側で行う。
+   */
+  onClickClearButton?: () => void;
   /** popup の開閉状態（任意、controlled） */
   isOpen?: boolean;
   /** 開閉変更時のコールバック */

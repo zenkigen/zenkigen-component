@@ -184,12 +184,70 @@ export const Component: Story = {
       setInputText(meta?.label ?? '');
     };
 
+    // クリアボタンの値クリアは利用者責務（onChange(null, null) / onInputChange('') を呼ぶ）。
+    const handleClickClearButton = () => {
+      setValue(null);
+      setInputText('');
+    };
+
     return (
       <div style={{ width: 300 }}>
-        <Combobox {...args} value={value} onChange={handleChange} inputValue={inputText} onInputChange={setInputText}>
+        <Combobox
+          {...args}
+          value={value}
+          onChange={handleChange}
+          inputValue={inputText}
+          onInputChange={setInputText}
+          onClickClearButton={handleClickClearButton}
+        >
           <Combobox.Input>
             <Combobox.HelperMessage>選択値: {value ?? '未選択'}</Combobox.HelperMessage>
             <Combobox.ErrorMessage>入力内容にエラーがあります</Combobox.ErrorMessage>
+          </Combobox.Input>
+          <Combobox.List>
+            {filtered.length === 0 && inputText.length > 0 && <Combobox.Empty />}
+            {filtered.map((opt) => (
+              <Combobox.Item key={opt.value} value={opt.value} label={opt.label} />
+            ))}
+          </Combobox.List>
+        </Combobox>
+      </div>
+    );
+  },
+};
+
+// onClickClearButton を渡さないパターン。クリアボタンは表示されない（TextInput と同一仕様）。
+export const WithoutClearButton: Story = {
+  parameters: {
+    chromatic: { disable: true },
+  },
+  render: function WithoutClearButtonRender() {
+    const [value, setValue] = useState<string | null>(null);
+    const [inputText, setInputText] = useState('');
+
+    const filtered = useMemo(
+      () => fruits.filter((f) => f.label.toLowerCase().includes(inputText.toLowerCase())),
+      [inputText],
+    );
+
+    const handleChange = (next: string | null, meta: ComboboxChangeMeta | null) => {
+      setValue(next);
+      setInputText(meta?.label ?? '');
+    };
+
+    return (
+      <div style={{ width: 300 }}>
+        <Combobox
+          value={value}
+          onChange={handleChange}
+          inputValue={inputText}
+          onInputChange={setInputText}
+          placeholder="果物を検索..."
+        >
+          <Combobox.Input>
+            <Combobox.HelperMessage>
+              onClickClearButton 未指定のためクリアボタンは表示されない（選択値: {value ?? '未選択'}）
+            </Combobox.HelperMessage>
           </Combobox.Input>
           <Combobox.List>
             {filtered.length === 0 && inputText.length > 0 && <Combobox.Empty />}
