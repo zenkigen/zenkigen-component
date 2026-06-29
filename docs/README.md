@@ -11,6 +11,7 @@
 - [テーマシステム](./theme-system.md) - テーマシステムとTailwind CSS設定
 - [Storybook ガイドライン](./storybook-guidelines.md) - Story の作成・構成に関する規約
 - [リリース手順](./release-process.md) - npm publish の手順（version bump・タグ・CI publish・dist-tag）
+- [バージョン運用方針](./versioning-policy.md) - メジャーバージョンのライフサイクル・ブランチ戦略・dist-tag 体制
 
 ## プロジェクト概要
 
