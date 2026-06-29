@@ -49,6 +49,8 @@ function ControlledCombobox({
   extraChildren,
   onSelectionChange,
   onOpenChange,
+  enableClearButton,
+  onClearButtonClick,
 }: {
   items?: Fruit[];
   initialValue?: string | null;
@@ -60,6 +62,8 @@ function ControlledCombobox({
   extraChildren?: ReactNode;
   onSelectionChange?: (value: string | null) => void;
   onOpenChange?: (isOpen: boolean) => void;
+  enableClearButton?: boolean;
+  onClearButtonClick?: () => void;
 }) {
   const [value, setValue] = useState<string | null>(initialValue);
   const [inputValue, setInputValue] = useState(initialInputValue);
@@ -73,6 +77,18 @@ function ControlledCombobox({
     return items;
   }, [filterItems, inputValue, items]);
 
+  // クリアの値リセットは利用者責務（onChange(null, null) / onInputChange('')）。
+  const clearButtonProps =
+    enableClearButton === true
+      ? {
+          onClickClearButton: () => {
+            setValue(null);
+            setInputValue('');
+            onClearButtonClick?.();
+          },
+        }
+      : {};
+
   return (
     <Combobox
       value={value}
@@ -83,6 +99,7 @@ function ControlledCombobox({
       }}
       inputValue={inputValue}
       onInputChange={setInputValue}
+      {...clearButtonProps}
       onOpenChange={onOpenChange}
       isError={isError}
       isDisabled={isDisabled}
@@ -1172,6 +1189,105 @@ describe('Combobox', () => {
       await user.click(input);
       expect(input).toHaveAttribute('aria-expanded', 'true');
       expect(input).toHaveAttribute('aria-controls', expect.any(String));
+    });
+  });
+
+  describe('クリアボタン', () => {
+    const getClearButton = () => screen.queryByRole('button', { name: '入力をクリア' });
+
+    it('onClickClearButton 未指定のときは入力値があってもクリアボタンを表示しない', () => {
+      render(<ControlledCombobox initialInputValue="りんご" />);
+
+      expect(getClearButton()).toBeNull();
+    });
+
+    it('onClickClearButton 指定 + 入力値ありでクリアボタンを表示する', () => {
+      render(<ControlledCombobox enableClearButton initialInputValue="りんご" />);
+
+      expect(getClearButton()).not.toBeNull();
+    });
+
+    it('入力値が空のときはクリアボタンを表示しない', () => {
+      render(<ControlledCombobox enableClearButton initialInputValue="" />);
+
+      expect(getClearButton()).toBeNull();
+    });
+
+    it('isDisabled のときはクリアボタンを表示しない', () => {
+      render(<ControlledCombobox enableClearButton initialInputValue="りんご" isDisabled />);
+
+      expect(getClearButton()).toBeNull();
+    });
+
+    it('クリックで onClickClearButton が呼ばれ、入力値がクリアされる', async () => {
+      const user = userEvent.setup();
+      const onClearButtonClick = vi.fn();
+      render(
+        <ControlledCombobox enableClearButton initialInputValue="りんご" onClearButtonClick={onClearButtonClick} />,
+      );
+
+      const clearButton = getClearButton();
+      expect(clearButton).not.toBeNull();
+      await user.click(clearButton as HTMLElement);
+
+      expect(onClearButtonClick).toHaveBeenCalledTimes(1);
+      expect(getCombobox()).toHaveValue('');
+      // 値が空になったのでクリアボタン自体も消える
+      expect(getClearButton()).toBeNull();
+    });
+
+    it('クリックしても popup は閉じず、input のフォーカスが維持される', async () => {
+      const user = userEvent.setup();
+      render(<ControlledCombobox enableClearButton initialInputValue="りんご" />);
+
+      const input = getCombobox();
+      await user.click(input);
+      expect(getListbox()).toHaveStyle({ visibility: 'visible' });
+
+      const clearButton = getClearButton();
+      // クリアボタンは onMouseDown で preventDefault するため input フォーカスが外れない。
+      await user.click(clearButton as HTMLElement);
+
+      expect(getListbox()).toHaveStyle({ visibility: 'visible' });
+      expect(input).toHaveFocus();
+    });
+
+    it('選択済みで open 中にクリアすると aria-activedescendant が残らない', async () => {
+      const user = userEvent.setup();
+      render(<ControlledCombobox enableClearButton initialValue="apple" initialInputValue="りんご" />);
+
+      const input = getCombobox();
+      await user.click(input);
+      // 選択済みの apple が active になり aria-activedescendant が付与される
+      expect(input).toHaveAttribute('aria-activedescendant');
+
+      await user.click(getClearButton() as HTMLElement);
+
+      // 内部の active 状態がリセットされ、クリア前の item が active に残らない
+      expect(input).not.toHaveAttribute('aria-activedescendant');
+    });
+
+    it('open 中にクリアした直後の Enter で旧選択が復活しない', async () => {
+      const user = userEvent.setup();
+      const onSelectionChange = vi.fn();
+      render(
+        <ControlledCombobox
+          enableClearButton
+          initialValue="apple"
+          initialInputValue="りんご"
+          onSelectionChange={onSelectionChange}
+        />,
+      );
+
+      const input = getCombobox();
+      await user.click(input);
+      await user.click(getClearButton() as HTMLElement);
+      onSelectionChange.mockClear();
+
+      // active が null のため Enter は選択を発火しない（クリア前の apple が再選択されない）
+      await user.keyboard('{Enter}');
+
+      expect(onSelectionChange).not.toHaveBeenCalled();
     });
   });
 });

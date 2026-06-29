@@ -37,8 +37,8 @@ export type ComboboxContextValue = {
   selectedValue: string | null;
   /** Item を選択する操作 */
   selectValue: (value: string, label: string) => void;
-  /** 選択解除 */
-  clearValue: () => void;
+  /** クリアボタンのクリック時に呼ばれる利用者コールバック（渡されたときのみクリアボタンを表示） */
+  onClickClearButton?: () => void;
   /** キーボードフォーカス中の Item index（items 配列上） */
   activeIndex: number | null;
   /** activeIndex を設定（activeValueRef も同期される） */

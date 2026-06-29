@@ -29,7 +29,6 @@ export type UseComboboxReturn = {
   items: ComboboxItemMeta[];
   setItems: (items: ComboboxItemMeta[]) => void;
   selectValue: (value: string, label: string) => void;
-  clearValue: () => void;
   /** 未確定入力を破棄し、最後に確定した表示テキストへ input を戻す（blur / Escape 用） */
   revertInputToCommitted: () => void;
   inputRef: React.RefObject<HTMLInputElement | null>;
@@ -41,7 +40,7 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
   const listId = `${baseId}-list`;
 
   // params を ref に退避し、コールバック群を params の identity 変化から切り離す。
-  // 毎レンダー新規の params に依存すると setIsOpen / selectValue / clearValue が毎回再生成され、
+  // 毎レンダー新規の params に依存すると setIsOpen / selectValue が毎回再生成され、
   // Combobox の context value も毎回変わって全 consumer（全 Item）が再レンダーするのを防ぐ。
   const paramsRef = useRef(params);
   paramsRef.current = params;
@@ -206,14 +205,19 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
     [setIsOpen],
   );
 
-  const clearValue = useCallback(() => {
-    committedInputValueRef.current = '';
-    paramsRef.current.onChange(null, null);
-    paramsRef.current.onInputChange('');
-    setActiveIndexState(null);
-    activeValueRef.current = null;
-    inputRef.current?.focus();
-  }, []);
+  // value も inputValue も空になったら active 系（activeIndex / activeValueRef）をリセットする。
+  // クリアボタン経由（利用者が onClickClearButton で onChange(null,null) + onInputChange('') する）に加え、
+  // 外部から完全リセットされた場合も含めて state-driven に揃える。
+  // - value !== null のまま inputValue だけ空（例: 選択済みのまま Ctrl+A Delete）はリセットしない
+  //   ＝ 既存仕様「selectedValue がある間は active 位置を維持」を保つため。
+  // - active を残すと open 中のクリア後に aria-activedescendant / Enter 選択対象が
+  //   クリア前のまま残るため、完全クリア時は明示的に null へ戻す。
+  useEffect(() => {
+    if (params.inputValue === '' && params.value === null) {
+      setActiveIndexState(null);
+      activeValueRef.current = null;
+    }
+  }, [params.inputValue, params.value]);
 
   const moveActive = useCallback((direction: 'next' | 'prev') => {
     const currentItems = itemsRef.current;
@@ -337,7 +341,6 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
     items,
     setItems,
     selectValue,
-    clearValue,
     revertInputToCommitted,
     inputRef,
     handleKeyDown,

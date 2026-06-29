@@ -26,10 +26,11 @@ export function ComboboxInput({ autoFocus, children }: ComboboxInputProps) {
     setInputElementRef,
     handleKeyDown,
     handleInputBlur,
-    clearValue,
+    onClickClearButton,
   } = useComboboxContext('Combobox.Input');
 
-  const isClearButtonVisible = inputValue.length > 0 && !isDisabled;
+  // クリアボタンは onClickClearButton が渡されたときのみ表示する（TextInput と同一仕様）。
+  const isClearButtonVisible = onClickClearButton != null && inputValue.length > 0 && !isDisabled;
 
   // List に Item/Loading/Empty のいずれも無い場合 popup は描画されない (visibility hidden)。
   // 画面上の開閉状態と aria-expanded / aria-controls を一致させるため、両方の AND を「実効 open」として使う。
@@ -57,8 +58,10 @@ export function ComboboxInput({ autoFocus, children }: ComboboxInputProps) {
   }, [isOpen, setIsOpen, inputRef]);
 
   const handleClear = useCallback(() => {
-    clearValue();
-  }, [clearValue]);
+    // 値のクリアは利用者ハンドラに委ねる。内部の active 系リセットは
+    // inputValue が空になったことを useCombobox 側の useEffect が検知して行う。
+    onClickClearButton?.();
+  }, [onClickClearButton]);
 
   const setRef = useCallback(
     (node: HTMLInputElement | null) => {
