@@ -29,8 +29,23 @@ jobs:
       - name: Build npm package
         run: yarn build-lib:all
 
+      - name: Determine npm dist-tag
+        id: dist-tag
+        run: |
+          # タグ名に '-'（プレリリース識別子）を含む場合は next、それ以外は latest。
+          #   例: v2.0.0-rc.0 → next（@next でオプトイン） / v1.20.5 → latest
+          # これにより安定版（latest）を壊さずにプレリリースを並行公開できる。
+          # 安定版タグ（ハイフンなし）は常に latest になるため、v1 のリリース手順・結果は従来と同じ。
+          if [[ "${GITHUB_REF_NAME}" == *-* ]]; then
+            echo "name=next" >> "$GITHUB_OUTPUT"
+          else
+            echo "name=latest" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Publish npm package
-        run: yarn publish:all
+        # --tolerate-republish: publish:all は 4 パッケージを順次公開するため、途中失敗後の再実行で
+        # 公開済み version が EPUBLISHCONFLICT を起こすのを避け、未公開分のみ揃えられるようにする。
+        run: yarn publish:all --tag ${{ steps.dist-tag.outputs.name }} --tolerate-republish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_OPTIONS: --max_old_space_size=8192
