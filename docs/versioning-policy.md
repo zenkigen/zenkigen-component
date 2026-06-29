@@ -12,7 +12,7 @@
   - [v2 本リリース時（順序が重要）](#v2-本リリース時順序が重要)
   - [本リリース後の定常状態](#本リリース後の定常状態)
 - [npm dist-tag 体制](#npm-dist-tag-体制)
-- [publish workflow の npm dist-tag 判定: 現状と将来改修](#publish-workflow-の-distribution-tag-dist-tag-判定-現状と将来改修)
+- [publish workflow の npm dist-tag 判定: 現状と将来改修](#publish-workflow-の-npm-dist-tag-判定-現状と将来改修)
   - [現状](#現状)
   - [将来（v2 本リリース時に改修必須）](#将来v2-本リリース時に改修必須)
 - [関連リンク](#関連リンク)
