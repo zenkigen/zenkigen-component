@@ -1,0 +1,76 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/addon-docs/blocks';
+import { Markdown } from '@storybook/addon-docs/blocks';
+import RadioCardStories, { Component } from './radio-card.stories';
+import spec from '../../../../docs/component/radio-card-specification.md?raw';
+
+<Meta title="RadioCard" of={RadioCardStories} />
+
+# RadioCard
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
+
+<Canvas>
+  <Story of={Component} />
+</Canvas>
+
+<Controls of={Component} />
+
+### Code Example
+
+```typescript
+import { useState } from 'react';
+import { RadioCard } from '@zenkigen-inc/component-ui';
+
+const Example = () => {
+  const [value, setValue] = useState('basic');
+
+  return (
+    <RadioCard value={value} onChange={setValue} aria-label="プラン選択">
+      <RadioCard.Group>
+        <RadioCard.Item value="basic" label="ベーシック" description="個人向けのプランです" />
+        <RadioCard.Item value="pro" label="プロ" description="チーム向けのプランです" />
+      </RadioCard.Group>
+      <RadioCard.ErrorMessage>いずれかのプランを選択してください</RadioCard.ErrorMessage>
+    </RadioCard>
+  );
+};
+```
+
+## 概要
+
+複数の選択肢から1つだけを、カード型で選択できるコンポーネントです。各カードに補足説明（`description`）を添えられます。`Radio` よりも情報量の多い選択肢を提示したい場面に適しています。
+
+## 構成
+
+`RadioCard`（フィールド）を親に、`RadioCard.Group`（選択肢のまとまり）・`RadioCard.Item`（各カード）・`RadioCard.ErrorMessage`（グループ全体のエラー）を組み合わせる複合コンポーネントです。
+
+- **`RadioCard`** — `value` / `onChange` を持つ controlled コンポーネント。状態とエラーを管理します。
+- **`RadioCard.Group`** — `role="radiogroup"`。選択肢のまとまりを表します。
+- **`RadioCard.Item`** — 各カード。`value` / `label` は必須、`description` は任意です。
+- **`RadioCard.ErrorMessage`** — グループ全体に対するエラーメッセージ。`isError` のときに表示されます。
+
+## 設計の原則（Do）
+
+### エラーはグループ全体に対して示します
+
+ラジオの選択は「1つを選ぶ」という1つの操作なので、エラーは個々のカードではなくグループ全体に紐づけます。`RadioCard` に `isError` を渡し、`RadioCard.ErrorMessage` をグループ末尾に置きます。
+
+### 補足が必要な選択肢に使います
+
+選択肢ごとに説明が必要な場合に `description` を活用します。説明が不要なシンプルな選択肢では `Radio` の利用を検討してください。
+
+## 推奨しないこと（Don't）
+
+### 複数選択には使用しない
+
+複数の回答を選択させる場合は `Checkbox` を使用してください。
+
+### カード内に操作可能な要素を含めない
+
+カード全体がクリック領域のため、内部にリンクやボタンなどの操作可能な要素を配置しないでください。誤操作の原因になります。
