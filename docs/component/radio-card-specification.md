@@ -59,7 +59,7 @@ const Example = () => {
 | コンポーネント           | 役割                                                                              |
 | ------------------------ | --------------------------------------------------------------------------------- |
 | `RadioCard`              | フィールド。`value` / `onChange` / `isError` を持つ controlled な状態管理を担う。 |
-| `RadioCard.Group`        | `role="radiogroup"`。カードのまとまりと並びレイアウトを担う。                     |
+| `RadioCard.Group`        | `role="radiogroup"`。カードのまとまりを表す縦並びのコンテナ。                     |
 | `RadioCard.Item`         | 個々のカード。`value` / `label` は必須、`description` は任意。                    |
 | `RadioCard.ErrorMessage` | グループ全体に対するエラーメッセージ。`isError` のときに表示される。              |
 
@@ -82,15 +82,11 @@ const Example = () => {
 
 ### RadioCard.Group
 
-並び方向は `orientation` で指定する。prop 名と `'horizontal'` / `'vertical'` の2値は `Steps` の `orientation` と共有する。
+`role="radiogroup"` を持つ縦並びのコンテナ。
 
-| プロパティ    | 型                                       | デフォルト値 | 説明                                                                                 |
-| ------------- | ---------------------------------------- | ------------ | ------------------------------------------------------------------------------------ |
-| `children`    | `ReactNode`                              | -            | `RadioCard.Item` 群。                                                                |
-| `orientation` | `'vertical' \| 'horizontal' \| 'custom'` | `'vertical'` | 並び方向。`'custom'` のときのみ `className` を受け取り、そのまま適用する。           |
-| `className`   | `string`                                 | -            | `orientation='custom'` のときのみ**必須**。grid 折り返しや等幅などを自由に指定する。 |
-
-`orientation` と `className` は判別可能ユニオンで型付けされており、`orientation='custom'` 以外で `className` を渡す、または `'custom'` で `className` を省略すると型エラーになる。
+| プロパティ | 型          | デフォルト値 | 説明                  |
+| ---------- | ----------- | ------------ | --------------------- |
+| `children` | `ReactNode` | -            | `RadioCard.Item` 群。 |
 
 ### RadioCard.Item
 
@@ -140,30 +136,6 @@ const Example = () => {
 
 ## 使用例
 
-### 横並び
-
-```typescript
-<RadioCard value={value} onChange={setValue} aria-label="配送方法">
-  <RadioCard.Group orientation="horizontal">
-    <RadioCard.Item value="normal" label="通常配送" description="3〜5日でお届け" />
-    <RadioCard.Item value="express" label="速達配送" description="翌日お届け" />
-  </RadioCard.Group>
-</RadioCard>
-```
-
-### grid（折り返し・等幅）
-
-```typescript
-<RadioCard value={value} onChange={setValue} aria-label="数量選択">
-  <RadioCard.Group orientation="custom" className="grid grid-cols-2 gap-2">
-    <RadioCard.Item value="1" label="1個" />
-    <RadioCard.Item value="2" label="2個" />
-    <RadioCard.Item value="3" label="3個" />
-    <RadioCard.Item value="4" label="4個" />
-  </RadioCard.Group>
-</RadioCard>
-```
-
 ### エラー表示
 
 ```typescript
@@ -196,15 +168,14 @@ const Example = () => {
 
 1. `RadioCard.Group` / `RadioCard.Item` / `RadioCard.ErrorMessage` は `RadioCard` の内部でのみ使用できる（外部で使うと例外を投げる）。単一の選択肢を扱う場合は `Radio` を使用する。
 2. エラーは個々のカードではなくグループ全体に帰属する。カードごとに異なるエラーを出す設計は採用していない。
-3. `orientation='custom'` で `className` を渡す場合、デフォルトの `flex flex-col gap-2` は適用されず、渡した `className` がそのまま適用される（`display` / `gap` を含めて指定する）。
-4. カード内にリンクやボタンなどの操作可能な要素を配置しない（カード全面がクリック領域のため）。
+3. カード内にリンクやボタンなどの操作可能な要素を配置しない（カード全面がクリック領域のため）。
 
 ## スタイルのカスタマイズ
 
-Tailwind ユーティリティと `@zenkigen-inc/component-config` のデザイントークン（例: `selectedUi`、`selectedUiBorder`、`supportError`、`uiBorder02`、`disabled01`）に依存する。並びレイアウトは `RadioCard.Group` の `orientation='custom'` + `className` で調整する。配色やフォーカスリングを変更する場合はテーマ設定（`@zenkigen-inc/component-theme`）を調整する。
+Tailwind ユーティリティと `@zenkigen-inc/component-config` のデザイントークン（例: `selectedUi`、`selectedUiBorder`、`supportError`、`uiBorder02`、`disabled01`）に依存する。配色やフォーカスリングを変更する場合はテーマ設定（`@zenkigen-inc/component-theme`）を調整する。
 
 ## 更新履歴
 
 | 日付           | 内容     | 担当者 |
 | -------------- | -------- | ------ |
-| 2026-06-24 JST | 新規作成 | -      |
+| 2026-06-30 JST | 新規作成 | -      |

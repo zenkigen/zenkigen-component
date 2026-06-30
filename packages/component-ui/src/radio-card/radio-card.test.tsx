@@ -278,30 +278,4 @@ describe('RadioCard', () => {
       expect(container.querySelectorAll('.bg-supportError')).toHaveLength(0);
     });
   });
-
-  describe('レイアウト', () => {
-    it('orientation="horizontal" で flex-row になること', () => {
-      render(
-        <RadioCard value="a" onChange={vi.fn()} aria-label="グループ">
-          <RadioCard.Group orientation="horizontal">
-            <RadioCard.Item value="a" label="A" />
-          </RadioCard.Group>
-        </RadioCard>,
-      );
-      expect(screen.getByRole('radiogroup')).toHaveClass('flex-row');
-    });
-
-    it('orientation="custom" で渡した className がそのまま適用されること', () => {
-      render(
-        <RadioCard value="a" onChange={vi.fn()} aria-label="グループ">
-          <RadioCard.Group orientation="custom" className="grid grid-cols-2 gap-4">
-            <RadioCard.Item value="a" label="A" />
-          </RadioCard.Group>
-        </RadioCard>,
-      );
-      const group = screen.getByRole('radiogroup');
-      expect(group).toHaveClass('grid', 'grid-cols-2', 'gap-4');
-      expect(group).not.toHaveClass('flex-col');
-    });
-  });
 });

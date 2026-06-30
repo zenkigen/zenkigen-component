@@ -51,7 +51,7 @@ const Example = () => {
 `RadioCard`（フィールド）を親に、`RadioCard.Group`（選択肢のまとまり）・`RadioCard.Item`（各カード）・`RadioCard.ErrorMessage`（グループ全体のエラー）を組み合わせる複合コンポーネントです。
 
 - **`RadioCard`** — `value` / `onChange` を持つ controlled コンポーネント。状態とエラーを管理します。
-- **`RadioCard.Group`** — `role="radiogroup"`。`orientation`（`'vertical'`（既定） / `'horizontal'` / `'custom'`）で並びを指定します。`'custom'` のときは `className` でレイアウトを自由に指定できます。
+- **`RadioCard.Group`** — `role="radiogroup"`。選択肢のまとまりを表します。
 - **`RadioCard.Item`** — 各カード。`value` / `label` は必須、`description` は任意です。
 - **`RadioCard.ErrorMessage`** — グループ全体に対するエラーメッセージ。`isError` のときに表示されます。
 
