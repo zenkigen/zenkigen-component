@@ -15,7 +15,7 @@ export function RadioCardGroup({ children }: RadioCardGroupProps) {
       role="radiogroup"
       aria-label={ariaLabel}
       aria-labelledby={ariaLabelledby}
-      className="flex flex-col gap-2"
+      className="flex flex-col gap-4"
       {...describedByProps}
     >
       {children}

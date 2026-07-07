@@ -132,7 +132,7 @@ const Example = () => {
 | 無効             | `border-disabled01`                | （選択時）`bg-disabled01`       |
 
 - カード形状は角丸（`rounded`）、パディングは `px-4 py-3`。
-- 間隔は Item 間・グループとエラー間ともに `gap-2`（8px）。
+- 間隔は Item 間が `gap-4`（16px）、グループとエラー間が `gap-2`（8px）。
 
 ## 使用例
 
