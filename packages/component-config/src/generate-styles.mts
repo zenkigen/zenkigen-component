@@ -1,7 +1,8 @@
 /* eslint-disable no-console */
 // tokens のビルド出力 (dist/index.mjs) と component-theme の typography から、
-// Tailwind v4 用の CSS (@theme / @utility / @source inline) を dist/ に生成する。
+// `exports["./styles"]` で公開するスタイル一式 (@theme / @utility / @source inline) を dist/ に生成する。
 // build スクリプトで tsup の後に実行される（dist/index.mjs と component-theme/dist の存在が前提）。
+// Node の型ストリップ機能（Node 22.6+）によりトランスパイルなしで直接実行される。
 import { writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -14,10 +15,10 @@ const scriptDir = dirname(fileURLToPath(import.meta.url));
 const distDir = join(scriptDir, '..', 'dist');
 
 // ---- カラートークンの収集（v3 tailwind-config.ts の colors 構造を踏襲）----
-const colorLines = [];
-const colorNames = [];
+const colorLines: string[] = [];
+const colorNames: string[] = [];
 
-const addColor = (name, value) => {
+const addColor = (name: string, value: string) => {
   colorLines.push(`  --color-${name}: ${value};`);
   colorNames.push(name);
 };
@@ -195,7 +196,7 @@ writeFileSync(join(distDir, 'utilities.css'), utilitiesCss);
 writeFileSync(join(distDir, 'index.css'), indexCss);
 
 console.log(
-  `[generate-v4-css] dist/{theme,utilities,index}.css を生成（colors: ${colorNames.length}, typography: ${
+  `[generate-styles] dist/{theme,utilities,index}.css を生成（colors: ${colorNames.length}, typography: ${
     Object.values(typography).flatMap((g) => Object.keys(g)).length
   }）`,
 );

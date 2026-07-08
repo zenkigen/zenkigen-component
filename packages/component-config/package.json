@@ -20,8 +20,8 @@
   "scripts": {
     "type-check": "tsc --noEmit",
     "build:tokens": "token-transformer style-dictionary/tokens.json style-dictionary/transformed-tokens.json --preserveRawValue=true && node build.cjs",
-    "build": "rimraf dist && tsup src/index.ts --format cjs,esm --dts && node src/generate-v4-css.mjs",
-    "build-lib": "rimraf dist && tsup src/index.ts --format cjs,esm --dts && node src/generate-v4-css.mjs"
+    "build": "rimraf dist && tsup src/index.ts --format cjs,esm --dts && node src/generate-styles.mts",
+    "build-lib": "rimraf dist && tsup src/index.ts --format cjs,esm --dts && node src/generate-styles.mts"
   },
   "devDependencies": {
     "style-dictionary": "5.4.0",
