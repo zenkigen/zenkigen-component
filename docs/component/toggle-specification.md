@@ -214,7 +214,7 @@ const ToggleCard = () => {
 - インジケーター色: `iconOnColor`
 - ラベル色: `text01`/`disabled01`
 
-テーマトークンを更新すればトラック色やホバー色を一括で変更できる。サイズの変更は`packages/component-config`のTailwindプリセットを介して行う。
+テーマトークンを更新すればトラック色やホバー色を一括で変更できる。サイズの変更は`packages/component-config`が生成するスタイル定義を介して行う。
 
 ## 更新履歴
 

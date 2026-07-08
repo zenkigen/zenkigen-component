@@ -101,18 +101,18 @@ component-theme
 
 ### 3. @zenkigen-inc/component-config
 
-このパッケージは、Tailwind CSS の設定を提供します。
+このパッケージは、Tailwind CSS 用のスタイル定義（CSS）を提供します。
 
 **主な特徴**:
 
-- Tailwind CSS のプリセット設定
-- Design Token を Tailwind の設定に変換
+- Design Token を CSS 変数に変換（`@theme` ディレクティブ）
+- タイポグラフィ・z-index 等のカスタムユーティリティ生成（`@utility` ディレクティブ）
 - component-themeパッケージに依存
-- Tailwindプラグインによるタイポグラフィユーティリティクラスの生成
+- 生成した CSS を `exports["./styles"]` として配布
 
 **主要ファイル**:
 
-- tailwind-config.ts: Tailwind CSS の設定
+- generate-styles.mts: 配布用 CSS（`dist/{theme,utilities,index}.css`）の生成スクリプト
 - tokens/tokens.ts: Design Token の定義
 
 ### 4. @zenkigen-inc/component-icons

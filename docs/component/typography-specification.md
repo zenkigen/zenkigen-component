@@ -29,13 +29,12 @@ Heading / Body / Label を通じてサイズ・行高・太さを統一し、UI 
 ## 利用前提
 
 Typography はコンポーネントではなく CSS ユーティリティであるため、import は不要である。
-`@zenkigen-inc/component-config` の Tailwind プリセットを読み込んだ環境で利用する。
+CSS エントリで `@zenkigen-inc/component-config/styles` を読み込んだ環境で利用する。
 
-```javascript
-// tailwind.config.js
-module.exports = {
-  presets: [require('@zenkigen-inc/component-config')],
-};
+```css
+/* globals.css */
+@import 'tailwindcss';
+@import '@zenkigen-inc/component-config/styles';
 ```
 
 ## 基本的な使用方法

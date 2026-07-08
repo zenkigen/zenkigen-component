@@ -280,7 +280,7 @@ type SegmentedControlContextValue = {
 
 ## スタイルのカスタマイズ
 
-このコンポーネントのスタイルは`@zenkigen-inc/component-config`のTailwind CSSプリセットに依存している。カスタマイズする場合は、プロジェクトのTailwind設定でデザイントークンを調整すること。
+このコンポーネントのスタイルは`@zenkigen-inc/component-config`が提供するスタイル定義（デザイントークン）に依存している。カスタマイズする場合は、デザイントークンを調整すること。
 
 ## 更新履歴
 

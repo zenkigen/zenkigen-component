@@ -27,14 +27,13 @@ Tailwind のユーティリティクラス（`text-*` / `bg-*` / `border-*` な�
 
 ## 利用前提
 
-Tailwind のプリセットとして `@zenkigen-inc/component-config` を組み込んだ環境で利用する。
+CSS エントリで `@zenkigen-inc/component-config/styles` を読み込んだ環境で利用する。
 Color を import する必要はない。
 
-```javascript
-// tailwind.config.js
-module.exports = {
-  presets: [require('@zenkigen-inc/component-config')],
-};
+```css
+/* globals.css */
+@import 'tailwindcss';
+@import '@zenkigen-inc/component-config/styles';
 ```
 
 ## 基本的な使用方法

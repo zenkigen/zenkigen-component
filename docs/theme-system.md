@@ -4,7 +4,7 @@
 
 ## テーマシステム概要
 
-Zenkigen Component のテーマシステムは、`@zenkigen-inc/component-theme` パッケージで定義され、`@zenkigen-inc/component-config` パッケージを通じてTailwind CSSの設定に変換されます。
+Zenkigen Component のテーマシステムは、`@zenkigen-inc/component-theme` パッケージで定義され、`@zenkigen-inc/component-config` パッケージを通じて CSS-first 形式のスタイル（`@theme` / `@utility`）に変換されます。
 
 ## パッケージの役割
 
@@ -21,13 +21,13 @@ Zenkigen Component のテーマシステムは、`@zenkigen-inc/component-theme`
 
 ### @zenkigen-inc/component-config
 
-このパッケージは、`component-theme` で定義された変数をTailwind CSSの設定に変換し、Tailwindプリセットとして提供します。
+このパッケージは、`component-theme` で定義された変数を CSS に変換し、`exports["./styles"]`（`dist/index.css`）として配布します。
 
 主な役割：
 
-- Tailwind CSSのプリセット設定の生成
-- デザイントークンのTailwind CSS設定への変換
-- タイポグラフィユーティリティクラスの生成
+- デザイントークンの CSS 変数への変換（`@theme` ディレクティブ）
+- タイポグラフィ・z-index 等のカスタムユーティリティ生成（`@utility` ディレクティブ）
+- 動的クラス（`fill-*`）の safelist 提供（`@source inline`）
 
 ## テーマの構成
 
@@ -44,11 +44,11 @@ Zenkigen Component のテーマシステムは、`@zenkigen-inc/component-theme`
 
 ### タイポグラフィシステム
 
-タイポグラフィシステムは、フォントサイズ、行の高さ、フォントウェイトなどの組み合わせを定義します。これらは、Tailwindプラグインにより `.typography-*` というユーティリティクラスとして使用できます。
+タイポグラフィシステムは、フォントサイズ、行の高さ、フォントウェイトなどの組み合わせを定義します。これらは `@utility` として生成され、`.typography-*` というユーティリティクラスで使用できます。
 
 例：
 
-- `.typography-heading24bold`
+- `.typography-h2`
 - `.typography-label16regular`
 - `.typography-body14regular`
 
@@ -100,68 +100,24 @@ z-index はコンポーネントの重なり順を制御するために使用し
 
 #### 定義場所
 
-z-index の値は `packages/component-config/src/tailwind-config.ts` で定義されています。
+z-index の値は `packages/component-config/src/generate-styles.mts` で定義され、`@utility z-*` として生成されます。
 
-## Tailwind CSS設定
+## CSS の生成（CSS-first 構成）
 
-### 設定のカスタマイズ
+Tailwind CSS の CSS-first 構成に対応するため、`component-config` はビルド時に `src/generate-styles.mts` を実行し、tokens と `component-theme` の typography から以下の CSS を `dist/` に生成します：
 
-`tailwind-config.ts` では、Tailwind CSSの設定をカスタマイズしています：
+| ファイル             | 内容                                                                                                                                                 |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `dist/theme.css`     | `@theme` ディレクティブ。カラー・fontSize・lineHeight・shadow・アニメーションのトークンを CSS 変数として定義                                         |
+| `dist/utilities.css` | `@utility` ディレクティブ。`z-*`・`typography-*`・`field-sizing-content` 等のカスタムユーティリティと、動的クラス用の `@source inline("fill-{...}")` |
+| `dist/index.css`     | エントリファイル（上記 2 つを `@import`）。`exports["./styles"]` で公開                                                                              |
 
-```tsx
-export const tailwindConfig = {
-  theme: {
-    extend: {
-      fontFamily: {
-        sans: "Arial, 'Noto Sans JP', sans-serif",
-      },
-      colors: {
-        user: tokens.user,
-        ...text,
-        ...link,
-        ...border,
-        ...background,
-        ...icon,
-        // ...その他の色定義
-      },
-      fontSize: tokens.fontSize,
-      lineHeight: tokens.lineHeights,
-      borderRadius: {
-        button: '.25rem',
-      },
-      boxShadow: {
-        modalShadow: tokens.shadow.modalShadow,
-        floatingShadow: tokens.shadow.floatingShadow,
-        layoutShadow: tokens.shadow.layoutShadow,
-      },
-      // ...その他の設定
-    },
-  },
-  plugins: [
-    // タイポグラフィユーティリティクラスを生成するプラグイン
-    plugin(({ addComponents }) => {
-      addComponents(
-        Object.entries(typography).reduce(
-          (acc, [, innerObj]) => (
-            Object.entries(innerObj).forEach(
-              ([innerKey, value]) => (acc[`.typography-${innerKey}`] = { [`@apply ${value}`]: {} }),
-            ),
-            acc
-          ),
-          {} as Record<string, Record<string, {}>>,
-        ),
-      );
-    }),
-  ],
-};
-```
+### タイポグラフィユーティリティ
 
-### タイポグラフィプラグイン
-
-タイポグラフィユーティリティクラスは、Tailwindプラグインを使用して生成されます。これにより、例えば以下のようなクラスが使用可能になります：
+タイポグラフィユーティリティクラスは `@utility typography-* { @apply ... }` として生成されます。これにより、例えば以下のようなクラスが使用可能になります：
 
 ```html
-<h1 class="typography-heading24bold">タイトル</h1>
+<h2 class="typography-h2">タイトル</h2>
 <p class="typography-body14regular">テキスト</p>
 ```
 
@@ -178,8 +134,8 @@ yarn update-tokens # トークンの更新コマンド
 このコマンドは以下のプロセスを実行します：
 
 1. `token-transformer` を使用してトークンを変換
-2. Style Dictionaryを使用してJavaScriptオブジェクトを生成
-3. 生成されたオブジェクトをTailwind CSS設定で使用
+2. Style Dictionaryを使用してJavaScriptオブジェクト（`src/tokens/tokens.ts`）を生成
+3. ビルド時に `generate-styles.mts` が生成されたオブジェクトから配布用 CSS（`@theme` / `@utility`）を生成
 
 ## コンポーネントでのテーマの利用
 
@@ -200,20 +156,15 @@ const baseClasses = clsx(
 
 ## Tailwind CSSの組み込み方法
 
-プロジェクトでZenkigen Componentを使用するには、以下のようにTailwind CSSの設定を行います：
+プロジェクトでZenkigen Componentを使用するには、CSS エントリ（例: `globals.css`）で以下のように読み込みます：
 
-```js
-// tailwind.config.js
-module.exports = {
-  content: [
-    // 既存の設定...
-    './node_modules/@zenkigen-inc/**/*.{js,ts,tsx}',
-  ],
-  presets: [
-    // 既存のプリセット...
-    require('@zenkigen-inc/component-config'),
-  ],
-};
+```css
+@import 'tailwindcss';
+@import '@zenkigen-inc/component-config/styles';
+
+/* zenkigen-component の動的クラスを検出（パスは CSS エントリから node_modules への相対パス） */
+@source '../../node_modules/@zenkigen-inc/component-theme/dist/**/*.mjs';
+@source '../../node_modules/@zenkigen-inc/component-ui/dist/**/*.mjs';
 ```
 
-これにより、Zenkigen Componentで使用されているTailwindのユーティリティクラスが、プロジェクトのCSSビルドに含まれるようになります。
+これにより、Zenkigen Componentで使用されているTailwindのユーティリティクラスが、プロジェクトのCSSビルドに含まれるようになります。v1.x（Tailwind v3 / JS preset）からの移行は [v1 → v2 移行ガイド](./migration-v1-to-v2.md) を参照してください。
