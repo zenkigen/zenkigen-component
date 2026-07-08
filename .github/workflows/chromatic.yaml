@@ -6,6 +6,9 @@ on:
   push:
     branches:
       - main
+      - v2-main
+  # baseline の再確立用: 手動起動時は TurboSnap を無効化し全ストーリーを撮影する
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -32,6 +35,7 @@ jobs:
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           onlyChanged: true
+          forceRebuild: ${{ github.event_name == 'workflow_dispatch' }}
           # component-config はトークン→生成 CSS 経由で全コンポーネントの見た目に影響するが、
           # import グラフに現れず TurboSnap が検知できないため、変更時は全ストーリーを再撮影する
           externals: packages/component-config/**
