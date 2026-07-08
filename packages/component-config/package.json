@@ -31,5 +31,8 @@
   },
   "dependencies": {
     "@zenkigen-inc/component-theme": "workspace:*"
+  },
+  "peerDependencies": {
+    "tailwindcss": "^4.0.0"
   }
 }
