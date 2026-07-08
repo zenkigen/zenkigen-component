@@ -32,6 +32,9 @@ jobs:
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           onlyChanged: true
+          # component-config はトークン→生成 CSS 経由で全コンポーネントの見た目に影響するが、
+          # import グラフに現れず TurboSnap が検知できないため、変更時は全ストーリーを再撮影する
+          externals: packages/component-config/**
         env:
           IS_CHROMATIC: 'true'
 
