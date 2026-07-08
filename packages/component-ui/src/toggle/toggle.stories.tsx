@@ -102,7 +102,7 @@ const ToggleStoryBasic = () => {
           isDisabled
         />
       </div>
-      <hr />
+      <hr className="border-uiBorder01" />
       <div style={{ display: 'flex', columnGap: '30px' }}>
         <Toggle
           id="switch-02"

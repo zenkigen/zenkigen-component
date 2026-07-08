@@ -394,7 +394,7 @@ export const WithLoading: Story = {
           </div>
         </div>
       </section>
-      <hr />
+      <hr className="border-uiBorder01" />
       <section className="flex flex-col gap-2">
         <p className="typography-body12regular text-text02">
           クリックすると 2 秒間「ダウンロード中」になり、その後元に戻ります。

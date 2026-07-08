@@ -73,7 +73,7 @@ const ComponentRender = (args: React.ComponentProps<typeof SortButton>) => {
           aria-label={`項目A ${sortOrder === null ? 'ソートなし' : sortOrder === 'ascend' ? '昇順' : '降順'}`}
         />
       </div>
-      <hr />
+      <hr className="border-uiBorder01" />
       <div>
         {sortOrder === 'ascend' && <p>昇順 - ascend</p>}
         {sortOrder === 'descend' && <p>降順 - descend</p>}
