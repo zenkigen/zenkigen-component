@@ -49,12 +49,22 @@ describe('NotificationInline', () => {
   describe('sizeバリエーション', () => {
     it('smallサイズでpaddingクラスが適用されること', () => {
       render(<NotificationInline size="small">メッセージ</NotificationInline>);
-      expect(getWrapper('メッセージ').className).toContain('p-[calc(0.5rem_-_1px)]');
+      expect(getWrapper('メッセージ').className).toContain('p-[calc(0.75rem_-_1px)]');
     });
 
     it('mediumサイズ（デフォルト）でpaddingクラスが適用されること', () => {
       render(<NotificationInline>メッセージ</NotificationInline>);
-      expect(getWrapper('メッセージ').className).toContain('p-[calc(0.75rem_-_1px)]');
+      expect(getWrapper('メッセージ').className).toContain('p-[calc(1rem_-_1px)]');
+    });
+
+    it('mediumサイズでアイコン非表示時も高さを揃えるmin-h-14が適用されること', () => {
+      render(<NotificationInline>メッセージ</NotificationInline>);
+      expect(getWrapper('メッセージ').className).toContain('min-h-14');
+    });
+
+    it('smallサイズではmin-h-14が適用されないこと', () => {
+      render(<NotificationInline size="small">メッセージ</NotificationInline>);
+      expect(getWrapper('メッセージ').className).not.toContain('min-h-14');
     });
   });
 
@@ -99,7 +109,7 @@ describe('NotificationInline', () => {
           メッセージ
         </NotificationInline>,
       );
-      expect(getWrapper('メッセージ').className).toContain('p-[calc(0.5rem_-_1px)]');
+      expect(getWrapper('メッセージ').className).toContain('p-[calc(0.75rem_-_1px)]');
     });
   });
 
@@ -116,6 +126,15 @@ describe('NotificationInline', () => {
         </NotificationInline>,
       );
       expect(screen.getByRole('button')).toBeInTheDocument();
+    });
+
+    it('閉じるボタンのラッパーにメッセージとの間隔を広げるml-2が適用されること', () => {
+      render(
+        <NotificationInline showClose onClickClose={vi.fn()}>
+          メッセージ
+        </NotificationInline>,
+      );
+      expect((screen.getByRole('button').parentElement as HTMLElement).className).toContain('ml-2');
     });
 
     it('閉じるボタンのクリックでonClickCloseが呼ばれること', async () => {

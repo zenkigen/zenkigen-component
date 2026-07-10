@@ -35,8 +35,9 @@ export function NotificationInline({ state = 'default', size = 'medium', variant
     'bg-uiBackgroundBlue': state === 'information',
     'bg-uiBackgroundSuccess': state === 'success',
     'bg-uiBackgroundGray': state === 'default',
-    'p-[calc(0.5rem_-_1px)]': size === 'small',
-    'p-[calc(0.75rem_-_1px)]': size === 'medium',
+    'p-[calc(0.75rem_-_1px)]': size === 'small',
+    // medium はアイコン(24px)が高さの基準になるため、アイコン非表示(state='default')でも同じ高さになるよう最小高を確保する
+    'min-h-14 p-[calc(1rem_-_1px)]': size === 'medium',
     'border-transparent': !isOutline,
     'border-supportError': isOutline && state === 'attention',
     'border-supportWarning': isOutline && state === 'warning',
@@ -73,7 +74,7 @@ export function NotificationInline({ state = 'default', size = 'medium', variant
       )}
       <p className="flex-1">{props.children}</p>
       {props.showClose === true && (
-        <div className="flex items-center">
+        <div className="ml-2 flex items-center">
           <IconButton icon="close" size="small" variant="text" onClick={props.onClickClose} />
         </div>
       )}
