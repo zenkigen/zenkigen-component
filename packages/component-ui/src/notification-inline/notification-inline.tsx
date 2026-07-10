@@ -9,6 +9,8 @@ type Props = {
   state?: 'success' | 'warning' | 'information' | 'attention' | 'default';
   /** コンポーネントの縦サイズとパディングを制御する。 */
   size?: 'small' | 'medium';
+  /** 枠線の有無を切り替える。outline は state に応じた 1px の枠線を表示する。 */
+  variant?: 'default' | 'outline';
   /** 通知に表示するメッセージ本体。 */
   children?: ReactNode;
 } & (
@@ -24,15 +26,23 @@ type Props = {
     }
 );
 
-export function NotificationInline({ state = 'default', size = 'medium', ...props }: Props) {
-  const wrapperClasses = clsx('typography-body13regular flex items-center gap-1 rounded text-text01', {
+export function NotificationInline({ state = 'default', size = 'medium', variant = 'default', ...props }: Props) {
+  const isOutline = variant === 'outline';
+  // 枠線の有無で外形寸法が変わらないよう、常時 1px の border を張り padding を 1px 分差し引く
+  const wrapperClasses = clsx('typography-body13regular flex items-center gap-1 rounded border text-text01', {
     'bg-uiBackgroundError': state === 'attention',
     'bg-uiBackgroundWarning': state === 'warning',
     'bg-uiBackgroundBlue': state === 'information',
     'bg-uiBackgroundSuccess': state === 'success',
     'bg-uiBackgroundGray': state === 'default',
-    'p-2': size === 'small',
-    'p-3': size === 'medium',
+    'p-[calc(0.5rem_-_1px)]': size === 'small',
+    'p-[calc(0.75rem_-_1px)]': size === 'medium',
+    'border-transparent': !isOutline,
+    'border-supportError': isOutline && state === 'attention',
+    'border-supportWarning': isOutline && state === 'warning',
+    'border-supportInfo': isOutline && state === 'information',
+    'border-supportSuccess': isOutline && state === 'success',
+    'border-uiBorder04': isOutline && state === 'default',
   });
 
   const iconClasses = clsx('flex items-center', {
