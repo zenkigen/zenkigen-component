@@ -26,7 +26,7 @@ yarn add @zenkigen-inc/component-ui @zenkigen-inc/component-config
 @source '../../node_modules/@zenkigen-inc/component-ui/dist/**/*.mjs';
 ```
 
-PostCSS プラグインは `@tailwindcss/postcss` を使用する（`autoprefixer` は不要）。v1.x（Tailwind v3 / JS preset）からの移行手順は移行ガイドを参照。
+PostCSS プラグインは `@tailwindcss/postcss` を使用する（`autoprefixer` は不要）。v1.x（Tailwind v3 / JS preset）からの移行手順は [v1 → v2 移行ガイド](https://github.com/zenkigen/zenkigen-component/blob/main/docs/migration-v1-to-v2.md) を参照。
 
 ## 利用方法
 
