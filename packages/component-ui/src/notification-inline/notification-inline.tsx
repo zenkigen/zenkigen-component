@@ -46,11 +46,18 @@ export function NotificationInline({ state = 'default', size = 'medium', variant
     'border-uiBorder04': isOutline && state === 'default',
   });
 
-  const iconClasses = clsx('flex items-center', {
+  // 複数行時にアイコンが 1 行目の中央に揃うよう、small は 1 行分の高さの箱の中でアイコンを中央配置する
+  const iconClasses = clsx('flex shrink-0 items-center', {
+    'h-5': size === 'small',
     'fill-supportError': state === 'attention',
     'fill-supportWarning': state === 'warning',
     'fill-blue-blue50': state === 'information',
     'fill-supportSuccess': state === 'success',
+  });
+
+  // medium はアイコン(24px)が 1 行分の高さ(約20px)より大きいため、テキスト側を 2px 下げて 1 行目とアイコンの中心を揃える
+  const textClasses = clsx('flex-1', {
+    'pt-[2px]': size === 'medium',
   });
 
   const iconName = {
@@ -67,14 +74,17 @@ export function NotificationInline({ state = 'default', size = 'medium', variant
 
   return (
     <div className={wrapperClasses}>
-      {state !== 'default' && (
-        <div className={iconClasses}>
-          <Icon name={iconName[state]} size={iconSize[size]} />
-        </div>
-      )}
-      <p className="flex-1">{props.children}</p>
+      {/* アイコンとメッセージは上揃えのグループにまとめ、複数行時もアイコンが 1 行目に揃うようにする */}
+      <div className="flex flex-1 items-start gap-1">
+        {state !== 'default' && (
+          <div className={iconClasses}>
+            <Icon name={iconName[state]} size={iconSize[size]} />
+          </div>
+        )}
+        <p className={textClasses}>{props.children}</p>
+      </div>
       {props.showClose === true && (
-        <div className="ml-2 flex items-center">
+        <div className="ml-2 flex shrink-0 items-center">
           <IconButton icon="close" size="small" variant="text" onClick={props.onClickClose} />
         </div>
       )}

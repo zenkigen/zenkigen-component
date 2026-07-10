@@ -93,6 +93,12 @@ export function WithoutClose() {
         Attention Outline
       </NotificationInline>
       <NotificationInline variant="outline">Default Outline</NotificationInline>
+      <NotificationInline size="small" state="attention">
+        めっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキスト
+      </NotificationInline>
+      <NotificationInline state="attention">
+        めっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキスト
+      </NotificationInline>
     </div>
   );
 }
