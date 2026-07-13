@@ -129,14 +129,14 @@ export const MinuteStep: Story = {
     docs: {
       description: {
         story:
-          '分候補の刻み。候補リストの最大高さは 264px 固定のため、minuteStep=1（60 候補）でもスクロール表示になる。',
+          '分候補の刻み。候補リストの最大高さは 250px 固定のため、minuteStep=1（60 候補）でもスクロール表示になる。',
       },
     },
   },
   render: () => (
     <div className="flex flex-col items-start gap-4">
       <div className="flex flex-col items-start gap-1">
-        <p className="typography-label14regular text-text02">minuteStep = 1（60 候補・リストは 264px でスクロール）</p>
+        <p className="typography-label14regular text-text02">minuteStep = 1（60 候補・リストは 250px でスクロール）</p>
         <TimePickerStory minuteStep={1} />
       </div>
       <div className="flex flex-col items-start gap-1">

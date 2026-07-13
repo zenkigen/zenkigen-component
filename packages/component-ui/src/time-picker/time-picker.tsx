@@ -25,8 +25,12 @@ const PLACEHOLDER = '--';
 const HOUR_ARIA_LABEL = '時';
 /** 分 Select トリガーの aria-label（内部固定） */
 const MINUTE_ARIA_LABEL = '分';
-/** 候補リストの最大高さ（内部固定・約 8 候補分）。時 Select（24 候補）が大きく出過ぎるのを防ぐ */
-const OPTION_LIST_MAX_HEIGHT = '264px';
+/**
+ * 候補リストの最大高さ（内部固定）。時 Select（24 候補）が大きく出過ぎるのを防ぐ。
+ * 候補 8 件分（264px）ちょうどにすると項目の切れ目と一致し、下にリストが続いていることが
+ * わかりにくいため、あえて項目の途中で切れる 250px にしている
+ */
+const OPTION_LIST_MAX_HEIGHT = '250px';
 
 export type TimePickerProps = {
   /** 選択時刻。`hour`・`minute` の両方が `null` の場合は未入力を表す */
