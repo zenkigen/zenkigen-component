@@ -35,6 +35,7 @@ export * from './table';
 export * from './tag';
 export * from './text-area';
 export * from './text-input';
+export * from './time-picker';
 export * from './toast';
 export * from './toggle';
 export * from './tooltip';
