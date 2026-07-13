@@ -70,22 +70,28 @@ const MyComponent = () => {
 
 ### オプションプロパティ
 
-| プロパティ            | 型                                            | デフォルト値 | 説明                                                                   |
-| --------------------- | --------------------------------------------- | ------------ | ---------------------------------------------------------------------- |
-| `size`                | `'x-small' \| 'small' \| 'medium' \| 'large'` | `'medium'`   | コンポーネントのサイズ。内部の`Select`のsizeに1:1でマッピングされる    |
-| `minuteStep`          | `1 \| 5 \| 10 \| 15 \| 20 \| 30`              | `15`         | 分候補の刻み（すべて60の約数）                                         |
-| `hourStep`            | `number`                                      | `1`          | 時候補の刻み                                                           |
-| `minTime`             | `string`（`"HH:mm"`）                         | `undefined`  | 選択可能な最小時刻（inclusive）。範囲外の候補は非表示になる            |
-| `maxTime`             | `string`（`"HH:mm"`）                         | `undefined`  | 選択可能な最大時刻（inclusive）。範囲外の候補は非表示になる            |
-| `isDisabled`          | `boolean`                                     | `false`      | 無効状態かどうか                                                       |
-| `isError`             | `boolean`                                     | `false`      | エラー状態かどうか。`true`の場合、両方のSelectがエラー表示になる       |
-| `hourPlaceholder`     | `string`                                      | `'--'`       | 時Selectの未選択時に表示するテキスト                                   |
-| `minutePlaceholder`   | `string`                                      | `'--'`       | 分Selectの未選択時に表示するテキスト                                   |
-| `hourAriaLabel`       | `string`                                      | `'時'`       | 時Selectのトリガーボタンに設定する`aria-label`                         |
-| `minuteAriaLabel`     | `string`                                      | `'分'`       | 分Selectのトリガーボタンに設定する`aria-label`                         |
-| `optionListMaxHeight` | `CSSProperties['height']`                     | `undefined`  | 候補リストの最大高さ（`minuteStep=1`で60件等のスクロール制御に使用）   |
-| `width`               | `CSSProperties['width']`                      | `undefined`  | 全体幅。指定時は各Selectが均等に伸長。省略時はsizeに応じた固定幅になる |
-| `children`            | `ReactNode`                                   | `undefined`  | Compound Component（`TimePicker.ErrorMessage`）                        |
+| プロパティ   | 型                                            | デフォルト値 | 説明                                                                   |
+| ------------ | --------------------------------------------- | ------------ | ---------------------------------------------------------------------- |
+| `size`       | `'x-small' \| 'small' \| 'medium' \| 'large'` | `'medium'`   | コンポーネントのサイズ。内部の`Select`のsizeに1:1でマッピングされる    |
+| `minuteStep` | `1 \| 5 \| 10 \| 15 \| 30`                    | `15`         | 分候補の刻み（すべて60の約数）                                         |
+| `hourStep`   | `number`                                      | `1`          | 時候補の刻み                                                           |
+| `minTime`    | `string`（`"HH:mm"`）                         | `undefined`  | 選択可能な最小時刻（inclusive）。範囲外の候補は非表示になる            |
+| `maxTime`    | `string`（`"HH:mm"`）                         | `undefined`  | 選択可能な最大時刻（inclusive）。範囲外の候補は非表示になる            |
+| `isDisabled` | `boolean`                                     | `false`      | 無効状態かどうか                                                       |
+| `isError`    | `boolean`                                     | `false`      | エラー状態かどうか。`true`の場合、両方のSelectがエラー表示になる       |
+| `width`      | `CSSProperties['width']`                      | `undefined`  | 全体幅。指定時は各Selectが均等に伸長。省略時はsizeに応じた固定幅になる |
+| `children`   | `ReactNode`                                   | `undefined`  | Compound Component（`TimePicker.ErrorMessage`）                        |
+
+### 内部固定値（props では変更不可）
+
+以下は公開 props ではなく内部で固定されている。
+
+| 項目                     | 固定値  | 説明                                                                                      |
+| ------------------------ | ------- | ----------------------------------------------------------------------------------------- |
+| 時・分のプレースホルダー | `'--'`  | 未選択時に時・分の両 Select に表示するテキスト                                            |
+| 時 Select の`aria-label` | `'時'`  | 時 Select のトリガーボタンに付与                                                          |
+| 分 Select の`aria-label` | `'分'`  | 分 Select のトリガーボタンに付与                                                          |
+| 候補リストの最大高さ     | `264px` | 時・分の両 Select に常時適用（約 8 候補分）。時 Select（24 候補）が大きく出過ぎるのを防ぐ |
 
 ## value 型（TimeValue）
 
@@ -200,11 +206,11 @@ const [time, setTime] = useState<TimeValue>({ hour: null, minute: null });
 // 30分刻み（00, 30）
 <TimePicker value={time} onChange={setTime} minuteStep={30} />
 
-// 1分刻み（00〜59の60件）。候補が多いため optionListMaxHeight を指定する
-<TimePicker value={time} onChange={setTime} minuteStep={1} optionListMaxHeight="264px" />
+// 1分刻み（00〜59の60件）。候補リストの最大高さは 264px 固定のためスクロール表示になる
+<TimePicker value={time} onChange={setTime} minuteStep={1} />
 ```
 
-`minuteStep`は`1 | 5 | 10 | 15 | 20 | 30`（すべて60の約数）のunion型であり、型レベルで不正な刻み（`7`や`25`など）を弾く。
+`minuteStep`は`1 | 5 | 10 | 15 | 30`（すべて60の約数）のunion型であり、型レベルで不正な刻み（`7`や`25`など）を弾く。
 
 ### エラー状態
 
@@ -249,21 +255,22 @@ const combined =
 ## アクセシビリティ
 
 - 時・分のトリガーボタンはそれぞれ標準的な`<button>`要素として実装されている。
-- 各トリガーボタンには`aria-label`（既定「時」「分」）が付与される。文言は`hourAriaLabel` / `minuteAriaLabel`で変更できる。
-- エラー状態では両トリガーボタンへ`aria-invalid="true"`が設定される。
+- 各トリガーボタンには固定の`aria-label`（「時」「分」）が付与される。
+- エラー状態では両トリガーボタンへ`aria-invalid="true"`が設定される（`Select`が`isError`から内部導出する）。
 - `TimePicker.ErrorMessage`は`aria-describedby`で両トリガーボタンとリンクされる。
 - `TimePicker.ErrorMessage`には`aria-live="assertive"`がデフォルトで設定される。
 - キーボード操作・フォーカスリング・外部クリックによる候補リストの開閉は、内部の`Select`の挙動を継承する。
-- **既知の制約（現在選択値の読み上げ）**: 各トリガーボタンの`aria-label`（既定「時」「分」）がアクセシブルネームになるため、現在選択している時・分の値はスクリーンリーダーの名前としては読み上げられない。値の変化を SR で伝えたい場合は、利用側で可視ラベルや説明テキストを補うことを検討する。
+- **既知の制約（現在選択値の読み上げ）**: 各トリガーボタンの`aria-label`（「時」「分」）がアクセシブルネームになるため、現在選択している時・分の値はスクリーンリーダーの名前としては読み上げられない。値の変化を SR で伝えたい場合は、利用側で可視ラベルや説明テキストを補うことを検討する。
 
 ## 技術的な詳細
 
 - v1は`Select` × 2（時・分）＋`:`セパレータの薄いコンポジットである（独自の入力パネルやclock UIは持たない）。
 - 表示は`value`から純導出され、隠れstateを持たない（pure controlled）。
 - 時候補は`hourStep`（既定1）で`00`〜`23`を生成する。分候補は`minuteStep`（既定15）で生成する。
+- 候補リストの最大高さは`264px`で内部固定し、時・分の両 Select に常時適用する（時 Select の 24 候補が大きく出過ぎるのを防ぐ）。`minuteStep=1`（60 候補）の場合もスクロール表示になる。
 - `minTime` / `maxTime`の範囲外の候補は、生成リストから除外（非表示）する。現行の`Select`はdisabledオプションに非対応のため、無効表示ではなく非表示とする。
 - 時候補は、その時に対して選択可能な分が 1 件も無い場合も除外する。これにより、`minTime`の分が`minuteStep`で到達できない場合（例: `minTime="09:45"`, `minuteStep=30`では 9 時の分候補`00`/`30`がいずれも 09:45 未満）に、選んでも分候補が空になるデッドエンドの時が候補へ現れることを防ぐ。
-- 時・分のラベルとエラーメッセージの`aria`配線は、`Select`のトリガー`aria-label` / `aria-describedby` / `aria-invalid`のpass-through経由で行う。
+- 時・分の固定`aria-label`とエラーメッセージの`aria-describedby`配線は、`Select`のトリガー`aria-label` / `aria-describedby`のpass-through経由で行う。`aria-invalid`は`Select`が`isError`から内部導出する。
 - 候補リストは`z-popover`で`FloatingPortal`表示されるため、Modal内で使用しても破綻しない。
 
 ## 注意事項
@@ -279,10 +286,11 @@ const combined =
 
 ## スタイルのカスタマイズ
 
-このコンポーネントは Tailwind CSS のユーティリティクラスを使用しており、`@zenkigen-inc/component-config`で定義されたデザイントークンに依存している。状態色（hover / active / disabled / error）は内部の`Select`に委譲され、`:`セパレータは`text-text02`で表示される。スタイルのカスタマイズは`className`ではなく、`size` / `width` / `optionListMaxHeight`等のpropsで行う。
+このコンポーネントは Tailwind CSS のユーティリティクラスを使用しており、`@zenkigen-inc/component-config`で定義されたデザイントークンに依存している。状態色（hover / active / disabled / error）は内部の`Select`に委譲され、`:`セパレータは`text-text02`で表示される。スタイルのカスタマイズは`className`ではなく、`size` / `width`等のpropsで行う。
 
 ## 更新履歴
 
-| 日付                 | 内容     | 担当者 |
-| -------------------- | -------- | ------ |
-| 2026-07-13 14:07 JST | 新規作成 | -      |
+| 日付                 | 内容                                                                                                                                                                                                                                | 担当者 |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| 2026-07-13 14:07 JST | 新規作成                                                                                                                                                                                                                            | -      |
+| 2026-07-13 15:46 JST | `minuteStep`から`20`を削除。`hourPlaceholder`/`minutePlaceholder`/`hourAriaLabel`/`minuteAriaLabel`/`optionListMaxHeight`を公開 API から削除し内部固定化（プレースホルダー`--`、aria-label「時」「分」、候補リスト最大高さ`264px`） | -      |

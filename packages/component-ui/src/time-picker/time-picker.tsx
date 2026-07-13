@@ -19,6 +19,15 @@ const SELECT_WIDTH_BY_SIZE: Record<TimePickerSize, number> = {
   large: 88,
 };
 
+/** 時・分 Select の未選択時プレースホルダー（内部固定） */
+const PLACEHOLDER = '--';
+/** 時 Select トリガーの aria-label（内部固定） */
+const HOUR_ARIA_LABEL = '時';
+/** 分 Select トリガーの aria-label（内部固定） */
+const MINUTE_ARIA_LABEL = '分';
+/** 候補リストの最大高さ（内部固定・約 8 候補分）。時 Select（24 候補）が大きく出過ぎるのを防ぐ */
+const OPTION_LIST_MAX_HEIGHT = '264px';
+
 export type TimePickerProps = {
   /** 選択時刻。`hour`・`minute` の両方が `null` の場合は未入力を表す */
   value: TimeValue;
@@ -38,16 +47,6 @@ export type TimePickerProps = {
   isDisabled?: boolean;
   /** エラー状態かどうか。`true` の場合、両方の Select がエラー表示になる @default false */
   isError?: boolean;
-  /** 時 Select の未選択時に表示するテキスト @default '--' */
-  hourPlaceholder?: string;
-  /** 分 Select の未選択時に表示するテキスト @default '--' */
-  minutePlaceholder?: string;
-  /** 時 Select のトリガーボタンに設定する `aria-label` @default '時' */
-  hourAriaLabel?: string;
-  /** 分 Select のトリガーボタンに設定する `aria-label` @default '分' */
-  minuteAriaLabel?: string;
-  /** 候補リストの最大高さ。分候補が多い（`minuteStep=1` で 60 件等）ときのスクロール制御に使用する */
-  optionListMaxHeight?: CSSProperties['height'];
   /** 全体幅。指定した場合、各 Select が均等に伸長する。省略時は size に応じた固定幅になる */
   width?: CSSProperties['width'];
   /** Compound Component（`TimePicker.ErrorMessage`） */
@@ -69,11 +68,6 @@ export const TimePicker: TimePickerComponent = ({
   maxTime,
   isDisabled = false,
   isError = false,
-  hourPlaceholder = '--',
-  minutePlaceholder = '--',
-  hourAriaLabel = '時',
-  minuteAriaLabel = '分',
-  optionListMaxHeight,
   width,
   children,
 }: TimePickerProps) => {
@@ -119,11 +113,9 @@ export const TimePicker: TimePickerComponent = ({
     return child;
   });
 
-  // 各 Select トリガーへ配線する共通 aria 属性（指定がある場合のみ属性を付与する）
-  const sharedAriaProps = {
-    ...(errorIds.length > 0 ? { 'aria-describedby': errorIds.join(' ') } : {}),
-    ...(isError ? { 'aria-invalid': true } : {}),
-  };
+  // ErrorMessage がある場合のみ各 Select トリガーへ aria-describedby を配線する。
+  // aria-invalid は Select が isError から内部導出するため、ここでは渡さない。
+  const sharedAriaProps = errorIds.length > 0 ? { 'aria-describedby': errorIds.join(' ') } : {};
 
   // セパレータ（":"）はエラー / 無効でも色を変えず text02 のまま。タイポグラフィは size 連動
   const separatorClasses = clsx('text-text02', {
@@ -144,12 +136,12 @@ export const TimePicker: TimePickerComponent = ({
         <Select
           size={size}
           width={selectWidth}
-          placeholder={hourPlaceholder}
+          placeholder={PLACEHOLDER}
           selectedOption={selectedHourOption}
           isDisabled={isDisabled}
           isError={isError}
-          optionListMaxHeight={optionListMaxHeight}
-          aria-label={hourAriaLabel}
+          optionListMaxHeight={OPTION_LIST_MAX_HEIGHT}
+          aria-label={HOUR_ARIA_LABEL}
           {...sharedAriaProps}
           onChange={handleHourChange}
         >
@@ -163,12 +155,12 @@ export const TimePicker: TimePickerComponent = ({
         <Select
           size={size}
           width={selectWidth}
-          placeholder={minutePlaceholder}
+          placeholder={PLACEHOLDER}
           selectedOption={selectedMinuteOption}
           isDisabled={isDisabled}
           isError={isError}
-          optionListMaxHeight={optionListMaxHeight}
-          aria-label={minuteAriaLabel}
+          optionListMaxHeight={OPTION_LIST_MAX_HEIGHT}
+          aria-label={MINUTE_ARIA_LABEL}
           {...sharedAriaProps}
           onChange={handleMinuteChange}
         >

@@ -163,25 +163,11 @@ describe('TimePicker', () => {
       expect(screen.getByText(':')).toBeInTheDocument();
     });
 
-    it('トリガーボタンに aria-label（時・分）が付与されること', () => {
+    it('トリガーボタンに固定の aria-label（時・分）が付与されること', () => {
       render(<TimePicker value={{ hour: null, minute: null }} onChange={vi.fn()} />);
 
       expect(getHourTrigger()).toHaveAttribute('aria-label', '時');
       expect(getMinuteTrigger()).toHaveAttribute('aria-label', '分');
-    });
-
-    it('hourAriaLabel・minuteAriaLabel を上書きできること', () => {
-      render(
-        <TimePicker
-          value={{ hour: null, minute: null }}
-          onChange={vi.fn()}
-          hourAriaLabel="開始時"
-          minuteAriaLabel="開始分"
-        />,
-      );
-
-      expect(screen.getByRole('button', { name: '開始時' })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: '開始分' })).toBeInTheDocument();
     });
   });
 
@@ -200,26 +186,12 @@ describe('TimePicker', () => {
       expect(getMinuteTrigger()).toHaveTextContent('--');
     });
 
-    it('未選択（{hour:null,minute:null}）ではプレースホルダーが表示され 00 に化けないこと', () => {
+    it('未選択（{hour:null,minute:null}）では固定プレースホルダー -- が表示され 00 に化けないこと', () => {
       render(<TimePicker value={{ hour: null, minute: null }} onChange={vi.fn()} />);
 
       expect(getHourTrigger()).toHaveTextContent('--');
       expect(getMinuteTrigger()).toHaveTextContent('--');
       expect(getHourTrigger()).not.toHaveTextContent('00');
-    });
-
-    it('プレースホルダーを個別に指定できること', () => {
-      render(
-        <TimePicker
-          value={{ hour: null, minute: null }}
-          onChange={vi.fn()}
-          hourPlaceholder="時"
-          minutePlaceholder="分"
-        />,
-      );
-
-      expect(getHourTrigger()).toHaveTextContent('時');
-      expect(getMinuteTrigger()).toHaveTextContent('分');
     });
   });
 
