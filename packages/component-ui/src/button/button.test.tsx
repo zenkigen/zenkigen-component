@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { Button } from './button';
+import { Button, InternalButton } from './button';
 
 describe('Button', () => {
   it('クリック時にonClickが呼ばれること', () => {
@@ -93,5 +93,21 @@ describe('Button', () => {
     (document.activeElement as HTMLElement)?.blur();
     await user.tab();
     expect(screen.getByRole('button', { name: 'フォーカスボタン' })).toHaveFocus();
+  });
+});
+
+describe('InternalButton', () => {
+  it('ref が host の button 要素に到達すること', () => {
+    const ref = React.createRef<HTMLButtonElement>();
+    render(<InternalButton ref={ref}>refボタン</InternalButton>);
+    expect(ref.current).toBeInstanceOf(HTMLButtonElement);
+    expect(ref.current).toBe(screen.getByRole('button', { name: 'refボタン' }));
+  });
+
+  // React 18 では素の関数コンポーネントに渡した ref は破棄され、PopoverTrigger のアンカー解決が
+  // 壊れて DatePicker のカレンダーが (0,0) に描画される。React 19 は ref-as-prop で偶然動くため
+  // 上の描画テストだけでは退行を検知できない。forwardRef であること自体を退行防止として固定する。
+  it('forwardRef コンポーネントであること（React 18 で ref が破棄されないための退行防止）', () => {
+    expect((InternalButton as { $$typeof?: symbol }).$$typeof).toBe(Symbol.for('react.forward_ref'));
   });
 });
