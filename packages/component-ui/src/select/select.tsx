@@ -2,7 +2,7 @@ import { autoUpdate, FloatingPortal, offset, size as sizeMiddleware, useFloating
 import type { IconName } from '@zenkigen-inc/component-icons';
 import { focusVisible, selectColors } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
-import type { CSSProperties, PropsWithChildren, RefObject } from 'react';
+import type { AriaAttributes, CSSProperties, PropsWithChildren, RefObject } from 'react';
 import { useRef, useState } from 'react';
 
 import { useDismissOnModalOpen } from '../hooks/use-dismiss-on-modal-open';
@@ -43,6 +43,12 @@ type Props = {
   onChange?: (option: SelectOption | null) => void;
   /** ドロップダウンリストの幅をトリガーボタンの幅に合わせる */
   matchListToTrigger?: boolean;
+  /** トリガーボタンに設定する aria-label。TimePicker 等のコンポジットからラベルを付与するために使用する */
+  'aria-label'?: AriaAttributes['aria-label'];
+  /** トリガーボタンに設定する aria-describedby。エラーメッセージ等と関連付けるために使用する */
+  'aria-describedby'?: AriaAttributes['aria-describedby'];
+  /** トリガーボタンに設定する aria-invalid。エラー状態をアクセシビリティツリーへ伝えるために使用する */
+  'aria-invalid'?: AriaAttributes['aria-invalid'];
 };
 
 export function Select({
@@ -60,6 +66,9 @@ export function Select({
   onChange,
   optionListMaxHeight,
   matchListToTrigger = false,
+  'aria-label': ariaLabel,
+  'aria-describedby': ariaDescribedby,
+  'aria-invalid': ariaInvalid,
 }: PropsWithChildren<Props>) {
   const [isOptionListOpen, setIsOptionListOpen] = useState(false);
   const targetRef = useRef<HTMLDivElement>(null);
@@ -151,6 +160,9 @@ export function Select({
           ref={refs.setReference}
           className={buttonClasses}
           type="button"
+          aria-label={ariaLabel}
+          aria-describedby={ariaDescribedby}
+          aria-invalid={ariaInvalid}
           onClick={handleClickToggle}
           disabled={isDisabled}
         >

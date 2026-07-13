@@ -558,4 +558,43 @@ describe('Select', () => {
       expect(selectedOptionButton?.className).toMatch(/bg-uiBackgroundError/);
     });
   });
+
+  describe('トリガーボタンへの aria 属性の伝播', () => {
+    it('aria-label がトリガーボタンに反映されること', () => {
+      render(<SelectTestComponent aria-label="時刻" />);
+      const selectButton = screen.getByRole('button', { name: '時刻' });
+      expect(selectButton).toHaveAttribute('aria-label', '時刻');
+    });
+
+    it('aria-describedby がトリガーボタンに反映されること', () => {
+      render(<SelectTestComponent aria-describedby="error-1" />);
+      const selectButton = screen.getByRole('button');
+      expect(selectButton).toHaveAttribute('aria-describedby', 'error-1');
+    });
+
+    it('aria-invalid がトリガーボタンに反映されること', () => {
+      render(<SelectTestComponent aria-invalid />);
+      const selectButton = screen.getByRole('button');
+      expect(selectButton).toHaveAttribute('aria-invalid', 'true');
+    });
+
+    it('aria 属性を指定しない場合、トリガーボタンに aria 属性が付与されないこと（既存挙動不変）', () => {
+      render(<SelectTestComponent placeholder="選択してください" />);
+      const selectButton = screen.getByRole('button');
+      expect(selectButton).not.toHaveAttribute('aria-label');
+      expect(selectButton).not.toHaveAttribute('aria-describedby');
+      expect(selectButton).not.toHaveAttribute('aria-invalid');
+    });
+
+    it('aria 属性を付与しても選択の開閉・選択挙動が変わらないこと（既存挙動不変）', () => {
+      render(<SelectTestComponent aria-label="時刻" placeholder="選択" />);
+      const selectButton = screen.getByRole('button', { name: '時刻' });
+
+      fireEvent.click(selectButton);
+      expect(screen.getByText('選択肢A')).toBeInTheDocument();
+
+      fireEvent.click(screen.getByText('選択肢B'));
+      expect(selectButton).toHaveTextContent('選択肢B');
+    });
+  });
 });
