@@ -572,10 +572,16 @@ describe('Select', () => {
       expect(selectButton).toHaveAttribute('aria-describedby', 'error-1');
     });
 
-    it('aria-invalid がトリガーボタンに反映されること', () => {
-      render(<SelectTestComponent aria-invalid />);
+    it('isError=true のとき aria-invalid がトリガーボタンに出力されること（内部導出）', () => {
+      render(<SelectTestComponent isError />);
       const selectButton = screen.getByRole('button');
       expect(selectButton).toHaveAttribute('aria-invalid', 'true');
+    });
+
+    it('isError=false のとき aria-invalid 属性が付与されないこと（内部導出）', () => {
+      render(<SelectTestComponent />);
+      const selectButton = screen.getByRole('button');
+      expect(selectButton).not.toHaveAttribute('aria-invalid');
     });
 
     it('aria 属性を指定しない場合、トリガーボタンに aria 属性が付与されないこと（既存挙動不変）', () => {

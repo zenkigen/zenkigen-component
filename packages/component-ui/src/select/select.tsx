@@ -47,8 +47,6 @@ type Props = {
   'aria-label'?: AriaAttributes['aria-label'];
   /** トリガーボタンに設定する aria-describedby。エラーメッセージ等と関連付けるために使用する */
   'aria-describedby'?: AriaAttributes['aria-describedby'];
-  /** トリガーボタンに設定する aria-invalid。エラー状態をアクセシビリティツリーへ伝えるために使用する */
-  'aria-invalid'?: AriaAttributes['aria-invalid'];
 };
 
 export function Select({
@@ -68,7 +66,6 @@ export function Select({
   matchListToTrigger = false,
   'aria-label': ariaLabel,
   'aria-describedby': ariaDescribedby,
-  'aria-invalid': ariaInvalid,
 }: PropsWithChildren<Props>) {
   const [isOptionListOpen, setIsOptionListOpen] = useState(false);
   const targetRef = useRef<HTMLDivElement>(null);
@@ -141,6 +138,9 @@ export function Select({
     'typography-label16regular': size === 'large',
   });
 
+  // aria-invalid はエラー状態から内部導出し、isError のときのみ属性を出力する（他コンポーネントと同じ挙動）
+  const ariaInvalidProps = isError ? { 'aria-invalid': true } : {};
+
   return (
     <SelectContext.Provider
       value={{
@@ -162,7 +162,7 @@ export function Select({
           type="button"
           aria-label={ariaLabel}
           aria-describedby={ariaDescribedby}
-          aria-invalid={ariaInvalid}
+          {...ariaInvalidProps}
           onClick={handleClickToggle}
           disabled={isDisabled}
         >
