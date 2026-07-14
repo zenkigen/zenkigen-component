@@ -10,6 +10,7 @@
 - [コンポーネント実装パターン](./component-patterns.md) - コンポーネントの設計パターンと実装方針
 - [テーマシステム](./theme-system.md) - テーマシステムとTailwind CSS設定
 - [Storybook ガイドライン](./storybook-guidelines.md) - Story の作成・構成に関する規約
+- [ビジュアルリグレッションテスト](./visual-regression-testing.md) - Chromatic による VRT の仕組みと運用（TurboSnap・baseline・手動全撮影）
 - [リリース手順](./release-process.md) - npm publish の手順（version bump・タグ・CI publish・dist-tag）
 - [バージョン運用方針](./versioning-policy.md) - メジャーバージョンのライフサイクル・ブランチ戦略・dist-tag 体制
 
