@@ -26,13 +26,13 @@ zenkigen-component v2.0.0（Tailwind CSS v4 専用）への移行手順です。
 
 主な変更点:
 
-| 項目                                                            | v1.x                                      | v2.0                                                                |
-| --------------------------------------------------------------- | ----------------------------------------- | ------------------------------------------------------------------- |
-| Tailwind CSS                                                    | v3                                        | **v4（必須）**                                                      |
-| 設定の読み込み                                                  | JS preset（`presets: [componentConfig]`） | **CSS import（`@import '@zenkigen-inc/component-config/styles'`）** |
-| PostCSS プラグイン                                              | `tailwindcss` + `autoprefixer`            | **`@tailwindcss/postcss`**（autoprefixer 不要）                     |
-| クラス検出                                                      | `content` 配列 + safelist                 | **自動検出 + `@source`**                                            |
-| `@zenkigen-inc/component-config` の default export（JS preset） | あり                                      | **廃止**                                                            |
+| 項目                                                            | v1.x                                      | v2.0                                                            |
+| --------------------------------------------------------------- | ----------------------------------------- | --------------------------------------------------------------- |
+| Tailwind CSS                                                    | v3                                        | **v4（必須）**                                                  |
+| 設定の読み込み                                                  | JS preset（`presets: [componentConfig]`） | **CSS import（`@import '@zenkigen-inc/component-ui/styles'`）** |
+| PostCSS プラグイン                                              | `tailwindcss` + `autoprefixer`            | **`@tailwindcss/postcss`**（autoprefixer 不要）                 |
+| クラス検出                                                      | `content` 配列 + safelist                 | **自動検出**（`@source` はパッケージ側で同梱済み・記述不要）    |
+| `@zenkigen-inc/component-config` の default export（JS preset） | あり                                      | **廃止**                                                        |
 
 ## 対象バージョン
 
@@ -107,20 +107,10 @@ export default {
 
 /* After (v4) */
 @import 'tailwindcss';
-@import '@zenkigen-inc/component-config/styles';
-
-/* zenkigen-component の動的クラス文字列を検出 */
-@source '<node_modules への相対パス>/@zenkigen-inc/component-theme/dist/**/*.mjs';
-@source '<node_modules への相対パス>/@zenkigen-inc/component-ui/dist/**/*.mjs';
+@import '@zenkigen-inc/component-ui/styles';
 ```
 
-`@source` のパスは **CSS エントリファイルから `node_modules` への相対パス**で指定します。
-
-| CSS エントリの位置                             | `@source` パス                                                         |
-| ---------------------------------------------- | ---------------------------------------------------------------------- |
-| `src/app/globals.css`                          | `../../node_modules/...`                                               |
-| `src/globals.css`                              | `../node_modules/...`                                                  |
-| `services/web/src/app/globals.css`（モノレポ） | `../../../../node_modules/...`（リポジトリルートの node_modules まで） |
+`@zenkigen-inc/component-ui/styles` が、デザイントークンの読み込み（`@zenkigen-inc/component-config/styles`）と、コンポーネントが実行時に参照する動的クラスの検出（`@source`）をまとめて提供します。利用側で `@source` や `node_modules` への相対パスを記述する必要はありません（モノレポ/単体などアプリ構成にも依存しません）。
 
 > **⚠️ v4 は SCSS/Less/Stylus 非対応**
 >
@@ -149,7 +139,7 @@ const config: Config = {
 @config './tailwind.config.ts';
 ```
 
-> v1 で独自の safelist を追加していた場合、`@zenkigen-inc` 関連のものは不要になります（`@source` で検出されます）。アプリ独自の動的クラスは [`@source inline(...)`](https://tailwindcss.com/docs/detecting-classes-in-source-files#safelisting-specific-utilities) に移行してください。
+> v1 で独自の safelist を追加していた場合、`@zenkigen-inc` 関連のものは不要になります（`@zenkigen-inc/component-ui/styles` に同梱の `@source` で検出されます）。アプリ独自の動的クラスは [`@source inline(...)`](https://tailwindcss.com/docs/detecting-classes-in-source-files#safelisting-specific-utilities) に移行してください。
 
 ### Step 6: アプリケーションコードのクラス名修正
 
@@ -203,27 +193,21 @@ npm run dev
 
 ### スタイルが適用されない
 
-1. **`@source` パスの確認**: CSS エントリから `node_modules` への相対パスが正しいか
-
-   ```bash
-   # CSS エントリのディレクトリから node_modules が見えるか確認
-   ls <相対パス>/@zenkigen-inc/component-theme/dist/
-   ```
-
+1. **CSS エントリの import 確認**: `@import '@zenkigen-inc/component-ui/styles';` が記述されているか
 2. **PostCSS 設定の確認**: `@tailwindcss/postcss` を使っているか（v3 の `tailwindcss` プラグイン指定は動きません）
 3. **CSS ディレクティブの確認**: `@tailwind base;` ではなく `@import 'tailwindcss';` になっているか
 
 ### 特定のクラスだけ効かない
 
-動的クラスが効かない場合は `@source` のパスを確認してください。アプリ独自の safelist は `@source inline(...)` に移行が必要です。
+動的クラスが効かない場合は `@import '@zenkigen-inc/component-ui/styles';` が読み込まれているか確認してください。アプリ独自の safelist は `@source inline(...)` に移行が必要です。
 
 ### z-index が効かない
 
-`z-modal` / `z-tooltip` 等のカスタム z-index は `@import '@zenkigen-inc/component-config/styles'` で定義されます。この import が読み込まれているか確認してください。
+`z-modal` / `z-tooltip` 等のカスタム z-index は `@zenkigen-inc/component-config/styles` で定義され、`@zenkigen-inc/component-ui/styles` 経由で読み込まれます。この import が読み込まれているか確認してください。
 
-### ビルドエラー: `Cannot find module '@zenkigen-inc/component-config/styles'`
+### ビルドエラー: `Cannot find module '@zenkigen-inc/component-ui/styles'`
 
-`@zenkigen-inc/component-config` が v2.0 以上であることを確認してください。v1.x に `./styles` エクスポートはありません。
+`@zenkigen-inc/component-ui` が v2.0 以上であることを確認してください。v1.x に `./styles` エクスポートはありません。
 
 ### 型エラー: `Module '"@zenkigen-inc/component-config"' has no default export`
 
