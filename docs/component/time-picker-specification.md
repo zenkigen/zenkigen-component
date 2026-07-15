@@ -70,16 +70,15 @@ const MyComponent = () => {
 
 ### オプションプロパティ
 
-| プロパティ   | 型                                            | デフォルト値 | 説明                                                                   |
-| ------------ | --------------------------------------------- | ------------ | ---------------------------------------------------------------------- |
-| `size`       | `'x-small' \| 'small' \| 'medium' \| 'large'` | `'medium'`   | コンポーネントのサイズ。内部の`Select`のsizeに1:1でマッピングされる    |
-| `minuteStep` | `1 \| 5 \| 10 \| 15 \| 30`                    | `15`         | 分候補の刻み（すべて60の約数）                                         |
-| `minTime`    | `string`（`"HH:mm"`）                         | `undefined`  | 選択可能な最小時刻（inclusive）。範囲外の候補は非表示になる            |
-| `maxTime`    | `string`（`"HH:mm"`）                         | `undefined`  | 選択可能な最大時刻（inclusive）。範囲外の候補は非表示になる            |
-| `isDisabled` | `boolean`                                     | `false`      | 無効状態かどうか                                                       |
-| `isError`    | `boolean`                                     | `false`      | エラー状態かどうか。`true`の場合、両方のSelectがエラー表示になる       |
-| `width`      | `CSSProperties['width']`                      | `undefined`  | 全体幅。指定時は各Selectが均等に伸長。省略時はsizeに応じた固定幅になる |
-| `children`   | `ReactNode`                                   | `undefined`  | Compound Component（`TimePicker.ErrorMessage`）                        |
+| プロパティ   | 型                                            | デフォルト値 | 説明                                                                |
+| ------------ | --------------------------------------------- | ------------ | ------------------------------------------------------------------- |
+| `size`       | `'x-small' \| 'small' \| 'medium' \| 'large'` | `'medium'`   | コンポーネントのサイズ。内部の`Select`のsizeに1:1でマッピングされる |
+| `minuteStep` | `1 \| 5 \| 10 \| 15 \| 30`                    | `15`         | 分候補の刻み（すべて60の約数）                                      |
+| `minTime`    | `string`（`"HH:mm"`）                         | `undefined`  | 選択可能な最小時刻（inclusive）。範囲外の候補は非表示になる         |
+| `maxTime`    | `string`（`"HH:mm"`）                         | `undefined`  | 選択可能な最大時刻（inclusive）。範囲外の候補は非表示になる         |
+| `isDisabled` | `boolean`                                     | `false`      | 無効状態かどうか                                                    |
+| `isError`    | `boolean`                                     | `false`      | エラー状態かどうか。`true`の場合、両方のSelectがエラー表示になる    |
+| `children`   | `ReactNode`                                   | `undefined`  | Compound Component（`TimePicker.ErrorMessage`）                     |
 
 ### 内部固定値（props では変更不可）
 
@@ -91,6 +90,7 @@ const MyComponent = () => {
 | 時 Select の`aria-label` | `'時'`  | 時 Select のトリガーボタンに付与                                                                                                                   |
 | 分 Select の`aria-label` | `'分'`  | 分 Select のトリガーボタンに付与                                                                                                                   |
 | 時候補の刻み             | `1`     | 時候補は`00`〜`23`の全24時（範囲制限による除外を除く）。刻みの変更ニーズが出た時点で props 公開を検討                                              |
+| 各 Select の幅           | `80px`  | sizeに応じた固定幅（`large`のみ`88px`。Figma 実測値）。全体幅のカスタマイズニーズが出た時点で props 公開を検討                                     |
 | 候補リストの最大高さ     | `250px` | 時・分の両 Select に常時適用。時 Select（24 候補）が大きく出過ぎるのを防ぐ。項目の途中で切れる高さにして、下にリストが続いていることを視覚的に示す |
 
 ## value 型（TimeValue）
@@ -286,7 +286,7 @@ const combined =
 
 ## スタイルのカスタマイズ
 
-このコンポーネントは Tailwind CSS のユーティリティクラスを使用しており、`@zenkigen-inc/component-config`で定義されたデザイントークンに依存している。状態色（hover / active / disabled / error）は内部の`Select`に委譲され、`:`セパレータは`text-text02`で表示される。スタイルのカスタマイズは`className`ではなく、`size` / `width`等のpropsで行う。
+このコンポーネントは Tailwind CSS のユーティリティクラスを使用しており、`@zenkigen-inc/component-config`で定義されたデザイントークンに依存している。状態色（hover / active / disabled / error）は内部の`Select`に委譲され、`:`セパレータは`text-text02`で表示される。スタイルのカスタマイズは`className`ではなく、`size`等のpropsで行う。
 
 ## 更新履歴
 
