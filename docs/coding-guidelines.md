@@ -203,7 +203,7 @@ const config = {
 
 ### Tailwind CSS
 
-- `@zenkigen-inc/component-config`のプリセットを使用
+- `@zenkigen-inc/component-config`が提供するスタイル（`@import '@zenkigen-inc/component-config/styles'`）を使用
 - `clsx`を使用した動的クラス名生成をサポート
 
 ```typescript

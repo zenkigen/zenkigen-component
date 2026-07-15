@@ -176,7 +176,7 @@ const LargeRating = () => {
 ## スタイルのカスタマイズ
 
 - 色やフォーカスリングは`@zenkigen-inc/component-theme`で提供される`focusVisible`や`fill-*`トークンによって制御される
-- 星の大きさを変更したい場合は、Tailwindプリセット（`@zenkigen-inc/component-config`）に同名ユーティリティを追加するか、カスタムクラスを拡張して再ビルドする
+- 星の大きさを変更したい場合は、`@zenkigen-inc/component-config`のスタイル定義に同名ユーティリティ（`@utility`）を追加するか、カスタムクラスを拡張して再ビルドする
 - 企業ブランドカラーに合わせた評価色へ変更する場合は、`component-theme`内の`fill-yellow-yellow50`や`fill-icon03`に対応するトークン値を調整する
 
 ## 更新履歴

@@ -145,7 +145,7 @@ import { Button, Icon } from '@zenkigen-inc/component-ui';
 
 - タイポグラフィやカラーを変更する場合は `@zenkigen-inc/component-theme` の `typography.heading` や `text` トークンを調整する。
 - 行頭/行末に追加余白が必要な場合は、`children` を `<div className="flex-1">` で包み左右にスペースを確保する。
-- Tailwind プリセット（`@zenkigen-inc/component-config`）に依存しているため、外部プロジェクトで使用する際はプリセットを `tailwind.config.js` に登録する。
+- `@zenkigen-inc/component-config` のスタイル定義に依存しているため、外部プロジェクトで使用する際は CSS エントリで `@import '@zenkigen-inc/component-ui/styles'`（内部で `@zenkigen-inc/component-config/styles` を読み込む）を記述する。
 
 ## 更新履歴
 
