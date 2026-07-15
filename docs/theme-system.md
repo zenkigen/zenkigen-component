@@ -160,11 +160,7 @@ const baseClasses = clsx(
 
 ```css
 @import 'tailwindcss';
-@import '@zenkigen-inc/component-config/styles';
-
-/* zenkigen-component の動的クラスを検出（パスは CSS エントリから node_modules への相対パス） */
-@source '../../node_modules/@zenkigen-inc/component-theme/dist/**/*.mjs';
-@source '../../node_modules/@zenkigen-inc/component-ui/dist/**/*.mjs';
+@import '@zenkigen-inc/component-ui/styles';
 ```
 
-これにより、Zenkigen Componentで使用されているTailwindのユーティリティクラスが、プロジェクトのCSSビルドに含まれるようになります。v1.x（Tailwind v3 / JS preset）からの移行は [v1 → v2 移行ガイド](./migration-v1-to-v2.md) を参照してください。
+`@zenkigen-inc/component-ui/styles` は、デザイントークンの読み込み（`@zenkigen-inc/component-config/styles`）と、コンポーネントが実行時に参照する動的クラスの検出（`@source`）をまとめて提供します。利用側で `@source` や `node_modules` への相対パスを記述する必要はありません。これにより、Zenkigen Componentで使用されているTailwindのユーティリティクラスが、プロジェクトのCSSビルドに含まれるようになります。v1.x（Tailwind v3 / JS preset）からの移行は [v1 → v2 移行ガイド](./migration-v1-to-v2.md) を参照してください。
