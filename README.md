@@ -32,12 +32,10 @@ yarn add @zenkigen-inc/component-ui @zenkigen-inc/component-config
 
 ```css
 @import 'tailwindcss';
-@import '@zenkigen-inc/component-config/styles';
-
-/* zenkigen-component の動的クラスを検出（globals.css から node_modules への相対パス。モノレポ/単体で異なる） */
-@source '../../node_modules/@zenkigen-inc/component-theme/dist/**/*.mjs';
-@source '../../node_modules/@zenkigen-inc/component-ui/dist/**/*.mjs';
+@import '@zenkigen-inc/component-ui/styles';
 ```
+
+`@zenkigen-inc/component-ui/styles` は、デザイントークンの読み込み（`@zenkigen-inc/component-config/styles`）と、コンポーネントが実行時に参照する動的クラスの検出（`@source`）をまとめて提供します。`node_modules` への相対パス指定は不要です。
 
 PostCSS プラグインは `@tailwindcss/postcss` を使用します（`autoprefixer` は不要）。`tailwind.config.js` の `presets` / `content` は不要になりました（v4 は CSS-first + 自動検出）。
 

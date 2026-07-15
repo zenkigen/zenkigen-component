@@ -14,7 +14,8 @@
     ".": {
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
-    }
+    },
+    "./styles": "./styles.css"
   },
   "scripts": {
     "type-check": "tsc --noEmit",

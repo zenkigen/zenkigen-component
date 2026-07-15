@@ -1,0 +1,4 @@
+/* Tailwind v4 のクラス検出対象として component-theme のビルド成果物を登録する。
+   @source の相対パスはこのファイルの場所基準で解決されるため、利用側に
+   node_modules へのパスを書かせずに済む。 */
+@source './dist/**/*.mjs';

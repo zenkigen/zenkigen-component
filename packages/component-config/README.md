@@ -35,14 +35,15 @@ flowchart LR
   B -->|Style Dictionary / build.cjs| C["src/tokens/tokens.ts"]
   C -->|tsup| D["dist/index.mjs (tokens)"]
   D -->|generate-styles.mts| E["dist/theme.css / utilities.css / index.css (Tailwind v4)"]
-  E -->|"@import '@zenkigen-inc/component-config/styles'"| F["利用側 globals.css"]
+  E -->|"@import '@zenkigen-inc/component-config/styles'"| F["component-ui/styles.css"]
+  F -->|"@import '@zenkigen-inc/component-ui/styles'"| G["利用側 globals.css"]
 ```
 
 - マスターデータ: `packages/component-config/style-dictionary/tokens.json`
 - `yarn build:tokens` 実行時に以下が順に生成されます
   1. `token-transformer` が `style-dictionary/tokens.json` を読み取り、`style-dictionary/transformed-tokens.json` を作成
   2. `build.cjs` が Style Dictionary で `transformed-tokens.json` を読み込み、ローワーキャメルのキーで `src/tokens/tokens.ts` を生成（`export const tokens = ... as const` と `export const tokensWithMeta = ... as const` を出力）
-- ビルド時に `src/generate-styles.mts` が `dist/index.mjs`（tokens）と `@zenkigen-inc/component-theme` の typography を読み込み、Tailwind v4 用の CSS（`@theme` / `@utility` / `@source inline`）を `dist/{theme,utilities,index}.css` に生成します。利用側は `@import '@zenkigen-inc/component-config/styles'`（`exports` の `"./styles"`）で読み込みます。**Tailwind v4 専用**（v3 の JS preset は廃止）。
+- ビルド時に `src/generate-styles.mts` が `dist/index.mjs`（tokens）と `@zenkigen-inc/component-theme` の typography を読み込み、Tailwind v4 用の CSS（`@theme` / `@utility` / `@source inline`）を `dist/{theme,utilities,index}.css` に生成します。通常の利用側セットアップでは `@zenkigen-inc/component-ui/styles` が内部で `@import '@zenkigen-inc/component-config/styles'`（`exports` の `"./styles"`）を読み込みます（トークンのみ使う場合は直接 `@import` も可能）。**Tailwind v4 専用**（v3 の JS preset は廃止）。
 
 #### 主なファイルとフォーマット
 
