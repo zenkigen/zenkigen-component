@@ -1,0 +1,8 @@
+/* zenkigen-component 利用側のエントリポイント。
+   デザイントークン（component-config/styles）の読み込みと、コンポーネントが
+   実行時に参照する動的クラスの検出（@source）をまとめて提供する。
+   @source の相対パスはこのファイルの場所基準で解決される。 */
+@import '@zenkigen-inc/component-config/styles';
+@import '@zenkigen-inc/component-theme/source';
+
+@source './dist/**/*.mjs';

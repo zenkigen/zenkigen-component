@@ -1,6 +1,9 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@import '@zenkigen-inc/component-config/styles';
+
+/* zenkigen-component の動的クラス文字列を検出（Storybook は workspace の src を直接読む） */
+@source '../packages/component-theme/src/**/*.{ts,tsx}';
+@source '../packages/component-ui/src/**/*.{ts,tsx,mdx}';
 
 h2 {
   font-weight: bold;

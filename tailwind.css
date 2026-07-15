@@ -1,0 +1,9 @@
+/*
+ * eslint-plugin-tailwindcss が Tailwind v4 のテーマ（@theme / @utility）を解決するための CSS エントリ。
+ * Tailwind v4 は CSS-first（tailwind.config.js なし）のため、lint 時のクラス検証用にこのファイルを参照する。
+ * 参照元: eslint.config.mjs の settings.tailwindcss.config
+ * ビルド / Storybook では使用しない（それらは .storybook/globals.css や各アプリの globals.css を使う）。
+ * 注: @import するため、lint 前に component-config がビルド済み（dist/index.css 生成済み）である必要がある。
+ */
+@import 'tailwindcss';
+@import '@zenkigen-inc/component-config/styles';

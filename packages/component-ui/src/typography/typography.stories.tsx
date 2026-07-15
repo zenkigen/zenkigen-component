@@ -55,7 +55,7 @@ export const Component: Story = {
           <SampleText label="body16regular" className="typography-body16regular" height="auto" />
           <SampleText label="body16bold" className="typography-body16bold" height="auto" />
         </div>
-        <hr />
+        <hr className="border-uiBorder01" />
         <div className="flex w-full gap-4">
           <SampleText label="label11regular" className="typography-label11regular" height="auto" />
           <SampleText label="label11bold" className="typography-label11bold" height="auto" />

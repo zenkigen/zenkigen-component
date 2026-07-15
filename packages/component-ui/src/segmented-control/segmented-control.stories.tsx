@@ -114,7 +114,7 @@ export const Component: Story = {
           </SegmentedControl>
         </div>
         <div>
-          <hr />
+          <hr className="border-uiBorder01" />
         </div>
         <div className="flex flex-col gap-5">
           <div className="typography-label12regular">

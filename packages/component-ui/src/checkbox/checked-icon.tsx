@@ -9,7 +9,7 @@ export const CheckedIcon = ({ size = 'medium' }: Props) => {
     <svg
       viewBox="0 0 20 20"
       xmlns="http://www.w3.org/2000/svg"
-      className={clsx('absolute z-10 rounded-sm fill-iconOnColor hover:rounded-sm', {
+      className={clsx('absolute z-10 rounded-xs fill-iconOnColor hover:rounded-xs', {
         'size-5': size === 'medium',
         'size-6': size === 'large',
       })}

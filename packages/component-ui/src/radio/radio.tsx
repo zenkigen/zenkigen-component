@@ -60,7 +60,7 @@ export function Radio({
     { 'size-5': !isLarge, 'size-7': isLarge },
     focusVisible.normalPeer,
     {
-      'border-disabled01 hover:border-disabled01': isDisabled && !isMouseOver,
+      'border-disabled01 hover:border-disabled01': isDisabled,
       'border-hoverUiBorder': !isDisabled && isMouseOver,
       'border-uiBorder04': !isDisabled,
       'cursor-not-allowed': isDisabled,

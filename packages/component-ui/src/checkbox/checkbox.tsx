@@ -64,7 +64,7 @@ export function Checkbox({
   });
 
   const boxClasses = clsx(
-    'inline-flex items-center justify-center rounded-sm border bg-white',
+    'inline-flex items-center justify-center rounded-xs border bg-white',
     sizeBox,
     focusVisible.normalPeer,
     {
@@ -82,7 +82,7 @@ export function Checkbox({
     'border-disabled01': isDisabled,
   });
 
-  const afterClasses = clsx('absolute inset-0 m-auto block rounded-sm', {
+  const afterClasses = clsx('absolute inset-0 m-auto block rounded-xs', {
     'bg-disabled01': isDisabled && isChecked,
     'bg-hover01': !(isDisabled && isChecked) && isMouseOver,
     'bg-interactive01': !(isDisabled && isChecked) && !isMouseOver,
