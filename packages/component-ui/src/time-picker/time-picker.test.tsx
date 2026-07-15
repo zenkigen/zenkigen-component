@@ -17,7 +17,7 @@ import { formatTime, generateHourOptions, generateMinuteOptions, isTimeInRange, 
  * - value 反映：完全 / 部分（片方のみ）/ 未選択
  * - イベント：各 Select 変更で新しい `{ hour, minute }` を返す
  * - pure controlled：中間状態からのリセット
- * - minuteStep / hourStep / minTime / maxTime
+ * - minuteStep / minTime / maxTime
  * - 状態：エラー・無効
  * - サイズ・アクセシビリティ
  */
@@ -92,34 +92,34 @@ describe('TimePicker', () => {
     });
 
     describe('generateHourOptions', () => {
-      it('既定（hourStep=1）で 00〜23 の 24 候補を生成すること', () => {
-        const options = generateHourOptions(1, 15);
+      it('00〜23 の 24 候補を生成すること', () => {
+        const options = generateHourOptions(15);
         expect(options).toHaveLength(24);
         expect(options[0]?.label).toBe('00');
         expect(options[23]?.label).toBe('23');
       });
 
       it('minTime の時より前の候補を除外すること', () => {
-        const labels = generateHourOptions(1, 15, '09:00').map((option) => option.label);
+        const labels = generateHourOptions(15, '09:00').map((option) => option.label);
         expect(labels).not.toContain('08');
         expect(labels[0]).toBe('09');
       });
 
       it('maxTime の時より後の候補を除外すること', () => {
-        const labels = generateHourOptions(1, 15, null, '10:00').map((option) => option.label);
+        const labels = generateHourOptions(15, null, '10:00').map((option) => option.label);
         expect(labels).not.toContain('11');
         expect(labels[labels.length - 1]).toBe('10');
       });
 
       it('minTime の分が minuteStep で到達できない時はデッドエンドの時を除外すること（例: minTime="09:45", minuteStep=30）', () => {
         // 9 時の分候補 00(09:00)/30(09:30) は両方 09:45 未満で除外され空になるため、9 時自体を候補から外す
-        const labels = generateHourOptions(1, 30, '09:45').map((option) => option.label);
+        const labels = generateHourOptions(30, '09:45').map((option) => option.label);
         expect(labels).not.toContain('09');
         expect(labels[0]).toBe('10');
       });
 
       it('minTime の分が minuteStep で到達できる時はその時を候補に含めること（例: minTime="09:30", minuteStep=30）', () => {
-        const labels = generateHourOptions(1, 30, '09:30').map((option) => option.label);
+        const labels = generateHourOptions(30, '09:30').map((option) => option.label);
         expect(labels).toContain('09');
         expect(labels[0]).toBe('09');
       });

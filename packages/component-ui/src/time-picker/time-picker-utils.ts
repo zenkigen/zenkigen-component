@@ -161,24 +161,21 @@ export const generateMinuteOptions = (
 };
 
 /**
- * 時の候補（`SelectOption[]`）を生成する。
+ * 時の候補（`SelectOption[]`）を生成する。時の刻みは 1 固定（`00`〜`23` の全 24 時が候補の母集合）。
  * `minTime` / `maxTime` の範囲外の時に加え、その時に対して選択可能な分が 1 件も無い時も除外（非表示）する。
  * これにより、`minTime` の分が `minuteStep` で到達できない場合（例: `minTime="09:45"`, `minuteStep=30` では
  * 9 時の分候補 `00`/`30` がいずれも 09:45 未満で除外され空になる）に、選んでも分候補が空になる
  * デッドエンドの時が候補へ現れることを防ぐ。
- * @param hourStep 時の刻み（通常 1）。1 未満が渡された場合は 1 として扱う
  * @param minuteStep 分の刻み。各時に選択可能な分が存在するかの判定に使用する
  */
 export const generateHourOptions = (
-  hourStep: number,
   minuteStep: MinuteStep,
   minTime?: string | null,
   maxTime?: string | null,
 ): SelectOption[] => {
-  const step = hourStep >= 1 ? Math.floor(hourStep) : 1;
   const options: SelectOption[] = [];
 
-  for (let hour = MIN_HOUR; hour <= MAX_HOUR; hour += step) {
+  for (let hour = MIN_HOUR; hour <= MAX_HOUR; hour += 1) {
     // その時に選択可能な分が 1 件も無い場合、選んでもデッドエンドになるため候補から除外する
     if (generateMinuteOptions(minuteStep, hour, minTime, maxTime).length === 0) {
       continue;

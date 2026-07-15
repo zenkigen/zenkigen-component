@@ -20,9 +20,6 @@ const meta: Meta<typeof TimePicker> = {
     minuteStep: {
       description: '分候補の刻み',
     },
-    hourStep: {
-      description: '時候補の刻み',
-    },
     minTime: {
       type: 'string',
       description: '選択可能な最小時刻（"HH:mm"）',
