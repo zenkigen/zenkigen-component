@@ -68,6 +68,16 @@ describe('NotificationInline', () => {
       expect(getWrapper('メッセージ').className).not.toContain('min-h-14');
     });
 
+    it('smallサイズで閉じるボタン非表示時も高さを揃えるmin-h-12が適用されること', () => {
+      render(<NotificationInline size="small">メッセージ</NotificationInline>);
+      expect(getWrapper('メッセージ').className).toContain('min-h-12');
+    });
+
+    it('mediumサイズではmin-h-12が適用されないこと', () => {
+      render(<NotificationInline>メッセージ</NotificationInline>);
+      expect(getWrapper('メッセージ').className).not.toContain('min-h-12');
+    });
+
     it('mediumサイズでメッセージ1行目とアイコンの中心を揃えるpt-[2px]がテキストに適用されること', () => {
       render(<NotificationInline>メッセージ</NotificationInline>);
       expect(screen.getByText('メッセージ').className).toContain('pt-[2px]');

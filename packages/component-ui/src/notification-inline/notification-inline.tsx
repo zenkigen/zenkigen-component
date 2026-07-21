@@ -35,8 +35,9 @@ export function NotificationInline({ state = 'default', size = 'medium', variant
     'bg-uiBackgroundBlue': state === 'information',
     'bg-uiBackgroundSuccess': state === 'success',
     'bg-uiBackgroundGray': state === 'default',
-    'p-[calc(0.75rem_-_1px)]': size === 'small',
-    // medium はアイコン(24px)が高さの基準になるため、アイコン非表示(state='default')でも同じ高さになるよう最小高を確保する
+    // 1 行時の高さの基準は small が閉じるボタン(24px)、medium がアイコン(24px)。
+    // showClose / state によらず高さが変わらないよう、両サイズとも最小高を確保する
+    'min-h-12 p-[calc(0.75rem_-_1px)]': size === 'small',
     'min-h-14 p-[calc(1rem_-_1px)]': size === 'medium',
     'border-transparent': !isOutline,
     'border-supportError': isOutline && state === 'attention',
