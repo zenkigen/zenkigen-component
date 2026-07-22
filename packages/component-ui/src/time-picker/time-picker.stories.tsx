@@ -82,7 +82,7 @@ export const Component: Story = {
   args: {
     value: EMPTY_TIME,
     size: 'medium',
-    minuteStep: 15,
+    minuteStep: 1,
     isDisabled: false,
     isError: false,
   },
@@ -133,7 +133,9 @@ export const MinuteStep: Story = {
   render: () => (
     <div className="flex flex-col items-start gap-4">
       <div className="flex flex-col items-start gap-1">
-        <p className="typography-label14regular text-text02">minuteStep = 1（60 候補・リストは 250px でスクロール）</p>
+        <p className="typography-label14regular text-text02">
+          minuteStep = 1（既定・60 候補・リストは 250px でスクロール）
+        </p>
         <TimePickerStory minuteStep={1} />
       </div>
       <div className="flex flex-col items-start gap-1">
@@ -141,7 +143,7 @@ export const MinuteStep: Story = {
         <TimePickerStory minuteStep={5} />
       </div>
       <div className="flex flex-col items-start gap-1">
-        <p className="typography-label14regular text-text02">minuteStep = 15（既定）</p>
+        <p className="typography-label14regular text-text02">minuteStep = 15</p>
         <TimePickerStory minuteStep={15} />
       </div>
       <div className="flex flex-col items-start gap-1">

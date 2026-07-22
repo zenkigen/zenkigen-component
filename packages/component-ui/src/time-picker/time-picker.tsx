@@ -39,7 +39,7 @@ export type TimePickerProps = {
   onChange: (value: TimeValue) => void;
   /** コンポーネントのサイズ。内部の `Select` の size に 1:1 でマッピングされる @default 'medium' */
   size?: TimePickerSize;
-  /** 分候補の刻み（60 の約数） @default 15 */
+  /** 分候補の刻み（60 の約数） @default 1 */
   minuteStep?: MinuteStep;
   /** 選択可能な最小時刻（`"HH:mm"`・inclusive）。範囲外の候補は非表示になる */
   minTime?: string;
@@ -62,7 +62,7 @@ export const TimePicker: TimePickerComponent = ({
   value,
   onChange,
   size = 'medium',
-  minuteStep = 15,
+  minuteStep = 1,
   minTime,
   maxTime,
   isDisabled = false,

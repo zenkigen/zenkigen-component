@@ -254,17 +254,17 @@ describe('TimePicker', () => {
       expect(within(list).getAllByRole('button')).toHaveLength(24);
     });
 
-    it('既定（minuteStep=15）で分候補が 00/15/30/45 になること', async () => {
+    it('既定（minuteStep=1）で分候補が 00〜59 の 60 件になること', async () => {
       const user = userEvent.setup();
       render(<TimePicker value={{ hour: null, minute: null }} onChange={vi.fn()} />);
 
       await user.click(getMinuteTrigger());
       const list = screen.getByRole('list');
+      expect(within(list).getAllByRole('button')).toHaveLength(60);
       expect(within(list).getByText('00')).toBeInTheDocument();
-      expect(within(list).getByText('15')).toBeInTheDocument();
-      expect(within(list).getByText('30')).toBeInTheDocument();
-      expect(within(list).getByText('45')).toBeInTheDocument();
-      expect(within(list).queryByText('10')).not.toBeInTheDocument();
+      // 1 分刻みで生成される中間の分（例: 07）が候補にあること
+      expect(within(list).getByText('07')).toBeInTheDocument();
+      expect(within(list).getByText('59')).toBeInTheDocument();
     });
 
     it('minuteStep=30 で分候補が 00/30 のみになること', async () => {

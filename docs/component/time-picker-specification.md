@@ -71,15 +71,15 @@ const MyComponent = () => {
 
 ### オプションプロパティ
 
-| プロパティ   | 型                                            | デフォルト値 | 説明                                                                |
-| ------------ | --------------------------------------------- | ------------ | ------------------------------------------------------------------- |
-| `size`       | `'x-small' \| 'small' \| 'medium' \| 'large'` | `'medium'`   | コンポーネントのサイズ。内部の`Select`のsizeに1:1でマッピングされる |
-| `minuteStep` | `1 \| 5 \| 10 \| 15 \| 30`                    | `15`         | 分候補の刻み（すべて60の約数）                                      |
-| `minTime`    | `string`（`"HH:mm"`）                         | `undefined`  | 選択可能な最小時刻（inclusive）。範囲外の候補は非表示になる         |
-| `maxTime`    | `string`（`"HH:mm"`）                         | `undefined`  | 選択可能な最大時刻（inclusive）。範囲外の候補は非表示になる         |
-| `isDisabled` | `boolean`                                     | `false`      | 無効状態かどうか                                                    |
-| `isError`    | `boolean`                                     | `false`      | エラー状態かどうか。`true`の場合、両方のSelectがエラー表示になる    |
-| `children`   | `ReactNode`                                   | `undefined`  | Compound Component（`TimePicker.ErrorMessage`）                     |
+| プロパティ   | 型                                            | デフォルト値 | 説明                                                                                                |
+| ------------ | --------------------------------------------- | ------------ | --------------------------------------------------------------------------------------------------- |
+| `size`       | `'x-small' \| 'small' \| 'medium' \| 'large'` | `'medium'`   | コンポーネントのサイズ。内部の`Select`のsizeに1:1でマッピングされる                                 |
+| `minuteStep` | `1 \| 5 \| 10 \| 15 \| 30`                    | `1`          | 分候補の刻み（すべて60の約数）。既定は全時刻を選べる`1`。予約枠など粗い刻みにしたい場合のみ明示する |
+| `minTime`    | `string`（`"HH:mm"`）                         | `undefined`  | 選択可能な最小時刻（inclusive）。範囲外の候補は非表示になる                                         |
+| `maxTime`    | `string`（`"HH:mm"`）                         | `undefined`  | 選択可能な最大時刻（inclusive）。範囲外の候補は非表示になる                                         |
+| `isDisabled` | `boolean`                                     | `false`      | 無効状態かどうか                                                                                    |
+| `isError`    | `boolean`                                     | `false`      | エラー状態かどうか。`true`の場合、両方のSelectがエラー表示になる                                    |
+| `children`   | `ReactNode`                                   | `undefined`  | Compound Component（`TimePicker.ErrorMessage`）                                                     |
 
 ### 内部固定値（props では変更不可）
 
@@ -267,7 +267,7 @@ const combined =
 
 - v1は`Select` × 2（時・分）＋`:`セパレータの薄いコンポジットである（独自の入力パネルやclock UIは持たない）。
 - 表示は`value`から純導出され、隠れstateを持たない（pure controlled）。
-- 時候補は`00`〜`23`の全24時を生成する（刻みは1で内部固定）。分候補は`minuteStep`（既定15）で生成する。
+- 時候補は`00`〜`23`の全24時を生成する（刻みは1で内部固定）。分候補は`minuteStep`（既定1）で生成する。
 - 候補リストの最大高さは`250px`で内部固定し、時・分の両 Select に常時適用する（時 Select の 24 候補が大きく出過ぎるのを防ぐ）。候補 8 件分（264px）ちょうどにすると項目の切れ目と一致し下にリストが続いていることがわかりにくいため、あえて項目の途中で切れる高さにしている。`minuteStep=1`（60 候補）の場合もスクロール表示になる。
 - `minTime` / `maxTime`の範囲外の候補は、生成リストから除外（非表示）する。現行の`Select`はdisabledオプションに非対応のため、無効表示ではなく非表示とする。
 - 時候補は、その時に対して選択可能な分が 1 件も無い場合も除外する。これにより、`minTime`の分が`minuteStep`で到達できない場合（例: `minTime="09:45"`, `minuteStep=30`では 9 時の分候補`00`/`30`がいずれも 09:45 未満）に、選んでも分候補が空になるデッドエンドの時が候補へ現れることを防ぐ。
@@ -302,6 +302,10 @@ A: 境界は「完全な時刻」のみが意味を持ち、未選択`null`を�
 ### Q: props 名はなぜ HTML 標準の `min` / `max` ではなく `minTime` / `maxTime`？
 
 A: DatePickerの`minDate` / `maxDate`との対称性を優先した。エコシステムでも命名は割れており（mantineは`min` / `max`、MUI x-date-pickersは`minTime` / `maxTime`）、HTML標準との親和性は値の形式（`"HH:mm"`）で確保している。
+
+### Q: 既定の `minuteStep` はなぜ `1`（分刻み）？
+
+A: 既定で全時刻を選べるようにするため。予約枠・会議スロットなど粗い刻みで十分な場面では`minuteStep={15}`のように指定する。候補が 60 件になる場合もリストは`optionListMaxHeight=250px`（内部固定）でスクロール表示される。
 
 ### Q: 不正な形式の `minTime` / `maxTime`（例: `"25:00"`、`"9-30"`）を渡すとどうなる？
 
