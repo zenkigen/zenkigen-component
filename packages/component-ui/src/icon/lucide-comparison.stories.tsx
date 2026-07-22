@@ -156,7 +156,7 @@ function CandidateCell({
           href={`https://lucide.dev/icons/${name}`}
           target="_blank"
           rel="noreferrer"
-          className="text-text02 hover:underline"
+          className="text-text02 underline hover:text-text01"
         >
           {name}
         </a>
