@@ -130,10 +130,25 @@ export const isTimeInRange = (
   return true;
 };
 
+/** いずれかの時（`00`〜`23`）と組み合わせて範囲内になる分かどうかを判定する */
+const isMinuteAvailableForAnyHour = (minute: number, minTime?: string | null, maxTime?: string | null): boolean => {
+  for (let hour = MIN_HOUR; hour <= MAX_HOUR; hour += 1) {
+    if (isTimeInRange(hour, minute, minTime, maxTime)) {
+      return true;
+    }
+  }
+
+  return false;
+};
+
 /**
  * 分の候補（`SelectOption[]`）を生成する。
- * `selectedHour` が指定されている場合は `minTime` / `maxTime` の範囲外の分を除外（非表示）する。
- * `selectedHour` が `null`（時が未選択）の場合は範囲によるフィルタを行わず刻みごとの分を全件返す。
+ * `selectedHour` が指定されている場合は、その時と組み合わせて `minTime` / `maxTime` の範囲外になる分を
+ * 除外（非表示）する。
+ * `selectedHour` が `null`（時が未選択）の場合は「いずれかの時と組み合わせれば範囲内になる分」だけを返す
+ * （＝選択可能な時ごとの分候補の和集合）。これにより、分を先に選んでから時を選ぶ順序でも、範囲内に存在
+ * しない分が候補へ現れない。
+ * `minTime` が `maxTime` より後（＝範囲が空集合）の場合は、どの時とも組み合わせられないため空配列を返す。
  * @param minuteStep 分の刻み（60 の約数）
  */
 export const generateMinuteOptions = (
@@ -144,14 +159,19 @@ export const generateMinuteOptions = (
 ): SelectOption[] => {
   const min = minTime != null ? parseTime(minTime) : null;
   const max = maxTime != null ? parseTime(maxTime) : null;
-  const shouldFilterByRange = selectedHour != null && (min != null || max != null);
+  const shouldFilterByRange = min != null || max != null;
   const options: SelectOption[] = [];
 
   for (let minute = MIN_MINUTE; minute <= MAX_MINUTE; minute += minuteStep) {
-    // shouldFilterByRange が true の時点で selectedHour は非 null だが、isTimeInRange の
-    // hour 引数（number）へ渡すための TypeScript の型絞り込みとして selectedHour != null を明示する。
-    if (shouldFilterByRange && selectedHour != null && !isTimeInRange(selectedHour, minute, minTime, maxTime)) {
-      continue;
+    if (shouldFilterByRange) {
+      const isAvailable =
+        selectedHour != null
+          ? isTimeInRange(selectedHour, minute, minTime, maxTime)
+          : isMinuteAvailableForAnyHour(minute, minTime, maxTime);
+
+      if (!isAvailable) {
+        continue;
+      }
     }
 
     options.push(createMinuteOption(minute));
@@ -166,6 +186,7 @@ export const generateMinuteOptions = (
  * これにより、`minTime` の分が `minuteStep` で到達できない場合（例: `minTime="09:45"`, `minuteStep=30` では
  * 9 時の分候補 `00`/`30` がいずれも 09:45 未満で除外され空になる）に、選んでも分候補が空になる
  * デッドエンドの時が候補へ現れることを防ぐ。
+ * `minTime` が `maxTime` より後（＝範囲が空集合）の場合は、すべての時で分候補が空になるため空配列を返す。
  * @param minuteStep 分の刻み。各時に選択可能な分が存在するかの判定に使用する
  */
 export const generateHourOptions = (

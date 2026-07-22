@@ -184,13 +184,17 @@ export const MinMax: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'minTime / maxTime で選択可能な範囲を制限する。範囲外の候補は非表示になる（例: 9:00〜17:30）。',
+        story:
+          'minTime / maxTime で選択可能な範囲を制限する。範囲外の候補は非表示になる（例: 9:00〜17:30）。' +
+          '狭い範囲（9:45〜10:15）では、時が未選択のときの分候補が「いずれかの時と組み合わせられる分」（45 / 00 / 15）に限定され、' +
+          '時を変更して分が範囲外になる場合はその分が未選択へ戻る。',
       },
     },
   },
   render: () => (
-    <div className="flex">
+    <div className="flex flex-col items-start gap-4">
       <TimePickerStory minTime="09:00" maxTime="17:30" value={{ hour: 12, minute: 0 }} />
+      <TimePickerStory minTime="09:45" maxTime="10:15" minuteStep={15} value={EMPTY_TIME} />
     </div>
   ),
 };

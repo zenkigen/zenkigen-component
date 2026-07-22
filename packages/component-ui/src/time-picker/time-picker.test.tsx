@@ -22,8 +22,9 @@ import { formatTime, generateHourOptions, generateMinuteOptions, isTimeInRange, 
  * - サイズ・アクセシビリティ
  */
 
-const getHourTrigger = () => screen.getByRole('button', { name: '時' });
-const getMinuteTrigger = () => screen.getByRole('button', { name: '分' });
+// アクセシブルネームは選択済みの場合「時 09」のように値を含むため、前方一致で取得する
+const getHourTrigger = () => screen.getByRole('button', { name: /^時/ });
+const getMinuteTrigger = () => screen.getByRole('button', { name: /^分/ });
 
 // value を内部 state で保持する制御コンポーネント（pure controlled の挙動確認用）
 const ControlledTimePicker = ({
@@ -147,8 +148,34 @@ describe('TimePicker', () => {
         expect(labels).toEqual(['30', '45']);
       });
 
-      it('selectedHour が null の場合は範囲フィルタを行わないこと', () => {
+      it('selectedHour が null の場合、いずれかの時と組み合わせられる分をすべて返すこと', () => {
+        // maxTime がなく 10 時以降は全分が範囲内のため、結果は全候補になる
         const labels = generateMinuteOptions(15, null, '09:30').map((option) => option.label);
+        expect(labels).toEqual(['00', '15', '30', '45']);
+      });
+
+      it('selectedHour が null の場合、どの時とも組み合わせられない分を除外すること', () => {
+        // 09:45〜10:15 では 45(9時)・00/15(10時) のみ成立し、30 はどの時とも組み合わせられない
+        const labels = generateMinuteOptions(15, null, '09:45', '10:15').map((option) => option.label);
+        expect(labels).toEqual(['00', '15', '45']);
+      });
+    });
+
+    describe('minTime > maxTime（範囲が空集合）', () => {
+      it('時候補が空になること', () => {
+        expect(generateHourOptions(15, '12:00', '09:00')).toEqual([]);
+      });
+
+      it('時が未選択でも分候補が空になること', () => {
+        expect(generateMinuteOptions(15, null, '12:00', '09:00')).toEqual([]);
+      });
+
+      it('時が選択済みでも分候補が空になること', () => {
+        expect(generateMinuteOptions(15, 10, '12:00', '09:00')).toEqual([]);
+      });
+
+      it('片側が不正フォーマットの場合はその側の制限のみ無視し、空集合として扱わないこと', () => {
+        const labels = generateMinuteOptions(15, null, '12:00', 'invalid').map((option) => option.label);
         expect(labels).toEqual(['00', '15', '30', '45']);
       });
     });
@@ -163,11 +190,26 @@ describe('TimePicker', () => {
       expect(screen.getByText(':')).toBeInTheDocument();
     });
 
-    it('トリガーボタンに固定の aria-label（時・分）が付与されること', () => {
+    it('未選択のときトリガーボタンの aria-label が「時」「分」になること', () => {
       render(<TimePicker value={{ hour: null, minute: null }} onChange={vi.fn()} />);
 
       expect(getHourTrigger()).toHaveAttribute('aria-label', '時');
       expect(getMinuteTrigger()).toHaveAttribute('aria-label', '分');
+    });
+
+    it('選択済みのとき aria-label に選択値が含まれ、現在値が読み上げられること', () => {
+      render(<TimePicker value={{ hour: 9, minute: 30 }} onChange={vi.fn()} />);
+
+      // aria-label は可視テキストを上書きするため、可視値（ゼロ埋め）を含めて現在値を読めるようにする
+      expect(screen.getByRole('button', { name: '時 09' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: '分 30' })).toBeInTheDocument();
+    });
+
+    it('片方のみ選択のとき、選択済み側だけ aria-label に値が含まれること', () => {
+      render(<TimePicker value={{ hour: 9, minute: null }} onChange={vi.fn()} />);
+
+      expect(screen.getByRole('button', { name: '時 09' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: '分' })).toBeInTheDocument();
     });
   });
 
@@ -300,6 +342,112 @@ describe('TimePicker', () => {
       expect(within(list).queryByText('09')).not.toBeInTheDocument();
       expect(within(list).getByText('10')).toBeInTheDocument();
     });
+
+    it('時が未選択のとき、どの時とも組み合わせられない分が候補に出ないこと', async () => {
+      const user = userEvent.setup();
+      // 09:45〜10:15 では 45(9時)・00/15(10時) のみ成立し、30 はどの時とも組み合わせられない
+      render(
+        <TimePicker
+          value={{ hour: null, minute: null }}
+          onChange={vi.fn()}
+          minTime="09:45"
+          maxTime="10:15"
+          minuteStep={15}
+        />,
+      );
+
+      await user.click(getMinuteTrigger());
+      const list = screen.getByRole('list');
+      expect(within(list).queryByText('30')).not.toBeInTheDocument();
+      expect(within(list).getByText('45')).toBeInTheDocument();
+      expect(within(list).getByText('00')).toBeInTheDocument();
+      expect(within(list).getByText('15')).toBeInTheDocument();
+    });
+
+    it('分を先に選んでから範囲外になる時を選ぶと、分が未選択へ戻り範囲外の時刻が発火しないこと', async () => {
+      const user = userEvent.setup();
+      const handleChange = vi.fn();
+      render(<ControlledTimePicker onChange={handleChange} minTime="09:45" maxTime="10:15" minuteStep={15} />);
+
+      await user.click(getMinuteTrigger());
+      await user.click(within(screen.getByRole('list')).getByText('00'));
+      expect(handleChange).toHaveBeenLastCalledWith({ hour: null, minute: 0 });
+
+      await user.click(getHourTrigger());
+      await user.click(within(screen.getByRole('list')).getByText('09'));
+
+      // 09:00 は範囲外のため、分は維持されず未選択へ戻る
+      expect(handleChange).toHaveBeenLastCalledWith({ hour: 9, minute: null });
+      expect(getMinuteTrigger()).toHaveTextContent('--');
+    });
+
+    it('時を変更しても分が新しい範囲内なら維持されること', async () => {
+      const user = userEvent.setup();
+      const handleChange = vi.fn();
+      render(
+        <ControlledTimePicker
+          initialValue={{ hour: 10, minute: 30 }}
+          onChange={handleChange}
+          minTime="09:00"
+          maxTime="11:00"
+          minuteStep={15}
+        />,
+      );
+
+      await user.click(getHourTrigger());
+      await user.click(within(screen.getByRole('list')).getByText('09'));
+
+      expect(handleChange).toHaveBeenLastCalledWith({ hour: 9, minute: 30 });
+    });
+
+    it('minTime > maxTime のとき時・分とも候補リストが空になること', async () => {
+      const user = userEvent.setup();
+      render(<TimePicker value={{ hour: null, minute: null }} onChange={vi.fn()} minTime="12:00" maxTime="09:00" />);
+
+      await user.click(getHourTrigger());
+      expect(within(screen.getByRole('list')).queryAllByRole('button')).toHaveLength(0);
+
+      await user.click(getHourTrigger());
+      await user.click(getMinuteTrigger());
+      expect(within(screen.getByRole('list')).queryAllByRole('button')).toHaveLength(0);
+    });
+  });
+
+  describe('個別クリア（選択解除）', () => {
+    it('時が選択済みのとき候補リストに「選択解除」が表示され、押すと時だけ未選択へ戻ること', async () => {
+      const user = userEvent.setup();
+      const handleChange = vi.fn();
+      render(<ControlledTimePicker initialValue={{ hour: 9, minute: 30 }} onChange={handleChange} />);
+
+      await user.click(getHourTrigger());
+      await user.click(within(screen.getByRole('list')).getByRole('button', { name: '選択解除' }));
+
+      expect(handleChange).toHaveBeenLastCalledWith({ hour: null, minute: 30 });
+      expect(getHourTrigger()).toHaveTextContent('--');
+      expect(getMinuteTrigger()).toHaveTextContent('30');
+    });
+
+    it('分が選択済みのとき「選択解除」で分だけ未選択へ戻ること', async () => {
+      const user = userEvent.setup();
+      const handleChange = vi.fn();
+      render(<ControlledTimePicker initialValue={{ hour: 9, minute: 30 }} onChange={handleChange} />);
+
+      await user.click(getMinuteTrigger());
+      await user.click(within(screen.getByRole('list')).getByRole('button', { name: '選択解除' }));
+
+      expect(handleChange).toHaveBeenLastCalledWith({ hour: 9, minute: null });
+      expect(getMinuteTrigger()).toHaveTextContent('--');
+      expect(getHourTrigger()).toHaveTextContent('09');
+    });
+
+    it('未選択のときは候補リストに「選択解除」が表示されないこと', async () => {
+      const user = userEvent.setup();
+      render(<ControlledTimePicker />);
+
+      await user.click(getHourTrigger());
+
+      expect(within(screen.getByRole('list')).queryByRole('button', { name: '選択解除' })).not.toBeInTheDocument();
+    });
   });
 
   describe('エラー状態とアクセシビリティ', () => {
@@ -324,6 +472,73 @@ describe('TimePicker', () => {
 
       expect(getHourTrigger()).toHaveAttribute('aria-describedby', 'time-error');
       expect(getMinuteTrigger()).toHaveAttribute('aria-describedby', 'time-error');
+    });
+
+    it('Fragment でラップした ErrorMessage も aria-describedby に配線されること', () => {
+      render(
+        <TimePicker value={{ hour: null, minute: null }} onChange={vi.fn()} isError>
+          <>
+            <TimePicker.ErrorMessage id="time-error">時刻を選択してください</TimePicker.ErrorMessage>
+          </>
+        </TimePicker>,
+      );
+
+      expect(screen.getByText('時刻を選択してください')).toBeInTheDocument();
+      expect(getHourTrigger()).toHaveAttribute('aria-describedby', 'time-error');
+      expect(getMinuteTrigger()).toHaveAttribute('aria-describedby', 'time-error');
+    });
+
+    it('ネストした Fragment・複数の ErrorMessage でも順に配線されること', () => {
+      render(
+        <TimePicker value={{ hour: null, minute: null }} onChange={vi.fn()} isError>
+          <>
+            <TimePicker.ErrorMessage id="error-1">時刻を選択してください</TimePicker.ErrorMessage>
+          </>
+          <>
+            <>
+              <TimePicker.ErrorMessage id="error-2">営業時間内で選択してください</TimePicker.ErrorMessage>
+            </>
+          </>
+        </TimePicker>,
+      );
+
+      expect(screen.getByText('時刻を選択してください')).toBeInTheDocument();
+      expect(screen.getByText('営業時間内で選択してください')).toBeInTheDocument();
+      expect(getHourTrigger()).toHaveAttribute('aria-describedby', 'error-1 error-2');
+      expect(getMinuteTrigger()).toHaveAttribute('aria-describedby', 'error-1 error-2');
+    });
+
+    it('Fragment でラップしても React のキー警告が出ないこと', () => {
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+      render(
+        <TimePicker value={{ hour: null, minute: null }} onChange={vi.fn()} isError>
+          <>
+            <TimePicker.ErrorMessage>1 件目</TimePicker.ErrorMessage>
+          </>
+          <>
+            <TimePicker.ErrorMessage>2 件目</TimePicker.ErrorMessage>
+          </>
+        </TimePicker>,
+      );
+
+      expect(consoleErrorSpy).not.toHaveBeenCalled();
+
+      consoleErrorSpy.mockRestore();
+    });
+
+    it('div など Fragment 以外の要素でラップした ErrorMessage は aria-describedby に配線されないこと（既知の制約）', () => {
+      render(
+        <TimePicker value={{ hour: null, minute: null }} onChange={vi.fn()} isError>
+          <div>
+            <TimePicker.ErrorMessage id="time-error">時刻を選択してください</TimePicker.ErrorMessage>
+          </div>
+        </TimePicker>,
+      );
+
+      expect(screen.getByText('時刻を選択してください')).toBeInTheDocument();
+      expect(getHourTrigger()).not.toHaveAttribute('aria-describedby');
+      expect(getMinuteTrigger()).not.toHaveAttribute('aria-describedby');
     });
 
     it('isError=false では ErrorMessage が表示されないこと', () => {
