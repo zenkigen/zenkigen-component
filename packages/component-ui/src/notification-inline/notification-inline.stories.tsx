@@ -6,6 +6,9 @@ import { NotificationInline } from '.';
 const meta: Meta<typeof NotificationInline> = {
   title: 'Components/NotificationInline',
   component: NotificationInline,
+  argTypes: {
+    variant: { control: 'radio', options: ['default', 'outline'] },
+  },
 };
 
 export default meta;
@@ -16,6 +19,7 @@ export const Component: Story = {
     children: 'Message',
     size: 'medium',
     state: 'success',
+    variant: 'default',
     showClose: false,
   },
   parameters: {
@@ -58,6 +62,49 @@ export function Base() {
       </NotificationInline>
       <NotificationInline state="success">閉じるボタン無し</NotificationInline>
       <NotificationInline size="small" state="attention" showClose onClickClose={action('clicked')}>
+        めっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキスト
+      </NotificationInline>
+    </div>
+  );
+}
+
+export function Outline() {
+  return (
+    <div className="flex flex-col gap-2">
+      <NotificationInline size="small" state="attention" variant="outline" showClose onClickClose={action('clicked')}>
+        Attention
+      </NotificationInline>
+      <NotificationInline size="small" state="warning" variant="outline" showClose onClickClose={action('clicked')}>
+        Warning
+      </NotificationInline>
+      <NotificationInline size="small" state="information" variant="outline" showClose onClickClose={action('clicked')}>
+        Information
+      </NotificationInline>
+      <NotificationInline size="small" state="success" variant="outline" showClose onClickClose={action('clicked')}>
+        Success
+      </NotificationInline>
+      <NotificationInline size="small" variant="outline" showClose onClickClose={action('clicked')}>
+        Default
+      </NotificationInline>
+      <NotificationInline state="attention" variant="outline" showClose onClickClose={action('clicked')}>
+        Attention
+      </NotificationInline>
+      <NotificationInline state="warning" variant="outline" showClose onClickClose={action('clicked')}>
+        Warning
+      </NotificationInline>
+      <NotificationInline state="information" variant="outline" showClose onClickClose={action('clicked')}>
+        Information
+      </NotificationInline>
+      <NotificationInline state="success" variant="outline" showClose onClickClose={action('clicked')}>
+        Success
+      </NotificationInline>
+      <NotificationInline variant="outline" showClose onClickClose={action('clicked')}>
+        Default
+      </NotificationInline>
+      <NotificationInline state="success" variant="outline">
+        閉じるボタン無し
+      </NotificationInline>
+      <NotificationInline size="small" state="attention" variant="outline" showClose onClickClose={action('clicked')}>
         めっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキスト
       </NotificationInline>
     </div>
