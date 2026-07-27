@@ -29,6 +29,8 @@ export function RadioCardItem({ value, label, description, isDisabled: itemDisab
   const isError = context.isError && !isDisabled;
   const hasDescription = description != null && description !== '';
   const describedByProps = hasDescription ? { 'aria-describedby': descriptionId } : {};
+  // aria-invalid はエラー時のみ出力する（非エラー時に aria-invalid="false" を出さない。TextInput 等と同じ挙動）
+  const ariaInvalidProps = isError ? { 'aria-invalid': true } : {};
 
   const handleChange = () => {
     if (!isDisabled) {
@@ -93,9 +95,9 @@ export function RadioCardItem({ value, label, description, isDisabled: itemDisab
         disabled={isDisabled}
         onChange={handleChange}
         aria-labelledby={labelId}
-        aria-invalid={isError}
         className="peer absolute inset-0 size-full cursor-pointer opacity-0 disabled:cursor-not-allowed"
         {...describedByProps}
+        {...ariaInvalidProps}
       />
       <div className={cardClasses}>
         <div className="flex items-center">

@@ -155,6 +155,13 @@ describe('RadioCard', () => {
       });
     });
 
+    it('非エラー時は各 input に aria-invalid が付かないこと', () => {
+      render(<ControlledRadioCard />);
+      screen.getAllByRole('radio').forEach((radio) => {
+        expect(radio).not.toHaveAttribute('aria-invalid');
+      });
+    });
+
     it('RadioCard.ErrorMessage がグループ下に1つ表示されること', () => {
       render(<ControlledRadioCard isError />);
       expect(screen.getByText('いずれかを選択してください')).toBeInTheDocument();
