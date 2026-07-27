@@ -175,6 +175,51 @@ describe('RadioCard', () => {
       expect(document.getElementById(describedby as string)).toHaveTextContent('いずれかを選択してください');
     });
 
+    it('ErrorMessage を複数配置すると、それぞれ一意の id が振られ aria-describedby がすべてを参照すること', () => {
+      render(
+        <RadioCard value="" onChange={vi.fn()} aria-label="グループ" isError>
+          <RadioCard.Group>
+            <RadioCard.Item value="a" label="A" />
+          </RadioCard.Group>
+          <RadioCard.ErrorMessage>エラー1</RadioCard.ErrorMessage>
+          <RadioCard.ErrorMessage>エラー2</RadioCard.ErrorMessage>
+        </RadioCard>,
+      );
+      const describedby = screen.getByRole('radiogroup').getAttribute('aria-describedby');
+      expect(describedby).not.toBeNull();
+      const ids = (describedby as string).split(' ');
+      expect(ids).toHaveLength(2);
+      expect(new Set(ids).size).toBe(2);
+      expect(document.getElementById(ids[0] as string)).toHaveTextContent('エラー1');
+      expect(document.getElementById(ids[1] as string)).toHaveTextContent('エラー2');
+    });
+
+    it('ErrorMessage に明示指定した id が採用されること', () => {
+      render(
+        <RadioCard value="" onChange={vi.fn()} aria-label="グループ" isError>
+          <RadioCard.Group>
+            <RadioCard.Item value="a" label="A" />
+          </RadioCard.Group>
+          <RadioCard.ErrorMessage id="my-error">エラー</RadioCard.ErrorMessage>
+        </RadioCard>,
+      );
+      expect(screen.getByRole('radiogroup')).toHaveAttribute('aria-describedby', 'my-error');
+      expect(document.getElementById('my-error')).toHaveTextContent('エラー');
+    });
+
+    it('isError が false のとき ErrorMessage は描画されず aria-describedby も付かないこと', () => {
+      render(
+        <RadioCard value="" onChange={vi.fn()} aria-label="グループ">
+          <RadioCard.Group>
+            <RadioCard.Item value="a" label="A" />
+          </RadioCard.Group>
+          <RadioCard.ErrorMessage>エラー</RadioCard.ErrorMessage>
+        </RadioCard>,
+      );
+      expect(screen.queryByText('エラー')).not.toBeInTheDocument();
+      expect(screen.getByRole('radiogroup')).not.toHaveAttribute('aria-describedby');
+    });
+
     it('エラー時にカードがエラー枠（border-supportError）になること', () => {
       const { container } = render(<ControlledRadioCard isError />);
       expect(container.querySelectorAll('.border-supportError').length).toBeGreaterThan(0);

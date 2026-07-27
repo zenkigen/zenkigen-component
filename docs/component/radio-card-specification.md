@@ -100,11 +100,12 @@ const Example = () => {
 
 ### RadioCard.ErrorMessage
 
-| プロパティ | 型          | 必須 | 説明                     |
-| ---------- | ----------- | ---- | ------------------------ |
-| `children` | `ReactNode` | ✓    | エラーメッセージの内容。 |
+| プロパティ | 型          | 必須 | 説明                                                            |
+| ---------- | ----------- | ---- | --------------------------------------------------------------- |
+| `children` | `ReactNode` | ✓    | エラーメッセージの内容。                                        |
+| `id`       | `string`    |      | メッセージ要素の id。未指定なら自動採番（`TextInput` と同様）。 |
 
-`RadioCard` の `isError` が `true` のときのみ表示される。配置はグループ末尾（`RadioCard.Group` の外、`RadioCard` 直下）。
+`RadioCard` の `isError` が `true` のときのみ表示される。配置はグループ末尾（`RadioCard.Group` の外、`RadioCard` 直下）。複数配置でき、それぞれに一意の id が自動採番されて radiogroup の `aria-describedby` がすべてを参照する（`TextInput.ErrorMessage` と同じ方式）。
 
 ## 状態とスタイル
 
@@ -154,13 +155,13 @@ const Example = () => {
 - 各カードはネイティブ `<input type="radio">` を共通 `name` で束ねる。これにより単一選択・矢印キー移動・Space 選択がブラウザネイティブに成立する。
 - カード全面に透明な input をオーバーレイし、カードのどこをクリック/フォーカスしてもラジオが操作される。`<label>` でカード全体をラップしないことで、主ラベルのみを accessible name とし、`description` は `aria-describedby` として分離する（二重読みを防ぐ）。
 - フォーカスリングは、オーバーレイ input の直後の兄弟である「カード見た目」要素に `focusVisible.normalPeer` を当てて表示する。
-- エラー時は各 input に `aria-invalid` を付与し、`RadioCard.ErrorMessage` が実在するときのみ radiogroup の `aria-describedby` でその id を参照する（宙吊り参照を防ぐ）。
+- エラー時は各 input に `aria-invalid` を付与し、表示中の `RadioCard.ErrorMessage` が存在するときのみ radiogroup の `aria-describedby` でその id 群を参照する（宙吊り参照を防ぐ）。非エラー時は `aria-invalid` を出力しない。
 
 ## 技術的な詳細
 
 - 状態は controlled のみ（`value` / `onChange` 必須）。uncontrolled（`defaultValue`）は持たない。
 - 親 `RadioCard` が Context で `value` / `onChange` / `name` / `isDisabled` / `isError` / `errorId` / aria 情報を配布する。`RadioCard.Group` / `RadioCard.Item` / `RadioCard.ErrorMessage` はこれを読む。
-- `RadioCard.ErrorMessage` は `useEffect` で自身の存在を Context に登録し、`RadioCard.Group` はそれが存在するときだけ `aria-describedby` を張る。
+- `RadioCard` は直下の子を走査し、`RadioCard.ErrorMessage` に連番 id を採番して注入する（`TextInput` と同じ方式）。表示中のメッセージ id 群を Context 経由で `RadioCard.Group` に渡し、Group はそれが存在するときだけ `aria-describedby` を張る。このため `RadioCard.ErrorMessage` は `RadioCard` の直下に置くこと（別コンポーネントでラップすると id が採番されない）。
 - 明示的な `RadioCard.Group` を境界に持つことで、子要素の型走査を行わない。`options.map(...)` で `RadioCard.Item` を生成しても壊れない。
 - `description` は prop として受け取り、説明文を直接描画する（サブコンポーネント化しない）。
 

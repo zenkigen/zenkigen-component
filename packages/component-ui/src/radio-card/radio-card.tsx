@@ -1,8 +1,9 @@
-import type { ReactNode } from 'react';
-import { useCallback, useId, useMemo, useState } from 'react';
+import type { ReactElement, ReactNode } from 'react';
+import { Children, cloneElement, isValidElement, useId, useMemo } from 'react';
 
 import type { RadioCardContextValue } from './radio-card-context';
 import { RadioCardContext } from './radio-card-context';
+import type { RadioCardErrorMessageProps } from './radio-card-error-message';
 import { RadioCardErrorMessage } from './radio-card-error-message';
 import { RadioCardGroup } from './radio-card-group';
 import { RadioCardItem } from './radio-card-item';
@@ -39,13 +40,27 @@ function RadioCardRoot({
   const autoName = useId();
   const baseId = useId();
   const resolvedName = name ?? autoName;
-  const errorId = `${baseId}-error`;
 
-  const [hasError, setHasError] = useState(false);
+  // TextInput と同じ方式: 直下の RadioCard.ErrorMessage に連番 id を採番して注入し、
+  // 表示中のメッセージ id 群を radiogroup の aria-describedby に張る（非表示時は参照しない）
+  const errorIds: string[] = [];
+  const enhancedChildren = Children.map(children, (child) => {
+    if (!isValidElement(child)) {
+      return child;
+    }
 
-  const registerError = useCallback((present: boolean) => {
-    setHasError(present);
-  }, []);
+    if (child.type === RadioCardErrorMessage && isError) {
+      const errorChild = child as ReactElement<RadioCardErrorMessageProps>;
+      const assignedId = errorChild.props.id ?? `${baseId}-error-${errorIds.length + 1}`;
+      errorIds.push(assignedId);
+
+      return cloneElement(errorChild, { id: assignedId });
+    }
+
+    return child;
+  });
+
+  const errorDescribedBy = errorIds.length > 0 ? errorIds.join(' ') : null;
 
   const contextValue = useMemo<RadioCardContextValue>(
     () => ({
@@ -54,18 +69,16 @@ function RadioCardRoot({
       name: resolvedName,
       isDisabled,
       isError,
-      errorId,
-      hasError,
-      registerError,
+      errorDescribedBy,
       ariaLabel,
       ariaLabelledby,
     }),
-    [value, onChange, resolvedName, isDisabled, isError, errorId, hasError, registerError, ariaLabel, ariaLabelledby],
+    [value, onChange, resolvedName, isDisabled, isError, errorDescribedBy, ariaLabel, ariaLabelledby],
   );
 
   return (
     <RadioCardContext.Provider value={contextValue}>
-      <div className="flex flex-col gap-2">{children}</div>
+      <div className="flex flex-col gap-2">{enhancedChildren}</div>
     </RadioCardContext.Provider>
   );
 }

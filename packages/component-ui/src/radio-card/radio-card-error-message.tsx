@@ -1,27 +1,22 @@
 import type { ReactNode } from 'react';
-import { useEffect } from 'react';
 
 import { useRadioCardContext } from './radio-card-context';
 
 export type RadioCardErrorMessageProps = {
   children: ReactNode;
+  /** エラーメッセージ要素の id。未指定なら RadioCard が自動採番して注入する */
+  id?: string;
 };
 
-export function RadioCardErrorMessage({ children }: RadioCardErrorMessageProps) {
-  const { isError, errorId, registerError } = useRadioCardContext('RadioCard.ErrorMessage');
-
-  useEffect(() => {
-    registerError(true);
-
-    return () => registerError(false);
-  }, [registerError]);
+export function RadioCardErrorMessage({ children, id }: RadioCardErrorMessageProps) {
+  const { isError } = useRadioCardContext('RadioCard.ErrorMessage');
 
   if (!isError) {
     return null;
   }
 
   return (
-    <p id={errorId} className="typography-label13regular text-supportError" aria-live="assertive">
+    <p id={id} className="typography-label13regular text-supportError" aria-live="assertive">
       {children}
     </p>
   );

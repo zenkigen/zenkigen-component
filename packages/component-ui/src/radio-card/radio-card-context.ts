@@ -11,12 +11,8 @@ export type RadioCardContextValue = {
   isDisabled: boolean;
   /** グループ全体をエラー状態にするか */
   isError: boolean;
-  /** エラーメッセージ要素の id（aria-describedby 連携用） */
-  errorId: string;
-  /** RadioCard.ErrorMessage が実在するか（宙吊り参照を防ぐ） */
-  hasError: boolean;
-  /** ErrorMessage が自身の存在を登録する */
-  registerError: (present: boolean) => void;
+  /** radiogroup の aria-describedby に張るエラーメッセージ id 群（スペース区切り）。表示中の ErrorMessage が無ければ null */
+  errorDescribedBy: string | null;
   /** radiogroup の aria-label */
   ariaLabel?: string;
   /** radiogroup の aria-labelledby */

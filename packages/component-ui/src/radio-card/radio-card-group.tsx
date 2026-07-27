@@ -7,8 +7,8 @@ export type RadioCardGroupProps = {
 };
 
 export function RadioCardGroup({ children }: RadioCardGroupProps) {
-  const { ariaLabel, ariaLabelledby, isError, hasError, errorId } = useRadioCardContext('RadioCard.Group');
-  const describedByProps = isError && hasError ? { 'aria-describedby': errorId } : {};
+  const { ariaLabel, ariaLabelledby, errorDescribedBy } = useRadioCardContext('RadioCard.Group');
+  const describedByProps = errorDescribedBy != null ? { 'aria-describedby': errorDescribedBy } : {};
 
   return (
     <div
