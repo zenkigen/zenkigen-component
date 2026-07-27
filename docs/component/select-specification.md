@@ -85,11 +85,19 @@ const [selectedOption, setSelectedOption] = useState<SelectOption | null>(null);
 | `isError`             | `boolean`                                     | `false`      | エラー状態の制御                                       |
 | `isOptionSelected`    | `boolean`                                     | `false`      | 選択状態の見た目を適用するかどうか                     |
 | `matchListToTrigger`  | `boolean`                                     | `false`      | ドロップダウンリストの幅をトリガーボタンの幅に合わせる |
+| `aria-label`          | `string`                                      | -            | トリガーボタンに設定する`aria-label`                   |
+| `aria-describedby`    | `string`                                      | -            | トリガーボタンに設定する`aria-describedby`             |
 | `onChange`            | `(option: SelectOption \| null) => void`      | -            | 選択変更時のコールバック関数                           |
 
 ### 継承プロパティ
 
 - `children` - `ReactNode`として`Select.Option`コンポーネントを受け取る
+
+### トリガーボタンへの aria 属性
+
+`aria-label` / `aria-describedby` は、指定した場合のみトリガーの`<button>`要素へそのまま付与される（未指定時は属性を付与しない）。`TimePicker`のように`Select`を合成するコンポーネントから、時/分などのラベルやエラーメッセージとの関連付けを配線するために使用する。
+
+`aria-invalid`は props では受け取らず、`isError`から内部導出する。`isError={true}`のときのみトリガーの`<button>`へ`aria-invalid="true"`を出力し、`isError={false}`のときは属性自体を出力しない（他のフォーム系コンポーネントと同じ挙動）。
 
 ## SelectOption型
 
@@ -349,8 +357,9 @@ Selectコンポーネントのスタイルは`@zenkigen-inc/component-theme`のT
 
 ## 更新履歴
 
-| 日付       | 内容                                  | 担当者 |
-| ---------- | ------------------------------------- | ------ |
-| 2026-01-27 | `matchListToTrigger` プロパティを追加 | -      |
-| 2025-10-10 | 親要素の`overflow`設定の影響回避      | -      |
-| 2025-08-18 | 新規作成                              | -      |
+| 日付       | 内容                                                                                                        | 担当者 |
+| ---------- | ----------------------------------------------------------------------------------------------------------- | ------ |
+| 2026-07-13 | トリガーボタンへ`aria-label`/`aria-describedby`を追加。`aria-invalid`は props ではなく`isError`から内部導出 | -      |
+| 2026-01-27 | `matchListToTrigger` プロパティを追加                                                                       | -      |
+| 2025-10-10 | 親要素の`overflow`設定の影響回避                                                                            | -      |
+| 2025-08-18 | 新規作成                                                                                                    | -      |
