@@ -24,6 +24,7 @@ export * from './password-input';
 export * from './popover';
 export * from './popup';
 export * from './radio';
+export * from './radio-card';
 export * from './search';
 export * from './segmented-control';
 export * from './select';
