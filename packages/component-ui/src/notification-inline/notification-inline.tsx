@@ -56,9 +56,10 @@ export function NotificationInline({ state = 'default', size = 'medium', variant
     'fill-supportSuccess': state === 'success',
   });
 
-  // medium はアイコン(24px)が 1 行分の高さ(約20px)より大きいため、テキスト側を 2px 下げて 1 行目とアイコンの中心を揃える
+  // medium はアイコン(24px)が 1 行分の高さ(約20px)より大きいため、テキスト側を 2px 下げて 1 行目とアイコンの中心を揃える。
+  // アイコンの無い default では揃える相手が無く、下げるとテキストの中央位置が他 state より 1px ずれるため付けない
   const textClasses = clsx('flex-1', {
-    'pt-[2px]': size === 'medium',
+    'pt-[2px]': size === 'medium' && state !== 'default',
   });
 
   const iconName = {

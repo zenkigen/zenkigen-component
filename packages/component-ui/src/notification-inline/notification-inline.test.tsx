@@ -79,12 +79,21 @@ describe('NotificationInline', () => {
     });
 
     it('mediumサイズでメッセージ1行目とアイコンの中心を揃えるpt-[2px]がテキストに適用されること', () => {
-      render(<NotificationInline>メッセージ</NotificationInline>);
+      render(<NotificationInline state="attention">メッセージ</NotificationInline>);
       expect(screen.getByText('メッセージ').className).toContain('pt-[2px]');
     });
 
+    it('mediumサイズでもアイコンの無いdefaultではテキストにpt-[2px]が適用されないこと', () => {
+      render(<NotificationInline>メッセージ</NotificationInline>);
+      expect(screen.getByText('メッセージ').className).not.toContain('pt-[2px]');
+    });
+
     it('smallサイズではテキストにpt-[2px]が適用されないこと', () => {
-      render(<NotificationInline size="small">メッセージ</NotificationInline>);
+      render(
+        <NotificationInline size="small" state="attention">
+          メッセージ
+        </NotificationInline>,
+      );
       expect(screen.getByText('メッセージ').className).not.toContain('pt-[2px]');
     });
   });
