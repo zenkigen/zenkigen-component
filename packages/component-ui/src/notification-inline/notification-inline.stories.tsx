@@ -68,6 +68,41 @@ export function Base() {
   );
 }
 
+export function WithoutClose() {
+  return (
+    <div className="flex flex-col gap-2">
+      <NotificationInline size="small" state="attention">
+        Attention
+      </NotificationInline>
+      <NotificationInline size="small" state="warning">
+        Warning
+      </NotificationInline>
+      <NotificationInline size="small" state="information">
+        Information
+      </NotificationInline>
+      <NotificationInline size="small" state="success">
+        Success
+      </NotificationInline>
+      <NotificationInline size="small">Default</NotificationInline>
+      <NotificationInline state="attention">Attention</NotificationInline>
+      <NotificationInline state="warning">Warning</NotificationInline>
+      <NotificationInline state="information">Information</NotificationInline>
+      <NotificationInline state="success">Success</NotificationInline>
+      <NotificationInline>Default</NotificationInline>
+      <NotificationInline state="attention" variant="outline">
+        Attention Outline
+      </NotificationInline>
+      <NotificationInline variant="outline">Default Outline</NotificationInline>
+      <NotificationInline size="small" state="attention">
+        めっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキスト
+      </NotificationInline>
+      <NotificationInline state="attention">
+        めっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキストめっちゃ長いテキスト
+      </NotificationInline>
+    </div>
+  );
+}
+
 export function Outline() {
   return (
     <div className="flex flex-col gap-2">

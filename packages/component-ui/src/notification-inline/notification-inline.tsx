@@ -35,8 +35,10 @@ export function NotificationInline({ state = 'default', size = 'medium', variant
     'bg-uiBackgroundBlue': state === 'information',
     'bg-uiBackgroundSuccess': state === 'success',
     'bg-uiBackgroundGray': state === 'default',
-    'p-[calc(0.5rem_-_1px)]': size === 'small',
-    'p-[calc(0.75rem_-_1px)]': size === 'medium',
+    // 1 行時の高さの基準は small が閉じるボタン(24px)、medium がアイコン(24px)。
+    // showClose / state によらず高さが変わらないよう、両サイズとも最小高を確保する
+    'min-h-12 p-[calc(0.75rem_-_1px)]': size === 'small',
+    'min-h-14 p-[calc(1rem_-_1px)]': size === 'medium',
     'border-transparent': !isOutline,
     'border-supportError': isOutline && state === 'attention',
     'border-supportWarning': isOutline && state === 'warning',
@@ -45,11 +47,19 @@ export function NotificationInline({ state = 'default', size = 'medium', variant
     'border-uiBorder04': isOutline && state === 'default',
   });
 
-  const iconClasses = clsx('flex items-center', {
+  // 複数行時にアイコンが 1 行目の中央に揃うよう、small は 1 行分の高さの箱の中でアイコンを中央配置する
+  const iconClasses = clsx('flex shrink-0 items-center', {
+    'h-5': size === 'small',
     'fill-supportError': state === 'attention',
     'fill-supportWarning': state === 'warning',
     'fill-blue-blue50': state === 'information',
     'fill-supportSuccess': state === 'success',
+  });
+
+  // medium はアイコン(24px)が 1 行分の高さ(約20px)より大きいため、テキスト側を 2px 下げて 1 行目とアイコンの中心を揃える。
+  // アイコンの無い default では揃える相手が無く、下げるとテキストの中央位置が他 state より 1px ずれるため付けない
+  const textClasses = clsx('flex-1', {
+    'pt-[2px]': size === 'medium' && state !== 'default',
   });
 
   const iconName = {
@@ -66,14 +76,17 @@ export function NotificationInline({ state = 'default', size = 'medium', variant
 
   return (
     <div className={wrapperClasses}>
-      {state !== 'default' && (
-        <div className={iconClasses}>
-          <Icon name={iconName[state]} size={iconSize[size]} />
-        </div>
-      )}
-      <p className="flex-1">{props.children}</p>
+      {/* アイコンとメッセージは上揃えのグループにまとめ、複数行時もアイコンが 1 行目に揃うようにする */}
+      <div className="flex flex-1 items-start gap-1">
+        {state !== 'default' && (
+          <div className={iconClasses}>
+            <Icon name={iconName[state]} size={iconSize[size]} />
+          </div>
+        )}
+        <p className={textClasses}>{props.children}</p>
+      </div>
       {props.showClose === true && (
-        <div className="flex items-center">
+        <div className="ml-2 flex shrink-0 items-center">
           <IconButton icon="close" size="small" variant="text" onClick={props.onClickClose} />
         </div>
       )}
