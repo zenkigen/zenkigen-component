@@ -64,16 +64,16 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
   },
   {
     name: 'angle-small-down',
-    status: 'replace',
-    note: 'angle-down と同一化',
-    candidates: ['chevron-down'],
+    status: 'keep',
+    note: '小型チェブロン。lucide では angle-down と同一化してしまうため置換先なし',
+    candidates: [],
     hasAccent: false,
   },
   {
     name: 'angle-small-up',
-    status: 'replace',
-    note: 'angle-up と同一化',
-    candidates: ['chevron-up'],
+    status: 'keep',
+    note: '小型チェブロン。lucide では angle-up と同一化してしまうため置換先なし',
+    candidates: [],
     hasAccent: false,
   },
   {
