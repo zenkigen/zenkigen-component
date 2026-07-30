@@ -212,14 +212,14 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
   {
     name: 'caret-down',
     status: 'ask',
-    note: '論点D: 塗り三角。独自維持推奨',
+    note: '論点D: 塗り三角。独自維持推奨。※置換すると angle-down と同じ chevron-down になり同一化（論点 B）',
     candidates: ['chevron-down', 'triangle'],
     hasAccent: false,
   },
   {
     name: 'caret-right',
     status: 'ask',
-    note: '論点D: 塗り三角。独自維持推奨',
+    note: '論点D: 塗り三角。独自維持推奨。※置換すると angle-right と同じ chevron-right になり同一化（論点 B）',
     candidates: ['chevron-right', 'play'],
     hasAccent: false,
   },
@@ -540,8 +540,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
   },
   {
     name: 'logout',
-    status: 'replace',
-    note: 'exit と同一化（現行は鏡像）',
+    status: 'ask',
+    note: '論点 B: 現行は exit の左右鏡像。置換すると exit と同じ log-out になり同一化するため、維持側（要相談）に倒した（2026-07-30 ユーザー判断）',
     candidates: ['log-out'],
     hasAccent: false,
   },
@@ -639,7 +639,7 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
   {
     name: 'play-filled',
     status: 'ask',
-    note: '論点D: 独自維持推奨（play との描き分け）',
+    note: '論点D: 独自維持推奨（play との描き分け）。※置換すると play と同じ play になり同一化（論点 B）',
     candidates: ['play'],
     hasAccent: false,
   },
@@ -828,7 +828,7 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
   {
     name: 'star-filled',
     status: 'ask',
-    note: '論点D: EvaluationStar 依存。独自維持を強く推奨',
+    note: '論点D: EvaluationStar 依存。独自維持を強く推奨。※置換すると star と同じ star になり同一化（論点 B）',
     candidates: ['star'],
     hasAccent: false,
   },
@@ -905,7 +905,7 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
   {
     name: 'upload-document-success',
     status: 'replace',
-    note: '',
+    note: '※score も file-check が候補で同一化する（論点 B・score 側は要相談で保留）',
     candidates: ['file-check'],
     hasAccent: false,
   },
