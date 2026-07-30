@@ -15,9 +15,44 @@ export type IconComparisonEntry = {
   candidates: string[];
   /** 現行アイコンが accentColor（2色）指定に対応するか */
   hasAccent: boolean;
+  /** カテゴリタグ（判定とは別軸の絞り込み用）。1 アイコンに複数付く */
+  tags: string[];
+  /** デザイナー承認の論点（A〜F）。該当なしは空配列 */
+  issues: string[];
 };
 
 export const lucideVersion = '1.25.0';
+
+/** カテゴリタグの表示順つきラベル（キーの順序がフィルタの表示順） */
+export const tagLabels: Record<string, string> = {
+  direction: '方向・矢印',
+  av: 'AV・面接',
+  document: '文書・ファイル',
+  edit: '編集・操作',
+  layout: 'レイアウト・表示',
+  status: '状態・通知',
+  user: 'user・人物',
+  communication: 'コミュニケーション',
+  calendar: 'カレンダー・日時',
+  rating: '評価・マーク',
+  transfer: 'アップ／ダウンロード',
+  auth: '認証・入退室・権限',
+  search: '検索・絞り込み',
+  data: 'データ・分析',
+  brand: 'ブランド・日本固有',
+  ai: 'AI',
+  misc: 'その他・設定',
+};
+
+/** 論点タグのラベル */
+export const issueLabels: Record<string, string> = {
+  A: '論点 A: 状態アイコンの filled 問題',
+  B: '論点 B: 同一化する組 / angle リバランス',
+  C: '論点 C: accent トレードオフ',
+  D: '論点 D: filled が意味を持つ',
+  E: '論点 E: 塗り印象 / -filled とセット',
+  F: '論点 F: ファミリー整合',
+};
 
 export const iconComparisonEntries: IconComparisonEntry[] = [
   {
@@ -26,6 +61,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '素の＋記号',
     candidates: ['plus'],
     hasAccent: false,
+    tags: ['edit'],
+    issues: [],
   },
   {
     name: 'ai',
@@ -33,6 +70,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '独自の 4 芒星＋交差線。lucide sparkles/sparkle とは形が異なるため独自維持で確定（2026-07-30）。候補は比較用に残す',
     candidates: ['sparkles', 'sparkle'],
     hasAccent: false,
+    tags: ['ai'],
+    issues: [],
   },
   {
     name: 'ai-agent',
@@ -40,6 +79,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: 'accent 対応。lucide は bot が近いが人物＋AI バッジ表現は無し。置換で accentColor 無効化',
     candidates: ['bot'],
     hasAccent: true,
+    tags: ['user', 'ai'],
+    issues: ['C'],
   },
   {
     name: 'angle-down',
@@ -47,6 +88,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '論点 B: 単体は chevron-down と一致。ただし angle-small-* が独自維持のため angle ファミリーが混在する。lucide を採るならファミリー全体のリバランスが必要',
     candidates: ['chevron-down'],
     hasAccent: false,
+    tags: ['direction'],
+    issues: ['B', 'F'],
   },
   {
     name: 'angle-left',
@@ -54,6 +97,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '論点 B: 単体は chevron-left と一致。angle ファミリーのリバランス判断に含める',
     candidates: ['chevron-left'],
     hasAccent: false,
+    tags: ['direction'],
+    issues: ['B', 'F'],
   },
   {
     name: 'angle-right',
@@ -61,6 +106,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '論点 B: 単体は chevron-right と一致。angle ファミリーのリバランス判断に含める',
     candidates: ['chevron-right'],
     hasAccent: false,
+    tags: ['direction'],
+    issues: ['B', 'F'],
   },
   {
     name: 'angle-small-down',
@@ -68,6 +115,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '小型チェブロン。lucide では angle-down と同一化してしまうため置換先なし',
     candidates: [],
     hasAccent: false,
+    tags: ['direction'],
+    issues: [],
   },
   {
     name: 'angle-small-up',
@@ -75,6 +124,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '小型チェブロン。lucide では angle-up と同一化してしまうため置換先なし',
     candidates: [],
     hasAccent: false,
+    tags: ['direction'],
+    issues: [],
   },
   {
     name: 'angle-up',
@@ -82,6 +133,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '論点 B: 単体は chevron-up と一致。angle ファミリーのリバランス判断に含める',
     candidates: ['chevron-up'],
     hasAccent: false,
+    tags: ['direction'],
+    issues: ['B', 'F'],
   },
   {
     name: 'arrow-down',
@@ -89,6 +142,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['arrow-down'],
     hasAccent: false,
+    tags: ['direction'],
+    issues: [],
   },
   {
     name: 'arrow-left',
@@ -96,6 +151,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['arrow-left'],
     hasAccent: false,
+    tags: ['direction'],
+    issues: [],
   },
   {
     name: 'arrow-right',
@@ -103,6 +160,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['arrow-right'],
     hasAccent: false,
+    tags: ['direction'],
+    issues: [],
   },
   {
     name: 'arrow-up',
@@ -110,6 +169,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['arrow-up'],
     hasAccent: false,
+    tags: ['direction'],
+    issues: [],
   },
   {
     name: 'attachment',
@@ -117,13 +178,17 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['paperclip'],
     hasAccent: false,
+    tags: ['document'],
+    issues: [],
   },
   {
     name: 'attention',
     status: 'ask',
-    note: '論点A: 状態アイコン。塗り円＋！',
+    note: '論点 A: 状態アイコン。塗り円＋！',
     candidates: ['circle-alert'],
     hasAccent: false,
+    tags: ['status'],
+    issues: ['A'],
   },
   {
     name: 'background-blur-strong',
@@ -131,6 +196,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: 'AV ドメイン固有',
     candidates: [],
     hasAccent: false,
+    tags: ['av'],
+    issues: [],
   },
   {
     name: 'background-blur-weak',
@@ -138,6 +205,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: 'AV ドメイン固有',
     candidates: [],
     hasAccent: false,
+    tags: ['av'],
+    issues: [],
   },
   {
     name: 'beginner',
@@ -145,6 +214,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '初心者マーク（日本固有）',
     candidates: [],
     hasAccent: false,
+    tags: ['rating', 'brand'],
+    issues: [],
   },
   {
     name: 'block',
@@ -152,6 +223,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['ban'],
     hasAccent: false,
+    tags: ['status'],
+    issues: [],
   },
   {
     name: 'bookmark',
@@ -159,6 +232,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['bookmark'],
     hasAccent: false,
+    tags: ['rating'],
+    issues: [],
   },
   {
     name: 'building',
@@ -166,6 +241,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['building'],
     hasAccent: false,
+    tags: ['misc'],
+    issues: [],
   },
   {
     name: 'calendar',
@@ -173,6 +250,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: 'calendar 系 4 種が accent 維持のためファミリー混在の判断',
     candidates: ['calendar'],
     hasAccent: false,
+    tags: ['calendar'],
+    issues: ['C'],
   },
   {
     name: 'calendar-attention',
@@ -180,6 +259,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: 'accent 対応。lucide に calendar＋！ 相当なし',
     candidates: [],
     hasAccent: true,
+    tags: ['calendar'],
+    issues: ['C'],
   },
   {
     name: 'calendar-check',
@@ -187,6 +268,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: 'accent 対応。lucide に calendar-check あり。置換で accentColor 無効化',
     candidates: ['calendar-check'],
     hasAccent: true,
+    tags: ['calendar'],
+    issues: ['C'],
   },
   {
     name: 'calendar-draft',
@@ -194,6 +277,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: 'lucide に calendar+ペン無し。独自維持寄り',
     candidates: [],
     hasAccent: false,
+    tags: ['calendar'],
+    issues: [],
   },
   {
     name: 'calendar-minus',
@@ -201,6 +286,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: 'accent 対応。lucide に calendar-minus あり。置換で accentColor 無効化',
     candidates: ['calendar-minus'],
     hasAccent: true,
+    tags: ['calendar'],
+    issues: ['C'],
   },
   {
     name: 'calendar-today',
@@ -208,20 +295,26 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: 'accent 対応。lucide calendar-days が近い。置換で accentColor 無効化',
     candidates: ['calendar-days', 'calendar-1'],
     hasAccent: true,
+    tags: ['calendar'],
+    issues: ['C'],
   },
   {
     name: 'caret-down',
     status: 'ask',
-    note: '論点D: 塗り三角。独自維持推奨。※置換すると angle-down と同じ chevron-down になり同一化（論点 B）',
+    note: '論点 D: 塗り三角。独自維持推奨。※置換すると angle-down と同じ chevron-down になり同一化（論点 B）',
     candidates: ['chevron-down', 'triangle'],
     hasAccent: false,
+    tags: ['direction'],
+    issues: ['B', 'D'],
   },
   {
     name: 'caret-right',
     status: 'ask',
-    note: '論点D: 塗り三角。独自維持推奨。※置換すると angle-right と同じ chevron-right になり同一化（論点 B）',
+    note: '論点 D: 塗り三角。独自維持推奨。※置換すると angle-right と同じ chevron-right になり同一化（論点 B）',
     candidates: ['chevron-right', 'play'],
     hasAccent: false,
+    tags: ['direction'],
+    issues: ['B', 'D'],
   },
   {
     name: 'catch',
@@ -229,6 +322,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: 'ドメイン固有（塗りボール）',
     candidates: [],
     hasAccent: false,
+    tags: ['rating', 'brand'],
+    issues: [],
   },
   {
     name: 'chart-bar',
@@ -236,6 +331,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: 'lucide の chart-bar は横棒なので注意',
     candidates: ['chart-column'],
     hasAccent: false,
+    tags: ['data'],
+    issues: [],
   },
   {
     name: 'chart-line',
@@ -243,6 +340,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['chart-line'],
     hasAccent: false,
+    tags: ['data'],
+    issues: [],
   },
   {
     name: 'check',
@@ -250,6 +349,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['check'],
     hasAccent: false,
+    tags: ['status'],
+    issues: [],
   },
   {
     name: 'circle',
@@ -257,6 +358,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['circle'],
     hasAccent: false,
+    tags: ['status'],
+    issues: [],
   },
   {
     name: 'close',
@@ -264,6 +367,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['x'],
     hasAccent: false,
+    tags: ['edit'],
+    issues: [],
   },
   {
     name: 'collapse-content',
@@ -271,6 +376,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['minimize-2'],
     hasAccent: false,
+    tags: ['layout'],
+    issues: [],
   },
   {
     name: 'comment',
@@ -278,6 +385,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['message-circle', 'message-square'],
     hasAccent: false,
+    tags: ['communication'],
+    issues: [],
   },
   {
     name: 'contract',
@@ -285,6 +394,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['shrink', 'minimize-2'],
     hasAccent: false,
+    tags: ['layout'],
+    issues: [],
   },
   {
     name: 'copy',
@@ -292,6 +403,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['copy'],
     hasAccent: false,
+    tags: ['document', 'edit'],
+    issues: [],
   },
   {
     name: 'delete',
@@ -299,6 +412,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['trash-2'],
     hasAccent: false,
+    tags: ['edit'],
+    issues: [],
   },
   {
     name: 'display',
@@ -306,6 +421,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['monitor'],
     hasAccent: false,
+    tags: ['av'],
+    issues: [],
   },
   {
     name: 'document',
@@ -313,6 +430,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['file-text'],
     hasAccent: false,
+    tags: ['document'],
+    issues: [],
   },
   {
     name: 'document-edit',
@@ -320,6 +439,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['file-pen-line', 'file-pen'],
     hasAccent: false,
+    tags: ['document'],
+    issues: [],
   },
   {
     name: 'documents',
@@ -327,6 +448,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '現行 3 枚重ね → lucide 2 枚',
     candidates: ['files'],
     hasAccent: false,
+    tags: ['document'],
+    issues: [],
   },
   {
     name: 'double-circle',
@@ -334,6 +457,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '◎ 記号。意味を守るなら独自維持',
     candidates: ['target'],
     hasAccent: false,
+    tags: ['status', 'rating'],
+    issues: [],
   },
   {
     name: 'download',
@@ -341,6 +466,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['download'],
     hasAccent: false,
+    tags: ['transfer'],
+    issues: [],
   },
   {
     name: 'download-document',
@@ -348,6 +475,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['file-down'],
     hasAccent: false,
+    tags: ['document', 'transfer'],
+    issues: [],
   },
   {
     name: 'edit',
@@ -355,6 +484,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['pencil'],
     hasAccent: false,
+    tags: ['edit'],
+    issues: [],
   },
   {
     name: 'email',
@@ -362,6 +493,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['mail'],
     hasAccent: false,
+    tags: ['communication'],
+    issues: [],
   },
   {
     name: 'exit',
@@ -369,6 +502,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['log-out'],
     hasAccent: false,
+    tags: ['auth'],
+    issues: ['B'],
   },
   {
     name: 'expand',
@@ -376,6 +511,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['expand', 'maximize-2'],
     hasAccent: false,
+    tags: ['layout'],
+    issues: [],
   },
   {
     name: 'expand-content',
@@ -383,6 +520,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['maximize-2'],
     hasAccent: false,
+    tags: ['layout'],
+    issues: [],
   },
   {
     name: 'external-link',
@@ -390,6 +529,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['external-link'],
     hasAccent: false,
+    tags: ['communication'],
+    issues: [],
   },
   {
     name: 'feedback',
@@ -397,6 +538,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '丸吹き出し＋点 3 つ。形状一致。comment=message-circle と点々の有無で描き分けが保たれる',
     candidates: ['message-circle-more', 'message-square-more'],
     hasAccent: false,
+    tags: ['communication'],
+    issues: [],
   },
   {
     name: 'filter',
@@ -404,6 +547,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '現行は線 3 本型（漏斗ではない）',
     candidates: ['list-filter'],
     hasAccent: false,
+    tags: ['search'],
+    issues: [],
   },
   {
     name: 'flag',
@@ -411,6 +556,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['flag'],
     hasAccent: false,
+    tags: ['rating'],
+    issues: [],
   },
   {
     name: 'global',
@@ -418,6 +565,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['globe'],
     hasAccent: false,
+    tags: ['misc'],
+    issues: [],
   },
   {
     name: 'graph-line',
@@ -425,6 +574,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '面塗りエリアチャート。lucide chart-area は塗りなしで印象が大きく変わるため独自維持で確定（2026-07-30）。候補は比較用に残す',
     candidates: ['chart-area', 'chart-line'],
     hasAccent: false,
+    tags: ['data'],
+    issues: [],
   },
   {
     name: 'guide',
@@ -432,6 +583,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['navigation', 'send'],
     hasAccent: false,
+    tags: ['misc'],
+    issues: [],
   },
   {
     name: 'hamburger',
@@ -439,6 +592,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['menu'],
     hasAccent: false,
+    tags: ['layout'],
+    issues: [],
   },
   {
     name: 'hamburger-close',
@@ -446,6 +601,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['chevrons-left'],
     hasAccent: false,
+    tags: ['direction'],
+    issues: [],
   },
   {
     name: 'hamburger-open',
@@ -453,6 +610,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['chevrons-right'],
     hasAccent: false,
+    tags: ['direction'],
+    issues: [],
   },
   {
     name: 'handle',
@@ -460,6 +619,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '論点 E: 6 ドットのベタ塗り。線画化で印象が変わる',
     candidates: ['grip-vertical'],
     hasAccent: false,
+    tags: ['layout'],
+    issues: ['E'],
   },
   {
     name: 'harutaka',
@@ -467,6 +628,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: 'ブランドロゴ',
     candidates: [],
     hasAccent: false,
+    tags: ['brand'],
+    issues: [],
   },
   {
     name: 'help',
@@ -474,6 +637,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['circle-help'],
     hasAccent: false,
+    tags: ['misc'],
+    issues: [],
   },
   {
     name: 'hint',
@@ -481,6 +646,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['lightbulb'],
     hasAccent: false,
+    tags: ['misc'],
+    issues: [],
   },
   {
     name: 'home',
@@ -488,6 +655,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['house'],
     hasAccent: false,
+    tags: ['misc'],
+    issues: [],
   },
   {
     name: 'image',
@@ -495,6 +664,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['image'],
     hasAccent: false,
+    tags: ['misc'],
+    issues: [],
   },
   {
     name: 'information',
@@ -502,13 +673,17 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '論点 E: information-filled とセット。片方だけ線画化すると filled 版との整合が崩れる',
     candidates: ['info'],
     hasAccent: false,
+    tags: ['status'],
+    issues: ['B', 'E'],
   },
   {
     name: 'information-filled',
     status: 'ask',
-    note: '論点A: 状態アイコン。置換で information と同一化',
+    note: '論点 A: 状態アイコン。置換で information と同一化',
     candidates: ['info'],
     hasAccent: false,
+    tags: ['status'],
+    issues: ['A', 'B'],
   },
   {
     name: 'input-delete',
@@ -516,6 +691,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '論点 E: 塗り円＋x。線画化で印象が変わる',
     candidates: ['circle-x'],
     hasAccent: false,
+    tags: ['edit'],
+    issues: ['E'],
   },
   {
     name: 'link',
@@ -523,6 +700,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['link'],
     hasAccent: false,
+    tags: ['communication'],
+    issues: [],
   },
   {
     name: 'list',
@@ -530,6 +709,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['list'],
     hasAccent: false,
+    tags: ['layout'],
+    issues: [],
   },
   {
     name: 'live-background',
@@ -537,6 +718,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: 'AV ドメイン固有',
     candidates: [],
     hasAccent: false,
+    tags: ['av'],
+    issues: [],
   },
   {
     name: 'logout',
@@ -544,6 +727,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '論点 B: 現行は exit の左右鏡像。置換すると exit と同じ log-out になり同一化するため、維持側（要相談）に倒した（2026-07-30 ユーザー判断）',
     candidates: ['log-out'],
     hasAccent: false,
+    tags: ['auth'],
+    issues: ['B'],
   },
   {
     name: 'main-view',
@@ -551,6 +736,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: 'AV ドメイン固有',
     candidates: [],
     hasAccent: false,
+    tags: ['av', 'layout'],
+    issues: [],
   },
   {
     name: 'message-text',
@@ -558,6 +745,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['messages-square'],
     hasAccent: false,
+    tags: ['communication'],
+    issues: [],
   },
   {
     name: 'mic',
@@ -565,6 +754,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: 'accent（ミュート2色）対応。lucide に mic あり。置換で accentColor 無効化',
     candidates: ['mic'],
     hasAccent: true,
+    tags: ['av'],
+    issues: ['C'],
   },
   {
     name: 'mic-off',
@@ -572,6 +763,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: 'mic ファミリー。lucide に mic-off あり',
     candidates: ['mic-off'],
     hasAccent: false,
+    tags: ['av'],
+    issues: ['C'],
   },
   {
     name: 'minus',
@@ -579,6 +772,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '論点 E: 塗り円バッジ＋−。線画化で印象が変わる',
     candidates: ['circle-minus'],
     hasAccent: false,
+    tags: ['edit'],
+    issues: ['E'],
   },
   {
     name: 'more',
@@ -586,6 +781,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '論点 E: 横 3 点のベタ塗り。線画化で印象が変わる',
     candidates: ['ellipsis'],
     hasAccent: false,
+    tags: ['layout'],
+    issues: ['E'],
   },
   {
     name: 'movie',
@@ -593,6 +790,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['film'],
     hasAccent: false,
+    tags: ['av'],
+    issues: [],
   },
   {
     name: 'network',
@@ -600,6 +799,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['waypoints'],
     hasAccent: false,
+    tags: ['communication'],
+    issues: [],
   },
   {
     name: 'notification',
@@ -607,6 +808,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['bell'],
     hasAccent: false,
+    tags: ['status'],
+    issues: [],
   },
   {
     name: 'pause',
@@ -614,6 +817,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '論点 E: 塗りバー。play（線画）との塗り／線の対比が lucide 化で統一される点も含めて判断',
     candidates: ['pause'],
     hasAccent: false,
+    tags: ['av'],
+    issues: ['E'],
   },
   {
     name: 'pdf',
@@ -621,6 +826,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '「PDF」文字入り。lucide に相当なし',
     candidates: [],
     hasAccent: false,
+    tags: ['document', 'brand'],
+    issues: [],
   },
   {
     name: 'picture-in-picture',
@@ -628,6 +835,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['picture-in-picture-2'],
     hasAccent: false,
+    tags: ['av'],
+    issues: [],
   },
   {
     name: 'play',
@@ -635,13 +844,17 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '論点 E: play-filled とセット。片方だけ線画化すると filled 版との描き分けが崩れる',
     candidates: ['play'],
     hasAccent: false,
+    tags: ['av'],
+    issues: ['B', 'E'],
   },
   {
     name: 'play-filled',
     status: 'ask',
-    note: '論点D: 独自維持推奨（play との描き分け）。※置換すると play と同じ play になり同一化（論点 B）',
+    note: '論点 D: 独自維持推奨（play との描き分け）。※置換すると play と同じ play になり同一化（論点 B）',
     candidates: ['play'],
     hasAccent: false,
+    tags: ['av'],
+    issues: ['B', 'D'],
   },
   {
     name: 'plus',
@@ -649,6 +862,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '論点 E: 塗り円バッジ＋＋。線画化で印象が変わる',
     candidates: ['circle-plus'],
     hasAccent: false,
+    tags: ['edit'],
+    issues: ['E'],
   },
   {
     name: 'presentation',
@@ -656,6 +871,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['presentation'],
     hasAccent: false,
+    tags: ['av'],
+    issues: [],
   },
   {
     name: 'questionnaire',
@@ -663,6 +880,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['clipboard-list'],
     hasAccent: false,
+    tags: ['document'],
+    issues: [],
   },
   {
     name: 'record',
@@ -670,6 +889,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '論点 E: 中心の塗りドット。線画化で塗り面積が小さくなる',
     candidates: ['circle-dot'],
     hasAccent: false,
+    tags: ['av'],
+    issues: ['E'],
   },
   {
     name: 'reload',
@@ -677,6 +898,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['rotate-cw'],
     hasAccent: false,
+    tags: ['edit'],
+    issues: [],
   },
   {
     name: 'remove',
@@ -684,6 +907,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '現行は素の−線',
     candidates: ['minus'],
     hasAccent: false,
+    tags: ['edit'],
+    issues: [],
   },
   {
     name: 'repeat',
@@ -691,6 +916,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['repeat'],
     hasAccent: false,
+    tags: ['edit'],
+    issues: [],
   },
   {
     name: 'score',
@@ -698,6 +925,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '論点 B: 文書＋テキスト 3 行＋チェック。file-check は upload-document-success に割当済みで同一化するため置換不可（同一化は不可とのユーザー判断・2026-07-30）。別候補の確認待ち',
     candidates: ['file-check'],
     hasAccent: false,
+    tags: ['document', 'data'],
+    issues: ['B'],
   },
   {
     name: 'screen-share',
@@ -705,6 +934,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['monitor-up'],
     hasAccent: false,
+    tags: ['av'],
+    issues: [],
   },
   {
     name: 'search',
@@ -712,6 +943,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['search'],
     hasAccent: false,
+    tags: ['search'],
+    issues: [],
   },
   {
     name: 'security',
@@ -719,6 +952,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '現行は南京錠（盾ではない）',
     candidates: ['lock'],
     hasAccent: false,
+    tags: ['auth'],
+    issues: [],
   },
   {
     name: 'send',
@@ -726,6 +961,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '論点 E: 塗りの紙飛行機。線画化で印象が変わる',
     candidates: ['send'],
     hasAccent: false,
+    tags: ['communication'],
+    issues: ['E'],
   },
   {
     name: 'setting',
@@ -733,6 +970,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['settings'],
     hasAccent: false,
+    tags: ['misc'],
+    issues: [],
   },
   {
     name: 'share',
@@ -740,6 +979,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['share-2'],
     hasAccent: false,
+    tags: ['communication'],
+    issues: [],
   },
   {
     name: 'shuffle',
@@ -747,6 +988,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['shuffle'],
     hasAccent: false,
+    tags: ['edit'],
+    issues: [],
   },
   {
     name: 'sidebar',
@@ -754,6 +997,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '論点 E: 塗りパネル。線画化で印象が変わる',
     candidates: ['panel-left'],
     hasAccent: false,
+    tags: ['layout'],
+    issues: ['E'],
   },
   {
     name: 'signal',
@@ -761,6 +1006,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: 'signal ファミリー。lucide に signal あり',
     candidates: ['signal'],
     hasAccent: false,
+    tags: ['av'],
+    issues: ['C'],
   },
   {
     name: 'signal-low',
@@ -768,6 +1015,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: 'accent 対応。lucide に signal-low あり。置換で accentColor 無効化',
     candidates: ['signal-low'],
     hasAccent: true,
+    tags: ['av'],
+    issues: ['C'],
   },
   {
     name: 'signal-off',
@@ -775,6 +1024,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: 'accent 対応。lucide は signal-zero（signal-off 相当）。置換で accentColor 無効化',
     candidates: ['signal-zero'],
     hasAccent: true,
+    tags: ['av'],
+    issues: ['C'],
   },
   {
     name: 'slider-editing',
@@ -782,6 +1033,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['sliders-horizontal'],
     hasAccent: false,
+    tags: ['edit'],
+    issues: [],
   },
   {
     name: 'sort',
@@ -789,6 +1042,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['arrow-up-down'],
     hasAccent: false,
+    tags: ['direction', 'search'],
+    issues: [],
   },
   {
     name: 'sort-down',
@@ -796,6 +1051,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '確信度低。方向は要再確認',
     candidates: ['arrow-down-wide-narrow'],
     hasAccent: false,
+    tags: ['direction', 'search'],
+    issues: [],
   },
   {
     name: 'sort-up',
@@ -803,6 +1060,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '確信度低。方向は要再確認',
     candidates: ['arrow-up-narrow-wide'],
     hasAccent: false,
+    tags: ['direction', 'search'],
+    issues: [],
   },
   {
     name: 'sparkle',
@@ -810,6 +1069,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '論点 E: 塗りスパークル。線画化で印象が変わる',
     candidates: ['sparkles'],
     hasAccent: false,
+    tags: ['ai'],
+    issues: ['E'],
   },
   {
     name: 'stamp',
@@ -817,6 +1078,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['stamp'],
     hasAccent: false,
+    tags: ['edit'],
+    issues: [],
   },
   {
     name: 'star',
@@ -824,20 +1087,26 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '論点 E: star-filled とセット。片方だけ線画化すると filled 版との描き分けが崩れる',
     candidates: ['star'],
     hasAccent: false,
+    tags: ['rating'],
+    issues: ['B', 'E'],
   },
   {
     name: 'star-filled',
     status: 'ask',
-    note: '論点D: EvaluationStar 依存。独自維持を強く推奨。※置換すると star と同じ star になり同一化（論点 B）',
+    note: '論点 D: EvaluationStar 依存。独自維持を強く推奨。※置換すると star と同じ star になり同一化（論点 B）',
     candidates: ['star'],
     hasAccent: false,
+    tags: ['rating'],
+    issues: ['B', 'D'],
   },
   {
     name: 'success-filled',
     status: 'ask',
-    note: '論点A: 状態アイコン。塗り円＋✓',
+    note: '論点 A: 状態アイコン。塗り円＋✓',
     candidates: ['circle-check'],
     hasAccent: false,
+    tags: ['status'],
+    issues: ['A'],
   },
   {
     name: 'superadmin',
@@ -845,6 +1114,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '盾＋チェック。lucide shield-check を採用（2026-07-30 確定）',
     candidates: ['shield-check', 'badge-check'],
     hasAccent: false,
+    tags: ['auth'],
+    issues: [],
   },
   {
     name: 'table',
@@ -852,6 +1123,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '論点 F: 単体は lucide table と一致。table-download / table-upload が要相談のため table 系 3 件をまとめて判断',
     candidates: ['table'],
     hasAccent: false,
+    tags: ['document', 'layout'],
+    issues: ['F'],
   },
   {
     name: 'table-download',
@@ -859,6 +1132,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '複合表現は lucide に無し。独自維持寄り',
     candidates: [],
     hasAccent: false,
+    tags: ['document', 'transfer'],
+    issues: ['F'],
   },
   {
     name: 'table-upload',
@@ -866,6 +1141,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '同上',
     candidates: [],
     hasAccent: false,
+    tags: ['document', 'transfer'],
+    issues: ['F'],
   },
   {
     name: 'timer',
@@ -873,6 +1150,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['timer'],
     hasAccent: false,
+    tags: ['calendar'],
+    issues: [],
   },
   {
     name: 'transcription',
@@ -880,6 +1159,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: 'AV ドメイン固有',
     candidates: [],
     hasAccent: false,
+    tags: ['av'],
+    issues: [],
   },
   {
     name: 'triangle',
@@ -887,6 +1168,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['triangle'],
     hasAccent: false,
+    tags: ['direction'],
+    issues: [],
   },
   {
     name: 'upload',
@@ -894,6 +1177,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['upload'],
     hasAccent: false,
+    tags: ['transfer'],
+    issues: [],
   },
   {
     name: 'upload-document',
@@ -901,6 +1186,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['file-up'],
     hasAccent: false,
+    tags: ['document', 'transfer'],
+    issues: [],
   },
   {
     name: 'upload-document-success',
@@ -908,6 +1195,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '※score も file-check が候補で同一化する（論点 B・score 側は要相談で保留）',
     candidates: ['file-check'],
     hasAccent: false,
+    tags: ['document', 'transfer'],
+    issues: ['B'],
   },
   {
     name: 'user',
@@ -915,6 +1204,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: 'user 系 5 種の描き分け全体で判断',
     candidates: ['user'],
     hasAccent: false,
+    tags: ['user'],
+    issues: ['F'],
   },
   {
     name: 'user-add',
@@ -922,6 +1213,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '論点 F: 単体は user-plus と一致。user ファミリー 8 件のうち 5 件が維持寄りのため巻き込みで要相談',
     candidates: ['user-plus'],
     hasAccent: false,
+    tags: ['user'],
+    issues: ['F'],
   },
   {
     name: 'user-group',
@@ -929,6 +1222,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: 'user-multi との描き分け',
     candidates: ['users-round'],
     hasAccent: false,
+    tags: ['user'],
+    issues: ['F'],
   },
   {
     name: 'user-line',
@@ -936,6 +1231,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '現行は塗り円アバター',
     candidates: ['circle-user-round'],
     hasAccent: false,
+    tags: ['user'],
+    issues: ['F'],
   },
   {
     name: 'user-multi',
@@ -943,6 +1240,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '現行 3 人像 → lucide 2 人',
     candidates: ['users'],
     hasAccent: false,
+    tags: ['user'],
+    issues: ['F'],
   },
   {
     name: 'user-one',
@@ -950,6 +1249,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: 'Avatar フォールバックで使用',
     candidates: ['user-round'],
     hasAccent: false,
+    tags: ['user'],
+    issues: ['F'],
   },
   {
     name: 'user-remove',
@@ -957,6 +1258,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '論点 F: 単体は user-minus と一致。user ファミリーの割れにより巻き込みで要相談',
     candidates: ['user-minus'],
     hasAccent: false,
+    tags: ['user'],
+    issues: ['F'],
   },
   {
     name: 'user-verified',
@@ -964,20 +1267,26 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '論点 F: 単体は user-check が同概念（現行は枠内バッジ型）。user ファミリーの割れにより巻き込みで要相談',
     candidates: ['user-check'],
     hasAccent: false,
+    tags: ['user', 'auth'],
+    issues: ['F'],
   },
   {
     name: 'video',
     status: 'ask',
-    note: '論点C: mic（維持）との混在判断',
+    note: '論点 C: mic（維持）との混在判断',
     candidates: ['video'],
     hasAccent: false,
+    tags: ['av'],
+    issues: ['C'],
   },
   {
     name: 'video-off',
     status: 'ask',
-    note: '論点C',
+    note: '論点 C',
     candidates: ['video-off'],
     hasAccent: false,
+    tags: ['av'],
+    issues: ['C'],
   },
   {
     name: 'visibility',
@@ -985,6 +1294,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['eye'],
     hasAccent: false,
+    tags: ['layout'],
+    issues: [],
   },
   {
     name: 'visibility-off',
@@ -992,6 +1303,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: '',
     candidates: ['eye-off'],
     hasAccent: false,
+    tags: ['layout'],
+    issues: [],
   },
   {
     name: 'volume',
@@ -999,6 +1312,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: 'volume ファミリー。lucide volume-2 が相当',
     candidates: ['volume-2', 'volume-1'],
     hasAccent: false,
+    tags: ['av'],
+    issues: ['C'],
   },
   {
     name: 'volume-off',
@@ -1006,13 +1321,17 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
     note: 'accent 対応。lucide に volume-off あり。置換で accentColor 無効化',
     candidates: ['volume-off', 'volume-x'],
     hasAccent: true,
+    tags: ['av'],
+    issues: ['C'],
   },
   {
     name: 'warning',
     status: 'ask',
-    note: '論点A: 状態アイコン。塗り三角＋！',
+    note: '論点 A: 状態アイコン。塗り三角＋！',
     candidates: ['triangle-alert'],
     hasAccent: false,
+    tags: ['status'],
+    issues: ['A'],
   },
 ];
 

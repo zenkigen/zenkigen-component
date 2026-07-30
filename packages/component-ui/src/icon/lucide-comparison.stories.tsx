@@ -21,7 +21,13 @@ import { Toggle } from '../toggle';
 import { Tooltip } from '../tooltip';
 import { Icon } from '.';
 import type { IconComparisonEntry, IconComparisonStatus } from './lucide-comparison-data';
-import { iconComparisonEntries, lucideSvgMarkup, lucideVersion } from './lucide-comparison-data';
+import {
+  iconComparisonEntries,
+  issueLabels,
+  lucideSvgMarkup,
+  lucideVersion,
+  tagLabels,
+} from './lucide-comparison-data';
 
 // アイコンの占有領域を可視化する着色クラス（トグルで ON/OFF）
 const BOUNDS_CLASS = 'bg-blue-blue10 outline outline-1 outline-blue-blue50';
@@ -93,6 +99,21 @@ const FILTERS: { value: Filter; label: string }[] = [
   { value: 'ask', label: `要相談 (${COUNTS.ask} / ${formatPercent(COUNTS.ask)})` },
   { value: 'keep', label: `独自維持 (${COUNTS.keep} / ${formatPercent(COUNTS.keep)})` },
 ];
+
+// カテゴリタグ・論点タグ。データ側のラベル定義の順序どおりに並べる（1 アイコンが複数持つ）
+const TAG_KEYS = Object.keys(tagLabels);
+const ISSUE_KEYS = Object.keys(issueLabels);
+
+function countBy(key: 'tags' | 'issues', value: string) {
+  return iconComparisonEntries.filter((entry) => entry[key].includes(value)).length;
+}
+
+const TAG_COUNTS: Record<string, number> = Object.fromEntries(TAG_KEYS.map((t) => [t, countBy('tags', t)]));
+const ISSUE_COUNTS: Record<string, number> = Object.fromEntries(ISSUE_KEYS.map((i) => [i, countBy('issues', i)]));
+
+function toggleValue(list: string[], value: string) {
+  return list.includes(value) ? list.filter((v) => v !== value) : [...list, value];
+}
 
 function LucideIcon({
   name,
@@ -277,6 +298,20 @@ function Row({
       </td>
       <td className="w-52 border border-gray-200 px-3 py-2 align-middle">
         <div className="typography-body14bold">{entry.name}</div>
+        <div className="mt-1 flex flex-wrap items-center gap-1">
+          {entry.tags.map((tag) => (
+            <span key={tag} className="typography-label11regular rounded bg-uiBackground02 px-1.5 py-px text-text02">
+              {tagLabels[tag] ?? tag}
+            </span>
+          ))}
+          {entry.issues.map((issue) => (
+            <Tooltip key={issue} content={issueLabels[issue] ?? issue} maxWidth={280}>
+              <span className="typography-label11bold cursor-help rounded bg-blue-blue10 px-1.5 py-px text-blue-blue100">
+                論点 {issue}
+              </span>
+            </Tooltip>
+          ))}
+        </div>
         {entry.hasAccent && (
           <div className="mt-1">
             <AccentBadge />
@@ -323,9 +358,28 @@ function Row({
 
 function ComparisonSheet() {
   const [filter, setFilter] = useState<Filter>('all');
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedIssues, setSelectedIssues] = useState<string[]>([]);
   const [strokeWidths, setStrokeWidths] = useState<StrokeWidths>(INITIAL_STROKE_WIDTHS);
   const [isBoundsColored, setIsBoundsColored] = useState(false);
-  const entries = filter === 'all' ? iconComparisonEntries : iconComparisonEntries.filter((e) => e.status === filter);
+
+  // 判定・カテゴリタグ・論点は AND で絞り込む。タグ／論点を複数選んだ場合はそれぞれ OR
+  const entries = iconComparisonEntries.filter((entry) => {
+    if (filter !== 'all' && entry.status !== filter) {
+      return false;
+    }
+    if (selectedTags.length > 0 && !selectedTags.some((tag) => entry.tags.includes(tag))) {
+      return false;
+    }
+
+    return selectedIssues.length === 0 || selectedIssues.some((issue) => entry.issues.includes(issue));
+  });
+  const isFiltered = filter !== 'all' || selectedTags.length > 0 || selectedIssues.length > 0;
+  const resetFilters = () => {
+    setFilter('all');
+    setSelectedTags([]);
+    setSelectedIssues([]);
+  };
 
   const bulkValue = ICON_SIZES.every((size) => strokeWidths[size] === strokeWidths['x-small'])
     ? strokeWidths['x-small']
@@ -419,25 +473,86 @@ function ComparisonSheet() {
           />
         </div>
       </div>
-      <div className="sticky top-0 z-10 mb-3 flex flex-wrap gap-2 border-b border-gray-200 bg-uiBackground01 py-2">
-        {FILTERS.map(({ value, label }) => {
-          const isActive = filter === value;
+      <div className="sticky top-0 z-10 mb-3 flex flex-col gap-2 border-b border-gray-200 bg-uiBackground01 py-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="typography-body12regular w-20 shrink-0 text-text02">判定</span>
+          {FILTERS.map(({ value, label }) => {
+            const isActive = filter === value;
 
-          return (
+            return (
+              <button
+                key={value}
+                type="button"
+                onClick={() => setFilter(value)}
+                className={clsx(
+                  'typography-body13regular rounded border px-3 py-1',
+                  isActive
+                    ? 'border-interactive01 bg-interactive01 text-textOnColor'
+                    : 'border-uiBorder02 bg-uiBackground01 text-text01',
+                )}
+              >
+                {label}
+              </button>
+            );
+          })}
+        </div>
+        <div className="flex flex-wrap items-center gap-1.5">
+          <span className="typography-body12regular w-20 shrink-0 text-text02">カテゴリ</span>
+          {TAG_KEYS.map((tag) => {
+            const isActive = selectedTags.includes(tag);
+
+            return (
+              <button
+                key={tag}
+                type="button"
+                onClick={() => setSelectedTags((prev) => toggleValue(prev, tag))}
+                className={clsx(
+                  'typography-body12regular rounded-full border px-2.5 py-0.5',
+                  isActive
+                    ? 'border-interactive01 bg-interactive01 text-textOnColor'
+                    : 'border-uiBorder02 bg-uiBackground01 text-text01',
+                )}
+              >
+                {tagLabels[tag]} ({TAG_COUNTS[tag]})
+              </button>
+            );
+          })}
+        </div>
+        <div className="flex flex-wrap items-center gap-1.5">
+          <span className="typography-body12regular w-20 shrink-0 text-text02">論点</span>
+          {ISSUE_KEYS.map((issue) => {
+            const isActive = selectedIssues.includes(issue);
+
+            return (
+              <Tooltip key={issue} content={issueLabels[issue] ?? issue} maxWidth={280}>
+                <button
+                  type="button"
+                  onClick={() => setSelectedIssues((prev) => toggleValue(prev, issue))}
+                  className={clsx(
+                    'typography-body12regular rounded-full border px-2.5 py-0.5',
+                    isActive
+                      ? 'border-interactive01 bg-interactive01 text-textOnColor'
+                      : 'border-uiBorder02 bg-uiBackground01 text-text01',
+                  )}
+                >
+                  論点 {issue} ({ISSUE_COUNTS[issue]})
+                </button>
+              </Tooltip>
+            );
+          })}
+          <span className="typography-body12regular ml-2 text-text02">
+            表示中 {entries.length} / {COUNTS.all} 件
+          </span>
+          {isFiltered && (
             <button
-              key={value}
               type="button"
-              onClick={() => setFilter(value)}
-              className={`typography-body13regular rounded border px-3 py-1 ${
-                isActive
-                  ? 'border-interactive01 bg-interactive01 text-textOnColor'
-                  : 'border-uiBorder02 bg-uiBackground01 text-text01'
-              }`}
+              onClick={resetFilters}
+              className="typography-body12regular rounded border border-uiBorder02 bg-uiBackground01 px-2 py-0.5 text-text01"
             >
-              {label}
+              絞り込みを解除
             </button>
-          );
-        })}
+          )}
+        </div>
       </div>
       <table className="border-collapse">
         <thead>
