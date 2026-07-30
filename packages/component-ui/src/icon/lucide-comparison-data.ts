@@ -695,7 +695,7 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
   {
     name: 'score',
     status: 'ask',
-    note: 'ドメイン固有性が高ければ独自維持',
+    note: '論点 B: 文書＋テキスト 3 行＋チェック。file-check は upload-document-success に割当済みで同一化するため置換不可（同一化は不可とのユーザー判断・2026-07-30）。別候補の確認待ち',
     candidates: ['file-check'],
     hasAccent: false,
   },
