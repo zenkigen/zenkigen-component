@@ -1,6 +1,6 @@
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import type { AnimationEvent, CSSProperties, ReactNode } from 'react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { Icon } from '../icon';
 import { IconButton } from '../icon-button';
@@ -9,29 +9,44 @@ import type { ToastState } from './type';
 const CLOSE_TIME_MSEC = 5000;
 
 type Props = {
-  /** 表示するメッセージの状態（色・アイコンを切り替えます） */
+  /** トーストの状態を表す。表示するアイコンとタイトルの文字色が切り替わる。 */
   state?: ToastState;
-  /** トースト全体の幅。数値・文字列いずれも指定可能 */
+  /** トースト全体の幅。数値・文字列いずれも指定できる。 */
   width?: CSSProperties['width'];
-  /** true で 5 秒後に自動で閉じる */
+  /** true のとき 5 秒後に自動で閉じ、onClickClose を呼ぶ。 */
   isAutoClose?: boolean;
-  /** true でフェードイン/アウトのアニメーションを有効化 */
+  /** true のときフェードイン / フェードアウトのアニメーションを有効にする。 */
   isAnimation?: boolean;
-  /** 表示する本文 */
+  /** true のとき閉じるボタンを表示する。isAutoClose が false のときは指定に関わらず必ず表示される。 */
+  hasCloseButton?: boolean;
+  /** タイトルの下に表示する補足テキスト。 */
+  description?: ReactNode;
+  /** タイトルとして表示する本文。 */
   children?: ReactNode;
-  /** クローズボタンや自動クローズ完了時に呼び出されるコールバック */
+  /** 閉じるボタン押下時および自動クローズ完了時に呼ばれる、トースト終了の通知コールバック。 */
   onClickClose: () => void;
 };
 
 export function Toast({
   state = 'information',
   width = 'auto',
-  isAutoClose = false,
+  isAutoClose = true,
   isAnimation = false,
+  hasCloseButton = false,
+  description,
   children,
   onClickClose,
 }: Props) {
   const [isRemoving, setIsRemoving] = useState(false);
+
+  // 自動クローズのタイマーから常に最新のコールバックを呼ぶために ref に保持する。
+  // 依存配列に onClickClose を直接入れると、インライン関数を渡す ToastProvider ではレンダーのたびに
+  // タイマーがリセットされ、永久に閉じなくなるため。
+  const onClickCloseRef = useRef(onClickClose);
+
+  useEffect(() => {
+    onClickCloseRef.current = onClickClose;
+  }, [onClickClose]);
 
   const handleClose = useCallback(() => {
     if (isAnimation) {
@@ -44,19 +59,41 @@ export function Toast({
   const handleAnimationEnd = (e: AnimationEvent<HTMLDivElement>) =>
     window.getComputedStyle(e.currentTarget).opacity === '0' && onClickClose();
 
-  const wrapperClasses = clsx('pointer-events-auto flex items-start gap-1 bg-white p-4 shadow-floatingShadow', {
-    ['animate-toast-in']: isAnimation && !isRemoving,
-    ['animate-toast-out opacity-0']: isAnimation && isRemoving,
-  });
-  const iconClasses = clsx('flex items-center', {
+  useEffect(() => {
+    if (!isAutoClose) {
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      if (isAnimation) {
+        setIsRemoving(true);
+      } else {
+        onClickCloseRef.current();
+      }
+    }, CLOSE_TIME_MSEC);
+
+    return () => window.clearTimeout(timer);
+  }, [isAutoClose, isAnimation]);
+
+  // 自動で閉じないトーストで閉じるボタンまで無いと、利用者がトーストを消せなくなるための安全弁。
+  const isCloseButtonShown = hasCloseButton || !isAutoClose;
+
+  const wrapperClasses = clsx(
+    'pointer-events-auto flex items-center gap-3 rounded border border-solid border-uiBorder01 bg-uiBackground01 p-4 shadow-floatingShadow',
+    {
+      ['animate-toast-in']: isAnimation && !isRemoving,
+      ['animate-toast-out opacity-0']: isAnimation && isRemoving,
+    },
+  );
+  const iconClasses = clsx('flex shrink-0 items-center', {
     'fill-supportSuccess': state === 'success',
     'fill-supportError': state === 'error',
     'fill-supportWarning': state === 'warning',
     'fill-supportInfo': state === 'information',
   });
-  const textClasses = clsx('typography-body13regular flex-1 pt-[3px]', {
+  const titleClasses = clsx('typography-body13regular break-words', {
     'text-supportError': state === 'error',
-    'text-text01': state === 'success' || state === 'warning' || state === 'information',
+    'text-text01': state !== 'error',
   });
 
   const iconName = {
@@ -66,23 +103,27 @@ export function Toast({
     information: 'information-filled',
   } as const;
 
-  useEffect(() => {
-    const timer = window.setTimeout(() => {
-      if (isAutoClose) {
-        setIsRemoving(true);
-      }
-    }, CLOSE_TIME_MSEC);
-
-    return () => window.clearTimeout(timer);
-  }, [isAutoClose]);
-
   return (
     <div className={wrapperClasses} style={{ width }} onAnimationEnd={handleAnimationEnd}>
-      <div className={iconClasses}>
-        <Icon name={iconName[state]} />
+      <div className="flex min-w-0 flex-1 items-start gap-1">
+        <div className={iconClasses}>
+          <Icon name={iconName[state]} />
+        </div>
+        {/*
+          アイコン(24px)は 1 行分の高さ(約 20px)より大きいため、幾何学的にはテキストを 2px 下げると中心が揃う。
+          ただし文字の実描画位置は行ボックスの中央より約 0.8px 上に来るため、それも含めて 3px 下げ、
+          1 行目の文字とアイコンの光学的な中心を合わせる。下側には余白を入れず、1 行時の高さをアイコン基準に保つ
+        */}
+        <div className="flex min-w-0 flex-1 flex-col gap-2 pt-[3px]">
+          <p className={titleClasses}>{children}</p>
+          {description != null && <p className="typography-label12regular break-words text-text01">{description}</p>}
+        </div>
       </div>
-      <p className={textClasses}>{children}</p>
-      <IconButton icon="close" size="medium" variant="text" onClick={handleClose} isNoPadding />
+      {isCloseButtonShown && (
+        <div className="flex shrink-0 items-center">
+          <IconButton icon="close" size="medium" variant="text" isNoPadding aria-label="閉じる" onClick={handleClose} />
+        </div>
+      )}
     </div>
   );
 }
