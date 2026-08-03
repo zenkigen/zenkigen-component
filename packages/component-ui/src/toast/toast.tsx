@@ -109,7 +109,12 @@ export function Toast({
         <div className={iconClasses}>
           <Icon name={iconName[state]} />
         </div>
-        <div className="flex min-w-0 flex-1 flex-col gap-2 py-0.5">
+        {/*
+          アイコン(24px)は 1 行分の高さ(約 20px)より大きいため、幾何学的にはテキストを 2px 下げると中心が揃う。
+          ただし文字の実描画位置は行ボックスの中央より約 0.8px 上に来るため、それも含めて 3px 下げ、
+          1 行目の文字とアイコンの光学的な中心を合わせる。下側には余白を入れず、1 行時の高さをアイコン基準に保つ
+        */}
+        <div className="flex min-w-0 flex-1 flex-col gap-2 pt-[3px]">
           <p className={titleClasses}>{children}</p>
           {description != null && <p className="typography-label12regular break-words text-text01">{description}</p>}
         </div>
