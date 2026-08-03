@@ -1,0 +1,105 @@
+import { Canvas, Meta, Story, Controls } from '@storybook/addon-docs/blocks';
+import { Markdown } from '@storybook/addon-docs/blocks';
+import TimePickerStories, { Component } from './time-picker.stories';
+import spec from '../../../../docs/component/time-picker-specification.md?raw';
+
+<Meta title="TimePicker" of={TimePickerStories} />
+
+# TimePicker
+
+<details>
+  <summary className="typography-label14regular text-text02">詳細仕様書</summary>
+  <div style={{ marginTop: '20px', padding: '12px 36px 36px 36px', backgroundColor: '#f9fafb', borderRadius: '4px' }}>
+    <p>※ 目次のアンカーリンクは使用できません。</p>
+    <Markdown>{spec}</Markdown>
+  </div>
+</details>
+
+<Canvas>
+  <Story of={Component} />
+</Canvas>
+
+<Controls of={Component} />
+
+## 概要
+
+時刻（時・分）を選択するためのコンポーネントです。時と分の2つのSelectと`:`セパレータで構成され、24時間表記に対応します。分候補は`minuteStep`で自動生成され、`minTime` / `maxTime`で選択可能な範囲を制限できます。
+
+## 設計の原則（Do）
+
+### 未選択は null で表現します
+
+value は `{ hour: number | null; minute: number | null }` の構造体です。時・分の両方が `null` のとき未入力を表し、`00` へフォールバックしません。片方だけ選択した中間状態も value に反映される pure controlled です。
+
+### 候補リストの高さは 250px 固定です
+
+候補リストの最大高さは `250px` で内部固定され、時・分の両 Select に常時適用されます。項目の途中で切れる高さにすることで、下にリストが続いていることを視覚的に示します。`minuteStep=1`（60 候補）などで分候補が多い場合もスクロール表示になります（高さの調整用 prop はありません）。
+
+## 推奨しないこと（Don't）
+
+### 候補にない任意時刻の直接入力が必要な場面では使用しない
+
+v1 は候補固定であり、テキストによる任意時刻の直接入力には対応しません。任意時刻の入力が必要な場合は別の手段を検討してください。
+
+### state 管理なしでの利用
+
+`Select` と同じくカスタム実装のため、`<form>` の自動収集・ネイティブリセットには追従しません。利用側で state 管理（React Hook Form / TanStack Form 等）を行ってください。
+
+## 挙動のポイント
+
+- **時・分は個別にクリアできます**: 選択済みの Select の候補リストに表示される「選択解除」を押すと、そのフィールドだけが未選択（`null`）へ戻ります。親が value に `{ hour: null, minute: null }` を渡す一括クリアも可能です。
+- **UI 操作で範囲外の時刻は生成されません**: 時を変更して選択済みの分が新しい範囲外になる場合、その分は未選択へ戻ります。時が未選択のときの分候補も「いずれかの時と組み合わせられる分」に限定されます。
+- **スクリーンリーダーは現在の選択値を読み上げます**: トリガーのアクセシブルネームは未選択時が「時」「分」、選択済みでは「時 09」「分 30」のように選択値を含みます。
+
+## 既知の制約
+
+- **外部から渡す value は補正されません**: `minTime` / `maxTime` の範囲外や `minuteStep` に整合しない `value` を親から渡した場合、その値はトリガーに表示されますが候補リストには現れません。初期値の整合は利用側で担保してください。
+- **トリガーの文脈ラベルは変更できません**: `aria-label` は内部固定のため、「開始時刻の時」のような文脈を親から与えることはできません。同一画面に複数配置する場合は、見出しやグループのラベルで文脈を補ってください。
+- **ErrorMessage は `<div>` などで包まないでください**: `TimePicker.ErrorMessage` は direct child か Fragment 直下に置いた場合のみ `aria-describedby` に配線されます。Fragment 以外の要素で包むと表示はされますが配線されません。
+
+## Code Examples
+
+```tsx
+import { useState } from 'react';
+import { TimePicker } from '@zenkigen-inc/component-ui';
+import type { TimeValue } from '@zenkigen-inc/component-ui';
+
+const BasicExample = () => {
+  const [time, setTime] = useState<TimeValue>({ hour: null, minute: null });
+
+  return <TimePicker value={time} onChange={(next) => setTime(next)} />;
+};
+```
+
+### エラー状態の例
+
+```tsx
+import { useState } from 'react';
+import { TimePicker } from '@zenkigen-inc/component-ui';
+import type { TimeValue } from '@zenkigen-inc/component-ui';
+
+const ErrorExample = () => {
+  const [time, setTime] = useState<TimeValue>({ hour: null, minute: null });
+  const isError = time.hour === null || time.minute === null;
+
+  return (
+    <TimePicker value={time} onChange={(next) => setTime(next)} isError={isError}>
+      <TimePicker.ErrorMessage>時刻を選択してください</TimePicker.ErrorMessage>
+    </TimePicker>
+  );
+};
+```
+
+### 時刻範囲制限の例
+
+```tsx
+import { useState } from 'react';
+import { TimePicker } from '@zenkigen-inc/component-ui';
+import type { TimeValue } from '@zenkigen-inc/component-ui';
+
+const MinMaxExample = () => {
+  const [time, setTime] = useState<TimeValue>({ hour: null, minute: null });
+
+  return <TimePicker value={time} onChange={(next) => setTime(next)} minTime="09:00" maxTime="17:30" />;
+};
+```

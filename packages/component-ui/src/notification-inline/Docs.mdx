@@ -33,6 +33,9 @@ export const InlineAlert = () => {
       <NotificationInline size="small" state="attention" showClose onClickClose={() => console.log('close')}>
         入力内容を確認してください。
       </NotificationInline>
+      <NotificationInline state="attention" variant="outline">
+        入力内容に不足があります。詳細を確認してください。
+      </NotificationInline>
     </div>
   );
 };

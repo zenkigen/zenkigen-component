@@ -1,6 +1,6 @@
 {
   "name": "@zenkigen-inc/component-theme",
-  "version": "1.21.0",
+  "version": "1.22.0",
   "repository": "https://github.com/zenkigen/zenkigen-component",
   "license": "MIT",
   "publishConfig": {
@@ -23,7 +23,6 @@
     "build-lib": "rimraf dist && tsup src/index.ts --format cjs,esm --dts"
   },
   "devDependencies": {
-    "tailwindcss": "3.4.19",
     "tsup": "8.5.1",
     "typescript": "5.9.3"
   }

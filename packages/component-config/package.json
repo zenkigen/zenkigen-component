@@ -1,6 +1,6 @@
 {
   "name": "@zenkigen-inc/component-config",
-  "version": "1.21.0",
+  "version": "1.22.0",
   "repository": "https://github.com/zenkigen/zenkigen-component",
   "license": "MIT",
   "publishConfig": {
@@ -24,7 +24,7 @@
     "build-lib": "rimraf dist && tsup src/index.ts --format cjs,esm --dts && node src/generate-styles.mts"
   },
   "devDependencies": {
-    "style-dictionary": "5.4.0",
+    "style-dictionary": "5.5.0",
     "token-transformer": "0.0.33",
     "tsup": "8.5.1",
     "typescript": "5.9.3"
