@@ -99,8 +99,11 @@ const LARGE_TOKENS: DatePickerSizeTokens = {
  * 縦方向は Figma の「40px の行 + 8px の間隔」を table で表現している。table は
  * `border-collapse: collapse` で行間に余白を作れないため、間隔を各行の高さに含める:
  * 曜日行は 48px（40px + 上下 4px）、日付行は 48px（40px + 上下 4px）。
- * その結果、月ヘッダーの下と month の下端にはそれぞれ 4px だけ残る（`pb-1`）。
- * カレンダー上端からの各行の中心位置が Figma と一致する（曜日 76px、日付行 124/172/…/364px）。
+ * その結果、month の下端には 4px だけ残る（`pb-1`）。
+ *
+ * 月ヘッダーと曜日行の間隔だけは Figma の 8px に対して 12px にしている
+ * （`monthCaptionClass` の `pb-2` 8px + 曜日行に含まれる 4px）。デザイン判断による
+ * 意図的な差異で、カレンダー全体の高さは 445px になる。
  */
 const X_LARGE_TOKENS: DatePickerSizeTokens = {
   triggerIcon: 'medium',
@@ -121,7 +124,8 @@ const X_LARGE_TOKENS: DatePickerSizeTokens = {
   },
   dayButtonClass: 'relative grid size-10 place-items-center rounded-full !border !border-solid',
   dayButtonFontSize: '16px',
-  monthCaptionClass: 'flex items-center justify-between px-1 pb-1',
+  // 月ヘッダーと曜日行の間隔。曜日行の 48px に含まれる 4px と合わせて 8px 空く
+  monthCaptionClass: 'flex items-center justify-between px-1 pb-2',
   monthCaptionTypography: 'typography-label16bold',
   // IconButton に x-large は無いが、large が 40px で Figma と一致する（内部アイコンも 24px になる）
   navIconButton: 'large',
