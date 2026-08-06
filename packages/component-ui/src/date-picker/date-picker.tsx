@@ -18,12 +18,13 @@ import { Button, InternalButton } from '../button/button';
 import { Icon } from '../icon';
 import { IconButton } from '../icon-button';
 import { Popover } from '../popover';
+import type { DatePickerSize } from './date-picker-context';
 import { DatePickerCompoundContext } from './date-picker-context';
 import { CustomDayButton } from './date-picker-day-button';
 import type { DatePickerErrorMessageProps } from './date-picker-error-message';
 import { DatePickerErrorMessage } from './date-picker-error-message';
 import { CustomMonthCaption } from './date-picker-month-caption';
-import { dayPickerClassNames, dayPickerStyle } from './date-picker-styles';
+import { DATE_PICKER_SIZE_TOKENS } from './date-picker-styles';
 import {
   createDateFromKey,
   createLocalDateFromKey,
@@ -56,8 +57,15 @@ export type DatePickerProps = DatePickerButtonProps & {
   maxDate?: Date;
   /** 未選択時に表示されるプレースホルダーテキスト @default '日付を選択' */
   placeholder?: string;
-  /** トリガーボタンのサイズ @default 'medium' */
-  size?: 'small' | 'medium' | 'large';
+  /**
+   * トリガーボタンのサイズ。`'x-large'` はカレンダーも拡大される（342×441px）
+   *
+   * `'x-large'` はモバイル向け。カレンダーがスクロールしないため、ビューポート幅 358px 以上、
+   * かつトリガーの上下いずれかに 449px 以上の余白が確保できるレイアウトでのみ使用すること。
+   * 満たせない場合はフッターが画面外に出て操作できなくなるため `'large'` 以下を選ぶ。
+   * @default 'medium'
+   */
+  size?: DatePickerSize;
   /** 日付変換に使用するタイムゾーン。選択された日付は指定タイムゾーンの 00:00:00 として返される @default 'Asia/Tokyo' */
   timeZone?: DatePickerTimeZone;
   /** Compound Component（ErrorMessage 等） */
@@ -235,7 +243,7 @@ export const DatePicker: DatePickerComponent = ({
     };
   }, []);
 
-  const iconSize = size === 'large' ? 'medium' : 'small';
+  const tokens = DATE_PICKER_SIZE_TOKENS[size];
   const displayText = value ? formatDisplayDate(value, timeZone) : placeholder;
   const displayTextClasses = 'min-w-0 truncate';
 
@@ -301,7 +309,7 @@ export const DatePicker: DatePickerComponent = ({
           size={size}
           variant={isError ? 'outlineDanger' : 'outline'}
           isDisabled={isDisabled}
-          before={<Icon name="calendar" size={iconSize} />}
+          before={<Icon name="calendar" size={tokens.triggerIcon} />}
           justifyContent="start"
           onClick={handleTriggerClick}
         >
@@ -315,7 +323,7 @@ export const DatePicker: DatePickerComponent = ({
             showOutsideDays
             hideNavigation
             weekStartsOn={0}
-            style={dayPickerStyle}
+            style={tokens.dayPickerStyle}
             month={displayMonth}
             onMonthChange={setDisplayMonth}
             selected={selectedDate}
@@ -323,7 +331,7 @@ export const DatePicker: DatePickerComponent = ({
             today={todayForCalendar}
             disabled={disabledDays}
             modifiers={{ minMaxDisabled: isMinMaxDisabled }}
-            classNames={dayPickerClassNames}
+            classNames={tokens.dayPickerClassNames}
             formatters={formatters}
             fixedWeeks
             components={{ MonthCaption: CustomMonthCaption, DayButton: CustomDayButton, Weekday: CustomWeekday }}
@@ -331,13 +339,13 @@ export const DatePicker: DatePickerComponent = ({
           <div className="flex items-center justify-between border-t border-uiBorder01 px-2 py-1">
             <IconButton
               icon="calendar-today"
-              size="medium"
+              size={tokens.footerIconButton}
               variant="text"
               aria-label="今日に戻る"
               iconAccentColor="supportInfo"
               onClick={handleClickToday}
             />
-            <Button type="button" size="small" variant="text" onClick={handleClear}>
+            <Button type="button" size={tokens.footerClearButton} variant="text" onClick={handleClear}>
               クリア
             </Button>
           </div>
