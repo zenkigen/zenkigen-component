@@ -1,4 +1,4 @@
-import { autoUpdate, offset, useFloating, useId as useFloatingId } from '@floating-ui/react';
+import { autoUpdate, flip, offset, shift, useFloating, useId as useFloatingId } from '@floating-ui/react';
 import type { PropsWithChildren } from 'react';
 import { useEffect, useMemo, useRef } from 'react';
 
@@ -10,6 +10,15 @@ import {
   type PopoverPlacement,
 } from './popover-context';
 import { PopoverTrigger } from './popover-trigger';
+
+/**
+ * ビューポート端との最小マージン（flip / shift の判定余白）
+ *
+ * combobox.tsx の FLOATING_VIEWPORT_PADDING と同値。
+ * shift はこのマージンを確保するため、ビューポート端から 8px 以内に配置された
+ * Popover を最大 8px 内側へ移動させる。
+ */
+const FLOATING_VIEWPORT_PADDING = 8;
 
 type Props = {
   isOpen: boolean;
@@ -29,6 +38,21 @@ export function Popover({
 }: PropsWithChildren<Props>) {
   const triggerRef = useRef<HTMLElement>(null);
 
+  /**
+   * 順序は offset → flip → shift で固定する
+   *
+   * flip がメイン軸（bottom↔top）、shift がクロス軸（左右）を担当する。
+   * 逆順にすると shift がずらした結果を flip が判定してしまう。
+   */
+  const middleware = useMemo(
+    () => [
+      offset(offsetValue),
+      flip({ padding: FLOATING_VIEWPORT_PADDING }),
+      shift({ padding: FLOATING_VIEWPORT_PADDING }),
+    ],
+    [offsetValue],
+  );
+
   const floating = useFloating({
     open: isOpen,
     onOpenChange: (open) => {
@@ -43,7 +67,7 @@ export function Popover({
       }
     },
     placement,
-    middleware: [offset(offsetValue)],
+    middleware,
     whileElementsMounted: autoUpdate,
     strategy: 'fixed',
   });
