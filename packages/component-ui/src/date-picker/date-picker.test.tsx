@@ -70,7 +70,8 @@ describe('DatePicker', () => {
         dayButtonFontSize: '16px',
         dayButtonSizeClass: 'size-10',
         monthLabelTypography: 'typography-label16bold',
-        weekdaySizeClass: 'size-10',
+        // 曜日行は 40px の行 + 上下 4px の間隔を含めて 48px（table は行間に余白を作れないため）
+        weekdaySizeClass: 'size-12',
         todayButtonSizeClass: 'h-10',
         clearButtonSizeClass: 'h-10',
         errorTypography: 'typography-label12regular',
