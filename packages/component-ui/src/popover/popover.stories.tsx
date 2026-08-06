@@ -641,6 +641,8 @@ export const OverflowAvoidance: StoryObj<OverflowAvoidanceArgs> = {
   render: OverflowAvoidanceStory,
   parameters: {
     layout: 'fullscreen',
+    // 表示結果がビューポートサイズに依存する動作確認用ストーリーのため、VRT の対象外にする
+    chromatic: { disable: true },
     docs: {
       description: {
         story:
