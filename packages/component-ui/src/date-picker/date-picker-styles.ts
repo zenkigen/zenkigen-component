@@ -95,6 +95,12 @@ const LARGE_TOKENS: DatePickerSizeTokens = {
  * `--rdp-day_button-*` と `dayButtonClass` の `size-*` は必ず同値にすること。
  * `.size-10` と `.rdp-day_button` は詳細度が同順位で CSS の注入順に勝敗が依存するため、
  * 両方に同じ値を入れてどちらが勝っても 40px になるようにしている（`!important` は付けない）。
+ *
+ * 縦方向は Figma の「40px の行 + 8px の間隔」を table で表現している。table は
+ * `border-collapse: collapse` で行間に余白を作れないため、間隔を各行の高さに含める:
+ * 曜日行は 48px（40px + 上下 4px）、日付行は 48px（40px + 上下 4px）。
+ * その結果、月ヘッダーの下と month の下端にはそれぞれ 4px だけ残る（`pb-1`）。
+ * カレンダー上端からの各行の中心位置が Figma と一致する（曜日 76px、日付行 124/172/…/364px）。
  */
 const X_LARGE_TOKENS: DatePickerSizeTokens = {
   triggerIcon: 'medium',
@@ -111,15 +117,15 @@ const X_LARGE_TOKENS: DatePickerSizeTokens = {
     fontWeight: 700,
   } as CSSProperties,
   dayPickerClassNames: {
-    month: clsx(defaultDayPickerClassNames.month, 'flex flex-col px-[3px] pb-4 pt-2'),
+    month: clsx(defaultDayPickerClassNames.month, 'flex flex-col px-[3px] pb-1 pt-2'),
   },
   dayButtonClass: 'relative grid size-10 place-items-center rounded-full !border !border-solid',
   dayButtonFontSize: '16px',
-  monthCaptionClass: 'flex items-center justify-between px-1',
+  monthCaptionClass: 'flex items-center justify-between px-1 pb-1',
   monthCaptionTypography: 'typography-label16bold',
   // IconButton に x-large は無いが、large が 40px で Figma と一致する（内部アイコンも 24px になる）
   navIconButton: 'large',
-  weekdayClass: 'm-0 size-10 p-0 text-center align-middle',
+  weekdayClass: 'm-0 size-12 p-0 text-center align-middle',
   footerIconButton: 'large',
   footerClearButton: 'large',
   errorTypography: 'typography-label12regular',

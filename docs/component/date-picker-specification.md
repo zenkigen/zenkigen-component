@@ -224,7 +224,7 @@ const MyComponent = () => {
 | 基本フォント             | `700 12px/1 Arial, 'Noto Sans JP', sans-serif` | **`700 16px/1 Arial, 'Noto Sans JP', sans-serif`** |
 | 月ラベルのタイポグラフィ | `typography-label12bold`                       | **`typography-label16bold`**                       |
 | 前後月ナビゲーション     | IconButton `small`（24px）                     | **IconButton `large`（40px）**                     |
-| 曜日ヘッダー             | 28px × 28px                                    | **40px × 40px**                                    |
+| 曜日ヘッダー（行の高さ） | 28px × 28px                                    | **48px × 48px**（見た目は40px + 上下4pxの間隔）    |
 | 日付セル                 | 30px × 30px                                    | **48px × 48px**                                    |
 | 日付ボタン               | 28px × 28px                                    | **40px × 40px**                                    |
 | 「今日に戻る」ボタン     | IconButton `medium`（32px）                    | **IconButton `large`（40px）**                     |
@@ -236,7 +236,9 @@ const MyComponent = () => {
 - フッターの「今日に戻る」ボタン: IconButton（`calendar-today`アイコン、`supportInfo`色）
 - フッターの区切り線: `border-uiBorder01`
 
-> react-day-pickerは`<table>`（`border-collapse: collapse`）で描画するためCSSの`gap`が使えない。日付ボタン間の間隔は、日付セルの中にひと回り小さい日付ボタンを中央配置することで表現している（X-Largeの場合、48pxのセルに40pxのボタンを配置して8pxの間隔になる）。
+> react-day-pickerは`<table>`（`border-collapse: collapse`）で描画するためCSSの`gap`が使えない。Figmaの「40pxの行 + 8pxの間隔」は、**間隔を各行の高さに含める**ことで表現している（X-Largeの場合、48pxのセルに40pxのボタンを中央配置して上下左右に4pxずつの余白を作る）。曜日ヘッダーの行も同じ理由で48pxとし、その結果として月ヘッダーの下と月グリッドの下端にはそれぞれ4pxだけが残る。
+>
+> この構造により、カレンダー上端から各行の中心までの距離がFigmaと一致する（月ヘッダー28px / 曜日76px / 日付行124・172・220・268・316・364px）。
 
 ## 使用例
 
