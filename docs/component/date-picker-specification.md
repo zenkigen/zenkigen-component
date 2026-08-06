@@ -74,16 +74,16 @@ const MyComponent = () => {
 
 ### オプションプロパティ
 
-| プロパティ    | 型                               | デフォルト値   | 説明                                 |
-| ------------- | -------------------------------- | -------------- | ------------------------------------ |
-| `size`        | `'small' \| 'medium' \| 'large'` | `'medium'`     | トリガーボタンのサイズ               |
-| `placeholder` | `string`                         | `'日付を選択'` | 未選択時に表示されるテキスト         |
-| `isDisabled`  | `boolean`                        | `false`        | 無効状態かどうか                     |
-| `isError`     | `boolean`                        | `false`        | エラー状態かどうか                   |
-| `minDate`     | `Date`                           | `undefined`    | 選択可能な最小日付                   |
-| `maxDate`     | `Date`                           | `undefined`    | 選択可能な最大日付                   |
-| `timeZone`    | `'UTC' \| 'Asia/Tokyo'`          | `'Asia/Tokyo'` | 日付変換に使用するタイムゾーン       |
-| `children`    | `ReactNode`                      | `undefined`    | Compound Component（ErrorMessage等） |
+| プロパティ    | 型                                            | デフォルト値   | 説明                                                                                                                |
+| ------------- | --------------------------------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `size`        | `'small' \| 'medium' \| 'large' \| 'x-large'` | `'medium'`     | トリガーボタンのサイズ。`'x-large'`はカレンダーも拡大される（モバイル向け。利用条件は「サイズバリエーション」参照） |
+| `placeholder` | `string`                                      | `'日付を選択'` | 未選択時に表示されるテキスト                                                                                        |
+| `isDisabled`  | `boolean`                                     | `false`        | 無効状態かどうか                                                                                                    |
+| `isError`     | `boolean`                                     | `false`        | エラー状態かどうか                                                                                                  |
+| `minDate`     | `Date`                                        | `undefined`    | 選択可能な最小日付                                                                                                  |
+| `maxDate`     | `Date`                                        | `undefined`    | 選択可能な最大日付                                                                                                  |
+| `timeZone`    | `'UTC' \| 'Asia/Tokyo'`                       | `'Asia/Tokyo'` | 日付変換に使用するタイムゾーン                                                                                      |
+| `children`    | `ReactNode`                                   | `undefined`    | Compound Component（ErrorMessage等）                                                                                |
 
 ### 継承プロパティ
 
@@ -133,6 +133,27 @@ const MyComponent = () => {
 - トリガーボタン: Buttonコンポーネントの`large`サイズ
 - アイコン: `medium` (24px)
 - ErrorMessageタイポグラフィ: `typography-label12regular`
+
+#### X-Large
+
+**モバイル向けのサイズ。トリガーボタンだけでなくカレンダーも拡大される**（342×445px）。他の3サイズはカレンダーが共通（224×295px）なのに対し、X-Largeのみカレンダーが専用の寸法になる。
+
+- トリガーボタン: Buttonコンポーネントの`x-large`サイズ
+- アイコン: `medium` (24px)
+- ErrorMessageタイポグラフィ: `typography-label12regular`
+- カレンダー: 下記「カレンダーのスタイル仕様」のX-Large列を参照
+
+> [!IMPORTANT]
+> **X-Largeの利用条件**
+>
+> X-Largeのカレンダーは342×445pxで固定であり、スクロールしない。以下を満たすレイアウトでのみ使用すること。満たせない場合はX-Largeを使わず`large`以下を選ぶ。
+>
+> - ビューポート幅358px以上（カレンダー342px + 左右マージン8px×2）
+> - カレンダー展開時、トリガーの**上または下のいずれか**に453px以上の余白（445px + offset 8px）が確保できること
+>
+> 条件を満たさない場合、カレンダー下部のフッター（「今日に戻る」「クリア」）が画面外に出て操作できなくなる。ビューポート高660pxでトリガーが画面中央にある場合が典型例。
+>
+> なお、メディアクエリによる自動的なサイズ切り替えは行わない。利用側が明示的に`size="x-large"`を指定する。
 
 ### トリガーボタンの状態
 
@@ -187,36 +208,39 @@ const MyComponent = () => {
 
 ### カレンダーのスタイル仕様
 
+`small` / `medium` / `large` はカレンダーの寸法が共通で、`x-large`のみ拡大される。
+
 #### カレンダーコンテナ
 
 - 背景: `bg-uiBackground01`
 - 角丸: `rounded`
 - 影: `shadow-floatingShadow`
 
-#### 月ヘッダー
+#### サイズ別の寸法
 
-- タイポグラフィ: `typography-label12bold`
-- テキスト色: `text-text02`
+| 項目                     | Small / Medium / Large                         | X-Large                                            |
+| ------------------------ | ---------------------------------------------- | -------------------------------------------------- |
+| カレンダー全体           | 224px × 295px                                  | **342px × 445px**                                  |
+| 基本フォント             | `700 12px/1 Arial, 'Noto Sans JP', sans-serif` | **`700 16px/1 Arial, 'Noto Sans JP', sans-serif`** |
+| 月ラベルのタイポグラフィ | `typography-label12bold`                       | **`typography-label16bold`**                       |
+| 前後月ナビゲーション     | IconButton `small`（24px）                     | **IconButton `large`（40px）**                     |
+| 曜日ヘッダー（行の高さ） | 28px × 28px                                    | **48px × 48px**（見た目は40px + 上下4pxの間隔）    |
+| 日付セル                 | 30px × 30px                                    | **48px × 48px**                                    |
+| 日付ボタン               | 28px × 28px                                    | **40px × 40px**                                    |
+| 「今日に戻る」ボタン     | IconButton `medium`（32px）                    | **IconButton `large`（40px）**                     |
+| 「クリア」ボタン         | Button `text` `small`                          | **Button `text` `large`**                          |
+
+- 月ヘッダー・曜日ヘッダーのテキスト色: `text-text02`
 - 前後月ナビゲーション: IconButtonコンポーネント（`angle-left`/`angle-right`）
+- 日付ボタンの形状: `rounded-full`
+- フッターの「今日に戻る」ボタン: IconButton（`calendar-today`アイコン、`supportInfo`色）
+- フッターの区切り線: `border-uiBorder01`
 
-#### 曜日ヘッダー
-
-- サイズ: 28px × 28px
-- フォント: `700 12px/1 Arial, 'Noto Sans JP', sans-serif`
-- テキスト色: `text-text02`
-
-#### 日付セル
-
-- サイズ: 30px × 30px
-- ボタンサイズ: 28px × 28px
-- フォント: `700 12px/1 Arial, 'Noto Sans JP', sans-serif`
-- 形状: `rounded-full`
-
-#### フッター
-
-- 「今日に戻る」ボタン: IconButton（`calendar-today`アイコン、`supportInfo`色）
-- 「クリア」ボタン: Button（`text`バリアント、`small`サイズ）
-- 区切り線: `border-uiBorder01`
+> react-day-pickerは`<table>`（`border-collapse: collapse`）で描画するためCSSの`gap`が使えない。Figmaの「40pxの行 + 8pxの間隔」は、**間隔を各行の高さに含める**ことで表現している（X-Largeの場合、48pxのセルに40pxのボタンを中央配置して上下左右に4pxずつの余白を作る）。曜日ヘッダーの行も同じ理由で48pxとし、その結果として月ヘッダーの下と月グリッドの下端にはそれぞれ4pxだけが残る。
+>
+> この構造により、カレンダー上端から各行の中心までの距離は月ヘッダー28px / 曜日80px / 日付行128・176・224・272・320・368pxとなる。
+>
+> なお、月ヘッダーと曜日行の間隔だけはFigmaの8pxに対して**12px**にしている（デザイン判断による意図的な差異）。この4px分だけカレンダー全体がFigmaより高い。
 
 ## 使用例
 
@@ -239,6 +263,8 @@ const [date, setDate] = useState<Date | null>(null);
   <DatePicker value={date} onChange={setDate} size="small" />
   <DatePicker value={date} onChange={setDate} size="medium" />
   <DatePicker value={date} onChange={setDate} size="large" />
+  {/* x-large はカレンダーも拡大される（モバイル向け。利用条件は「サイズバリエーション」参照） */}
+  <DatePicker value={date} onChange={setDate} size="x-large" />
 </div>
 ```
 
@@ -377,26 +403,30 @@ formatDateKey(new Date('2026-01-15T00:00:00Z'), 'Asia/Tokyo'); // → '2026-01-1
 
 このコンポーネントは Tailwind CSS のユーティリティクラスを使用しており、`@zenkigen-inc/component-config`で定義されたデザイントークンに依存している。カスタマイズする場合は、これらの設定を参照すること。
 
-react-day-pickerのスタイルはCSS変数で上書きしている：
+size別の見た目の値は`date-picker-styles.ts`の`DATE_PICKER_SIZE_TOKENS`に集約されている。`Record<DatePickerSize, DatePickerSizeTokens>`として定義しているため、sizeを追加した際に未記入のキーがコンパイルエラーになる。
+
+react-day-pickerのスタイルはCSS変数とフォント指定で上書きしている（以下は`medium`の値。`x-large`の値は「カレンダーのスタイル仕様」を参照）：
 
 ```typescript
 const dayPickerStyle = {
-  '--rdp-font-family': "Arial, 'Noto Sans JP', sans-serif",
   '--rdp-nav-height': '30px',
-  '--rdp-day-font': "700 12px/1 'Arial', 'Noto Sans JP', sans-serif",
-  '--rdp-selected-font': "700 12px/1 'Arial', 'Noto Sans JP', sans-serif",
-  '--rdp-weekday-font': "700 12px/1 'Arial', 'Noto Sans JP', sans-serif",
   '--rdp-day-width': '30px',
   '--rdp-day-height': '30px',
   '--rdp-day_button-width': '28px',
   '--rdp-day_button-height': '28px',
   '--rdp-day_button-border': '1px solid transparent',
   '--rdp-weekday-padding': '0px',
+  fontFamily: "Arial, 'Noto Sans JP', sans-serif",
+  fontSize: '12px',
+  fontWeight: 700,
 };
 ```
 
+日付ボタンには上記に加えてinlineで`fontSize`を指定している。react-day-pickerの`.rdp-selected { font-size: large }`が日付セルの`<td>`に適用され、`.rdp-day_button`が`font: inherit`であるため、指定しないと選択日だけ文字が拡大されてしまう。**この指定は打ち消しのために必須であり、削除してはいけない。**
+
 ## 更新履歴
 
-| 日付                 | 内容     | 担当者 |
-| -------------------- | -------- | ------ |
-| 2026-01-16 11:09 JST | 新規作成 | -      |
+| 日付                 | 内容                                                                                       | 担当者 |
+| -------------------- | ------------------------------------------------------------------------------------------ | ------ |
+| 2026-08-06 15:09 JST | size に `x-large` を追加（カレンダーも拡大）。スタイルのカスタマイズ節を実装に合わせて修正 | -      |
+| 2026-01-16 11:09 JST | 新規作成                                                                                   | -      |
