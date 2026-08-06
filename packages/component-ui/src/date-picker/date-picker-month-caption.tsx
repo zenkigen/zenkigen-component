@@ -3,6 +3,8 @@ import type { MonthCaptionProps } from 'react-day-picker';
 import { useDayPicker } from 'react-day-picker';
 
 import { IconButton } from '../icon-button';
+import { useDatePickerCompoundContext } from './date-picker-context';
+import { DATE_PICKER_SIZE_TOKENS } from './date-picker-styles';
 import { formatMonthLabel } from './date-picker-utils';
 
 /**
@@ -15,26 +17,28 @@ export const CustomMonthCaption = ({ calendarMonth, className, displayIndex, sty
   void displayIndex;
 
   const { goToMonth, nextMonth, previousMonth } = useDayPicker();
+  const { size } = useDatePickerCompoundContext('DatePicker のカレンダー');
+  const tokens = DATE_PICKER_SIZE_TOKENS[size];
   const captionMonth = calendarMonth.date;
 
   return (
     <div
-      className={clsx('flex items-center justify-between px-1 pb-0.5', className)}
+      className={clsx(tokens.monthCaptionClass, className)}
       style={{ ...style, fontSize: 'inherit', fontWeight: 'inherit' }}
       {...props}
     >
       <IconButton
         icon="angle-left"
-        size="small"
+        size={tokens.navIconButton}
         variant="text"
         isDisabled={!previousMonth}
         aria-label="前の月"
         onClick={() => previousMonth && goToMonth(previousMonth)}
       />
-      <span className="typography-label12bold text-text02">{formatMonthLabel(captionMonth)}</span>
+      <span className={clsx(tokens.monthCaptionTypography, 'text-text02')}>{formatMonthLabel(captionMonth)}</span>
       <IconButton
         icon="angle-right"
-        size="small"
+        size={tokens.navIconButton}
         variant="text"
         isDisabled={!nextMonth}
         aria-label="次の月"
