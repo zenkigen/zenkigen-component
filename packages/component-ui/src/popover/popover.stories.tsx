@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { Decorator } from '@storybook/react-vite';
+import { clsx } from 'clsx';
 import MockDate from 'mockdate';
 import { useEffect, useRef, useState } from 'react';
 
@@ -10,6 +11,8 @@ import { Popup } from '../popup';
 import { Select } from '../select';
 import type { SelectOption } from '../select/type';
 import { Popover } from '.';
+import type { PopoverPlacement } from './popover-context';
+import { usePopoverContext } from './popover-context';
 
 // 定数の抽出
 const ALL_PLACEMENTS = [
@@ -519,6 +522,129 @@ export const WithDatePicker: Story = {
       description: {
         story:
           'Popover内にDatePickerを配置した例。DatePickerのカレンダーを開いて日付を選択したり、カレンダー外側をクリックしてカレンダーを閉じても、Popoverは閉じません（ネストされたFloating UI要素の動作確認用）。',
+      },
+    },
+  },
+};
+
+// ビューポート端でのはみ出し回避（flip / shift）確認用ストーリー
+type OverflowAvoidanceArgs = {
+  /** トリガーの水平位置（0 = 左端, 100 = 右端） */
+  horizontalPercent: number;
+  /** トリガーの垂直位置（0 = 上端, 100 = 下端） */
+  verticalPercent: number;
+  placement: PopoverPlacement;
+  offset: number;
+};
+
+/**
+ * 実際に適用された配置を表示する。
+ *
+ * `floating.placement`は flip 後の最終的な配置、`middlewareData.shift`は shift でずらした量。
+ * どちらも PopoverContext 経由で取得できる。
+ */
+const OverflowAvoidanceReadout = ({ requestedPlacement }: { requestedPlacement: PopoverPlacement }) => {
+  const { floating } = usePopoverContext();
+
+  const actualPlacement = floating.placement;
+  const shiftX = Math.round(floating.middlewareData.shift?.x ?? 0);
+  const shiftY = Math.round(floating.middlewareData.shift?.y ?? 0);
+  const hasShifted = shiftX !== 0 || shiftY !== 0;
+
+  // flip は「上下左右の反転」だけでなく「start / end の揃え位置の変更」も行う。
+  // どちらが起きたか判別できるよう、side（'-' の前）と alignment を分けて比較する
+  const requestedSide = requestedPlacement.split('-')[0];
+  const actualSide = actualPlacement.split('-')[0];
+  const hasSideFlipped = actualSide !== requestedSide;
+  const hasAlignmentChanged = !hasSideFlipped && actualPlacement !== requestedPlacement;
+  const flipLabel = hasSideFlipped ? '（反転）' : hasAlignmentChanged ? '（揃え位置を変更）' : '';
+
+  return (
+    <div className="w-72 rounded bg-uiBackground01 p-4 shadow-floatingShadow">
+      <dl className="typography-label12regular grid grid-cols-[5rem_1fr] gap-x-2 gap-y-1 text-text02">
+        <dt>指定</dt>
+        <dd className="typography-label12bold text-text01">{requestedPlacement}</dd>
+        <dt>実際</dt>
+        <dd className={clsx('typography-label12bold', flipLabel === '' ? 'text-text01' : 'text-supportError')}>
+          {actualPlacement}
+          {flipLabel}
+        </dd>
+        <dt>ずらし量</dt>
+        <dd className={clsx('typography-label12bold', hasShifted ? 'text-supportError' : 'text-text01')}>
+          {hasShifted ? `x: ${shiftX}px / y: ${shiftY}px` : 'なし'}
+        </dd>
+      </dl>
+      <p className="typography-label11regular mt-3 border-t border-uiBorder01 pt-2 text-text02">
+        Controls の位置スライダーを動かすか、ブラウザの幅・高さを変えて挙動を確認してください。画面外へ出そうになると
+        flip（反転）と shift（ずらし）が働きます。
+      </p>
+    </div>
+  );
+};
+
+const OverflowAvoidanceStory = (args: OverflowAvoidanceArgs) => {
+  const [isOpen, setIsOpen] = useState(true);
+
+  // left/top と translate に同じ割合を使うことで、0% では左上端・100% では右下端に
+  // トリガー全体が収まる（端でも要素がビューポートからはみ出さない）
+  const triggerStyle = {
+    left: `${args.horizontalPercent}%`,
+    top: `${args.verticalPercent}%`,
+    transform: `translate(-${args.horizontalPercent}%, -${args.verticalPercent}%)`,
+  };
+
+  return (
+    <div className="relative h-screen w-screen overflow-hidden bg-uiBackground02">
+      {/* w-max がないと left:100% 指定時に利用可能幅が 0 になり、トリガーが押し潰されて折り返す */}
+      <div className="absolute w-max" style={triggerStyle}>
+        <Popover isOpen={isOpen} placement={args.placement} offset={args.offset}>
+          <Popover.Trigger>
+            <Button variant="fill" size="small" onClick={() => setIsOpen((value) => !value)}>
+              {`トリガー（${args.horizontalPercent}%, ${args.verticalPercent}%）`}
+            </Button>
+          </Popover.Trigger>
+          <Popover.Content>
+            <OverflowAvoidanceReadout requestedPlacement={args.placement} />
+          </Popover.Content>
+        </Popover>
+      </div>
+    </div>
+  );
+};
+
+export const OverflowAvoidance: StoryObj<OverflowAvoidanceArgs> = {
+  args: {
+    horizontalPercent: 50,
+    verticalPercent: 90,
+    placement: 'bottom',
+    offset: 8,
+  },
+  argTypes: {
+    horizontalPercent: {
+      control: { type: 'range', min: 0, max: 100, step: 5 },
+      description: 'トリガーの水平位置（0 = 左端 / 100 = 右端）',
+    },
+    verticalPercent: {
+      control: { type: 'range', min: 0, max: 100, step: 5 },
+      description: 'トリガーの垂直位置（0 = 上端 / 100 = 下端）',
+    },
+    placement: {
+      options: ALL_PLACEMENTS,
+      control: { type: 'select' },
+      description: '希望する配置（収まらない場合は自動的に変更される）',
+    },
+    offset: {
+      control: { type: 'number' },
+      description: 'トリガーとの間隔（ピクセル単位）',
+    },
+  },
+  render: OverflowAvoidanceStory,
+  parameters: {
+    layout: 'fullscreen',
+    docs: {
+      description: {
+        story:
+          'トリガーの位置とビューポートサイズを変えて flip / shift の挙動を確認するストーリー。`placement` は「第一希望」として扱われ、そのままでは画面外に出る場合は自動的に反転・ずらしが行われます。Popover 内に「指定した placement」「実際に適用された placement」「ずらし量」を表示しているため、どちらが働いたかを判別できます。なお shift はビューポート端から 8px のマージンを確保するため、端から 8px 以内に配置された Popover は最大 8px 内側へ移動します。',
       },
     },
   },

@@ -1,7 +1,7 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { Button } from '../button';
 import { MODAL_OPEN_EVENT } from '../hooks/use-dismiss-on-modal-open';
@@ -783,6 +783,210 @@ describe('Popover', () => {
       window.dispatchEvent(new CustomEvent(MODAL_OPEN_EVENT));
 
       expect(onClose).not.toHaveBeenCalled();
+    });
+  });
+
+  /**
+   * ビューポートからのはみ出し回避（flip / shift）
+   *
+   * jsdom はレイアウトを行わず getBoundingClientRect が常に 0 を返すため、Floating UI の位置計算が
+   * 成立しない。要素別に固定 rect を返す mock を入れて計算を決定的にし、算出された inline style の
+   * 数値を手計算値と突き合わせる（combobox.test.tsx と同じ手法）。
+   *
+   * mock はこの describe 内に閉じている。ファイル全体に spy を張ると useDismiss のポインタ判定など
+   * 既存テストへの影響が読めないため。
+   */
+  describe('ビューポートはみ出し回避 (flip / shift)', () => {
+    const VIEWPORT_WIDTH = 1024;
+    const VIEWPORT_HEIGHT = 768;
+    /** popover.tsx の FLOATING_VIEWPORT_PADDING と同値 */
+    const VIEWPORT_PADDING = 8;
+    // 許容領域は x: [8, 1016] / y: [8, 760]
+    const MAX_RIGHT = VIEWPORT_WIDTH - VIEWPORT_PADDING;
+    const MAX_BOTTOM = VIEWPORT_HEIGHT - VIEWPORT_PADDING;
+
+    const createRect = ({
+      width,
+      height,
+      top,
+      left,
+    }: {
+      width: number;
+      height: number;
+      top: number;
+      left: number;
+    }): DOMRect =>
+      ({
+        width,
+        height,
+        top,
+        left,
+        right: left + width,
+        bottom: top + height,
+        x: left,
+        y: top,
+        toJSON: () => ({}),
+      }) as DOMRect;
+
+    /** floating element かどうか（popover-content.tsx が付与する `z-popover` クラスで判別する） */
+    const isFloatingElement = (element: Element): boolean => element.classList.contains('z-popover');
+
+    /**
+     * トリガーと floating element に別々の寸法を返す mock を仕込む。
+     *
+     * 位置の基準（reference の座標）は getBoundingClientRect から取るが、Floating UI は
+     * **floating element 自身のサイズだけは offsetWidth / offsetHeight から取得する**
+     * （@floating-ui/dom の getCssDimensions）。jsdom ではどちらも 0 になるため、
+     * 両方を mock しないと「高さ 0 の要素」と見なされて flip が発火しない。
+     */
+    const mockRects = ({ trigger, floating }: { trigger: DOMRect; floating: DOMRect }) => {
+      const viewportRect = createRect({ width: VIEWPORT_WIDTH, height: VIEWPORT_HEIGHT, top: 0, left: 0 });
+
+      vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(function mocked(this: Element) {
+        if (this === document.documentElement || this === document.body) {
+          return viewportRect;
+        }
+        if (isFloatingElement(this)) {
+          return floating;
+        }
+
+        return trigger;
+      });
+
+      Object.defineProperty(HTMLElement.prototype, 'offsetWidth', {
+        configurable: true,
+        get(this: HTMLElement) {
+          return isFloatingElement(this) ? floating.width : trigger.width;
+        },
+      });
+      Object.defineProperty(HTMLElement.prototype, 'offsetHeight', {
+        configurable: true,
+        get(this: HTMLElement) {
+          return isFloatingElement(this) ? floating.height : trigger.height;
+        },
+      });
+
+      // Floating UI の clipping boundary 計算は documentElement の clientHeight / clientWidth を参照する。
+      // jsdom はデフォルトで 0 を返すため明示的に viewport サイズを設定する。
+      Object.defineProperty(document.documentElement, 'clientHeight', {
+        configurable: true,
+        value: VIEWPORT_HEIGHT,
+      });
+      Object.defineProperty(document.documentElement, 'clientWidth', { configurable: true, value: VIEWPORT_WIDTH });
+    };
+
+    const renderOpenPopover = (placement: React.ComponentProps<typeof Popover>['placement'], offsetValue = 8) =>
+      render(
+        <Popover isOpen placement={placement} offset={offsetValue}>
+          <Popover.Trigger>
+            <Button>Open</Button>
+          </Popover.Trigger>
+          <Popover.Content>
+            <div data-testid="popover-content">Content</div>
+          </Popover.Content>
+        </Popover>,
+      );
+
+    /** floating element（z-popover が付いたラッパー）を取得する */
+    const getFloatingElement = () => screen.getByTestId('popover-content').parentElement as HTMLElement;
+
+    // offsetWidth / offsetHeight は defineProperty で差し替えるため restoreAllMocks では戻らない。
+    // 元の descriptor を控えて明示的に復元する。
+    const originalOffsetWidth = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'offsetWidth');
+    const originalOffsetHeight = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'offsetHeight');
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+
+      if (originalOffsetWidth != null) {
+        Object.defineProperty(HTMLElement.prototype, 'offsetWidth', originalOffsetWidth);
+      }
+      if (originalOffsetHeight != null) {
+        Object.defineProperty(HTMLElement.prototype, 'offsetHeight', originalOffsetHeight);
+      }
+    });
+
+    it('下に収まらない場合は上へ反転すること', async () => {
+      // トリガーは下端付近（bottom: 732）。下に出すと 732 + offset 8 + 高さ 400 = 1140 で許容下端 760 を超える
+      mockRects({
+        trigger: createRect({ width: 200, height: 32, top: 700, left: 100 }),
+        floating: createRect({ width: 200, height: 400, top: 0, left: 0 }),
+      });
+      renderOpenPopover('bottom');
+
+      // 上へ反転: トリガー上端 700 − offset 8 − 高さ 400 = 292
+      await waitFor(() => {
+        expect(getFloatingElement().style.top).toBe('292px');
+      });
+    });
+
+    it('下に収まる場合は反転しないこと', async () => {
+      // 132 + offset 8 + 高さ 200 = 340 で許容下端 760 に収まる
+      mockRects({
+        trigger: createRect({ width: 200, height: 32, top: 100, left: 100 }),
+        floating: createRect({ width: 200, height: 200, top: 0, left: 0 }),
+      });
+      renderOpenPopover('bottom');
+
+      // トリガー下端 132 + offset 8 = 140
+      await waitFor(() => {
+        expect(getFloatingElement().style.top).toBe('140px');
+      });
+      expect(MAX_BOTTOM).toBe(760);
+    });
+
+    it('右にはみ出す場合は左へずれること', async () => {
+      // bottom-start はトリガー左端 900 に揃うため、右端は 900 + 200 = 1100 で許容右端 1016 を 84 超える
+      mockRects({
+        trigger: createRect({ width: 200, height: 32, top: 100, left: 900 }),
+        floating: createRect({ width: 200, height: 100, top: 0, left: 0 }),
+      });
+      renderOpenPopover('bottom-start');
+
+      // 900 − 84 = 816
+      await waitFor(() => {
+        expect(getFloatingElement().style.left).toBe('816px');
+      });
+      expect(MAX_RIGHT).toBe(1016);
+    });
+
+    it('左右に収まる場合はずれないこと', async () => {
+      // [100, 300] は許容領域 [8, 1016] に収まる
+      mockRects({
+        trigger: createRect({ width: 200, height: 32, top: 100, left: 100 }),
+        floating: createRect({ width: 200, height: 100, top: 0, left: 0 }),
+      });
+      renderOpenPopover('bottom-start');
+
+      await waitFor(() => {
+        expect(getFloatingElement().style.left).toBe('100px');
+      });
+    });
+
+    it('ビューポート端から 8px 以内の場合は padding 分だけ内側へ移動すること', async () => {
+      // 左端 0 は許容左端 8 に届かないため、shift の padding 分だけ右へ押し込まれる
+      mockRects({
+        trigger: createRect({ width: 200, height: 32, top: 100, left: 0 }),
+        floating: createRect({ width: 200, height: 100, top: 0, left: 0 }),
+      });
+      renderOpenPopover('bottom-start');
+
+      await waitFor(() => {
+        expect(getFloatingElement().style.left).toBe(`${VIEWPORT_PADDING}px`);
+      });
+    });
+
+    it('反転した場合も offset が維持されること', async () => {
+      mockRects({
+        trigger: createRect({ width: 200, height: 32, top: 700, left: 100 }),
+        floating: createRect({ width: 200, height: 400, top: 0, left: 0 }),
+      });
+      renderOpenPopover('bottom', 16);
+
+      // 上へ反転: トリガー上端 700 − offset 16 − 高さ 400 = 284
+      await waitFor(() => {
+        expect(getFloatingElement().style.top).toBe('284px');
+      });
     });
   });
 });
