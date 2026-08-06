@@ -3,6 +3,7 @@ import type { HTMLAttributes } from 'react';
 import { forwardRef } from 'react';
 
 import { useDatePickerCompoundContext } from './date-picker-context';
+import { DATE_PICKER_SIZE_TOKENS } from './date-picker-styles';
 
 /**
  * DatePicker のエラーメッセージを表示するコンポーネントのプロパティ
@@ -15,7 +16,7 @@ export type DatePickerErrorMessageProps = Omit<HTMLAttributes<HTMLDivElement>, '
 export const DatePickerErrorMessage = forwardRef<HTMLDivElement, DatePickerErrorMessageProps>(
   ({ 'aria-live': ariaLive = 'assertive', ...props }, ref) => {
     const { size, isError } = useDatePickerCompoundContext('DatePicker.ErrorMessage');
-    const typographyClass = size === 'large' ? 'typography-label12regular' : 'typography-label11regular';
+    const typographyClass = DATE_PICKER_SIZE_TOKENS[size].errorTypography;
 
     if (isError !== true) {
       return null;

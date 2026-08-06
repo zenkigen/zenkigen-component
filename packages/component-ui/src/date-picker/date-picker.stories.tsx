@@ -83,39 +83,69 @@ export const Component: Story = {
  * - 範囲外の日（前月）: 12月28〜31日（薄いグレー文字）
  * - maxDate 無効化: 26〜31日（グレー・選択不可）
  */
+/** カレンダーを開いた状態で撮影する Story 共通の args */
+const openStoryArgs = {
+  value: new Date('2026-01-20T00:00:00Z'),
+  placeholder: '日付を選択',
+  maxDate: new Date('2026-01-25T00:00:00Z'),
+} satisfies Story['args'];
+
+/**
+ * マウント時にトリガーをクリックしてカレンダーを開く Story の render
+ *
+ * DatePicker は非制御でカレンダーを開けないため、コンテナ経由でトリガーを click する。
+ */
+const OpenCalendarStory = ({ size }: { size: NonNullable<Story['args']>['size'] }) => {
+  const [value, setValue] = useState<Date | null>(openStoryArgs.value);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (container) {
+      const trigger = container.querySelector<HTMLButtonElement>('button');
+      trigger?.click();
+    }
+  }, []);
+
+  return (
+    <div ref={containerRef} className="flex">
+      <DatePicker
+        size={size}
+        placeholder={openStoryArgs.placeholder}
+        value={value}
+        maxDate={openStoryArgs.maxDate}
+        onChange={(nextValue) => {
+          action('onChange')(nextValue);
+          setValue(nextValue);
+        }}
+      />
+    </div>
+  );
+};
+
 export const Open: Story = {
   decorators: [withMockedDate],
   args: {
-    value: new Date('2026-01-20T00:00:00Z'),
-    placeholder: '日付を選択',
+    ...openStoryArgs,
     size: 'medium',
-    maxDate: new Date('2026-01-25T00:00:00Z'),
   },
-  render: function OpenStory({ value: initialValue = null, maxDate, ...args }) {
-    const [value, setValue] = useState<Date | null>(initialValue);
-    const containerRef = useRef<HTMLDivElement>(null);
+  render: () => <OpenCalendarStory size="medium" />,
+};
 
-    useEffect(() => {
-      const container = containerRef.current;
-      if (container) {
-        const trigger = container.querySelector<HTMLButtonElement>('button');
-        trigger?.click();
-      }
-    }, []);
-
-    return (
-      <div ref={containerRef} className="flex">
-        <DatePicker
-          {...args}
-          value={value}
-          maxDate={maxDate}
-          onChange={(nextValue) => {
-            action('onChange')(nextValue);
-            setValue(nextValue);
-          }}
-        />
-      </div>
-    );
+export const OpenXLarge: Story = {
+  decorators: [withMockedDate],
+  args: {
+    ...openStoryArgs,
+    size: 'x-large',
+  },
+  render: () => <OpenCalendarStory size="x-large" />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'size="x-large" でカレンダーを開いた状態。x-large はトリガーだけでなくカレンダーも拡大される（342×440px）。x-large はモバイル向けで、カレンダーはスクロールしないため、ビューポート幅 358px 以上かつトリガーの上下いずれかに 449px 以上の余白が確保できるレイアウトでのみ使用すること。',
+      },
+    },
   },
 };
 
@@ -191,18 +221,21 @@ export const SizeVariants: Story = {
         <DatePickerStory size="small" />
         <DatePickerStory size="medium" />
         <DatePickerStory size="large" />
+        <DatePickerStory size="x-large" />
       </div>
       <div className="flex flex-col items-start gap-4">
         <p className="typography-label14regular text-text02">Disabled</p>
         <DatePickerStory size="small" isDisabled />
         <DatePickerStory size="medium" isDisabled />
         <DatePickerStory size="large" isDisabled />
+        <DatePickerStory size="x-large" isDisabled />
       </div>
       <div className="flex flex-col items-start gap-4">
         <p className="typography-label14regular text-text02">Error</p>
         <DatePickerStory size="small" isError />
         <DatePickerStory size="medium" isError />
         <DatePickerStory size="large" isError />
+        <DatePickerStory size="x-large" isError />
       </div>
     </div>
   ),
