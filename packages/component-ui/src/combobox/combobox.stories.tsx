@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { expect, userEvent, within } from 'storybook/test';
 
 import { Button } from '../button';
 import { Modal } from '../modal';
@@ -1150,4 +1151,379 @@ export const WithinPopover: Story = {
       </div>
     );
   },
+};
+
+/**
+ * 時刻選択（HH:mm）を 1 つの Combobox で構成するサンプル（実験実装フェーズの検証用）。
+ *
+ * `docs/time-input-component-design-best-practices.md` の combo box 型（§3.2 USWDS / §2.9）を踏襲:
+ * - `step`（既定 15 分）で `HH:mm` 候補を自動生成（24h）
+ * - テキスト入力でインクリメンタルに絞り込み（`09`・`0930`・`09:30` のいずれでもヒット）
+ * - 24 時間表記。未選択は `null`、placeholder で `HH:mm` フォーマットを提示
+ *
+ * Select×2（時・分）に対する利点: 1 フィールドで完結し、`0930` のような連続入力・ペーストで素早く絞り込める。
+ * 注意: 候補に無い任意時刻（例 `09:38`）の確定には別途パース/バリデーションが必要（このデモは候補からの選択のみ）。
+ */
+
+type TimeOption = { value: string; label: string };
+
+// step（分刻み）から HH:mm 候補を自動生成する（24h × (60 / step) 件）
+function createTimeOptions(step: number): TimeOption[] {
+  const minutesPerHour = Math.floor(60 / step);
+
+  return Array.from({ length: 24 }, (_, hour) => hour).flatMap((hour) =>
+    Array.from({ length: minutesPerHour }, (_, index) => {
+      const label = `${String(hour).padStart(2, '0')}:${String(index * step).padStart(2, '0')}`;
+
+      return { value: label, label };
+    }),
+  );
+}
+
+// 入力テキストで候補を絞り込む。`09:30`（そのまま）/ `0930`（数字のみ）の双方でヒットさせる
+function filterTimeOptions(options: TimeOption[], inputText: string): TimeOption[] {
+  if (inputText === '') {
+    return options;
+  }
+  const normalized = inputText.replace(/[^0-9]/g, '');
+
+  return options.filter((option) => {
+    if (option.label.includes(inputText)) {
+      return true;
+    }
+
+    return normalized !== '' && option.label.replace(':', '').includes(normalized);
+  });
+}
+
+type TimeComboboxFieldProps = {
+  step?: number;
+  size?: ComboboxSize;
+  isError?: boolean;
+  isDisabled?: boolean;
+};
+
+function TimeComboboxField({
+  step = 15,
+  size = 'medium',
+  isError = false,
+  isDisabled = false,
+}: TimeComboboxFieldProps) {
+  const [value, setValue] = useState<string | null>(null);
+  const [inputText, setInputText] = useState('');
+  const options = useMemo(() => createTimeOptions(step), [step]);
+  const filtered = useMemo(() => filterTimeOptions(options, inputText), [options, inputText]);
+
+  const handleChange = (next: string | null, meta: ComboboxChangeMeta | null) => {
+    setValue(next);
+    setInputText(meta?.label ?? '');
+  };
+
+  return (
+    <div style={{ width: 200 }}>
+      <Combobox
+        size={size}
+        value={value}
+        onChange={handleChange}
+        inputValue={inputText}
+        onInputChange={setInputText}
+        placeholder="HH:mm"
+        isError={isError}
+        isDisabled={isDisabled}
+        listMaxHeight={240}
+        matchListToTrigger
+      >
+        <Combobox.Input>
+          <Combobox.HelperMessage>選択値: {value ?? '未選択'}</Combobox.HelperMessage>
+        </Combobox.Input>
+        <Combobox.List>
+          {filtered.length === 0 && inputText.length > 0 && <Combobox.Empty />}
+          {filtered.map((opt) => (
+            <Combobox.Item key={opt.value} value={opt.value} label={opt.label} />
+          ))}
+        </Combobox.List>
+      </Combobox>
+    </div>
+  );
+}
+
+export const TimeCombobox: Story = {
+  parameters: {
+    chromatic: { disable: true },
+  },
+  render: () => (
+    <div className="flex flex-col gap-2">
+      <p className="typography-label14bold text-text01">時刻（HH:mm）</p>
+      <TimeComboboxField />
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    const user = userEvent.setup();
+    const input = canvas.getByRole('combobox');
+
+    // 数字のみ（0930）でも HH:mm 候補が絞り込めることを確認
+    await user.click(input);
+    await user.type(input, '0930');
+    const body = within(document.body);
+    const option = await body.findByRole('option', { name: '09:30', hidden: true });
+    await user.click(option);
+
+    // 選択した候補が input に反映されることを確認
+    await expect(input).toHaveValue('09:30');
+  },
+};
+
+export const TimeComboboxSizes: Story = {
+  decorators: [
+    (StoryFn) => (
+      <div style={{ paddingBottom: 280 }}>
+        <StoryFn />
+      </div>
+    ),
+  ],
+  render: () => (
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-2">
+        <p className="typography-label14bold text-text01">medium</p>
+        <TimeComboboxField size="medium" />
+      </div>
+      <div className="flex flex-col gap-2">
+        <p className="typography-label14bold text-text01">large</p>
+        <TimeComboboxField size="large" />
+      </div>
+    </div>
+  ),
+};
+
+export const TimeComboboxVariants: Story = {
+  decorators: [
+    (StoryFn) => (
+      <div style={{ paddingBottom: 280 }}>
+        <StoryFn />
+      </div>
+    ),
+  ],
+  render: () => (
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-2">
+        <p className="typography-label14bold text-text01">15分刻み（デフォルト）</p>
+        <TimeComboboxField step={15} />
+      </div>
+      <div className="flex flex-col gap-2">
+        <p className="typography-label14bold text-text01">30分刻み</p>
+        <TimeComboboxField step={30} />
+      </div>
+      <div className="flex flex-col gap-2">
+        <p className="typography-label14bold text-text01">エラー状態</p>
+        <TimeComboboxField isError />
+      </div>
+      <div className="flex flex-col gap-2">
+        <p className="typography-label14bold text-text01">無効状態</p>
+        <TimeComboboxField isDisabled />
+      </div>
+    </div>
+  ),
+};
+
+/**
+ * 時刻選択を「時」「分」別々の Combobox×2 で構成するサンプル（実験実装フェーズの検証用）。
+ *
+ * 上の単一 Combobox（HH:mm）に対し、Select×2 と同じ「時・分を独立に選ぶ」操作感を Combobox で再現したもの。
+ * - 時は 00〜23、分は `step`（既定 15 分）刻みの候補を自動生成
+ * - 各フィールドはテキストで絞り込み可能（`9` → `09` 等）
+ * - 24 時間表記。未選択は `null`、placeholder `--` で明示
+ */
+
+// 時の候補（00〜23）
+const splitHourOptions: TimeOption[] = Array.from({ length: 24 }, (_, hour) => {
+  const label = String(hour).padStart(2, '0');
+
+  return { value: label, label };
+});
+
+// 分の候補を step（分刻み）から生成
+function createSplitMinuteOptions(step: number): TimeOption[] {
+  const count = Math.floor(60 / step);
+
+  return Array.from({ length: count }, (_, index) => {
+    const label = String(index * step).padStart(2, '0');
+
+    return { value: label, label };
+  });
+}
+
+// セパレータ「:」のタイポグラフィ・高さを Combobox のサイズに合わせる
+const splitSeparatorClass: Record<ComboboxSize, string> = {
+  medium: 'typography-label14regular h-8',
+  large: 'typography-label16regular h-10',
+};
+
+type TimeComboboxSplitFieldProps = {
+  minuteStep?: number;
+  size?: ComboboxSize;
+  isError?: boolean;
+  isDisabled?: boolean;
+};
+
+function TimeComboboxSplitField({
+  minuteStep = 15,
+  size = 'medium',
+  isError = false,
+  isDisabled = false,
+}: TimeComboboxSplitFieldProps) {
+  const [hour, setHour] = useState<string | null>(null);
+  const [hourInput, setHourInput] = useState('');
+  const [minute, setMinute] = useState<string | null>(null);
+  const [minuteInput, setMinuteInput] = useState('');
+
+  const minuteOptions = useMemo(() => createSplitMinuteOptions(minuteStep), [minuteStep]);
+  const filteredHours = useMemo(() => filterTimeOptions(splitHourOptions, hourInput), [hourInput]);
+  const filteredMinutes = useMemo(() => filterTimeOptions(minuteOptions, minuteInput), [minuteOptions, minuteInput]);
+
+  const fieldWidth = 112;
+
+  const handleHourChange = (next: string | null, meta: ComboboxChangeMeta | null) => {
+    setHour(next);
+    setHourInput(meta?.label ?? '');
+  };
+  const handleMinuteChange = (next: string | null, meta: ComboboxChangeMeta | null) => {
+    setMinute(next);
+    setMinuteInput(meta?.label ?? '');
+  };
+
+  return (
+    <div className="flex items-center gap-2">
+      <div style={{ width: fieldWidth }}>
+        <Combobox
+          size={size}
+          value={hour}
+          onChange={handleHourChange}
+          inputValue={hourInput}
+          onInputChange={setHourInput}
+          placeholder="--"
+          isError={isError}
+          isDisabled={isDisabled}
+          listMaxHeight={200}
+          matchListToTrigger
+        >
+          <Combobox.Input />
+          <Combobox.List>
+            {filteredHours.length === 0 && hourInput.length > 0 && <Combobox.Empty />}
+            {filteredHours.map((opt) => (
+              <Combobox.Item key={opt.value} value={opt.value} label={opt.label} />
+            ))}
+          </Combobox.List>
+        </Combobox>
+      </div>
+      <span className={`${splitSeparatorClass[size]} flex items-center text-text02`}>:</span>
+      <div style={{ width: fieldWidth }}>
+        <Combobox
+          size={size}
+          value={minute}
+          onChange={handleMinuteChange}
+          inputValue={minuteInput}
+          onInputChange={setMinuteInput}
+          placeholder="--"
+          isError={isError}
+          isDisabled={isDisabled}
+          listMaxHeight={200}
+          matchListToTrigger
+        >
+          <Combobox.Input />
+          <Combobox.List>
+            {filteredMinutes.length === 0 && minuteInput.length > 0 && <Combobox.Empty />}
+            {filteredMinutes.map((opt) => (
+              <Combobox.Item key={opt.value} value={opt.value} label={opt.label} />
+            ))}
+          </Combobox.List>
+        </Combobox>
+      </div>
+    </div>
+  );
+}
+
+export const TimeComboboxSplit: Story = {
+  parameters: {
+    chromatic: { disable: true },
+  },
+  render: () => (
+    <div className="flex flex-col gap-2">
+      <p className="typography-label14bold text-text01">時刻（時・分を別々に選択）</p>
+      <TimeComboboxSplitField />
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    const user = userEvent.setup();
+    const [hourInput, minuteInput] = canvas.getAllByRole('combobox');
+    if (hourInput == null || minuteInput == null) {
+      return;
+    }
+    const body = within(document.body);
+
+    // 時: 「9」で絞り込み、候補 09 を選択
+    await user.click(hourInput);
+    await user.type(hourInput, '9');
+    const hourOption = await body.findByRole('option', { name: '09', hidden: true });
+    await user.click(hourOption);
+    await expect(hourInput).toHaveValue('09');
+
+    // 分: 「30」で絞り込み、候補 30 を選択
+    await user.click(minuteInput);
+    await user.type(minuteInput, '30');
+    const minuteOption = await body.findByRole('option', { name: '30', hidden: true });
+    await user.click(minuteOption);
+    await expect(minuteInput).toHaveValue('30');
+  },
+};
+
+export const TimeComboboxSplitSizes: Story = {
+  decorators: [
+    (StoryFn) => (
+      <div style={{ paddingBottom: 240 }}>
+        <StoryFn />
+      </div>
+    ),
+  ],
+  render: () => (
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-2">
+        <p className="typography-label14bold text-text01">medium</p>
+        <TimeComboboxSplitField size="medium" />
+      </div>
+      <div className="flex flex-col gap-2">
+        <p className="typography-label14bold text-text01">large</p>
+        <TimeComboboxSplitField size="large" />
+      </div>
+    </div>
+  ),
+};
+
+export const TimeComboboxSplitVariants: Story = {
+  decorators: [
+    (StoryFn) => (
+      <div style={{ paddingBottom: 240 }}>
+        <StoryFn />
+      </div>
+    ),
+  ],
+  render: () => (
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-2">
+        <p className="typography-label14bold text-text01">15分刻み（デフォルト）</p>
+        <TimeComboboxSplitField minuteStep={15} />
+      </div>
+      <div className="flex flex-col gap-2">
+        <p className="typography-label14bold text-text01">30分刻み</p>
+        <TimeComboboxSplitField minuteStep={30} />
+      </div>
+      <div className="flex flex-col gap-2">
+        <p className="typography-label14bold text-text01">エラー状態</p>
+        <TimeComboboxSplitField isError />
+      </div>
+      <div className="flex flex-col gap-2">
+        <p className="typography-label14bold text-text01">無効状態</p>
+        <TimeComboboxSplitField isDisabled />
+      </div>
+    </div>
+  ),
 };

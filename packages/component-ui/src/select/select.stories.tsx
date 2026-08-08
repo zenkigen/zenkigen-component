@@ -1,7 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { IconName } from '@zenkigen-inc/component-icons';
 import { iconElements } from '@zenkigen-inc/component-icons';
+import clsx from 'clsx';
 import { useEffect, useRef, useState } from 'react';
+import { expect, userEvent, within } from 'storybook/test';
 
 import { Button } from '../button';
 import { Modal } from '../modal';
@@ -923,3 +925,189 @@ export const DismissOnModalOpen: Story = {
     },
   },
 };
+
+/**
+ * 時刻選択（時・分）を Select×2 で構成するサンプル。
+ *
+ * `docs/time-input-component-design-best-practices.md` の推奨を反映している:
+ * - 分の候補は `step`（既定 15 分）で自動生成し、60 候補を出さない
+ * - 24 時間表記
+ * - 未選択は `null` で表現し、placeholder `--` で明示（`00` で誤魔化さない）
+ * - `:` セパレータは `typography-label14regular`（タイポグラフィトークン）で表示し、`text-[14px]` 等のハードコードをしない
+ */
+
+// 時の候補（00〜23 の 24 個）
+const hourOptions: SelectOption[] = Array.from({ length: 24 }, (_, hour) => {
+  const value = String(hour).padStart(2, '0');
+
+  return { id: `hour-${value}`, value, label: value };
+});
+
+// 分の候補を step（分刻み）から自動生成する
+function createMinuteOptions(step: number): SelectOption[] {
+  const count = Math.floor(60 / step);
+
+  return Array.from({ length: count }, (_, index) => {
+    const value = String(index * step).padStart(2, '0');
+
+    return { id: `minute-${value}`, value, label: value };
+  });
+}
+
+type TimeSelectSize = 'x-small' | 'small' | 'medium' | 'large';
+
+type TimeSelectFieldProps = {
+  size?: TimeSelectSize;
+  minuteStep?: number;
+  isError?: boolean;
+  isDisabled?: boolean;
+  defaultHour?: SelectOption | null;
+  defaultMinute?: SelectOption | null;
+};
+
+// セパレータ「:」のタイポグラフィを Select のサイズに合わせる
+const separatorTypographyClass: Record<TimeSelectSize, string> = {
+  'x-small': 'typography-label12regular',
+  small: 'typography-label14regular',
+  medium: 'typography-label14regular',
+  large: 'typography-label16regular',
+};
+
+function TimeSelectField({
+  size = 'medium',
+  minuteStep = 15,
+  isError = false,
+  isDisabled = false,
+  defaultHour = null,
+  defaultMinute = null,
+}: TimeSelectFieldProps) {
+  const [hour, setHour] = useState<SelectOption | null>(defaultHour);
+  const [minute, setMinute] = useState<SelectOption | null>(defaultMinute);
+  const minuteOptions = createMinuteOptions(minuteStep);
+  const width = size === 'large' ? 88 : 80;
+
+  return (
+    <div className="flex items-center gap-2">
+      <Select
+        size={size}
+        variant="outline"
+        placeholder="--"
+        selectedOption={hour}
+        onChange={(option) => setHour(option)}
+        isError={isError}
+        isDisabled={isDisabled}
+        width={width}
+        optionListMaxHeight={160}
+        matchListToTrigger
+      >
+        {hourOptions.map((option) => (
+          <Select.Option key={option.id} option={option} />
+        ))}
+      </Select>
+      <span className={clsx(separatorTypographyClass[size], 'text-text02')}>:</span>
+      <Select
+        size={size}
+        variant="outline"
+        placeholder="--"
+        selectedOption={minute}
+        onChange={(option) => setMinute(option)}
+        isError={isError}
+        isDisabled={isDisabled}
+        width={width}
+        optionListMaxHeight={160}
+        matchListToTrigger
+      >
+        {minuteOptions.map((option) => (
+          <Select.Option key={option.id} option={option} />
+        ))}
+      </Select>
+    </div>
+  );
+}
+
+export const TimeSelect: Story = {
+  parameters: {
+    chromatic: { disable: true },
+    docs: {
+      description: {
+        story: [
+          'Select を 2 つ並べた時刻選択（時・分）のサンプル。',
+          '',
+          '`docs/time-input-component-design-best-practices.md` の推奨を反映:',
+          '- 分の候補は `step`（既定 15 分）で自動生成し、60 候補を出さない',
+          '- 24 時間表記',
+          '- 未選択は `null` で表現し、placeholder `--` で明示（`00` で誤魔化さない）',
+          '- `isError` / `isDisabled` に対応',
+        ].join('\n'),
+      },
+    },
+  },
+  render: () => (
+    <div className="flex flex-col gap-2">
+      <p className="typography-label14bold text-text01">時刻</p>
+      <TimeSelectField />
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    const user = userEvent.setup();
+    const [hourTrigger] = canvas.getAllByRole('button', { name: '--' });
+    await expect(hourTrigger).toBeDefined();
+    if (hourTrigger == null) {
+      return;
+    }
+
+    // 時の Select を開き、候補から 08 を選択
+    await user.click(hourTrigger);
+    const body = within(document.body);
+    const hourOption = await body.findByRole('button', { name: '08' });
+    await user.click(hourOption);
+
+    // トリガーの表示が選択値に更新されることを確認
+    await expect(canvas.getByRole('button', { name: '08' })).toBeInTheDocument();
+  },
+};
+
+export function TimeSelectVariants() {
+  return (
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-2">
+        <p className="typography-label14bold text-text01">15分刻み（デフォルト）</p>
+        <TimeSelectField minuteStep={15} />
+      </div>
+      <div className="flex flex-col gap-2">
+        <p className="typography-label14bold text-text01">30分刻み</p>
+        <TimeSelectField minuteStep={30} />
+      </div>
+      <div className="flex flex-col gap-2">
+        <p className="typography-label14bold text-text01">選択済み</p>
+        <TimeSelectField
+          defaultHour={{ id: 'hour-09', value: '09', label: '09' }}
+          defaultMinute={{ id: 'minute-30', value: '30', label: '30' }}
+        />
+      </div>
+      <div className="flex flex-col gap-2">
+        <p className="typography-label14bold text-text01">エラー状態</p>
+        <TimeSelectField isError />
+      </div>
+      <div className="flex flex-col gap-2">
+        <p className="typography-label14bold text-text01">無効状態</p>
+        <TimeSelectField isDisabled />
+      </div>
+    </div>
+  );
+}
+
+export function TimeSelectSizes() {
+  const sizes: TimeSelectSize[] = ['x-small', 'small', 'medium', 'large'];
+
+  return (
+    <div className="flex flex-col gap-6">
+      {sizes.map((size) => (
+        <div key={size} className="flex flex-col gap-2">
+          <p className="typography-label14bold text-text01">{size}</p>
+          <TimeSelectField size={size} />
+        </div>
+      ))}
+    </div>
+  );
+}
