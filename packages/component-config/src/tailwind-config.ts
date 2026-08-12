@@ -1,7 +1,14 @@
 import { typography } from '@zenkigen-inc/component-theme';
+import flattenColorPaletteModule from 'tailwindcss/lib/util/flattenColorPalette';
+import toColorValueModule from 'tailwindcss/lib/util/toColorValue';
 import plugin from 'tailwindcss/plugin';
 
 import { tokens } from './tokens/tokens';
+
+// tailwindcss/lib/* は CJS。読み込まれ方（CJS require / ESM import）で default の解決が変わるため両対応する
+const interopDefault = <T>(module: T): T => (module as { default?: T }).default ?? module;
+const flattenColorPalette = interopDefault(flattenColorPaletteModule);
+const toColorValue = interopDefault(toColorValueModule);
 
 const {
   tokens: {
@@ -233,6 +240,13 @@ export const tailwindConfig = {
     'text-supportError',
     // fill-* (Icon の color / accentColor で任意の ColorToken を指定可能にするため)
     { pattern: /^fill-/ },
+    // stroke 系アイコン（lucide 由来）の着色ブリッジとサイズ別 stroke-width 上書き
+    'zen-stroke-icon',
+    '[&_svg]:[stroke-width:2.5]',
+    '[&_svg]:[stroke-width:2.25]',
+    '[&_svg]:[stroke-width:2]',
+    '[&_svg]:[stroke-width:1.75]',
+    '[&_svg]:[stroke-width:1.5]',
     // userColors (Avatar用)
     'bg-user-red',
     'bg-user-pink',
@@ -245,8 +259,35 @@ export const tailwindConfig = {
     'bg-user-yellow',
     'bg-user-orange',
   ],
+  // fill-* は下の plugin で再定義する（CSS 変数ブリッジ）。core 実装は二重定義を避けるため無効化する
+  corePlugins: {
+    fill: false,
+  },
   plugins: [
-    plugin(({ addUtilities, addComponents }) => {
+    plugin(({ addUtilities, addComponents, matchUtilities, theme }) => {
+      // CSS 変数ブリッジ: core の fill plugin と同一シグネチャで fill-* を再定義し、
+      // fill に加えて --zen-icon-stroke を併出力する。CSS 変数は DOM を継承するため、
+      // fill-* がどの要素に付いていても stroke 系アイコン（lucide 由来）に同じ色が届く
+      matchUtilities(
+        {
+          fill: (value) => ({
+            fill: toColorValue(value),
+            '--zen-icon-stroke': toColorValue(value),
+          }),
+        },
+        { values: flattenColorPalette(theme('fill')), type: ['color', 'any'] },
+      );
+      addUtilities({
+        '.zen-stroke-icon': {
+          stroke: 'var(--zen-icon-stroke, currentColor)',
+          // accent path は自身のスコープで変数を解決させる（fill-* が path 上に置くローカル値を拾う）。
+          // fill: none は accentColor の fill-* クラスによる塗り事故を specificity (0,2,0) で防ぐ
+          '& .zen-stroke-accent': {
+            fill: 'none',
+            stroke: 'var(--zen-icon-stroke, currentColor)',
+          },
+        },
+      });
       addUtilities({
         '.field-sizing-content': {
           fieldSizing: 'content',
