@@ -56,8 +56,10 @@ async function processLucideSvgFile(file) {
   $('[data-name]').removeAttr('data-name');
   $('svg[id]').removeAttr('id');
   $('svg').removeAttr('class');
-  $('[width]').removeAttr('width');
-  $('[height]').removeAttr('height');
+  // width / height の除去は root の svg に限定する。
+  // 全要素から除去すると <rect> の寸法（width / height 属性）まで消えて図形が描画されなくなる
+  $('svg').removeAttr('width');
+  $('svg').removeAttr('height');
 
   // Handle accent class specially
   $('[class="accent"]').attr('className', '{accentClassName}').removeAttr('class');
