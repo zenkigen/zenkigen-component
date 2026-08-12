@@ -215,7 +215,7 @@ export function SingleIconNoColor() {
  * 利用側で実在する 4 つの着色経路すべてで確認する（④ は実際に hover して確認する）。
  */
 export function ColorPaths() {
-  const names = ['close', 'search', 'harutaka', 'signal-low'] as const;
+  const names = ['close', 'search', 'harutaka', 'volume-off'] as const;
 
   return (
     <div className="flex flex-col gap-6 p-4">
