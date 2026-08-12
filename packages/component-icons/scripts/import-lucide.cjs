@@ -85,6 +85,19 @@ function transformSvg(name, definition, content) {
   return { svg: $.xml(), markedCount, addedCount };
 }
 
+// ENOENT を空扱いにするディレクトリ一覧。存在チェック→操作を分けると race になるため
+// （CodeQL js/file-system-race）、判定用の存在情報は一覧のスナップショットで持つ
+function readDirSnapshot(dir) {
+  try {
+    return new Set(fs.readdirSync(dir));
+  } catch (error) {
+    if (error.code === 'ENOENT') {
+      return new Set();
+    }
+    throw error;
+  }
+}
+
 function main() {
   const entries = Object.entries(importConfig.icons);
   const uniqueLucideNames = new Set(entries.map(([, definition]) => definition.lucide));
@@ -97,6 +110,9 @@ function main() {
   if (!isDryRun) {
     fs.mkdirSync(outputDir, { recursive: true });
   }
+
+  const importedSnapshot = readDirSnapshot(outputDir);
+  const legacySnapshot = readDirSnapshot(legacyDir);
 
   for (const [name, definition] of entries) {
     let sourcePath;
@@ -113,17 +129,28 @@ function main() {
     totalAdded += addedCount;
 
     const outputPath = path.join(outputDir, `${name}.svg`);
-    const isAlreadyImported = fs.existsSync(outputPath);
+    const isAlreadyImported = importedSnapshot.has(`${name}.svg`);
     if (!isDryRun) {
       fs.writeFileSync(outputPath, `${svg.trimEnd()}\n`, 'utf8');
     }
     importedCount += 1;
 
     const legacyPath = path.join(legacyDir, `${name}.svg`);
-    if (fs.existsSync(legacyPath)) {
-      if (!isDryRun) {
+    let isLegacyDeleted = false;
+    if (isDryRun) {
+      isLegacyDeleted = legacySnapshot.has(`${name}.svg`);
+    } else {
+      // 存在チェックせず削除を試み、無ければ ENOENT を握りつぶす（check-then-act の race 回避）
+      try {
         fs.rmSync(legacyPath);
+        isLegacyDeleted = true;
+      } catch (error) {
+        if (error.code !== 'ENOENT') {
+          throw error;
+        }
       }
+    }
+    if (isLegacyDeleted) {
       deletedCount += 1;
     } else if (!isAlreadyImported) {
       // 取り込み済み（output あり）の再実行では旧ファイルが無いのは正常。
