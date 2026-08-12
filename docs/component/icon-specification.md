@@ -154,7 +154,7 @@ lucide 由来の stroke（線画）系アイコンは viewBox 24 基準で一様
 - 用途: アイコン内の特定要素に異なる色を適用（SVG内の`.accentColor`クラスを持つ要素が対象）
 - 適用方法: `fill-${accentColor}`クラスとして動的に生成
 - 利用可能な値: `ColorToken`型（デザイントークン、ベースカラー、Tailwind標準色）
-- 対応アイコン（9 件）: `ai-agent`, `calendar-attention`, `calendar-check`, `calendar-minus`, `calendar-today`, `mic`（以上 fill 系）, `signal-low`, `signal-off`, `volume-off`（以上 stroke 系）
+- 対応アイコン（9 件）: `ai-agent`, `calendar-attention`, `calendar-check`, `calendar-minus`, `calendar-today`, `mic`, `signal-low`, `signal-off`（以上 fill 系）, `volume-off`（stroke 系）
 - 例:
   - `accentColor="interactive01"` → インタラクティブなアクセント（`calendar-today` など）
   - `accentColor="supportError"` → エラー状態のアクセント（`calendar-attention`, `volume-off` など）
