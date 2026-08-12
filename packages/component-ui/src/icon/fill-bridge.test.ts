@@ -91,7 +91,7 @@ describe('fill-* ブリッジ（CSS 出力）', () => {
   });
 
   it('サイズ別 stroke-width 上書きが出力されること（safelist 経由）', () => {
-    for (const width of ['2.5', '2.25', '2', '1.75', '1.5']) {
+    for (const width of ['2.5', '2.35', '2', '1.65', '1.4']) {
       const selector = `.\\[\\&_svg\\]\\:\\[stroke-width\\:${width.replace('.', '\\.')}\\] svg`;
       const rule = ruleOf(css, selector);
       expect(rule, `stroke-width:${width} の上書きルールが見つからない`).toContain(`stroke-width: ${width}`);
