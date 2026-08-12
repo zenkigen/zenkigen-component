@@ -1,0 +1,285 @@
+{
+  "$comment": "lucide 取り込み定義。キー = 現行 IconName（主キー。複数のキーが同じ lucide 名を参照してよい）。accent.markPaths = d が完全一致する既存 path に class=\"accent\" を付与（一致は必ず 1 件）。accent.addPaths = <path class=\"accent\" d=...> を末尾に追加。scripts/import-lucide.cjs が読む。",
+  "lucideVersion": "1.25.0",
+  "icons": {
+    "add": {
+      "lucide": "plus"
+    },
+    "angle-down": {
+      "lucide": "chevron-down"
+    },
+    "angle-left": {
+      "lucide": "chevron-left"
+    },
+    "angle-right": {
+      "lucide": "chevron-right"
+    },
+    "angle-up": {
+      "lucide": "chevron-up"
+    },
+    "arrow-down": {
+      "lucide": "arrow-down"
+    },
+    "arrow-left": {
+      "lucide": "arrow-left"
+    },
+    "arrow-right": {
+      "lucide": "arrow-right"
+    },
+    "arrow-up": {
+      "lucide": "arrow-up"
+    },
+    "attachment": {
+      "lucide": "paperclip"
+    },
+    "attention": {
+      "lucide": "circle-alert"
+    },
+    "block": {
+      "lucide": "ban"
+    },
+    "bookmark": {
+      "lucide": "bookmark"
+    },
+    "building": {
+      "lucide": "building"
+    },
+    "caret-down": {
+      "lucide": "chevron-down"
+    },
+    "caret-right": {
+      "lucide": "chevron-right"
+    },
+    "chart-bar": {
+      "lucide": "chart-column"
+    },
+    "chart-line": {
+      "lucide": "chart-line"
+    },
+    "check": {
+      "lucide": "check"
+    },
+    "circle": {
+      "lucide": "circle"
+    },
+    "close": {
+      "lucide": "x"
+    },
+    "collapse-content": {
+      "lucide": "minimize-2"
+    },
+    "comment": {
+      "lucide": "message-circle"
+    },
+    "contract": {
+      "lucide": "shrink"
+    },
+    "copy": {
+      "lucide": "copy"
+    },
+    "delete": {
+      "lucide": "trash-2"
+    },
+    "display": {
+      "lucide": "monitor"
+    },
+    "document": {
+      "lucide": "file-text"
+    },
+    "document-edit": {
+      "lucide": "file-pen-line"
+    },
+    "documents": {
+      "lucide": "files"
+    },
+    "download": {
+      "lucide": "download"
+    },
+    "download-document": {
+      "lucide": "file-down"
+    },
+    "edit": {
+      "lucide": "pencil"
+    },
+    "email": {
+      "lucide": "mail"
+    },
+    "exit": {
+      "lucide": "log-out"
+    },
+    "expand": {
+      "lucide": "expand"
+    },
+    "expand-content": {
+      "lucide": "maximize-2"
+    },
+    "external-link": {
+      "lucide": "external-link"
+    },
+    "feedback": {
+      "lucide": "message-circle-more"
+    },
+    "filter": {
+      "lucide": "list-filter"
+    },
+    "flag": {
+      "lucide": "flag"
+    },
+    "global": {
+      "lucide": "globe"
+    },
+    "guide": {
+      "lucide": "navigation"
+    },
+    "hamburger": {
+      "lucide": "menu"
+    },
+    "hamburger-close": {
+      "lucide": "chevrons-left"
+    },
+    "hamburger-open": {
+      "lucide": "chevrons-right"
+    },
+    "help": {
+      "lucide": "circle-help"
+    },
+    "hint": {
+      "lucide": "lightbulb"
+    },
+    "home": {
+      "lucide": "house"
+    },
+    "image": {
+      "lucide": "image"
+    },
+    "link": {
+      "lucide": "link"
+    },
+    "list": {
+      "lucide": "list"
+    },
+    "logout": {
+      "lucide": "log-out"
+    },
+    "message-text": {
+      "lucide": "messages-square"
+    },
+    "movie": {
+      "lucide": "film"
+    },
+    "network": {
+      "lucide": "waypoints"
+    },
+    "notification": {
+      "lucide": "bell"
+    },
+    "picture-in-picture": {
+      "lucide": "picture-in-picture-2"
+    },
+    "presentation": {
+      "lucide": "presentation"
+    },
+    "questionnaire": {
+      "lucide": "clipboard-list"
+    },
+    "reload": {
+      "lucide": "rotate-cw"
+    },
+    "remove": {
+      "lucide": "minus"
+    },
+    "repeat": {
+      "lucide": "repeat"
+    },
+    "screen-share": {
+      "lucide": "monitor-up"
+    },
+    "search": {
+      "lucide": "search"
+    },
+    "security": {
+      "lucide": "lock"
+    },
+    "setting": {
+      "lucide": "settings"
+    },
+    "share": {
+      "lucide": "share-2"
+    },
+    "shuffle": {
+      "lucide": "shuffle"
+    },
+    "signal": {
+      "lucide": "signal"
+    },
+    "signal-low": {
+      "lucide": "signal",
+      "accent": {
+        "markPaths": ["M2 20h.01", "M7 20v-4"]
+      }
+    },
+    "signal-off": {
+      "lucide": "signal",
+      "accent": {
+        "addPaths": ["m2 2 20 20"]
+      }
+    },
+    "slider-editing": {
+      "lucide": "sliders-horizontal"
+    },
+    "sort": {
+      "lucide": "arrow-up-down"
+    },
+    "sort-down": {
+      "lucide": "arrow-down-wide-narrow"
+    },
+    "sort-up": {
+      "lucide": "arrow-up-narrow-wide"
+    },
+    "stamp": {
+      "lucide": "stamp"
+    },
+    "superadmin": {
+      "lucide": "shield-check"
+    },
+    "timer": {
+      "lucide": "timer"
+    },
+    "triangle": {
+      "lucide": "triangle"
+    },
+    "upload": {
+      "lucide": "upload"
+    },
+    "upload-document": {
+      "lucide": "file-up"
+    },
+    "upload-document-success": {
+      "lucide": "file-check"
+    },
+    "video": {
+      "lucide": "video"
+    },
+    "video-off": {
+      "lucide": "video-off"
+    },
+    "visibility": {
+      "lucide": "eye"
+    },
+    "visibility-off": {
+      "lucide": "eye-off"
+    },
+    "volume": {
+      "lucide": "volume-2"
+    },
+    "volume-off": {
+      "lucide": "volume-off",
+      "accent": {
+        "markPaths": ["m2 2 20 20"]
+      }
+    },
+    "warning": {
+      "lucide": "triangle-alert"
+    }
+  }
+}

@@ -1,7 +1,9 @@
 node_modules/
 src/
+scripts/
 .npmrc
 .npmignore
 codegen.cjs
 template.ejs
 tsconfig.json
+lucide-import.json
