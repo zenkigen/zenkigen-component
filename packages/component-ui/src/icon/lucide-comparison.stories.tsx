@@ -56,14 +56,14 @@ const LUCIDE_PX: Record<IconSize, number> = {
 const MAX_CANDIDATES = Math.max(...iconComparisonEntries.map((entry) => entry.candidates.length));
 
 // lucide の線の太さ（stroke-width）。サイズごとに個別指定できる。
-// 初期値は実装計画のサイズ別 stroke-width 案（lucide 既定 2 を medium とし、小サイズは太く・大サイズは細く）。
+// 初期値はデザイナー調整値（2026-08-12。lucide 既定 2 を medium とし、小サイズは太く・大サイズは細く）。
 type StrokeWidths = Record<IconSize, number>;
 const INITIAL_STROKE_WIDTHS: StrokeWidths = {
   'x-small': 2.5,
-  small: 2.25,
+  small: 2.35,
   medium: 2,
-  large: 1.75,
-  'x-large': 1.5,
+  large: 1.65,
+  'x-large': 1.4,
 };
 
 function buildLucideUri(markup: string, strokeWidth: number) {
