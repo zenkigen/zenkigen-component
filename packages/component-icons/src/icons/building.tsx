@@ -21,6 +21,6 @@ export const buildingIcon: React.FC<buildingIconProps> = ({ accentClassName }) =
   <path d="M8 14h.01"></path>
   <path d="M8 6h.01"></path>
   <path d="M9 22v-3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"></path>
-  <rect x="4" y="2" rx="2"></rect>
+  <rect x="4" y="2" width="16" height="20" rx="2"></rect>
 </svg>
 );
