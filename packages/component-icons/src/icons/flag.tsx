@@ -1,6 +1,7 @@
 /*
 * NOTE: This file is auto generated
 * Do not edit manually.
+* Based on lucide (https://lucide.dev) — ISC License. See LICENSE-lucide.
 */
 import React from 'react';
 
@@ -9,7 +10,7 @@ export interface flagIconProps {
 }
 
 export const flagIcon: React.FC<flagIconProps> = ({ accentClassName }) => (
-  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="flag">
-<path d="M20 2.375H6.625V2C6.625 1.655 6.345 1.375 6 1.375C5.655 1.375 5.375 1.655 5.375 2V3V12V21.375H4C3.655 21.375 3.375 21.655 3.375 22C3.375 22.345 3.655 22.625 4 22.625H8C8.345 22.625 8.625 22.345 8.625 22C8.625 21.655 8.345 21.375 8 21.375H6.625V12.625H20C20.345 12.625 20.625 12.345 20.625 12V3C20.625 2.655 20.345 2.375 20 2.375ZM19.375 11.375H6.625V3.625H19.375V11.375Z"></path>
+  <svg className="zen-stroke-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" role="img" aria-label="flag">
+  <path d="M4 22V4a1 1 0 0 1 .4-.8A6 6 0 0 1 8 2c3 0 5 2 7.333 2q2 0 3.067-.8A1 1 0 0 1 20 4v10a1 1 0 0 1-.4.8A6 6 0 0 1 16 16c-3 0-5-2-8-2a6 6 0 0 0-4 1.528"></path>
 </svg>
 );
