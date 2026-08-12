@@ -49,10 +49,10 @@ describe('Icon', () => {
   describe('サイズ', () => {
     it.each([
       ['x-small', ['w-3', 'h-3', '[&_svg]:[stroke-width:2.5]']],
-      ['small', ['w-4', 'h-4', '[&_svg]:[stroke-width:2.25]']],
+      ['small', ['w-4', 'h-4', '[&_svg]:[stroke-width:2.35]']],
       ['medium', ['w-6', 'h-6', '[&_svg]:[stroke-width:2]']],
-      ['large', ['w-8', 'h-8', '[&_svg]:[stroke-width:1.75]']],
-      ['x-large', ['w-10', 'h-10', '[&_svg]:[stroke-width:1.5]']],
+      ['large', ['w-8', 'h-8', '[&_svg]:[stroke-width:1.65]']],
+      ['x-large', ['w-10', 'h-10', '[&_svg]:[stroke-width:1.4]']],
     ] as const)('size="%s" の場合、幅・高さと stroke-width 上書きクラスが付与されること', (size, classes) => {
       render(<Icon name="add" size={size} />);
       const wrapper = screen.getByRole('img').parentElement;

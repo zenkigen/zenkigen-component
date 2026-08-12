@@ -243,10 +243,10 @@ export const tailwindConfig = {
     // stroke 系アイコン（lucide 由来）の着色ブリッジとサイズ別 stroke-width 上書き
     'zen-stroke-icon',
     '[&_svg]:[stroke-width:2.5]',
-    '[&_svg]:[stroke-width:2.25]',
+    '[&_svg]:[stroke-width:2.35]',
     '[&_svg]:[stroke-width:2]',
-    '[&_svg]:[stroke-width:1.75]',
-    '[&_svg]:[stroke-width:1.5]',
+    '[&_svg]:[stroke-width:1.65]',
+    '[&_svg]:[stroke-width:1.4]',
     // userColors (Avatar用)
     'bg-user-red',
     'bg-user-pink',
