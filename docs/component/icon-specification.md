@@ -113,6 +113,20 @@ const MyComponent = () => {
 - サイズ: `w-10 h-10` (40px × 40px)
 - 用途: 特に目立たせたいアイコンやヒーロー要素での表示
 
+#### サイズ別 stroke-width 補正（stroke 系アイコン）
+
+lucide 由来の stroke（線画）系アイコンは viewBox 24 基準で一様スケールされるため、Icon がサイズごとに stroke-width を上書きして実効線幅を補正します（fill 系アイコンには影響しません）。
+
+| size    | 表示サイズ | stroke-width | 実効線幅  |
+| ------- | ---------- | ------------ | --------- |
+| x-small | 12px       | 2.5          | 約 1.25px |
+| small   | 16px       | 2.25         | 1.5px     |
+| medium  | 24px       | 2（既定）    | 2px       |
+| large   | 32px       | 1.75         | 約 2.33px |
+| x-large | 40px       | 1.5          | 2.5px     |
+
+**利用ガイド**: x-small（12px）ではディテールの多いアイコンは線が潰れやすいため、シンプルな形状のアイコンを選んでください。
+
 ### カラーバリエーション
 
 #### icon01
@@ -140,7 +154,7 @@ const MyComponent = () => {
 - 用途: アイコン内の特定要素に異なる色を適用（SVG内の`.accentColor`クラスを持つ要素が対象）
 - 適用方法: `fill-${accentColor}`クラスとして動的に生成
 - 利用可能な値: `ColorToken`型（デザイントークン、ベースカラー、Tailwind標準色）
-- 対応アイコン: `calendar-attention`, `calendar-check`, `calendar-minus`, `calendar-today`, `mic`, `volume-off`
+- 対応アイコン（9 件）: `ai-agent`, `calendar-attention`, `calendar-check`, `calendar-minus`, `calendar-today`, `mic`（以上 fill 系）, `signal-low`, `signal-off`, `volume-off`（以上 stroke 系）
 - 例:
   - `accentColor="interactive01"` → インタラクティブなアクセント（`calendar-today` など）
   - `accentColor="supportError"` → エラー状態のアクセント（`calendar-attention`, `volume-off` など）
@@ -422,9 +436,14 @@ const MicIcon = ({ isActive }: { isActive: boolean }) => (
 - アクセントカラーは、無効状態でない場合にのみ、アイコンコンポーネントに`accentClassName`として渡される
 - SVG内の`.accentColor`クラスを持つ要素に対してのみアクセントカラーが適用される
 
-### アイコンの提供元
+### アイコンの提供元（ハイブリッド構成）
 
-すべてのアイコンは`@zenkigen-inc/component-icons`パッケージから提供されます。利用可能なアイコン名は以下で確認できます：
+すべてのアイコンは`@zenkigen-inc/component-icons`パッケージから提供されます。内部は 2 系統のハイブリッド構成です：
+
+- **stroke（線画）系**: [lucide](https://lucide.dev) 由来のアイコン（ISC License。パッケージ同梱の `LICENSE-lucide` 参照）。root に `zen-stroke-icon` クラスを持ち、`stroke="currentColor"` で描画されます
+- **fill（塗り）系**: 自前 SVG のアイコン（ブランド・ドメイン固有アイコンなど）。従来どおり CSS の fill 継承で着色されます
+
+どちらの系統も `fill-*` ユーティリティで着色できます。`@zenkigen-inc/component-config` が `fill-*` を「`fill` + `--zen-icon-stroke` CSS 変数」の併出力として定義しており、stroke 系はこの変数を `stroke` として参照するためです（`color` prop / `className` 直渡し / 親要素への付与 / variant のいずれの経路でも同じ色が届きます）。利用可能なアイコン名は以下で確認できます：
 
 ```typescript
 import { iconElements } from '@zenkigen-inc/component-icons';
@@ -450,7 +469,7 @@ console.log(availableIcons);
 4. **サイズのカスタマイズ**: `className`で`w-*`や`h-*`クラスを指定した場合、`size`プロパティによるサイズ指定は上書きされます
 5. **fillプロパティ**: Tailwindの`fill-*`クラスを`className`で指定することで、`color`プロパティとは独立した色指定が可能です
 6. **アイコンの追加**: 新しいアイコンを追加する場合は、`@zenkigen-inc/component-icons`パッケージにSVGファイルを追加し、コード生成を実行する必要があります
-7. **accentColorの適用範囲**: `accentColor`プロパティは、SVG内で`.accentColor`クラスを持つ要素にのみ適用されます。現在対応しているアイコンは `calendar-attention`, `calendar-check`, `calendar-minus`, `calendar-today`, `mic`, `volume-off` です。その他のアイコンでは効果がありません
+7. **accentColorの適用範囲**: `accentColor`プロパティは、SVG内でアクセント指定（`class="accent"`）を持つ要素にのみ適用されます。現在対応しているアイコンは `ai-agent`, `calendar-attention`, `calendar-check`, `calendar-minus`, `calendar-today`, `mic`, `signal-low`, `signal-off`, `volume-off` の 9 件です。その他のアイコンでは効果がありません
 8. **accentColorと無効状態**: `isDisabled={true}`の場合、`accentColor`プロパティは無視され、アクセントカラーは適用されません
 9. **accentColorの型安全性**: `accentColor`は`ColorToken`型で型付けされており、デザインシステムで定義された色トークンのみ指定可能です
 10. **動的クラス名生成**: `accentColor`は`fill-${accentColor}`の形式でクラス名が生成されるため、Tailwindのセーフリスト設定が必要な場合があります
@@ -501,7 +520,8 @@ console.log(availableIcons);
 
 ## 更新履歴
 
-| 日付       | 内容                                        | 担当者 |
-| ---------- | ------------------------------------------- | ------ |
-| 2025-10-13 | `accentColor`プロパティ追加に伴う仕様書更新 | -      |
-| 2025-10-14 | 新規作成                                    | -      |
+| 日付       | 内容                                                                               | 担当者 |
+| ---------- | ---------------------------------------------------------------------------------- | ------ |
+| 2026-08-12 | lucide 置き換え（90 アイコンを stroke 系に差し替え・ハイブリッド構成化）に伴う更新 | -      |
+| 2025-10-13 | `accentColor`プロパティ追加に伴う仕様書更新                                        | -      |
+| 2025-10-14 | 新規作成                                                                           | -      |
