@@ -137,6 +137,15 @@ describe('Icon', () => {
       expect(icon).not.toHaveAttribute('stroke');
     });
 
+    it('rect を含む lucide 由来アイコンが rect の寸法属性を保持すること', () => {
+      // codegen の width / height 除去が root svg に限定されていることの回帰テスト。
+      // 全要素から除去すると rect の寸法が消えて図形が描画されなくなる
+      render(<Icon name="copy" />);
+      const rect = screen.getByRole('img').querySelector('rect');
+      expect(rect).toHaveAttribute('width', '14');
+      expect(rect).toHaveAttribute('height', '14');
+    });
+
     it.each([
       ['signal-low', 2],
       ['signal-off', 1],
