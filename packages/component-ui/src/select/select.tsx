@@ -182,10 +182,7 @@ export function Select({
             <div className="truncate">{selectedOption ? selectedOption.label : placeholder != null && placeholder}</div>
           </div>
           <div className="ml-auto flex items-center">
-            <Icon
-              name={isOptionListOpen ? 'angle-small-up' : 'angle-small-down'}
-              size={size === 'large' ? 'medium' : 'small'}
-            />
+            <Icon name={isOptionListOpen ? 'angle-up' : 'angle-down'} size={size === 'large' ? 'medium' : 'small'} />
           </div>
         </button>
         {isOptionListOpen && !isDisabled && (
