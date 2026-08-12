@@ -139,10 +139,7 @@ export function Dropdown({
             {target}
             {!isArrowHidden && (
               <div className="ml-2 flex items-center fill-icon01">
-                <Icon
-                  name={isVisible ? 'angle-small-up' : 'angle-small-down'}
-                  size={size === 'large' ? 'medium' : 'small'}
-                />
+                <Icon name={isVisible ? 'angle-up' : 'angle-down'} size={size === 'large' ? 'medium' : 'small'} />
               </div>
             )}
           </button>
@@ -156,7 +153,7 @@ export function Dropdown({
             <span className={labelClasses}>{label}</span>
             {!isArrowHidden && (
               <div className="ml-auto flex items-center">
-                <Icon name={isVisible ? 'angle-small-up' : 'angle-small-down'} size="small" />
+                <Icon name={isVisible ? 'angle-up' : 'angle-down'} size="small" />
               </div>
             )}
           </button>
