@@ -24,10 +24,10 @@ export const Icon = ({ size = 'medium', isDisabled = false, ...props }: Props) =
       // stroke-width はサイズ別に上書きする（stroke 系アイコンは viewBox 24 基準で一様スケールされるため、
       // 小サイズでは太く・大サイズでは細くして実効線幅を補正する。fill 系アイコンは stroke 不使用のため無害）
       'w-3 h-3 [&_svg]:[stroke-width:2.5]': size === 'x-small',
-      'w-4 h-4 [&_svg]:[stroke-width:2.25]': size === 'small',
+      'w-4 h-4 [&_svg]:[stroke-width:2.35]': size === 'small',
       'w-6 h-6 [&_svg]:[stroke-width:2]': size === 'medium',
-      'w-8 h-8 [&_svg]:[stroke-width:1.75]': size === 'large',
-      'w-10 h-10 [&_svg]:[stroke-width:1.5]': size === 'x-large',
+      'w-8 h-8 [&_svg]:[stroke-width:1.65]': size === 'large',
+      'w-10 h-10 [&_svg]:[stroke-width:1.4]': size === 'x-large',
     },
     props.className,
   );
