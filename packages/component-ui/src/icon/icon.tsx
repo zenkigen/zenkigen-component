@@ -21,11 +21,13 @@ export const Icon = ({ size = 'medium', isDisabled = false, ...props }: Props) =
     {
       'fill-disabled01': isDisabled,
       [`fill-${props.color}`]: !isDisabled && props.color != null,
-      'w-3 h-3': size === 'x-small',
-      'w-4 h-4': size === 'small',
-      'w-6 h-6': size === 'medium',
-      'w-8 h-8': size === 'large',
-      'w-10 h-10': size === 'x-large',
+      // stroke-width はサイズ別に上書きする（stroke 系アイコンは viewBox 24 基準で一様スケールされるため、
+      // 小サイズでは太く・大サイズでは細くして実効線幅を補正する。fill 系アイコンは stroke 不使用のため無害）
+      'w-3 h-3 [&_svg]:[stroke-width:2.5]': size === 'x-small',
+      'w-4 h-4 [&_svg]:[stroke-width:2.25]': size === 'small',
+      'w-6 h-6 [&_svg]:[stroke-width:2]': size === 'medium',
+      'w-8 h-8 [&_svg]:[stroke-width:1.75]': size === 'large',
+      'w-10 h-10 [&_svg]:[stroke-width:1.5]': size === 'x-large',
     },
     props.className,
   );
