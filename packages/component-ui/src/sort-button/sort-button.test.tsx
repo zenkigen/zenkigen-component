@@ -121,10 +121,10 @@ describe('SortButton', () => {
   });
 
   describe('ソート状態とアイコン表示', () => {
-    it('sortOrder=nullの場合にangle-small-downアイコンが表示されること', () => {
+    it('sortOrder=nullの場合にangle-downアイコンが表示されること', () => {
       render(<SortButton label="テストラベル" sortOrder={null} aria-label="テストボタン" data-testid="sort-button" />);
       const button = screen.getByTestId('sort-button');
-      const iconSvg = button.querySelector('span svg[aria-label="angleSmallDown"]');
+      const iconSvg = button.querySelector('span svg[aria-label="angleDown"]');
       expect(iconSvg).toBeInTheDocument();
       // アイコンコンポーネントが存在することを確認
       expect(button.querySelector('span')).toHaveClass('inline-block', 'shrink-0');
@@ -179,9 +179,9 @@ describe('SortButton', () => {
         <SortButton label="テストラベル" sortOrder={null} aria-label="テストボタン" data-testid="sort-button" />,
       );
 
-      // 初期状態（null）でangle-small-downアイコンが表示
+      // 初期状態（null）でangle-downアイコンが表示
       let button = screen.getByTestId('sort-button');
-      expect(button.querySelector('span svg[aria-label="angleSmallDown"]')).toBeInTheDocument();
+      expect(button.querySelector('span svg[aria-label="angleDown"]')).toBeInTheDocument();
       expect(button.querySelector('span svg[aria-label="arrowUp"]')).not.toBeInTheDocument();
       expect(button.querySelector('span svg[aria-label="arrowDown"]')).not.toBeInTheDocument();
 
@@ -191,7 +191,7 @@ describe('SortButton', () => {
       );
       button = screen.getByTestId('sort-button');
       expect(button.querySelector('span svg[aria-label="arrowUp"]')).toBeInTheDocument();
-      expect(button.querySelector('span svg[aria-label="angleSmallDown"]')).not.toBeInTheDocument();
+      expect(button.querySelector('span svg[aria-label="angleDown"]')).not.toBeInTheDocument();
       expect(button.querySelector('span svg[aria-label="arrowDown"]')).not.toBeInTheDocument();
 
       // descendに変更してarrow-downアイコンが表示
@@ -200,7 +200,7 @@ describe('SortButton', () => {
       );
       button = screen.getByTestId('sort-button');
       expect(button.querySelector('span svg[aria-label="arrowDown"]')).toBeInTheDocument();
-      expect(button.querySelector('span svg[aria-label="angleSmallDown"]')).not.toBeInTheDocument();
+      expect(button.querySelector('span svg[aria-label="angleDown"]')).not.toBeInTheDocument();
       expect(button.querySelector('span svg[aria-label="arrowUp"]')).not.toBeInTheDocument();
     });
   });
