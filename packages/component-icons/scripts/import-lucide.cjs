@@ -113,6 +113,7 @@ function main() {
     totalAdded += addedCount;
 
     const outputPath = path.join(outputDir, `${name}.svg`);
+    const isAlreadyImported = fs.existsSync(outputPath);
     if (!isDryRun) {
       fs.writeFileSync(outputPath, `${svg.trimEnd()}\n`, 'utf8');
     }
@@ -124,7 +125,9 @@ function main() {
         fs.rmSync(legacyPath);
       }
       deletedCount += 1;
-    } else {
+    } else if (!isAlreadyImported) {
+      // 取り込み済み（output あり）の再実行では旧ファイルが無いのは正常。
+      // 初回取り込みで旧ファイルが無い場合のみ、エントリ名の誤りを疑って警告する
       warnings.push(`${name}: 置換対象の旧 src/svg/${name}.svg が存在しない`);
     }
   }
