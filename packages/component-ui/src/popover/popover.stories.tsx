@@ -5,6 +5,7 @@ import MockDate from 'mockdate';
 import { useEffect, useRef, useState } from 'react';
 
 import { Button } from '../button';
+import type { DatePickerProps } from '../date-picker';
 import { DatePicker } from '../date-picker';
 import { Modal } from '../modal';
 import { Popup } from '../popup';
@@ -528,13 +529,18 @@ export const WithDatePicker: Story = {
 };
 
 // ビューポート端でのはみ出し回避（flip / shift）確認用ストーリー
+const DATE_PICKER_SIZES: NonNullable<DatePickerProps['size']>[] = ['small', 'medium', 'large'];
+
 type OverflowAvoidanceArgs = {
+  /** 表示物（Popover または DatePicker） */
+  content: 'popover' | 'date-picker';
   /** トリガーの水平位置（0 = 左端, 100 = 右端） */
   horizontalPercent: number;
   /** トリガーの垂直位置（0 = 上端, 100 = 下端） */
   verticalPercent: number;
   placement: PopoverPlacement;
   offset: number;
+  datePickerSize: NonNullable<DatePickerProps['size']>;
 };
 
 /**
@@ -582,6 +588,34 @@ const OverflowAvoidanceReadout = ({ requestedPlacement }: { requestedPlacement: 
   );
 };
 
+/**
+ * DatePicker 表示用。DatePicker は内部で Popover（placement: 'bottom-start'）を使用して
+ * カレンダーを表示するため、画面端では Popover と同じ flip / shift が働く。
+ */
+const OverflowAvoidanceDatePicker = ({ size }: { size: OverflowAvoidanceArgs['datePickerSize'] }) => {
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // 表示物を切り替えた直後からカレンダーの挙動を確認できるよう、マウント時にトリガーをクリックして開く
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const container = containerRef.current;
+      if (container !== null) {
+        const trigger = container.querySelector<HTMLButtonElement>('button');
+        trigger?.click();
+      }
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <div ref={containerRef}>
+      <DatePicker size={size} value={selectedDate} onChange={(date) => setSelectedDate(date)} />
+    </div>
+  );
+};
+
 const OverflowAvoidanceStory = (args: OverflowAvoidanceArgs) => {
   const [isOpen, setIsOpen] = useState(true);
 
@@ -597,16 +631,20 @@ const OverflowAvoidanceStory = (args: OverflowAvoidanceArgs) => {
     <div className="relative h-screen w-screen overflow-hidden bg-uiBackground02">
       {/* w-max がないと left:100% 指定時に利用可能幅が 0 になり、トリガーが押し潰されて折り返す */}
       <div className="absolute w-max" style={triggerStyle}>
-        <Popover isOpen={isOpen} placement={args.placement} offset={args.offset}>
-          <Popover.Trigger>
-            <Button variant="fill" size="small" onClick={() => setIsOpen((value) => !value)}>
-              {`トリガー（${args.horizontalPercent}%, ${args.verticalPercent}%）`}
-            </Button>
-          </Popover.Trigger>
-          <Popover.Content>
-            <OverflowAvoidanceReadout requestedPlacement={args.placement} />
-          </Popover.Content>
-        </Popover>
+        {args.content === 'date-picker' ? (
+          <OverflowAvoidanceDatePicker size={args.datePickerSize} />
+        ) : (
+          <Popover isOpen={isOpen} placement={args.placement} offset={args.offset}>
+            <Popover.Trigger>
+              <Button variant="fill" size="small" onClick={() => setIsOpen((value) => !value)}>
+                {`トリガー（${args.horizontalPercent}%, ${args.verticalPercent}%）`}
+              </Button>
+            </Popover.Trigger>
+            <Popover.Content>
+              <OverflowAvoidanceReadout requestedPlacement={args.placement} />
+            </Popover.Content>
+          </Popover>
+        )}
       </div>
     </div>
   );
@@ -614,12 +652,19 @@ const OverflowAvoidanceStory = (args: OverflowAvoidanceArgs) => {
 
 export const OverflowAvoidance: StoryObj<OverflowAvoidanceArgs> = {
   args: {
+    content: 'popover',
     horizontalPercent: 50,
     verticalPercent: 90,
     placement: 'bottom',
     offset: 8,
+    datePickerSize: 'medium',
   },
   argTypes: {
+    content: {
+      options: ['popover', 'date-picker'],
+      control: { type: 'radio', labels: { popover: 'Popover', 'date-picker': 'DatePicker' } },
+      description: '表示物。DatePicker は内部で Popover を使用してカレンダーを表示するため、同じはみ出し回避が働く',
+    },
     horizontalPercent: {
       control: { type: 'range', min: 0, max: 100, step: 5 },
       description: 'トリガーの水平位置（0 = 左端 / 100 = 右端）',
@@ -632,10 +677,18 @@ export const OverflowAvoidance: StoryObj<OverflowAvoidanceArgs> = {
       options: ALL_PLACEMENTS,
       control: { type: 'select' },
       description: '希望する配置（収まらない場合は自動的に変更される）',
+      if: { arg: 'content', eq: 'popover' },
     },
     offset: {
       control: { type: 'number' },
       description: 'トリガーとの間隔（ピクセル単位）',
+      if: { arg: 'content', eq: 'popover' },
+    },
+    datePickerSize: {
+      options: DATE_PICKER_SIZES,
+      control: { type: 'select' },
+      description: 'DatePicker のサイズ',
+      if: { arg: 'content', eq: 'date-picker' },
     },
   },
   render: OverflowAvoidanceStory,
@@ -646,7 +699,7 @@ export const OverflowAvoidance: StoryObj<OverflowAvoidanceArgs> = {
     docs: {
       description: {
         story:
-          'トリガーの位置とビューポートサイズを変えて flip / shift の挙動を確認するストーリー。`placement` は「第一希望」として扱われ、そのままでは画面外に出る場合は自動的に反転・ずらしが行われます。Popover 内に「指定した placement」「実際に適用された placement」「ずらし量」を表示しているため、どちらが働いたかを判別できます。なお shift はビューポート端から 8px のマージンを確保するため、端から 8px 以内に配置された Popover は最大 8px 内側へ移動します。',
+          'トリガーの位置とビューポートサイズを変えて flip / shift の挙動を確認するストーリー。`placement` は「第一希望」として扱われ、そのままでは画面外に出る場合は自動的に反転・ずらしが行われます。Popover 内に「指定した placement」「実際に適用された placement」「ずらし量」を表示しているため、どちらが働いたかを判別できます。なお shift はビューポート端から 8px のマージンを確保するため、端から 8px 以内に配置された Popover は最大 8px 内側へ移動します。表示物は Controls で Popover / DatePicker を切り替えられます。DatePicker は内部で Popover（placement: `bottom-start`）を使用してカレンダーを表示するため、画面端に配置するとカレンダーにも同じ flip / shift が働くことを確認できます。',
       },
     },
   },
