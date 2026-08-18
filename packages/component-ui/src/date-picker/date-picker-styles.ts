@@ -101,9 +101,14 @@ const LARGE_TOKENS: DatePickerSizeTokens = {
  * 曜日行は 48px（40px + 上下 4px）、日付行は 48px（40px + 上下 4px）。
  * その結果、month の下端には 4px だけ残る（`pb-1`）。
  *
- * 月ヘッダーと曜日行の間隔だけは Figma の 8px に対して 12px にしている
- * （`monthCaptionClass` の `pb-2` 8px + 曜日行に含まれる 4px）。デザイン判断による
- * 意図的な差異で、カレンダー全体の高さは 445px になる。
+ * 月ヘッダーは react-day-picker の `.rdp-month_caption { height: var(--rdp-nav-height) }`
+ * （border-box）で高さが 40px に固定されるため、`monthCaptionClass` の `pb-2` は高さに
+ * 加算されず内側に食い込み、40px のナビボタンは caption の上へ 4px はみ出して置かれる。
+ * 結果、カレンダー上端からボタンまで 4px、ボタン下端から曜日行の視覚領域まで 8px となり、
+ * カレンダー全体は 342×437px になる（検算: month の `pt-2` 8 + caption 40 + 曜日行 48
+ * + 日付行 48×6（fixedWeeks）+ `pb-1` 4 + フッター 49 = 437）。
+ * このレイアウトは Figma と重ねて確認済みの確定値。`pb-2` や `--rdp-nav-height` を変えると
+ * バランスが崩れるため、変更時は必ず実寸を測り直すこと。
  */
 const X_LARGE_TOKENS: DatePickerSizeTokens = {
   triggerIcon: 'medium',
@@ -124,7 +129,8 @@ const X_LARGE_TOKENS: DatePickerSizeTokens = {
   },
   dayButtonClass: 'relative grid size-10 place-items-center rounded-full !border !border-solid',
   dayButtonFontSize: '16px',
-  // 月ヘッダーと曜日行の間隔。曜日行の 48px に含まれる 4px と合わせて 8px 空く
+  // caption は height 固定（--rdp-nav-height: 40px）のため pb-2 は食い込みとして働き、
+  // ナビボタンが上へ 4px はみ出して月ヘッダーと曜日行の視覚間隔が 8px になる（上部ブロックコメント参照）
   monthCaptionClass: 'flex items-center justify-between px-1 pb-2',
   monthCaptionTypography: 'typography-label16bold',
   // IconButton に x-large は無いが、large が 40px で Figma と一致する（内部アイコンも 24px になる）
