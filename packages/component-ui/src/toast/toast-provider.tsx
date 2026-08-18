@@ -1,5 +1,5 @@
 import type { PropsWithChildren, ReactNode } from 'react';
-import { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import { Toast } from './toast';
@@ -42,13 +42,19 @@ const ToastContext = createContext<ToastContextValue>({} as ToastContextValue);
 export const ToastProvider = ({ children, hasCloseButton = false }: ToastProviderProps) => {
   const [isClientRender, setIsClientRender] = useState(false);
   const [toasts, setToasts] = useState<ToastItem[]>([]);
+  // 乱数だと衝突時に key の重複と removeToast での一括削除が起こるため、単調増加カウンタで採番する
+  const nextIdRef = useRef(0);
 
   const addToast = useCallback(
     (args: AddToastArgs) => {
+      nextIdRef.current += 1;
+
+      const id = nextIdRef.current;
+
       setToasts((prev) => [
         ...prev,
         {
-          id: Math.trunc(Math.random() * 100000),
+          id,
           message: args.message,
           state: args.state,
           description: args.description,
@@ -74,24 +80,29 @@ export const ToastProvider = ({ children, hasCloseButton = false }: ToastProvide
       {isClientRender &&
         createPortal(
           <div
-            role="status"
-            aria-live="polite"
-            aria-atomic="false"
+            role="region"
+            aria-label="通知"
             className="pointer-events-none fixed bottom-0 left-0 z-toast mb-4 ml-4 flex w-full flex-col-reverse gap-4"
           >
+            {/*
+              live region はトーストごとのラッパーに置き、error は role="alert"（assertive 相当）で即時に、
+              それ以外は role="status"（polite 相当）で読み上げる。要素の挿入と同時に内容が告知される
+              role を使うことで、politeness の異なる通知を 1 つの視覚スタックに時系列のまま混在できる
+            */}
             {toasts.map((toast) => (
-              <Toast
-                key={toast.id}
-                state={toast.state}
-                description={toast.description}
-                hasCloseButton={toast.hasCloseButton}
-                isAutoClose={toast.isAutoClose}
-                isAnimation
-                width={475}
-                onClickClose={() => removeToast(toast.id)}
-              >
-                {toast.message}
-              </Toast>
+              <div key={toast.id} role={toast.state === 'error' ? 'alert' : 'status'}>
+                <Toast
+                  state={toast.state}
+                  description={toast.description}
+                  hasCloseButton={toast.hasCloseButton}
+                  isAutoClose={toast.isAutoClose}
+                  isAnimation
+                  width={475}
+                  onClickClose={() => removeToast(toast.id)}
+                >
+                  {toast.message}
+                </Toast>
+              </div>
             ))}
           </div>,
           document.body,

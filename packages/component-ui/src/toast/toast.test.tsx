@@ -17,6 +17,7 @@ vi.mock('../icon', () => ({
  */
 
 const CLOSE_TIME_MSEC = 5000;
+const REMOVAL_FALLBACK_MSEC = 1000;
 
 type ToastProps = ComponentProps<typeof Toast>;
 type AddToastArgs = Parameters<ReturnType<typeof useToast>['addToast']>[0];
@@ -71,6 +72,11 @@ describe('Toast', () => {
 
     it('description 未指定時は説明文の要素が描画されないこと', () => {
       const { root } = renderToast();
+      expect(root.querySelectorAll('p')).toHaveLength(1);
+    });
+
+    it('description が空文字のときは説明文の要素が描画されないこと', () => {
+      const { root } = renderToast({ description: '' });
       expect(root.querySelectorAll('p')).toHaveLength(1);
     });
 
@@ -210,6 +216,40 @@ describe('Toast', () => {
 
       expect(onClickClose).toHaveBeenCalledTimes(1);
     });
+
+    it('animationend が発火しない環境でも、フォールバックにより onClickClose が呼ばれること', async () => {
+      const { onClickClose } = renderToast({ isAutoClose: true, isAnimation: true });
+
+      await advanceToAutoClose();
+      expect(onClickClose).not.toHaveBeenCalled();
+
+      await act(async () => {
+        vi.advanceTimersByTime(REMOVAL_FALLBACK_MSEC);
+      });
+
+      expect(onClickClose).toHaveBeenCalledTimes(1);
+    });
+
+    it('フェードアウト完了後はフォールバックタイマーで二重に呼ばれないこと', async () => {
+      const { onClickClose, root } = renderToast({ isAutoClose: true, isAnimation: true });
+
+      await advanceToAutoClose();
+      fireFadeOutEnd(root);
+      await act(async () => {
+        vi.advanceTimersByTime(REMOVAL_FALLBACK_MSEC);
+      });
+
+      expect(onClickClose).toHaveBeenCalledTimes(1);
+    });
+
+    it('子孫要素からバブリングした animationend では onClickClose が呼ばれないこと', async () => {
+      const { onClickClose, root } = renderToast({ isAutoClose: true, isAnimation: true });
+
+      await advanceToAutoClose();
+      fireFadeOutEnd(root.querySelector('p') as HTMLElement);
+
+      expect(onClickClose).not.toHaveBeenCalled();
+    });
   });
 
   describe('スタイル', () => {
@@ -259,7 +299,11 @@ const clickAddToast = (label = 'トーストを表示') => {
   fireEvent.click(screen.getByRole('button', { name: label }));
 };
 
-const getToastContainer = () => screen.getByRole('status');
+const getToastContainer = () => screen.getByRole('region', { name: '通知' });
+
+/** コンテナ直下の live region ラッパーを介して Toast のルート要素を取得する */
+const getToastRoots = () =>
+  Array.from(getToastContainer().children).map((wrapper) => wrapper.firstElementChild as HTMLElement);
 
 describe('ToastProvider / useToast', () => {
   it('addToast({ message, state }) でトーストが表示されること', () => {
@@ -316,7 +360,7 @@ describe('ToastProvider / useToast', () => {
     clickAddToast();
     await advanceToAutoClose();
 
-    expect(getToastContainer().firstElementChild?.className).toMatch(/animate-toast-out/);
+    expect(getToastRoots()[0]?.className).toMatch(/animate-toast-out/);
   });
 
   it('addToast の isAutoClose=false でトーストが自動で消えないこと', async () => {
@@ -326,7 +370,7 @@ describe('ToastProvider / useToast', () => {
     await advanceToAutoClose();
 
     expect(screen.getByText('保存しました')).toBeInTheDocument();
-    expect(getToastContainer().firstElementChild?.className).not.toMatch(/animate-toast-out/);
+    expect(getToastRoots()[0]?.className).not.toMatch(/animate-toast-out/);
   });
 
   it('addToast の isAutoClose=false のとき閉じるボタンが必ず表示されること', () => {
@@ -337,10 +381,27 @@ describe('ToastProvider / useToast', () => {
     expect(screen.getByRole('button', { name: '閉じる' })).toBeInTheDocument();
   });
 
-  it('ポータルコンテナに role="status" / aria-live="polite" が付与されていること', () => {
+  it('ポータルコンテナが role="region" / aria-label="通知" のランドマークであること', () => {
     renderProvider({ message: '保存しました', state: 'success' });
 
-    expect(getToastContainer()).toHaveAttribute('aria-live', 'polite');
+    expect(getToastContainer()).toBeInTheDocument();
+  });
+
+  it('error 以外のトーストは role="status"（polite 相当）のラッパーで描画されること', () => {
+    renderProvider({ message: '保存しました', state: 'success' });
+
+    clickAddToast();
+
+    expect(screen.getByRole('status')).toHaveTextContent('保存しました');
+  });
+
+  it('error のトーストは role="alert"（assertive 相当）のラッパーで描画されること', () => {
+    renderProvider({ message: '保存に失敗しました', state: 'error' });
+
+    clickAddToast();
+
+    expect(screen.getByRole('alert')).toHaveTextContent('保存に失敗しました');
+    expect(screen.queryByRole('status')).not.toBeInTheDocument();
   });
 
   it('閉じるボタンクリックでトーストが DOM から取り除かれること', () => {
@@ -348,7 +409,7 @@ describe('ToastProvider / useToast', () => {
 
     clickAddToast();
 
-    const toastElement = getToastContainer().firstElementChild as HTMLElement;
+    const toastElement = getToastRoots()[0] as HTMLElement;
 
     fireEvent.click(screen.getByRole('button', { name: '閉じる' }));
     fireFadeOutEnd(toastElement);
@@ -357,13 +418,6 @@ describe('ToastProvider / useToast', () => {
   });
 
   it('複数トーストが追加順に積み上がること', () => {
-    let idSeed = 0;
-    vi.spyOn(Math, 'random').mockImplementation(() => {
-      idSeed += 1;
-
-      return idSeed / 100000;
-    });
-
     render(
       <ToastProvider>
         <AddToastButton args={{ message: '1 件目', state: 'information' }} label="1 件目を表示" />
@@ -381,14 +435,27 @@ describe('ToastProvider / useToast', () => {
     expect(messages[1]).toContain('2 件目');
   });
 
+  it('一方のトーストを閉じても、他方のトーストは表示されたままであること', () => {
+    render(
+      <ToastProvider hasCloseButton>
+        <AddToastButton args={{ message: '1 件目', state: 'information' }} label="1 件目を表示" />
+        <AddToastButton args={{ message: '2 件目', state: 'information' }} label="2 件目を表示" />
+      </ToastProvider>,
+    );
+
+    clickAddToast('1 件目を表示');
+    clickAddToast('2 件目を表示');
+
+    const firstToastElement = getToastRoots()[0] as HTMLElement;
+
+    fireEvent.click(screen.getAllByRole('button', { name: '閉じる' })[0] as HTMLElement);
+    fireFadeOutEnd(firstToastElement);
+
+    expect(screen.queryByText('1 件目')).not.toBeInTheDocument();
+    expect(screen.getByText('2 件目')).toBeInTheDocument();
+  });
+
   it('後からトーストを追加しても、先に表示したトーストの自動クローズがリセットされないこと', async () => {
-    let idSeed = 0;
-    vi.spyOn(Math, 'random').mockImplementation(() => {
-      idSeed += 1;
-
-      return idSeed / 100000;
-    });
-
     render(
       <ToastProvider>
         <AddToastButton args={{ message: '1 件目', state: 'information' }} label="1 件目を表示" />
@@ -407,9 +474,9 @@ describe('ToastProvider / useToast', () => {
     });
 
     // 1 件目は表示から 5 秒でフェードアウトを開始し、2 件目（表示から 1 秒）はまだ表示中
-    const toastElements = Array.from(getToastContainer().children);
+    const toastRoots = getToastRoots();
 
-    expect(toastElements[0]?.className).toMatch(/animate-toast-out/);
-    expect(toastElements[1]?.className).not.toMatch(/animate-toast-out/);
+    expect(toastRoots[0]?.className).toMatch(/animate-toast-out/);
+    expect(toastRoots[1]?.className).not.toMatch(/animate-toast-out/);
   });
 });

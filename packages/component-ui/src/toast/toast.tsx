@@ -7,6 +7,8 @@ import { IconButton } from '../icon-button';
 import type { ToastState } from './type';
 
 const CLOSE_TIME_MSEC = 5000;
+// フェードアウト（animate-toast-out: 250ms）の完了通知が来ない場合に備えたフォールバックの待ち時間
+const REMOVAL_FALLBACK_MSEC = 1000;
 
 type Props = {
   /** トーストの状態を表す。表示するアイコンとタイトルの文字色が切り替わる。 */
@@ -50,16 +52,34 @@ export function Toast({
     onClickCloseRef.current = onClickClose;
   }, [onClickClose]);
 
+  // トースト終了の通知は 1 回に限る（animationend とフォールバックタイマーの二重発火防止）
+  const hasNotifiedCloseRef = useRef(false);
+
+  const notifyClose = useCallback(() => {
+    if (hasNotifiedCloseRef.current) {
+      return;
+    }
+    hasNotifiedCloseRef.current = true;
+    onClickCloseRef.current();
+  }, []);
+
   const handleClose = useCallback(() => {
     if (isAnimation) {
       setIsRemoving(true);
     } else {
-      onClickClose();
+      notifyClose();
     }
-  }, [isAnimation, onClickClose]);
+  }, [isAnimation, notifyClose]);
 
-  const handleAnimationEnd = (e: AnimationEvent<HTMLDivElement>) =>
-    window.getComputedStyle(e.currentTarget).opacity === '0' && onClickClose();
+  const handleAnimationEnd = (e: AnimationEvent<HTMLDivElement>) => {
+    // 子孫要素からバブリングしてきた animationend では閉じない
+    if (e.target !== e.currentTarget) {
+      return;
+    }
+    if (window.getComputedStyle(e.currentTarget).opacity === '0') {
+      notifyClose();
+    }
+  };
 
   useEffect(() => {
     if (!isAutoClose) {
@@ -70,12 +90,24 @@ export function Toast({
       if (isAnimation) {
         setIsRemoving(true);
       } else {
-        onClickCloseRef.current();
+        notifyClose();
       }
     }, CLOSE_TIME_MSEC);
 
     return () => window.clearTimeout(timer);
-  }, [isAutoClose, isAnimation]);
+  }, [isAutoClose, isAnimation, notifyClose]);
+
+  useEffect(() => {
+    if (!isRemoving) {
+      return;
+    }
+
+    // animationend が発火しない環境（グローバル CSS でのアニメーション無効化・非表示ツリー配下等）でも、
+    // 不可視のトーストが DOM に残り続けないよう確実に終了を通知する
+    const fallbackTimer = window.setTimeout(notifyClose, REMOVAL_FALLBACK_MSEC);
+
+    return () => window.clearTimeout(fallbackTimer);
+  }, [isRemoving, notifyClose]);
 
   // 自動で閉じないトーストで閉じるボタンまで無いと、利用者がトーストを消せなくなるための安全弁。
   const isCloseButtonShown = hasCloseButton || !isAutoClose;
@@ -118,7 +150,9 @@ export function Toast({
         */}
         <div className="flex min-w-0 flex-1 flex-col gap-2 pt-[3px]">
           <p className={titleClasses}>{children}</p>
-          {description != null && <p className="typography-label12regular break-words text-text01">{description}</p>}
+          {description != null && description !== '' && (
+            <p className="typography-label12regular break-words text-text01">{description}</p>
+          )}
         </div>
       </div>
       {isCloseButtonShown && (
