@@ -1,8 +1,10 @@
 import { createRequire } from 'node:module';
+import { fileURLToPath } from 'node:url';
 import type { StorybookConfig } from '@storybook/react-vite';
 import path, { dirname, join } from 'path';
 
 const require = createRequire(import.meta.url);
+const currentDir = dirname(fileURLToPath(import.meta.url));
 
 const config: StorybookConfig = {
   stories: ['../packages/**/*.stories.@(ts|tsx)', '../packages/**/*.mdx'],
@@ -33,7 +35,7 @@ const config: StorybookConfig = {
     return mergeConfig(config, {
       resolve: {
         alias: {
-          src: path.resolve(__dirname, '../src'),
+          src: path.resolve(currentDir, '../src'),
         },
       },
     });
