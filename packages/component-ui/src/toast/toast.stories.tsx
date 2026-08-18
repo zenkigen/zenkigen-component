@@ -35,6 +35,9 @@ export const Component: Story = {
   args: {
     state: 'success',
     children: 'テキスト',
+    // ToastProvider 経由と同じ「自動クローズ・閉じるボタンなし」の既定の見た目を示す
+    // （素の Toast の既定は isAutoClose=false のため、安全弁により閉じるボタンが表示される）
+    isAutoClose: true,
     hasCloseButton: false,
     width: 475,
     onClickClose: action('閉じる'),
@@ -48,7 +51,7 @@ export const States: Story = {
   render: () => (
     <div className="flex flex-col gap-2">
       {states.map((state) => (
-        <Toast key={state} state={state} width={475} onClickClose={action('閉じる')}>
+        <Toast key={state} state={state} width={475} isAutoClose onClickClose={action('閉じる')}>
           テキスト
         </Toast>
       ))}
@@ -60,7 +63,7 @@ export const WithCloseButton: Story = {
   render: () => (
     <div className="flex flex-col gap-2">
       {states.map((state) => (
-        <Toast key={state} state={state} width={475} hasCloseButton onClickClose={action('閉じる')}>
+        <Toast key={state} state={state} width={475} isAutoClose hasCloseButton onClickClose={action('閉じる')}>
           テキスト
         </Toast>
       ))}
@@ -73,10 +76,17 @@ export const WithDescription: Story = {
     <div className="flex flex-col gap-2">
       {states.map((state) => (
         <div key={state} className="flex items-start gap-4">
-          <Toast state={state} width={475} description="説明が入ります" onClickClose={action('閉じる')}>
+          <Toast state={state} width={475} isAutoClose description="説明が入ります" onClickClose={action('閉じる')}>
             テキスト
           </Toast>
-          <Toast state={state} width={475} description="説明が入ります" hasCloseButton onClickClose={action('閉じる')}>
+          <Toast
+            state={state}
+            width={475}
+            isAutoClose
+            description="説明が入ります"
+            hasCloseButton
+            onClickClose={action('閉じる')}
+          >
             テキスト
           </Toast>
         </div>
@@ -88,19 +98,20 @@ export const WithDescription: Story = {
 export const LongText: Story = {
   render: () => (
     <div className="flex flex-col gap-2">
-      <Toast state="error" width={475} hasCloseButton onClickClose={action('閉じる')}>
+      <Toast state="error" width={475} isAutoClose hasCloseButton onClickClose={action('閉じる')}>
         テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
       </Toast>
       <Toast
         state="information"
         width={475}
+        isAutoClose
         hasCloseButton
         description="説明テキストが折り返して複数行になる場合のレイアウトを確認します。説明テキストが折り返して複数行になる場合のレイアウトを確認します。"
         onClickClose={action('閉じる')}
       >
         テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
       </Toast>
-      <Toast state="success" width={475} hasCloseButton onClickClose={action('閉じる')}>
+      <Toast state="success" width={475} isAutoClose hasCloseButton onClickClose={action('閉じる')}>
         https://storybook.zenkigen.co.jp/?path=/docs/components-toast--docs&globals=&args=state:success
       </Toast>
     </div>

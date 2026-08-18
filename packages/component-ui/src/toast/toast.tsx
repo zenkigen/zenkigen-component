@@ -13,7 +13,7 @@ type Props = {
   state?: ToastState;
   /** トースト全体の幅。数値・文字列いずれも指定できる。 */
   width?: CSSProperties['width'];
-  /** true のとき 5 秒後に自動で閉じ、onClickClose を呼ぶ。 */
+  /** true のとき 5 秒後に自動で閉じ、onClickClose を呼ぶ。既定は false（ToastProvider 経由のトーストには既定で true が渡される）。 */
   isAutoClose?: boolean;
   /** true のときフェードイン / フェードアウトのアニメーションを有効にする。 */
   isAnimation?: boolean;
@@ -30,7 +30,9 @@ type Props = {
 export function Toast({
   state = 'information',
   width = 'auto',
-  isAutoClose = true,
+  // 既定 false は v1.22.0 までの互換維持のため据え置き（自動クローズしない既定では、安全弁により閉じるボタンが表示される）。
+  // 「自動クローズ・閉じるボタンなし」の新しい既定は ToastProvider が isAutoClose を明示的に渡すことで実現している。
+  isAutoClose = false,
   isAnimation = false,
   hasCloseButton = false,
   description,

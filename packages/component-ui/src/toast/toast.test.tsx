@@ -54,6 +54,7 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.useRealTimers();
+  vi.restoreAllMocks();
 });
 
 describe('Toast', () => {
@@ -90,13 +91,18 @@ describe('Toast', () => {
   });
 
   describe('閉じるボタン', () => {
-    it('既定では閉じるボタンが表示されないこと', () => {
+    it('既定（isAutoClose 未指定）では自動で閉じないため、安全弁により閉じるボタンが表示されること', () => {
       renderToast();
+      expect(screen.getByRole('button', { name: '閉じる' })).toBeInTheDocument();
+    });
+
+    it('isAutoClose=true かつ hasCloseButton 未指定では閉じるボタンが表示されないこと', () => {
+      renderToast({ isAutoClose: true });
       expect(screen.queryByRole('button', { name: '閉じる' })).not.toBeInTheDocument();
     });
 
-    it('hasCloseButton=true で閉じるボタンが表示されること', () => {
-      renderToast({ hasCloseButton: true });
+    it('isAutoClose=true でも hasCloseButton=true で閉じるボタンが表示されること', () => {
+      renderToast({ isAutoClose: true, hasCloseButton: true });
       expect(screen.getByRole('button', { name: '閉じる' })).toBeInTheDocument();
     });
 
@@ -125,13 +131,21 @@ describe('Toast', () => {
   });
 
   describe('自動クローズ', () => {
-    it('props 未指定でも 5 秒後に onClickClose が呼ばれること', async () => {
-      const { onClickClose } = renderToast();
+    it('isAutoClose=true のとき 5 秒後に onClickClose が呼ばれること', async () => {
+      const { onClickClose } = renderToast({ isAutoClose: true });
 
       expect(onClickClose).not.toHaveBeenCalled();
       await advanceToAutoClose();
 
       expect(onClickClose).toHaveBeenCalledTimes(1);
+    });
+
+    it('既定（isAutoClose 未指定）では 5 秒経過しても onClickClose が呼ばれないこと', async () => {
+      const { onClickClose } = renderToast();
+
+      await advanceToAutoClose();
+
+      expect(onClickClose).not.toHaveBeenCalled();
     });
 
     it('isAutoClose=false では 5 秒経過しても onClickClose が呼ばれないこと', async () => {
@@ -143,18 +157,44 @@ describe('Toast', () => {
     });
 
     it('アンマウント後はタイマーが発火しても onClickClose が呼ばれないこと', async () => {
-      const { onClickClose, unmount } = renderToast();
+      const { onClickClose, unmount } = renderToast({ isAutoClose: true });
 
       unmount();
       await advanceToAutoClose();
 
       expect(onClickClose).not.toHaveBeenCalled();
     });
+
+    it('再レンダリングで onClickClose の参照が変わってもタイマーはリセットされず、最新のコールバックが呼ばれること', async () => {
+      const initialOnClickClose = vi.fn();
+      const latestOnClickClose = vi.fn();
+      const { rerender } = render(
+        <Toast isAutoClose onClickClose={initialOnClickClose}>
+          テキスト
+        </Toast>,
+      );
+
+      await act(async () => {
+        vi.advanceTimersByTime(CLOSE_TIME_MSEC - 1000);
+      });
+      // ToastProvider はレンダーのたびに新しいインライン関数を渡すため、同じ状況を再現する
+      rerender(
+        <Toast isAutoClose onClickClose={latestOnClickClose}>
+          テキスト
+        </Toast>,
+      );
+      await act(async () => {
+        vi.advanceTimersByTime(1000);
+      });
+
+      expect(latestOnClickClose).toHaveBeenCalledTimes(1);
+      expect(initialOnClickClose).not.toHaveBeenCalled();
+    });
   });
 
   describe('アニメーション', () => {
     it('isAnimation=true では 5 秒経過だけでは onClickClose が呼ばれないこと', async () => {
-      const { onClickClose, root } = renderToast({ isAnimation: true });
+      const { onClickClose, root } = renderToast({ isAutoClose: true, isAnimation: true });
 
       await advanceToAutoClose();
 
@@ -163,7 +203,7 @@ describe('Toast', () => {
     });
 
     it('フェードアウト完了時に onClickClose が呼ばれること', async () => {
-      const { onClickClose, root } = renderToast({ isAnimation: true });
+      const { onClickClose, root } = renderToast({ isAutoClose: true, isAnimation: true });
 
       await advanceToAutoClose();
       fireFadeOutEnd(root);
@@ -339,5 +379,37 @@ describe('ToastProvider / useToast', () => {
     expect(messages).toHaveLength(2);
     expect(messages[0]).toContain('1 件目');
     expect(messages[1]).toContain('2 件目');
+  });
+
+  it('後からトーストを追加しても、先に表示したトーストの自動クローズがリセットされないこと', async () => {
+    let idSeed = 0;
+    vi.spyOn(Math, 'random').mockImplementation(() => {
+      idSeed += 1;
+
+      return idSeed / 100000;
+    });
+
+    render(
+      <ToastProvider>
+        <AddToastButton args={{ message: '1 件目', state: 'information' }} label="1 件目を表示" />
+        <AddToastButton args={{ message: '2 件目', state: 'information' }} label="2 件目を表示" />
+      </ToastProvider>,
+    );
+
+    clickAddToast('1 件目を表示');
+    await act(async () => {
+      vi.advanceTimersByTime(CLOSE_TIME_MSEC - 1000);
+    });
+    // 2 件目の追加で Provider が再レンダーされ、1 件目の onClickClose は新しいインライン関数に差し替わる
+    clickAddToast('2 件目を表示');
+    await act(async () => {
+      vi.advanceTimersByTime(1000);
+    });
+
+    // 1 件目は表示から 5 秒でフェードアウトを開始し、2 件目（表示から 1 秒）はまだ表示中
+    const toastElements = Array.from(getToastContainer().children);
+
+    expect(toastElements[0]?.className).toMatch(/animate-toast-out/);
+    expect(toastElements[1]?.className).not.toMatch(/animate-toast-out/);
   });
 });
