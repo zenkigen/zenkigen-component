@@ -61,34 +61,47 @@ dist-tag は**タグ名にハイフン（`-`）を含むか**で自動判定す�
 >
 > **手順は共通。コミット先ブランチのみ異なる。**
 
-1. **version bump**
+1. **リリースブランチに切り替え**
+   - `git checkout <リリースブランチ>` → `git pull` で最新化する。
+   - **以降の編集・コマンドはすべてリリースブランチ上で行う**（別ブランチで version bump すると、誤った内容を起点に編集してしまうほか、未コミット変更が衝突して切り替えに失敗する）。
+
+2. **version bump**
    - 4つの `packages/*/package.json` の `version` 行を新 version に更新。
 
-2. **lockfile 更新**
+3. **lockfile 更新**
    - `yarn install` を実行し `yarn.lock` の resolution を更新。
 
-3. **commit（リリースブランチに直接）**
+4. **commit（リリースブランチに直接）**
    - リリースブランチ上で直接 commit する（PR を通さない）。
    - メッセージ形式: `release: X.Y.Z`
    - 対象: 4 package.json ＋ yarn.lock
 
-4. **push ＆ タグ作成・push**
+5. **push ＆ タグ作成・push**
    - `git push origin <リリースブランチ>` で release コミットを push。
    - `git tag vX.Y.Z` → `git push origin vX.Y.Z`（このタグ push が publish.yaml を発火させる）。
 
-5. **CI publish（自動）**
+6. **CI publish（自動）**
    - `publish.yaml`（`on: push: tags: 'v*'`）が発火。
    - `yarn install` → `yarn build-lib:all` → `yarn publish:all --tag <dist-tag> --tolerate-republish`。
    - `publish:all` = `yarn workspaces foreach --all --exclude zenkigen-component npm publish`。`--tag` は CI がタグ名から判定（安定版 → `latest` / プレリリース → `next`）。
 
-6. **確認**
+7. **確認**
    - `npm view @zenkigen-inc/component-ui version` で公開を確認。
 
 ### 具体例: 1.20.4 → 1.20.5 をリリースする
 
-人が手を動かすのは「4つの `version` 行の書き換え → `yarn install` → commit → tag push」だけ。ビルドや publish コマンドは打たない（CI が実施する）。
+人が手を動かすのは「リリースブランチへの切り替え → 4つの `version` 行の書き換え → `yarn install` → commit → tag push」だけ。ビルドや publish コマンドは打たない（CI が実施する）。
 
-#### ① version 行を書き換える（手動編集）
+#### ① リリースブランチに切り替える
+
+**version 行を書き換える前に**リリースブランチへ切り替え、最新化する。
+
+```bash
+git checkout main                            # v1 のリリースブランチ
+git pull
+```
+
+#### ② version 行を書き換える（手動編集）
 
 4つすべての `packages/*/package.json` で `version` 行を変更する。
 
@@ -97,12 +110,11 @@ dist-tag は**タグ名にハイフン（`-`）を含むか**で自動判定す�
 +  "version": "1.20.5",
 ```
 
-#### ② 以降はコマンド
+#### ③ 以降はコマンド
 
 ```bash
 yarn install                                 # yarn.lock を 1.20.5 に更新
 
-git checkout main                            # v1 のリリースブランチ
 git add packages/*/package.json yarn.lock
 git commit -m "release: 1.20.5"
 git push origin main
@@ -121,7 +133,16 @@ npm view @zenkigen-inc/component-ui version  # 1.20.5 を確認
 
 ### 具体例: 2.0.0-rc.0 を next でリリースする
 
-#### ① version 行を書き換える（手動編集）
+#### ① リリースブランチに切り替える
+
+**version 行を書き換える前に**リリースブランチへ切り替え、最新化する。
+
+```bash
+git checkout v2-main                                  # v2 のリリースブランチ
+git pull
+```
+
+#### ② version 行を書き換える（手動編集）
 
 4つすべての `packages/*/package.json` で `version` 行を変更する。
 
@@ -130,12 +151,11 @@ npm view @zenkigen-inc/component-ui version  # 1.20.5 を確認
 +  "version": "2.0.0-rc.0",
 ```
 
-#### ② 以降はコマンド
+#### ③ 以降はコマンド
 
 ```bash
 yarn install                                          # yarn.lock を 2.0.0-rc.0 に更新
 
-git checkout v2-main                                  # v2 のリリースブランチ
 git add packages/*/package.json yarn.lock
 git commit -m "release: 2.0.0-rc.0"
 git push origin v2-main
