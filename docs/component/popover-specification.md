@@ -173,7 +173,7 @@ type PopoverPlacement =
 
 Popoverの配置は`placement` propで制御され、Floating UIが自動的に最適な位置を計算します。
 
-`placement`は**希望する配置**として扱われます。指定した位置のままではビューポートからはみ出す場合、`flip`により反対側へ反転し、それでも軸方向にはみ出す場合は`shift`によりビューポート内へずらされます。収まる場合は指定した`placement`のまま表示されます。
+`placement`は**希望する配置**として扱われます。指定した位置のままではビューポートからはみ出す場合、`flip`によりメイン軸の反対側へ反転し（揃え位置`-start`/`-end`は維持されます）、クロス軸方向のはみ出しは`shift`が必要最小限だけずらして収めます。収まる場合は指定した`placement`のまま表示されます。
 
 #### 基本配置
 
@@ -339,7 +339,7 @@ Popoverコンポーネントは[@floating-ui/react](https://floating-ui.com/)を
 - `useFloating`: 位置計算とref管理
 - `autoUpdate`: トリガー要素の移動やリサイズ時の自動位置更新
 - `offset`: トリガーとコンテンツ間の間隔制御
-- `flip`: ビューポートに収まらない場合の反対側への反転
+- `flip`: ビューポートに収まらない場合のメイン軸の反転（揃え位置は維持）
 - `shift`: ビューポートからはみ出す場合のずらし
 - `strategy: 'fixed'`: `position: fixed`を使用した固定配置
 - `useDismiss` + `useInteractions`: 外側クリックの検知を含むインタラクションのハンドリング
@@ -350,7 +350,7 @@ Popoverコンポーネントは[@floating-ui/react](https://floating-ui.com/)を
 位置計算は`offset` → `flip` → `shift`の順で適用されます。`flip`がメイン軸（上下の反転）、`shift`がクロス軸（左右のずらし）を担当するため、この順序が前提です。
 
 - `offset`: トリガー要素からの距離を制御
-- `flip`: 指定した`placement`のままではビューポートに収まらない場合、反対側へ反転する（`padding: 8px`）
+- `flip`: 指定した`placement`のままではビューポートに収まらない場合、メイン軸の反対側へ反転する（`padding: 8px`・`flipAlignment: false`）。揃え位置（`-start`/`-end`）は反転せず、クロス軸方向は`shift`に委ねる
 - `shift`: 反転しても軸方向にはみ出す場合、ビューポート内に収まるようずらす（`padding: 8px`）
 - `autoUpdate`: ビューポート変更時の自動更新
 - `whileElementsMounted`: 要素がマウントされている間の継続的な位置更新

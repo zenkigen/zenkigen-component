@@ -935,17 +935,21 @@ describe('Popover', () => {
       expect(MAX_BOTTOM).toBe(760);
     });
 
-    it('右にはみ出す場合は左へずれること', async () => {
-      // bottom-start はトリガー左端 900 に揃うため、右端は 900 + 200 = 1100 で許容右端 1016 を 84 超える
+    it('右にはみ出す場合は揃え位置を保ったまま shift の最小移動で左へずれること', async () => {
+      // トリガー（幅 100）よりパネル（幅 300）が広い非対称構成にしている。
+      // bottom-start の希望位置 x=850、右端 1150 で許容右端 1016 を 134 超えるため:
+      //   - shift の最小移動:              x = 1016 − 300 = 716（bottom-start を維持）
+      //   - flip が揃え位置を反転した場合: x = 950 − 300 = 650（bottom-end。flipAlignment: false で防止）
+      // 幅が同じだと両者の x が一致してしまい（トリガー左端 = 右端揃えの位置）、
+      // flipAlignment の退行を検出できないため、必ず非対称にすること
       mockRects({
-        trigger: createRect({ width: 200, height: 32, top: 100, left: 900 }),
-        floating: createRect({ width: 200, height: 100, top: 0, left: 0 }),
+        trigger: createRect({ width: 100, height: 32, top: 100, left: 850 }),
+        floating: createRect({ width: 300, height: 100, top: 0, left: 0 }),
       });
       renderOpenPopover('bottom-start');
 
-      // 900 − 84 = 816
       await waitFor(() => {
-        expect(getFloatingElement().style.left).toBe('816px');
+        expect(getFloatingElement().style.left).toBe('716px');
       });
       expect(MAX_RIGHT).toBe(1016);
     });

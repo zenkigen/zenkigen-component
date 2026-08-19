@@ -557,8 +557,8 @@ const OverflowAvoidanceReadout = ({ requestedPlacement }: { requestedPlacement: 
   const shiftY = Math.round(floating.middlewareData.shift?.y ?? 0);
   const hasShifted = shiftX !== 0 || shiftY !== 0;
 
-  // flip は「上下左右の反転」だけでなく「start / end の揃え位置の変更」も行う。
-  // どちらが起きたか判別できるよう、side（'-' の前）と alignment を分けて比較する
+  // Popover は flipAlignment: false のため、通常は side（上下左右）の反転しか起きない。
+  // 「揃え位置を変更」の表示は flipAlignment が誤って有効化された場合に気づけるよう残している
   const requestedSide = requestedPlacement.split('-')[0];
   const actualSide = actualPlacement.split('-')[0];
   const hasSideFlipped = actualSide !== requestedSide;

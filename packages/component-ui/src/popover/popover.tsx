@@ -41,13 +41,17 @@ export function Popover({
   /**
    * 順序は offset → flip → shift で固定する
    *
-   * flip がメイン軸（bottom↔top）、shift がクロス軸（左右）を担当する。
-   * 逆順にすると shift がずらした結果を flip が判定してしまう。
+   * flip がメイン軸（bottom↔top）の反転のみを担当し、クロス軸（左右）は shift が
+   * 必要最小限だけずらす。逆順にすると shift がずらした結果を flip が判定してしまう。
+   *
+   * flipAlignment は既定で有効なため、無効化しないと flip が揃え位置（start/end）まで
+   * 反転させてこの分担が崩れる。トリガーより広いパネル（例: DatePicker のカレンダー）が
+   * 画面端に寄った際、shift の最小移動ではなく反対側の端揃えに切り替わってしまう。
    */
   const middleware = useMemo(
     () => [
       offset(offsetValue),
-      flip({ padding: FLOATING_VIEWPORT_PADDING }),
+      flip({ padding: FLOATING_VIEWPORT_PADDING, flipAlignment: false }),
       shift({ padding: FLOATING_VIEWPORT_PADDING }),
     ],
     [offsetValue],
