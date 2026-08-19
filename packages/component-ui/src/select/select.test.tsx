@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React, { useState } from 'react';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { MODAL_OPEN_EVENT } from '../hooks/use-dismiss-on-modal-open';
 import { Select } from './select';
@@ -451,6 +451,89 @@ describe('Select', () => {
       fireEvent.click(selectButton);
       const optionList = screen.getByRole('list');
       expect(optionList.style.maxHeight).toBe('120px');
+    });
+
+    // 既定値 = オプション 1 件の高さ × 8.5 + リスト上端の余白 8px + 枠線 2px
+    it.each([
+      ['x-small', '282px'],
+      ['small', '282px'],
+      ['medium', '282px'],
+      ['large', '350px'],
+    ])('optionListMaxHeight 未指定のとき %s サイズでは既定値 %s が適用されること', (size, expected) => {
+      render(<SelectTestComponent size={size} />);
+      const selectButton = screen.getByRole('button');
+
+      fireEvent.click(selectButton);
+      const optionList = screen.getByRole('list');
+      expect(optionList.style.maxHeight).toBe(expected);
+    });
+
+    it('optionListMaxHeight="none" で高さ制限を解除できること', () => {
+      render(<SelectTestComponent optionListMaxHeight="none" />);
+      const selectButton = screen.getByRole('button');
+
+      fireEvent.click(selectButton);
+      const optionList = screen.getByRole('list');
+      expect(optionList.style.maxHeight).toBe('none');
+    });
+
+    it('optionListMaxHeight={0} が既定値で上書きされないこと', () => {
+      render(<SelectTestComponent optionListMaxHeight={0} />);
+      const selectButton = screen.getByRole('button');
+
+      fireEvent.click(selectButton);
+      const optionList = screen.getByRole('list');
+      expect(optionList.style.maxHeight).toBe('0');
+    });
+  });
+
+  describe('選択項目への自動スクロール', () => {
+    // jsdom はレイアウトを計算しないため、スクロールの発生条件になる寸法を mock する
+    const mockListLayout = ({ scrollHeight, clientHeight }: { scrollHeight: number; clientHeight: number }) => {
+      vi.spyOn(Element.prototype, 'scrollHeight', 'get').mockReturnValue(scrollHeight);
+      vi.spyOn(Element.prototype, 'clientHeight', 'get').mockReturnValue(clientHeight);
+      vi.spyOn(HTMLElement.prototype, 'offsetTop', 'get').mockReturnValue(320);
+      vi.spyOn(HTMLElement.prototype, 'offsetHeight', 'get').mockReturnValue(32);
+    };
+
+    // scrollTo は jsdom で未実装。spy で検証するため vitest mock を差す
+    let scrollToMock: ReturnType<typeof vi.fn>;
+
+    beforeEach(() => {
+      scrollToMock = vi.fn();
+      Element.prototype.scrollTo = scrollToMock as unknown as Element['scrollTo'];
+    });
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    it('スクロールが発生する場合、選択中のオプションが中央に来るようスクロールされること', () => {
+      mockListLayout({ scrollHeight: 500, clientHeight: 282 });
+      render(<SelectTestComponent initialOption={testOptions[1]} />);
+
+      fireEvent.click(screen.getByRole('button'));
+
+      // offsetTop 320 - (clientHeight 282 - offsetHeight 32) / 2 = 195
+      expect(scrollToMock).toHaveBeenCalledWith({ top: 195 });
+    });
+
+    it('全件が収まっている場合はスクロールされないこと', () => {
+      mockListLayout({ scrollHeight: 282, clientHeight: 282 });
+      render(<SelectTestComponent initialOption={testOptions[1]} />);
+
+      fireEvent.click(screen.getByRole('button'));
+
+      expect(scrollToMock).not.toHaveBeenCalled();
+    });
+
+    it('未選択の場合はスクロールされないこと', () => {
+      mockListLayout({ scrollHeight: 500, clientHeight: 282 });
+      render(<SelectTestComponent />);
+
+      fireEvent.click(screen.getByRole('button'));
+
+      expect(scrollToMock).not.toHaveBeenCalled();
     });
   });
 

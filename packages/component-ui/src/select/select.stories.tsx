@@ -28,7 +28,8 @@ const meta: Meta<typeof Select> = {
     },
     optionListMaxHeight: {
       type: 'string',
-      description: 'オプションリストの最大高さ',
+      description:
+        'オプションリストの最大高さ。未指定の場合はオプション 8.5 個分（large: 350px、それ以外: 282px）。"none" で制限を解除',
     },
     placeholder: {
       type: 'string',
@@ -918,6 +919,85 @@ export const DismissOnModalOpen: Story = {
           '1秒後に Select が自動で開き、さらに 2秒後に Modal が表示される。Modal の表示と同時に Select の List が閉じれば成功。',
           '',
           '**仕組み**: Modal は `isOpen` が `true` に切り替わる瞬間に `window` へ `zenkigen-modal-open` カスタムイベントを dispatch する。Select 内部の `useDismissOnModalOpen` フックがそれを listen して List を閉じる。同じ仕組みが Dropdown / SelectSort / Popover / DatePicker（Popover 経由）にも横展開されている。',
+        ].join('\n'),
+      },
+    },
+  },
+};
+// 既定の高さ（8.5 個分）でスクロールが発生することを確認するための長いリスト
+const longOptionsList: SelectOption[] = Array.from({ length: 12 }, (_, index) => ({
+  id: `${index + 1}`,
+  label: `選択肢${index + 1}`,
+  value: `${index + 1}`,
+}));
+
+function DefaultOptionListMaxHeightContent() {
+  const [selectedOption1, setSelectedOption1] = useState<SelectOption | null>(null);
+  const [selectedOption2, setSelectedOption2] = useState<SelectOption | null>(null);
+  const [selectedOption3, setSelectedOption3] = useState<SelectOption | null>(longOptionsList[9] ?? null);
+  const [selectedOption4, setSelectedOption4] = useState<SelectOption | null>(null);
+
+  return (
+    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '80px', height: '420px' }}>
+      <Select
+        size="medium"
+        placeholder="medium（既定 282px）"
+        selectedOption={selectedOption1}
+        onChange={(option) => setSelectedOption1(option)}
+      >
+        {longOptionsList.map((option) => (
+          <Select.Option key={option.id} option={option} />
+        ))}
+      </Select>
+      <Select
+        size="large"
+        placeholder="large（既定 350px）"
+        selectedOption={selectedOption2}
+        onChange={(option) => setSelectedOption2(option)}
+      >
+        {longOptionsList.map((option) => (
+          <Select.Option key={option.id} option={option} />
+        ))}
+      </Select>
+      <Select
+        size="medium"
+        placeholder="選択済み（選択解除ボタンあり）"
+        selectedOption={selectedOption3}
+        onChange={(option) => setSelectedOption3(option)}
+      >
+        {longOptionsList.map((option) => (
+          <Select.Option key={option.id} option={option} />
+        ))}
+      </Select>
+      <Select
+        size="medium"
+        placeholder="none（制限解除）"
+        optionListMaxHeight="none"
+        selectedOption={selectedOption4}
+        onChange={(option) => setSelectedOption4(option)}
+      >
+        {longOptionsList.map((option) => (
+          <Select.Option key={option.id} option={option} />
+        ))}
+      </Select>
+    </div>
+  );
+}
+
+export const DefaultOptionListMaxHeight: Story = {
+  render: () => <DefaultOptionListMaxHeightContent />,
+  parameters: {
+    chromatic: { disable: true },
+    docs: {
+      description: {
+        story: [
+          '`optionListMaxHeight` 未指定時の既定の高さを確認する Story（オプション 12 件）。',
+          '',
+          '既定値はオプション 8.5 個分で、`size` に応じて x-small / small / medium は 282px、large は 350px になる。末尾の 0.5 個はスクロールできることを示すためのもの。',
+          '',
+          '**選択解除ボタンも 8.5 個に含まれる**ため、選択済みのときは表示されるオプション数がその分減る（3 番目の Select）。',
+          '',
+          '高さ制限を外して全件表示したい場合は `optionListMaxHeight="none"` を指定する（4 番目の Select）。',
         ].join('\n'),
       },
     },
