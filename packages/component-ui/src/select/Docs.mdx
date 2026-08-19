@@ -23,6 +23,27 @@ import spec from '../../../../docs/component/select-specification.md?raw';
 
 リスト形式の複数の選択肢の中から選択できるコンポーネントです。Listと組み合わせて使用します。
 
+## オプションリストの高さ
+
+オプションリストの高さは、既定でオプション 8.5 個分に制限されます（`size` が `large` のとき 350px、それ以外は 282px）。末尾の 0.5 個は、スクロールできることを示すためのものです。「選択解除」ボタンもこの 8.5 個に含まれるため、選択済みのときは表示されるオプション数がその分減ります。
+
+高さを変えたい場合は `optionListMaxHeight` に任意の CSS の長さを指定します。制限を外して全件表示したい場合は `optionListMaxHeight="none"` を指定してください。ただし件数によってはリストが画面外へはみ出すため、件数が可変の場合は既定値のまま使うことを推奨します。
+
+<Source
+  code={`// 既定（オプション 8.5 個分）
+<Select placeholder="選択">{/* ... */}</Select>
+
+// 高さを指定する
+
+<Select placeholder="選択" optionListMaxHeight={120}>
+  {/* ... */}
+</Select>
+
+// 制限を外して全件表示する
+
+<Select placeholder="選択" optionListMaxHeight="none">{/* ... */}</Select>`}
+/>
+
 ## 設計の原則 （Do）
 
 ### 選択肢が4つ以上ある場合に使用します

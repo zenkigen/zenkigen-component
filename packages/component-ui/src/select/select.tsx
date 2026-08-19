@@ -16,6 +16,17 @@ import type { SelectOption } from './type';
 // Floating UI の定数
 const FLOATING_OFFSET = 4;
 
+/** オプション 1 件の高さ（select-item.tsx・select-list.tsx の h-8 / h-10 と対応） */
+const OPTION_HEIGHT_PX = { 'x-small': 32, small: 32, medium: 32, large: 40 } as const;
+/** 既定で表示するオプション数。末尾 0.5 個でスクロール可能であることを示す */
+const DEFAULT_VISIBLE_OPTION_COUNT = 8.5;
+/** リスト上端の余白（py-2 の片側 8px）と枠線（variant="outline" の上下 1px ずつ） */
+const LIST_VERTICAL_CHROME_PX = 10;
+
+/** optionListMaxHeight 未指定時の既定値（x-small / small / medium: 282px、large: 350px） */
+const getDefaultOptionListMaxHeight = (size: keyof typeof OPTION_HEIGHT_PX) =>
+  OPTION_HEIGHT_PX[size] * DEFAULT_VISIBLE_OPTION_COUNT + LIST_VERTICAL_CHROME_PX;
+
 type Props = {
   /** コンポーネントのサイズ */
   size?: 'x-small' | 'small' | 'medium' | 'large';
@@ -31,7 +42,7 @@ type Props = {
   placeholderIcon?: IconName;
   /** 現在選択されているオプション */
   selectedOption?: SelectOption | null;
-  /** オプションリストの最大高さ */
+  /** オプションリストの最大高さ。未指定の場合はオプション 8.5 個分（x-small / small / medium: 282px、large: 350px）。"none" で制限を解除する */
   optionListMaxHeight?: CSSProperties['height'];
   /** 無効状態の制御 */
   isDisabled?: boolean;
@@ -101,6 +112,9 @@ export function Select({
   });
 
   const handleClickToggle = () => setIsOptionListOpen((prev) => !prev);
+
+  // 未指定のときのみ既定値を使う（0 を潰さないため ?? を使用する）
+  const resolvedOptionListMaxHeight = optionListMaxHeight ?? getDefaultOptionListMaxHeight(size);
 
   const buttonVariant: 'outline' | 'text' | 'outlineError' | 'textError' =
     isError && !isDisabled ? (`${variant}Error` as 'outlineError' | 'textError') : variant;
@@ -191,7 +205,7 @@ export function Select({
         {isOptionListOpen && !isDisabled && (
           <FloatingPortal>
             <div className="relative z-popover">
-              <SelectList ref={refs.setFloating} maxHeight={optionListMaxHeight}>
+              <SelectList ref={refs.setFloating} maxHeight={resolvedOptionListMaxHeight}>
                 {children}
               </SelectList>
             </div>
