@@ -2,7 +2,7 @@ import { focusVisible } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
 import { DayButton, type DayButtonProps } from 'react-day-picker';
 
-import { DAY_PICKER_FONT_SIZE, dayButtonBaseClass } from './date-picker-styles';
+import { useDatePickerSizeTokens } from './date-picker-styles';
 
 /**
  * カレンダーの日付ボタン
@@ -11,6 +11,7 @@ import { DAY_PICKER_FONT_SIZE, dayButtonBaseClass } from './date-picker-styles';
  * react-day-picker の DayButton を使用してキーボードナビゲーションを維持
  */
 export const CustomDayButton = ({ day, modifiers, className, style, ...buttonProps }: DayButtonProps) => {
+  const { tokens } = useDatePickerSizeTokens();
   const isSelected = Boolean(modifiers.selected);
   const isOutside = Boolean(modifiers.outside);
   const isMinMaxDisabled = Boolean(modifiers.minMaxDisabled);
@@ -27,10 +28,10 @@ export const CustomDayButton = ({ day, modifiers, className, style, ...buttonPro
       {...buttonProps}
       day={day}
       modifiers={modifiers}
-      style={{ ...style, fontSize: DAY_PICKER_FONT_SIZE }}
+      style={{ ...style, fontSize: tokens.dayButtonFontSize }}
       className={clsx(
         className,
-        dayButtonBaseClass,
+        tokens.dayButtonClass,
         // 共通: フォーカスリング（有効な日のみ）
         // react-day-picker の rdp-day_button クラスが outline: none を設定しているため、!important で上書き
         !isDisabledDay && focusVisible.normalImportant,
