@@ -41,10 +41,12 @@ describe('DatePicker', () => {
     });
 
     /**
-     * size ごとのカレンダー寸法
+     * size ごとの見た目のトークン適用
      *
-     * x-large だけカレンダーが拡大される。既存 3 サイズは同一トークンを共有しているため、
-     * 代表として medium を対照に置き、リファクタで既存の見た目が変わっていないことを検出する。
+     * カレンダー寸法は small / medium / large が共通で、x-large だけ拡大される。
+     * medium は共通トークン（BASE_TOKENS）の代表（small は medium と同一のため省略）。
+     * large は独自値を持つトリガーアイコンと ErrorMessage を含めて検証する。
+     * date-picker-styles.ts のリファクタで既存の見た目が変わっていないことの検出を兼ねる。
      */
     const calendarSizeCases = [
       {
@@ -60,6 +62,25 @@ describe('DatePicker', () => {
         todayButtonSizeClass: 'h-8',
         clearButtonSizeClass: 'h-6',
         errorTypography: 'typography-label11regular',
+        // Icon small（16px）
+        triggerIconSelector: '.w-4.h-4',
+      },
+      {
+        // カレンダー寸法は medium と共通。トリガーアイコンと ErrorMessage だけ独自値を持つ
+        size: 'large',
+        rootFontSize: '12px',
+        dayWidth: '30px',
+        dayButtonWidth: '28px',
+        navHeight: '30px',
+        dayButtonFontSize: '12px',
+        dayButtonSizeClass: 'size-full',
+        monthLabelTypography: 'typography-label12bold',
+        weekdaySizeClass: 'size-7',
+        todayButtonSizeClass: 'h-8',
+        clearButtonSizeClass: 'h-6',
+        errorTypography: 'typography-label12regular',
+        // Icon medium（24px）
+        triggerIconSelector: '.w-6.h-6',
       },
       {
         size: 'x-large',
@@ -75,10 +96,12 @@ describe('DatePicker', () => {
         todayButtonSizeClass: 'h-10',
         clearButtonSizeClass: 'h-10',
         errorTypography: 'typography-label12regular',
+        // Icon medium（24px）
+        triggerIconSelector: '.w-6.h-6',
       },
     ] as const;
 
-    describe.each(calendarSizeCases)('size=$size のカレンダー寸法', (expected) => {
+    describe.each(calendarSizeCases)('size=$size のサイズ適用', (expected) => {
       const renderAndOpen = async () => {
         const user = userEvent.setup();
         const { container } = render(<DatePicker value={null} onChange={vi.fn()} size={expected.size} />);
@@ -133,18 +156,12 @@ describe('DatePicker', () => {
 
         expect(screen.getByText('エラーメッセージ')).toHaveClass(expected.errorTypography);
       });
-    });
 
-    it('size=x-large のトリガーアイコンが medium（24px）になること', () => {
-      const { container } = render(<DatePicker value={null} onChange={vi.fn()} size="x-large" />);
+      it('トリガーアイコンのサイズが適用されること', () => {
+        const { container } = render(<DatePicker value={null} onChange={vi.fn()} size={expected.size} />);
 
-      expect(container.querySelector('.w-6.h-6')).not.toBeNull();
-    });
-
-    it('size=medium のトリガーアイコンが small（16px）のままであること', () => {
-      const { container } = render(<DatePicker value={null} onChange={vi.fn()} size="medium" />);
-
-      expect(container.querySelector('.w-4.h-4')).not.toBeNull();
+        expect(container.querySelector(expected.triggerIconSelector)).not.toBeNull();
+      });
     });
   });
 
