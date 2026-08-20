@@ -2,8 +2,7 @@ import { focusVisible } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
 import { DayButton, type DayButtonProps } from 'react-day-picker';
 
-import { useDatePickerCompoundContext } from './date-picker-context';
-import { DATE_PICKER_SIZE_TOKENS } from './date-picker-styles';
+import { useDatePickerSizeTokens } from './date-picker-styles';
 
 /**
  * カレンダーの日付ボタン
@@ -12,8 +11,7 @@ import { DATE_PICKER_SIZE_TOKENS } from './date-picker-styles';
  * react-day-picker の DayButton を使用してキーボードナビゲーションを維持
  */
 export const CustomDayButton = ({ day, modifiers, className, style, ...buttonProps }: DayButtonProps) => {
-  const { size } = useDatePickerCompoundContext('DatePicker のカレンダー');
-  const tokens = DATE_PICKER_SIZE_TOKENS[size];
+  const { tokens } = useDatePickerSizeTokens();
   const isSelected = Boolean(modifiers.selected);
   const isOutside = Boolean(modifiers.outside);
   const isMinMaxDisabled = Boolean(modifiers.minMaxDisabled);

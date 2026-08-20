@@ -2,7 +2,8 @@ import { clsx } from 'clsx';
 import type { CSSProperties } from 'react';
 import { getDefaultClassNames } from 'react-day-picker';
 
-import type { DatePickerSize } from './date-picker-context';
+import type { DatePickerContextValue, DatePickerSize } from './date-picker-context';
+import { useDatePickerCompoundContext } from './date-picker-context';
 
 const defaultDayPickerClassNames = getDefaultClassNames();
 
@@ -146,4 +147,20 @@ export const DATE_PICKER_SIZE_TOKENS: Record<DatePickerSize, DatePickerSizeToken
   medium: BASE_TOKENS,
   large: LARGE_TOKENS,
   'x-large': X_LARGE_TOKENS,
+};
+
+/**
+ * DatePicker 配下で、現在の size に対応するトークンと context の値を取得する
+ *
+ * 「context を購読して DATE_PICKER_SIZE_TOKENS を引く」パターンがカレンダーの
+ * カスタムコンポーネントと ErrorMessage に重複しないよう一箇所に集約する。
+ * context（import なし）→ styles（context を import）という一方向の依存を保つため、
+ * date-picker-context.tsx ではなくこのファイルに置いている。
+ */
+export const useDatePickerSizeTokens = (
+  componentName = 'DatePicker のカレンダー',
+): DatePickerContextValue & { tokens: DatePickerSizeTokens } => {
+  const context = useDatePickerCompoundContext(componentName);
+
+  return { ...context, tokens: DATE_PICKER_SIZE_TOKENS[context.size] };
 };
