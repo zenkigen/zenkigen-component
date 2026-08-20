@@ -78,34 +78,38 @@ dist-tag は**タグ名にハイフン（`-`）を含むか**で自動判定す�
 >
 > **手順は共通。コミット先ブランチのみ異なる。**
 
-1. **リリースブランチに切り替え**
+1. **リリースブランチに切り替える**
    - `git checkout <リリースブランチ>` → `git pull` で最新化する。
-   - **以降の編集・コマンドはすべてリリースブランチ上で行う**（別ブランチで version bump すると、誤った内容を起点に編集してしまうほか、未コミット変更が衝突して切り替えに失敗する）。
+   - **以降の編集・コマンドはすべてリリースブランチ上で行う**（別ブランチで version を書き換えると、誤った内容を起点に編集してしまうほか、未コミット変更が衝突して切り替えに失敗する）。
 
-2. **version bump**
-   - 4つの `packages/*/package.json` の `version` 行を新 version に更新。
+2. **4 つの `package.json` の `version` を書き換える**
+   - `packages/*/package.json`（ui / config / icons / theme）の `version` 行を新しいバージョンに更新する。手動編集でよい。
+   - ここで書き換えるのは `version` 行だけ。内部依存は `workspace:*` なので触らない。
 
-3. **lockfile が変化しないことを確認**
-   - `yarn install --immutable` を実行する（CI と同条件。lockfile を書き換える必要があれば失敗する）。
-   - 続けて `git status --short` を確認し、**変更が 4 つの `package.json` だけ**であることを見る。
+3. **`yarn install --immutable` を実行する**
+   - CI と同条件で流す。lockfile を書き換える必要がある状態なら**ここで失敗する**ので、不整合を push 前に検出できる。
+   - 続けて `git status --short` を見て、**変更が 4 つの `package.json` だけ**であることを確認する。
    - `yarn.lock` に差分が出たら異常。commit せず中断して調査する（[lockfile に差分が出た場合](#lockfile-に差分が出た場合)）。
 
-4. **commit（リリースブランチに直接）**
-   - リリースブランチ上で直接 commit する（PR を通さない）。
+4. **4 つの `package.json` だけを commit する**
+   - `git add packages/*/package.json` で対象を絞る（`git add .` は使わない）。
    - メッセージ形式: `release: X.Y.Z`
-   - 対象: 4 package.json のみ（`git add packages/*/package.json`）
+   - リリースブランチ上で直接 commit する（PR を通さない）。
 
-5. **push ＆ タグ作成・push**
-   - `git push origin <リリースブランチ>` で release コミットを push。
-   - `git tag vX.Y.Z` → `git push origin vX.Y.Z`（このタグ push が publish.yaml を発火させる）。
+5. **リリースコミットを push する**
+   - `git push origin <リリースブランチ>`
 
-6. **CI publish（自動）**
-   - `publish.yaml`（`on: push: tags: 'v*'`）が発火。
-   - `yarn install` → `yarn build-lib:all` → `yarn publish:all --tag <dist-tag> --tolerate-republish`。
+6. **`vX.Y.Z` タグを作成して push する**
+   - `git tag vX.Y.Z` → `git push origin vX.Y.Z`
+   - ⚠️ **この push が publish の起点**。以降は自動で npm 公開まで進むため、実行前にバージョン番号とタグ名（プレリリースならハイフン付き）を再確認する。
+
+7. **CI の publish 完了を待つ**
+   - ここから先に手作業はない。`publish.yaml`（`on: push: tags: 'v*'`）が発火する。
+   - CI の中身: `yarn install` → `yarn build-lib:all` → `yarn publish:all --tag <dist-tag> --tolerate-republish`。
    - `publish:all` = `yarn workspaces foreach --all --exclude zenkigen-component npm publish`。`--tag` は CI がタグ名から判定（安定版 → `latest` / プレリリース → `next`）。
 
-7. **確認**
-   - `npm view @zenkigen-inc/component-ui version` で公開を確認。
+8. **npm に公開されたことを確認する**
+   - `npm view @zenkigen-inc/component-ui version`
 
 ### lockfile に差分が出た場合
 
@@ -131,7 +135,7 @@ git diff yarn.lock
 
 ### 具体例: 1.22.0 → 1.22.1 をリリースする
 
-人が手を動かすのは「リリースブランチへの切り替え → 4つの `version` 行の書き換え → 確認 → commit → tag push」だけ。ビルドや publish コマンドは打たない（CI が実施する）。
+人が手を動かすのはステップ 1〜6（ブランチ切り替え → `version` 行の書き換え → `yarn install --immutable` → commit → push → タグ push）だけ。ビルドや publish コマンドは打たない（CI が実施する）。
 
 #### ① リリースブランチに切り替える
 
