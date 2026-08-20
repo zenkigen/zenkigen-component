@@ -20,6 +20,76 @@ import { IconButton, Icon } from '@zenkigen-inc/component-ui';
 Design Token（デザイントークン）は、デザインのスタイル（色、タイポグラフィ、スペーシング、シャドウなど）をコードとして定義し、再利用しやすくするための仕組みです。これにより、一貫性のあるUIデザインを提供できます。
 デザイントークンは [**Primitive Token（プリミティブトークン）**](#primitive-token) と [**Semantic Token（セマンティックトークン）**](#semantic-token) の 2 つの種類に分かれます。
 
+{/* --- カラートークン棚卸し（docs/research/color-token-consolidation.md）の確認用マーキング。棚卸し完了後に削除予定 --- */}
+
+<div
+  style={{
+    border: '2px solid #d92b57',
+    borderRadius: 8,
+    padding: '8px 12px',
+    margin: '16px 0',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 4,
+  }}
+>
+  <div style={{ fontWeight: 'bold' }}>{'カラートークン棚卸し 確認用マーキング（棚卸し完了後に削除予定）'}</div>
+  <div>
+    <span style={{ color: '#d92b57', fontWeight: 'bold' }}>{'✕ 削除候補（未使用）'}</span>
+    <span>{' … library・利用側アプリともに実装で未使用の 16 トークン'}</span>
+  </div>
+  <div>
+    <span style={{ color: '#d97706', fontWeight: 'bold' }}>{'△ 統合候補（lib のみ使用）'}</span>
+    <span>{' … library 実装でのみ使用の 24 トークン（統合可否はデザイン意図の個別判断）'}</span>
+  </div>
+</div>
+
+export const deletionCandidates = new Set([
+  'link02',
+  'hoverLink01',
+  'hoverLink02',
+  'activeLink01',
+  'disabledLink01',
+  'disabledLink02',
+  'fieldInput',
+  'fieldSearch',
+  'interactiveBg01',
+  'hover02Background',
+  'hoverSelectedUi',
+  'selectedUiGray',
+  'selectedUiOnColor',
+  'backgroundOverlayGray',
+  'interactive03',
+  'disabled04',
+]);
+
+export const consolidationCandidates = new Set([
+  'uiBorder03',
+  'uiBorder04',
+  'uiBackgroundWarning',
+  'uiBackgroundTooltip',
+  'interactive04',
+  'focus',
+  'hoverUi02',
+  'hoverUiBorder',
+  'hoverError',
+  'hoverGray',
+  'hoverInput',
+  'hoverUiError',
+  'active01',
+  'active02',
+  'activeLink02',
+  'activeInput',
+  'activeUiError',
+  'disabledOn',
+  'disabled02',
+  'supportErrorLight',
+  'supportSuccessLight',
+  'supportWarningLight',
+  'supportInfoLight',
+  'supportDangerLight',
+]);
+
 ### Code Example
 
 - Color Token は Tailwind の色系ユーティリティ（text / bg / border / ring / fill / stroke など）から参照できます。
@@ -61,18 +131,46 @@ console.error('Failed to copy: ', err);
 }
 };
 
+const isDeletionCandidate = deletionCandidates.has(colorKey);
+const isConsolidationCandidate = consolidationCandidates.has(colorKey);
+
 return (
 
 <div className="flex flex-col items-left gap-2 flex-shrink-0">
-  <div className="flex w-full p-1 justify-end items-end" style={{ backgroundColor: value, height: 170 }}>
+  <div
+    className="relative flex w-full p-1 justify-end items-end"
+    style={{ backgroundColor: value, height: 170 }}
+  >
     {rawValue ? (
       <div className="flex bg-white rounded-sm px-1 py-0.5">
         <Icon name="link" size="small" color="icon01" />
         <span style={{ fontSize: '12px', fontWeight: 'bold' }}>{rawValue.replaceAll('$Colors.', '')}</span>
       </div>
     ) : null}
+    {isDeletionCandidate ? (
+      <div
+        className="absolute inset-0 flex items-center justify-center"
+        style={{ backgroundColor: 'rgba(255, 255, 255, 0.6)' }}
+      >
+        <span style={{ color: '#d92b57', fontSize: 120, fontWeight: 'bold', lineHeight: 1 }}>✕</span>
+      </div>
+    ) : null}
+    {isConsolidationCandidate ? (
+      <div
+        className="absolute inset-0 flex items-center justify-center"
+        style={{ backgroundColor: 'rgba(255, 255, 255, 0.4)' }}
+      >
+        <span style={{ color: '#d97706', fontSize: 100, fontWeight: 'bold', lineHeight: 1 }}>△</span>
+      </div>
+    ) : null}
   </div>
   <div className="flex flex-col gap-1 text-left pr-1" style={{ minWidth: 170 }}>
+    {isDeletionCandidate ? (
+      <div style={{ color: '#d92b57', fontWeight: 'bold', fontSize: '12px' }}>✕ 削除候補（未使用）</div>
+    ) : null}
+    {isConsolidationCandidate ? (
+      <div style={{ color: '#d97706', fontWeight: 'bold', fontSize: '12px' }}>△ 統合候補（lib のみ使用）</div>
+    ) : null}
     <div className="flex items-center">
       <div className="typography-label11bold">{colorKey}</div>
       <IconButton
