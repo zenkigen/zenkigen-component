@@ -1,15 +1,13 @@
 import { clsx } from 'clsx';
 import type { WeekdayProps } from 'react-day-picker';
 
-import { useDatePickerCompoundContext } from './date-picker-context';
-import { DATE_PICKER_SIZE_TOKENS } from './date-picker-styles';
+import { useDatePickerSizeTokens } from './date-picker-styles';
 
 /**
  * カレンダーの曜日ヘッダー（日〜土）
  */
 export const CustomWeekday = ({ className, children, style, ...props }: WeekdayProps) => {
-  const { size } = useDatePickerCompoundContext('DatePicker のカレンダー');
-  const tokens = DATE_PICKER_SIZE_TOKENS[size];
+  const { tokens } = useDatePickerSizeTokens();
 
   return (
     <th

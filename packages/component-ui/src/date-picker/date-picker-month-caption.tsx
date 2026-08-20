@@ -3,8 +3,7 @@ import type { MonthCaptionProps } from 'react-day-picker';
 import { useDayPicker } from 'react-day-picker';
 
 import { IconButton } from '../icon-button';
-import { useDatePickerCompoundContext } from './date-picker-context';
-import { DATE_PICKER_SIZE_TOKENS } from './date-picker-styles';
+import { useDatePickerSizeTokens } from './date-picker-styles';
 import { formatMonthLabel } from './date-picker-utils';
 
 /**
@@ -17,8 +16,7 @@ export const CustomMonthCaption = ({ calendarMonth, className, displayIndex, sty
   void displayIndex;
 
   const { goToMonth, nextMonth, previousMonth } = useDayPicker();
-  const { size } = useDatePickerCompoundContext('DatePicker のカレンダー');
-  const tokens = DATE_PICKER_SIZE_TOKENS[size];
+  const { tokens } = useDatePickerSizeTokens();
   const captionMonth = calendarMonth.date;
 
   return (
