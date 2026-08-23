@@ -529,7 +529,7 @@ export const WithDatePicker: Story = {
 };
 
 // ビューポート端でのはみ出し回避（flip / shift）確認用ストーリー
-const DATE_PICKER_SIZES: NonNullable<DatePickerProps['size']>[] = ['small', 'medium', 'large'];
+const DATE_PICKER_SIZES: NonNullable<DatePickerProps['size']>[] = ['small', 'medium', 'large', 'x-large'];
 
 type OverflowAvoidanceArgs = {
   /** 表示物（Popover または DatePicker） */
