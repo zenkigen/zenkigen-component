@@ -1,4 +1,4 @@
-import { autoUpdate, offset, useFloating, useId as useFloatingId } from '@floating-ui/react';
+import { autoUpdate, flip, offset, shift, useFloating, useId as useFloatingId } from '@floating-ui/react';
 import type { PropsWithChildren } from 'react';
 import { useEffect, useMemo, useRef } from 'react';
 
@@ -10,6 +10,15 @@ import {
   type PopoverPlacement,
 } from './popover-context';
 import { PopoverTrigger } from './popover-trigger';
+
+/**
+ * ビューポート端との最小マージン（flip / shift の判定余白）
+ *
+ * combobox.tsx の FLOATING_VIEWPORT_PADDING と同値。
+ * shift はこのマージンを確保するため、ビューポート端から 8px 以内に配置された
+ * Popover を最大 8px 内側へ移動させる。
+ */
+const FLOATING_VIEWPORT_PADDING = 8;
 
 type Props = {
   isOpen: boolean;
@@ -29,6 +38,25 @@ export function Popover({
 }: PropsWithChildren<Props>) {
   const triggerRef = useRef<HTMLElement>(null);
 
+  /**
+   * 順序は offset → flip → shift で固定する
+   *
+   * flip がメイン軸（bottom↔top）の反転のみを担当し、クロス軸（左右）は shift が
+   * 必要最小限だけずらす。逆順にすると shift がずらした結果を flip が判定してしまう。
+   *
+   * flipAlignment は既定で有効なため、無効化しないと flip が揃え位置（start/end）まで
+   * 反転させてこの分担が崩れる。トリガーより広いパネル（例: DatePicker のカレンダー）が
+   * 画面端に寄った際、shift の最小移動ではなく反対側の端揃えに切り替わってしまう。
+   */
+  const middleware = useMemo(
+    () => [
+      offset(offsetValue),
+      flip({ padding: FLOATING_VIEWPORT_PADDING, flipAlignment: false }),
+      shift({ padding: FLOATING_VIEWPORT_PADDING }),
+    ],
+    [offsetValue],
+  );
+
   const floating = useFloating({
     open: isOpen,
     onOpenChange: (open) => {
@@ -43,7 +71,7 @@ export function Popover({
       }
     },
     placement,
-    middleware: [offset(offsetValue)],
+    middleware,
     whileElementsMounted: autoUpdate,
     strategy: 'fixed',
   });

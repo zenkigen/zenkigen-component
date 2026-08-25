@@ -2,7 +2,7 @@ import { clsx } from 'clsx';
 import type { HTMLAttributes } from 'react';
 import { forwardRef } from 'react';
 
-import { useDatePickerCompoundContext } from './date-picker-context';
+import { useDatePickerSizeTokens } from './date-picker-styles';
 
 /**
  * DatePicker のエラーメッセージを表示するコンポーネントのプロパティ
@@ -14,8 +14,8 @@ export type DatePickerErrorMessageProps = Omit<HTMLAttributes<HTMLDivElement>, '
 
 export const DatePickerErrorMessage = forwardRef<HTMLDivElement, DatePickerErrorMessageProps>(
   ({ 'aria-live': ariaLive = 'assertive', ...props }, ref) => {
-    const { size, isError } = useDatePickerCompoundContext('DatePicker.ErrorMessage');
-    const typographyClass = size === 'large' ? 'typography-label12regular' : 'typography-label11regular';
+    const { isError, tokens } = useDatePickerSizeTokens('DatePicker.ErrorMessage');
+    const typographyClass = tokens.errorTypography;
 
     if (isError !== true) {
       return null;
