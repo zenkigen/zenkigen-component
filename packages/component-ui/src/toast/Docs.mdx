@@ -1,6 +1,6 @@
 import { Canvas, Meta, ArgTypes, Story, Controls, Source } from '@storybook/addon-docs/blocks';
 import { Markdown } from '@storybook/addon-docs/blocks';
-import ToastStories, { Component, Base } from './toast.stories';
+import ToastStories, { Component } from './toast.stories';
 import spec from '../../../../docs/component/toast-specification.md?raw';
 
 <Meta title="Toast" of={ToastStories} />
@@ -42,6 +42,32 @@ export const App = () => (
   language="tsx"
 />
 
+説明文を添えたい場合や、閉じるボタンを表示したい場合は `addToast` のオプションで指定します。閉じるボタンはアプリ全体の既定値として `ToastProvider` の `hasCloseButton` でも設定でき、`addToast` の指定がそれを上書きします。
+
+<Source
+  code={`// 説明文つきのトースト
+addToast({
+  message: 'アップロードに失敗しました',
+  state: 'error',
+  description: 'ファイルサイズを確認して、もう一度お試しください',
+});
+
+// このトーストだけ閉じるボタンを表示する
+addToast({ message: '設定を保存しました', state: 'success', hasCloseButton: true });
+
+// 自動で閉じないトースト（閉じるボタンが必ず表示される）
+addToast({ message: 'バックアップを実行しています', state: 'information', isAutoClose: false });
+
+// アプリ全体で閉じるボタンを表示する
+export const App = () => (
+
+  <ToastProvider hasCloseButton>
+    <ShowToastButton />
+  </ToastProvider>
+);`}
+  language="tsx"
+/>
+
 ## 概要
 
 Toastコンポーネントは、画面に短時間表示される小さなメッセージを表示するUI要素です。
@@ -60,6 +86,12 @@ Toastコンポーネントは、画面に短時間表示される小さなメッ
 ### 内容に合わせて適切なステートを使用します
 
 成功、警告、エラー、情報など内容に合わせて適切なステートを選択してください。
+
+### 閉じるボタンは既定で非表示です
+
+トーストは 5 秒で自動的に消えるため、閉じるボタンは既定では表示しません。ユーザーに手動で閉じさせたい場合のみ `hasCloseButton` を指定してください。なお `isAutoClose` を `false` にしたトーストでは、閉じる手段がなくならないよう閉じるボタンが自動的に表示されます。
+
+`ToastProvider` を使わず `Toast` を単体で使う場合、`isAutoClose` の既定は `false` のため、上記の仕組みにより閉じるボタンが表示されます。「自動クローズ・閉じるボタンなし」にするには `isAutoClose` を明示してください。
 
 ### エラーを通知する場合はユーザーに具体的な解決策を示してください
 

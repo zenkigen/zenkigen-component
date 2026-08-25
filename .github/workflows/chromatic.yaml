@@ -10,6 +10,12 @@ on:
   # baseline の再確立用: 手動起動時は TurboSnap を無効化し全ストーリーを撮影する
   workflow_dispatch:
 
+# checkout の読み取りに加え、Chromatic の結果を PR にコメントするため pull-requests の書き込みが要る。
+# 未指定だとリポジトリ既定が適用され Contents を含む 18 スコープが write になるため、この 2 つに絞る。
+permissions:
+  contents: read
+  pull-requests: write
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true

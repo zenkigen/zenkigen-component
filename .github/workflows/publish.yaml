@@ -5,6 +5,12 @@ on:
     tags:
       - 'v*'
 
+# GITHUB_TOKEN は checkout の読み取りにしか使わない（npm publish の認証は NPM_TOKEN）。
+# 未指定だとリポジトリ既定が適用され Contents を含む 18 スコープが write になるため、
+# ビルド時に実行される依存が汚染された場合の書き戻しを防ぐ目的で明示的に絞る。
+permissions:
+  contents: read
+
 jobs:
   publish:
     runs-on: ubuntu-latest
