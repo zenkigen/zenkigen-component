@@ -117,4 +117,51 @@ describe('Icon', () => {
       expect(icon.querySelector('.fill-supportError')).toBeNull();
     });
   });
+
+  describe('stroke 系アイコン（lucide 由来）', () => {
+    it('lucide 由来アイコンが stroke 属性と zen-stroke-icon class を持つこと', () => {
+      render(<Icon name="close" />);
+      const icon = screen.getByRole('img');
+      expect(icon).toHaveClass('zen-stroke-icon');
+      expect(icon).toHaveAttribute('fill', 'none');
+      expect(icon).toHaveAttribute('stroke', 'currentColor');
+      expect(icon).toHaveAttribute('stroke-width', '2');
+      expect(icon).toHaveAttribute('stroke-linecap', 'round');
+      expect(icon).toHaveAttribute('stroke-linejoin', 'round');
+    });
+
+    it('fill 系のまま維持されたアイコンは stroke 属性と zen-stroke-icon を持たないこと', () => {
+      render(<Icon name="harutaka" />);
+      const icon = screen.getByRole('img');
+      expect(icon).not.toHaveClass('zen-stroke-icon');
+      expect(icon).not.toHaveAttribute('stroke');
+    });
+
+    it('rect を含む lucide 由来アイコンが rect の寸法属性を保持すること', () => {
+      // codegen の width / height 除去が root svg に限定されていることの回帰テスト。
+      // 全要素から除去すると rect の寸法が消えて図形が描画されなくなる
+      render(<Icon name="copy" />);
+      const rect = screen.getByRole('img').querySelector('rect');
+      expect(rect).toHaveAttribute('width', '14');
+      expect(rect).toHaveAttribute('height', '14');
+    });
+
+    it.each([['volume-off', 1]] as const)(
+      'stroke 系 accent アイコン %s の accent path 数が取り込み定義と一致すること',
+      (name, expectedCount) => {
+        // lucide-import.json の accent（markPaths / addPaths）の path 数と突合する。
+        // 存在確認だけでは複数 accent path の変換漏れを検出できないため件数で検証する
+        render(<Icon name={name} accentColor="supportError" />);
+        const icon = screen.getByRole('img');
+        expect(icon.querySelectorAll('.zen-stroke-accent.fill-supportError')).toHaveLength(expectedCount);
+      },
+    );
+
+    it('accentColor 未指定でも accent path は zen-stroke-accent を持つこと（主色で描画される）', () => {
+      render(<Icon name="volume-off" />);
+      const icon = screen.getByRole('img');
+      expect(icon.querySelectorAll('.zen-stroke-accent')).toHaveLength(1);
+      expect(icon.querySelector('.fill-supportError')).toBeNull();
+    });
+  });
 });
