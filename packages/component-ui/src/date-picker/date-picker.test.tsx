@@ -34,10 +34,134 @@ describe('DatePicker', () => {
   });
 
   describe('サイズバリエーション', () => {
-    it.each(['small', 'medium', 'large'] as const)('size=%s でレンダリングされること', (size) => {
+    it.each(['small', 'medium', 'large', 'x-large'] as const)('size=%s でレンダリングされること', (size) => {
       render(<DatePicker value={null} onChange={vi.fn()} size={size} />);
 
       expect(screen.getByRole('button')).toBeInTheDocument();
+    });
+
+    /**
+     * size ごとの見た目のトークン適用
+     *
+     * カレンダー寸法は small / medium / large が共通で、x-large だけ拡大される。
+     * medium は共通トークン（BASE_TOKENS）の代表（small は medium と同一のため省略）。
+     * large は独自値を持つトリガーアイコンと ErrorMessage を含めて検証する。
+     * date-picker-styles.ts のリファクタで既存の見た目が変わっていないことの検出を兼ねる。
+     */
+    const calendarSizeCases = [
+      {
+        size: 'medium',
+        rootFontSize: '12px',
+        dayWidth: '30px',
+        dayButtonWidth: '28px',
+        navHeight: '30px',
+        dayButtonFontSize: '12px',
+        dayButtonSizeClass: 'size-full',
+        monthLabelTypography: 'typography-label12bold',
+        weekdaySizeClass: 'size-7',
+        todayButtonSizeClass: 'h-8',
+        clearButtonSizeClass: 'h-6',
+        errorTypography: 'typography-label11regular',
+        // Icon small（16px）
+        triggerIconSelector: '.w-4.h-4',
+      },
+      {
+        // カレンダー寸法は medium と共通。トリガーアイコンと ErrorMessage だけ独自値を持つ
+        size: 'large',
+        rootFontSize: '12px',
+        dayWidth: '30px',
+        dayButtonWidth: '28px',
+        navHeight: '30px',
+        dayButtonFontSize: '12px',
+        dayButtonSizeClass: 'size-full',
+        monthLabelTypography: 'typography-label12bold',
+        weekdaySizeClass: 'size-7',
+        todayButtonSizeClass: 'h-8',
+        clearButtonSizeClass: 'h-6',
+        errorTypography: 'typography-label12regular',
+        // Icon medium（24px）
+        triggerIconSelector: '.w-6.h-6',
+      },
+      {
+        size: 'x-large',
+        rootFontSize: '16px',
+        dayWidth: '48px',
+        dayButtonWidth: '40px',
+        navHeight: '40px',
+        dayButtonFontSize: '16px',
+        dayButtonSizeClass: 'size-10',
+        monthLabelTypography: 'typography-label16bold',
+        // 曜日行は 40px の行 + 上下 4px の間隔を含めて 48px（table は行間に余白を作れないため）
+        weekdaySizeClass: 'size-12',
+        todayButtonSizeClass: 'h-10',
+        clearButtonSizeClass: 'h-10',
+        errorTypography: 'typography-label12regular',
+        // Icon medium（24px）
+        triggerIconSelector: '.w-6.h-6',
+      },
+    ] as const;
+
+    describe.each(calendarSizeCases)('size=$size のサイズ適用', (expected) => {
+      const renderAndOpen = async () => {
+        const user = userEvent.setup();
+        const { container } = render(<DatePicker value={null} onChange={vi.fn()} size={expected.size} />);
+        const dialog = await openPopover(user);
+
+        return { container, dialog };
+      };
+
+      it('DayPicker の CSS 変数とフォントサイズが適用されること', async () => {
+        const { dialog } = await renderAndOpen();
+        const root = dialog.querySelector<HTMLElement>('.rdp-root');
+
+        expect(root).not.toBeNull();
+        expect(root?.style.getPropertyValue('--rdp-day-width')).toBe(expected.dayWidth);
+        expect(root?.style.getPropertyValue('--rdp-day-height')).toBe(expected.dayWidth);
+        expect(root?.style.getPropertyValue('--rdp-day_button-width')).toBe(expected.dayButtonWidth);
+        expect(root?.style.getPropertyValue('--rdp-day_button-height')).toBe(expected.dayButtonWidth);
+        expect(root?.style.getPropertyValue('--rdp-nav-height')).toBe(expected.navHeight);
+        expect(root?.style.fontSize).toBe(expected.rootFontSize);
+      });
+
+      it('日付ボタンのフォントサイズとサイズクラスが適用されること', async () => {
+        const { dialog } = await renderAndOpen();
+        const dayButton = findDayButton(dialog, '15');
+
+        expect(dayButton).not.toBeNull();
+        // .rdp-selected の font-size: large を打ち消すための inline 指定
+        expect(dayButton?.style.fontSize).toBe(expected.dayButtonFontSize);
+        expect(dayButton).toHaveClass(expected.dayButtonSizeClass);
+      });
+
+      it('月ラベルと曜日ヘッダーのサイズが適用されること', async () => {
+        const { dialog } = await renderAndOpen();
+
+        expect(dialog.querySelector(`.${expected.monthLabelTypography}`)).not.toBeNull();
+        expect(dialog.querySelectorAll('th')[0]).toHaveClass(expected.weekdaySizeClass);
+      });
+
+      it('フッターのボタンサイズが適用されること', async () => {
+        await renderAndOpen();
+
+        expect(screen.getByRole('button', { name: '今日に戻る' })).toHaveClass(expected.todayButtonSizeClass);
+        expect(screen.getByRole('button', { name: 'クリア' })).toHaveClass(expected.clearButtonSizeClass);
+      });
+
+      it('ErrorMessage の typography が適用されること', () => {
+        render(
+          <DatePicker value={null} onChange={vi.fn()} size={expected.size} isError>
+            <DatePicker.ErrorMessage>エラーメッセージ</DatePicker.ErrorMessage>
+          </DatePicker>,
+        );
+
+        expect(screen.getByText('エラーメッセージ')).toHaveClass(expected.errorTypography);
+      });
+
+      it('トリガーアイコンのサイズが適用されること', () => {
+        const { container } = render(<DatePicker value={null} onChange={vi.fn()} size={expected.size} />);
+
+        expect(container.querySelector(expected.triggerIconSelector)).not.toBeNull();
+      });
     });
   });
 
