@@ -13,6 +13,7 @@
 - [ビジュアルリグレッションテスト](./visual-regression-testing.md) - Chromatic による VRT の仕組みと運用（TurboSnap・baseline・手動全撮影）
 - [リリース手順](./release-process.md) - npm publish の手順（version bump・タグ・CI publish・dist-tag）
 - [バージョン運用方針](./versioning-policy.md) - メジャーバージョンのライフサイクル・ブランチ戦略・dist-tag 体制
+- [v1 → v2 移行ガイド](./migration-v1-to-v2.md) - 利用者向け。Tailwind CSS v4 / v2.0.0 への移行手順
 
 ## プロジェクト概要
 
