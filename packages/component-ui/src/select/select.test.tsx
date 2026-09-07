@@ -55,6 +55,25 @@ const SelectTestComponent = ({
   );
 };
 
+// 必須項目で「選択解除」を非表示にするために、利用側が取っている回避策の再現。
+// 値が選択されている間はプレースホルダーを渡さないことで、解除ボタンを消している。
+const RequiredSelectTestComponent = () => {
+  const [selectedOption, setSelectedOption] = useState<SelectOption | null>(null);
+
+  return (
+    <Select
+      // eslint-disable-next-line no-undefined
+      placeholder={selectedOption == null ? '選択してください' : undefined}
+      selectedOption={selectedOption}
+      onChange={setSelectedOption}
+    >
+      {testOptions.map((option) => (
+        <Select.Option key={option.id} option={option} />
+      ))}
+    </Select>
+  );
+};
+
 describe('Select', () => {
   describe('基本機能', () => {
     it('正常にレンダリングされること', () => {
@@ -136,6 +155,38 @@ describe('Select', () => {
       fireEvent.click(screen.getByText('選択解除'));
 
       expect(selectButton).toHaveTextContent('選択');
+    });
+
+    it('選択されている間プレースホルダーを渡さない場合、選択解除ボタンが表示されないこと', () => {
+      render(<RequiredSelectTestComponent />);
+      const selectButton = screen.getByRole('button');
+
+      // 未選択のときはプレースホルダーが表示され、リストを開いても選択解除ボタンは現れない。
+      // 「選択肢B」はリスト内にしか現れないため、リストが開いていることの担保に使う。
+      expect(selectButton).toHaveTextContent('選択してください');
+      fireEvent.click(selectButton);
+      expect(screen.getByText('選択肢B')).toBeInTheDocument();
+      expect(screen.queryByText('選択解除')).not.toBeInTheDocument();
+
+      // 選択するとトリガーに選択したラベルが表示される
+      fireEvent.click(screen.getByText('選択肢A'));
+      expect(selectButton).toHaveTextContent('選択肢A');
+
+      // 選択後にリストを開き直しても選択解除ボタンは現れない
+      fireEvent.click(selectButton);
+      expect(screen.getByText('選択肢B')).toBeInTheDocument();
+      expect(screen.queryByText('選択解除')).not.toBeInTheDocument();
+    });
+
+    it('プレースホルダーが空文字の場合、選択解除ボタンが表示されること', () => {
+      // 表示条件が placeholder != null のため、空文字では非表示にできない。
+      // truthy 判定に変えると利用側の挙動が変わるため、現状の判定を固定する。
+      render(<SelectTestComponent placeholder="" initialOption={testOptions[1]} />);
+      const selectButton = screen.getByRole('button');
+
+      fireEvent.click(selectButton);
+
+      expect(screen.getByText('選択解除')).toBeInTheDocument();
     });
   });
 
