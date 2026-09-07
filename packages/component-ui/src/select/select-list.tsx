@@ -10,8 +10,16 @@ type Props = {
 };
 
 export const SelectList = forwardRef<HTMLUListElement, PropsWithChildren<Props>>(({ children, maxHeight }, ref) => {
-  const { selectedOption, setIsOptionListOpen, variant, placeholder, onChange, floatingStyles, floatingRef, size } =
-    useContext(SelectContext);
+  const {
+    selectedOption,
+    setIsOptionListOpen,
+    variant,
+    isDeselectVisible,
+    onChange,
+    floatingStyles,
+    floatingRef,
+    size,
+  } = useContext(SelectContext);
 
   const handleClickDeselect = () => {
     onChange?.(null);
@@ -59,7 +67,7 @@ export const SelectList = forwardRef<HTMLUListElement, PropsWithChildren<Props>>
   return (
     <ul className={listClasses} style={{ maxHeight, ...floatingStyles }} ref={ref}>
       {children}
-      {placeholder != null && selectedOption !== null && (
+      {isDeselectVisible && selectedOption !== null && (
         <li>
           <button className={deselectButtonClasses} type="button" onClick={handleClickDeselect}>
             選択解除
