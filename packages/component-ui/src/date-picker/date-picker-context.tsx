@@ -1,7 +1,9 @@
 import { createContext, useContext } from 'react';
 
+export type DatePickerSize = 'small' | 'medium' | 'large' | 'x-large';
+
 export type DatePickerContextValue = {
-  size: 'small' | 'medium' | 'large';
+  size: DatePickerSize;
   isError: boolean;
 };
 
