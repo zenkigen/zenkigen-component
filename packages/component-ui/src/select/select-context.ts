@@ -5,7 +5,8 @@ import type { SelectOption } from './type';
 
 type UseSelectReturnType = {
   size?: 'x-small' | 'small' | 'medium' | 'large';
-  placeholder?: string;
+  /** 「選択解除」を表示するかどうか。Select 側で解決済みの値を受け取る */
+  isDeselectVisible: boolean;
   selectedOption?: SelectOption | null;
   setIsOptionListOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onChange?: (option: SelectOption | null) => void;
@@ -17,6 +18,7 @@ type UseSelectReturnType = {
 
 export const SelectContext = createContext<UseSelectReturnType>({
   size: 'medium',
+  isDeselectVisible: false,
   setIsOptionListOpen: () => false,
   variant: 'outline',
   isError: false,

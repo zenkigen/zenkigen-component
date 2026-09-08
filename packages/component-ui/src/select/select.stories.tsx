@@ -46,6 +46,11 @@ const meta: Meta<typeof Select> = {
       type: 'boolean',
       description: '選択状態の見た目にするかどうか（selectedOption が指定されている場合のみ有効）',
     },
+    hasDeselectButton: {
+      type: 'boolean',
+      description:
+        '「選択解除」を表示するかどうか。未指定の場合は後方互換の挙動になる（一度切り替えると未指定には戻せない）',
+    },
     isError: {
       type: 'boolean',
       description: 'エラー状態',
@@ -919,6 +924,59 @@ export const DismissOnModalOpen: Story = {
           '1秒後に Select が自動で開き、さらに 2秒後に Modal が表示される。Modal の表示と同時に Select の List が閉じれば成功。',
           '',
           '**仕組み**: Modal は `isOpen` が `true` に切り替わる瞬間に `window` へ `zenkigen-modal-open` カスタムイベントを dispatch する。Select 内部の `useDismissOnModalOpen` フックがそれを listen して List を閉じる。同じ仕組みが Dropdown / SelectSort / Popover / DatePicker（Popover 経由）にも横展開されている。',
+        ].join('\n'),
+      },
+    },
+  },
+};
+
+export const HasDeselectButton: Story = {
+  render: function MyFunc() {
+    const [requiredOption, setRequiredOption] = useState<SelectOption | null>(optionsList[1] ?? null);
+    const [optionalOption, setOptionalOption] = useState<SelectOption | null>(optionsList[1] ?? null);
+
+    return (
+      <div className="flex items-start gap-20">
+        <div className="flex flex-col gap-2">
+          <div className="typography-label14regular text-text01">必須項目（{'hasDeselectButton={false}'}）</div>
+          <Select
+            placeholder="選択"
+            hasDeselectButton={false}
+            selectedOption={requiredOption}
+            onChange={(option) => setRequiredOption(option)}
+          >
+            {optionsList.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
+        </div>
+        <div className="flex flex-col gap-2">
+          <div className="typography-label14regular text-text01">任意項目（{'hasDeselectButton={true}'}）</div>
+          <Select
+            placeholder="選択"
+            hasDeselectButton
+            selectedOption={optionalOption}
+            onChange={(option) => setOptionalOption(option)}
+          >
+            {optionsList.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
+        </div>
+      </div>
+    );
+  },
+  parameters: {
+    chromatic: { disable: true },
+    docs: {
+      description: {
+        story: [
+          '`hasDeselectButton` で「選択解除」の表示を制御する Story。**それぞれの Select を開いて確認する。**',
+          '',
+          '- **必須項目**: `hasDeselectButton={false}` で「選択解除」を表示しない',
+          '- **任意項目**: `hasDeselectButton={true}` で「選択解除」を表示する',
+          '',
+          '`placeholder` は未選択時の表示テキストを指定するプロパティであり、「選択解除」の表示制御には用いない。表示を制御する場合は `hasDeselectButton` を指定すること。',
         ].join('\n'),
       },
     },

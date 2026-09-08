@@ -55,6 +55,26 @@ const SelectTestComponent = ({
   );
 };
 
+// placeholder を選択状態に応じて切り替えた場合の挙動を固定するためのコンポーネント。
+// hasDeselectButton の追加前はこの書き方しか手段が無かったが、現在は非推奨。
+// 「選択解除」を非表示にする場合は hasDeselectButton={false} を指定する。
+const RequiredSelectTestComponent = () => {
+  const [selectedOption, setSelectedOption] = useState<SelectOption | null>(null);
+
+  return (
+    <Select
+      // eslint-disable-next-line no-undefined
+      placeholder={selectedOption == null ? '選択してください' : undefined}
+      selectedOption={selectedOption}
+      onChange={setSelectedOption}
+    >
+      {testOptions.map((option) => (
+        <Select.Option key={option.id} option={option} />
+      ))}
+    </Select>
+  );
+};
+
 describe('Select', () => {
   describe('基本機能', () => {
     it('正常にレンダリングされること', () => {
@@ -130,6 +150,98 @@ describe('Select', () => {
 
     it('選択解除ボタンで選択を解除できること', () => {
       render(<SelectTestComponent placeholder="選択" initialOption={testOptions[1]} />);
+      const selectButton = screen.getByRole('button');
+
+      fireEvent.click(selectButton);
+      fireEvent.click(screen.getByText('選択解除'));
+
+      expect(selectButton).toHaveTextContent('選択');
+    });
+
+    it('選択されている間プレースホルダーを渡さない場合、選択解除ボタンが表示されないこと（非推奨の旧パターン）', () => {
+      render(<RequiredSelectTestComponent />);
+      const selectButton = screen.getByRole('button');
+
+      // 未選択のときはプレースホルダーが表示され、リストを開いても選択解除ボタンは現れない。
+      // 「選択肢B」はリスト内にしか現れないため、リストが開いていることの担保に使う。
+      expect(selectButton).toHaveTextContent('選択してください');
+      fireEvent.click(selectButton);
+      expect(screen.getByText('選択肢B')).toBeInTheDocument();
+      expect(screen.queryByText('選択解除')).not.toBeInTheDocument();
+
+      // 選択するとトリガーに選択したラベルが表示される
+      fireEvent.click(screen.getByText('選択肢A'));
+      expect(selectButton).toHaveTextContent('選択肢A');
+
+      // 選択後にリストを開き直しても選択解除ボタンは現れない
+      fireEvent.click(selectButton);
+      expect(screen.getByText('選択肢B')).toBeInTheDocument();
+      expect(screen.queryByText('選択解除')).not.toBeInTheDocument();
+    });
+
+    it('プレースホルダーが空文字の場合、選択解除ボタンが表示されること', () => {
+      // 表示条件が placeholder != null のため、空文字では非表示にできない。
+      // truthy 判定に変えると利用側の挙動が変わるため、現状の判定を固定する。
+      render(<SelectTestComponent placeholder="" initialOption={testOptions[1]} />);
+      const selectButton = screen.getByRole('button');
+
+      fireEvent.click(selectButton);
+
+      expect(screen.getByText('選択解除')).toBeInTheDocument();
+    });
+
+    it('hasDeselectButton が false の場合、プレースホルダーがあっても選択解除ボタンが表示されないこと', () => {
+      render(<SelectTestComponent placeholder="選択" hasDeselectButton={false} initialOption={testOptions[1]} />);
+      const selectButton = screen.getByRole('button');
+
+      fireEvent.click(selectButton);
+
+      // 「選択肢A」はリスト内にしか現れないため、リストが開いていることの担保に使う
+      expect(screen.getByText('選択肢A')).toBeInTheDocument();
+      expect(screen.queryByText('選択解除')).not.toBeInTheDocument();
+    });
+
+    it('hasDeselectButton が true の場合、プレースホルダーがなくても選択解除ボタンが表示されること', () => {
+      render(<SelectTestComponent hasDeselectButton initialOption={testOptions[1]} />);
+      const selectButton = screen.getByRole('button');
+
+      fireEvent.click(selectButton);
+
+      expect(screen.getByText('選択解除')).toBeInTheDocument();
+    });
+
+    it('hasDeselectButton が true のとき、選択解除ボタンを押すと onChange に null が渡ること', () => {
+      const handleChange = vi.fn();
+      render(
+        <Select hasDeselectButton selectedOption={testOptions[1]} onChange={handleChange}>
+          {testOptions.map((option) => (
+            <Select.Option key={option.id} option={option} />
+          ))}
+        </Select>,
+      );
+      const selectButton = screen.getByRole('button');
+
+      fireEvent.click(selectButton);
+      fireEvent.click(screen.getByText('選択解除'));
+
+      expect(handleChange).toHaveBeenCalledWith(null);
+    });
+
+    it('hasDeselectButton が true でも未選択なら選択解除ボタンが表示されないこと', () => {
+      render(<SelectTestComponent placeholder="選択" hasDeselectButton />);
+      const selectButton = screen.getByRole('button');
+
+      fireEvent.click(selectButton);
+
+      // 「選択肢A」はリスト内にしか現れないため、リストが開いていることの担保に使う
+      expect(screen.getByText('選択肢A')).toBeInTheDocument();
+      expect(screen.queryByText('選択解除')).not.toBeInTheDocument();
+    });
+
+    it('hasDeselectButton が true でもプレースホルダーがあれば、解除後にプレースホルダーへ戻ること', () => {
+      // プレースホルダーを渡さずに解除するとトリガーの表示テキストが空になるため、
+      // hasDeselectButton を使う場合はプレースホルダーの併用が前提になる
+      render(<SelectTestComponent placeholder="選択" hasDeselectButton initialOption={testOptions[1]} />);
       const selectButton = screen.getByRole('button');
 
       fireEvent.click(selectButton);

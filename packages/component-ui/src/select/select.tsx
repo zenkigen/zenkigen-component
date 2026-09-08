@@ -50,6 +50,8 @@ type Props = {
   isError?: boolean;
   /** 選択状態の見た目を適用するかどうか */
   isOptionSelected?: boolean;
+  /** 「選択解除」を表示するかどうか。未指定の場合は後方互換の挙動（placeholder の有無に従う）となる */
+  hasDeselectButton?: boolean;
   /** 選択変更時のコールバック関数 */
   onChange?: (option: SelectOption | null) => void;
   /** ドロップダウンリストの幅をトリガーボタンの幅に合わせる */
@@ -72,6 +74,7 @@ export function Select({
   isDisabled = false,
   isError = false,
   isOptionSelected = false,
+  hasDeselectButton,
   onChange,
   optionListMaxHeight,
   matchListToTrigger = false,
@@ -121,6 +124,10 @@ export function Select({
 
   const isSelected = isOptionSelected && !isDisabled && selectedOption !== null && !isError;
 
+  // 「選択解除」の表示可否。hasDeselectButton 未指定時は placeholder の有無に従うが、
+  // これは hasDeselectButton 導入前の挙動を維持するための後方互換であり、表示制御には hasDeselectButton を使う
+  const isDeselectVisible = hasDeselectButton ?? placeholder != null;
+
   const wrapperClasses = clsx('relative flex shrink-0 items-center gap-1 rounded bg-uiBackground01', {
     'h-6': size === 'x-small' || size === 'small',
     'h-8': size === 'medium',
@@ -160,7 +167,7 @@ export function Select({
       value={{
         size,
         variant,
-        placeholder,
+        isDeselectVisible,
         setIsOptionListOpen,
         selectedOption,
         onChange,
