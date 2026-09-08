@@ -85,7 +85,7 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
   {
     name: 'angle-down',
     status: 'replace',
-    note: '置換確定（2026-08-04 ユーザー判断）。単体は chevron-down と一致。※ angle-small-* は独自維持のままなので angle ファミリーに stroke/fill の混在が残る点、caret-down と同じ chevron-down になり同一化する点は、どちらも許容の判断',
+    note: '置換確定（2026-08-04 ユーザー判断）。単体は chevron-down と一致。※ angle-small-* は独自維持のままなので angle ファミリーに stroke/fill の混在が残る点は許容の判断。caret-down との同一化は 2026-09-08 の caret 維持確定で解消',
     candidates: ['chevron-down'],
     hasAccent: false,
     tags: ['direction'],
@@ -103,7 +103,7 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
   {
     name: 'angle-right',
     status: 'replace',
-    note: '置換確定（2026-08-04 ユーザー判断）。単体は chevron-right と一致。※ caret-right と同じ chevron-right になり同一化するが許容の判断',
+    note: '置換確定（2026-08-04 ユーザー判断）。単体は chevron-right と一致。※ caret-right との同一化は 2026-09-08 の caret 維持確定で解消',
     candidates: ['chevron-right'],
     hasAccent: false,
     tags: ['direction'],
@@ -300,8 +300,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
   },
   {
     name: 'caret-down',
-    status: 'replace',
-    note: '置換確定（2026-08-04 ユーザー判断）。第一候補の chevron-down を採用。**angle-down と同一化する**（塗り三角 → 線チェブロン）が許容の判断。代替の triangle は採らない',
+    status: 'keep',
+    note: '塗り三角。独自維持で確定（2026-09-08 ユーザー判断。既存の塗り印象が強く、線チェブロン化の印象変化が大きいため。2026-08-04 の置換確定を覆した）。angle-down との同一化も解消。候補は比較用に残す',
     candidates: ['chevron-down', 'triangle'],
     hasAccent: false,
     tags: ['direction'],
@@ -309,8 +309,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
   },
   {
     name: 'caret-right',
-    status: 'replace',
-    note: '置換確定（2026-08-04 ユーザー判断）。第一候補の chevron-right を採用。**angle-right と同一化する**が許容の判断。代替の play は採らない',
+    status: 'keep',
+    note: '塗り三角。独自維持で確定（2026-09-08 ユーザー判断。理由は caret-down と同じ）。angle-right との同一化も解消。候補は比較用に残す',
     candidates: ['chevron-right', 'play'],
     hasAccent: false,
     tags: ['direction'],
