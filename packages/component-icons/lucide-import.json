@@ -32,9 +32,6 @@
     "attachment": {
       "lucide": "paperclip"
     },
-    "attention": {
-      "lucide": "circle-alert"
-    },
     "block": {
       "lucide": "ban"
     },
@@ -274,9 +271,6 @@
       "accent": {
         "markPaths": ["m2 2 20 20"]
       }
-    },
-    "warning": {
-      "lucide": "triangle-alert"
     }
   }
 }
