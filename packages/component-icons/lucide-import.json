@@ -41,12 +41,6 @@
     "building": {
       "lucide": "building"
     },
-    "caret-down": {
-      "lucide": "chevron-down"
-    },
-    "caret-right": {
-      "lucide": "chevron-right"
-    },
     "chart-bar": {
       "lucide": "chart-column"
     },
