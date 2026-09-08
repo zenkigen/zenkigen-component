@@ -345,8 +345,8 @@ export const iconComparisonEntries: IconComparisonEntry[] = [
   },
   {
     name: 'check',
-    status: 'replace',
-    note: '',
+    status: 'keep',
+    note: '形は完全一致だがグリフ実寸が別物（旧: viewBox 内 55%・線幅約 1 unit / lucide: 75%・線幅 2 unit）で、同じ Icon サイズでも見た目が幅 1.37 倍・線 2 倍に拡大する。Steps の丸バッジ内で顕著になり、利用箇所の実装調整は行わない方針のため独自維持で確定（2026-09-08 ユーザー判断）。候補は比較用に残す',
     candidates: ['check'],
     hasAccent: false,
     tags: ['status'],
