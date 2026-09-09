@@ -1,0 +1,178 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+
+  // 公式の config:best-practices を土台にし、固有の事情がある箇所だけ上書きする
+  "extends": [
+    "config:best-practices",
+    ":separateMultipleMajorReleases",
+    // major は Dependency Dashboard で承認したものだけ起票する。公式は「major を無効化するより
+    // 承認制の方が、保留内容が Dashboard で見えるぶん優れている」としている
+    ":approveMajorUpdates",
+    ":semanticCommitTypeAll(chore)",
+  ],
+
+  // ===========================================================================
+  // 起票のしかた
+  // ===========================================================================
+  "timezone": "Asia/Tokyo",
+  "schedule": ["before 9am on monday"],
+  "labels": ["dependencies"],
+  "rebaseWhen": "conflicted",
+
+  // ===========================================================================
+  // 待機期間（サプライチェーン対策）
+  // ===========================================================================
+  // pnpm-workspace.yaml の minimumReleaseAge: 4320（分）と値を揃える。
+  // Renovate は直接依存のみを見る。推移的依存は pnpm 側が担保する。
+  // 待機中の更新は PR を作らず Dependency Dashboard に保留として並ぶ
+  // （internalChecksFilter の既定値 strict による）。
+  // 脆弱性起因の更新は待機させない（末尾の vulnerabilityAlerts を参照）
+  "minimumReleaseAge": "3 days",
+
+  // lockfile 生成時のツール制約（ルート package.json の engines と一致させる）
+  "constraints": {
+    "node": ">=24.18.1 <25",
+    "pnpm": ">=12.4.0 <13",
+  },
+
+  // 内部パッケージは workspace: プロトコルで参照しているため更新対象にしない
+  "ignoreDeps": ["@zenkigen-inc/*"],
+
+  "packageRules": [
+    // =========================================================================
+    // 1. 全体ポリシー
+    //    プリセットの packageRules は自前のものより前に結合されるため、
+    //    この配列に書くだけで config:best-practices の設定を上書きできる。
+    //    自前ルール同士は後勝ちなので、後続の節で同じ項目を扱う場合は注意する
+    // =========================================================================
+    {
+      // これらはリリース日時が紐づかず、待機判定に掛けると永久に保留される。
+      // 公式の security:minimumReleaseAgeNpm も同じ除外を持つ
+      "description": "パッケージマネージャ側が版を決める更新は待機させない",
+      "matchUpdateTypes": ["lockFileMaintenance", "replacement", "pin"],
+      "minimumReleaseAge": null,
+    },
+    {
+      // .github/workflows/chromatic.yaml は dependencies / renovate ラベルの付いた PR で
+      // Chromatic をスキップする。自動マージすると視覚回帰を一度も検証しないまま
+      // 公開ライブラリに依存更新が入るため、全面的に無効にする。
+      // 有効化を検討する場合は、先に renovate PR でも Chromatic を回す必要がある
+      "description": "自動マージはしない（renovate PR は Chromatic をスキップするため）",
+      "matchPackageNames": ["*"],
+      "automerge": false,
+    },
+
+    // =========================================================================
+    // 2. まとめかた
+    //    自動マージしない方針のため、PR 数を抑えないとレビューが追いつかない。
+    //    non-major はマネージャ単位でまとめる（現行 renovate.json の運用を踏襲）
+    // =========================================================================
+    {
+      "description": "npm の non-major",
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "groupName": "npm non-major dependencies",
+    },
+    {
+      "description": "GitHub Actions の non-major",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch", "digest"],
+      "groupName": "GitHub Actions (non-major)",
+    },
+
+    // =========================================================================
+    // 3. major と破壊的変更（両者は別概念として扱う）
+    // =========================================================================
+    {
+      // 承認制そのものは extends の :approveMajorUpdates が担う
+      "description": "major 更新",
+      "matchUpdateTypes": ["major"],
+      "addLabels": ["major"],
+    },
+    {
+      // Renovate が isBreaking を導入したのは、major / minor の定義を歪めずに
+      // 「破壊的変更」を独立して扱うため。よって major へ格上げはせず、
+      // ラベルで判別できるようにする。semver は 0.y.z の互換性を保証しないため、
+      // 0.x は patch でも破壊的と判定される
+      "description": "破壊的変更はラベルで判別できるようにする",
+      "matchJsonata": ["isBreaking = true"],
+      "addLabels": ["breaking"],
+    },
+
+    // =========================================================================
+    // 4. バージョンの固定方針
+    // =========================================================================
+    {
+      // pnpm-workspace.yaml の saveExact: true に合わせる。
+      // 公式の :pinDevDependencies は devDependencies しか pin しない
+      "description": "dependencies も完全固定する",
+      "matchManagers": ["npm"],
+      "matchFileNames": ["package.json", "packages/*/package.json"],
+      "matchDepTypes": ["dependencies"],
+      "rangeStrategy": "pin",
+    },
+
+    // =========================================================================
+    // 5. マネージャを跨いでバージョンを揃える必要があるもの
+    //    Node と pnpm の版の源は package.json の engines / packageManager と
+    //    .node-version の 3 つ。これらは常に同時に更新する必要がある
+    // =========================================================================
+    {
+      "matchDepNames": ["node"],
+      "groupName": "Node.js",
+      "allowedVersions": "<25",
+    },
+    {
+      "matchDepNames": ["pnpm"],
+      "groupName": "pnpm",
+      "allowedVersions": "<13",
+    },
+    {
+      // flat config への追随は一括更新でないと lint が通らないため 1 グループに集約する。
+      // eslint-config-next 相当のものは無いが、将来の取り違えを避けて明示的に列挙する
+      "description": "ESLint 本体とプラグイン・設定",
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["eslint", "eslint-*", "@eslint/*", "@typescript-eslint/*", "typescript-eslint"],
+      "groupName": "ESLint",
+    },
+
+    // =========================================================================
+    // 6. 影響範囲が広く、単独でレビューしたいもの
+    // =========================================================================
+    {
+      // depType で判定するため catalog にライブラリを追加しても追記は不要
+      "description": "pnpm catalog（参照している全パッケージに影響する）",
+      "matchDepTypes": ["pnpm.catalog.default"],
+      "addLabels": ["configuration"],
+    },
+    {
+      "description": "pnpm-workspace.yaml の overrides（上流の不具合を避けるための固定ピン）",
+      "matchDepTypes": ["pnpm-workspace.overrides"],
+      "addLabels": ["configuration"],
+      "prBodyNotes": [
+        ":warning: 上流の不具合を避けるための固定ピンである。固定した理由が解消したかを確認すること（`pnpm-workspace.yaml` のコメントに理由と外す条件を記載している）。",
+      ],
+    },
+  ],
+
+  // ===========================================================================
+  // 脆弱性起因の更新
+  // ===========================================================================
+  // この節の設定は packageRules より優先される。
+  // minimumReleaseAge を null にするのは必須。Renovate は脆弱性起因でも待機期間を
+  // 自動では解除せず、全体設定の 3 days が効いたままだと修正版が 3 日間 PR にならない
+  // （internalChecksFilter が strict のため Dashboard の保留に留まる）。
+  //
+  // なお pnpm 側の待機期間は残るため、リリース直後は lockfile 生成が失敗し得る。
+  // その場合は pnpm-workspace.yaml の minimumReleaseAgeExclude に対象を追記する
+  // （推移的依存も列挙が必要）。追記したら待機期間を過ぎたあとに必ず削除すること。
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "addLabels": ["security"],
+    "schedule": ["at any time"],
+    "minimumReleaseAge": null,
+    "dependencyDashboardApproval": false,
+    "automerge": false,
+  },
+  "osvVulnerabilityAlerts": true,
+}
