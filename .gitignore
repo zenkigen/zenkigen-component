@@ -65,9 +65,6 @@ typings/
 # Output of 'npm pack'
 *.tgz
 
-# Yarn Integrity file
-.yarn-integrity
-
 # dotenv environment variables file
 .env
 .env.test
@@ -101,10 +98,8 @@ dist
 # local version control
 .tool-versions
 
-# yarn
-.yarn/*
-!.yarn/releases
-!.yarn/plugins
+# pnpm
+.pnpm-store/
 
 # Storybook
 storybook-static

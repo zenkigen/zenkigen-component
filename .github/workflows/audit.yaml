@@ -6,8 +6,8 @@ on:
     paths:
       - 'package.json'
       - 'packages/**/package.json'
-      - 'yarn.lock'
-      - '.yarnrc.yml'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
       - '.github/workflows/audit.yaml'
   push:
     branches:
@@ -15,8 +15,8 @@ on:
     paths:
       - 'package.json'
       - 'packages/**/package.json'
-      - 'yarn.lock'
-      - '.yarnrc.yml'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
       - '.github/workflows/audit.yaml'
   schedule:
     # 毎日 09:00 JST (00:00 UTC) に実行: 上流の新規脆弱性を検知する
@@ -37,18 +37,9 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - name: Read Node version from .node-version
-        run: echo "node_version=$(cat .node-version)" >> $GITHUB_OUTPUT
-        id: node-version
-
-      - name: Use Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ steps.node-version.outputs.node_version }}
-
-      - name: Yarn install
-        uses: ./.github/actions/yarn-install
+      - name: Install dependencies
+        uses: ./.github/actions/pnpm-install
 
       # production 依存に high 以上の脆弱性が見つかった場合はジョブを失敗させる。
       - name: Audit production dependencies (high and above)
-        run: yarn npm audit --all --recursive --environment production --severity high
+        run: pnpm npm audit --all --recursive --environment production --severity high

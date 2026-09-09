@@ -1,0 +1,90 @@
+# pnpm の設定はすべてここに集約する。
+# pnpm 11 以降、.npmrc からは auth / registry しか読まれない。それ以外の設定を .npmrc に
+# 書いてもエラーも警告もなく無視されるため、設定の置き場をこのファイルに一本化する。
+
+packages:
+  - packages/*
+
+# Takumi Guard（検査済みプロキシ）を既定のレジストリにする。CI だけでなくローカル install も
+# ここを経由させる。Renovate もこの値を読む。
+registries:
+  default: https://npm.flatt.tech/
+
+engineStrict: true # engines のバージョン指定を厳格化する
+saveExact: true # package.json に保存するバージョンを完全固定する（yarn の defaultSemverRangePrefix: '' 相当）
+
+# ネットワークエラーのリトライ設定。既定（2 回）では一時的な取得失敗に対する耐性が不足するため増やす。
+# factor は既定の 10 だと 2 回目で上限に張り付くため 2 に下げ、総待機を 5+10+20+40+60=135 秒に抑える。
+fetchRetries: 5
+fetchRetryFactor: 2
+fetchRetryMintimeout: 5000
+fetchRetryMaxtimeout: 60000
+
+# 複数パッケージで共有する依存のバージョンを 1 箇所に固定する（package.json 側は "catalog:"）。
+# strict: catalog と異なるバージョンの add を ERR_PNPM_CATALOG_VERSION_MISMATCH で拒否し、
+# ドリフトを防ぐ。新規パッケージは catalog へ自動登録される。
+catalogMode: strict
+# strict による自動追加と対を成す自動削除。install 時に未参照の項目を除去する。
+cleanupUnusedCatalogs: true
+
+catalog:
+  rimraf: 6.1.3
+  tailwindcss: 3.4.19
+  tsup: 8.5.1
+  typescript: 5.9.3
+
+# yarn の resolutions から移設。
+overrides:
+  # nwsapi 2.2.26 以降、jsdom 下で matches(':modal') が Element.matches() を再帰的に呼び出し、
+  # 1 回あたり約 1.3 秒かかる回帰がある（dperini/nwsapi#172 / #177。原因は commit 24cdab6 の
+  # display-state 疑似クラスのネイティブ検出）。@floating-ui/utils の isTopLayer が
+  # matches(':modal') を毎回呼ぶため、Select / Popup などフローティング UI を開くテストが
+  # 極端に遅くなる（実測: select.test.tsx が 0.7 秒 → 101 秒）。
+  #
+  # jsdom は nwsapi を範囲指定（^2.2.12）で依存しているため、lockfile を作り直すと 2.2.27 が入る。
+  # 最新の 2.2.27 でも未修正のため 2.2.26 未満に固定する。
+  #
+  # この行を外せるのは次のどちらか:
+  #   1. nwsapi 側で修正がリリースされる
+  #   2. jsdom を 27 以上に上げる（jsdom 27.0.0 で nwsapi への依存自体がなくなった。
+  #      現在は 24.1.3 で依存あり ^2.2.12、26.1.0 でも ^2.2.16）
+  nwsapi: 2.2.25
+
+  # 以下 2 つは yarn の resolutions から移設したもの。どちらも「当時の特定バージョンの不具合を
+  # 避ける」ための一時固定で、その理由はすでに解消している。
+  #
+  # 【削除できることを検証済み】2 つとも外して lockfile を作り直しても
+  # build:all / test:ci / build-storybook はすべて通る（vite は 7.3.6 のまま、rollup は 4.63.1 に上がる）。
+  # rollup の固定理由は「4.45.0 で build-storybook が壊れる」ことだったので、その storybook ビルドが
+  # 通る以上、固定を続ける理由はない。
+  # ただし移行 PR に依存ポリシーの変更を混ぜると CI が落ちたときの切り分けができなくなるため、
+  # 削除は移行後の別 PR で行う。
+  #
+  # vite: PR #415（Vitest 導入・2025-07-07）で 5.4.19 として追加。理由はコミット・PR とも記録が
+  #   なく、数日のうちに追加と削除を繰り返した試行錯誤の跡がある（Vitest と Storybook が引く
+  #   vite の競合回避と思われる）。
+  vite: 7.3.6
+  # rollup: PR #421（2025-07-14）で 4.44.0 として追加。rollup 4.45.0 で build-storybook が
+  #   失敗したための固定で、「4.45.0 のリリースが数日前」と PR 本文に明記された一時措置。
+  #   現在は 4.62.3 まで上がっており、当時の問題は過去のもの。
+  rollup: 4.62.3
+
+# 依存パッケージのビルドスクリプト（preinstall / install / postinstall）の allowlist。
+# pnpm は既定でこれらを実行しないため、install 時の任意コード実行（認証情報・publish トークンの
+# 窃取／自己増殖）を遮断できる。ビルドが必要なパッケージのみここに列挙する。
+allowBuilds:
+  esbuild: true
+
+# リリースから 3 日未満のバージョンを install 対象外にする（0-day / 改ざん版対策）。
+# 推移的依存も対象になる。
+#
+# 緊急時は minimumReleaseAgeExclude に 'pkg@version' 形式で追記する。ただしこれは待機期間の免除、
+# すなわちサプライチェーン防御の穴であり、対象が待機期間を過ぎたら速やかに削除すること。
+minimumReleaseAge: 4320
+# 条件を満たすバージョンが無いとき、古いバージョンへ黙って落ちずに解決を失敗させる。
+minimumReleaseAgeStrict: true
+# 公開日時を返さないレジストリ経由のとき、待機期間の判定を黙ってスキップせず失敗させる。
+# 既定は true（スキップ）で、これだと防御が静かに外れるため false にする。
+minimumReleaseAgeIgnoreMissingTime: false
+# add / update / remove 時に、lockfile が解決しなくなった除外エントリを自動削除する。
+minimumReleaseAgeExcludePrune: true

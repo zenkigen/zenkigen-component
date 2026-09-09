@@ -1,36 +1,28 @@
 {
   "name": "zenkigen-component",
   "private": true,
-  "packageManager": "yarn@4.18.0",
-  "workspaces": [
-    "packages/*"
-  ],
-  "dependenciesMeta": {
-    "esbuild": {
-      "built": true
-    }
+  "packageManager": "pnpm@12.4.0",
+  "engines": {
+    "node": ">=24.18.1 <25",
+    "pnpm": ">=12.4.0 <13"
   },
   "scripts": {
     "lint": "eslint './packages/**/*.ts{,x}' && prettier --check .",
     "lint:fix": "eslint './packages/**/*.ts{,x}' --fix && prettier --write .",
     "check-filenames": "node scripts/check-filename-case.mjs",
-    "lint:all": "yarn lint && yarn check-filenames",
-    "type-check": "yarn workspaces foreach --all --exclude zenkigen-component run type-check",
-    "build:all": "yarn workspaces foreach --all -pt --exclude zenkigen-component run build",
-    "build-lib:all": "yarn workspaces foreach --all -pt --exclude zenkigen-component run build-lib",
-    "publish:all": "yarn workspaces foreach --all --exclude zenkigen-component npm publish",
+    "lint:all": "pnpm lint && pnpm check-filenames",
+    "type-check": "pnpm -r --if-present run type-check",
+    "build:all": "pnpm -r run build",
+    "build-lib:all": "pnpm -r run build-lib",
+    "publish:all": "pnpm -r publish",
     "storybook": "storybook dev -p 6006",
-    "create-component": "yarn workspace @zenkigen-inc/component-ui hygen generator components",
-    "update-tokens": "yarn workspace @zenkigen-inc/component-config run build:tokens",
-    "test": "yarn workspace @zenkigen-inc/component-ui run test",
-    "test:ci": "yarn workspace @zenkigen-inc/component-ui run test:ci",
+    "create-component": "pnpm --filter @zenkigen-inc/component-ui exec hygen generator components",
+    "update-tokens": "pnpm --filter @zenkigen-inc/component-config run build:tokens",
+    "test": "pnpm --filter @zenkigen-inc/component-ui run test",
+    "test:ci": "pnpm --filter @zenkigen-inc/component-ui run test:ci",
     "build-storybook": "storybook build",
     "clean": "rimraf node_modules",
     "prepare": "husky"
-  },
-  "resolutions": {
-    "vite": "7.3.6",
-    "rollup": "4.62.3"
   },
   "devDependencies": {
     "@babel/core": "7.29.7",
@@ -56,7 +48,10 @@
     "@typescript-eslint/eslint-plugin": "8.65.0",
     "@typescript-eslint/parser": "8.65.0",
     "@vitejs/plugin-react": "5.2.0",
+    "@zenkigen-inc/component-config": "workspace:*",
+    "@zenkigen-inc/component-ui": "workspace:*",
     "autoprefixer": "10.5.4",
+    "axe-core": "4.12.1",
     "eslint": "9.39.5",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-react": "7.37.5",
@@ -74,12 +69,12 @@
     "prettier": "3.9.6",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "rimraf": "6.1.3",
+    "rimraf": "catalog:",
     "storybook": "10.5.5",
-    "tailwindcss": "3.4.19",
+    "tailwindcss": "catalog:",
     "terser": "5.49.0",
-    "tsup": "8.5.1",
-    "typescript": "5.9.3",
+    "tsup": "catalog:",
+    "typescript": "catalog:",
     "vite": "7.3.6",
     "vitest": "3.2.7"
   },
