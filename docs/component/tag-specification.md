@@ -201,7 +201,7 @@ const EditableTags = () => {
 
 ## スタイルのカスタマイズ
 
-`tagColors` / `tagLightColors` の定義は `@zenkigen-inc/component-theme` に含まれる。色やタイポグラフィを変更する場合は `packages/component-theme/src/colors.ts` でトークンを調整し、`component-config` を再生成した後に `yarn build:all` を実行する。
+`tagColors` / `tagLightColors` の定義は `@zenkigen-inc/component-theme` に含まれる。色やタイポグラフィを変更する場合は `packages/component-theme/src/colors.ts` でトークンを調整し、`component-config` を再生成した後に `pnpm build:all` を実行する。
 
 ## 更新履歴
 
