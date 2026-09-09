@@ -28,7 +28,8 @@ const meta: Meta<typeof Select> = {
     },
     optionListMaxHeight: {
       type: 'string',
-      description: 'オプションリストの最大高さ',
+      description:
+        'オプションリストの最大高さ。未指定の場合はオプション 8.5 個分（large: 350px、それ以外: 282px）。"none" で制限を解除',
     },
     placeholder: {
       type: 'string',
@@ -976,6 +977,134 @@ export const HasDeselectButton: Story = {
           '- **任意項目**: `hasDeselectButton={true}` で「選択解除」を表示する',
           '',
           '`placeholder` は未選択時の表示テキストを指定するプロパティであり、「選択解除」の表示制御には用いない。表示を制御する場合は `hasDeselectButton` を指定すること。',
+        ].join('\n'),
+      },
+    },
+  },
+};
+
+// 既定の高さ（8.5 個分）でスクロールが発生することを確認するための長いリスト
+const longOptionsList: SelectOption[] = Array.from({ length: 12 }, (_, index) => ({
+  id: `${index + 1}`,
+  label: `選択肢${index + 1}`,
+  value: `${index + 1}`,
+}));
+
+const captionStyle = { color: '#5a6570', fontSize: '12px', whiteSpace: 'nowrap' } as const;
+const columnStyle = { display: 'flex', flexDirection: 'column', gap: '8px' } as const;
+const rowStyle = { display: 'flex', alignItems: 'flex-start', gap: '48px' } as const;
+
+function DefaultOptionListMaxHeightContent() {
+  const [selectedXSmall, setSelectedXSmall] = useState<SelectOption | null>(null);
+  const [selectedSmall, setSelectedSmall] = useState<SelectOption | null>(null);
+  const [selectedMedium, setSelectedMedium] = useState<SelectOption | null>(null);
+  const [selectedLarge, setSelectedLarge] = useState<SelectOption | null>(null);
+  const [selectedWithDeselect, setSelectedWithDeselect] = useState<SelectOption | null>(longOptionsList[9] ?? null);
+  const [selectedNone, setSelectedNone] = useState<SelectOption | null>(null);
+
+  return (
+    <div style={{ display: 'grid', rowGap: '420px' }}>
+      <div style={rowStyle}>
+        <div style={columnStyle}>
+          <span style={captionStyle}>x-small / 282px</span>
+          <Select
+            size="x-small"
+            placeholder="選択"
+            selectedOption={selectedXSmall}
+            onChange={(option) => setSelectedXSmall(option)}
+          >
+            {longOptionsList.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
+        </div>
+        <div style={columnStyle}>
+          <span style={captionStyle}>small / 282px</span>
+          <Select
+            size="small"
+            placeholder="選択"
+            selectedOption={selectedSmall}
+            onChange={(option) => setSelectedSmall(option)}
+          >
+            {longOptionsList.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
+        </div>
+        <div style={columnStyle}>
+          <span style={captionStyle}>medium / 282px</span>
+          <Select
+            size="medium"
+            placeholder="選択"
+            selectedOption={selectedMedium}
+            onChange={(option) => setSelectedMedium(option)}
+          >
+            {longOptionsList.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
+        </div>
+        <div style={columnStyle}>
+          <span style={captionStyle}>large / 350px</span>
+          <Select
+            size="large"
+            placeholder="選択"
+            selectedOption={selectedLarge}
+            onChange={(option) => setSelectedLarge(option)}
+          >
+            {longOptionsList.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
+        </div>
+      </div>
+      <div style={rowStyle}>
+        <div style={columnStyle}>
+          <span style={captionStyle}>選択済み（選択解除ボタンを含めて 8.5 個分）</span>
+          <Select
+            size="medium"
+            placeholder="選択"
+            selectedOption={selectedWithDeselect}
+            onChange={(option) => setSelectedWithDeselect(option)}
+          >
+            {longOptionsList.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
+        </div>
+        <div style={columnStyle}>
+          <span style={captionStyle}>optionListMaxHeight=&quot;none&quot;（制限解除・12 件すべて表示）</span>
+          <Select
+            size="medium"
+            placeholder="選択"
+            optionListMaxHeight="none"
+            selectedOption={selectedNone}
+            onChange={(option) => setSelectedNone(option)}
+          >
+            {longOptionsList.map((option) => (
+              <Select.Option key={option.id} option={option} />
+            ))}
+          </Select>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export const DefaultOptionListMaxHeight: Story = {
+  render: () => <DefaultOptionListMaxHeightContent />,
+  parameters: {
+    chromatic: { disable: true },
+    docs: {
+      description: {
+        story: [
+          '`optionListMaxHeight` 未指定時の既定の高さを確認する Story（オプション 12 件）。',
+          '',
+          "既定値はオプション 8.5 個分で、`size` に応じて x-small / small / medium は 282px、large は 350px になる。オプション 1 件の高さが `size='large'` のみ 40px（`h-10`）、それ以外は 32px（`h-8`）のため、上段の 3 つは同じ高さになる。末尾の 0.5 個はスクロールできることを示すためのもの。",
+          '',
+          '下段左: **選択解除ボタンを表示している場合は、そのボタンも 8.5 個に含まれる**ため、選択済みのときは表示されるオプション数がその分減る（表示の有無は `hasDeselectButton` で制御する）。開くと選択中の項目（選択肢10）が中央付近へスクロールされる。',
+          '',
+          '下段右: 高さ制限を外して全件表示したい場合は `optionListMaxHeight="none"` を指定する。',
         ].join('\n'),
       },
     },
