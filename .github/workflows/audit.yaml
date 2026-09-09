@@ -42,4 +42,9 @@ jobs:
 
       # production 依存に high 以上の脆弱性が見つかった場合はジョブを失敗させる。
       - name: Audit production dependencies (high and above)
-        run: pnpm npm audit --all --recursive --environment production --severity high
+        env:
+          # 旧 .yarnrc.yml の npmAuditRegistry と同じ意図。既定のレジストリは Takumi Guard だが、
+          # advisory の問い合わせ先は npmjs に固定し、プロキシ経由で advisory を取得できずに
+          # 偽 green になるのを防ぐ。
+          PNPM_CONFIG_REGISTRY: https://registry.npmjs.org/
+        run: pnpm audit --prod --audit-level high
