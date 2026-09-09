@@ -413,13 +413,13 @@ export type { ButtonProps } from './Button.types';
 
 ```bash
 # Lint実行
-yarn lint
+pnpm lint
 
 # Lint + 自動修正
-yarn lint:fix
+pnpm lint:fix
 
 # 型チェック
-yarn type-check
+pnpm type-check
 ```
 
 ### 保存時の自動実行
@@ -502,13 +502,13 @@ const calculate = () => {
 
 ```bash
 # 全体のLintチェックと修正
-yarn lint:fix
+pnpm lint:fix
 
 # 型チェック
-yarn type-check
+pnpm type-check
 
 # ビルドの確認
-yarn build:all
+pnpm build:all
 ```
 
 ### 4. 品質保証
