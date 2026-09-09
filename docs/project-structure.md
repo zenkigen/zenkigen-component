@@ -141,7 +141,7 @@ component-theme
 
 ## 開発ワークフロー
 
-1. **コンポーネント作成**: `yarn generate-component` コマンドを使用して雛形を生成
+1. **コンポーネント作成**: `pnpm generate-component` コマンドを使用して雛形を生成
 2. **テスト**: Storybookを使用してコンポーネントをテスト
-3. **ビルド**: `yarn build` コマンドを使用してパッケージをビルド
+3. **ビルド**: `pnpm build` コマンドを使用してパッケージをビルド
 4. **公開**: `v*` タグの push を起点に CI が npm publish する（詳細は[リリース手順](./release-process.md)を参照）
