@@ -11,6 +11,8 @@
 
 ## インストール
 
+> **対応バージョン**: v1.x は **Tailwind CSS v3 専用**です。Tailwind CSS v4 のプロジェクトでは v2 系列を利用してください（導入・移行の手順は [v1 → v2 移行ガイド](https://github.com/zenkigen/zenkigen-component/blob/main/docs/migration-v1-to-v2.md) を参照）。
+
 ```bash
 yarn add @zenkigen-inc/component-ui @zenkigen-inc/component-config
 ```

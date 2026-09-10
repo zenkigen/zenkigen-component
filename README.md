@@ -16,6 +16,16 @@ ZENKIGENのコンポーネントライブラリです。Reactコンポーネン�
 
 ## インストール
 
+> [!IMPORTANT]
+> 本 README のセットアップ手順は **v1.x（Tailwind CSS v3 専用）** 向けです。バージョン系列ごとに対応する Tailwind CSS が異なります：
+>
+> | zenkigen-component    | Tailwind CSS |
+> | --------------------- | ------------ |
+> | v1.x（現行 `latest`） | **v3 のみ**  |
+> | v2.x                  | **v4 のみ**  |
+>
+> Tailwind CSS v4 のプロジェクトでは v2 系列を利用してください。導入・移行の手順は [v1 → v2 移行ガイド](./docs/migration-v1-to-v2.md) を、バージョン系列の運用は [バージョン運用方針](./docs/versioning-policy.md) を参照してください。
+
 ### 1. パッケージのインストール
 
 ```bash
