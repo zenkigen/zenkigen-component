@@ -208,3 +208,58 @@ export function SingleIconNoColor() {
     </div>
   );
 }
+
+/**
+ * 着色 4 経路の結合検証用 fixture。
+ * fill-* の CSS 変数ブリッジが stroke 系（lucide 由来）アイコンにも効くことを、
+ * 利用側で実在する 4 つの着色経路すべてで確認する（④ は実際に hover して確認する）。
+ */
+export function ColorPaths() {
+  const names = ['close', 'search', 'harutaka', 'volume-off'] as const;
+
+  return (
+    <div className="flex flex-col gap-6 p-4">
+      <div>
+        <div className="typography-body14bold">① color prop（interactive01）:</div>
+        <div className="flex items-center gap-2">
+          {names.map((name) => (
+            <Icon key={name} name={name} size="large" color="interactive01" />
+          ))}
+        </div>
+      </div>
+      <div>
+        <div className="typography-body14bold">② className に fill-* 直渡し（supportError）:</div>
+        <div className="flex items-center gap-2">
+          {names.map((name) => (
+            <Icon key={name} name={name} size="large" className="fill-supportError" />
+          ))}
+        </div>
+      </div>
+      <div>
+        <div className="typography-body14bold">③ 親ラッパー要素へ fill-* 付与（supportSuccess）:</div>
+        <div className="flex items-center gap-2 fill-supportSuccess">
+          {names.map((name) => (
+            <Icon key={name} name={name} size="large" />
+          ))}
+        </div>
+      </div>
+      <div>
+        <div className="typography-body14bold">④ group-hover:fill-*（hover で supportError に変化）:</div>
+        <div className="group flex items-center gap-2 fill-icon01">
+          {names.map((name) => (
+            <Icon key={name} name={name} size="large" className="group-hover:fill-supportError" />
+          ))}
+        </div>
+      </div>
+      <div>
+        <div className="typography-body14bold">参考: accentColor 併用（color=icon01 / accentColor=supportError）:</div>
+        <div className="flex items-center gap-2">
+          <Icon name="signal-low" size="large" color="icon01" accentColor="supportError" />
+          <Icon name="signal-off" size="large" color="icon01" accentColor="supportError" />
+          <Icon name="volume-off" size="large" color="icon01" accentColor="supportError" />
+          <Icon name="mic" size="large" color="icon01" accentColor="supportError" />
+        </div>
+      </div>
+    </div>
+  );
+}
