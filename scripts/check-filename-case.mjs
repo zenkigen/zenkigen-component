@@ -22,7 +22,6 @@ const IGNORE_PATTERNS = [
   '.git/**',
   '**/dist/**',
   'build/**',
-  '.yarn/**',
   'storybook-static/**',
   '**/*.d.ts', // TypeScript型定義ファイルは除外
   '**/*.svg', // SVGファイルは除外

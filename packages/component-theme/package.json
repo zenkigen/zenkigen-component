@@ -4,7 +4,8 @@
   "repository": "https://github.com/zenkigen/zenkigen-component",
   "license": "MIT",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
   "source": "./src/index.ts",
   "main": "./dist/index.js",
@@ -22,8 +23,9 @@
     "build-lib": "rimraf dist && tsup src/index.ts --format cjs,esm --dts"
   },
   "devDependencies": {
-    "tailwindcss": "3.4.19",
-    "tsup": "8.5.1",
-    "typescript": "5.9.3"
+    "rimraf": "catalog:",
+    "tailwindcss": "catalog:",
+    "tsup": "catalog:",
+    "typescript": "catalog:"
   }
 }

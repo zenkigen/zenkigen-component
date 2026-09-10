@@ -21,23 +21,14 @@ jobs:
     steps:
       - uses: actions/checkout@main
 
-      - name: Read Node version from .node-version
-        run: echo "node_version=$(cat .node-version)" >> $GITHUB_OUTPUT
-        id: node-version
-
-      - name: Use Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ steps.node-version.outputs.node_version }}
-
-      - name: Yarn install
-        uses: ./.github/actions/yarn-install
+      - name: Install dependencies
+        uses: ./.github/actions/pnpm-install
 
       - name: Build
-        run: yarn build:all
+        run: pnpm build:all
 
       - name: TypeScript type check
-        run: yarn type-check
+        run: pnpm type-check
 
   lint:
     if: github.event.pull_request.draft == false
@@ -45,23 +36,14 @@ jobs:
     steps:
       - uses: actions/checkout@main
 
-      - name: Read Node version from .node-version
-        run: echo "node_version=$(cat .node-version)" >> $GITHUB_OUTPUT
-        id: node-version
-
-      - name: Use Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ steps.node-version.outputs.node_version }}
-
-      - name: Yarn install
-        uses: ./.github/actions/yarn-install
+      - name: Install dependencies
+        uses: ./.github/actions/pnpm-install
 
       - name: Build
-        run: yarn build:all
+        run: pnpm build:all
 
       - name: Lint and filename check
-        run: yarn lint
+        run: pnpm lint
 
   test:
     if: github.event.pull_request.draft == false
@@ -69,20 +51,11 @@ jobs:
     steps:
       - uses: actions/checkout@main
 
-      - name: Read Node version from .node-version
-        run: echo "node_version=$(cat .node-version)" >> $GITHUB_OUTPUT
-        id: node-version
-
-      - name: Use Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ steps.node-version.outputs.node_version }}
-
-      - name: Yarn install
-        uses: ./.github/actions/yarn-install
+      - name: Install dependencies
+        uses: ./.github/actions/pnpm-install
 
       - name: Build
-        run: yarn build:all
+        run: pnpm build:all
 
       - name: Test
-        run: yarn test:ci
+        run: pnpm test:ci

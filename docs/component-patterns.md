@@ -97,7 +97,7 @@ type Props<T extends ElementAs> = PolymorphicPropsWithoutRef<
 新しいコンポーネントを開発する際は、hygenを使って雛形を生成します：
 
 ```bash
-yarn generate-component
+pnpm generate-component
 ```
 
 このコマンドは、適切なディレクトリ構造とファイルテンプレートを作成します。
@@ -111,7 +111,7 @@ yarn generate-component
 実装したコンポーネントは、Storybookを使用してビジュアルテストを行います：
 
 ```bash
-yarn storybook
+pnpm storybook
 ```
 
 ### 4. インデックスファイルへのエクスポート追加

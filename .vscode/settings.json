@@ -11,6 +11,6 @@
   ],
   "typescript.tsdk": "node_modules/typescript/lib",
   "search.exclude": {
-    ".yarn": true
+    "**/node_modules/.pnpm": true
   }
 }

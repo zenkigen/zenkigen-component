@@ -4,6 +4,19 @@ on:
   push:
     tags:
       - 'v*'
+  # publish はタグを打つまで一度も実行されないため、経路が壊れていてもリリース当日まで気づけない。
+  # publish に影響する変更を含む PR では dry-run を走らせ、事前に検証する。
+  # 実際の publish は push（タグ）のときだけ行うので、PR で公開されることはない。
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+    paths:
+      - '.github/workflows/publish.yaml'
+      - 'package.json'
+      - 'packages/*/package.json'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+  # 任意のタイミングで手動確認するための経路（こちらも dry-run のみ）。
+  workflow_dispatch:
 
 # GITHUB_TOKEN は checkout の読み取りにしか使わない（npm publish の認証は NPM_TOKEN）。
 # 未指定だとリポジトリ既定が適用され Contents を含む 18 スコープが write になるため、
@@ -21,6 +34,11 @@ jobs:
         run: echo "node_version=$(cat .node-version)" >> $GITHUB_OUTPUT
         id: node-version
 
+      # このジョブは共通の pnpm-install action を使わない（registry-url / scope の指定が要るため）。
+      # corepack を有効化しないと pnpm が存在せず、PR の CI がすべて緑でもタグ発行時だけ失敗する。
+      - name: Enable corepack
+        run: corepack enable
+
       - name: Use Node.js
         uses: actions/setup-node@v6
         with:
@@ -30,12 +48,13 @@ jobs:
           always-auth: true
 
       - name: Install dependencies
-        run: yarn install
+        run: pnpm install --frozen-lockfile
 
       - name: Build npm package
-        run: yarn build-lib:all
+        run: pnpm build-lib:all
 
       - name: Determine npm dist-tag
+        if: github.event_name == 'push'
         id: dist-tag
         run: |
           # タグ名に '-'（プレリリース識別子）を含む場合は next、それ以外は latest。
@@ -49,9 +68,23 @@ jobs:
           fi
 
       - name: Publish npm package
-        # --tolerate-republish: publish:all は 4 パッケージを順次公開するため、途中失敗後の再実行で
-        # 公開済み version が EPUBLISHCONFLICT を起こすのを避け、未公開分のみ揃えられるようにする。
-        run: yarn publish:all --tag ${{ steps.dist-tag.outputs.name }} --tolerate-republish
+        if: github.event_name == 'push'
+        # pnpm -r publish は「まだ公開されていないバージョンだけ」を publish するため、
+        # 途中失敗後の再実行でも公開済み version が EPUBLISHCONFLICT を起こさない
+        # （yarn の --tolerate-republish に相当する挙動が標準）。
+        # タグからの checkout は detached HEAD になり publish ブランチ判定に掛かるため --no-git-checks が要る。
+        run: pnpm publish:all --tag ${{ steps.dist-tag.outputs.name }} --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_OPTIONS: --max_old_space_size=8192
+
+      # 手動実行時の検証。--force を付けないと「公開済みなので全スキップ」で何も検証せずに成功する。
+      # タグ push 以外（PR / 手動実行）では publish せず、経路の検証だけを行う。
+      # --force が無いと「公開済みなのでスキップ」で 4 パッケージとも処理されず、
+      # 何も検証しないまま成功してしまう。出力に 4 パッケージすべてが並ぶことが確認の要点。
+      # dry-run はレジストリへ書き込まないため NPM_TOKEN は不要（fork PR でも動作する）。
+      - name: Dry run publish
+        if: github.event_name != 'push'
+        run: pnpm publish:all --dry-run --force --no-git-checks
+        env:
           NODE_OPTIONS: --max_old_space_size=8192

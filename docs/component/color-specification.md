@@ -118,8 +118,8 @@ export const InteractiveButton = () => (
 Color の変更は `@zenkigen-inc/component-config` のトークンを更新して行う。
 
 1. `packages/component-config/style-dictionary/tokens.json` を更新する。
-2. `yarn workspace @zenkigen-inc/component-config run build:tokens` を実行する。
-3. `yarn build:all` で全体へ反映する。
+2. `pnpm --filter @zenkigen-inc/component-config run build:tokens` を実行する。
+3. `pnpm build:all` で全体へ反映する。
 
 ## 更新履歴
 

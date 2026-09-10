@@ -203,16 +203,24 @@ git clone https://github.com/zenkigen/zenkigen-component.git
 cd zenkigen-component
 
 # 依存関係のインストール
-yarn install
+pnpm install
 
 # build
-yarn build-lib:all
+pnpm build-lib:all
 
 # Storybook起動
-yarn storybook
+pnpm storybook
 ```
 
-Storybook MCP は Storybook 起動中に利用可能になります。MCP を使った story の URL 取得や UI 開発支援が必要な場合は、先に `yarn storybook` を起動してください。
+> **パッケージマネージャは pnpm です。** Node と pnpm のバージョンは `.node-version` と、ルート `package.json` の
+> `packageManager` / `engines` が決めます。`corepack enable` を実行しておけば、`pnpm` コマンドが自動で指定の
+> バージョンに切り替わります。
+>
+> 依存の取得は検査プロキシ（[Takumi Guard](https://github.com/flatt-security/setup-takumi-guard-npm) /
+> `npm.flatt.tech`）を経由します（`pnpm-workspace.yaml` の `registries`）。既知の悪性パッケージをブロックする
+> ためのもので、アカウントなしで利用できます。
+
+Storybook MCP は Storybook 起動中に利用可能になります。MCP を使った story の URL 取得や UI 開発支援が必要な場合は、先に `pnpm storybook` を起動してください。
 
 ## ライセンス
 

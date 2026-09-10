@@ -1,0 +1,34 @@
+name: pnpm install
+description: 'Set up Node.js and pnpm, then install dependencies through Takumi Guard'
+runs:
+  using: composite
+  steps:
+    # setup-node の cache: 'pnpm' は pnpm の実体を必要とするため、先に corepack を有効化する。
+    # pnpm 自体のバージョンは package.json の packageManager フィールドが決める。
+    - name: Enable corepack
+      shell: bash
+      run: corepack enable
+
+    - name: Read Node version from .node-version
+      shell: bash
+      id: node-version
+      run: echo "node_version=$(cat .node-version)" >> $GITHUB_OUTPUT
+
+    - name: Use Node.js
+      uses: actions/setup-node@v6
+      with:
+        node-version: ${{ steps.node-version.outputs.node_version }}
+        cache: 'pnpm'
+        cache-dependency-path: pnpm-lock.yaml
+
+    # install を Takumi Guard（npm.flatt.tech）経由にし、既知の悪性パッケージをブロックする。
+    # レジストリは pnpm-workspace.yaml の registries でも固定しているが、この action は
+    # 認証まわりも含めて設定するため多層防御として残す。
+    # 匿名モード（bot-id なし / Tier A ブロッキングのみ）のため id-token 権限は不要で、fork PR でも動作する。
+    - name: Setup Takumi Guard (anonymous, blocking only)
+      uses: flatt-security/setup-takumi-guard-npm@9a5d797c2085b6326d3a2985c08e3a114b9b88c1 # v1.1.1
+
+    # CI では既定で frozen だが、意図を明示する（lockfile と package.json の齟齬を失敗させる）。
+    - name: Install dependencies
+      shell: bash
+      run: pnpm install --frozen-lockfile
