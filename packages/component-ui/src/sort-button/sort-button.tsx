@@ -40,7 +40,7 @@ export function SortButton({
     if (sortOrder === 'ascend') return 'arrow-up';
     if (sortOrder === 'descend') return 'arrow-down';
 
-    return 'angle-small-down';
+    return 'angle-down';
   };
 
   const wrapperClasses = clsx('relative flex shrink-0 items-center gap-1 rounded', {
