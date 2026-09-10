@@ -14,6 +14,12 @@
 - [リリース手順](./release-process.md) - npm publish の手順（version bump・タグ・CI publish・dist-tag）
 - [バージョン運用方針](./versioning-policy.md) - メジャーバージョンのライフサイクル・ブランチ戦略・dist-tag 体制
 
+### 調査資料（research/）
+
+設計判断の材料となる調査・棚卸し系のドキュメント。正式な規約・ガイドラインとは区別して `research/` 配下に置く。
+
+- [カラートークン棚卸し](./research/color-token-consolidation.md) - トークンの変遷と使用実態監査に基づく整理方針
+
 ## プロジェクト概要
 
 Zenkigen Component は React コンポーネントライブラリで、ZENKIGENのデザインシステムに準拠したUIを構築するためのツールを提供します。Tailwind CSSをベースとしており、一貫したデザインとUIコンポーネントをアプリケーションに簡単に取り入れることができます。
