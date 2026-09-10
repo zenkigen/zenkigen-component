@@ -1,6 +1,7 @@
 import { buttonColors, focusVisible } from '@zenkigen-inc/component-theme';
 import { clsx } from 'clsx';
-import type { ComponentPropsWithoutRef, CSSProperties, ElementType, PropsWithChildren, ReactNode } from 'react';
+import type { ComponentPropsWithoutRef, CSSProperties, ElementType, PropsWithChildren, ReactNode, Ref } from 'react';
+import { forwardRef } from 'react';
 
 type Size = 'small' | 'medium' | 'large' | 'x-large';
 type Variant = 'fill' | 'fillDanger' | 'outline' | 'text';
@@ -53,7 +54,7 @@ type InternalProps<T extends ElementAs> = BaseProps<T> & {
 };
 
 // 共通のButton実装
-const createButton = <T extends ElementAs = 'button'>(props: InternalProps<T>) => {
+const createButton = <T extends ElementAs = 'button'>(props: InternalProps<T>, ref?: Ref<HTMLButtonElement>) => {
   const {
     size = 'medium',
     variant = 'fill',
@@ -97,7 +98,7 @@ const createButton = <T extends ElementAs = 'button'>(props: InternalProps<T>) =
   const Component = elementAs ?? 'button';
 
   return (
-    <Component className={baseClasses} style={{ width, borderRadius }} disabled={isDisabled} {...restProps}>
+    <Component ref={ref} className={baseClasses} style={{ width, borderRadius }} disabled={isDisabled} {...restProps}>
       {before}
       {children}
       {after}
@@ -111,6 +112,10 @@ export const Button = <T extends ElementAs = 'button'>(props: PublicProps<T>) =>
 };
 
 // 内部実装用のButtonコンポーネント（outlineDanger variantを含む）
-export const InternalButton = <T extends ElementAs = 'button'>(props: InternalProps<T>) => {
-  return createButton(props);
-};
+// PopoverTrigger 等が cloneElement で注入する ref を host button まで届けるため forwardRef でラップする
+export const InternalButton = forwardRef<HTMLButtonElement, InternalProps<'button'>>(
+  function InternalButton(props, ref) {
+    return createButton(props, ref);
+  },
+);
+InternalButton.displayName = 'InternalButton';
