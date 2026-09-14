@@ -2,6 +2,7 @@ import { act, fireEvent, render, screen } from '@testing-library/react';
 import type { ComponentProps } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { TOP_LAYER_ATTRIBUTE } from '../utils';
 import { Toast } from './toast';
 import { ToastProvider, useToast } from './toast-provider';
 
@@ -306,6 +307,13 @@ const getToastRoots = () =>
   Array.from(getToastContainer().children).map((wrapper) => wrapper.firstElementChild as HTMLElement);
 
 describe('ToastProvider / useToast', () => {
+  it('コンテナに、Modal 表示中も操作・読み上げ可能に保つための属性が付くこと', () => {
+    // Modal は背面を inert にする際、この属性を持つ要素を除外する
+    renderProvider({ message: '保存しました', state: 'success' });
+
+    expect(getToastContainer()).toHaveAttribute(TOP_LAYER_ATTRIBUTE, '');
+  });
+
   it('addToast({ message, state }) でトーストが表示されること', () => {
     renderProvider({ message: '保存しました', state: 'success' });
 

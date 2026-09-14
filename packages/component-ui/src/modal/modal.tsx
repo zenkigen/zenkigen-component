@@ -1,8 +1,10 @@
+import { FloatingFocusManager, useFloating } from '@floating-ui/react';
 import type { CSSProperties, MutableRefObject, PropsWithChildren } from 'react';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import { MODAL_OPEN_EVENT } from '../hooks/use-dismiss-on-modal-open';
+import { TOP_LAYER_ATTRIBUTE } from '../utils';
 import { BodyScrollLock } from './body-scroll-lock';
 import { ModalBody } from './modal-body';
 import { ModalContext } from './modal-context';
@@ -11,6 +13,24 @@ import { ModalHeader } from './modal-header';
 
 const LIMIT_WIDTH = 320;
 const LIMIT_HEIGHT = 184;
+
+/**
+ * Modal 表示中も inert / aria-hidden の対象から外す要素を返す（FloatingFocusManager の getInsideElements 用）。
+ * Modal を開いた瞬間に一度だけ評価される。
+ *
+ * - `[data-floating-ui-portal]`: Popover / DatePicker / Combobox は閉じていても FloatingPortal の器を
+ *   body 直下に作る。Modal より先に存在するため、除外しないと Modal 内で後から開いたときに
+ *   中身が inert 配下に入って操作できなくなる。
+ *   属性名は floating-ui の内部規約（createAttribute('portal')）なので、ライブラリ更新時は要確認。
+ * - `TOP_LAYER_ATTRIBUTE`: Toast など、Modal より前面に出る設計の要素。inert にすると操作できなくなる。
+ *
+ * body / html が除外対象に入ると floating-ui の走査がそこで止まり、何も inert にならず
+ * トラップが丸ごと無効化されるため、防御的に弾く。
+ */
+const getInsideElements = () =>
+  Array.from(document.querySelectorAll(`[data-floating-ui-portal],[${TOP_LAYER_ATTRIBUTE}]`)).filter(
+    (element) => element !== document.body && element !== document.documentElement,
+  );
 
 type Props = {
   width?: CSSProperties['width'];
@@ -31,6 +51,11 @@ export function Modal({
   portalTargetRef,
 }: PropsWithChildren<Props>) {
   const [isMounted, setIsMounted] = useState(false);
+
+  // FloatingFocusManager は context に useFloating の戻り値を要求する。
+  // Modal は位置計算をしないため reference・placement・middleware は指定しない
+  // （reference がないので computePosition は走らず、floatingStyles も使わない）。
+  const { refs, context } = useFloating({ open: isOpen });
 
   const renderWidth = typeof width === 'number' ? Math.max(width, LIMIT_WIDTH) : width;
   const renderHeight = typeof height === 'number' ? Math.max(height, LIMIT_HEIGHT) : height;
@@ -54,16 +79,30 @@ export function Modal({
       <BodyScrollLock />
       {createPortal(
         <ModalContext.Provider value={{ onClose }}>
-          <div className="fixed left-0 top-0 z-overlay flex size-full items-center justify-center bg-backgroundOverlayBlack py-4">
-            <div
-              role="dialog"
-              aria-modal="true"
-              className="grid max-h-full min-h-[120px] grid-rows-[max-content_1fr_max-content] flex-col rounded-lg bg-uiBackground01 shadow-modalShadow"
-              style={{ width: renderWidth, height: renderHeight, maxWidth }}
-            >
-              {children}
+          {/*
+            フォーカストラップ。開いたら Modal 内の先頭の tabbable へフォーカスを移し、Tab / Shift+Tab を
+            Modal 内でループさせ、閉じたら開く直前にフォーカスがあった要素へ戻す（いずれも既定値の挙動）。
+            Escape / 背景クリックで閉じる機能は意図的に持たせていない（useDismiss を使わない）。
+            利用側には Esc で閉じてはいけないモーダルがあり、デフォルトで有効にすると破壊的変更になるため。
+
+            outsideElementsInert: 背面を inert にする。既定の aria-hidden はタブ順から要素を外さないため、
+            フォーカスが focus guard の外（body 直下のポータル内や body 自身）へ出ると Tab + Enter で
+            背面が操作できてしまう。inert 非対応ブラウザ・jsdom では自動的に aria-hidden へフォールバックする。
+          */}
+          <FloatingFocusManager context={context} outsideElementsInert getInsideElements={getInsideElements}>
+            <div className="fixed left-0 top-0 z-overlay flex size-full items-center justify-center bg-backgroundOverlayBlack py-4">
+              {/* role="dialog" は FloatingFocusManager が tabindex を自動付与する前提条件なので変更しない */}
+              <div
+                ref={refs.setFloating}
+                role="dialog"
+                aria-modal="true"
+                className="grid max-h-full min-h-[120px] grid-rows-[max-content_1fr_max-content] flex-col rounded-lg bg-uiBackground01 shadow-modalShadow"
+                style={{ width: renderWidth, height: renderHeight, maxWidth }}
+              >
+                {children}
+              </div>
             </div>
-          </div>
+          </FloatingFocusManager>
         </ModalContext.Provider>,
         portalTargetRef?.current != null ? portalTargetRef.current : document.body,
       )}
