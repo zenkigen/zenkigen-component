@@ -2,12 +2,13 @@ import type { IconName } from '@zenkigen-inc/component-icons';
 import { buttonColors, focusVisible } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
 import type { MutableRefObject, PropsWithChildren, ReactElement } from 'react';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import { useDismissOnModalOpen } from '../hooks/use-dismiss-on-modal-open';
 import { useOutsideClick } from '../hooks/use-outside-click';
 import { Icon } from '../icon';
+import { TOP_LAYER_ATTRIBUTE } from '../utils';
 import { DropdownContext } from './dropdown-context';
 import { DropdownItem } from './dropdown-item';
 import { DropdownMenu } from './dropdown-menu';
@@ -61,6 +62,15 @@ export function Dropdown({
   });
 
   const targetRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+
+  // portalTargetRef は render 時点では未設定（コンテナが後続の兄弟なら layout effect の時点でも未設定）のため、
+  // 全 ref が付与された後の passive effect で解決して state に持つ。これによりポータル先のラッパーが
+  // トグル前から（Modal を開く前に）マウントされる。コンテナは描画時点で存在する前提（仕様書の注意事項）。
+  const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
+  useEffect(() => {
+    setPortalTarget(portalTargetRef?.current ?? null);
+  }, [portalTargetRef]);
   useOutsideClick(targetRef, () => setIsVisible(false));
   useDismissOnModalOpen(() => {
     if (isVisible) {
@@ -125,11 +135,12 @@ export function Dropdown({
 
   return (
     <DropdownContext.Provider
-      value={{ isVisible, setIsVisible, isDisabled, targetDimensions, variant, size, portalTargetRef }}
+      value={{ isVisible, setIsVisible, isDisabled, targetDimensions, variant, size, portalTargetRef, triggerRef }}
     >
       <div ref={targetRef} className={wrapperClasses}>
         {target ? (
           <button
+            ref={triggerRef}
             type="button"
             title={title}
             className={childrenButtonClasses}
@@ -147,7 +158,14 @@ export function Dropdown({
             )}
           </button>
         ) : (
-          <button type="button" title={title} className={buttonClasses} onClick={handleToggle} disabled={isDisabled}>
+          <button
+            ref={triggerRef}
+            type="button"
+            title={title}
+            className={buttonClasses}
+            onClick={handleToggle}
+            disabled={isDisabled}
+          >
             {icon && (
               <span className="mr-1 flex">
                 <Icon name={icon} size={size === 'large' ? 'medium' : 'small'} />
@@ -163,7 +181,12 @@ export function Dropdown({
         )}
         {!portalTargetRef
           ? children
-          : portalTargetRef != null && portalTargetRef.current && createPortal(children, portalTargetRef.current)}
+          : portalTarget != null &&
+            // Modal の外にあるコンテナへ描画すると、Modal 表示時にそのコンテナが inert になりメニューが操作不能になる。
+            // 常時マウントされる自前のラッパーに除外用の属性を付けることで、Modal 表示中もメニューを操作可能に保つ。
+            // 属性は「自分が描画した要素」にだけ付ける。利用側のコンテナ（body の可能性がある）に付けると
+            // ページ全体が除外され、Modal のフォーカストラップが無効化される。
+            createPortal(<div {...{ [TOP_LAYER_ATTRIBUTE]: '' }}>{children}</div>, portalTarget)}
       </div>
     </DropdownContext.Provider>
   );

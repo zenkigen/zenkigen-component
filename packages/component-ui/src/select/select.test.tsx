@@ -1,4 +1,5 @@
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import React, { useState } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -689,6 +690,154 @@ describe('Select', () => {
 
       const selectButton = screen.getByRole('button');
       expect(selectButton).not.toHaveFocus();
+    });
+  });
+
+  describe('キーボード操作とフォーカス復帰', () => {
+    const PLACEHOLDER = 'カテゴリ';
+    // トリガーの accessible name にはアイコンの aria-label（angleSmallDown 等）が混ざるため、DOM 順で先頭のボタンとして取得する
+    // （候補リストは body 末尾のポータルに描画されるので、トリガーは常に先頭）
+    const getTrigger = () => {
+      const [trigger] = screen.getAllByRole('button');
+      if (trigger == null) {
+        throw new Error('トリガーボタンが見つかりません');
+      }
+
+      return trigger;
+    };
+    // 選択中の候補は名前に check アイコンの aria-label が付くため前方一致で取得する
+    const getOption = (label: string) =>
+      within(screen.getByRole('list')).getByRole('button', { name: new RegExp(`^${label}`) });
+
+    it('候補リストを開くと、未選択なら先頭の候補にフォーカスが移ること', async () => {
+      const user = userEvent.setup();
+      render(<SelectTestComponent placeholder={PLACEHOLDER} />);
+
+      await user.click(getTrigger());
+
+      await waitFor(() => expect(getOption('選択肢A')).toHaveFocus());
+    });
+
+    it('候補リストを開くと、選択中の候補にフォーカスが移ること', async () => {
+      const user = userEvent.setup();
+      render(<SelectTestComponent placeholder={PLACEHOLDER} initialOption={testOptions[1]} />);
+
+      await user.click(getTrigger());
+
+      await waitFor(() => expect(getOption('選択肢B')).toHaveFocus());
+    });
+
+    it('ArrowDown / ArrowUp で候補間を移動し、端ではラップすること', async () => {
+      const user = userEvent.setup();
+      render(<SelectTestComponent placeholder={PLACEHOLDER} />);
+      await user.click(getTrigger());
+      await waitFor(() => expect(getOption('選択肢A')).toHaveFocus());
+
+      await user.keyboard('{ArrowDown}');
+      expect(getOption('選択肢B')).toHaveFocus();
+      await user.keyboard('{ArrowDown}');
+      expect(getOption('選択肢C')).toHaveFocus();
+      await user.keyboard('{ArrowDown}');
+      expect(getOption('選択肢A')).toHaveFocus();
+      await user.keyboard('{ArrowUp}');
+      expect(getOption('選択肢C')).toHaveFocus();
+    });
+
+    it('Home / End で先頭・末尾の候補へ移動すること', async () => {
+      const user = userEvent.setup();
+      render(<SelectTestComponent placeholder={PLACEHOLDER} />);
+      await user.click(getTrigger());
+      await waitFor(() => expect(getOption('選択肢A')).toHaveFocus());
+
+      await user.keyboard('{End}');
+      expect(getOption('選択肢C')).toHaveFocus();
+      await user.keyboard('{Home}');
+      expect(getOption('選択肢A')).toHaveFocus();
+    });
+
+    it('Escape で候補リストが閉じ、トリガーにフォーカスが戻ること', async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      render(
+        <Select placeholder={PLACEHOLDER} selectedOption={null} onChange={onChange}>
+          {testOptions.map((option) => (
+            <Select.Option key={option.id} option={option} />
+          ))}
+        </Select>,
+      );
+      await user.click(getTrigger());
+      await waitFor(() => expect(getOption('選択肢A')).toHaveFocus());
+
+      await user.keyboard('{Escape}');
+
+      expect(screen.queryByRole('list')).not.toBeInTheDocument();
+      expect(getTrigger()).toHaveFocus();
+      expect(onChange).not.toHaveBeenCalled();
+    });
+
+    it('Tab で候補リストが閉じ、トリガーにフォーカスが戻ること', async () => {
+      const user = userEvent.setup();
+      render(<SelectTestComponent placeholder={PLACEHOLDER} />);
+      await user.click(getTrigger());
+      await waitFor(() => expect(getOption('選択肢A')).toHaveFocus());
+
+      await user.tab();
+
+      expect(screen.queryByRole('list')).not.toBeInTheDocument();
+      expect(getTrigger()).toHaveFocus();
+    });
+
+    it('Enter で候補を選択すると、候補リストが閉じてトリガーにフォーカスが戻ること', async () => {
+      const user = userEvent.setup();
+      render(<SelectTestComponent placeholder={PLACEHOLDER} />);
+      await user.click(getTrigger());
+      await waitFor(() => expect(getOption('選択肢A')).toHaveFocus());
+
+      await user.keyboard('{ArrowDown}{Enter}');
+
+      expect(screen.queryByRole('list')).not.toBeInTheDocument();
+      expect(getTrigger()).toHaveTextContent('選択肢B');
+      expect(getTrigger()).toHaveFocus();
+    });
+
+    it('候補をクリックで選択すると、トリガーにフォーカスが戻ること', async () => {
+      const user = userEvent.setup();
+      render(<SelectTestComponent placeholder={PLACEHOLDER} />);
+      await user.click(getTrigger());
+
+      await user.click(getOption('選択肢C'));
+
+      expect(screen.queryByRole('list')).not.toBeInTheDocument();
+      expect(getTrigger()).toHaveTextContent('選択肢C');
+      expect(getTrigger()).toHaveFocus();
+    });
+
+    it('「選択解除」を選ぶと、トリガーにフォーカスが戻ること', async () => {
+      const user = userEvent.setup();
+      render(<SelectTestComponent placeholder={PLACEHOLDER} initialOption={testOptions[0]} hasDeselectButton />);
+      await user.click(getTrigger());
+
+      await user.click(within(screen.getByRole('list')).getByRole('button', { name: '選択解除' }));
+
+      expect(screen.queryByRole('list')).not.toBeInTheDocument();
+      expect(getTrigger()).toHaveFocus();
+    });
+
+    it('外側クリックで閉じたときはトリガーにフォーカスを戻さないこと', async () => {
+      const user = userEvent.setup();
+      render(
+        <div>
+          <SelectTestComponent placeholder={PLACEHOLDER} />
+          <button type="button">外部のボタン</button>
+        </div>,
+      );
+      await user.click(getTrigger());
+      await waitFor(() => expect(getOption('選択肢A')).toHaveFocus());
+
+      await user.click(screen.getByRole('button', { name: '外部のボタン' }));
+
+      await waitFor(() => expect(screen.queryByRole('list')).not.toBeInTheDocument());
+      expect(screen.getByRole('button', { name: '外部のボタン' })).toHaveFocus();
     });
   });
 

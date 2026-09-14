@@ -11,11 +11,11 @@ type Props = {
 };
 
 export function SelectItem({ option }: Props) {
-  const { setIsOptionListOpen, selectedOption, onChange, isError, size } = useContext(SelectContext);
+  const { closeAndFocusTrigger, selectedOption, onChange, isError, size } = useContext(SelectContext);
 
   const handleClickItem = (option: SelectOption) => {
     onChange?.(option);
-    setIsOptionListOpen(false);
+    closeAndFocusTrigger?.();
   };
 
   const itemClasses = clsx(

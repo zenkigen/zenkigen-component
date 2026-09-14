@@ -1,4 +1,4 @@
-import type { MutableRefObject } from 'react';
+import type { MutableRefObject, RefObject } from 'react';
 import { createContext } from 'react';
 
 type UseDropdownReturnType = {
@@ -6,6 +6,8 @@ type UseDropdownReturnType = {
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
   isDisabled: boolean;
   portalTargetRef?: MutableRefObject<HTMLElement | null>;
+  /** トリガーボタン。項目選択後にフォーカスを戻すために使う */
+  triggerRef?: RefObject<HTMLButtonElement | null>;
   targetDimensions: {
     width: number;
     height: number;

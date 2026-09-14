@@ -14,6 +14,8 @@ type UseSelectReturnType = {
   isError?: boolean;
   floatingStyles?: CSSProperties;
   floatingRef?: RefObject<HTMLUListElement | null>;
+  /** オプションリストを閉じてトリガーボタンへフォーカスを戻す（選択・選択解除・Escape・Tab で使う） */
+  closeAndFocusTrigger?: () => void;
 };
 
 export const SelectContext = createContext<UseSelectReturnType>({

@@ -14,9 +14,12 @@ type Props = {
 };
 
 export function DropdownItem({ children, color = 'gray', onClick }: PropsWithChildren<Props>) {
-  const { setIsVisible, size } = useContext(DropdownContext);
+  const { setIsVisible, size, triggerRef } = useContext(DropdownContext);
   const handleClickItem = (event: MouseEvent<HTMLButtonElement>) => {
     setIsVisible(false);
+    // 項目が unmount されてフォーカスが body に落ちないよう、onClick より先にトリガーへ戻す
+    // （onClick で Modal を開く場合、Modal はトリガーを「開く直前の要素」として記録し、閉じたときにそこへ戻せる）
+    triggerRef?.current?.focus({ preventScroll: true });
     onClick?.(event);
   };
   const itemClasses = clsx(

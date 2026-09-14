@@ -3,11 +3,12 @@ import type { IconName } from '@zenkigen-inc/component-icons';
 import { focusVisible, selectColors } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
 import type { AriaAttributes, CSSProperties, PropsWithChildren, RefObject } from 'react';
-import { useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { useDismissOnModalOpen } from '../hooks/use-dismiss-on-modal-open';
 import { useOutsideClick } from '../hooks/use-outside-click';
 import { Icon } from '../icon';
+import { composeRefs } from '../utils';
 import { SelectContext } from './select-context';
 import { SelectItem } from './select-item';
 import { SelectList } from './select-list';
@@ -83,6 +84,7 @@ export function Select({
 }: PropsWithChildren<Props>) {
   const [isOptionListOpen, setIsOptionListOpen] = useState(false);
   const targetRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
   useOutsideClick(targetRef, () => setIsOptionListOpen(false));
   useDismissOnModalOpen(() => {
     if (isOptionListOpen) {
@@ -115,6 +117,21 @@ export function Select({
   });
 
   const handleClickToggle = () => setIsOptionListOpen((prev) => !prev);
+
+  // 選択・選択解除・Escape・Tab でリストを閉じたときはトリガーへフォーカスを戻す。
+  // 候補は body 直下のポータルに描画されるため、戻さないとフォーカスが body に落ちて
+  // 次の Tab がページ先頭から始まってしまう（Modal 内ではトラップの外へ出る経路になる）。
+  // 外側クリックや Modal 表示による自動クローズでは呼ばない（クリック先からフォーカスを奪わないため）。
+  const closeAndFocusTrigger = useCallback(() => {
+    setIsOptionListOpen(false);
+    triggerRef.current?.focus({ preventScroll: true });
+  }, []);
+
+  // floating-ui の reference と自前の ref を 1 つのコールバックにまとめる（毎レンダー作り直すと ref の付け外しが走るため memo する）
+  const setTriggerRef = useMemo(
+    () => composeRefs<HTMLButtonElement>(refs.setReference, triggerRef),
+    [refs.setReference],
+  );
 
   // 未指定のときのみ既定値を使う（0 を潰さないため ?? を使用する）
   const resolvedOptionListMaxHeight = optionListMaxHeight ?? getDefaultOptionListMaxHeight(size);
@@ -174,11 +191,12 @@ export function Select({
         isError,
         floatingStyles,
         floatingRef: refs.floating as RefObject<HTMLUListElement | null>,
+        closeAndFocusTrigger,
       }}
     >
       <div className={wrapperClasses} style={{ width, maxWidth }} ref={targetRef}>
         <button
-          ref={refs.setReference}
+          ref={setTriggerRef}
           className={buttonClasses}
           type="button"
           aria-label={ariaLabel}
