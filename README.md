@@ -188,6 +188,7 @@ yarn list --pattern "@zenkigen-inc/component-*"
 プロジェクトの詳細な技術資料は以下のドキュメントを参照してください：
 
 - [プロジェクト概要](./docs/README.md) - ドキュメント全体の概要
+- [コンポーネントの対象範囲と追加方針](./docs/component-scope-policy.md) - 提供するコンポーネントの範囲と、追加を相談する際の判断基準
 - [プロジェクト構造](./docs/project-structure.md) - パッケージ構成と相互関係
 - [コンポーネント実装パターン](./docs/component-patterns.md) - 設計パターンと実装方針
 - [テーマシステム](./docs/theme-system.md) - テーマとTailwind CSS設定
