@@ -2,6 +2,7 @@ import type { PropsWithChildren, ReactNode } from 'react';
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
+import { TOP_LAYER_ATTRIBUTE } from '../utils';
 import { Toast } from './toast';
 import type { ToastState } from './type';
 
@@ -80,6 +81,9 @@ export const ToastProvider = ({ children, hasCloseButton = false }: ToastProvide
       {isClientRender &&
         createPortal(
           <div
+            // Toast は z-toast(1300) で Modal より前面に出る設計のため、Modal 表示中も
+            // 操作・読み上げ可能に保つ（Modal が背面を inert にする際の除外対象にする）
+            {...{ [TOP_LAYER_ATTRIBUTE]: '' }}
             role="region"
             aria-label="通知"
             className="pointer-events-none fixed bottom-0 left-0 z-toast mb-4 ml-4 flex w-full flex-col-reverse gap-4"

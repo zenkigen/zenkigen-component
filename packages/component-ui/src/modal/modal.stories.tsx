@@ -542,3 +542,65 @@ export const LayoutExample: Story = {
     );
   },
 };
+
+/**
+ * モーダル on モーダル。フォーカストラップの検証用（内側が開いている間は Tab が内側だけでループし、
+ * 内側を閉じると「内側を開く」ボタンへフォーカスが戻り、外側のトラップが再び効く）。
+ * 見た目は Base と変わらないため Chromatic の撮影対象から外している。
+ */
+export const NestedModal: Story = {
+  args: {
+    width: 480,
+  },
+  parameters: {
+    chromatic: { disable: true },
+  },
+  render: function MyFunc({ ...args }) {
+    const [isOuterOpen, setIsOuterOpen] = useState(true);
+    const [isInnerOpen, setIsInnerOpen] = useState(false);
+
+    return (
+      <div>
+        <Button variant="fill" size="large" onClick={() => setIsOuterOpen(true)}>
+          open
+        </Button>
+        <Modal isOpen={isOuterOpen} onClose={() => setIsOuterOpen(false)} width={args.width}>
+          <Modal.Header>外側のモーダル</Modal.Header>
+          <Modal.Body>
+            <div className="flex w-full flex-col items-center justify-center gap-4 py-16">
+              <div className="typography-body14regular text-text02">
+                内側を開くと Tab は内側だけでループし、閉じると「内側を開く」ボタンにフォーカスが戻る
+              </div>
+              <Button variant="outline" size="large" onClick={() => setIsInnerOpen(true)}>
+                内側を開く
+              </Button>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <div className="flex w-full flex-wrap items-center justify-end gap-4">
+              <Button variant="outline" size="large" onClick={() => setIsOuterOpen(false)}>
+                キャンセル
+              </Button>
+              <Button variant="fill" size="large" onClick={() => setIsOuterOpen(false)}>
+                保存する
+              </Button>
+            </div>
+          </Modal.Footer>
+        </Modal>
+        <Modal isOpen={isInnerOpen} onClose={() => setIsInnerOpen(false)} width={400}>
+          <Modal.Header>内側のモーダル</Modal.Header>
+          <Modal.Body>
+            <div className="flex w-full items-center justify-center py-10">Content</div>
+          </Modal.Body>
+          <Modal.Footer>
+            <div className="flex w-full flex-wrap items-center justify-end gap-4">
+              <Button variant="fill" size="large" onClick={() => setIsInnerOpen(false)}>
+                閉じる
+              </Button>
+            </div>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    );
+  },
+};
