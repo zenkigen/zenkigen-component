@@ -114,19 +114,38 @@ describe('Modal', () => {
    * 手動確認で担保する。
    */
   describe('フォーカストラップ', () => {
-    it('開いたときに Modal 内の先頭のフォーカス可能要素（閉じるボタン）へフォーカスが移ること', async () => {
+    it('開いたときにダイアログ本体へフォーカスが移り、Tab で先頭のフォーカス可能要素（閉じるボタン）へ進むこと', async () => {
       const user = userEvent.setup();
       render(<TestApp />);
 
       await user.click(screen.getByRole('button', { name: '開く' }));
+      await waitFor(() => expect(document.activeElement).toBe(getDialog()));
+
+      await user.tab();
 
       await waitFor(() => expect(document.activeElement).toBe(getCloseButton()));
+    });
+
+    it('Modal.Header の内容がダイアログのアクセシブルネームになること', async () => {
+      render(<TestApp isInitiallyOpen />);
+
+      expect(await screen.findByRole('dialog', { name: 'タイトル' })).toBeInTheDocument();
+    });
+
+    it('Modal.Header がない場合は aria-labelledby が付かないこと', () => {
+      render(
+        <Modal isOpen>
+          <Modal.Body>content</Modal.Body>
+        </Modal>,
+      );
+
+      expect(getDialog()).not.toHaveAttribute('aria-labelledby');
     });
 
     it('末尾の要素で Tab を押すと先頭の要素へループすること', async () => {
       const user = userEvent.setup();
       render(<TestApp isInitiallyOpen />);
-      await waitFor(() => expect(document.activeElement).toBe(getCloseButton()));
+      await waitFor(() => expect(document.activeElement).toBe(getDialog()));
 
       screen.getByRole('button', { name: '保存する' }).focus();
       await user.tab();
@@ -137,8 +156,9 @@ describe('Modal', () => {
     it('先頭の要素で Shift+Tab を押すと末尾の要素へループすること', async () => {
       const user = userEvent.setup();
       render(<TestApp isInitiallyOpen />);
-      await waitFor(() => expect(document.activeElement).toBe(getCloseButton()));
+      await waitFor(() => expect(document.activeElement).toBe(getDialog()));
 
+      getCloseButton().focus();
       await user.tab({ shift: true });
 
       await waitFor(() => expect(document.activeElement).toBe(screen.getByRole('button', { name: '保存する' })));
@@ -150,7 +170,7 @@ describe('Modal', () => {
       const opener = screen.getByRole('button', { name: '開く' });
 
       await user.click(opener);
-      await waitFor(() => expect(document.activeElement).toBe(getCloseButton()));
+      await waitFor(() => expect(document.activeElement).toBe(getDialog()));
 
       await user.click(getCloseButton());
 
@@ -176,7 +196,7 @@ describe('Modal', () => {
       const user = userEvent.setup();
       const onClose = vi.fn();
       render(<TestApp isInitiallyOpen onClose={onClose} />);
-      await waitFor(() => expect(document.activeElement).toBe(getCloseButton()));
+      await waitFor(() => expect(document.activeElement).toBe(getDialog()));
 
       await user.keyboard('{Escape}');
 

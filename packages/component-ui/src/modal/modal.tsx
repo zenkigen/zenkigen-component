@@ -1,6 +1,6 @@
 import { FloatingFocusManager, useFloating } from '@floating-ui/react';
 import type { CSSProperties, MutableRefObject, PropsWithChildren } from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import { MODAL_OPEN_EVENT } from '../hooks/use-dismiss-on-modal-open';
@@ -52,6 +52,10 @@ export function Modal({
 }: PropsWithChildren<Props>) {
   const [isMounted, setIsMounted] = useState(false);
 
+  // Modal.Header の内容をダイアログのアクセシブルネームにする。Header がない場合は aria-labelledby を付けない
+  const titleId = useId();
+  const [hasTitle, setHasTitle] = useState(false);
+
   // FloatingFocusManager は context に useFloating の戻り値を要求する。
   // Modal は位置計算をしないため reference・placement・middleware は指定しない
   // （reference がないので computePosition は走らず、floatingStyles も使わない）。
@@ -78,25 +82,38 @@ export function Modal({
     <>
       <BodyScrollLock />
       {createPortal(
-        <ModalContext.Provider value={{ onClose }}>
+        <ModalContext.Provider value={{ onClose, titleId, setHasTitle }}>
           {/*
-            フォーカストラップ。開いたら Modal 内の先頭の tabbable へフォーカスを移し、Tab / Shift+Tab を
-            Modal 内でループさせ、閉じたら開く直前にフォーカスがあった要素へ戻す（いずれも既定値の挙動）。
+            フォーカストラップ。Tab / Shift+Tab を Modal 内でループさせ、閉じたら開く直前にフォーカスがあった
+            要素へ戻す（既定値の挙動）。
             Escape / 背景クリックで閉じる機能は意図的に持たせていない（useDismiss を使わない）。
             利用側には Esc で閉じてはいけないモーダルがあり、デフォルトで有効にすると破壊的変更になるため。
+
+            initialFocus: 開いたときのフォーカス先をダイアログ本体にする（既定は先頭の tabbable = ヘッダーの
+            閉じるボタンで、キーボード操作や自動撮影ではそこにフォーカスリングが出てしまう）。本体にフォーカスが
+            あれば支援技術はダイアログとして（Header があればそのタイトルを）読み上げ、Tab 1 回で先頭の tabbable へ進める。
 
             outsideElementsInert: 背面を inert にする。既定の aria-hidden はタブ順から要素を外さないため、
             フォーカスが focus guard の外（body 直下のポータル内や body 自身）へ出ると Tab + Enter で
             背面が操作できてしまう。inert 非対応ブラウザ・jsdom では自動的に aria-hidden へフォールバックする。
           */}
-          <FloatingFocusManager context={context} outsideElementsInert getInsideElements={getInsideElements}>
+          <FloatingFocusManager
+            context={context}
+            initialFocus={refs.floating}
+            outsideElementsInert
+            getInsideElements={getInsideElements}
+          >
             <div className="fixed left-0 top-0 z-overlay flex size-full items-center justify-center bg-backgroundOverlayBlack py-4">
-              {/* role="dialog" は FloatingFocusManager が tabindex を自動付与する前提条件なので変更しない */}
+              {/*
+                role="dialog" は FloatingFocusManager が tabindex を自動付与する前提条件なので変更しない。
+                outline-none: 本体は開いた瞬間にフォーカスを受けるが、操作対象ではないためフォーカスリングは出さない。
+              */}
               <div
                 ref={refs.setFloating}
                 role="dialog"
                 aria-modal="true"
-                className="grid max-h-full min-h-[120px] grid-rows-[max-content_1fr_max-content] flex-col rounded-lg bg-uiBackground01 shadow-modalShadow"
+                {...(hasTitle && { 'aria-labelledby': titleId })}
+                className="grid max-h-full min-h-[120px] grid-rows-[max-content_1fr_max-content] flex-col rounded-lg bg-uiBackground01 shadow-modalShadow outline-none"
                 style={{ width: renderWidth, height: renderHeight, maxWidth }}
               >
                 {children}
