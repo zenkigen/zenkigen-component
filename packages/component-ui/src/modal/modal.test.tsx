@@ -1,3 +1,4 @@
+import { FloatingPortal } from '@floating-ui/react';
 import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
@@ -41,6 +42,43 @@ const TestApp = ({ isInitiallyOpen = false, onClose }: TestAppProps) => {
   );
 };
 
+type NestedAppProps = {
+  isBothInitiallyOpen?: boolean;
+};
+
+/** 外側 Modal の中から内側 Modal を開くアプリ（モーダル on モーダル） */
+const NestedApp = ({ isBothInitiallyOpen = false }: NestedAppProps) => {
+  const [isOuterOpen, setIsOuterOpen] = useState(isBothInitiallyOpen);
+  const [isInnerOpen, setIsInnerOpen] = useState(isBothInitiallyOpen);
+
+  return (
+    <div>
+      <button type="button" onClick={() => setIsOuterOpen(true)}>
+        外側を開く
+      </button>
+      <Modal isOpen={isOuterOpen} onClose={() => setIsOuterOpen(false)}>
+        <Modal.Header>外側</Modal.Header>
+        <Modal.Body>
+          <button type="button" onClick={() => setIsInnerOpen(true)}>
+            内側を開く
+          </button>
+          <button type="button" onClick={() => setIsOuterOpen(false)}>
+            外側を閉じる
+          </button>
+        </Modal.Body>
+      </Modal>
+      <Modal isOpen={isInnerOpen} onClose={() => setIsInnerOpen(false)}>
+        <Modal.Header>内側</Modal.Header>
+        <Modal.Body>
+          <button type="button" onClick={() => setIsInnerOpen(false)}>
+            内側を閉じる
+          </button>
+        </Modal.Body>
+      </Modal>
+    </div>
+  );
+};
+
 const getDialog = () => screen.getByRole('dialog');
 
 /** Modal.Header の閉じるボタン（IconButton）は accessible name を持たないため、dialog 内の先頭のボタンとして取得する */
@@ -51,6 +89,16 @@ const getCloseButton = () => {
   }
 
   return button;
+};
+
+/** 隠された（aria-hidden の）dialog も含めて名前で取得し、その overlay を返す */
+const getOverlay = (name: string) => {
+  const overlay = screen.getByRole('dialog', { name, hidden: true }).parentElement;
+  if (overlay == null) {
+    throw new Error('overlay が見つかりません');
+  }
+
+  return overlay;
 };
 
 // BodyScrollLock の cleanup が呼ぶ window.scrollTo は jsdom 未実装で console.error が出るためスタブする
@@ -220,17 +268,35 @@ describe('Modal', () => {
         });
       });
 
-      it('floating-ui のポータルの器（[data-floating-ui-portal]）は隠されないこと', async () => {
-        // Popover / DatePicker / Combobox は閉じていても FloatingPortal の器を body 直下に作る。
-        // 除外しないと Modal 内で開いたときに中身が隠された祖先の配下に入り、操作できなくなる。
-        const portal = appendElementWithAttribute('data-floating-ui-portal');
+      it('Modal より前から存在する背面のポータルの器（[data-floating-ui-portal]）は隠されること', async () => {
+        // 背面で開いたままの Popover 等の器。除外すると z-popover が overlay より上のため背面の操作が残ってしまう
+        const backgroundPortal = appendElementWithAttribute('data-floating-ui-portal');
         const { container } = render(<TestApp isInitiallyOpen />);
 
         await waitFor(() => expect(container).toHaveAttribute('aria-hidden', 'true'));
+        expect(backgroundPortal).toHaveAttribute('aria-hidden', 'true');
+      });
+
+      it('Modal の中のコンポーネントが作るポータルの器は隠されないこと', async () => {
+        // Popover / DatePicker / Combobox は閉じていても FloatingPortal の器を body 直下に作る。
+        // Modal の DOM より後に作られるため、除外しないと Modal 内で開いたときに中身が隠された祖先の配下に入り操作できなくなる
+        const { container } = render(
+          <Modal isOpen>
+            <Modal.Body>
+              <FloatingPortal>
+                <span>ポータルの中身</span>
+              </FloatingPortal>
+            </Modal.Body>
+          </Modal>,
+        );
+
+        await waitFor(() => expect(container).toHaveAttribute('aria-hidden', 'true'));
+        const portal = screen.getByText('ポータルの中身').closest('[data-floating-ui-portal]');
+        expect(portal).not.toBeNull();
         expect(portal).not.toHaveAttribute('aria-hidden');
       });
 
-      it(`${TOP_LAYER_ATTRIBUTE} を持つ要素（Toast のコンテナ等）は隠されないこと`, async () => {
+      it(`${TOP_LAYER_ATTRIBUTE} を持つ要素（Toast のコンテナ等）は、Modal より前から存在していても隠されないこと`, async () => {
         const topLayer = appendElementWithAttribute(TOP_LAYER_ATTRIBUTE);
         const { container } = render(<TestApp isInitiallyOpen />);
 
@@ -244,6 +310,52 @@ describe('Modal', () => {
         const { container } = render(<TestApp isInitiallyOpen />);
 
         await waitFor(() => expect(container).toHaveAttribute('aria-hidden', 'true'));
+      });
+    });
+
+    describe('複数の Modal', () => {
+      it('順番に開くと、内側が開いている間だけ外側が隠され、内側を閉じると「内側を開く」ボタンへ戻ること', async () => {
+        const user = userEvent.setup();
+        render(<NestedApp />);
+
+        await user.click(screen.getByRole('button', { name: '外側を開く' }));
+        await waitFor(() => expect(document.activeElement).toBe(screen.getByRole('dialog', { name: '外側' })));
+        await user.click(screen.getByRole('button', { name: '内側を開く' }));
+        await waitFor(() => expect(getOverlay('外側')).toHaveAttribute('aria-hidden', 'true'));
+        expect(getOverlay('内側')).not.toHaveAttribute('aria-hidden');
+
+        await user.click(screen.getByRole('button', { name: '内側を閉じる' }));
+
+        await waitFor(() => expect(getOverlay('外側')).not.toHaveAttribute('aria-hidden'));
+        await waitFor(() => expect(document.activeElement).toBe(screen.getByRole('button', { name: '内側を開く' })));
+      });
+
+      it('同時に開いた場合、DOM 上で後ろの Modal が前面として扱われ、前の Modal だけが隠されること', async () => {
+        // 互いを隠し合うと前面の Modal まで inert になり、操作不能（Escape も効かない）になる
+        render(<NestedApp isBothInitiallyOpen />);
+
+        await waitFor(() => expect(getOverlay('外側')).toHaveAttribute('aria-hidden', 'true'));
+        expect(getOverlay('内側')).not.toHaveAttribute('aria-hidden');
+        await waitFor(() => expect(document.activeElement).toBe(screen.getByRole('dialog', { name: '内側' })));
+      });
+
+      it('内側→外側の順に閉じると、最初に開いた要素へフォーカスが戻ること', async () => {
+        // floating-ui の共有の履歴スタックに任せると、外側を閉じたときに unmount 済みの「内側を開く」を選んで復帰に失敗する
+        const user = userEvent.setup();
+        render(<NestedApp />);
+        const opener = screen.getByRole('button', { name: '外側を開く' });
+
+        await user.click(opener);
+        await waitFor(() => expect(document.activeElement).toBe(screen.getByRole('dialog', { name: '外側' })));
+        await user.click(screen.getByRole('button', { name: '内側を開く' }));
+        await waitFor(() => expect(document.activeElement).toBe(screen.getByRole('dialog', { name: '内側' })));
+        await user.click(screen.getByRole('button', { name: '内側を閉じる' }));
+        await waitFor(() => expect(document.activeElement).toBe(screen.getByRole('button', { name: '内側を開く' })));
+
+        await user.click(screen.getByRole('button', { name: '外側を閉じる' }));
+
+        await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+        await waitFor(() => expect(document.activeElement).toBe(opener));
       });
     });
   });
