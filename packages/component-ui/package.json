@@ -25,7 +25,7 @@
     "test:ci": "vitest run"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "6.9.1",
+    "@testing-library/jest-dom": "7.0.1",
     "@testing-library/react": "16.3.2",
     "@testing-library/user-event": "14.6.1",
     "hygen": "6.2.11",
