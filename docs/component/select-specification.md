@@ -71,23 +71,24 @@ const [selectedOption, setSelectedOption] = useState<SelectOption | null>(null);
 
 ### オプションプロパティ
 
-| プロパティ            | 型                                            | デフォルト値 | 説明                                                   |
-| --------------------- | --------------------------------------------- | ------------ | ------------------------------------------------------ |
-| `size`                | `'x-small' \| 'small' \| 'medium' \| 'large'` | `'medium'`   | コンポーネントのサイズ                                 |
-| `variant`             | `'outline' \| 'text'`                         | `'outline'`  | 表示スタイルのバリエーション                           |
-| `width`               | `CSSProperties['width']`                      | -            | コンポーネントの幅                                     |
-| `maxWidth`            | `CSSProperties['maxWidth']`                   | -            | コンポーネントの最大幅                                 |
-| `placeholder`         | `string`                                      | -            | 未選択時に表示されるテキスト                           |
-| `placeholderIcon`     | `IconName`                                    | -            | プレースホルダー表示時のアイコン                       |
-| `selectedOption`      | `SelectOption \| null`                        | `null`       | 現在選択されているオプション                           |
-| `optionListMaxHeight` | `CSSProperties['height']`                     | -            | オプションリストの最大高さ                             |
-| `isDisabled`          | `boolean`                                     | `false`      | 無効状態の制御                                         |
-| `isError`             | `boolean`                                     | `false`      | エラー状態の制御                                       |
-| `isOptionSelected`    | `boolean`                                     | `false`      | 選択状態の見た目を適用するかどうか                     |
-| `matchListToTrigger`  | `boolean`                                     | `false`      | ドロップダウンリストの幅をトリガーボタンの幅に合わせる |
-| `aria-label`          | `string`                                      | -            | トリガーボタンに設定する`aria-label`                   |
-| `aria-describedby`    | `string`                                      | -            | トリガーボタンに設定する`aria-describedby`             |
-| `onChange`            | `(option: SelectOption \| null) => void`      | -            | 選択変更時のコールバック関数                           |
+| プロパティ            | 型                                            | デフォルト値        | 説明                                                                   |
+| --------------------- | --------------------------------------------- | ------------------- | ---------------------------------------------------------------------- |
+| `size`                | `'x-small' \| 'small' \| 'medium' \| 'large'` | `'medium'`          | コンポーネントのサイズ                                                 |
+| `variant`             | `'outline' \| 'text'`                         | `'outline'`         | 表示スタイルのバリエーション                                           |
+| `width`               | `CSSProperties['width']`                      | -                   | コンポーネントの幅                                                     |
+| `maxWidth`            | `CSSProperties['maxWidth']`                   | -                   | コンポーネントの最大幅                                                 |
+| `placeholder`         | `string`                                      | -                   | 未選択時に表示されるテキスト                                           |
+| `placeholderIcon`     | `IconName`                                    | -                   | プレースホルダー表示時のアイコン                                       |
+| `selectedOption`      | `SelectOption \| null`                        | `null`              | 現在選択されているオプション                                           |
+| `optionListMaxHeight` | `CSSProperties['height']`                     | オプション 8.5 個分 | オプションリストの最大高さ。`"none"` で制限を解除する                  |
+| `isDisabled`          | `boolean`                                     | `false`             | 無効状態の制御                                                         |
+| `isError`             | `boolean`                                     | `false`             | エラー状態の制御                                                       |
+| `isOptionSelected`    | `boolean`                                     | `false`             | 選択状態の見た目を適用するかどうか                                     |
+| `hasDeselectButton`   | `boolean`                                     | 後方互換の挙動      | 「選択解除」を表示するかどうか（未指定時の挙動は「選択解除機能」参照） |
+| `matchListToTrigger`  | `boolean`                                     | `false`             | ドロップダウンリストの幅をトリガーボタンの幅に合わせる                 |
+| `aria-label`          | `string`                                      | -                   | トリガーボタンに設定する`aria-label`                                   |
+| `aria-describedby`    | `string`                                      | -                   | トリガーボタンに設定する`aria-describedby`                             |
+| `onChange`            | `(option: SelectOption \| null) => void`      | -                   | 選択変更時のコールバック関数                                           |
 
 ### 継承プロパティ
 
@@ -310,7 +311,17 @@ const optionsWithIcons = [
 
 ### オプションリストの高さ制御
 
+未指定の場合、オプションリストの高さはオプション 8.5 個分に制限される（`size='large'` で 350px、それ以外は 282px）。末尾の 0.5 個はスクロールできることを示すためのもの。「選択解除」ボタンを表示している場合（`hasDeselectButton` を参照）は、そのボタンもこの 8.5 個に含まれるため、選択済みのときは表示されるオプション数がその分減る。
+
 ```typescript
+// 既定（オプション 8.5 個分）
+<Select selectedOption={selectedOption} onChange={(option) => setSelectedOption(option)}>
+  {manyOptions.map((option) => (
+    <Select.Option key={option.id} option={option} />
+  ))}
+</Select>
+
+// 高さを指定する
 <Select
   optionListMaxHeight="120px"
   selectedOption={selectedOption}
@@ -320,17 +331,61 @@ const optionsWithIcons = [
     <Select.Option key={option.id} option={option} />
   ))}
 </Select>
+
+// 制限を外して全件表示する
+<Select
+  optionListMaxHeight="none"
+  selectedOption={selectedOption}
+  onChange={(option) => setSelectedOption(option)}
+>
+  {manyOptions.map((option) => (
+    <Select.Option key={option.id} option={option} />
+  ))}
+</Select>
 ```
+
+`"none"` を指定した場合、オプション件数によってはリストが画面外へはみ出しうる。件数が可変の場合は既定値のまま使うか、明示的な高さを指定すること。
 
 ## 技術的な詳細
 
 ### 選択解除機能
 
-プレースホルダーが設定されており、何かが選択されている場合、オプションリストの下部に「選択解除」ボタンが表示される。このボタンをクリックすると、`onChange`に`null`が渡されて選択が解除される。
+「選択解除」ボタンは、表示が有効かつ何かが選択されている場合にオプションリストの下部へ表示される。このボタンをクリックすると、`onChange`に`null`が渡されて選択が解除される。
+
+表示するかどうかは`hasDeselectButton`で制御する。
+
+| `hasDeselectButton` | 「選択解除」 |
+| ------------------- | ------------ |
+| `true`              | 表示する     |
+| `false`             | 表示しない   |
+
+必須項目のように選択解除を許可したくない場合は`hasDeselectButton={false}`を指定する。
+
+```tsx
+<Select
+  placeholder="選択してください"
+  hasDeselectButton={false}
+  selectedOption={selectedOption}
+  onChange={handleChange}
+>
+  {options.map((option) => (
+    <Select.Option key={option.id} option={option} />
+  ))}
+</Select>
+```
+
+> [!WARNING]
+> `hasDeselectButton={true}`を使う場合は`placeholder`（または`aria-label`）を必ず併せて指定すること。どちらも指定しないまま選択を解除すると、トリガーの表示テキストとアクセシブルネームがともに空になる。
+
+`hasDeselectButton`を指定しなかった場合は、後方互換のため`placeholder`が指定されているかどうかで表示が決まる（空文字も指定扱いとなる）。これは`hasDeselectButton`導入前の挙動を維持するためのものであり、**将来のメジャーバージョンで廃止して`hasDeselectButton`単独の制御に移行する予定である**。
+
+**`placeholder`は未選択時の表示テキストを指定するプロパティであり、「選択解除」の表示制御に用いてはならない。表示を制御する場合は必ず`hasDeselectButton`を指定すること。**
 
 ### 自動スクロール・外部クリック検知
 
 オプションリスト表示時に選択中のアイテムを視認可能位置までスクロールし、外部クリック時は自動的に閉じる。
+
+自動スクロールはリストが実際にスクロールする状態（`scrollHeight > clientHeight`）のときのみ実行される。全件が収まっている場合や `optionListMaxHeight="none"` で制限を外している場合は実行されない。
 
 ### 親要素の`overflow`設定の影響回避
 
@@ -357,9 +412,11 @@ Selectコンポーネントのスタイルは`@zenkigen-inc/component-theme`のT
 
 ## 更新履歴
 
-| 日付       | 内容                                                                                                        | 担当者 |
-| ---------- | ----------------------------------------------------------------------------------------------------------- | ------ |
-| 2026-07-13 | トリガーボタンへ`aria-label`/`aria-describedby`を追加。`aria-invalid`は props ではなく`isError`から内部導出 | -      |
-| 2026-01-27 | `matchListToTrigger` プロパティを追加                                                                       | -      |
-| 2025-10-10 | 親要素の`overflow`設定の影響回避                                                                            | -      |
-| 2025-08-18 | 新規作成                                                                                                    | -      |
+| 日付                 | 内容                                                                                                        | 担当者 |
+| -------------------- | ----------------------------------------------------------------------------------------------------------- | ------ |
+| 2026-09-07 12:04 JST | 「選択解除」の表示制御プロパティ`hasDeselectButton`を追加。未指定時は後方互換の挙動を維持                   | -      |
+| 2026-08-19           | `optionListMaxHeight` の既定値としてオプション 8.5 個分を設定。自動スクロールの実行条件を実測ベースへ変更   | -      |
+| 2026-07-13           | トリガーボタンへ`aria-label`/`aria-describedby`を追加。`aria-invalid`は props ではなく`isError`から内部導出 | -      |
+| 2026-01-27           | `matchListToTrigger` プロパティを追加                                                                       | -      |
+| 2025-10-10           | 親要素の`overflow`設定の影響回避                                                                            | -      |
+| 2025-08-18           | 新規作成                                                                                                    | -      |
