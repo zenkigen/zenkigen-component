@@ -151,8 +151,8 @@ git pull
 4つすべての `packages/*/package.json` で `version` 行を変更する。
 
 ```diff
--  "version": "1.23.1",
-+  "version": "1.22.1",
+-  "version": "1.22.1",
++  "version": "1.24.0",
 ```
 
 #### ③ 以降はコマンド
