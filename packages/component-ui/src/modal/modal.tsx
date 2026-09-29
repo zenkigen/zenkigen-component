@@ -140,14 +140,14 @@ export function Modal({
             >
               {/*
                 role="dialog" は FloatingFocusManager が tabindex を自動付与する前提条件なので変更しない。
-                outline-none: 本体は開いた瞬間にフォーカスを受けるが、操作対象ではないためフォーカスリングは出さない。
+                outline-hidden: 本体は開いた瞬間にフォーカスを受けるが、操作対象ではないためフォーカスリングは出さない。
               */}
               <div
                 ref={refs.setFloating}
                 role="dialog"
                 aria-modal="true"
                 {...(hasTitle && { 'aria-labelledby': titleId })}
-                className="grid max-h-full min-h-[120px] grid-rows-[max-content_1fr_max-content] flex-col rounded-lg bg-uiBackground01 shadow-modalShadow outline-none"
+                className="grid max-h-full min-h-[120px] grid-rows-[max-content_1fr_max-content] flex-col rounded-lg bg-uiBackground01 shadow-modalShadow outline-hidden"
                 style={{ width: renderWidth, height: renderHeight, maxWidth }}
               >
                 {children}

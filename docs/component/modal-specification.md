@@ -414,7 +414,7 @@ const tabItems = [
 - `@floating-ui/react` の `FloatingFocusManager` を使用する
 - 位置計算は行わないため、`useFloating` は `open` のみを渡し `refs.setFloating` / `context` だけを利用する
 - `role="dialog"` はダイアログ本体の `tabindex` 自動付与の前提条件になっているため、変更しないこと
-- `initialFocus` にダイアログ本体を指定する（既定の先頭の tabbable = 閉じるボタンにフォーカスリングが出るのを避け、支援技術にダイアログとして認識させるため）。本体は `outline-none` でフォーカスリングを出さない
+- `initialFocus` にダイアログ本体を指定する（既定の先頭の tabbable = 閉じるボタンにフォーカスリングが出るのを避け、支援技術にダイアログとして認識させるため）。本体は `outline-hidden` でフォーカスリングを出さない
 - `outsideElementsInert` を有効にして背面を `inert` にする（`aria-hidden` はタブ順から要素を外さないため、フォーカスがモーダル外に出た瞬間に背面へ抜けられてしまう）
 - `getInsideElements` で以下を `inert` の対象から除外する
   - このモーダルより後に DOM へ追加された floating-ui のポータルの器と、後から（または同時に）開いた別のモーダル — モーダルの中で使う Popover / DatePicker / Combobox / Select の器はモーダルの DOM より後に作られる。モーダルより前から存在する器（背面で開いたままのポップアップ）は背面として `inert` にする
