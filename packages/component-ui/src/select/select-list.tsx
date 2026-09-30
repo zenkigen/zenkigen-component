@@ -10,8 +10,16 @@ type Props = {
 };
 
 export const SelectList = forwardRef<HTMLUListElement, PropsWithChildren<Props>>(({ children, maxHeight }, ref) => {
-  const { selectedOption, setIsOptionListOpen, variant, placeholder, onChange, floatingStyles, floatingRef, size } =
-    useContext(SelectContext);
+  const {
+    selectedOption,
+    setIsOptionListOpen,
+    variant,
+    isDeselectVisible,
+    onChange,
+    floatingStyles,
+    floatingRef,
+    size,
+  } = useContext(SelectContext);
 
   const handleClickDeselect = () => {
     onChange?.(null);
@@ -19,28 +27,35 @@ export const SelectList = forwardRef<HTMLUListElement, PropsWithChildren<Props>>
   };
 
   useLayoutEffect(() => {
-    // maxHeight（optionListMaxHeight）が指定されてない場合はスクロールしない（リストは全て見えている想定のため場合）
-    if (maxHeight != null && selectedOption != null) {
-      const container = floatingRef?.current;
-      if (container != null) {
-        const element = container.querySelector(`[data-id="${selectedOption.id}"]`) as HTMLElement;
-
-        if (element != null) {
-          // 要素の位置を計算してスクロール
-          const htmlElement = element as HTMLElement;
-          const elementTop = htmlElement.offsetTop;
-          const elementHeight = htmlElement.offsetHeight;
-          const containerHeight = container.clientHeight;
-
-          // 要素を中央に配置するためのスクロール位置を計算
-          const scrollTop = elementTop - (containerHeight - elementHeight) / 2;
-
-          container.scrollTo({
-            top: Math.max(0, scrollTop),
-          });
-        }
-      }
+    if (selectedOption == null) {
+      return;
     }
+
+    const container = floatingRef?.current;
+
+    // スクロールが発生しない場合（全件が収まっている、maxHeight="none" 等）は何もしない
+    if (container == null || container.scrollHeight <= container.clientHeight) {
+      return;
+    }
+
+    const element = container.querySelector(`[data-id="${selectedOption.id}"]`);
+
+    if (element == null) {
+      return;
+    }
+
+    // 要素の位置を計算してスクロール
+    const htmlElement = element as HTMLElement;
+    const elementTop = htmlElement.offsetTop;
+    const elementHeight = htmlElement.offsetHeight;
+    const containerHeight = container.clientHeight;
+
+    // 要素を中央に配置するためのスクロール位置を計算
+    const scrollTop = elementTop - (containerHeight - elementHeight) / 2;
+
+    container.scrollTo({
+      top: Math.max(0, scrollTop),
+    });
   }, [selectedOption, maxHeight, floatingRef]);
 
   const listClasses = clsx('overflow-y-auto rounded bg-uiBackground01 py-2 shadow-floatingShadow', {
@@ -59,7 +74,7 @@ export const SelectList = forwardRef<HTMLUListElement, PropsWithChildren<Props>>
   return (
     <ul className={listClasses} style={{ maxHeight, ...floatingStyles }} ref={ref}>
       {children}
-      {placeholder != null && selectedOption !== null && (
+      {isDeselectVisible && selectedOption !== null && (
         <li>
           <button className={deselectButtonClasses} type="button" onClick={handleClickDeselect}>
             選択解除
