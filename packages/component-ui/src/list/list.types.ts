@@ -26,6 +26,8 @@ export type ListProps = PropsWithChildren<{
   'aria-label'?: string;
   /** アクセシブルな名前（参照） */
   'aria-labelledby'?: string;
+  /** 複数選択可能か（role が 'listbox' のときに使う） */
+  'aria-multiselectable'?: boolean;
   /**
    * 外側 wrapper div への ref。Floating UI の floating element として扱う用途等。
    * 通常は `ref` が内側の ul を指す。

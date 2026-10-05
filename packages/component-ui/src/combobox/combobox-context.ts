@@ -57,8 +57,10 @@ export type ComboboxContextValue = {
   setHasOpenableContent: (next: boolean) => void;
   /** input への ref */
   inputRef: RefObject<HTMLInputElement | null>;
-  /** input への ref 設定関数（Floating UI の reference と統合） */
+  /** input への ref 設定関数 */
   setInputElementRef: (node: HTMLInputElement | null) => void;
+  /** 入力欄の枠 div への ref 設定関数（Floating UI の reference） */
+  setFrameRef: (node: HTMLDivElement | null) => void;
   /** 候補リスト wrapper への ref 設定関数（Floating UI の floating element） */
   setListRef: (node: HTMLDivElement | null) => void;
   /** Floating UI の style */

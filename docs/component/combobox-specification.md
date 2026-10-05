@@ -452,7 +452,7 @@ DOM フォーカスは常に input に維持される（`aria-activedescendant` 
 - 状態管理は `useCombobox` フックにまとめている（baseId / activeIndex / isOpen / items / キーボードハンドラ）。
 - 候補リストの位置計算は `@floating-ui/react` の `useFloating`（`autoUpdate`、`offset(4)`、`flip`、`size` middleware）を使う。`size` middleware で利用可能高と `listMaxHeight` の小さい方を `maxHeight` に適用し、`matchListToTrigger` 時は input 幅に固定、それ以外は `min-width = input 幅`・`max-width = ビューポート幅` を適用する。
 - 候補リストは `FloatingPortal` 経由で `z-popover` の階層に描画する。`Combobox.List` は候補リストを **常時 DOM に mount** し、`visibility: hidden` / `pointer-events: none` で開閉を表現する。
-- Floating UI の `reference` は **input の親要素（TextInput 内部の inner wrap div）** にする。位置は input の枠を基準にし、幅は IconButton を含む input 全幅に揃う。
+- Floating UI の `reference` は **入力欄の枠 div**（`InternalTextInput` の内部 prop `frameRef` で受け取る要素）にする。位置は input の枠を基準にし、幅は IconButton を含む input 全幅に揃う。
 - 外部クリック検知は `useOutsideClick` フックを使う。
 - `Combobox.Input` は内部で `InternalTextInput`（TextInput の internal API）を利用し、矢印・クリアボタンを `after` prop で差し込む。
 - `Combobox.HelperMessage` / `Combobox.ErrorMessage` は `TextInput.HelperMessage` / `TextInput.ErrorMessage` をそのまま再エクスポートしている。
@@ -514,3 +514,4 @@ A: `aria-activedescendant` のターゲット ID が衝突し、キーボード�
 | 2026-06-29 | クリアボタンの仕様変更（`onClickClearButton` を渡したときのみ表示、値のクリアは利用者責務）に伴う記述更新 | -      |
 | 2026-10-05 | IME 変換中の `↑` / `↓` / `Escape` を Combobox で扱わないよう修正（従来は `Enter` のみ）                   | -      |
 | 2026-10-05 | `Combobox.Item` に `children`（候補行の見た目のみのカスタムレイアウト）を追加                             | -      |
+| 2026-10-05 | Floating UI の `reference` の取得を input の親要素の参照から `frameRef` 経由に変更（挙動は変わらない）    | -      |
