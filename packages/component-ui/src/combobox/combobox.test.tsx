@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import { useMemo, useState } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { Popover } from '../popover';
 import { Combobox } from './combobox';
 
 /**
@@ -14,6 +15,7 @@ import { Combobox } from './combobox';
  * - open / close: focus / Escape / outside click
  * - 選択動作: クリック、Enter で onChange が呼ばれる
  * - キーボード操作: ArrowUp/Down/Enter/Escape/Alt
+ * - IME 変換中のキー操作: ArrowUp/Down/Enter/Escape を Combobox では扱わない
  * - activeIndex 初期化: selectedValue 優先 / 先頭 enabled / close → 再 open
  * - items 更新時の active 維持: 並び替え / フィルタ絞り込み / フィルタで消えた場合
  * - 選択済み視覚強調 (isSelected の DOM 伝搬)
@@ -49,6 +51,7 @@ function ControlledCombobox({
   extraChildren,
   onSelectionChange,
   onOpenChange,
+  onInputValueChange,
   enableClearButton,
   onClearButtonClick,
 }: {
@@ -62,6 +65,7 @@ function ControlledCombobox({
   extraChildren?: ReactNode;
   onSelectionChange?: (value: string | null) => void;
   onOpenChange?: (isOpen: boolean) => void;
+  onInputValueChange?: (inputValue: string) => void;
   enableClearButton?: boolean;
   onClearButtonClick?: () => void;
 }) {
@@ -98,7 +102,10 @@ function ControlledCombobox({
         onSelectionChange?.(next);
       }}
       inputValue={inputValue}
-      onInputChange={setInputValue}
+      onInputChange={(next) => {
+        setInputValue(next);
+        onInputValueChange?.(next);
+      }}
       {...clearButtonProps}
       onOpenChange={onOpenChange}
       isError={isError}
@@ -560,6 +567,130 @@ describe('Combobox', () => {
 
       await user.keyboard('{Alt>}{ArrowUp}{/Alt}');
       expect(getListbox()).toHaveStyle({ visibility: 'hidden' });
+    });
+  });
+
+  describe('IME 変換中のキー操作', () => {
+    // 日本語入力の変換中は keydown 時点で isComposing=true（一部環境では keyCode=229 のみ）。
+    // ↑↓ は変換候補の移動、Enter は確定、Escape は変換の取り消しに使われるため Combobox では扱わない。
+    const composingCases = [
+      { name: 'isComposing=true', init: { isComposing: true } },
+      { name: 'keyCode=229', init: { keyCode: 229 } },
+    ];
+
+    describe.each(composingCases)('$name', ({ init }) => {
+      it('ArrowDown / ArrowUp で active が動かない', async () => {
+        const user = userEvent.setup();
+        render(<ControlledCombobox />);
+        await user.click(getCombobox());
+        const input = getCombobox();
+        const initialActiveId = input.getAttribute('aria-activedescendant');
+        expect(initialActiveId).toContain('apple');
+
+        fireEvent.keyDown(input, { key: 'ArrowDown', ...init });
+        expect(input).toHaveAttribute('aria-activedescendant', initialActiveId);
+
+        fireEvent.keyDown(input, { key: 'ArrowUp', ...init });
+        expect(input).toHaveAttribute('aria-activedescendant', initialActiveId);
+      });
+
+      it('ArrowDown / ArrowUp の既定動作を妨げない（preventDefault しない）', async () => {
+        const user = userEvent.setup();
+        render(<ControlledCombobox />);
+        await user.click(getCombobox());
+        const input = getCombobox();
+
+        // fireEvent は preventDefault されると false を返す
+        expect(fireEvent.keyDown(input, { key: 'ArrowDown', ...init })).toBe(true);
+        expect(fireEvent.keyDown(input, { key: 'ArrowUp', ...init })).toBe(true);
+      });
+
+      it('閉じている状態の ArrowDown / ArrowUp でリストが開かない', async () => {
+        const user = userEvent.setup();
+        render(<ControlledCombobox />);
+        await user.click(getCombobox());
+        await user.keyboard('{Escape}');
+        const input = getCombobox();
+        expect(getListbox()).toHaveStyle({ visibility: 'hidden' });
+
+        fireEvent.keyDown(input, { key: 'ArrowDown', ...init });
+        expect(getListbox()).toHaveStyle({ visibility: 'hidden' });
+
+        fireEvent.keyDown(input, { key: 'ArrowUp', ...init });
+        expect(getListbox()).toHaveStyle({ visibility: 'hidden' });
+      });
+
+      it('Enter で選択しない', async () => {
+        const user = userEvent.setup();
+        const onSelectionChange = vi.fn();
+        render(<ControlledCombobox onSelectionChange={onSelectionChange} />);
+        await user.click(getCombobox());
+
+        fireEvent.keyDown(getCombobox(), { key: 'Enter', ...init });
+        expect(onSelectionChange).not.toHaveBeenCalled();
+        expect(getListbox()).toHaveStyle({ visibility: 'visible' });
+      });
+
+      it('Escape でリストが閉じず、入力も選択値の表示へ戻らない', async () => {
+        const user = userEvent.setup();
+        const onInputValueChange = vi.fn();
+        render(<ControlledCombobox onInputValueChange={onInputValueChange} />);
+        const input = getCombobox();
+        await user.click(input);
+        await user.click(getOption('りんご'));
+        await user.click(input);
+        await user.clear(input);
+        await user.type(input, 'にん');
+        onInputValueChange.mockClear();
+
+        fireEvent.keyDown(input, { key: 'Escape', ...init });
+        expect(getListbox()).toHaveStyle({ visibility: 'visible' });
+        expect(onInputValueChange).not.toHaveBeenCalled();
+        expect(input).toHaveValue('にん');
+      });
+
+      it('Escape は親要素に伝搬しない（変換の取り消しで Popover 等が閉じないように）', async () => {
+        const user = userEvent.setup();
+        const handleParentEscape = vi.fn();
+        render(
+          <div onKeyDown={(e) => e.key === 'Escape' && handleParentEscape()}>
+            <ControlledCombobox />
+          </div>,
+        );
+        await user.click(getCombobox());
+        // List を閉じた状態でも、変換中の Escape は親に伝搬しない
+        await user.keyboard('{Escape}');
+
+        fireEvent.keyDown(getCombobox(), { key: 'Escape', ...init });
+        expect(handleParentEscape).not.toHaveBeenCalled();
+      });
+    });
+
+    it('Popover 内の Combobox で変換中に Escape を押しても Popover は閉じない', async () => {
+      const user = userEvent.setup();
+      const onClose = vi.fn();
+      render(
+        <Popover isOpen onClose={onClose}>
+          <Popover.Trigger>
+            <button type="button">trigger</button>
+          </Popover.Trigger>
+          <Popover.Content>
+            <div>
+              <ControlledCombobox />
+            </div>
+          </Popover.Content>
+        </Popover>,
+      );
+      await user.click(getCombobox());
+
+      fireEvent.keyDown(getCombobox(), { key: 'Escape', isComposing: true });
+      expect(onClose).not.toHaveBeenCalled();
+
+      // 変換していない Escape は従来どおり: 1 回目で List を閉じ、2 回目で Popover を閉じる
+      await user.keyboard('{Escape}');
+      expect(onClose).not.toHaveBeenCalled();
+      await user.keyboard('{Escape}');
+      expect(onClose).toHaveBeenCalledWith({ reason: 'escape-key-down' });
     });
   });
 

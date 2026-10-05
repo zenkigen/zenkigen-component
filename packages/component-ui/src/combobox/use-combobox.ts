@@ -255,6 +255,21 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
         return;
       }
 
+      // IME 変換中（keydown 時点で isComposing=true、一部環境では keyCode=229）のキーは Combobox では扱わない。
+      // - ↑↓: IME の変換候補の移動に使われる。扱うと preventDefault で候補移動を妨げ、active まで動いてしまう
+      // - Enter: 変換の確定に使われる。候補選択として扱うと input が controlled value（候補ラベル）に更新された直後、
+      //   IME 確定文字が追記され「(候補ラベル)(入力中の文字)」の二重入力になる
+      // - Escape: 変換の取り消しに使われる。扱うと List が閉じ、未確定入力も選択値の表示へ戻されてしまう
+      if (event.nativeEvent.isComposing === true || event.nativeEvent.keyCode === 229) {
+        if (event.key === 'Escape') {
+          // 親要素（Popover 等）は自前の keydown で Escape を処理し、IME 変換中かを判定しないため、
+          // 伝搬すると変換の取り消しで親まで閉じてしまう。変換の取り消しを妨げないよう preventDefault はしない。
+          event.stopPropagation();
+        }
+
+        return;
+      }
+
       if (event.altKey && event.key === 'ArrowDown') {
         event.preventDefault();
         setInputMode('keyboard');
@@ -296,12 +311,6 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
       }
 
       if (event.key === 'Enter') {
-        // IME 変換確定の Enter（keydown 時点で isComposing=true、一部環境では keyCode=229）は
-        // 候補選択として扱わない。選択すると input が controlled value（候補ラベル）に更新された直後、
-        // IME 確定文字が追記され「(候補ラベル)(入力中の文字)」の二重入力になるため。
-        if (event.nativeEvent.isComposing === true || event.nativeEvent.keyCode === 229) {
-          return;
-        }
         if (!isOpen || activeIndex === null) {
           return;
         }
