@@ -119,18 +119,21 @@ function ComboboxBase({
   const refsRef = useRef(refs);
   refsRef.current = refs;
 
-  // Floating UI の reference は input の親 (TextInput 内部の inner wrap div) にする。
+  const setInputElementRef = useCallback(
+    (node: HTMLInputElement | null) => {
+      combobox.inputRef.current = node;
+    },
+    [combobox.inputRef],
+  );
+
+  // Floating UI の reference は TextInput 内部の枠 div（frameRef）にする。
   // - 位置基準: input の枠（HelperMessage / ErrorMessage を含まない）
   // - 幅基準: input の枠（IconButton も含む全幅）
   // input 自身を reference にすると IconButton の分だけ list 幅が狭くなる。
   // wrapper を reference にすると HelperMessage を含む高さ分 list が下にずれる。
-  const setInputElementRef = useCallback(
-    (node: HTMLInputElement | null) => {
-      combobox.inputRef.current = node;
-      refsRef.current.setReference(node?.parentElement ?? null);
-    },
-    [combobox.inputRef],
-  );
+  const setFrameRef = useCallback((node: HTMLDivElement | null) => {
+    refsRef.current.setReference(node);
+  }, []);
 
   // floating element（候補リスト wrapper）を outside-click 判定で参照するため自前 ref にも保持する。
   const listElementRef = useRef<HTMLDivElement | null>(null);
@@ -207,6 +210,7 @@ function ComboboxBase({
       setHasOpenableContent,
       inputRef: combobox.inputRef,
       setInputElementRef,
+      setFrameRef,
       setListRef,
       floatingStyles,
       listMaxHeight,
@@ -238,6 +242,7 @@ function ComboboxBase({
       setHasOpenableContent,
       combobox.inputRef,
       setInputElementRef,
+      setFrameRef,
       setListRef,
       floatingStyles,
       listMaxHeight,

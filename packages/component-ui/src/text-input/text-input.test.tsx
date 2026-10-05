@@ -1,8 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import React, { createRef } from 'react';
+import React, { createRef, useState } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { TextInput } from './text-input';
+import { InternalTextInput, TextInput } from './text-input';
 
 describe('TextInput', () => {
   describe('基本機能', () => {
@@ -426,6 +426,120 @@ describe('TextInput', () => {
         .find((button) => button.querySelector('svg[aria-label="close"]') != null);
 
       expect(clearButton).toBeDefined();
+    });
+  });
+});
+
+describe('InternalTextInput', () => {
+  describe('before 未指定時の構造', () => {
+    it('input が枠 div の直下に置かれ、高さ・padding のクラスを input が持つこと', () => {
+      render(<InternalTextInput value="" onChange={() => {}} />);
+
+      const input = screen.getByRole('textbox');
+      const frame = input.parentElement;
+      expect(frame).toHaveClass('relative', 'flex', 'items-center', 'gap-2', 'overflow-hidden', 'rounded', 'border');
+      expect(input).toHaveClass('flex-1', 'bg-transparent', 'outline-none', 'min-h-8', 'px-2');
+    });
+
+    it('frameRef が枠 div を指すこと', () => {
+      const frameRef = createRef<HTMLDivElement>();
+      render(<InternalTextInput value="" onChange={() => {}} frameRef={frameRef} />);
+
+      expect(frameRef.current).toBe(screen.getByRole('textbox').parentElement);
+      expect(frameRef.current).toHaveClass('rounded', 'border');
+    });
+  });
+
+  describe('before 指定時の構造', () => {
+    it('before と input が同じ折り返しコンテナ内に描画されること', () => {
+      render(<InternalTextInput value="" onChange={() => {}} before={<span data-testid="before">A</span>} />);
+
+      const input = screen.getByRole('textbox');
+      const container = input.parentElement;
+      expect(container).toContainElement(screen.getByTestId('before'));
+      expect(container).toHaveClass('flex', 'min-w-0', 'flex-1', 'flex-wrap', 'items-center', 'gap-1', 'py-1');
+      expect(input).toHaveClass('min-w-20', 'flex-1');
+      expect(input).not.toHaveClass('min-h-8');
+    });
+
+    it('frameRef が折り返しコンテナの外側の枠 div を指すこと', () => {
+      const frameRef = createRef<HTMLDivElement>();
+      render(<InternalTextInput value="" onChange={() => {}} frameRef={frameRef} before={<span>A</span>} />);
+
+      const container = screen.getByRole('textbox').parentElement;
+      expect(frameRef.current).toBe(container?.parentElement);
+      expect(frameRef.current).toHaveClass('rounded', 'border');
+    });
+
+    it.each([
+      ['medium', 'min-h-8', 'px-2'],
+      ['large', 'min-h-10', 'px-3'],
+      ['x-large', 'min-h-12', 'px-3'],
+    ] as const)('size="%s" のとき折り返しコンテナに %s / %s が付くこと', (size, minHeightClass, paddingClass) => {
+      render(<InternalTextInput value="" onChange={() => {}} size={size} before={<span>A</span>} />);
+
+      const container = screen.getByRole('textbox').parentElement;
+      expect(container).toHaveClass(minHeightClass, paddingClass);
+    });
+
+    it('variant="text" のとき折り返しコンテナに横 padding が付かないこと', () => {
+      render(<InternalTextInput value="" onChange={() => {}} variant="text" before={<span>A</span>} />);
+
+      const container = screen.getByRole('textbox').parentElement;
+      expect(container).toHaveClass('min-h-8');
+      expect(container).not.toHaveClass('px-2');
+      expect(container).not.toHaveClass('px-3');
+    });
+
+    it('after がある場合は折り返しコンテナの右 padding を外し、after は枠 div の直下に置かれること', () => {
+      render(
+        <InternalTextInput
+          value=""
+          onChange={() => {}}
+          before={<span>A</span>}
+          after={<span data-testid="after">after</span>}
+        />,
+      );
+
+      const container = screen.getByRole('textbox').parentElement;
+      expect(container).toHaveClass('pr-0');
+      expect(screen.getByTestId('after').parentElement).toBe(container?.parentElement);
+    });
+
+    it('before の中身が 空 → 1 要素 → 空 と変化しても input が同一ノードのままフォーカスを保つこと', () => {
+      const BeforeSwitcher = () => {
+        const [hasChip, setHasChip] = useState(false);
+
+        return (
+          <>
+            <button type="button" onClick={() => setHasChip((prev) => !prev)}>
+              切り替え
+            </button>
+            <InternalTextInput
+              value=""
+              onChange={() => {}}
+              before={<div className="contents">{hasChip && <span data-testid="chip">A</span>}</div>}
+            />
+          </>
+        );
+      };
+      render(<BeforeSwitcher />);
+
+      const input = screen.getByRole('textbox');
+      const toggleButton = screen.getByRole('button', { name: '切り替え' });
+      input.focus();
+      expect(input).toHaveFocus();
+
+      // ボタンのクリックでフォーカスが移らないよう、状態の切り替えは click イベントだけを発火させる
+      fireEvent.click(toggleButton);
+      expect(screen.getByTestId('chip')).toBeInTheDocument();
+      expect(screen.getByRole('textbox')).toBe(input);
+      expect(input).toHaveFocus();
+
+      fireEvent.click(toggleButton);
+      expect(screen.queryByTestId('chip')).not.toBeInTheDocument();
+      expect(screen.getByRole('textbox')).toBe(input);
+      expect(input).toHaveFocus();
     });
   });
 });

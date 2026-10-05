@@ -24,6 +24,7 @@ export function ComboboxInput({ autoFocus, children }: ComboboxInputProps) {
     hasOpenableContent,
     inputRef,
     setInputElementRef,
+    setFrameRef,
     handleKeyDown,
     handleInputBlur,
     onClickClearButton,
@@ -83,6 +84,7 @@ export function ComboboxInput({ autoFocus, children }: ComboboxInputProps) {
   return (
     <InternalTextInput
       ref={setRef}
+      frameRef={setFrameRef}
       size={size}
       variant={variant}
       value={inputValue}

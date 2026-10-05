@@ -30,6 +30,8 @@ function TextInputInner(
     disabled = false,
     onClickClearButton,
     after,
+    before,
+    frameRef,
     children,
     ...props
   }: TextInputInternalProps,
@@ -132,29 +134,56 @@ function TextInputInner(
     'pr-3': !isBorderless && (size === 'large' || size === 'x-large') && hasTrailingElement,
   });
 
-  const inputClasses = clsx('flex-1 bg-transparent outline-none', {
+  // input の文字まわり（typography・文字色・placeholder 色・disabled 色）。
+  // before 有無の 2 つの input で共有し、見た目がモードで食い違わないようにする。
+  const inputTextClassMap = {
     'disabled:text-textPlaceholder': !isBorderless,
     'disabled:text-disabled01': isBorderless,
-    // outline: 従来の padding
-    'typography-label14regular min-h-8 px-2': !isBorderless && size === 'medium',
-    'typography-label16regular min-h-10 px-3': !isBorderless && size === 'large',
-    'typography-label16regular min-h-12 px-3': !isBorderless && size === 'x-large',
-    // text: padding なし
-    'typography-label14regular min-h-8': isBorderless && size === 'medium',
-    'typography-label16regular min-h-10': isBorderless && size === 'large',
-    'typography-label16regular min-h-12': isBorderless && size === 'x-large',
+    'typography-label14regular': size === 'medium',
+    'typography-label16regular': size === 'large' || size === 'x-large',
     // テキスト色
     'text-text01': !isError,
     'text-supportError': isError,
     // placeholder 色（text variant エラー時のみ上書き）
     'placeholder:text-textPlaceholder': !(isBorderless && isError && !disabled),
     'placeholder:text-supportErrorLight': isBorderless && isError && !disabled,
+  };
+
+  const inputClasses = clsx('flex-1 bg-transparent outline-none', inputTextClassMap, {
+    // 高さ
+    'min-h-8': size === 'medium',
+    'min-h-10': size === 'large',
+    'min-h-12': size === 'x-large',
+    // outline: 従来の padding / text: padding なし
+    'px-2': !isBorderless && size === 'medium',
+    'px-3': !isBorderless && (size === 'large' || size === 'x-large'),
     'pr-0': hasTrailingElement,
   });
 
+  // before 指定時のみ使う: 折り返しコンテナに min-h / padding を移し、input は残り幅を埋める。
+  const hasBefore = before != null;
+
+  const beforeContainerClasses = clsx('flex min-w-0 flex-1 flex-wrap items-center gap-1 py-1', {
+    'min-h-8': size === 'medium',
+    'min-h-10': size === 'large',
+    'min-h-12': size === 'x-large',
+    'px-2': !isBorderless && size === 'medium',
+    'px-3': !isBorderless && (size === 'large' || size === 'x-large'),
+    'pr-0': hasTrailingElement,
+  });
+
+  const inputInBeforeContainerClasses = clsx('min-w-20 flex-1 bg-transparent outline-none', inputTextClassMap);
+
   const inputElement = (
-    <div className={inputWrapClasses}>
-      <input ref={ref} size={1} className={inputClasses} {...mergedInputProps} />
+    <div ref={frameRef} className={inputWrapClasses}>
+      {hasBefore ? (
+        <div className={beforeContainerClasses}>
+          {before}
+          <input ref={ref} size={1} className={inputInBeforeContainerClasses} {...mergedInputProps} />
+        </div>
+      ) : (
+        <input ref={ref} size={1} className={inputClasses} {...mergedInputProps} />
+      )}
       {after}
       {isShowClearButton && <IconButton variant="text" icon="close" size="small" onClick={onClickClearButton} />}
     </div>
