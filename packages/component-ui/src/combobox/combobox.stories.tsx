@@ -801,6 +801,67 @@ export const MatchListToTrigger: Story = {
   },
 };
 
+const fruitOrigins = [
+  { value: 'apple', label: 'りんご', origin: '青森県' },
+  { value: 'green-apple', label: '青りんご', origin: '長野県' },
+  { value: 'banana', label: 'バナナ', origin: 'フィリピン' },
+  { value: 'strawberry', label: 'いちご', origin: '栃木県' },
+  { value: 'fig', label: 'いちじく', origin: '愛知県' },
+  { value: 'shine-muscat', label: 'シャインマスカット（長い名前の表示確認用）', origin: '山梨県' },
+];
+
+export const ItemWithCustomLayout: Story = {
+  decorators: [
+    (StoryFn) => (
+      <div style={{ paddingBottom: 240 }}>
+        <StoryFn />
+      </div>
+    ),
+  ],
+  render: function ItemWithCustomLayoutRender() {
+    const [value, setValue] = useState<string | null>(null);
+    const [inputText, setInputText] = useState('');
+    const [isOpen, setIsOpen] = useState(true);
+
+    const filtered = useMemo(() => fruitOrigins.filter((fruit) => fruit.label.includes(inputText)), [inputText]);
+
+    return (
+      <div style={{ width: 320 }}>
+        <Combobox
+          value={value}
+          onChange={(next, meta) => {
+            setValue(next);
+            setInputText(meta?.label ?? '');
+          }}
+          inputValue={inputText}
+          onInputChange={setInputText}
+          isOpen={isOpen}
+          onOpenChange={setIsOpen}
+          placeholder="果物を検索..."
+          matchListToTrigger
+        >
+          <Combobox.Input>
+            <Combobox.HelperMessage>
+              children は見た目のみ。選択時の入力値には label が入る（選択値: {value ?? '未選択'}）
+            </Combobox.HelperMessage>
+          </Combobox.Input>
+          <Combobox.List>
+            {filtered.length === 0 && <Combobox.Empty />}
+            {filtered.map((fruit) => (
+              <Combobox.Item key={fruit.value} value={fruit.value} label={fruit.label}>
+                <span className="flex w-full min-w-0 items-center justify-between gap-4">
+                  <span className="truncate">{fruit.label}</span>
+                  <span className="typography-label12regular shrink-0">{fruit.origin}</span>
+                </span>
+              </Combobox.Item>
+            ))}
+          </Combobox.List>
+        </Combobox>
+      </div>
+    );
+  },
+};
+
 const largeDataset = Array.from({ length: 1000 }, (_, i) => ({
   value: `item-${String(i + 1)}`,
   label: `アイテム ${String(i + 1).padStart(4, '0')}`,

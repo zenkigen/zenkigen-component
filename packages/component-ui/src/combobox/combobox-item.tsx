@@ -4,7 +4,7 @@ import { ListOptionItem } from '../list/list-option-item';
 import type { ComboboxItemProps } from './combobox.types';
 import { useComboboxContext } from './combobox-context';
 
-export function ComboboxItem({ value, label, isDisabled = false }: ComboboxItemProps) {
+export function ComboboxItem({ value, label, isDisabled = false, children }: ComboboxItemProps) {
   const { baseId, items, activeIndex, selectedValue, selectValue, setActiveIndex, inputMode, setInputMode } =
     useComboboxContext('Combobox.Item');
 
@@ -44,6 +44,9 @@ export function ComboboxItem({ value, label, isDisabled = false }: ComboboxItemP
     }
   };
 
+  // `{isX && <Badge />}` のように boolean が渡った場合は未指定とみなし、label を描画する（空の行にしない）
+  const hasCustomContent = children != null && typeof children !== 'boolean';
+
   return (
     <ListOptionItem
       ref={liRef}
@@ -55,7 +58,12 @@ export function ComboboxItem({ value, label, isDisabled = false }: ComboboxItemP
       onClick={handleClick}
       onMouseEnter={handleMouseEnter}
     >
-      <span className="min-w-0 flex-1 truncate">{label}</span>
+      {hasCustomContent ? (
+        // 選択チェック（ml-auto）と共存させるため flex-1 で残り幅を取る
+        <span className="flex min-w-0 flex-1 items-center">{children}</span>
+      ) : (
+        <span className="min-w-0 flex-1 truncate">{label}</span>
+      )}
     </ListOptionItem>
   );
 }
