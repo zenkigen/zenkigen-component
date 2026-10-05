@@ -7,9 +7,10 @@ type Props = {
   color?: TagColor;
   variant?: ColorVariant;
   onClick?: () => void;
+  ariaLabel?: string;
 };
 
-export const DeleteIcon = ({ color, variant, onClick }: Props) => {
+export const DeleteIcon = ({ color, variant, onClick, ariaLabel }: Props) => {
   const deleteButtonClasses = clsx(
     'group ml-2 size-[14px] rounded-full p-0.5 hover:cursor-pointer hover:bg-iconOnColor focus-visible:bg-iconOnColor',
     focusVisible.normal,
@@ -21,7 +22,7 @@ export const DeleteIcon = ({ color, variant, onClick }: Props) => {
   });
 
   return (
-    <button type="button" className={deleteButtonClasses} onClick={onClick}>
+    <button type="button" className={deleteButtonClasses} onClick={onClick} aria-label={ariaLabel}>
       <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
         <path
           fillRule="evenodd"
