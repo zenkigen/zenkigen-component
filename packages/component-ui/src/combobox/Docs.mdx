@@ -99,7 +99,41 @@ const filtered = useMemo(() => {
 </Combobox>;
 ```
 
-`Combobox.Item` は `label` を 1 行 `truncate` 表示で自動レンダリングします。カスタム描画には現時点では対応していません。
+`Combobox.Item` は children を省略すると `label` を 1 行 `truncate` 表示で自動レンダリングします。行の見た目を変えたい場合は次節の children を使います。
+
+### 候補行のカスタムレイアウト（`Combobox.Item` の children）
+
+`Combobox.Item` に children を渡すと、候補行の中身を自由にレイアウトできます（例: 名前 + 右寄せの補足テキスト）。children は**見た目のみ**で、`label` は引き続き必須です。選択時の入力値・`onChange` の `meta.label` には常に `label` が使われます。
+
+```tsx
+<Combobox.List>
+  {filtered.map((fruit) => (
+    <Combobox.Item key={fruit.value} value={fruit.value} label={fruit.label}>
+      <span className="flex w-full min-w-0 items-center justify-between gap-4">
+        <span className="truncate">{fruit.label}</span>
+        <span className="typography-label12regular shrink-0">{fruit.origin}</span>
+      </span>
+    </Combobox.Item>
+  ))}
+</Combobox.List>
+```
+
+children の規約:
+
+- **インタラクティブ要素を置かない**: 候補行は `role="option"` のため、ボタン・リンク・入力などを子孫に置けません。静的な表示要素のみにしてください
+- **高さは 1 行固定**: 行の高さは `size` に応じて固定です。はみ出し対策（`truncate` / `min-w-0` / `shrink-0`）は children 側で行ってください
+- **背景色を付けない**: ハイライト（背景・左ボーダー）と選択チェックは行側で描画します。children に背景色を付けると隠れてしまいます
+- **文字色は行の状態に応じて継承**: 既定は `interactive02`、選択中は `interactive01`、無効（`isDisabled`）は `disabled01`、エラー時（`isError`）の選択中は `supportError` になります。補足テキストの色を children 側で固定すると、無効・エラー時も色が変わらなくなる点に注意してください
+- **読み上げ**: 候補の accessible name は children のテキストの連結になります（上の例では「りんご 青森県」）。読み上げ不要な要素（装飾アイコン・区切り記号・重複情報）には、利用側で `aria-hidden` を付けてください
+
+```tsx
+<Combobox.Item value={fruit.value} label={fruit.label}>
+  <span className="truncate">{fruit.label}</span>
+  {/* 装飾の区切り記号は読み上げない */}
+  <span aria-hidden="true">・</span>
+  <span className="typography-label12regular shrink-0">{fruit.origin}</span>
+</Combobox.Item>
+```
 
 ### ヘルパー / エラーメッセージ
 

@@ -154,13 +154,33 @@ const MyComponent = () => {
 
 ### Combobox.Item
 
-個別の候補を表す。`value` と `label` は必須。`label` を 1 行 `truncate` 表示で自動レンダリングする（任意 JSX のカスタム描画には現時点では対応しない）。
+個別の候補を表す。`value` と `label` は必須。children を省略した場合は `label` を 1 行 `truncate` 表示で自動レンダリングする。children を渡した場合は候補行の中身を children で描画する（見た目のみ）。
 
-| プロパティ   | 型        | 必須 | 説明                                                             |
-| ------------ | --------- | :--: | ---------------------------------------------------------------- |
-| `value`      | `string`  |  ✓   | 選択時に onChange へ渡す値                                       |
-| `label`      | `string`  |  ✓   | input 表示・選択時の復元用テキスト。truncate span で自動描画する |
-| `isDisabled` | `boolean` |      | 個別アイテムの無効化（キーボード巡回でスキップされる）           |
+| プロパティ   | 型          | 必須 | 説明                                                                                                                                    |
+| ------------ | ----------- | :--: | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `value`      | `string`    |  ✓   | 選択時に onChange へ渡す値                                                                                                              |
+| `label`      | `string`    |  ✓   | input 表示・選択時の復元用テキスト。children 省略時は truncate span で自動描画する                                                      |
+| `isDisabled` | `boolean`   |      | 個別アイテムの無効化（キーボード巡回でスキップされる）                                                                                  |
+| `children`   | `ReactNode` |      | 候補行の見た目（例: 名前 + 右寄せの補足テキスト）。見た目のみで、選択時の入力値・`onChange` の `meta.label` には常に `label` が使われる |
+
+children は `<span className="flex min-w-0 flex-1 items-center">` で包んで描画する（右端の選択チェックと共存させるため残り幅を取る）。children は Item の登録情報（`value` / `label` / `isDisabled`）には含まれない。
+
+children の規約:
+
+- **インタラクティブ要素を置かない**。候補行は `role="option"` のため、ボタン・リンク・入力などを子孫に置けない。静的な表示要素のみとする。
+- **高さは 1 行固定**（`size` に応じた行の高さ）。複数行レイアウトには対応しない。はみ出し対策（`truncate` / `min-w-0` / `shrink-0`）は children 側で行う。
+- **背景色を付けない**。ハイライト（背景・左ボーダー）と選択チェックは行（`li`）側で描画するため、children に背景色を付けると隠れる。
+- **文字色は行の状態に応じて継承する**（既定 `interactive02`、選択中 `interactive01`、無効 `disabled01`、エラー時の選択中 `supportError`）。補足テキストの色を children 側で固定すると、無効・エラー時も色が変わらなくなる点に注意する。
+- **読み上げ不要な要素（装飾アイコン・記号・重複情報）には利用側で `aria-hidden` を付ける**（下記「アクセシビリティ」参照）。
+
+```tsx
+<Combobox.Item value={fruit.value} label={fruit.label}>
+  <span className="flex w-full min-w-0 items-center justify-between gap-4">
+    <span className="truncate">{fruit.label}</span>
+    <span className="typography-label12regular shrink-0">{fruit.origin}</span>
+  </span>
+</Combobox.Item>
+```
 
 ### Combobox.Loading
 
@@ -407,7 +427,7 @@ DOM フォーカスは常に input に維持される（`aria-activedescendant` 
 
 ## 候補リストの開閉判定ルール
 
-`Combobox.List` の children を `React.Children.toArray` で走査し、以下のいずれかが含まれている場合のみ候補リストを開く:
+`Combobox.List` の children を `React.Children.forEach` で走査し、以下のいずれかが含まれている場合のみ候補リストを開く:
 
 - `Combobox.Item`
 - `Combobox.Loading`
@@ -422,6 +442,7 @@ DOM フォーカスは常に input に維持される（`aria-activedescendant` 
 - 候補リストが開いている間は `aria-controls` で候補リストの `id` を指す。
 - アクティブ Item は `aria-activedescendant` で参照する（DOM フォーカスは input に残る）。
 - 候補リストは `role="listbox"` を持つ `<ul>`、各 Item は `role="option"` を持つ `<li>`。
+- 各 Item の accessible name は描画内容のテキストになる。children 省略時は `label`、children 指定時は children のテキストの連結（例: 「りんご 青森県」）。補足情報も読み上げられるため、読み上げ不要な要素（装飾アイコン・記号・重複情報）には利用側で `aria-hidden` を付ける。
 - `Combobox.HelperMessage` / `Combobox.ErrorMessage` は TextInput と同じ仕組みで `aria-describedby` / `aria-invalid` を自動付与する。
 - マウスクリック時の入力フォーカス維持のため、Item / クリアボタン（表示時）/ 矢印ボタンに `onMouseDown.preventDefault` を実装している。
 - 矢印ボタン・クリアボタン（表示時）は `tabIndex={-1}` で Tab キー巡回から除外し、フォーカスを input に集約する。
@@ -435,7 +456,7 @@ DOM フォーカスは常に input に維持される（`aria-activedescendant` 
 - 外部クリック検知は `useOutsideClick` フックを使う。
 - `Combobox.Input` は内部で `InternalTextInput`（TextInput の internal API）を利用し、矢印・クリアボタンを `after` prop で差し込む。
 - `Combobox.HelperMessage` / `Combobox.ErrorMessage` は `TextInput.HelperMessage` / `TextInput.ErrorMessage` をそのまま再エクスポートしている。
-- `Combobox.List` は children を `React.Children.toArray` で走査し、`Combobox.Item` の `value` / `label` 配列を Context 経由で本体に通知する。
+- `Combobox.List` は children を `React.Children.forEach` で走査し、`Combobox.Item` の `value` / `label` 配列を Context 経由で本体に通知する。`Combobox.Item` の children は走査対象に含めない（選択・入力表示はすべて `label` を使うため）。
 - `activeIndex` は items 変動時に **value 基準で再引き当て** する。`useCombobox` 内で active Item の `value` を ref に保持し、新 items 内に同じ value の有効 Item が残っていれば該当 index を active にする。残っていない場合は先頭の有効 Item にフォールバックする。
 - 内部に `inputMode`（`'keyboard' | 'mouse'`）の状態を持ち、キーボード操作で active が変化したときのみ active Item を `scrollIntoView({ block: 'nearest' })` でスクロール表示する。マウスホバーで active が同期する場合はスクロールを発生させない。
 - 候補リストが open のとき Escape は `event.stopPropagation()` で親要素（Popover / Modal 等）への伝搬を止める。Combobox を内包する Popover / Modal が Escape で同時に閉じる二重 close を防ぐためである。候補リストが closed のときは Escape を素通しする（IME 変換中の Escape は除く。下記参照）。
@@ -492,3 +513,4 @@ A: `aria-activedescendant` のターゲット ID が衝突し、キーボード�
 | 2026-04-17 | 新規作成                                                                                                  | -      |
 | 2026-06-29 | クリアボタンの仕様変更（`onClickClearButton` を渡したときのみ表示、値のクリアは利用者責務）に伴う記述更新 | -      |
 | 2026-10-05 | IME 変換中の `↑` / `↓` / `Escape` を Combobox で扱わないよう修正（従来は `Enter` のみ）                   | -      |
+| 2026-10-05 | `Combobox.Item` に `children`（候補行の見た目のみのカスタムレイアウト）を追加                             | -      |

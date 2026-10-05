@@ -19,6 +19,7 @@ import { Combobox } from './combobox';
  * - activeIndex 初期化: selectedValue 優先 / 先頭 enabled / close → 再 open
  * - items 更新時の active 維持: 並び替え / フィルタ絞り込み / フィルタで消えた場合
  * - 選択済み視覚強調 (isSelected の DOM 伝搬)
+ * - Combobox.Item の children: 見た目のみ。選択値・input 表示は label、accessible name は children のテキスト
  * - scrollIntoView / inputMode: keyboard のみで scroll、mouse では抑止、reopen で keyboard に戻る
  * - scrollTop リセット: open 直後に 0
  * - isError / isDisabled: 視覚 / 操作抑止
@@ -1115,6 +1116,158 @@ describe('Combobox', () => {
       expect(textSpan?.textContent).toBe('りんご');
       expect(textSpan?.className).toMatch(/truncate/);
       expect(textSpan?.className).toMatch(/min-w-0/);
+    });
+  });
+
+  describe('Combobox.Item の children', () => {
+    type FruitOrigin = { value: string; label: string; origin: string };
+
+    const fruitOrigins: FruitOrigin[] = [
+      { value: 'apple', label: 'りんご', origin: '青森県' },
+      { value: 'banana', label: 'バナナ', origin: 'フィリピン' },
+    ];
+
+    function ChildrenCombobox({
+      initialValue = null,
+      initialInputValue = '',
+      onChange,
+      onInputChange,
+    }: {
+      initialValue?: string | null;
+      initialInputValue?: string;
+      onChange?: (value: string | null, meta: { label: string } | null) => void;
+      onInputChange?: (value: string) => void;
+    }) {
+      const [value, setValue] = useState<string | null>(initialValue);
+      const [inputValue, setInputValue] = useState(initialInputValue);
+
+      return (
+        <Combobox
+          value={value}
+          onChange={(next, meta) => {
+            setValue(next);
+            onChange?.(next, meta);
+          }}
+          inputValue={inputValue}
+          onInputChange={(next) => {
+            setInputValue(next);
+            onInputChange?.(next);
+          }}
+        >
+          <Combobox.Input />
+          <Combobox.List>
+            {fruitOrigins.map((item) => (
+              <Combobox.Item key={item.value} value={item.value} label={item.label}>
+                <span className="truncate" data-testid={`label-${item.value}`}>
+                  {item.label}
+                </span>
+                {/* 読み上げ不要な装飾の区切り記号 */}
+                <span aria-hidden="true">・</span>
+                <span className="shrink-0">{item.origin}</span>
+              </Combobox.Item>
+            ))}
+          </Combobox.List>
+        </Combobox>
+      );
+    }
+
+    it('children 未指定のとき option の直下は label の span と選択チェックのみ（DOM 不変）', async () => {
+      const user = userEvent.setup();
+      render(<ControlledCombobox />);
+      await user.click(getCombobox());
+
+      const option = getOption('りんご');
+      const childSpans = Array.from(option.children);
+      expect(childSpans).toHaveLength(2);
+      expect(childSpans[0]?.className).toBe('min-w-0 flex-1 truncate');
+      expect(childSpans[0]?.textContent).toBe('りんご');
+      expect(childSpans[1]).toHaveAttribute('data-selection-indicator');
+    });
+
+    it('children が行内のラッパー span に描画される', async () => {
+      const user = userEvent.setup();
+      render(<ChildrenCombobox />);
+      await user.click(getCombobox());
+
+      const labelSpan = screen.getByTestId('label-apple');
+      const wrapper = labelSpan.parentElement;
+      expect(wrapper?.tagName).toBe('SPAN');
+      expect(wrapper?.className).toBe('flex min-w-0 flex-1 items-center');
+      expect(wrapper?.parentElement).toHaveAttribute('role', 'option');
+      expect(wrapper?.textContent).toContain('青森県');
+    });
+
+    it('children が boolean（条件付き描画で false）のときは未指定とみなし label を描画する', async () => {
+      const user = userEvent.setup();
+      const hasBadge = false;
+      render(
+        <Combobox value={null} onChange={vi.fn()} inputValue="" onInputChange={vi.fn()}>
+          <Combobox.Input />
+          <Combobox.List>
+            <Combobox.Item value="apple" label="りんご">
+              {hasBadge && <span>バッジ</span>}
+            </Combobox.Item>
+          </Combobox.List>
+        </Combobox>,
+      );
+      await user.click(getCombobox());
+
+      const option = getOption('りんご');
+      expect(option.children[0]?.className).toBe('min-w-0 flex-1 truncate');
+      expect(option.children[0]?.textContent).toBe('りんご');
+    });
+
+    it('option の accessible name は children のテキストの連結になり、aria-hidden の要素は含まれない', async () => {
+      const user = userEvent.setup();
+      render(<ChildrenCombobox />);
+      await user.click(getCombobox());
+
+      const option = getOption('りんご 青森県');
+      expect(option).toHaveAttribute('id', expect.stringContaining('apple'));
+      expect(screen.queryByRole('option', { name: /・/, hidden: true })).toBeNull();
+    });
+
+    it('選択時の onChange の meta と onInputChange には children のテキストではなく label が渡る', async () => {
+      const user = userEvent.setup();
+      const handleChange = vi.fn();
+      const handleInputChange = vi.fn();
+      render(<ChildrenCombobox onChange={handleChange} onInputChange={handleInputChange} />);
+      await user.click(getCombobox());
+      await user.click(getOption('バナナ フィリピン'));
+
+      expect(handleChange).toHaveBeenCalledWith('banana', { label: 'バナナ' });
+      expect(handleInputChange).toHaveBeenLastCalledWith('バナナ');
+      expect(getCombobox().value).toBe('バナナ');
+    });
+
+    it('Enter で選択したときも label が使われる', async () => {
+      const user = userEvent.setup();
+      const handleChange = vi.fn();
+      render(<ChildrenCombobox onChange={handleChange} />);
+      await user.click(getCombobox());
+      await user.keyboard('{Enter}');
+
+      expect(handleChange).toHaveBeenCalledWith('apple', { label: 'りんご' });
+      expect(getCombobox().value).toBe('りんご');
+    });
+
+    it('children 指定時もハイライトと選択状態（aria-selected・選択チェック）が表示される', async () => {
+      const user = userEvent.setup();
+      render(<ChildrenCombobox initialValue="banana" initialInputValue="バナナ" />);
+      await user.click(getCombobox());
+
+      const selected = getOption('バナナ フィリピン');
+      expect(selected).toHaveAttribute('aria-selected', 'true');
+      expect(selected.className).toMatch(/bg-selectedUi/);
+      expect(selected.className).toMatch(/border-l-interactive03/);
+      expect(selected.querySelector('[data-selection-indicator] svg')).not.toBeNull();
+
+      await user.keyboard('{ArrowDown}');
+      const active = getOption('りんご 青森県');
+      expect(active.className).toMatch(/bg-hover02/);
+      expect(active.className).toMatch(/border-l-interactive03/);
+      expect(active).toHaveAttribute('aria-selected', 'false');
+      expect(active.querySelector('[data-selection-indicator] svg')).toBeNull();
     });
   });
 
