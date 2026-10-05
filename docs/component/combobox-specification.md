@@ -380,7 +380,11 @@ DOM フォーカスは常に input に維持される（`aria-activedescendant` 
 
 `↑` / `↓` は **`Combobox.Item` のみを巡回** する。`Combobox.Loading` / `Combobox.Empty` はスキップされる。`isDisabled` の Item もスキップされる。
 
-`Enter` は日本語入力（IME）の変換確定で押された場合（keydown 時点で `isComposing` が true、一部環境では `keyCode === 229`）は選択処理を行わない。変換確定の Enter を選択として扱うと、input が選択ラベルに更新された直後に IME の確定文字が追記され「(選択ラベル)(入力中の文字)」のような二重入力になるため。変換確定後に改めて `Enter` を押すことでアクティブ Item を選択できる。
+日本語入力（IME）の変換中に押されたキー（keydown 時点で `isComposing` が true、一部環境では `keyCode === 229`）は、上表の操作を行わず IME に委ねる。変換中の各キーは IME 側の操作に使われるためである。
+
+- `↑` / `↓`: 変換候補の移動に使われる。アクティブ Item の移動・候補リストの開閉は行わず、既定動作も妨げない（`preventDefault` しない）。
+- `Enter`: 変換の確定に使われる。選択処理は行わない。選択として扱うと、input が選択ラベルに更新された直後に IME の確定文字が追記され「(選択ラベル)(入力中の文字)」のような二重入力になるため。変換確定後に改めて `Enter` を押すことでアクティブ Item を選択できる。
+- `Escape`: 変換の取り消しに使われる。候補リストを閉じず、未確定入力の revert も行わない。また、候補リストの開閉にかかわらず親要素（Popover 等）へは伝搬しない（変換の取り消しで親まで閉じないようにするため）。
 
 候補リストを新規に開いた瞬間の初期 active 位置は以下のように決まる:
 
@@ -434,7 +438,8 @@ DOM フォーカスは常に input に維持される（`aria-activedescendant` 
 - `Combobox.List` は children を `React.Children.toArray` で走査し、`Combobox.Item` の `value` / `label` 配列を Context 経由で本体に通知する。
 - `activeIndex` は items 変動時に **value 基準で再引き当て** する。`useCombobox` 内で active Item の `value` を ref に保持し、新 items 内に同じ value の有効 Item が残っていれば該当 index を active にする。残っていない場合は先頭の有効 Item にフォールバックする。
 - 内部に `inputMode`（`'keyboard' | 'mouse'`）の状態を持ち、キーボード操作で active が変化したときのみ active Item を `scrollIntoView({ block: 'nearest' })` でスクロール表示する。マウスホバーで active が同期する場合はスクロールを発生させない。
-- 候補リストが open のとき Escape は `event.stopPropagation()` で親要素（Popover / Modal 等）への伝搬を止める。Combobox を内包する Popover / Modal が Escape で同時に閉じる二重 close を防ぐためである。候補リストが closed のときは Escape を素通しする。
+- 候補リストが open のとき Escape は `event.stopPropagation()` で親要素（Popover / Modal 等）への伝搬を止める。Combobox を内包する Popover / Modal が Escape で同時に閉じる二重 close を防ぐためである。候補リストが closed のときは Escape を素通しする（IME 変換中の Escape は除く。下記参照）。
+- IME 変換中（`isComposing` / `keyCode === 229`）の keydown は `handleKeyDown` の冒頭で判定し、どのキーも Combobox では扱わない。変換中の Escape のみ `event.stopPropagation()` する。Popover は自前の keydown ハンドラで Escape を処理し IME 変換中かを判定しないため、伝搬すると変換の取り消しで Popover まで閉じてしまうためである。変換の取り消し自体を妨げないよう `preventDefault` はしない。
 
 ## 注意事項
 
@@ -486,3 +491,4 @@ A: `aria-activedescendant` のターゲット ID が衝突し、キーボード�
 | ---------- | --------------------------------------------------------------------------------------------------------- | ------ |
 | 2026-04-17 | 新規作成                                                                                                  | -      |
 | 2026-06-29 | クリアボタンの仕様変更（`onClickClearButton` を渡したときのみ表示、値のクリアは利用者責務）に伴う記述更新 | -      |
+| 2026-10-05 | IME 変換中の `↑` / `↓` / `Escape` を Combobox で扱わないよう修正（従来は `Enter` のみ）                   | -      |
