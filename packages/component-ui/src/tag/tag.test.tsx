@@ -17,7 +17,8 @@ import { InternalTag, Tag } from './tag';
  * - アクセシビリティ：削除ボタンの accessible name
  * - isDisabled（InternalTag）：削除ボタン非表示・文字色の置き換え・編集モードの形の維持
  * - isDeletable（InternalTag）：削除ボタン非表示・編集モードの形と文字色の維持
- * - 型：公開 Tag に isDisabled / isDeletable を渡せないこと、InternalTag の表示専用タグにも渡せないこと
+ * - isTruncated（InternalTag）：文字の省略・title での全文表示・削除ボタンを縮めないこと・accessible name の維持
+ * - 型：公開 Tag に isDisabled / isDeletable / isTruncated を渡せないこと、InternalTag の表示専用タグに isDisabled / isDeletable を渡せないこと
  */
 
 describe('Tag', () => {
@@ -240,6 +241,33 @@ describe('Tag', () => {
       expect(tag).toHaveClass('text-textOnColor');
       expect(tag).not.toHaveClass('text-disabled01');
     });
+
+    it('isTruncated をオブジェクトの展開で渡しても、文字が span に包まれず幅の制限クラスも付かないこと', () => {
+      const internalProps = { isTruncated: true };
+      const { container } = render(
+        <div>
+          <Tag id="tag-1" color="default" isEditable onDelete={vi.fn()} {...internalProps}>
+            営業
+          </Tag>
+          <Tag id="tag-2" color="default" {...internalProps}>
+            開発
+          </Tag>
+        </div>,
+      );
+
+      const editableTag = screen.getByText('営業');
+      expect(editableTag.tagName).toBe('DIV');
+      expect(editableTag).not.toHaveClass('min-w-0');
+      expect(editableTag).not.toHaveClass('max-w-full');
+      expect(editableTag).not.toHaveAttribute('title');
+      expect(screen.getByRole('button', { name: '営業を削除' })).not.toHaveClass('shrink-0');
+
+      const displayTag = screen.getByText('開発');
+      expect(displayTag.tagName).toBe('DIV');
+      expect(displayTag).not.toHaveClass('min-w-0');
+      expect(displayTag).not.toHaveClass('max-w-full');
+      expect(container.querySelector('span')).toBeNull();
+    });
   });
 
   describe('isDisabled（InternalTag）', () => {
@@ -354,6 +382,75 @@ describe('Tag', () => {
     });
   });
 
+  describe('isTruncated（InternalTag）', () => {
+    const longLabel = 'とても長い名前のくだものドラゴンフルーツとパッションフルーツの盛り合わせ';
+
+    it('編集可能なタグで、文字が truncate の span に入り title に全文が入ること', () => {
+      const { container } = render(
+        <InternalTag id="tag-1" color="default" isEditable onDelete={vi.fn()} isTruncated>
+          {longLabel}
+        </InternalTag>,
+      );
+      const text = screen.getByText(longLabel);
+      expect(text.tagName).toBe('SPAN');
+      expect(text).toHaveClass('truncate');
+      expect(text).toHaveAttribute('title', longLabel);
+
+      const wrapper = container.firstElementChild as HTMLElement;
+      expect(wrapper).toHaveClass('min-w-0', 'max-w-full');
+    });
+
+    it('編集可能なタグで、削除ボタンが縮まず accessible name が全文の「children を削除」のままであること', () => {
+      render(
+        <InternalTag id="tag-1" color="default" isEditable onDelete={vi.fn()} isTruncated>
+          {longLabel}
+        </InternalTag>,
+      );
+      const button = screen.getByRole('button', { name: `${longLabel}を削除` });
+      expect(button).toHaveClass('shrink-0');
+    });
+
+    it('編集可能なタグで、高さ・余白・形は変わらないこと', () => {
+      const { container } = render(
+        <InternalTag id="tag-1" color="default" isEditable onDelete={vi.fn()} isTruncated>
+          {longLabel}
+        </InternalTag>,
+      );
+      const wrapper = container.firstElementChild as HTMLElement;
+      expect(wrapper).toHaveClass('h-5', 'px-2', 'rounded-full');
+    });
+
+    it('表示専用のタグで、文字が truncate の span に入り title に全文が入ること', () => {
+      const { container } = render(
+        <InternalTag id="tag-1" color="default" size="small" isTruncated>
+          {longLabel}
+        </InternalTag>,
+      );
+      const text = screen.getByText(longLabel);
+      expect(text.tagName).toBe('SPAN');
+      expect(text).toHaveClass('truncate');
+      expect(text).toHaveAttribute('title', longLabel);
+
+      const wrapper = container.firstElementChild as HTMLElement;
+      expect(wrapper).toHaveClass('min-w-0', 'max-w-full', 'h-4', 'px-1', 'rounded');
+      expect(screen.queryByRole('button')).not.toBeInTheDocument();
+    });
+
+    it('isTruncated 未指定の場合、文字は span に包まれず幅の制限クラスも付かないこと', () => {
+      const { container } = render(
+        <InternalTag id="tag-1" color="default" isEditable onDelete={vi.fn()}>
+          ラベル
+        </InternalTag>,
+      );
+      const wrapper = container.firstElementChild as HTMLElement;
+      expect(screen.getByText('ラベル')).toBe(wrapper);
+      expect(wrapper).not.toHaveClass('min-w-0');
+      expect(wrapper).not.toHaveClass('max-w-full');
+      expect(container.querySelector('span')).toBeNull();
+      expect(screen.getByRole('button', { name: 'ラベルを削除' })).not.toHaveClass('shrink-0');
+    });
+  });
+
   describe('型', () => {
     it('公開 Tag には isEditable の有無に関わらず isDisabled / isDeletable を渡せないこと', () => {
       render(
@@ -373,6 +470,22 @@ describe('Tag', () => {
           {/* @ts-expect-error 公開 Tag には isEditable 指定時も isDeletable を渡せない */}
           <Tag id="tag-d" color="default" isEditable onDelete={vi.fn()} isDeletable={false}>
             D
+          </Tag>
+        </div>,
+      );
+      expect(screen.getByText('A')).toBeInTheDocument();
+    });
+
+    it('公開 Tag には isEditable の有無に関わらず isTruncated を渡せないこと', () => {
+      render(
+        <div>
+          {/* @ts-expect-error 公開 Tag には isTruncated を渡せない */}
+          <Tag id="tag-a" color="default" isTruncated>
+            A
+          </Tag>
+          {/* @ts-expect-error 公開 Tag には isEditable 指定時も isTruncated を渡せない */}
+          <Tag id="tag-b" color="default" isEditable onDelete={vi.fn()} isTruncated>
+            B
           </Tag>
         </div>,
       );

@@ -8,12 +8,15 @@ type Props = {
   variant?: ColorVariant;
   onClick?: () => void;
   ariaLabel?: string;
+  /** `false` で親の幅が足りなくても縮めない（Tag の文字を省略するときに使う）。 */
+  isShrinkable?: boolean;
 };
 
-export const DeleteIcon = ({ color, variant, onClick, ariaLabel }: Props) => {
+export const DeleteIcon = ({ color, variant, onClick, ariaLabel, isShrinkable = true }: Props) => {
   const deleteButtonClasses = clsx(
     'group ml-2 size-[14px] rounded-full p-0.5 hover:cursor-pointer hover:bg-iconOnColor focus-visible:bg-iconOnColor',
     focusVisible.normal,
+    { 'shrink-0': !isShrinkable },
   );
 
   const deletePathClasses = clsx({
