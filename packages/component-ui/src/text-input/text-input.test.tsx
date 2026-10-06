@@ -458,7 +458,7 @@ describe('InternalTextInput', () => {
       const container = input.parentElement;
       expect(container).toContainElement(screen.getByTestId('before'));
       expect(container).toHaveClass('flex', 'min-w-0', 'flex-1', 'flex-wrap', 'items-center', 'gap-1');
-      expect(input).toHaveClass('min-w-20', 'flex-1');
+      expect(input).toHaveClass('h-5', 'min-w-20', 'flex-1');
       expect(input).not.toHaveClass('min-h-8');
     });
 
