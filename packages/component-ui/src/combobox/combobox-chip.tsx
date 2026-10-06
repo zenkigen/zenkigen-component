@@ -66,8 +66,9 @@ export function ComboboxChip({ value, label, isRemovable = true }: ComboboxChipP
   }
 
   return (
-    // Tag は div のため、包む要素も div にする（span の中に div を置くと HTML の入れ子として不正）
-    <div ref={rootRef} onMouseDown={preventBlur}>
+    // Tag は div のため、包む要素も div にする（span の中に div を置くと HTML の入れ子として不正）。
+    // 折り返しコンテナの中で入力欄の幅を超えないよう幅を制限し、長いラベルは Tag 側で 1 行に省略する。
+    <div ref={rootRef} className="flex min-w-0 max-w-full" onMouseDown={preventBlur}>
       <InternalTag
         id={value}
         isEditable
@@ -75,6 +76,7 @@ export function ComboboxChip({ value, label, isRemovable = true }: ComboboxChipP
         color="gray"
         isDisabled={isDisabled}
         isDeletable={isRemovable}
+        isTruncated
       >
         {label}
       </InternalTag>

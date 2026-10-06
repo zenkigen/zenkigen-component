@@ -218,6 +218,7 @@ const candidates = fruits.filter((fruit) => !selectedIds.includes(fruit.value) &
 - 1 つの `value` につきチップは 1 つにしてください
 - チップは `Combobox.Input` の **直接の子** に置いてください（Fragment やラッパーコンポーネントで包むと認識されません）
 - 色は `gray` 固定で、`size="large"` でもチップは `medium` のままです。単一選択モードでは描画されません
+- 長いラベルは 1 行で末尾を「…」で省略します（チップの最大幅は入力欄の中のチップ領域の幅）。✗ は常に表示され、全文は `title`（マウスオーバー）とスクリーンリーダーで伝わります
 
 追加・削除に応じた副作用（API 呼び出し等）は `onChange` の第 2 引数で受け取れます。
 

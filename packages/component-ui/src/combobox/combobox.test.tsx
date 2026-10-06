@@ -25,7 +25,7 @@ import type { ComboboxInputProps, ComboboxMultipleChangeMeta, ComboboxProps } fr
  * - scrollTop リセット: open 直後に 0
  * - isError / isDisabled: 視覚 / 操作抑止
  * - multiple: 追加 / toggle 削除 / Backspace / revert / aria-multiselectable / aria-live / 型
- * - Combobox.Chip: 描画 / ✗ での削除（マウス・キーボード）/ 外せないチップ / フォーカス維持 / blur・Escape / disabled
+ * - Combobox.Chip: 描画 / 長いラベルの省略 / ✗ での削除（マウス・キーボード）/ 外せないチップ / フォーカス維持 / blur・Escape / disabled
  * - Combobox.Input の id / aria-label / aria-labelledby
  *
  * 注意: popup は常時 DOM にあり visibility で制御するため、Testing Library の
@@ -2158,10 +2158,10 @@ describe('Combobox', () => {
       it('Chip が children の順に、label と gray の Tag で描画される', () => {
         render(<MultipleComboboxWithChips initialValue={['peach', 'apple']} />);
 
-        const peach = screen.getByText('もも', { selector: 'div' });
-        const apple = screen.getByText('りんご', { selector: 'div' });
+        const peach = screen.getByText('もも', { selector: 'span[title]' });
+        const apple = screen.getByText('りんご', { selector: 'span[title]' });
         expect(peach.compareDocumentPosition(apple) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-        expect(peach).toHaveClass('bg-gray-gray10');
+        expect(peach.parentElement).toHaveClass('bg-gray-gray10');
         expect(getDeleteButton('もも')).toBeInTheDocument();
         expect(getDeleteButton('りんご')).toBeInTheDocument();
       });
@@ -2290,6 +2290,51 @@ describe('Combobox', () => {
         const describedTexts = describedBy.split(' ').map((id) => document.getElementById(id)?.textContent);
         expect(describedTexts).toEqual(['補足', 'エラー']);
         expect(getDeleteButton('りんご')).toBeInTheDocument();
+      });
+    });
+
+    describe('Combobox.Chip の長いラベル', () => {
+      const longLabel = 'シャインマスカット（長い名前の表示確認用・とても長いラベル）';
+
+      it('文字を省略用の span に入れて title に全文を出し、Tag と Chip の外側に幅の制限クラスを付ける', () => {
+        render(<MultipleComboboxWithChips initialValue={['apple']} chipLabels={{ apple: longLabel }} />);
+
+        const text = screen.getByText(longLabel, { selector: 'span[title]' });
+        expect(text).toHaveClass('truncate');
+        expect(text).toHaveAttribute('title', longLabel);
+
+        const tag = text.parentElement;
+        expect(tag).toHaveClass('min-w-0', 'max-w-full');
+        expect(tag?.parentElement).toHaveClass('flex', 'min-w-0', 'max-w-full');
+      });
+
+      it('✗ の accessible name は全文の「{label}を削除」になり、✗ は縮まない', () => {
+        render(<MultipleComboboxWithChips initialValue={['apple']} chipLabels={{ apple: longLabel }} />);
+
+        const deleteButton = getDeleteButton(longLabel);
+        expect(deleteButton).toBeInTheDocument();
+        expect(deleteButton).toHaveClass('shrink-0');
+      });
+
+      it('✗ で削除したときの aria-live 通知も全文で行う', async () => {
+        const user = userEvent.setup();
+        const { container } = render(
+          <MultipleComboboxWithChips initialValue={['apple']} chipLabels={{ apple: longLabel }} />,
+        );
+
+        await user.click(getDeleteButton(longLabel));
+
+        expect(getLiveRegion(container)).toHaveTextContent(`「${longLabel}」を削除しました`);
+      });
+
+      it('短いラベルでも同じ構造で描画する（省略されないだけ）', () => {
+        render(<MultipleComboboxWithChips initialValue={['apple']} />);
+
+        const text = screen.getByText('りんご', { selector: 'span[title]' });
+        expect(text).toHaveClass('truncate');
+        expect(text).toHaveAttribute('title', 'りんご');
+        expect(text.parentElement?.parentElement).toHaveClass('flex', 'min-w-0', 'max-w-full');
+        expect(getDeleteButton('りんご')).toHaveClass('shrink-0');
       });
     });
 
@@ -2451,7 +2496,7 @@ describe('Combobox', () => {
             <MultipleComboboxWithChips initialValue={['apple', 'orange']} isDisabled />
           </>,
         );
-        expect(screen.getByText('りんご', { selector: 'div' })).toBeInTheDocument();
+        expect(screen.getByText('りんご', { selector: 'span[title]' })).toBeInTheDocument();
 
         expect(queryDeleteButton('りんご')).toBeNull();
         expect(queryDeleteButton('みかん')).toBeNull();
@@ -2523,7 +2568,7 @@ describe('Combobox', () => {
       it('✗ を描画せず、Tab 順にも出ない', async () => {
         const user = userEvent.setup();
         render(<MultipleComboboxWithChips initialValue={['apple', 'orange']} fixedValues={['orange']} />);
-        expect(screen.getByText('みかん', { selector: 'div' })).toBeInTheDocument();
+        expect(screen.getByText('みかん', { selector: 'span[title]' })).toBeInTheDocument();
         expect(queryDeleteButton('みかん')).toBeNull();
         await user.click(getCombobox());
 

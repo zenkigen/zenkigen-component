@@ -1232,6 +1232,8 @@ type MultipleFruitComboboxProps = {
   isDisabled?: boolean;
   isOpenInitially?: boolean;
   helperMessage?: string;
+  /** 候補と Chip の label の元データ（未指定時は fruits） */
+  items?: { value: string; label: string }[];
 };
 
 // 利用側のデータ（fruits）から value と Combobox.Chip を導出する。候補は選択済みを除外して入力で絞り込む（利用側の責務）。
@@ -1242,17 +1244,18 @@ function MultipleFruitCombobox({
   isDisabled,
   isOpenInitially = false,
   helperMessage,
+  items = fruits,
 }: MultipleFruitComboboxProps) {
   const [selectedValues, setSelectedValues] = useState<string[]>(initialValue);
   const [inputText, setInputText] = useState('');
   const [isOpen, setIsOpen] = useState(isOpenInitially);
 
   const selectedFruits = selectedValues.flatMap((value) => {
-    const fruit = fruits.find((item) => item.value === value);
+    const fruit = items.find((item) => item.value === value);
 
     return fruit != null ? [fruit] : [];
   });
-  const candidates = fruits.filter((fruit) => !selectedValues.includes(fruit.value) && fruit.label.includes(inputText));
+  const candidates = items.filter((fruit) => !selectedValues.includes(fruit.value) && fruit.label.includes(inputText));
 
   return (
     <Combobox
@@ -1351,13 +1354,29 @@ export const MultipleLarge: MultipleStory = {
   },
 };
 
+// 入力欄の幅より長いラベルのチップの確認用
+const fruitsWithLongLabel = [
+  ...fruits,
+  { value: 'shine-muscat', label: 'シャインマスカット（長い名前の表示確認用・とても長いラベル）' },
+];
+
 export const MultipleWrapping: MultipleStory = {
   render: function MultipleWrappingRender() {
     return (
       <div style={{ width: 280 }}>
         <MultipleFruitCombobox
-          initialValue={['apple', 'green-apple', 'banana', 'strawberry', 'blueberry', 'raspberry', 'dragonfruit']}
-          helperMessage="チップが入りきらないと折り返し、入力欄が縦に伸びる"
+          items={fruitsWithLongLabel}
+          initialValue={[
+            'apple',
+            'green-apple',
+            'banana',
+            'strawberry',
+            'shine-muscat',
+            'blueberry',
+            'raspberry',
+            'dragonfruit',
+          ]}
+          helperMessage="チップが入りきらないと折り返し、入力欄が縦に伸びる。長いラベルは 1 行で末尾を省略する"
         />
       </div>
     );

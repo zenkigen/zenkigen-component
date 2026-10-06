@@ -193,6 +193,7 @@ const MyComponent = () => {
 - キーボードで ✗ を押した場合は、削除前に input へフォーカスを戻す（フォーカスが body に落ちないようにする）
 - `Combobox` の `isDisabled` をチップへ伝える（✗ を描画しない）
 - チップの `label` を読み上げ用に登録する
+- 長い `label` は 1 行で末尾を「…」で省略する（全文は `title` 属性と、✗ の accessible name・読み上げで伝わる）
 
 利用側が担うこと:
 
@@ -299,9 +300,10 @@ children の規約:
 
 - チップは Tag の編集可能スタイル（`rounded-full`、`px-2`、`h-5`、`typography-label14regular`）で、色は `gray` 固定
 - `size="large"` でもチップは `medium` のまま（入力欄の高さ・文字サイズだけが変わる）
-- チップと input は同じ行に並び、入りきらない場合は折り返して入力欄が縦に伸びる（省略表示はしない）。チップ間・チップと input の間隔は `gap-1`。チップが 0 件のときの入力欄の高さは単一選択と同じ
+- チップと input は同じ行に並び、入りきらない場合は折り返して入力欄が縦に伸びる。チップ間・チップと input の間隔は `gap-1`。チップが 0 件のときの入力欄の高さは単一選択と同じ
 - 無効状態（`isDisabled`）: ✗ を描画せず、チップの文字色を `text-disabled01` にする（形・余白は変えない）。**デザイン確認中の仮の見た目**で、今後変更する可能性がある
 - 外せないチップ（`isRemovable={false}`）: ✗ を描画しない。形・余白・文字色は通常のチップと同じ
+- 長いラベル: チップの最大幅は入力欄の中のチップ領域の幅で、超える場合は文字を 1 行で末尾を「…」で省略する（折り返さない）。✗ は縮めず常に表示する。全文は `title` 属性で確認でき、省略は見た目だけで、スクリーンリーダーには全文が伝わる
 
 ## 使用例
 
@@ -638,7 +640,7 @@ DOM フォーカスは常に input に維持される（`aria-activedescendant` 
 - 入力欄の accessible name は `Combobox.Input` の `id`（`<label htmlFor>` と関連付け）/ `aria-label` / `aria-labelledby` で付ける。placeholder は名前にならないため、いずれかの指定を推奨する。
 - 複数選択モード:
   - 候補リストに `aria-multiselectable="true"` を付与し、`value` に含まれる Item の `aria-selected` を `true` にする。
-  - チップの ✗ は `<button>` で、accessible name は `{label}を削除`。Tab で到達できるため、選択内容の確認と任意のチップの削除をキーボードで行える。
+  - チップの ✗ は `<button>` で、accessible name は `{label}を削除`（長いラベルを省略表示している場合も全文）。Tab で到達できるため、選択内容の確認と任意のチップの削除をキーボードで行える。
   - 追加・削除を `aria-live="polite"` の領域（視覚的に非表示）で読み上げる（例: `「りんご」を追加しました` / `「りんご」を削除しました`。複数の変化は「、」で連結）。前回の `value` との差分から生成するため、利用側が `value` を直接書き換えた場合も通知される。初期表示時は読み上げない。
   - 読み上げる label は、チップの `label`（最後に描画されたもの）または追加時に選んだ Item の `label` を使い、どちらも無ければ `value` の文字列を使う。
   - `value` に含まれるがチップを描画していない値は、見えないだけで選択中として扱う（`aria-selected`・再選択での解除・Backspace の削除対象・読み上げの対象に含める）。視覚的なフィードバックは無いため、すべての値のチップを描画すること。
@@ -659,6 +661,7 @@ DOM フォーカスは常に input に維持される（`aria-activedescendant` 
 - 読み上げ領域（`aria-live="polite"`）は複数選択モードで常時描画し、中身だけを通知ごとに増える連番を `key` にした要素で入れ替える。同じ label の別の値を続けて追加・削除すると文言が前回と同じになるが、要素が入れ替わるため新しい通知として伝わる。
 - `Combobox.Chip` は `useLayoutEffect` で label を読み上げ用に登録する（unmount では消さず、通知に使い終えた時点で `value` に無い値を掃除する）。`isRemovable={false}` のときは外せない値として登録し、unmount・`isRemovable` の変化で解除する。
 - 外せない値は、✗・Backspace・候補の再選択（toggle）の 3 つの削除経路すべてで削除を行わない。
+- `Combobox.Chip` は Tag の内部 prop `isTruncated` を指定する（文字を `truncate` の span で包んで `title` に全文を入れ、Tag に `min-w-0 max-w-full`、✗ に `shrink-0` を付ける）。チップのルート div にも `flex min-w-0 max-w-full` を付け、折り返しコンテナ（flex-wrap）の中で入力欄の幅を超えないようにする。
 - `Combobox.HelperMessage` / `Combobox.ErrorMessage` は `TextInput.HelperMessage` / `TextInput.ErrorMessage` をそのまま再エクスポートしている。
 - `Combobox.List` は children を `React.Children.forEach` で走査し、`Combobox.Item` の `value` / `label` 配列を Context 経由で本体に通知する。`Combobox.Item` の children は走査対象に含めない（選択・入力表示はすべて `label` を使うため）。
 - `activeIndex` は items 変動時に **value 基準で再引き当て** する。`useCombobox` 内で active Item の `value` を ref に保持し、新 items 内に同じ value の有効 Item が残っていれば該当 index を active にする。残っていない場合は先頭の有効 Item にフォールバックする。
@@ -730,11 +733,11 @@ A: 複数選択モードにはクリアボタンを用意していない（`onCl
 
 ## 更新履歴
 
-| 日付       | 内容                                                                                                                        | 担当者 |
-| ---------- | --------------------------------------------------------------------------------------------------------------------------- | ------ |
-| 2026-04-17 | 新規作成                                                                                                                    | -      |
-| 2026-06-29 | クリアボタンの仕様変更（`onClickClearButton` を渡したときのみ表示、値のクリアは利用者責務）に伴う記述更新                   | -      |
-| 2026-10-05 | IME 変換中の `↑` / `↓` / `Escape` を Combobox で扱わないよう修正（従来は `Enter` のみ）                                     | -      |
-| 2026-10-05 | `Combobox.Item` に `children`（候補行の見た目のみのカスタムレイアウト）を追加                                               | -      |
-| 2026-10-05 | Floating UI の `reference` の取得を input の親要素の参照から `frameRef` 経由に変更（挙動は変わらない）                      | -      |
-| 2026-10-06 | 複数選択モード（`isMultiple`）と `Combobox.Chip` を追加。`Combobox.Input` に `id` / `aria-label` / `aria-labelledby` を追加 | -      |
+| 日付       | 内容                                                                                                                                                       | 担当者 |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| 2026-04-17 | 新規作成                                                                                                                                                   | -      |
+| 2026-06-29 | クリアボタンの仕様変更（`onClickClearButton` を渡したときのみ表示、値のクリアは利用者責務）に伴う記述更新                                                  | -      |
+| 2026-10-05 | IME 変換中の `↑` / `↓` / `Escape` を Combobox で扱わないよう修正（従来は `Enter` のみ）                                                                    | -      |
+| 2026-10-05 | `Combobox.Item` に `children`（候補行の見た目のみのカスタムレイアウト）を追加                                                                              | -      |
+| 2026-10-05 | Floating UI の `reference` の取得を input の親要素の参照から `frameRef` 経由に変更（挙動は変わらない）                                                     | -      |
+| 2026-10-06 | 複数選択モード（`isMultiple`）と `Combobox.Chip` を追加（長いラベルは 1 行で省略表示）。`Combobox.Input` に `id` / `aria-label` / `aria-labelledby` を追加 | -      |
