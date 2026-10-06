@@ -175,7 +175,9 @@ function TextInputInner(
     'pr-0': hasTrailingElement,
   });
 
-  const inputInBeforeContainerClasses = clsx('min-w-20 flex-1 bg-transparent outline-none', inputTextClassMap);
+  // 高さは before に並ぶ要素（Combobox のチップ: h-5）と同じ 20px に揃える。
+  // input だけが最後の行に回ったときも行の高さが変わらず、各行の隙間と末尾の要素の位置が揃うようにするため。
+  const inputInBeforeContainerClasses = clsx('h-5 min-w-20 flex-1 bg-transparent outline-none', inputTextClassMap);
 
   // before 指定時のみ使う: 末尾の要素（after・クリアボタン）を 1 行の高さの箱に入れて枠の下端に揃える。
   // 1 行のときは従来どおり縦中央、折り返して複数行になったときは input のある最後の行の横に並ぶ
