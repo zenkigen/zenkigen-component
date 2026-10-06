@@ -33,10 +33,18 @@ export type ComboboxContextValue = {
   isOpen: boolean;
   /** popup の開閉操作 */
   setIsOpen: (next: boolean) => void;
-  /** 選択中の値 */
-  selectedValue: string | null;
-  /** Item を選択する操作 */
+  /** 複数選択モードか */
+  isMultiple: boolean;
+  /** 選択中の値の一覧（単一選択は 0〜1 件）。Item の isSelected 判定に使う */
+  selectedValues: string[];
+  /** Item を選択する操作（複数選択では選択済みなら外す） */
   selectValue: (value: string, label: string) => void;
+  /** 複数選択: 指定した値を選択から外す（value に無い・外せない値なら何もしない） */
+  removeSelected: (value: string) => void;
+  /** 複数選択: aria-live 通知用の label を登録する */
+  registerChipLabel: (value: string, label: string) => void;
+  /** 複数選択: 外せない値を登録する。戻り値の関数で登録を解除する */
+  registerFixedValue: (value: string) => () => void;
   /** クリアボタンのクリック時に呼ばれる利用者コールバック（渡されたときのみクリアボタンを表示） */
   onClickClearButton?: () => void;
   /** キーボードフォーカス中の Item index（items 配列上） */
@@ -59,6 +67,8 @@ export type ComboboxContextValue = {
   inputRef: RefObject<HTMLInputElement | null>;
   /** input への ref 設定関数 */
   setInputElementRef: (node: HTMLInputElement | null) => void;
+  /** 複数選択: Chip 群のコンテナへの ref（✗ へのフォーカス移動を blur で判定する） */
+  chipsRef: RefObject<HTMLDivElement | null>;
   /** 入力欄の枠 div への ref 設定関数（Floating UI の reference） */
   setFrameRef: (node: HTMLDivElement | null) => void;
   /** 候補リスト wrapper への ref 設定関数（Floating UI の floating element） */
@@ -69,7 +79,7 @@ export type ComboboxContextValue = {
   listMaxHeight?: CSSProperties['height'];
   /** input の keydown ハンドラ */
   handleKeyDown: (event: KeyboardEvent<HTMLInputElement>) => void;
-  /** input の blur ハンドラ（Combobox 外へのフォーカス移動時に close + revert） */
+  /** input の blur ハンドラ（Combobox 外・Chip の ✗ へのフォーカス移動時に close + revert） */
   handleInputBlur: (event: FocusEvent<HTMLInputElement>) => void;
 };
 

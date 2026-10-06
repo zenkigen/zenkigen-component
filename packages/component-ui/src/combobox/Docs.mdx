@@ -148,3 +148,127 @@ children の規約:
   <Combobox.List>{/* ... */}</Combobox.List>
 </Combobox>
 ```
+
+### 入力欄に名前を付ける
+
+placeholder だけでは入力欄の accessible name になりません。`Combobox.Input` の `id`（`<label htmlFor>` と関連付け）/ `aria-label` / `aria-labelledby` のいずれかで名前を付けてください。単一選択・複数選択のどちらでも使えます。
+
+```tsx
+<label htmlFor="favorite-fruit">好きな果物</label>
+<Combobox /* ... */>
+  <Combobox.Input id="favorite-fruit" />
+  <Combobox.List>{/* ... */}</Combobox.List>
+</Combobox>
+
+{/* 画面上にラベルが無い場合 */}
+<Combobox /* ... */>
+  <Combobox.Input aria-label="好きな果物" />
+  <Combobox.List>{/* ... */}</Combobox.List>
+</Combobox>
+```
+
+### 複数選択（チップ）
+
+`isMultiple` を指定すると複数選択モードになり、`value` は ID の配列（`string[]`）、`onChange` は「次の配列」と差分（`{ type: 'add' | 'remove', value }`）を受け取ります。選択済みの値は、利用側が `Combobox.Chip` を `Combobox.Input` の children に並べて表示します。
+
+```tsx
+const [selectedIds, setSelectedIds] = useState<string[]>([]);
+const [inputText, setInputText] = useState('');
+
+// チップ表示用（state ではなく value からの導出）。value の順に並べる
+const selectedFruits = selectedIds.flatMap((id) => {
+  const fruit = fruits.find((item) => item.value === id);
+  return fruit != null ? [fruit] : [];
+});
+// 候補: 選択済みを除外し、入力で絞り込む（利用側の責務）
+const candidates = fruits.filter((fruit) => !selectedIds.includes(fruit.value) && fruit.label.includes(inputText));
+
+<Combobox
+  isMultiple
+  value={selectedIds}
+  onChange={(next) => setSelectedIds(next)}
+  inputValue={inputText}
+  onInputChange={setInputText}
+  placeholder="果物を検索..."
+>
+  <Combobox.Input aria-label="果物">
+    {selectedFruits.map((fruit) => (
+      <Combobox.Chip key={fruit.value} value={fruit.value} label={fruit.label} />
+    ))}
+  </Combobox.Input>
+  <Combobox.List>
+    {candidates.map((fruit) => (
+      <Combobox.Item key={fruit.value} value={fruit.value} label={fruit.label} />
+    ))}
+  </Combobox.List>
+</Combobox>;
+```
+
+ふるまい:
+
+- 候補を選ぶ（クリック / `Enter`）とチップが追加され、入力が空に戻ります。**候補リストは閉じません**。選択済みの候補を選ぶと選択を解除します
+- 削除はチップの ✗（クリック、または `Shift + Tab` で ✗ に移動して `Enter` / `Space`）と、入力が空のときの `Backspace`（`value` の末尾を削除）で行います
+- 入力欄の文字は常に未確定の検索語です。blur・`Escape`・✗ へのフォーカス移動で空に戻り、`value` は変わりません
+- 選択がある間は placeholder を表示しません。クリアボタンはありません（`onClickClearButton` は指定できません）
+- 追加・削除は `aria-live` で読み上げます（チップの `label` を使用）
+
+チップの規約:
+
+- **`value` の全要素について、`value` と同じ順にチップを並べてください**。`Backspace` は描画順ではなく `value` の末尾を削除します。`value` にあってチップを描画していない値も、見えないだけで選択中として扱われます
+- 1 つの `value` につきチップは 1 つにしてください
+- チップは `Combobox.Input` の **直接の子** に置いてください（Fragment やラッパーコンポーネントで包むと認識されません）
+- 色は `gray` 固定で、`size="large"` でもチップは `medium` のままです。単一選択モードでは描画されません
+- 長いラベルは 1 行で末尾を「…」で省略します（チップの最大幅は入力欄の中のチップ領域の幅）。✗ は常に表示され、全文は `title`（マウスオーバー）とスクリーンリーダーで伝わります
+
+追加・削除に応じた副作用（API 呼び出し等）は `onChange` の第 2 引数で受け取れます。
+
+```tsx
+const handleChange = (next: string[], meta: ComboboxMultipleChangeMeta) => {
+  setSelectedIds(next);
+  if (meta.type === 'add') {
+    attachTag(meta.value);
+  } else {
+    detachTag(meta.value);
+  }
+};
+```
+
+候補をサーバーで検索する場合は、検索語が変わると選択済みの表示情報が検索結果から消えるため、追加時に保持しておきます。
+
+```tsx
+const [selectedCache, setSelectedCache] = useState<Map<string, Fruit>>(new Map());
+
+const handleChange = (next: string[], meta: ComboboxMultipleChangeMeta) => {
+  if (meta.type === 'add') {
+    const fruit = results.find((result) => result.value === meta.value);
+    if (fruit != null) {
+      setSelectedCache((prev) => new Map(prev).set(fruit.value, fruit));
+    }
+  }
+  setSelectedIds(next);
+};
+
+const selectedFruits = selectedIds.flatMap((id) => {
+  const fruit = selectedCache.get(id);
+  return fruit != null ? [fruit] : [];
+});
+```
+
+### 外せないチップ
+
+最初から設定されていて外せない値は、そのチップに `isRemovable={false}` を指定します。✗ が表示されず、`Backspace`・候補の再選択でも外れません。外せるかどうかは**描画中のチップの宣言だけ**で判定するため、外せない値のチップは必ず描画してください。
+
+```tsx
+<Combobox.Input aria-label="果物">
+  {selectedFruits.map((fruit) => (
+    <Combobox.Chip
+      key={fruit.value}
+      value={fruit.value}
+      label={fruit.label}
+      isRemovable={!fixedIds.includes(fruit.value)}
+    />
+  ))}
+</Combobox.Input>
+```
+
+`Combobox.Item` の children（候補行のカスタムレイアウト）は複数選択でも同じように使えます（Story: `MultipleWithCustomItem`）。
