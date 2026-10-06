@@ -54,6 +54,7 @@ export function ComboboxInput({
     selectedValues,
     hasRemovableSelection,
     chipsRef,
+    setIsComposing,
   } = useComboboxContext('Combobox.Input');
 
   // クリアボタンは onClickClearButton が渡されたときのみ表示する（TextInput と同一仕様）。
@@ -75,7 +76,12 @@ export function ComboboxInput({
   const isEffectivelyOpen = isOpen && hasOpenableContent;
 
   const activeItem = activeIndex !== null ? items[activeIndex] : null;
-  const activeId = activeItem != null ? `${baseId}-option-${activeItem.value}` : null;
+  const activeId =
+    activeItem == null
+      ? null
+      : activeItem.kind === 'create'
+        ? `${baseId}-create-option`
+        : `${baseId}-option-${activeItem.value}`;
   const conditionalAriaProps = {
     ...(isEffectivelyOpen ? { 'aria-controls': listId } : {}),
     ...(activeId !== null ? { 'aria-activedescendant': activeId } : {}),
@@ -144,6 +150,15 @@ export function ComboboxInput({
     [setFrameRef, isMultiple, handleFrameMouseDown],
   );
 
+  // IME 変換中は作成行を出さない（未確定の文字で作成しない）ため、変換の開始・終了を Combobox に伝える
+  const handleCompositionStart = useCallback(() => {
+    setIsComposing(true);
+  }, [setIsComposing]);
+
+  const handleCompositionEnd = useCallback(() => {
+    setIsComposing(false);
+  }, [setIsComposing]);
+
   const handleChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       onInputChange(event.target.value);
@@ -168,6 +183,8 @@ export function ComboboxInput({
       onFocus={handleFocus}
       onKeyDown={handleKeyDown}
       onBlur={handleInputBlur}
+      onCompositionStart={handleCompositionStart}
+      onCompositionEnd={handleCompositionEnd}
       isError={isError}
       disabled={isDisabled}
       {...(isPlaceholderHidden ? {} : { placeholder })}

@@ -21,9 +21,9 @@ function useComboboxChip({ value, label, isRemovable, rootRef }: UseComboboxChip
   const { isMultiple, inputRef, removeSelected, registerChipLabel, registerFixedValue } =
     useComboboxContext('Combobox.Chip');
 
-  // aria-live の削除通知で使う label を登録する。子の layout effect は親の passive effect より先に走るため、
+  // aria-live の通知と作成行の重複判定で使う label を登録する。子の layout effect は親の passive effect より先に走るため、
   // 同じコミットで追加・label 変更されたチップの label も通知に間に合う。
-  // 描画中は value から外れていても label が消されないよう、unmount・label 変更時に登録を戻す。
+  // unmount・label 変更時は、描画中の数を戻し、重複判定用の登録を解除する（aria-live 用の label は最後に知っていたものとして残る）。
   useLayoutEffect(() => {
     if (!isMultiple) {
       return;
