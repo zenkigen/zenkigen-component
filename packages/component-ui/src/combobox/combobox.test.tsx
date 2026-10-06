@@ -948,6 +948,45 @@ describe('Combobox', () => {
     });
   });
 
+  describe('Floating UI の reference', () => {
+    it('候補リストの最小幅が入力欄の枠 div の幅に揃う', async () => {
+      const user = userEvent.setup();
+      // beforeEach の mock は全要素に同じ rect を返すため、枠 div だけ幅の異なる rect を返す mock に差し替える
+      const rectOf = (width: number, height: number, top: number) =>
+        ({
+          width,
+          height,
+          top,
+          left: 0,
+          right: width,
+          bottom: top + height,
+          x: 0,
+          y: top,
+          toJSON: () => ({}),
+        }) as DOMRect;
+      let frameElement: Element | null = null;
+      vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(function mocked(this: Element) {
+        if (this === document.documentElement || this === document.body) {
+          return rectOf(1024, 768, 0);
+        }
+        if (frameElement != null && this === frameElement) {
+          return rectOf(320, 32, 100);
+        }
+
+        return rectOf(200, 32, 100);
+      });
+      render(<ControlledCombobox />);
+      frameElement = getCombobox().parentElement;
+
+      await user.click(getCombobox());
+
+      const listWrapper = getListbox().parentElement;
+      await vi.waitFor(() => {
+        expect(listWrapper?.style.minWidth).toBe('320px');
+      });
+    });
+  });
+
   describe('listMaxHeight', () => {
     // listbox は内側 ul、その親 div が外側 wrapper。
     // wrapper の inline style に maxHeight が Floating UI の size middleware 経由で反映される。

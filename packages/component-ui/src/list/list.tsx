@@ -34,6 +34,7 @@ const ListBase = forwardRef<HTMLUListElement, ListProps>(function List(
     id,
     'aria-label': ariaLabel,
     'aria-labelledby': ariaLabelledby,
+    'aria-multiselectable': ariaMultiselectable,
     containerRef,
     selectionIndicator = 'none',
   },
@@ -56,6 +57,7 @@ const ListBase = forwardRef<HTMLUListElement, ListProps>(function List(
           id={id}
           aria-label={ariaLabel}
           aria-labelledby={ariaLabelledby}
+          aria-multiselectable={ariaMultiselectable}
           className="min-h-0 flex-1 overflow-y-auto py-2"
         >
           {children}
