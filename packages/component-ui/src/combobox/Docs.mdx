@@ -233,10 +233,88 @@ const handleChange = (next: string[], meta: ComboboxMultipleChangeMeta) => {
 };
 ```
 
-候補をサーバーで検索する場合は、検索語が変わると選択済みの表示情報が検索結果から消えるため、追加時に保持しておきます。
+### 作成行（`Combobox.CreateItem`）
+
+候補に無い名前を新しく作って選べるようにするには、`Combobox.List` に `Combobox.CreateItem` を置きます。入力に応じて末尾に「「{入力文字}」を作成」行が表示され、Enter / クリックで `onCreate(text)` が呼ばれます（`text` は入力を trim したもの）。
 
 ```tsx
+const [fruits, setFruits] = useState<Fruit[]>(initialFruits); // マスタ（作成で増える）
+const [selectedIds, setSelectedIds] = useState<string[]>([]);
+const [inputText, setInputText] = useState('');
+
+const handleCreate = (text: string) => {
+  const created = { value: crypto.randomUUID(), label: text }; // 実際は API で作成
+  setFruits((prev) => [...prev, created]);
+  setSelectedIds((prev) => [...prev, created.value]);
+  setInputText(''); // 作成に成功したら利用側で入力を空にする
+};
+
+<Combobox
+  isMultiple
+  value={selectedIds}
+  onChange={(next) => setSelectedIds(next)}
+  inputValue={inputText}
+  onInputChange={setInputText}
+>
+  <Combobox.Input aria-label="果物">
+    {selectedFruits.map((fruit) => (
+      <Combobox.Chip key={fruit.value} value={fruit.value} label={fruit.label} />
+    ))}
+  </Combobox.Input>
+  <Combobox.List>
+    {candidates.length === 0 && <Combobox.Empty />}
+    {candidates.map((fruit) => (
+      <Combobox.Item key={fruit.value} value={fruit.value} label={fruit.label} />
+    ))}
+    <Combobox.CreateItem onCreate={handleCreate} />
+  </Combobox.List>
+</Combobox>;
+```
+
+- **表示するかどうかはライブラリが判定します。利用側は置くだけです**。入力が空（空白のみを含む）・IME 変換中・`Combobox.Loading` の描画中・既存と重複しているときは、区切り線も含めて何も表示しません
+- 重複の既定の判定は「候補の `Combobox.Item` の `label`、または選択中のチップの `label` と完全一致（`===`）」です。選択済みを候補から除外していても、チップの `label` と一致すれば作成行は出ません
+- 大文字小文字・全角半角・かなを同一視したい場合や、画面に出ていない既存データと照合したい場合は `checkDuplicate`（同期関数。`true` で作成行を出さない）を渡します。指定すると既定の判定を**置き換えます**（候補との一致も含めて利用側で判定してください）
+- `onCreate` の後、ライブラリは `onChange` も `onInputChange` も呼びません。`value` への追加と、**成功時の入力のクリアは利用側で行います**。入力をクリアしなくても、追加したチップの `label` と一致するため作成行は消えます（既定の判定の場合）
+- 複数選択では作成後も候補リストは開いたままです
+- 候補が 0 件のときは `Combobox.Empty` と作成行を並べて表示でき、作成行が active になります
+- 文言（「「{入力文字}」を作成」）は固定です。`Combobox.CreateItem` は `Combobox.List` の **直接の子** として 1 つだけ置いてください（2 つ目以降や、Fragment・ラッパーコンポーネントで包んだものは何も表示されず、`onCreate` も呼ばれません）
+- 重複の最終的な防止はサーバー側の検証で行ってください
+
+作成 API が非同期の場合は、**作成中に `Combobox.Loading` を描画して二重作成を防ぎ**、失敗時は入力を残して再試行できるようにします。
+
+```tsx
+const [isCreating, setIsCreating] = useState(false);
+
+const handleCreate = async (text: string) => {
+  setIsCreating(true); // Loading の描画中は作成行が出ないため、連打しても二重に作成されない
+  try {
+    const created = await createFruit(text);
+    setSelectedCache((prev) => new Map(prev).set(created.value, created));
+    setSelectedIds((prev) => [...prev, created.value]);
+    setInputText(''); // 成功時のみクリアする
+  } catch {
+    setErrorMessage(`「${text}」を作成できませんでした`); // 入力は残るので、そのまま再試行できる
+  } finally {
+    setIsCreating(false);
+  }
+};
+
+<Combobox.List>
+  {isCreating && <Combobox.Loading />}
+  {/* ... */}
+  <Combobox.CreateItem onCreate={handleCreate} />
+</Combobox.List>;
+```
+
+### 複数選択の非同期検索
+
+候補をサーバーで検索する場合は、検索語が変わると選択済みの表示情報が検索結果から消えるため、追加時に保持しておきます。作成行には、画面に出ていない既存データとの重複をライブラリが検出できないため `checkDuplicate` を渡し、**選択済みを除外する前の検索結果**で判定します（Story: `MultipleAsyncSearch`）。
+
+```tsx
+const [selectedIds, setSelectedIds] = useState<string[]>([]);
 const [selectedCache, setSelectedCache] = useState<Map<string, Fruit>>(new Map());
+const { data: results = [], isLoading } = useFruitSearch(inputText); // 利用側の検索フック
+// isCreating / handleCreate は「作成行（Combobox.CreateItem）」節の非同期版と同じ定義を使う
 
 const handleChange = (next: string[], meta: ComboboxMultipleChangeMeta) => {
   if (meta.type === 'add') {
@@ -252,7 +330,29 @@ const selectedFruits = selectedIds.flatMap((id) => {
   const fruit = selectedCache.get(id);
   return fruit != null ? [fruit] : [];
 });
+
+<Combobox isMultiple value={selectedIds} onChange={handleChange} inputValue={inputText} onInputChange={setInputText}>
+  <Combobox.Input aria-label="果物">
+    {selectedFruits.map((fruit) => (
+      <Combobox.Chip key={fruit.value} value={fruit.value} label={fruit.label} />
+    ))}
+  </Combobox.Input>
+  <Combobox.List>
+    {(isLoading || isCreating) && <Combobox.Loading />}
+    {!isLoading &&
+      results
+        .filter((fruit) => !selectedIds.includes(fruit.value)) // 選択済みは候補から除外（再検索で戻ってくるため）
+        .map((fruit) => <Combobox.Item key={fruit.value} value={fruit.value} label={fruit.label} />)}
+    <Combobox.CreateItem
+      onCreate={handleCreate}
+      checkDuplicate={(text) => results.some((fruit) => fruit.label === text)}
+    />
+  </Combobox.List>
+</Combobox>;
 ```
+
+- 検索中は `Combobox.Loading` を描画してください。Loading の描画中は作成行が出ないため、古い検索結果で一瞬「作成」が出ることを防げます
+- 初期値（編集画面など）がある場合は、初期表示時に選択済みの値の表示情報を取得してキャッシュに入れてください
 
 ### 外せないチップ
 
