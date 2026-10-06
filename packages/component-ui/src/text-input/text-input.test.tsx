@@ -457,7 +457,7 @@ describe('InternalTextInput', () => {
       const input = screen.getByRole('textbox');
       const container = input.parentElement;
       expect(container).toContainElement(screen.getByTestId('before'));
-      expect(container).toHaveClass('flex', 'min-w-0', 'flex-1', 'flex-wrap', 'items-center', 'gap-1', 'py-1');
+      expect(container).toHaveClass('flex', 'min-w-0', 'flex-1', 'flex-wrap', 'items-center', 'gap-1');
       expect(input).toHaveClass('min-w-20', 'flex-1');
       expect(input).not.toHaveClass('min-h-8');
     });
@@ -471,16 +471,22 @@ describe('InternalTextInput', () => {
       expect(frameRef.current).toHaveClass('rounded', 'border');
     });
 
+    // 上下の padding は 1 行のときの中央揃えと同じ値（(min-h - 行の高さ 20px) / 2）。
+    // 折り返して min-h を超えても、先頭の行の上の隙間が 1 行のときと変わらないようにするため
     it.each([
-      ['medium', 'min-h-8', 'px-2'],
-      ['large', 'min-h-10', 'px-3'],
-      ['x-large', 'min-h-12', 'px-3'],
-    ] as const)('size="%s" のとき折り返しコンテナに %s / %s が付くこと', (size, minHeightClass, paddingClass) => {
-      render(<InternalTextInput value="" onChange={() => {}} size={size} before={<span>A</span>} />);
+      ['medium', 'min-h-8', 'px-2', 'py-1.5'],
+      ['large', 'min-h-10', 'px-3', 'py-2.5'],
+      ['x-large', 'min-h-12', 'px-3', 'py-3.5'],
+    ] as const)(
+      'size="%s" のとき折り返しコンテナに %s / %s / %s が付くこと',
+      (size, minHeightClass, paddingXClass, paddingYClass) => {
+        render(<InternalTextInput value="" onChange={() => {}} size={size} before={<span>A</span>} />);
 
-      const container = screen.getByRole('textbox').parentElement;
-      expect(container).toHaveClass(minHeightClass, paddingClass);
-    });
+        const container = screen.getByRole('textbox').parentElement;
+        expect(container).toHaveClass(minHeightClass, paddingXClass, paddingYClass);
+        expect(container).not.toHaveClass('py-1');
+      },
+    );
 
     it('variant="text" のとき折り返しコンテナに横 padding が付かないこと', () => {
       render(<InternalTextInput value="" onChange={() => {}} variant="text" before={<span>A</span>} />);

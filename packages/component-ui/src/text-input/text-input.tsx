@@ -163,10 +163,13 @@ function TextInputInner(
   // before 指定時のみ使う: 折り返しコンテナに min-h / padding を移し、input は残り幅を埋める。
   const hasBefore = before != null;
 
-  const beforeContainerClasses = clsx('flex min-w-0 flex-1 flex-wrap items-center gap-1 py-1', {
-    'min-h-8': size === 'medium',
-    'min-h-10': size === 'large',
-    'min-h-12': size === 'x-large',
+  // 上下の padding は、1 行のとき（min-h の中で items-center により中央揃え）と同じ値にする。
+  // 共通の値（例: py-1）にすると、折り返して min-h を超えたときに先頭の行の上の隙間だけが狭くなるため。
+  // 例: medium は (32px - 行の高さ 20px) / 2 = 6px（py-1.5）
+  const beforeContainerClasses = clsx('flex min-w-0 flex-1 flex-wrap items-center gap-1', {
+    'min-h-8 py-1.5': size === 'medium',
+    'min-h-10 py-2.5': size === 'large',
+    'min-h-12 py-3.5': size === 'x-large',
     'px-2': !isBorderless && size === 'medium',
     'px-3': !isBorderless && (size === 'large' || size === 'x-large'),
     'pr-0': hasTrailingElement,
