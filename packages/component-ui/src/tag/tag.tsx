@@ -35,9 +35,11 @@ type DisplayProps = {
 
 type Props = BaseProps & (EditableProps | DisplayProps);
 
-/** @internal Tag で内部利用する props（isDisabled / isDeletable を含む） */
-type TagInternalProps = BaseProps &
-  (
+/** @internal Tag で内部利用する props（isDisabled / isDeletable / isTruncated を含む） */
+type TagInternalProps = BaseProps & {
+  /** 長い文字を 1 行で省略する。全文は `title` で確認でき、削除ボタンは縮めない（内部実装用）。 */
+  isTruncated?: boolean;
+} & (
     | (EditableProps & {
         /** 無効状態にする。削除ボタンを描画せず、文字色を薄くする。形・余白は編集可能なタグのまま（内部実装用）。 */
         isDisabled?: boolean;
@@ -69,6 +71,7 @@ const getDisabledColorClasses = (colorClasses: string) =>
 /**
  * 内部実装用の Tag（Combobox のチップで使用）。ライブラリ外には公開しない。
  * 公開 `Tag` の props に加え、編集可能なタグでのみ `isDisabled` / `isDeletable` を受け付ける。
+ * `isTruncated` は表示専用・編集可能のどちらでも受け付ける。
  */
 function InternalTag({
   id,
@@ -80,6 +83,7 @@ function InternalTag({
   onDelete,
   isDisabled = false,
   isDeletable = true,
+  isTruncated = false,
 }: TagInternalProps) {
   const colorClasses = variant === 'light' ? tagLightColors[color] : tagColors[color];
   const isDisabledEditable = isEditable === true && isDisabled;
@@ -94,6 +98,8 @@ function InternalTag({
     rounded: !isEditable,
     'px-1': !isEditable,
     'px-2': isEditable,
+    // 親の幅を超えないようにし、文字の部分だけを省略する
+    'min-w-0 max-w-full': isTruncated,
   });
 
   // 無効状態では isDeletable の値に関わらず削除ボタンを描画しない
@@ -101,9 +107,21 @@ function InternalTag({
 
   return (
     <div className={wrapperClasses}>
-      {children}
+      {isTruncated ? (
+        <span className="truncate" title={children}>
+          {children}
+        </span>
+      ) : (
+        children
+      )}
       {hasDeleteButton ? (
-        <DeleteIcon onClick={() => onDelete(id)} color={color} variant={variant} ariaLabel={`${children}を削除`} />
+        <DeleteIcon
+          onClick={() => onDelete(id)}
+          color={color}
+          variant={variant}
+          ariaLabel={`${children}を削除`}
+          isShrinkable={!isTruncated}
+        />
       ) : null}
     </div>
   );
