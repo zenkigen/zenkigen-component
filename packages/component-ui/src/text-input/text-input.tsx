@@ -177,6 +177,15 @@ function TextInputInner(
 
   const inputInBeforeContainerClasses = clsx('min-w-20 flex-1 bg-transparent outline-none', inputTextClassMap);
 
+  // before 指定時のみ使う: 末尾の要素（after・クリアボタン）を 1 行の高さの箱に入れて枠の下端に揃える。
+  // 1 行のときは従来どおり縦中央、折り返して複数行になったときは input のある最後の行の横に並ぶ
+  // （最後の行の中心は下から「上下 padding + 行の高さ / 2」＝ 1 行の高さ / 2 の位置にあるため）。
+  const beforeTrailingClasses = clsx('flex shrink-0 items-center gap-2 self-end', {
+    'min-h-8': size === 'medium',
+    'min-h-10': size === 'large',
+    'min-h-12': size === 'x-large',
+  });
+
   const inputElement = (
     <div ref={frameRef} className={inputWrapClasses}>
       {hasBefore ? (
@@ -187,8 +196,19 @@ function TextInputInner(
       ) : (
         <input ref={ref} size={1} className={inputClasses} {...mergedInputProps} />
       )}
-      {after}
-      {isShowClearButton && <IconButton variant="text" icon="close" size="small" onClick={onClickClearButton} />}
+      {hasBefore ? (
+        hasTrailingElement && (
+          <div className={beforeTrailingClasses}>
+            {after}
+            {isShowClearButton && <IconButton variant="text" icon="close" size="small" onClick={onClickClearButton} />}
+          </div>
+        )
+      ) : (
+        <>
+          {after}
+          {isShowClearButton && <IconButton variant="text" icon="close" size="small" onClick={onClickClearButton} />}
+        </>
+      )}
     </div>
   );
 

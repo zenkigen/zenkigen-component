@@ -497,7 +497,7 @@ describe('InternalTextInput', () => {
       expect(container).not.toHaveClass('px-3');
     });
 
-    it('after がある場合は折り返しコンテナの右 padding を外し、after は枠 div の直下に置かれること', () => {
+    it('after がある場合は折り返しコンテナの右 padding を外し、after は枠の下端に揃える 1 行の高さの箱に入ること', () => {
       render(
         <InternalTextInput
           value=""
@@ -509,7 +509,33 @@ describe('InternalTextInput', () => {
 
       const container = screen.getByRole('textbox').parentElement;
       expect(container).toHaveClass('pr-0');
-      expect(screen.getByTestId('after').parentElement).toBe(container?.parentElement);
+      const trailing = screen.getByTestId('after').parentElement;
+      expect(trailing?.parentElement).toBe(container?.parentElement);
+      expect(trailing).toHaveClass('flex', 'shrink-0', 'items-center', 'self-end', 'min-h-8');
+    });
+
+    it.each([
+      ['medium', 'min-h-8'],
+      ['large', 'min-h-10'],
+      ['x-large', 'min-h-12'],
+    ] as const)('size="%s" のとき末尾の箱の高さが 1 行の高さ（%s）になること', (size, minHeightClass) => {
+      render(
+        <InternalTextInput
+          value=""
+          onChange={() => {}}
+          size={size}
+          before={<span>A</span>}
+          after={<span data-testid="after">after</span>}
+        />,
+      );
+
+      expect(screen.getByTestId('after').parentElement).toHaveClass(minHeightClass, 'self-end');
+    });
+
+    it('before 未指定時は after を箱で包まず、枠 div の直下に置くこと（従来どおり）', () => {
+      render(<InternalTextInput value="" onChange={() => {}} after={<span data-testid="after">after</span>} />);
+
+      expect(screen.getByTestId('after').parentElement).toBe(screen.getByRole('textbox').parentElement);
     });
 
     it('before の中身が 空 → 1 要素 → 空 と変化しても input が同一ノードのままフォーカスを保つこと', () => {
