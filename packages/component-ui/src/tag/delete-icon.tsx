@@ -7,12 +7,16 @@ type Props = {
   color?: TagColor;
   variant?: ColorVariant;
   onClick?: () => void;
+  ariaLabel?: string;
+  /** `false` で親の幅が足りなくても縮めない（Tag の文字を省略するときに使う）。 */
+  isShrinkable?: boolean;
 };
 
-export const DeleteIcon = ({ color, variant, onClick }: Props) => {
+export const DeleteIcon = ({ color, variant, onClick, ariaLabel, isShrinkable = true }: Props) => {
   const deleteButtonClasses = clsx(
     'group ml-2 size-[14px] rounded-full p-0.5 hover:cursor-pointer hover:bg-iconOnColor focus-visible:bg-iconOnColor',
     focusVisible.normal,
+    { 'shrink-0': !isShrinkable },
   );
 
   const deletePathClasses = clsx({
@@ -21,7 +25,7 @@ export const DeleteIcon = ({ color, variant, onClick }: Props) => {
   });
 
   return (
-    <button type="button" className={deleteButtonClasses} onClick={onClick}>
+    <button type="button" className={deleteButtonClasses} onClick={onClick} aria-label={ariaLabel}>
       <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
         <path
           fillRule="evenodd"
