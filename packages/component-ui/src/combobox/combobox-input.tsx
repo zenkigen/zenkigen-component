@@ -1,12 +1,34 @@
-import type { ChangeEvent, MouseEvent } from 'react';
-import { useCallback } from 'react';
+import type { ChangeEvent, MouseEvent, ReactNode } from 'react';
+import { Children, isValidElement, useCallback, useRef } from 'react';
 
 import { IconButton } from '../icon-button';
 import { InternalTextInput } from '../text-input/text-input';
 import type { ComboboxInputProps } from './combobox.types';
+import { ComboboxChip } from './combobox-chip';
 import { useComboboxContext } from './combobox-context';
 
-export function ComboboxInput({ autoFocus, children }: ComboboxInputProps) {
+// children を Chip とそれ以外（HelperMessage / ErrorMessage）に分ける。直接の子のみを見る（Fragment 等で包むと認識しない）。
+function splitChildren(children: ReactNode) {
+  const chips: ReactNode[] = [];
+  const others: ReactNode[] = [];
+  Children.toArray(children).forEach((child) => {
+    if (isValidElement(child) && child.type === ComboboxChip) {
+      chips.push(child);
+    } else {
+      others.push(child);
+    }
+  });
+
+  return { chips, others };
+}
+
+export function ComboboxInput({
+  autoFocus,
+  id,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledby,
+  children,
+}: ComboboxInputProps) {
   const {
     baseId,
     listId,
@@ -28,10 +50,19 @@ export function ComboboxInput({ autoFocus, children }: ComboboxInputProps) {
     handleKeyDown,
     handleInputBlur,
     onClickClearButton,
+    isMultiple,
+    selectedValues,
+    chipsRef,
   } = useComboboxContext('Combobox.Input');
 
-  // クリアボタンは onClickClearButton が渡されたときのみ表示する（TextInput と同一仕様）。
-  const isClearButtonVisible = onClickClearButton != null && inputValue.length > 0 && !isDisabled;
+  // クリアボタンは onClickClearButton が渡されたときのみ表示する（TextInput と同一仕様）。複数選択では提供しない。
+  const isClearButtonVisible = !isMultiple && onClickClearButton != null && inputValue.length > 0 && !isDisabled;
+
+  // 単一選択では Chip を描画しない（捨てる）。
+  const { chips, others } = splitChildren(children);
+
+  // 複数選択で選択がある間はプレースホルダーを出さない（チップの後ろに出さない）。判定は Chip 数ではなく value で行う。
+  const isPlaceholderHidden = isMultiple && selectedValues.length > 0;
 
   // List に Item/Loading/Empty のいずれも無い場合 popup は描画されない (visibility hidden)。
   // 画面上の開閉状態と aria-expanded / aria-controls を一致させるため、両方の AND を「実効 open」として使う。
@@ -71,6 +102,42 @@ export function ComboboxInput({ autoFocus, children }: ComboboxInputProps) {
     [setInputElementRef],
   );
 
+  // 複数選択: チップが折り返して縦に伸びた枠の余白をクリックしたら input にフォーカスする。
+  // 枠 div は InternalTextInput 内にあり React のハンドラを渡せないため、frameRef で受けて native listener を付ける。
+  const handleFrameMouseDown = useCallback(
+    (event: globalThis.MouseEvent) => {
+      const target = event.target;
+      // input 自身（キャレット操作）と、ボタン（✗ / 開閉）上の操作は対象外
+      if (!(target instanceof Element) || target === inputRef.current || target.closest('button') != null) {
+        return;
+      }
+      event.preventDefault();
+      inputRef.current?.focus();
+    },
+    [inputRef],
+  );
+  // HelperMessage の有無などで InternalTextInput の構造が変わると枠 div が別ノードに入れ替わるため、
+  // effect ではなく callback ref でノードの変化に追従する。React 18 も対象のため ref callback の cleanup は使わず、
+  // listener を付けたノードを保持して自前で外す（unmount 時は null が来て外れる。isMultiple の変化では ref が作り直されて付け直す）。
+  const listeningFrameRef = useRef<{ node: HTMLDivElement; listener: (event: globalThis.MouseEvent) => void } | null>(
+    null,
+  );
+  const handleFrameRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      setFrameRef(node);
+      const listening = listeningFrameRef.current;
+      if (listening !== null) {
+        listening.node.removeEventListener('mousedown', listening.listener);
+        listeningFrameRef.current = null;
+      }
+      if (isMultiple && node !== null) {
+        node.addEventListener('mousedown', handleFrameMouseDown);
+        listeningFrameRef.current = { node, listener: handleFrameMouseDown };
+      }
+    },
+    [setFrameRef, isMultiple, handleFrameMouseDown],
+  );
+
   const handleChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       onInputChange(event.target.value);
@@ -84,7 +151,10 @@ export function ComboboxInput({ autoFocus, children }: ComboboxInputProps) {
   return (
     <InternalTextInput
       ref={setRef}
-      frameRef={setFrameRef}
+      frameRef={handleFrameRef}
+      id={id}
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabelledby}
       size={size}
       variant={variant}
       value={inputValue}
@@ -94,13 +164,24 @@ export function ComboboxInput({ autoFocus, children }: ComboboxInputProps) {
       onBlur={handleInputBlur}
       isError={isError}
       disabled={isDisabled}
-      placeholder={placeholder}
+      {...(isPlaceholderHidden ? {} : { placeholder })}
       role="combobox"
       aria-expanded={isEffectivelyOpen}
       aria-autocomplete="list"
       {...conditionalAriaProps}
       autoFocus={autoFocus}
       autoComplete="off"
+      // 複数選択では件数に関係なく常に before を渡す。before の有無で DOM 構造が変わると、
+      // 0↔1 件の遷移で input が再マウントされフォーカスが外れるため（構造の切り替えはモードのみで行う）。
+      {...(isMultiple
+        ? {
+            before: (
+              <div ref={chipsRef} className="contents">
+                {chips}
+              </div>
+            ),
+          }
+        : {})}
       after={
         <>
           {isClearButtonVisible && (
@@ -127,7 +208,7 @@ export function ComboboxInput({ autoFocus, children }: ComboboxInputProps) {
         </>
       }
     >
-      {children}
+      {others}
     </InternalTextInput>
   );
 }

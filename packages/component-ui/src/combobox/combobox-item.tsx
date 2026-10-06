@@ -5,12 +5,12 @@ import type { ComboboxItemProps } from './combobox.types';
 import { useComboboxContext } from './combobox-context';
 
 export function ComboboxItem({ value, label, isDisabled = false, children }: ComboboxItemProps) {
-  const { baseId, items, activeIndex, selectedValue, selectValue, setActiveIndex, inputMode, setInputMode } =
+  const { baseId, items, activeIndex, selectedValues, selectValue, setActiveIndex, inputMode, setInputMode } =
     useComboboxContext('Combobox.Item');
 
   const index = items.findIndex((item) => item.value === value);
   const isActive = index !== -1 && activeIndex === index;
-  const isSelected = selectedValue === value;
+  const isSelected = selectedValues.includes(value);
   const id = `${baseId}-option-${value}`;
 
   const liRef = useRef<HTMLLIElement | null>(null);

@@ -6,9 +6,16 @@ import { Modal } from '../modal';
 import { Popover } from '../popover';
 import { Popup } from '../popup';
 import { Combobox } from './combobox';
-import type { ComboboxChangeMeta, ComboboxSize, ComboboxVariant } from './combobox.types';
+import type {
+  ComboboxChangeMeta,
+  ComboboxMultipleProps,
+  ComboboxSingleProps,
+  ComboboxSize,
+  ComboboxVariant,
+} from './combobox.types';
 
-const meta: Meta<typeof Combobox> = {
+// ComboboxProps は isMultiple で判別するユニオンのため、args（Controls）は単一選択の props で型付けする
+const meta: Meta<ComboboxSingleProps> = {
   title: 'Components/Combobox',
   component: Combobox,
   argTypes: {
@@ -47,7 +54,7 @@ const meta: Meta<typeof Combobox> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof Combobox>;
+type Story = StoryObj<ComboboxSingleProps>;
 
 const noop = () => {
   // intentionally empty
@@ -1208,6 +1215,207 @@ export const WithinPopover: Story = {
             </Popup>
           </Popover.Content>
         </Popover>
+      </div>
+    );
+  },
+};
+
+// ---- 複数選択（isMultiple） ----
+
+type MultipleStory = StoryObj<ComboboxMultipleProps>;
+
+type MultipleFruitComboboxProps = {
+  initialValue?: string[];
+  /** 外せないチップにする値 */
+  fixedValues?: string[];
+  size?: ComboboxSize;
+  isDisabled?: boolean;
+  isOpenInitially?: boolean;
+  helperMessage?: string;
+};
+
+// 利用側のデータ（fruits）から value と Combobox.Chip を導出する。候補は選択済みを除外して入力で絞り込む（利用側の責務）。
+function MultipleFruitCombobox({
+  initialValue = [],
+  fixedValues = [],
+  size,
+  isDisabled,
+  isOpenInitially = false,
+  helperMessage,
+}: MultipleFruitComboboxProps) {
+  const [selectedValues, setSelectedValues] = useState<string[]>(initialValue);
+  const [inputText, setInputText] = useState('');
+  const [isOpen, setIsOpen] = useState(isOpenInitially);
+
+  const selectedFruits = selectedValues.flatMap((value) => {
+    const fruit = fruits.find((item) => item.value === value);
+
+    return fruit != null ? [fruit] : [];
+  });
+  const candidates = fruits.filter((fruit) => !selectedValues.includes(fruit.value) && fruit.label.includes(inputText));
+
+  return (
+    <Combobox
+      isMultiple
+      value={selectedValues}
+      onChange={(next) => setSelectedValues(next)}
+      inputValue={inputText}
+      onInputChange={setInputText}
+      isOpen={isOpen}
+      onOpenChange={setIsOpen}
+      size={size}
+      isDisabled={isDisabled}
+      placeholder="果物を検索..."
+      width="100%"
+    >
+      <Combobox.Input aria-label="果物">
+        {selectedFruits.map((fruit) => (
+          <Combobox.Chip
+            key={fruit.value}
+            value={fruit.value}
+            label={fruit.label}
+            isRemovable={!fixedValues.includes(fruit.value)}
+          />
+        ))}
+        {helperMessage != null && <Combobox.HelperMessage>{helperMessage}</Combobox.HelperMessage>}
+      </Combobox.Input>
+      <Combobox.List>
+        {candidates.length === 0 && <Combobox.Empty />}
+        {candidates.map((fruit) => (
+          <Combobox.Item key={fruit.value} value={fruit.value} label={fruit.label} />
+        ))}
+      </Combobox.List>
+    </Combobox>
+  );
+}
+
+export const Multiple: MultipleStory = {
+  decorators: [
+    (StoryFn) => (
+      <div style={{ paddingBottom: 280 }}>
+        <StoryFn />
+      </div>
+    ),
+  ],
+  render: function MultipleRender() {
+    return (
+      <div style={{ width: 360 }}>
+        <MultipleFruitCombobox
+          initialValue={['apple', 'banana']}
+          isOpenInitially
+          helperMessage="候補を選ぶとチップが追加され、リストは開いたまま。入力が空のときの Backspace で末尾のチップを削除"
+        />
+      </div>
+    );
+  },
+};
+
+export const MultipleWithFixedChip: MultipleStory = {
+  render: function MultipleWithFixedChipRender() {
+    return (
+      <div style={{ width: 360 }}>
+        <MultipleFruitCombobox
+          initialValue={['apple', 'banana', 'strawberry']}
+          fixedValues={['apple']}
+          helperMessage="「りんご」は外せないチップ（✗ が無く、Backspace・候補の再選択でも外れない）"
+        />
+      </div>
+    );
+  },
+};
+
+export const MultipleDisabled: MultipleStory = {
+  render: function MultipleDisabledRender() {
+    return (
+      <div className="flex flex-col gap-4" style={{ width: 360 }}>
+        <MultipleFruitCombobox initialValue={['apple', 'banana']} isDisabled />
+        <MultipleFruitCombobox isDisabled />
+      </div>
+    );
+  },
+};
+
+export const MultipleLarge: MultipleStory = {
+  render: function MultipleLargeRender() {
+    return (
+      <div className="flex flex-col gap-4" style={{ width: 360 }}>
+        <MultipleFruitCombobox size="medium" initialValue={['apple', 'banana']} />
+        <MultipleFruitCombobox
+          size="large"
+          initialValue={['apple', 'banana']}
+          helperMessage="large でもチップは medium"
+        />
+        <MultipleFruitCombobox size="large" />
+      </div>
+    );
+  },
+};
+
+export const MultipleWrapping: MultipleStory = {
+  render: function MultipleWrappingRender() {
+    return (
+      <div style={{ width: 280 }}>
+        <MultipleFruitCombobox
+          initialValue={['apple', 'green-apple', 'banana', 'strawberry', 'blueberry', 'raspberry', 'dragonfruit']}
+          helperMessage="チップが入りきらないと折り返し、入力欄が縦に伸びる"
+        />
+      </div>
+    );
+  },
+};
+
+export const MultipleWithCustomItem: MultipleStory = {
+  decorators: [
+    (StoryFn) => (
+      <div style={{ paddingBottom: 240 }}>
+        <StoryFn />
+      </div>
+    ),
+  ],
+  render: function MultipleWithCustomItemRender() {
+    const [selectedValues, setSelectedValues] = useState<string[]>(['apple']);
+    const [inputText, setInputText] = useState('');
+    const [isOpen, setIsOpen] = useState(true);
+
+    const selectedFruits = selectedValues.flatMap((value) => {
+      const fruit = fruitOrigins.find((item) => item.value === value);
+
+      return fruit != null ? [fruit] : [];
+    });
+    const candidates = fruitOrigins.filter(
+      (fruit) => !selectedValues.includes(fruit.value) && fruit.label.includes(inputText),
+    );
+
+    return (
+      <div style={{ width: 360 }}>
+        <Combobox
+          isMultiple
+          value={selectedValues}
+          onChange={(next) => setSelectedValues(next)}
+          inputValue={inputText}
+          onInputChange={setInputText}
+          isOpen={isOpen}
+          onOpenChange={setIsOpen}
+          placeholder="果物を検索..."
+          matchListToTrigger
+        >
+          <Combobox.Input aria-label="果物">
+            {selectedFruits.map((fruit) => (
+              <Combobox.Chip key={fruit.value} value={fruit.value} label={fruit.label} />
+            ))}
+          </Combobox.Input>
+          <Combobox.List>
+            {candidates.length === 0 && <Combobox.Empty />}
+            {candidates.map((fruit) => (
+              <Combobox.Item key={fruit.value} value={fruit.value} label={fruit.label}>
+                <span className="flex w-full min-w-0 items-center justify-between gap-4">
+                  <span className="truncate">{fruit.label}</span>
+                  <span className="typography-label12regular shrink-0">{fruit.origin}</span>
+                </span>
+              </Combobox.Item>
+            ))}
+          </Combobox.List>
+        </Combobox>
       </div>
     );
   },
