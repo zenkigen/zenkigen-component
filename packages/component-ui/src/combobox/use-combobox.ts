@@ -1,14 +1,17 @@
 import type { KeyboardEvent } from 'react';
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
 
-import type { ComboboxChangeMeta } from './combobox.types';
+import type { ComboboxMultipleProps, ComboboxSingleProps } from './combobox.types';
 import type { ComboboxItemMeta } from './combobox-context';
 
 export type ComboboxInputMode = 'keyboard' | 'mouse';
 
-export type UseComboboxParams = {
-  value: string | null;
-  onChange: (value: string | null, meta: ComboboxChangeMeta | null) => void;
+/** 選択値まわりの params。props と同じく isMultiple で判別する */
+type UseComboboxSelectionParams =
+  | Pick<ComboboxSingleProps, 'isMultiple' | 'value' | 'onChange'>
+  | Pick<ComboboxMultipleProps, 'isMultiple' | 'value' | 'onChange'>;
+
+export type UseComboboxParams = UseComboboxSelectionParams & {
   inputValue: string;
   onInputChange: (value: string) => void;
   isOpen?: boolean;
@@ -33,7 +36,45 @@ export type UseComboboxReturn = {
   revertInputToCommitted: () => void;
   inputRef: React.RefObject<HTMLInputElement | null>;
   handleKeyDown: (event: KeyboardEvent<HTMLInputElement>) => void;
+  /** 複数選択: 指定した値を選択から外す（value に無い・外せない値なら何もしない。開閉状態は変えない） */
+  removeSelected: (value: string) => void;
+  /** 複数選択: value の末尾から見て最初の外せる値を選択から外す（Backspace 用） */
+  removeLastSelected: () => void;
+  /** 複数選択: aria-live 通知用の label を登録する（unmount では削除しない＝最後に知っていた label を保持） */
+  registerChipLabel: (value: string, label: string) => void;
+  /** 複数選択: 外せない値を登録する。戻り値の関数で登録を解除する */
+  registerFixedValue: (value: string) => () => void;
+  /**
+   * 複数選択: aria-live 領域に出すメッセージ（value の差分から生成。単一選択では常に空）。
+   * id は通知ごとに増える連番。同じ文言が続いても別の通知として描画し直すために使う。
+   */
+  liveMessage: { id: number; text: string };
 };
+
+// blur / Escape で未確定入力を破棄して戻す先の表示テキストを求める。
+// - 複数選択: 入力は常に未確定の検索テキストなので必ず ''
+// - 単一選択: value===null のとき ''、それ以外は確定時の inputValue
+function getCommittedInputValue(params: UseComboboxParams): string {
+  if (params.isMultiple === true || params.value === null) {
+    return '';
+  }
+
+  return params.inputValue;
+}
+
+// 複数選択の value の差分から aria-live のメッセージを組み立てる（削除 → 追加の順、「、」で連結）。
+function buildLiveMessage(added: string[], removed: string[], getLabel: (value: string) => string): string {
+  const toLabels = (values: string[]) => values.map((value) => `「${getLabel(value)}」`).join('、');
+  const messages: string[] = [];
+  if (removed.length > 0) {
+    messages.push(`${toLabels(removed)}を削除しました`);
+  }
+  if (added.length > 0) {
+    messages.push(`${toLabels(added)}を追加しました`);
+  }
+
+  return messages.join('、');
+}
 
 export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
   const baseId = useId();
@@ -71,12 +112,13 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
   );
 
   // blur / Escape で未確定入力を破棄して戻す先の表示テキスト。
-  // 不変条件: value===null のとき必ず ''、それ以外は最後に確定した label（＝確定時の inputValue）。
-  const committedInputValueRef = useRef(params.value === null ? '' : params.inputValue);
+  // 不変条件（単一選択）: value===null のとき必ず ''、それ以外は最後に確定した label（＝確定時の inputValue）。
+  // 不変条件（複数選択）: 常に ''（入力は常に未確定の検索テキスト。選択値はチップ側に保持される）。
+  const committedInputValueRef = useRef(getCommittedInputValue(params));
 
   // 外部からの value 変更（プログラム的セット）に committed を追従させる。null は必ず空に正規化。
   useEffect(() => {
-    committedInputValueRef.current = paramsRef.current.value === null ? '' : paramsRef.current.inputValue;
+    committedInputValueRef.current = getCommittedInputValue(paramsRef.current);
   }, [params.value]);
 
   const revertInputToCommitted = useCallback(() => {
@@ -165,8 +207,11 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
     };
 
     if (!hasInitializedActiveRef.current) {
-      // 初回（この open セッションの最初）: selectedValue 優先で初期化
-      const selectedIdx = items.findIndex((item) => item.value === paramsRef.current.value && !item.isDisabled);
+      // 初回（この open セッションの最初）: 単一選択は selectedValue 優先で初期化。
+      // 複数選択は選択済みが通常候補から除外されるため、value 一致を優先せず先頭 enabled にする。
+      const selectedValue = paramsRef.current.isMultiple === true ? null : paramsRef.current.value;
+      const selectedIdx =
+        selectedValue === null ? -1 : items.findIndex((item) => item.value === selectedValue && !item.isDisabled);
       if (selectedIdx !== -1) {
         setActiveIndexState(selectedIdx);
         activeValueRef.current = items[selectedIdx]?.value ?? null;
@@ -194,11 +239,81 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
 
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // 複数選択: aria-live 通知用の label 登録簿（value → 最後に知っていた label）。描画には使わない。
+  const chipLabelsRef = useRef<Map<string, string>>(new Map());
+  // 複数選択: 外せない値の集合。Combobox.Chip（isRemovable=false）が登録し、unmount / 変化時に解除する。
+  const fixedValuesRef = useRef<Set<string>>(new Set());
+
+  const registerChipLabel = useCallback((value: string, label: string) => {
+    chipLabelsRef.current.set(value, label);
+  }, []);
+
+  const registerFixedValue = useCallback((value: string) => {
+    fixedValuesRef.current.add(value);
+
+    return () => {
+      fixedValuesRef.current.delete(value);
+    };
+  }, []);
+
+  const removeSelected = useCallback((value: string) => {
+    const current = paramsRef.current;
+    if (current.isMultiple !== true) {
+      return;
+    }
+    if (!current.value.includes(value) || fixedValuesRef.current.has(value)) {
+      return;
+    }
+    current.onChange(
+      current.value.filter((selected) => selected !== value),
+      { type: 'remove', value },
+    );
+  }, []);
+
+  const removeLastSelected = useCallback(() => {
+    const current = paramsRef.current;
+    if (current.isMultiple !== true) {
+      return;
+    }
+    // Chip の描画有無は問わず、value の配列順で末尾から外せる値を探す
+    const target = [...current.value].reverse().find((selected) => !fixedValuesRef.current.has(selected));
+    if (target == null) {
+      return;
+    }
+    current.onChange(
+      current.value.filter((selected) => selected !== target),
+      { type: 'remove', value: target },
+    );
+  }, []);
+
   const selectValue = useCallback(
     (value: string, label: string) => {
+      const current = paramsRef.current;
+      if (current.isMultiple === true) {
+        // 複数選択: 選択済みなら外し（toggle）、未選択なら追加する。リストは閉じない。
+        if (current.value.includes(value)) {
+          if (fixedValuesRef.current.has(value)) {
+            return;
+          }
+          current.onChange(
+            current.value.filter((selected) => selected !== value),
+            { type: 'remove', value },
+          );
+        } else {
+          // aria-live の追加通知で Item の label を使えるよう、onChange より先に登録する
+          chipLabelsRef.current.set(value, label);
+          current.onChange([...current.value, value], { type: 'add', value });
+        }
+        if (current.inputValue !== '') {
+          current.onInputChange('');
+        }
+
+        return;
+      }
+
       committedInputValueRef.current = label;
-      paramsRef.current.onChange(value, { label });
-      paramsRef.current.onInputChange(label);
+      current.onChange(value, { label });
+      current.onInputChange(label);
       setIsOpen(false);
       // isOpen useEffect 側で activeIndex / activeValueRef / hasInitializedActiveRef は null/false にリセットされる
     },
@@ -212,12 +327,44 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
   //   ＝ 既存仕様「selectedValue がある間は active 位置を維持」を保つため。
   // - active を残すと open 中のクリア後に aria-activedescendant / Enter 選択対象が
   //   クリア前のまま残るため、完全クリア時は明示的に null へ戻す。
+  // - 複数選択では行わない（チップを全削除しても、開いているリストの active は維持する）。
   useEffect(() => {
-    if (params.inputValue === '' && params.value === null) {
+    if (params.isMultiple !== true && params.inputValue === '' && params.value === null) {
       setActiveIndexState(null);
       activeValueRef.current = null;
     }
-  }, [params.inputValue, params.value]);
+  }, [params.isMultiple, params.inputValue, params.value]);
+
+  // 複数選択: value の前回との差分（value キー）から aria-live のメッセージを作る。
+  // onChange 起点ではなく差分方式にするのは、利用側のプログラム的な変更も通知するため。mount 時は通知しない。
+  const [liveMessage, setLiveMessage] = useState<{ id: number; text: string }>({ id: 0, text: '' });
+  const prevSelectedValuesRef = useRef<string[]>(params.isMultiple === true ? params.value : []);
+  useEffect(() => {
+    const current = paramsRef.current;
+    if (current.isMultiple !== true) {
+      return;
+    }
+    const prev = prevSelectedValuesRef.current;
+    const next = current.value;
+    prevSelectedValuesRef.current = next;
+
+    const added = next.filter((value) => !prev.includes(value));
+    const removed = prev.filter((value) => !next.includes(value));
+    if (added.length === 0 && removed.length === 0) {
+      return;
+    }
+    const labels = chipLabelsRef.current;
+    const text = buildLiveMessage(added, removed, (value) => labels.get(value) ?? value);
+    // 同じ label の別の値を続けて追加・削除すると文言が前回と同じになる。連番を進めて毎回別の通知にする
+    setLiveMessage((prevMessage) => ({ id: prevMessage.id + 1, text }));
+
+    // 通知に使い終えた、現在の value に無い label を掃除する
+    Array.from(labels.keys()).forEach((key) => {
+      if (!next.includes(key)) {
+        labels.delete(key);
+      }
+    });
+  }, [params.value]);
 
   const moveActive = useCallback((direction: 'next' | 'prev') => {
     const currentItems = itemsRef.current;
@@ -266,6 +413,15 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
           // 伝搬すると変換の取り消しで親まで閉じてしまう。変換の取り消しを妨げないよう preventDefault はしない。
           event.stopPropagation();
         }
+
+        return;
+      }
+
+      // 複数選択で入力が空のときの Backspace は、value の末尾（外せる値）を選択から外す。
+      // IME 変換中の Backspace は上の共通ガードで除外される（変換中の文字削除として IME が処理する）。
+      if (event.key === 'Backspace' && paramsRef.current.isMultiple === true && paramsRef.current.inputValue === '') {
+        event.preventDefault();
+        removeLastSelected();
 
         return;
       }
@@ -335,7 +491,7 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
         }
       }
     },
-    [isOpen, activeIndex, items, moveActive, setIsOpen, selectValue, revertInputToCommitted],
+    [isOpen, activeIndex, items, moveActive, setIsOpen, selectValue, revertInputToCommitted, removeLastSelected],
   );
 
   return {
@@ -353,5 +509,10 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
     revertInputToCommitted,
     inputRef,
     handleKeyDown,
+    removeSelected,
+    removeLastSelected,
+    registerChipLabel,
+    registerFixedValue,
+    liveMessage,
   };
 }

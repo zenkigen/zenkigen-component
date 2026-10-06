@@ -43,8 +43,18 @@ function hasOpenableContent(children: ReactNode): boolean {
 }
 
 export function ComboboxList({ children, maxHeight: maxHeightProp }: ComboboxListProps) {
-  const { listId, isOpen, setItems, setHasOpenableContent, setListRef, floatingStyles, listMaxHeight, variant, size } =
-    useComboboxContext('Combobox.List');
+  const {
+    listId,
+    isOpen,
+    isMultiple,
+    setItems,
+    setHasOpenableContent,
+    setListRef,
+    floatingStyles,
+    listMaxHeight,
+    variant,
+    size,
+  } = useComboboxContext('Combobox.List');
 
   const items = useMemo(() => extractItems(children), [children]);
   const hasContent = useMemo(() => hasOpenableContent(children), [children]);
@@ -100,6 +110,7 @@ export function ComboboxList({ children, maxHeight: maxHeightProp }: ComboboxLis
         selectionIndicator="right"
         maxHeight={maxHeightProp ?? listMaxHeight}
         aria-label="候補一覧"
+        {...(isMultiple ? { 'aria-multiselectable': true } : {})}
         className="z-popover"
         style={{
           ...floatingStyles,
