@@ -8,6 +8,7 @@ export type {
   ComboboxItemProps,
   ComboboxListProps,
   ComboboxLoadingProps,
+  ComboboxLoadMoreProps,
   ComboboxMultipleChangeMeta,
   ComboboxMultipleProps,
   ComboboxProps,

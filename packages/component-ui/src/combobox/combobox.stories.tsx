@@ -1029,6 +1029,80 @@ export const Asynchronous: Story = {
   },
 };
 
+// ---- 候補の追加読み込み（Combobox.LoadMore） ----
+
+const LOAD_MORE_PAGE_SIZE = 100;
+
+const loadMoreCandidates = Array.from({ length: 1000 }, (_, i) => ({
+  value: `candidate-${String(i + 1)}`,
+  label: `候補 ${String(i + 1)}`,
+}));
+
+// 全件（1,000 件）を手元に持ち、表示件数を 100 件ずつ増やす例。取得を伴わないので isLoading は使わない。
+// 確認観点:
+// - 候補リストを下へスクロールすると、下端に近づくたびに 100 件ずつ増える
+// - ↓ で末尾まで進み、さらに ↓ を押すと続きが追加され、追加分の先頭へ移る（端でループしない）
+// - 入力で絞り込むと表示件数が初期値（100 件）に戻る。全件を表示し終えると ↑↓ が端でループする
+export const LoadMore: Story = {
+  parameters: {
+    // スクロール・キーボード操作が前提のためスナップショットは撮らない
+    chromatic: { disable: true },
+  },
+  decorators: [
+    (StoryFn) => (
+      <div style={{ paddingBottom: 280 }}>
+        <StoryFn />
+      </div>
+    ),
+  ],
+  render: function LoadMoreRender() {
+    const [value, setValue] = useState<string | null>(null);
+    const [inputText, setInputText] = useState('');
+    const [visibleCount, setVisibleCount] = useState(LOAD_MORE_PAGE_SIZE);
+
+    const filtered = useMemo(() => loadMoreCandidates.filter((item) => item.label.includes(inputText)), [inputText]);
+    const visibleItems = filtered.slice(0, visibleCount);
+
+    // 入力が変わったら表示件数を初期値に戻す
+    const updateInputText = (next: string) => {
+      setInputText(next);
+      setVisibleCount(LOAD_MORE_PAGE_SIZE);
+    };
+
+    return (
+      <div style={{ width: 320 }}>
+        <Combobox
+          value={value}
+          onChange={(next, meta) => {
+            setValue(next);
+            updateInputText(meta?.label ?? '');
+          }}
+          inputValue={inputText}
+          onInputChange={updateInputText}
+          placeholder="候補を検索..."
+          listMaxHeight={240}
+        >
+          <Combobox.Input aria-label="候補">
+            <Combobox.HelperMessage>
+              表示中 {visibleItems.length} 件 / 該当 {filtered.length} 件。下端に近づくと 100 件ずつ追加する
+            </Combobox.HelperMessage>
+          </Combobox.Input>
+          <Combobox.List>
+            {filtered.length === 0 && <Combobox.Empty />}
+            {visibleItems.map((item) => (
+              <Combobox.Item key={item.value} value={item.value} label={item.label} />
+            ))}
+            {/* これ以上の候補が無くなったら描画しない（終端） */}
+            {visibleCount < filtered.length && (
+              <Combobox.LoadMore onLoadMore={() => setVisibleCount((count) => count + LOAD_MORE_PAGE_SIZE)} />
+            )}
+          </Combobox.List>
+        </Combobox>
+      </div>
+    );
+  },
+};
+
 // 日本語入力（IME 変換中も含む）で inputValue がどのように流れてくるかを確認するための Story。
 // 入力欄の横に onInputChange のログを時系列で表示する。
 export const ImeInputLog: Story = {
@@ -1748,6 +1822,154 @@ export const MultipleAsyncSearch: MultipleStory = {
               onCreate={handleCreate}
               checkDuplicate={(text) => results.some((fruit) => fruit.label === text)}
             />
+          </Combobox.List>
+        </Combobox>
+      </div>
+    );
+  },
+};
+
+type CandidateItem = (typeof loadMoreCandidates)[number];
+
+const LOAD_MORE_SERVER_TOTAL = 500;
+const LOAD_MORE_DELAY_MS = 600;
+
+// 擬似 API: 検索語に一致する候補を offset から 100 件返す
+function searchCandidatePage(source: CandidateItem[], keyword: string, offset: number) {
+  const matched = source.filter((item) => item.label.includes(keyword));
+
+  return {
+    items: matched.slice(offset, offset + LOAD_MORE_PAGE_SIZE),
+    hasNextPage: offset + LOAD_MORE_PAGE_SIZE < matched.length,
+  };
+}
+
+// サーバーから 100 件ずつ取得する例（擬似 API・全 500 件）。複数選択 + 作成行との併用。
+// 確認観点:
+// - 初回・検索語の変更時は Combobox.Loading、続きの取得中は Combobox.LoadMore の読み込み中の行が出る
+// - Combobox.LoadMore を Combobox.CreateItem の前に置いているため、作成行が区切り線付きで最下部に残る
+// - 続きの取得中も作成行は消えない。500 件を読み込み終えると Combobox.LoadMore が外れ、↑↓ が端でループする
+export const LoadMoreAsync: MultipleStory = {
+  parameters: {
+    // 擬似 API の待ち時間・スクロール操作に依存するためスナップショットは撮らない
+    chromatic: { disable: true },
+  },
+  decorators: [
+    (StoryFn) => (
+      <div style={{ paddingBottom: 280 }}>
+        <StoryFn />
+      </div>
+    ),
+  ],
+  render: function LoadMoreAsyncRender() {
+    // 擬似サーバーのデータ（作成で増える）
+    const serverCandidatesRef = useRef<CandidateItem[]>(loadMoreCandidates.slice(0, LOAD_MORE_SERVER_TOTAL));
+    const [selectedValues, setSelectedValues] = useState<string[]>([]);
+    const [selectedCache, setSelectedCache] = useState<Map<string, CandidateItem>>(new Map());
+    const [inputText, setInputText] = useState('');
+    // 取得結果は、どの検索語に対する結果かと組で持つ
+    const [searchResult, setSearchResult] = useState<{
+      keyword: string;
+      items: CandidateItem[];
+      hasNextPage: boolean;
+    } | null>(null);
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
+    const loadMoreTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    const keyword = inputText.trim();
+    const currentResult = searchResult !== null && searchResult.keyword === keyword ? searchResult : null;
+    // 入力に対する 1 ページ目がまだ届いていない間は検索中とみなす
+    const isSearching = currentResult === null;
+    const results = currentResult?.items ?? [];
+    const hasNextPage = currentResult?.hasNextPage ?? false;
+
+    // 擬似的な 1 ページ目の取得。検索語が変わったら、進行中の続きの取得は捨てる
+    useEffect(() => {
+      setIsLoadingMore(false);
+      const timer = setTimeout(() => {
+        setSearchResult({ keyword, ...searchCandidatePage(serverCandidatesRef.current, keyword, 0) });
+      }, LOAD_MORE_DELAY_MS);
+
+      return () => {
+        clearTimeout(timer);
+        if (loadMoreTimerRef.current !== null) {
+          clearTimeout(loadMoreTimerRef.current);
+        }
+      };
+    }, [keyword]);
+
+    // 擬似的な続きの取得。連打の防止は不要（isLoading のあいだ onLoadMore は呼ばれない）
+    const handleLoadMore = () => {
+      setIsLoadingMore(true);
+      loadMoreTimerRef.current = setTimeout(() => {
+        setSearchResult((prev) => {
+          if (prev === null || prev.keyword !== keyword) {
+            return prev;
+          }
+          const page = searchCandidatePage(serverCandidatesRef.current, keyword, prev.items.length);
+
+          return { ...prev, items: [...prev.items, ...page.items], hasNextPage: page.hasNextPage };
+        });
+        setIsLoadingMore(false);
+      }, LOAD_MORE_DELAY_MS);
+    };
+
+    const handleChange = (next: string[], meta: ComboboxMultipleChangeMeta) => {
+      if (meta.type === 'add') {
+        const candidate = results.find((result) => result.value === meta.value);
+        if (candidate != null) {
+          setSelectedCache((prev) => new Map(prev).set(candidate.value, candidate));
+        }
+      }
+      setSelectedValues(next);
+    };
+
+    const handleCreate = (text: string) => {
+      const created = { value: `created-${serverCandidatesRef.current.length}`, label: text };
+      serverCandidatesRef.current = [...serverCandidatesRef.current, created];
+      setSelectedCache((prev) => new Map(prev).set(created.value, created));
+      setSelectedValues((prev) => [...prev, created.value]);
+      setInputText('');
+    };
+
+    const selectedCandidates = selectedValues.flatMap((value) => {
+      const candidate = selectedCache.get(value);
+
+      return candidate != null ? [candidate] : [];
+    });
+    const candidates = results.filter((candidate) => !selectedValues.includes(candidate.value));
+
+    return (
+      <div style={{ width: 360 }}>
+        <Combobox
+          isMultiple
+          value={selectedValues}
+          onChange={handleChange}
+          inputValue={inputText}
+          onInputChange={setInputText}
+          placeholder="候補を検索・追加"
+          width="100%"
+          listMaxHeight={240}
+        >
+          <Combobox.Input aria-label="候補">
+            {selectedCandidates.map((candidate) => (
+              <Combobox.Chip key={candidate.value} value={candidate.value} label={candidate.label} />
+            ))}
+            <Combobox.HelperMessage>
+              読み込み済み {results.length} 件{!isSearching && !hasNextPage ? '（すべて読み込み済み）' : ''}
+              。下端に近づくと 600ms 後に 100 件ずつ追加する
+            </Combobox.HelperMessage>
+          </Combobox.Input>
+          <Combobox.List>
+            {/* 初回・検索語の変更時はリスト全体の読み込み（Combobox.LoadMore だけでは候補リストは開かない） */}
+            {isSearching && <Combobox.Loading />}
+            {!isSearching && candidates.length === 0 && <Combobox.Empty />}
+            {candidates.map((candidate) => (
+              <Combobox.Item key={candidate.value} value={candidate.value} label={candidate.label} />
+            ))}
+            {/* 続きがあるあいだだけ描画する。作成行の前に置くと、作成行が最下部に残る */}
+            {hasNextPage && <Combobox.LoadMore isLoading={isLoadingMore} onLoadMore={handleLoadMore} />}
+            <Combobox.CreateItem onCreate={handleCreate} />
           </Combobox.List>
         </Combobox>
       </div>

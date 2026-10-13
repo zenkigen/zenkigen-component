@@ -2,7 +2,7 @@ import type { CSSProperties, FocusEvent, KeyboardEvent, RefObject } from 'react'
 import { createContext, useContext } from 'react';
 
 import type { ComboboxSize, ComboboxVariant } from './combobox.types';
-import type { ComboboxCreateJudge, ComboboxInputMode } from './use-combobox';
+import type { ComboboxActiveItemKey, ComboboxCreateJudge, ComboboxInputMode } from './use-combobox';
 
 export type ComboboxItemMeta = {
   /** 候補 Item（option）か、作成行（create）か */
@@ -65,12 +65,19 @@ export type ComboboxContextValue = {
   registerFixedValue: (value: string) => () => void;
   /** 複数選択: value に外せる値が 1 つ以上あるか（クリアボタンの表示判定に使う。単一選択では常に false） */
   hasRemovableSelection: boolean;
+  /** 追加読み込みの要求を登録する（Combobox.LoadMore から。null で解除）。登録中は ↑↓ が端でループしない */
+  registerLoadMore: (request: (() => void) | null) => void;
   /** クリアボタンのクリック時に呼ばれる利用者コールバック（渡されたときのみクリアボタンを表示） */
   onClickClearButton?: () => void;
   /** キーボードフォーカス中の Item index（items 配列上） */
   activeIndex: number | null;
   /** activeIndex を設定（activeItemRef も同期される） */
   setActiveIndex: (index: number | null) => void;
+  /**
+   * active な項目の識別子（候補行は value、作成行は kind）。Item / CreateItem のハイライト判定に使う。
+   * index と違い、候補の追加・挿入で変わらない。
+   */
+  activeItemKey: ComboboxActiveItemKey | null;
   /** キー / マウスの操作モード（keyboard 中のみ scrollIntoView が発動） */
   inputMode: ComboboxInputMode;
   /** inputMode を設定 */
@@ -132,4 +139,23 @@ export const ComboboxCreateItemContextProvider = ComboboxCreateItemContext.Provi
 /** 有効な CreateItem のときだけ値を返す。無効（Provider の外）なら null */
 export function useComboboxCreateItemContext(): ComboboxCreateItemContextValue | null {
   return useContext(ComboboxCreateItemContext);
+}
+
+/** Combobox.List が配下の部品（Combobox.LoadMore）に配る値 */
+export type ComboboxListContextValue = {
+  /** scrollable な内側 ul への ref */
+  scrollRef: RefObject<HTMLUListElement | null>;
+};
+
+const ComboboxListContext = createContext<ComboboxListContextValue | null>(null);
+
+export const ComboboxListContextProvider = ComboboxListContext.Provider;
+
+export function useComboboxListContext(componentName: string): ComboboxListContextValue {
+  const ctx = useContext(ComboboxListContext);
+  if (ctx === null) {
+    throw new Error(`<${componentName}> must be used inside <Combobox.List>`);
+  }
+
+  return ctx;
 }

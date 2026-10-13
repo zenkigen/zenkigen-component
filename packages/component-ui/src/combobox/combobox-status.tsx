@@ -7,10 +7,10 @@ import { hasRenderableChildren } from './has-renderable-children';
 
 /**
  * 単純な display 用の li ベース Compound。
- * Loading / Empty で共通の見た目（中央寄せ・グレー文字）を提供する。
+ * Loading / Empty / LoadMore で共通の見た目（中央寄せ・グレー文字）を提供する。
  * 中身は各 Compound の children で差し替えられる（未指定時は各 Compound の既定文言）。
  */
-function StatusItem({ children, componentName }: { children: ReactNode; componentName: string }) {
+export function StatusItem({ children, componentName }: { children: ReactNode; componentName: string }) {
   const { size } = useComboboxContext(componentName);
 
   const liClasses = clsx('flex w-full items-center px-3 text-text02', {
@@ -31,9 +31,9 @@ function StatusItem({ children, componentName }: { children: ReactNode; componen
 }
 
 // `{isX && '文言'}` の boolean や、変数経由の空文字、それらだけの配列は未指定とみなし、既定文言を描画する（空の行にしない）
-const hasCustomContent = (children: ReactNode) => hasRenderableChildren(children);
+export const hasCustomContent = (children: ReactNode) => hasRenderableChildren(children);
 
-const DEFAULT_LOADING_MESSAGE = '読み込み中...';
+export const DEFAULT_LOADING_MESSAGE = '読み込み中...';
 
 export function ComboboxLoading({ children }: ComboboxLoadingProps) {
   return (

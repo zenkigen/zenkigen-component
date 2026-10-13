@@ -386,6 +386,104 @@ const selectedFruits = selectedIds.flatMap((id) => {
 - 検索中は `Combobox.Loading` を描画してください。Loading の描画中は作成行が出ないため、古い検索結果で一瞬「作成」が出ることを防げます
 - 初期値（編集画面など）がある場合は、初期表示時に選択済みの値の表示情報を取得してキャッシュに入れてください
 
+### 候補の追加読み込み（`Combobox.LoadMore`）
+
+候補が多いときに、最初は一部だけを表示し、候補リストの下端に近づいたら続きを追加できます。`Combobox.List` に `Combobox.LoadMore` を置くと、続きが必要になったときに `onLoadMore` が呼ばれます。何件ずつ取得するか・続きがあるかどうかは利用側で持ちます（ライブラリは件数やページの状態を持ちません）。
+
+| prop         | 型           | 既定値          | 説明                                                                                        |
+| ------------ | ------------ | --------------- | ------------------------------------------------------------------------------------------- |
+| `onLoadMore` | `() => void` | -（必須）       | 続きの候補が必要になったときに呼ばれる                                                      |
+| `isLoading`  | `boolean`    | `false`         | 追加読み込み中か。`true` のあいだは `onLoadMore` を呼ばず、末尾に読み込み中の行を表示する   |
+| `children`   | `ReactNode`  | `読み込み中...` | 読み込み中の行の中身。規約は `Combobox.Loading` と同じ（未指定・boolean・空文字は既定文言） |
+
+サーバーから続きを取得する場合（例: TanStack Query の `useInfiniteQuery`）。`onLoadMore` には Promise を返す関数もそのまま渡せます。
+
+```tsx
+const { data, hasNextPage, isFetchingNextPage, fetchNextPage } = useFruitPages(inputText); // 利用側の取得フック
+const results = data?.pages.flatMap((page) => page.items) ?? [];
+
+<Combobox.List>
+  {results.map((fruit) => (
+    <Combobox.Item key={fruit.value} value={fruit.value} label={fruit.label} />
+  ))}
+  {hasNextPage && <Combobox.LoadMore isLoading={isFetchingNextPage} onLoadMore={() => fetchNextPage()} />}
+</Combobox.List>;
+```
+
+全件を手元に持ち、表示件数を 100 件ずつ増やす場合（Story: `LoadMore`）。取得を伴わないので `isLoading` は不要です。入力が変わったら表示件数を初期値に戻します。
+
+```tsx
+const PAGE_SIZE = 100;
+const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+
+const filtered = useMemo(() => allItems.filter((item) => item.label.includes(inputText)), [inputText]);
+const visibleItems = filtered.slice(0, visibleCount);
+
+<Combobox
+  /* ... */
+  inputValue={inputText}
+  onInputChange={(next) => {
+    setInputText(next);
+    setVisibleCount(PAGE_SIZE);
+  }}
+>
+  <Combobox.Input />
+  <Combobox.List>
+    {visibleItems.map((item) => (
+      <Combobox.Item key={item.value} value={item.value} label={item.label} />
+    ))}
+    {visibleCount < filtered.length && (
+      <Combobox.LoadMore onLoadMore={() => setVisibleCount((count) => count + PAGE_SIZE)} />
+    )}
+  </Combobox.List>
+</Combobox>;
+```
+
+置き方:
+
+- **これ以上の候補が無くなったら `Combobox.LoadMore` を描画しません**。終端を表す専用の prop はありません（`{hasNextPage && <Combobox.LoadMore ... />}` のように条件で出し分けます）
+- `Combobox.List` の **直接の子** として、候補（`Combobox.Item`）の後ろに 1 つだけ置いてください。`Combobox.List` の外に置くとエラーになります
+- `Combobox.CreateItem` を使う場合は、その **前** に置きます。作成行が区切り線付きで最下部に残ります（Story: `LoadMoreAsync`）
+
+```tsx
+<Combobox.List>
+  {candidates.map((fruit) => (
+    <Combobox.Item key={fruit.value} value={fruit.value} label={fruit.label} />
+  ))}
+  {hasNextPage && <Combobox.LoadMore isLoading={isFetchingNextPage} onLoadMore={() => fetchNextPage()} />}
+  <Combobox.CreateItem onCreate={handleCreate} />
+</Combobox.List>
+```
+
+`onLoadMore` が呼ばれるタイミング:
+
+- 候補リストをスクロールして、下端から 1 画面分手前まで近づいたとき
+- 候補リストを開いた直後や候補が増えた直後に、候補が少なくリストが埋まっていないとき（埋まるまで続けて呼ばれます）
+- キーボードで末尾の項目からさらに `↓` を押したとき
+- `isLoading` が `true` のあいだは呼ばれません。同じ位置で連続して呼ばれないようライブラリが抑止するため、利用側で連打を防ぐ処理は不要です
+
+取得に失敗したとき:
+
+- `onLoadMore` の後に候補が増えなければ、自動では再度呼ばれません（失敗しても呼び続けることはありません）
+- 利用者がスクロールで下端からいったん離れて戻すか、末尾の項目で `↓` を押すと、再度呼ばれます
+
+アクセシビリティ上の制約:
+
+- 追加読み込みの開始・失敗・終端や、`↑` / `↓` が端でループしないことは、スクリーンリーダーには通知されません。必要な場合は利用側で通知してください
+
+キーボード操作:
+
+- `Combobox.LoadMore` を置いているあいだ、`↑` / `↓` は端でループしません（先頭で `↑`、末尾で `↓` を押しても反対側へ移りません）
+- 末尾の項目（作成行を含む）で `↓` を押すと `onLoadMore` が呼ばれ、取得が終わって候補が増えると、追加された候補の先頭へ移ります。最後のページの追加と同時に `Combobox.LoadMore` を描画しなくなった場合も同じです
+- 表示中の候補がすべて `isDisabled` のときも、`↓` で `onLoadMore` が呼ばれます（続きにある有効な候補へ進めます）
+- `Combobox.LoadMore` を描画しなくなると（終端）、従来どおり端でループします
+
+読み込み中の行:
+
+- `isLoading` が `true` のあいだ、`Combobox.LoadMore` を置いた位置に「読み込み中...」の行を表示します。children で中身を差し替えられます（規約は「ローディング / 該当なしの文言」節と同じ）
+- `Combobox.Loading`（リスト全体の読み込み）とは役割が異なります。`Combobox.Loading` の描画中は作成行が出ませんが、`Combobox.LoadMore` の読み込み中は作成行を隠しません
+- **初回の読み込みには従来どおり `Combobox.Loading` を使ってください**。`Combobox.LoadMore` は候補ではないため、それだけでは候補リストは開きません
+
 ### 外せないチップ
 
 最初から設定されていて外せない値は、そのチップに `isRemovable={false}` を指定します。✗ が表示されず、`Backspace`・候補の再選択でも外れません。外せるかどうかは**描画中のチップの宣言だけ**で判定するため、外せない値のチップは必ず描画してください。

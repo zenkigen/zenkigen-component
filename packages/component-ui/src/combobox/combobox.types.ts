@@ -130,6 +130,22 @@ export type ComboboxEmptyProps = {
   children?: ReactNode;
 };
 
+/** 候補の追加読み込み（`Combobox.List` の直接の子に、通常は `Combobox.Item` の後ろへ 1 つだけ置く） */
+export type ComboboxLoadMoreProps = {
+  /**
+   * 続きの候補が必要になったときに呼ばれる。取得・件数・ページ状態は利用側で持つ。
+   * これ以上の候補が無くなったら、`Combobox.LoadMore` 自体を描画しない。
+   */
+  onLoadMore: () => void;
+  /** 追加読み込み中か。true のあいだは onLoadMore を呼ばず、読み込み中の行を描画する */
+  isLoading?: boolean;
+  /**
+   * 読み込み中の行の中身（任意）。未指定・boolean・空文字のときは「読み込み中...」を描画する。
+   * インタラクティブ要素は置かない。高さは 1 行固定で、はみ出した分は末尾を省略する。
+   */
+  children?: ReactNode;
+};
+
 export type ComboboxListProps = PropsWithChildren<{
   /** 候補リストの最大高さ（Combobox の listMaxHeight を上書き） */
   maxHeight?: CSSProperties['height'];

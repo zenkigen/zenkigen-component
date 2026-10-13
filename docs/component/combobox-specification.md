@@ -15,6 +15,7 @@
    - [Combobox.List](#comboboxlist)
    - [Combobox.Item](#comboboxitem)
    - [Combobox.CreateItem](#comboboxcreateitem)
+   - [Combobox.LoadMore](#comboboxloadmore)
    - [Combobox.Loading](#comboboxloading)
    - [Combobox.Empty](#comboboxempty)
    - [Combobox.HelperMessage](#comboboxhelpermessage)
@@ -35,6 +36,7 @@
    - [複数選択（チップ）](#複数選択チップ)
    - [外せないチップ](#外せないチップ)
    - [作成行（Combobox.CreateItem）](#作成行comboboxcreateitem)
+   - [候補の追加読み込み（Combobox.LoadMore）](#候補の追加読み込みcomboboxloadmore)
 8. [キーボード操作](#キーボード操作)
 9. [未確定入力の取り消し（revert）](#未確定入力の取り消しrevert)
 10. [候補リストの開閉判定ルール](#候補リストの開閉判定ルール)
@@ -159,6 +161,7 @@ const MyComponent = () => {
 | `Combobox.List`          | `Combobox` 直下       | 候補リスト（FloatingPortal で描画）                         |
 | `Combobox.Item`          | `Combobox.List` 直下  | 個別の候補                                                  |
 | `Combobox.CreateItem`    | `Combobox.List` 直下  | 「「{入力文字}」を作成」行（表示はライブラリが判定）        |
+| `Combobox.LoadMore`      | `Combobox.List` 直下  | 候補の追加読み込み（下端に近づいたら `onLoadMore` を呼ぶ）  |
 | `Combobox.Loading`       | `Combobox.List` 直下  | ローディング表示（children で文言を差し替え可能）           |
 | `Combobox.Empty`         | `Combobox.List` 直下  | 該当候補なし表示（children で文言を差し替え可能）           |
 | `Combobox.HelperMessage` | `Combobox.Input` 直下 | 補助メッセージ（TextInput.HelperMessage を再エクスポート）  |
@@ -284,6 +287,67 @@ children の規約:
 - 文言（`「{text}」を作成`）は固定で、差し替える props は無い
 - 1 つの `Combobox.List` に 1 つだけ置く。複数置いた場合は最初の 1 つだけが有効で、2 つ目以降は描画しない
 - `Combobox.List` の直接の子のみを認識する（Fragment やラッパーコンポーネントで包むと認識されない）。認識されなかったものは、直接の子の `Combobox.CreateItem` と併置した場合も含めて何も描画せず、`onCreate` も呼ばれない（有効なのは直接の子として認識された最初の 1 つだけ）
+
+### Combobox.LoadMore
+
+候補の追加読み込み。候補が多いときに最初は一部だけを表示し、続きが必要になったら `onLoadMore` を呼ぶ。`Combobox.List` の **直接の子** に、候補（`Combobox.Item`）の後ろへ 1 つだけ置く。取得・1 回あたりの件数・続きがあるかどうかの判定は利用側が持ち、ライブラリは件数やページの状態を持たない。
+
+| プロパティ   | 型           | 必須 | デフォルト値    | 説明                                                                                                                     |
+| ------------ | ------------ | :--: | --------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `onLoadMore` | `() => void` |  ✓   | -               | 続きの候補が必要になったときに呼ばれる（下記「`onLoadMore` を呼ぶ規則」）。Promise を返す関数もそのまま渡せる            |
+| `isLoading`  | `boolean`    |      | `false`         | 追加読み込み中か。`true` のあいだは `onLoadMore` を呼ばず、読み込み中の行を描画する                                      |
+| `children`   | `ReactNode`  |      | `読み込み中...` | 読み込み中の行の中身。規約は `Combobox.Loading` / `Combobox.Empty` と共通（未指定・boolean・空文字は既定文言を描画する） |
+
+終端の表現:
+
+- これ以上の候補が無くなったら、利用側が `Combobox.LoadMore` を描画しない（`{hasNextPage && <Combobox.LoadMore ... />}`）。終端を表す専用の props は無い
+
+描画:
+
+- `isLoading` が `true` のあいだだけ、置いた位置に読み込み中の行を描画する。見た目・`role="presentation"`・キーボード巡回の対象外である点は `Combobox.Loading` と同じ。`isLoading` が `false` のときは何も描画しない
+- 候補ではないため、候補リストの開閉判定には数えない（`Combobox.LoadMore` だけでは候補リストは開かない）。初回の読み込み中は従来どおり `Combobox.Loading` を描画する
+- `Combobox.Loading` と違い、読み込み中も作成行（`Combobox.CreateItem`）を隠さない
+
+`onLoadMore` を呼ぶ規則:
+
+「下端付近」とは、候補リスト（スクロールする `<ul>`）の残りのスクロール量が 1 画面分以下の状態（`scrollHeight - scrollTop - clientHeight <= clientHeight`）を指す。候補がリストの高さに満たずスクロールが発生しない場合も下端付近に含まれる。高さが取れないとき（`clientHeight === 0`）は下端付近とみなさない。
+
+スクロールによる呼び出しは、次のすべてを満たしたときに 1 回行う。
+
+1. 候補リストが開いている
+2. `isLoading` が `false`
+3. 下端付近にある
+4. 前回の呼び出しの後に、次のいずれかが起きている（初回は `Combobox.LoadMore` を描画した時点で満たす）
+   - 候補の中身が変わった（`Combobox.Item` の `value` の並びが変わった。作成行の変化は含めない）
+   - 候補リストを開き直した
+   - スクロールして下端付近からいったん離れた
+
+判定は、スクロールしたとき・候補の中身が変わったとき・候補リストを開いたとき・`isLoading` が変わったときに行う。そのため次のように動作する。
+
+- 下端付近に入ると 1 回だけ呼ぶ。同じ位置でスクロールを続けても重ねて呼ばない（利用側で連打を防ぐ処理は不要）
+- 候補リストを開いた直後や候補が増えた直後に、候補が少なく下端付近のままであれば続けて呼ぶ（リストが埋まるまで読み込む）
+- **取得に失敗した・追加が 0 件だった等で候補の中身が変わらなかった場合は、自動では再度呼ばない**（`isLoading` が `false` に戻っただけでは条件 4 を満たさない）。利用者がスクロールで下端付近から離れて戻すか、下記のキーボード操作を行うと再度呼ぶ
+
+キーボードによる呼び出し:
+
+- 末尾の有効な項目（作成行を含む）がアクティブのときに `↓` を押すと、`isLoading` が `false` であれば `onLoadMore` を呼ぶ。スクロールによる呼び出しの条件 3・4 は見ない（明示的な操作として、取得失敗後の再試行にも使える）
+- 有効な項目が 1 件も無いとき（表示中の `Combobox.Item` がすべて `isDisabled` で、作成行も無い）も、`↓` で同じように `onLoadMore` を呼ぶ（続きにある有効な候補へキーボードで進めるようにするため）
+- この呼び出しも、スクロールによる呼び出しの条件 4 の「前回の呼び出し」に数える。取得に失敗して候補の中身が変わらなかった場合、`isLoading` が `false` に戻っただけでは再度呼ばない
+- `Combobox.LoadMore` を描画しているあいだ、`↑` / `↓` は端でループしない（[キーボード操作](#キーボード操作) 参照）
+
+利用側が担うこと:
+
+- 続きの取得と、取得した候補の `Combobox.Item` としての描画（末尾に追加する）
+- 取得中は `isLoading` を `true` にする（全件を手元に持ち表示件数を増やすだけの場合は不要）
+- 続きが無くなったら `Combobox.LoadMore` を描画しない
+- 検索語が変わったときのページ状態のリセット（ライブラリはページの状態を持たない）
+
+制約:
+
+- `Combobox.List` の中に置く。外に置くとエラー（`<Combobox.LoadMore> must be used inside <Combobox.List>`）になる
+- 1 つの `Combobox.List` に 1 つだけ置く（複数置いた場合の動作は保証しない）
+- `Combobox.CreateItem` を使う場合は、その **前** に置く。追加した候補が作成行の前に入り、作成行が区切り線付きで最下部に残る
+- 先読みの量（1 画面分）を変える props は無い
 
 ### Combobox.Loading
 
@@ -709,6 +773,55 @@ const handleCreate = async (text: string) => {
 <Combobox.CreateItem onCreate={handleCreate} checkDuplicate={(text) => results.some((fruit) => fruit.label === text)} />
 ```
 
+### 候補の追加読み込み（Combobox.LoadMore）
+
+サーバーから続きを取得する場合。続きがあるあいだだけ `Combobox.LoadMore` を描画し、取得中は `isLoading` を `true` にする。初回の読み込み中は `Combobox.Loading` を描画する。
+
+```typescript
+// 利用側の取得フック（例: TanStack Query の useInfiniteQuery）
+const { data, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage } = useFruitPages(inputText);
+const results = data?.pages.flatMap((page) => page.items) ?? [];
+
+<Combobox.List>
+  {isLoading && <Combobox.Loading />}
+  {results.map((fruit) => (
+    <Combobox.Item key={fruit.value} value={fruit.value} label={fruit.label} />
+  ))}
+  {hasNextPage && <Combobox.LoadMore isLoading={isFetchingNextPage} onLoadMore={() => fetchNextPage()} />}
+  <Combobox.CreateItem onCreate={handleCreate} />
+</Combobox.List>
+```
+
+全件を手元に持ち、表示件数を 100 件ずつ増やす場合。入力が変わったら表示件数を初期値に戻す。
+
+```typescript
+const PAGE_SIZE = 100;
+const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+
+const filtered = useMemo(() => allItems.filter((item) => item.label.includes(inputText)), [inputText]);
+const visibleItems = filtered.slice(0, visibleCount);
+
+<Combobox
+  value={value}
+  onChange={...}
+  inputValue={inputText}
+  onInputChange={(next) => {
+    setInputText(next);
+    setVisibleCount(PAGE_SIZE);
+  }}
+>
+  <Combobox.Input />
+  <Combobox.List>
+    {visibleItems.map((item) => (
+      <Combobox.Item key={item.value} value={item.value} label={item.label} />
+    ))}
+    {visibleCount < filtered.length && (
+      <Combobox.LoadMore onLoadMore={() => setVisibleCount((count) => count + PAGE_SIZE)} />
+    )}
+  </Combobox.List>
+</Combobox>
+```
+
 ## キーボード操作
 
 DOM フォーカスは常に input に維持される（`aria-activedescendant` 方式）。Item / Loading / Empty クリック時は `onMouseDown.preventDefault` でフォーカスを奪わない。
@@ -724,7 +837,24 @@ DOM フォーカスは常に input に維持される（`aria-activedescendant` 
 | `Alt + ↓`    | 候補リストを開く                                                                                                                                              |
 | `Alt + ↑`    | 候補リストを閉じる                                                                                                                                            |
 
-`↑` / `↓` は **`Combobox.Item` と表示中の作成行（`Combobox.CreateItem`）を children の順に巡回** する。`Combobox.Loading` / `Combobox.Empty` はスキップされる。`isDisabled` の Item もスキップされる。候補が 0 件で作成行だけがあるとき（`Combobox.Empty` と併記する場合を含む）は、作成行がアクティブになる。
+`↑` / `↓` は **`Combobox.Item` と表示中の作成行（`Combobox.CreateItem`）を children の順に巡回** する。`Combobox.Loading` / `Combobox.Empty` はスキップされる。`isDisabled` の Item もスキップされる。候補が 0 件で作成行だけがあるとき（`Combobox.Empty` と併記する場合を含む）は、作成行がアクティブになる。端では反対側へループする（末尾で `↓` → 先頭、先頭で `↑` → 末尾）。
+
+`Combobox.LoadMore` を描画しているあいだは、次のように変わる（描画しなくなると上記のループに戻る）。
+
+| 操作                           | 動作                                                                                                                                                    |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 先頭の有効な項目で `↑`         | アクティブを動かさない（末尾へループしない）                                                                                                            |
+| 末尾の有効な項目で `↓`         | アクティブを動かさず（先頭へループしない）、`isLoading` が `false` なら `onLoadMore` を呼ぶ。あわせて「候補が増えたら追加分の先頭へ移る」ことを予約する |
+| 上記の後に候補が追加されたとき | `↓` を押した時点で最後にあった `Combobox.Item` より後ろの、最初の有効な `Combobox.Item`（追加分の先頭）へアクティブを移す                               |
+
+- 「末尾の有効な項目」には作成行を含む。作成行を最下部に置く構成では作成行が末尾になり、追加された候補は作成行の前に入るため、アクティブは作成行から追加分の先頭へ戻る
+- **`↓` を押した時点で `Combobox.Item` が 0 件（作成行だけ）のときは、候補が追加されると最初の有効な `Combobox.Item` へ移る**
+- 有効な項目が 1 件も無いとき（表示中の `Combobox.Item` がすべて `isDisabled` で、作成行も無い）の `↓` も、末尾での `↓` と同じ扱いにする。アクティブは無いまま `onLoadMore` を呼び、候補が追加されると、`↓` を押した時点で最後にあった `Combobox.Item` より後ろの最初の有効な `Combobox.Item` へ移る。`↑` は何もしない
+- 予約は `isLoading` が `true` のあいだに押した `↓` でも行う（`onLoadMore` は呼ばないが、進行中の取得が終わって候補が増えると追加分の先頭へ移る）
+- 予約は、候補が追加されるまでに次のいずれかが起きると取り消す: `↑` / `↓` でアクティブが移った・先頭で `↑` を押した・マウスホバーでアクティブが変わった・入力文字が変わった・候補または作成行を選んだ・候補リストを閉じた・`Combobox.LoadMore` を描画しなくなった・`↓` を押した時点で最後にあった `Combobox.Item` が候補から無くなった・候補と作成行がいったんすべて無くなった
+- **最後のページの追加と同じ更新で `Combobox.LoadMore` を描画しなくなった場合（`{hasNextPage && <Combobox.LoadMore ... />}` の構成で終端に達したとき）は、追加分の先頭へ移ってから予約を取り消す**。`Combobox.LoadMore` を描画しなくなった更新で候補が追加されなかった場合は、その時点で予約を取り消し、後の更新で候補が増えてもアクティブは動かさない
+- 取得に失敗して候補が増えなかった場合、アクティブは動かない。もう一度 `↓` を押すと再び `onLoadMore` を呼ぶ
+- スクロールだけで起きた追加読み込み（末尾の `↓` を伴わないもの）では、アクティブもスクロール位置も動かさない
 
 複数選択モードでの違い:
 
@@ -747,7 +877,7 @@ DOM フォーカスは常に input に維持される（`aria-activedescendant` 
 - 一致しない場合は先頭の有効 Item を active にする
 - 有効 Item が 1 件も無い場合は active なし（null）
 
-候補リストを開いた状態で items が変動した場合は、現在の active value が新 items に残っていれば維持され、残っていなければ先頭の有効 Item にフォールバックする。作成行は入力に合わせて文字列が変わっても同じ行とみなし、アクティブを維持する。
+候補リストを開いた状態で items が変動した場合は、現在の active value が新 items に残っていれば維持され、残っていなければ先頭の有効 Item にフォールバックする。作成行は入力に合わせて文字列が変わっても同じ行とみなし、アクティブを維持する。アクティブな項目が変わらない限り、候補の追加・挿入だけではスクロール位置を動かさない（アクティブな項目より前に候補が挿入された場合も含む）。
 
 ## 未確定入力の取り消し（revert）
 
@@ -774,6 +904,8 @@ DOM フォーカスは常に input に維持される（`aria-activedescendant` 
 - `Combobox.Empty`
 - `Combobox.CreateItem`（表示条件を満たしているときのみ）
 
+`Combobox.LoadMore` は候補ではないため数えない（読み込み中の行を描画していても、`Combobox.LoadMore` だけでは候補リストは開かない）。
+
 いずれも含まれない場合、`isOpen === true` の状態でも候補リストは描画されない。これにより「未入力時は何も書かない」だけで候補リストを抑制できる。さらに `Combobox.Input` の矢印（▼/▲）ボタンは自動で disabled になり、クリックしてもアイコンだけが反応して候補リストは出ない dead click を防ぐ。
 
 ## アクセシビリティ
@@ -796,6 +928,10 @@ DOM フォーカスは常に input に維持される（`aria-activedescendant` 
   - `role="option"` の `<li>` で、`aria-activedescendant` の対象になる（id は内部で採番）。accessible name は `「{text}」を作成`（アイコンは `aria-hidden`）。`aria-selected` は常に `false`
   - 区切り線は `role="presentation"` と `aria-hidden="true"` を付けた `<li>` で、読み上げ・巡回の対象外
   - 作成後に利用側が `value` へ追加すると、`value` の差分から `「{チップの label}」を追加しました` と読み上げる
+- 追加読み込み（`Combobox.LoadMore`）:
+  - 読み込み中の行は `role="presentation"` の `<li>` で、`aria-activedescendant`・キーボード巡回の対象外。読み込み中であることの読み上げ（live region）は行わない
+  - スクロールを使わずに続きを読み込めるよう、末尾の項目での `↓` でも `onLoadMore` を呼ぶ（表示中の候補がすべて無効のときも含む）
+  - 既知の制約: 追加読み込みの開始・失敗・終端（これ以上の候補が無いこと）はスクリーンリーダーに通知されない。`Combobox.LoadMore` を描画しているあいだ `↑` / `↓` が端でループしないことも通知されない。必要な場合は利用側で別途通知する（`aria-live` の領域を用意する等）
 - マウスクリック時の入力フォーカス維持のため、Item / 作成行 / クリアボタン（表示時）/ 矢印ボタンに `onMouseDown.preventDefault` を実装している。
 - 矢印ボタン・クリアボタン（表示時）は `tabIndex={-1}` で Tab キー巡回から除外し、フォーカスを input に集約する。
 
@@ -817,11 +953,17 @@ DOM フォーカスは常に input に維持される（`aria-activedescendant` 
 - `Combobox.HelperMessage` / `Combobox.ErrorMessage` は `TextInput.HelperMessage` / `TextInput.ErrorMessage` をそのまま再エクスポートしている。
 - `Combobox.List` は children を `React.Children.forEach` で走査し、`Combobox.Item` の `value` / `label` 配列を Context 経由で本体に通知する。`Combobox.Item` の children は走査対象に含めない（選択・入力表示はすべて `label` を使うため）。
 - `activeIndex` は items 変動時に **value 基準で再引き当て** する。`useCombobox` 内で active な項目の種別（候補 / 作成行）と `value` を ref に保持し、新 items 内に同じ項目が残っていれば該当 index を active にする（作成行は種別だけで同一とみなす）。残っていない場合は先頭の有効 Item にフォールバックする。
+- active な項目の識別子（種別と `value`）は state としても持ち、`Combobox.Item` / `Combobox.CreateItem` のハイライト判定は index ではなくこの識別子で行う。`activeIndex` は items の更新から 1 描画遅れて引き直されるため、index で判定すると、active な項目より前に候補が挿入されたときに判定が一瞬外れて `scrollIntoView` が再度走る。`aria-activedescendant` とキーボード移動は従来どおり `activeIndex` を使う（id は `value` 由来のため、index がずれても指す要素は同じ）。
 - 作成行の表示判定は `Combobox.List` の描画時に行う（children の走査で得た Item の `label`・`Combobox.Loading` の有無・`checkDuplicate` と、本体の `inputValue`・変換状態・チップの `label` を使う）。表示するときだけ items に `kind: 'create'` の項目を差し込む。判定結果は List 専用の Context で `Combobox.CreateItem` に渡すため、表示の切り替えは同じ描画で反映される。
 - 重複判定に使うチップの `label` は **state**（`chipLabels`）で持つ。`Combobox.Chip` の `useLayoutEffect` から登録し、値が変わったときだけ更新（同じなら同じ Map を返して再描画しない）、unmount・`label` の変化で解除する。layout effect 内の更新は paint 前に同期で再描画されるため、入力・選択 ID を変えずにチップの `label` だけが変わった場合も、作成行の表示にちらつきなく反映される（ref だと再描画が起きず、一致しているのに作成行が残って重複作成できてしまう）。読み上げ用の label 登録（ref）とは別に持つ。
 - 変換状態は `Combobox.Input` の `compositionstart` / `compositionend` で更新する state で、作成直前の再判定用に ref でも即時に追跡する（変換開始の再描画より先に作成行がクリックされても、未確定の文字で作成しない）。
 - `Combobox.CreateItem` の `onCreate` と、`Combobox.List` の判定材料は本体の ref に登録する（items の state にコールバックを入れると、items の浅い比較が毎描画で崩れるため）。作成直前の再判定はこの ref と最新の props から行う。
-- 内部に `inputMode`（`'keyboard' | 'mouse'`）の状態を持ち、キーボード操作で active が変化したときのみ active Item を `scrollIntoView({ block: 'nearest' })` でスクロール表示する。マウスホバーで active が同期する場合はスクロールを発生させない。
+- 内部に `inputMode`（`'keyboard' | 'mouse'`）の状態を持ち、キーボード操作で active な項目が変わったとき（および操作がマウスからキーボードへ切り替わったとき）のみ active Item を `scrollIntoView({ block: 'nearest' })` でスクロール表示する。マウスホバーで active が同期する場合はスクロールを発生させない。候補の追加・挿入で active な項目の index だけが変わった場合もスクロールしない。
+- `Combobox.LoadMore` は、`Combobox.List` が専用の Context で渡すスクロール要素（内側の `<ul>`）に `scroll` リスナー（passive）を付け、スクロール量の計算で下端付近を判定する（IntersectionObserver は使わない）。候補の中身の変化は、items のうち候補行の `value` を並べた文字列の比較で判定する（items は中身が同じでも作り直されるため参照では比較しない。作成行は入力のたびに変わるため含めない）。
+- `Combobox.LoadMore` は「取得の要求」を本体の ref に登録する（登録中は `↑` / `↓` を端で止める）。端の判定と `onLoadMore` の呼び出しは state の更新関数の外で行う（StrictMode で更新関数が 2 回呼ばれても二重に呼ばないため）。
+- `Combobox.LoadMore` の登録解除（unmount）では、`↓` による移動の予約をその場では消さず「取り消し待ち」にする。同じ更新で `Combobox.List` から届く items が前回と変わらなければその時点で取り消し、変わっていれば items の反映時に追加分の先頭への移動を試みてから（移れなくても）取り消す。これにより「最後のページの追加と同時に外れた」場合と「外れた後の別の更新で候補が増えた」場合を区別する（タイマー等は使わない）。
+- キーボードからの `onLoadMore` の呼び出しでも、スクロール用の「前回の呼び出しの後に条件 4 を満たしたか」の記録を消費する（消費しないと、取得中のスクロールで条件を満たしたまま残り、取得失敗後に `isLoading` が戻っただけで再度呼んでしまう）。
+- 候補リストを開いたときのスクロール位置のリセットは layout effect で行う（`Combobox.LoadMore` の開いた直後の判定が、リセット後のスクロール位置を見るようにするため）。
 - 候補リストが open のとき Escape は `event.stopPropagation()` で親要素（Popover / Modal 等）への伝搬を止める。Combobox を内包する Popover / Modal が Escape で同時に閉じる二重 close を防ぐためである。候補リストが closed のときは Escape を素通しする（IME 変換中の Escape は除く。下記参照）。
 - IME 変換中（`isComposing` / `keyCode === 229`）の keydown は `handleKeyDown` の冒頭で判定し、どのキーも Combobox では扱わない。変換中の Escape のみ `event.stopPropagation()` する。Popover は自前の keydown ハンドラで Escape を処理し IME 変換中かを判定しないため、伝搬すると変換の取り消しで Popover まで閉じてしまうためである。変換の取り消し自体を妨げないよう `preventDefault` はしない。
 
@@ -837,6 +979,7 @@ DOM フォーカスは常に input に維持される（`aria-activedescendant` 
 8. 複数選択モードでは、`Combobox.Chip` を **`Combobox.Input` の直接の子** として、`value` の全要素について `value` と同じ順に 1 つずつ描画すること。
 9. 外せない値（`isRemovable={false}`）は、その値の `Combobox.Chip` を必ず描画すること。チップを描画していない値は外せる扱いになる。
 10. `Combobox.CreateItem` の `onCreate` 後、ライブラリは入力をクリアしない。作成が成功したら利用側で `inputValue` を空にすること。作成が非同期の場合は、作成中に `Combobox.Loading` を描画して二重作成を防ぐこと。
+11. `Combobox.LoadMore` は続きがあるあいだだけ描画し、これ以上の候補が無くなったら描画しないこと。描画したままにすると、`↑` / `↓` が端でループせず、下端付近に来るたびに `onLoadMore` が呼ばれる。初回の読み込み中の表示には `Combobox.Loading` を使うこと。
 
 ## スタイルのカスタマイズ
 
@@ -876,6 +1019,14 @@ A: `aria-activedescendant` のターゲット ID が衝突し、キーボード�
 
 A: 利用側で候補配列から除外する（`fruits.filter((fruit) => !value.includes(fruit.value))`）。フィルタリングと同じく利用側の責務。除外しなかった場合は選択中の表示（チェック）になり、選ぶと選択を解除する。
 
+### Q: 候補が多いときに 100 件ずつ出したい
+
+A: `Combobox.LoadMore` を `Combobox.List` の候補の後ろに置く。候補リストの下端に近づいたとき（および末尾の項目で `↓` を押したとき）に `onLoadMore` が呼ばれるので、その中で続きを取得する、または表示件数を増やす。何件ずつ増やすかは利用側で決める（ライブラリは件数を持たない）。続きが無くなったら `Combobox.LoadMore` を描画しない。サーバーから取得する場合は取得中に `isLoading` を `true` にすると、末尾に読み込み中の行が出て、その間は `onLoadMore` が呼ばれない。使用例は [候補の追加読み込み（Combobox.LoadMore）](#候補の追加読み込みcomboboxloadmore) を参照。
+
+### Q: 追加読み込みに失敗したときはどうなる？
+
+A: 候補が増えなければ、ライブラリは `onLoadMore` を自動では再度呼ばない（失敗したまま呼び続けることはない）。利用者が候補リストをスクロールして下端付近からいったん離れて戻すか、末尾の項目で `↓` を押すと再度呼ばれる。エラーの表示は利用側で行う（`Combobox.ErrorMessage` など）。
+
 ### Q: 作成行はいつ出す？
 
 A: 出すかどうかはライブラリが判定するため、利用側は `Combobox.CreateItem` を置くだけでよい。入力（trim 後）が空・IME 変換中・`Combobox.Loading` の描画中・候補の `label` または選択中のチップの `label` と完全一致するときは出ない。大文字小文字・全角半角・かなを同一視したい場合や、候補をサーバーで検索していて画面に出ていない既存データと照合したい場合は `checkDuplicate` を渡す。検索結果が上位 N 件のみで完全一致を含まない API もあり得るため、重複の最終的な防止はサーバー側の検証で行うこと。
@@ -904,6 +1055,7 @@ A: `onClickClearButton` を常に渡し、未入力のときにハンドラで�
 | 2026-10-06 | 複数選択モード（`isMultiple`）と `Combobox.Chip` を追加（長いラベルは 1 行で省略表示。折り返し時の開閉ボタンは最後の行の横）。`Combobox.Input` に `id` / `aria-label` / `aria-labelledby` を追加 | -      |
 | 2026-10-06 | `Combobox.CreateItem`（「「{入力文字}」を作成」行。表示はライブラリが判定、`checkDuplicate` で重複判定を差し替え）を追加                                                                         | -      |
 | 2026-10-13 | `Combobox.Loading` / `Combobox.Empty` に `children`（表示の中身の差し替え。未指定時は既定文言）を追加                                                                                            | -      |
+| 2026-10-13 | `Combobox.LoadMore`（候補の追加読み込み。下端付近・末尾の `↓` で `onLoadMore` を呼ぶ。描画中は `↑` / `↓` が端でループしない）を追加。候補の追加・挿入だけではスクロール位置を動かさないよう修正  | -      |
 | 2026-10-19 | 複数選択でも `onClickClearButton` を指定できるようにした（入力があるか、外せる選択があるときに表示。読み上げ名は入力の有無で切り替え）                                                           | -      |
 | 2026-10-21 | `Combobox.Item` の children が空の配列・空文字のときも `label` を描画するよう修正                                                                                                                | -      |
 | 2026-10-21 | 候補アイテムの色は `isError` で変わらないことに記載を合わせた                                                                                                                                    | -      |

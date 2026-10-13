@@ -5,7 +5,7 @@ import { Children, isValidElement, useCallback, useEffect, useLayoutEffect, useM
 import { List } from '../list/list';
 import type { ComboboxCreateItemProps, ComboboxItemProps, ComboboxListProps } from './combobox.types';
 import type { ComboboxCreateItemContextValue, ComboboxItemMeta } from './combobox-context';
-import { ComboboxCreateItemContextProvider, useComboboxContext } from './combobox-context';
+import { ComboboxCreateItemContextProvider, ComboboxListContextProvider, useComboboxContext } from './combobox-context';
 import { ComboboxCreateItem } from './combobox-create-item';
 import { ComboboxItem } from './combobox-item';
 import { ComboboxEmpty, ComboboxLoading } from './combobox-status';
@@ -159,8 +159,9 @@ export function ComboboxList({ children, maxHeight: maxHeightProp }: ComboboxLis
     setHasOpenableContent(hasContent);
   }, [hasContent, setHasOpenableContent]);
 
-  // scrollable な内側 ul への ref（scrollTop リセット用）
+  // scrollable な内側 ul への ref（scrollTop リセット用。Combobox.LoadMore にも context で渡す）
   const ulRef = useRef<HTMLUListElement | null>(null);
+  const listContextValue = useMemo(() => ({ scrollRef: ulRef }), []);
 
   // Floating UI の floating element として wrapper (List の containerRef) を渡す
   const mergedContainerRef = useCallback(
@@ -170,9 +171,10 @@ export function ComboboxList({ children, maxHeight: maxHeightProp }: ComboboxLis
     [setListRef],
   );
 
-  // open false → true で内側 ul の scrollTop をリセット（前回 scroll 位置を持ち越さない）
+  // open false → true で内側 ul の scrollTop をリセット（前回 scroll 位置を持ち越さない）。
+  // 子（Combobox.LoadMore）の effect がリセット後の scrollTop を見られるよう、layout effect で行う。
   const prevOpenRef = useRef(isOpen);
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!prevOpenRef.current && isOpen && ulRef.current != null) {
       ulRef.current.scrollTop = 0;
     }
@@ -208,7 +210,9 @@ export function ComboboxList({ children, maxHeight: maxHeightProp }: ComboboxLis
           pointerEvents: isVisible ? 'auto' : 'none',
         }}
       >
-        {wrapEnabledCreateItem(children, createItemContextValue)}
+        <ComboboxListContextProvider value={listContextValue}>
+          {wrapEnabledCreateItem(children, createItemContextValue)}
+        </ComboboxListContextProvider>
       </List>
     </FloatingPortal>
   );

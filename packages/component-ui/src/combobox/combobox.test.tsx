@@ -1,7 +1,7 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import type { ReactNode } from 'react';
-import { useMemo, useState } from 'react';
+import type { ComponentProps, ReactNode } from 'react';
+import { StrictMode, useMemo, useState } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { Popover } from '../popover';
@@ -29,6 +29,8 @@ import type { ComboboxInputProps, ComboboxMultipleChangeMeta, ComboboxProps } fr
  * - Combobox.Empty / Combobox.Loading の children: 指定時はその内容、未指定・boolean・null・空文字（それらだけの配列を含む）は既定文言。role / popup の開閉 / 作成行の抑止は不変
  * - Combobox.Input の id / aria-label / aria-labelledby
  * - Combobox.CreateItem: 表示条件（空・変換中・Loading・重複・checkDuplicate）/ 作成 / 作成直前の再検証 / キーボード / a11y
+ * - Combobox.LoadMore: 読み込み中の行の描画 / ↑↓ の端停止と末尾の ↓ での onLoadMore / 取得後に追加分の先頭へ進む（アンカー）/
+ *   ハイライトと aria-activedescendant の一致
  *
  * 注意: popup は常時 DOM にあり visibility で制御するため、Testing Library の
  * `getByRole` にはデフォルトで hidden な要素が除外される。`{ hidden: true }` を渡す。
@@ -357,6 +359,65 @@ function CreatableMultipleCombobox({
   );
 }
 
+const moreFruits: Fruit[] = [
+  { value: 'grape', label: 'ぶどう' },
+  { value: 'banana', label: 'バナナ' },
+];
+
+/**
+ * Combobox.LoadMore 付きの単一選択 Combobox。候補・isLoading・LoadMore の有無は props で与え、
+ * テストから rerender で「取得の完了（候補の追加）」「終端（LoadMore を外す）」を再現する。
+ * - hasCreateItem: Combobox.CreateItem を LoadMore の後ろ（最下部）に置く
+ * - shouldFilter: 入力を含む label で候補を絞り込む
+ * onLoadMore は毎レンダー新しい関数で渡す（利用側がインライン関数で渡す場合の再現）。
+ */
+function LoadMoreCombobox({
+  items = defaultFruits,
+  hasLoadMore = true,
+  isLoading,
+  loadMoreChildren,
+  hasCreateItem = false,
+  shouldFilter = false,
+  onLoadMore,
+}: {
+  items?: (Fruit & { isDisabled?: boolean })[];
+  hasLoadMore?: boolean;
+  isLoading?: boolean;
+  loadMoreChildren?: ReactNode;
+  hasCreateItem?: boolean;
+  shouldFilter?: boolean;
+  onLoadMore?: () => void;
+}) {
+  const [value, setValue] = useState<string | null>(null);
+  const [inputValue, setInputValue] = useState('');
+  const visibleItems = shouldFilter ? items.filter((item) => item.label.includes(inputValue)) : items;
+
+  return (
+    <Combobox
+      value={value}
+      onChange={(next, meta) => {
+        setValue(next);
+        setInputValue(meta?.label ?? '');
+      }}
+      inputValue={inputValue}
+      onInputChange={setInputValue}
+    >
+      <Combobox.Input />
+      <Combobox.List>
+        {visibleItems.map((item) => (
+          <Combobox.Item key={item.value} value={item.value} label={item.label} isDisabled={item.isDisabled} />
+        ))}
+        {hasLoadMore && (
+          <Combobox.LoadMore isLoading={isLoading} onLoadMore={() => onLoadMore?.()}>
+            {loadMoreChildren}
+          </Combobox.LoadMore>
+        )}
+        {hasCreateItem && <Combobox.CreateItem onCreate={() => {}} />}
+      </Combobox.List>
+    </Combobox>
+  );
+}
+
 const getCombobox = () => screen.getByRole('combobox') as HTMLInputElement;
 const getListbox = () => screen.getByRole('listbox', { hidden: true });
 const getOption = (name: string | RegExp) => screen.getByRole('option', { name, hidden: true });
@@ -365,6 +426,15 @@ const getDeleteButton = (label: string) => screen.getByRole('button', { name: `$
 const queryDeleteButton = (label: string) => screen.queryByRole('button', { name: `${label}を削除` });
 const getCreateOption = (text: string) => getOption(`「${text}」を作成`);
 const queryCreateOption = () => screen.queryByRole('option', { name: /を作成$/, hidden: true });
+const getActiveId = () => getCombobox().getAttribute('aria-activedescendant') ?? '';
+// ハイライト（active の左ボーダー）が付いている行
+const getHighlightedOptions = () =>
+  queryOptions().filter((option) => option.classList.contains('border-l-interactive03') === true);
+const expectHighlightToMatchActiveDescendant = () => {
+  const highlighted = getHighlightedOptions();
+  expect(highlighted).toHaveLength(1);
+  expect(highlighted[0]?.id).toBe(getActiveId());
+};
 
 beforeEach(() => {
   // scrollIntoView は jsdom で未実装。spy で検証するため vitest mock を差す
@@ -1160,6 +1230,57 @@ describe('Combobox', () => {
       await user.keyboard('{ArrowDown}');
       // 初期 active への scrollIntoView が呼ばれるはず
       expect(spy).toHaveBeenCalled();
+    });
+
+    it('mouse mode で hover した後、ArrowDown で keyboard mode に戻ると scrollIntoView が呼ばれる', async () => {
+      const user = userEvent.setup();
+      render(<ControlledCombobox />);
+
+      await user.click(getCombobox());
+      await user.hover(getOption('みかん'));
+      const spy = Element.prototype.scrollIntoView as ReturnType<typeof vi.fn>;
+      spy.mockClear();
+
+      await user.keyboard('{ArrowDown}');
+      expect(getActiveId()).toContain('peach');
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it('active の候補行より前に候補が挿入されても scrollIntoView は呼ばれない', async () => {
+      const user = userEvent.setup();
+      const { rerender } = render(<LoadMoreCombobox hasLoadMore={false} />);
+
+      await user.click(getCombobox());
+      await user.keyboard('{ArrowDown}{ArrowDown}');
+      expect(getActiveId()).toContain('peach');
+      const spy = Element.prototype.scrollIntoView as ReturnType<typeof vi.fn>;
+      spy.mockClear();
+
+      // 先頭側に 2 件挿入する（peach の index が 2 → 4 にずれる）
+      rerender(<LoadMoreCombobox hasLoadMore={false} items={[...moreFruits, ...defaultFruits]} />);
+
+      expect(getActiveId()).toContain('peach');
+      expectHighlightToMatchActiveDescendant();
+      expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('作成行が active のとき、その前に候補が追加されても scrollIntoView は呼ばれない', async () => {
+      const user = userEvent.setup();
+      const { rerender } = render(<LoadMoreCombobox hasLoadMore={false} hasCreateItem />);
+
+      await user.click(getCombobox());
+      await user.type(getCombobox(), 'x');
+      await user.keyboard('{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}');
+      expect(getActiveId()).toMatch(/-create-option$/);
+      const spy = Element.prototype.scrollIntoView as ReturnType<typeof vi.fn>;
+      spy.mockClear();
+
+      // 候補は作成行の前に追加される（作成行の index が 4 → 6 にずれる）
+      rerender(<LoadMoreCombobox hasLoadMore={false} hasCreateItem items={[...defaultFruits, ...moreFruits]} />);
+
+      expect(getActiveId()).toMatch(/-create-option$/);
+      expectHighlightToMatchActiveDescendant();
+      expect(spy).not.toHaveBeenCalled();
     });
   });
 
@@ -3245,6 +3366,982 @@ describe('Combobox', () => {
 
         expect([singleWithArray, multipleWithClear, multiple]).toHaveLength(3);
       });
+    });
+  });
+
+  describe('Combobox.LoadMore', () => {
+    const allFruits = [...defaultFruits, ...moreFruits];
+    const toggleButton = () => screen.getByRole('button', { name: '候補を表示' });
+    // 候補行の末尾（メロン）まで進める
+    const moveToLastOption = async (user: ReturnType<typeof userEvent.setup>) => {
+      await user.click(getCombobox());
+      await user.keyboard('{ArrowDown}{ArrowDown}{ArrowDown}');
+      expect(getActiveId()).toContain('melon');
+    };
+    // 「x」を入力して作成行を出し、作成行（最下部）まで進める
+    const moveToCreateOption = async (user: ReturnType<typeof userEvent.setup>) => {
+      await user.click(getCombobox());
+      await user.type(getCombobox(), 'x');
+      await user.keyboard('{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}');
+      expect(getActiveId()).toMatch(/-create-option$/);
+    };
+
+    describe('読み込み中の行', () => {
+      it('isLoading のとき role="presentation" の行に「読み込み中...」を描画する', () => {
+        render(<LoadMoreCombobox isLoading />);
+
+        const row = screen.getByText('読み込み中...').closest('li');
+        expect(row).toHaveAttribute('role', 'presentation');
+        expect(row).not.toHaveAttribute('id');
+        expect(queryOptions()).toHaveLength(defaultFruits.length);
+      });
+
+      it('children を渡すと、既定文言の代わりにその内容を描画する', () => {
+        render(<LoadMoreCombobox isLoading loadMoreChildren="続きを取得しています" />);
+
+        expect(screen.getByText('続きを取得しています').closest('li')).toHaveAttribute('role', 'presentation');
+        expect(screen.queryByText('読み込み中...')).toBeNull();
+      });
+
+      it.each([
+        ['false', false],
+        ['null', null],
+        ['空文字', ''],
+      ])('children が %s のときは既定文言を描画する', (_name, children) => {
+        render(<LoadMoreCombobox isLoading loadMoreChildren={children} />);
+
+        expect(screen.getByText('読み込み中...')).toBeInTheDocument();
+      });
+
+      it('isLoading が false のときは何も描画しない', () => {
+        render(<LoadMoreCombobox loadMoreChildren="続きを取得しています" />);
+
+        expect(screen.queryByText('読み込み中...')).toBeNull();
+        expect(screen.queryByText('続きを取得しています')).toBeNull();
+        expect(getListbox().querySelectorAll('li')).toHaveLength(defaultFruits.length);
+      });
+
+      it('Combobox.LoadMore だけでは popup が開かない（toggle ボタンは disabled）', async () => {
+        const user = userEvent.setup();
+        render(<LoadMoreCombobox items={[]} isLoading />);
+
+        expect(toggleButton()).toBeDisabled();
+        await user.click(getCombobox());
+        expect(getListbox()).toHaveStyle({ visibility: 'hidden' });
+        expect(getCombobox()).not.toHaveAttribute('aria-controls');
+      });
+
+      it('isLoading 中も作成行は消えない', async () => {
+        const user = userEvent.setup();
+        render(<LoadMoreCombobox isLoading hasCreateItem />);
+        await user.click(getCombobox());
+        await user.type(getCombobox(), 'x');
+
+        expect(screen.getByText('読み込み中...')).toBeInTheDocument();
+        expect(getCreateOption('x')).toBeInTheDocument();
+      });
+    });
+
+    describe('↑↓ の端停止と onLoadMore', () => {
+      it('末尾の候補でさらに ↓ を押すと active は動かず、onLoadMore が 1 回呼ばれる', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        await moveToLastOption(user);
+        expect(onLoadMore).not.toHaveBeenCalled();
+
+        await user.keyboard('{ArrowDown}');
+
+        expect(getActiveId()).toContain('melon');
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+      });
+
+      it('isLoading 中は末尾の ↓ で onLoadMore が呼ばれない', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        render(<LoadMoreCombobox isLoading onLoadMore={onLoadMore} />);
+        await moveToLastOption(user);
+
+        await user.keyboard('{ArrowDown}');
+
+        expect(getActiveId()).toContain('melon');
+        expect(onLoadMore).not.toHaveBeenCalled();
+      });
+
+      it('先頭の候補で ↑ を押しても active は動かない（末尾へループしない）', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        await user.click(getCombobox());
+        expect(getActiveId()).toContain('apple');
+
+        await user.keyboard('{ArrowUp}');
+
+        expect(getActiveId()).toContain('apple');
+        expect(onLoadMore).not.toHaveBeenCalled();
+      });
+
+      it('Combobox.LoadMore を外すと、端でループする挙動に戻る', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        const { rerender } = render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        await moveToLastOption(user);
+
+        rerender(<LoadMoreCombobox hasLoadMore={false} onLoadMore={onLoadMore} />);
+
+        await user.keyboard('{ArrowDown}');
+        expect(getActiveId()).toContain('apple');
+        await user.keyboard('{ArrowUp}');
+        expect(getActiveId()).toContain('melon');
+        expect(onLoadMore).not.toHaveBeenCalled();
+      });
+
+      it('作成行が最下部にあるとき、作成行が末尾の項目として扱われる', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        render(<LoadMoreCombobox hasCreateItem onLoadMore={onLoadMore} />);
+        await user.click(getCombobox());
+        await user.type(getCombobox(), 'x');
+
+        // 最後の候補行（メロン）からは作成行へ進むだけで、取得は要求しない
+        await user.keyboard('{ArrowDown}{ArrowDown}{ArrowDown}');
+        expect(getActiveId()).toContain('melon');
+        await user.keyboard('{ArrowDown}');
+        expect(getActiveId()).toMatch(/-create-option$/);
+        expect(onLoadMore).not.toHaveBeenCalled();
+
+        await user.keyboard('{ArrowDown}');
+        expect(getActiveId()).toMatch(/-create-option$/);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+      });
+
+      it('表示中の候補がすべて disabled でも ↓ で onLoadMore が呼ばれ、有効な候補が届くとその先頭が active になる', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        const disabledFruits = defaultFruits.map((item) => ({ ...item, isDisabled: true }));
+        const { rerender } = render(<LoadMoreCombobox items={disabledFruits} onLoadMore={onLoadMore} />);
+        await user.click(getCombobox());
+        expect(getActiveId()).toBe('');
+
+        // ↑ では取得を要求しない
+        await user.keyboard('{ArrowUp}');
+        expect(onLoadMore).not.toHaveBeenCalled();
+
+        await user.keyboard('{ArrowDown}');
+        expect(getActiveId()).toBe('');
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+
+        // 次ページ: 先頭は disabled、その次が有効
+        rerender(
+          <LoadMoreCombobox
+            items={[...disabledFruits, { value: 'grape', label: 'ぶどう', isDisabled: true }, moreFruits[1] as Fruit]}
+            onLoadMore={onLoadMore}
+          />,
+        );
+
+        expect(getActiveId()).toContain('banana');
+        expectHighlightToMatchActiveDescendant();
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+      });
+
+      it('Combobox.LoadMore が無いときは、候補がすべて disabled なら ↓ を押しても何も起きない', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        const disabledFruits = defaultFruits.map((item) => ({ ...item, isDisabled: true }));
+        render(<LoadMoreCombobox hasLoadMore={false} items={disabledFruits} onLoadMore={onLoadMore} />);
+        await user.click(getCombobox());
+
+        await user.keyboard('{ArrowDown}');
+
+        expect(getActiveId()).toBe('');
+        expect(onLoadMore).not.toHaveBeenCalled();
+      });
+
+      it('StrictMode でも末尾の ↓ 1 回につき onLoadMore は 1 回だけ呼ばれる', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        render(
+          <StrictMode>
+            <LoadMoreCombobox onLoadMore={onLoadMore} />
+          </StrictMode>,
+        );
+        await moveToLastOption(user);
+
+        await user.keyboard('{ArrowDown}');
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+        await user.keyboard('{ArrowDown}');
+        expect(onLoadMore).toHaveBeenCalledTimes(2);
+      });
+    });
+
+    describe('取得後の active の遷移', () => {
+      it('末尾の ↓ で取得した候補が追加されると、active が追加分の先頭へ移る', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        const { rerender } = render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        await moveToLastOption(user);
+        await user.keyboard('{ArrowDown}');
+        const spy = Element.prototype.scrollIntoView as ReturnType<typeof vi.fn>;
+        spy.mockClear();
+
+        rerender(<LoadMoreCombobox items={allFruits} onLoadMore={onLoadMore} />);
+
+        expect(getActiveId()).toContain('grape');
+        expectHighlightToMatchActiveDescendant();
+        // active の項目が変わったので、追加分の先頭へスクロールする
+        expect(spy).toHaveBeenCalled();
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+      });
+
+      it('作成行が最下部にあるとき、作成行での ↓ で取得した候補が追加されると追加分の先頭へ移り、取得だけを繰り返さない', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        const { rerender } = render(<LoadMoreCombobox hasCreateItem onLoadMore={onLoadMore} />);
+        await moveToCreateOption(user);
+        await user.keyboard('{ArrowDown}');
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+
+        // 追加候補は作成行の前に入る
+        rerender(<LoadMoreCombobox hasCreateItem items={allFruits} onLoadMore={onLoadMore} />);
+        expect(getActiveId()).toContain('grape');
+        expectHighlightToMatchActiveDescendant();
+
+        // 続く ↓ は追加分を順に進むだけで、作成行に戻るまで取得を要求しない
+        await user.keyboard('{ArrowDown}');
+        expect(getActiveId()).toContain('banana');
+        await user.keyboard('{ArrowDown}');
+        expect(getActiveId()).toMatch(/-create-option$/);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+      });
+
+      it('取得中（isLoading）に作成行で ↓ を押すと onLoadMore は呼ばれないが、取得完了で追加分の先頭へ移る', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        // 先読みで取得が始まっている状態
+        const { rerender } = render(<LoadMoreCombobox hasCreateItem isLoading onLoadMore={onLoadMore} />);
+        await moveToCreateOption(user);
+
+        await user.keyboard('{ArrowDown}');
+        expect(onLoadMore).not.toHaveBeenCalled();
+        expect(getActiveId()).toMatch(/-create-option$/);
+
+        rerender(<LoadMoreCombobox hasCreateItem items={allFruits} onLoadMore={onLoadMore} />);
+
+        expect(getActiveId()).toContain('grape');
+        expectHighlightToMatchActiveDescendant();
+        // 次の ↓ は次ページの取得ではなく、追加分の 2 件目への移動になる
+        await user.keyboard('{ArrowDown}');
+        expect(getActiveId()).toContain('banana');
+        expect(onLoadMore).not.toHaveBeenCalled();
+      });
+
+      it('候補行が無く作成行だけのとき、作成行での ↓ で取得した候補が届くと最初の有効な候補へ移る', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        const { rerender } = render(<LoadMoreCombobox hasCreateItem items={[]} onLoadMore={onLoadMore} />);
+        await user.click(getCombobox());
+        await user.type(getCombobox(), 'x');
+        expect(getActiveId()).toMatch(/-create-option$/);
+
+        await user.keyboard('{ArrowDown}');
+        expect(getActiveId()).toMatch(/-create-option$/);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+
+        rerender(
+          <LoadMoreCombobox
+            hasCreateItem
+            items={[{ value: 'grape', label: 'ぶどう', isDisabled: true }, moreFruits[1] as Fruit]}
+            onLoadMore={onLoadMore}
+          />,
+        );
+        expect(getActiveId()).toContain('banana');
+        expectHighlightToMatchActiveDescendant();
+
+        // 続く ↓ は作成行へ進むだけで、取得は要求しない
+        await user.keyboard('{ArrowDown}');
+        expect(getActiveId()).toMatch(/-create-option$/);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+      });
+
+      it('追加分の先頭が disabled のときは、その次の有効な候補へ移る', async () => {
+        const user = userEvent.setup();
+        const { rerender } = render(<LoadMoreCombobox />);
+        await moveToLastOption(user);
+        await user.keyboard('{ArrowDown}');
+
+        rerender(
+          <LoadMoreCombobox
+            items={[...defaultFruits, { value: 'grape', label: 'ぶどう', isDisabled: true }, moreFruits[1] as Fruit]}
+          />,
+        );
+
+        expect(getActiveId()).toContain('banana');
+      });
+
+      it('末尾の ↓ を伴わずに候補が追加されたとき（スクロールによる取得）は active が動かない', async () => {
+        const user = userEvent.setup();
+        const { rerender } = render(<LoadMoreCombobox />);
+        await moveToLastOption(user);
+
+        rerender(<LoadMoreCombobox items={allFruits} />);
+
+        expect(getActiveId()).toContain('melon');
+        expectHighlightToMatchActiveDescendant();
+      });
+
+      it('取得に失敗して候補が増えなかった後、もう一度 ↓ を押すと再び onLoadMore が呼ばれる', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        const { rerender } = render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        await moveToLastOption(user);
+        await user.keyboard('{ArrowDown}');
+
+        // 取得中 → 失敗（候補は変わらない）
+        rerender(<LoadMoreCombobox isLoading onLoadMore={onLoadMore} />);
+        rerender(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        expect(getActiveId()).toContain('melon');
+
+        await user.keyboard('{ArrowDown}');
+        expect(onLoadMore).toHaveBeenCalledTimes(2);
+
+        rerender(<LoadMoreCombobox items={allFruits} onLoadMore={onLoadMore} />);
+        expect(getActiveId()).toContain('grape');
+      });
+
+      describe('最終ページの追加と同時に Combobox.LoadMore が外れるとき', () => {
+        it.each([
+          ['通常', false],
+          ['StrictMode', true],
+        ])(
+          '末尾の候補での ↓ で取得した最終ページが届くと、active が追加分の先頭へ移る（%s）',
+          async (_name, isStrict) => {
+            const user = userEvent.setup();
+            const renderTree = (props: ComponentProps<typeof LoadMoreCombobox>) =>
+              isStrict ? (
+                <StrictMode>
+                  <LoadMoreCombobox {...props} />
+                </StrictMode>
+              ) : (
+                <LoadMoreCombobox {...props} />
+              );
+            const { rerender } = render(renderTree({}));
+            await moveToLastOption(user);
+            await user.keyboard('{ArrowDown}');
+
+            rerender(renderTree({ hasLoadMore: false, items: allFruits }));
+
+            expect(getActiveId()).toContain('grape');
+            expectHighlightToMatchActiveDescendant();
+            // LoadMore が外れたので、端でループする挙動に戻る
+            await user.keyboard('{ArrowDown}{ArrowDown}');
+            expect(getActiveId()).toContain('apple');
+          },
+        );
+
+        it('作成行が最下部にあるとき、作成行での ↓ で取得した最終ページが届くと、active が追加分の先頭へ移る', async () => {
+          const user = userEvent.setup();
+          const { rerender } = render(<LoadMoreCombobox hasCreateItem />);
+          await moveToCreateOption(user);
+          await user.keyboard('{ArrowDown}');
+
+          rerender(<LoadMoreCombobox hasCreateItem hasLoadMore={false} items={allFruits} />);
+
+          expect(getActiveId()).toContain('grape');
+          expectHighlightToMatchActiveDescendant();
+          // 続く ↓ は追加分を飛ばさずに順に進み、作成行の次で先頭へループする
+          await user.keyboard('{ArrowDown}');
+          expect(getActiveId()).toContain('banana');
+          await user.keyboard('{ArrowDown}');
+          expect(getActiveId()).toMatch(/-create-option$/);
+          await user.keyboard('{ArrowDown}');
+          expect(getActiveId()).toContain('apple');
+        });
+
+        it('候補が増えずに Combobox.LoadMore だけが外れたときは active が動かず、予約も残らない', async () => {
+          const user = userEvent.setup();
+          const { rerender } = render(
+            <StrictMode>
+              <LoadMoreCombobox />
+            </StrictMode>,
+          );
+          await moveToLastOption(user);
+          await user.keyboard('{ArrowDown}');
+
+          rerender(
+            <StrictMode>
+              <LoadMoreCombobox hasLoadMore={false} />
+            </StrictMode>,
+          );
+          expect(getActiveId()).toContain('melon');
+          rerender(
+            <StrictMode>
+              <LoadMoreCombobox hasLoadMore={false} items={allFruits} />
+            </StrictMode>,
+          );
+
+          expect(getActiveId()).toContain('melon');
+        });
+        it('Combobox.LoadMore が外れると同時に候補が変わっても追加が無ければ、後から候補が増えても active は動かない', async () => {
+          const user = userEvent.setup();
+          const { rerender } = render(<LoadMoreCombobox />);
+          await moveToLastOption(user);
+          await user.keyboard('{ArrowDown}');
+          const relabeledFruits = defaultFruits.map((item) => ({ ...item, label: `${item.label}（旬）` }));
+
+          rerender(<LoadMoreCombobox hasLoadMore={false} items={relabeledFruits} />);
+          expect(getActiveId()).toContain('melon');
+          rerender(<LoadMoreCombobox hasLoadMore={false} items={[...relabeledFruits, ...moreFruits]} />);
+
+          expect(getActiveId()).toContain('melon');
+        });
+      });
+
+      describe('移動の予約が取り消されるとき（その後に候補が増えても active は動かない）', () => {
+        it.each([
+          ['Combobox.LoadMore が残っている', true],
+          ['Combobox.LoadMore も同時に外れた', false],
+        ])('候補がいったん空になった（%s）', async (_, hasLoadMore) => {
+          const user = userEvent.setup();
+          const { rerender } = render(<LoadMoreCombobox />);
+          await moveToLastOption(user);
+          await user.keyboard('{ArrowDown}');
+
+          rerender(<LoadMoreCombobox hasLoadMore={hasLoadMore} items={[]} />);
+          rerender(<LoadMoreCombobox hasLoadMore={hasLoadMore} items={allFruits} />);
+
+          // 予約が残っていると、以前の末尾（melon）の直後へ移って先頭側の候補を飛ばす
+          expect(getActiveId()).toContain('apple');
+        });
+
+        it('↑ で active を移した', async () => {
+          const user = userEvent.setup();
+          const { rerender } = render(<LoadMoreCombobox />);
+          await moveToLastOption(user);
+          await user.keyboard('{ArrowDown}');
+
+          await user.keyboard('{ArrowUp}');
+          rerender(<LoadMoreCombobox items={allFruits} />);
+
+          expect(getActiveId()).toContain('peach');
+        });
+
+        it('hover で active を移した', async () => {
+          const user = userEvent.setup();
+          const { rerender } = render(<LoadMoreCombobox />);
+          await moveToLastOption(user);
+          await user.keyboard('{ArrowDown}');
+
+          await user.hover(getOption('みかん'));
+          rerender(<LoadMoreCombobox items={allFruits} />);
+
+          expect(getActiveId()).toContain('orange');
+        });
+
+        it('入力文字を変えた', async () => {
+          const user = userEvent.setup();
+          const { rerender } = render(<LoadMoreCombobox />);
+          await moveToLastOption(user);
+          await user.keyboard('{ArrowDown}');
+
+          await user.keyboard('x');
+          rerender(<LoadMoreCombobox items={allFruits} />);
+
+          expect(getActiveId()).toContain('melon');
+        });
+
+        it('リストを閉じて開き直した', async () => {
+          const user = userEvent.setup();
+          const { rerender } = render(<LoadMoreCombobox />);
+          await moveToLastOption(user);
+          await user.keyboard('{ArrowDown}');
+
+          await user.keyboard('{Escape}');
+          await user.keyboard('{ArrowDown}');
+          expect(getActiveId()).toContain('apple');
+          rerender(<LoadMoreCombobox items={allFruits} />);
+
+          expect(getActiveId()).toContain('apple');
+        });
+
+        it('Combobox.LoadMore が外れた', async () => {
+          const user = userEvent.setup();
+          const { rerender } = render(<LoadMoreCombobox />);
+          await moveToLastOption(user);
+          await user.keyboard('{ArrowDown}');
+
+          rerender(<LoadMoreCombobox hasLoadMore={false} />);
+          rerender(<LoadMoreCombobox items={allFruits} />);
+
+          expect(getActiveId()).toContain('melon');
+        });
+
+        it('複数選択で候補を選んだ', async () => {
+          function MultipleLoadMoreCombobox({ items }: { items: Fruit[] }) {
+            const [value, setValue] = useState<string[]>([]);
+            const [inputValue, setInputValue] = useState('');
+
+            return (
+              <Combobox
+                isMultiple
+                value={value}
+                onChange={setValue}
+                inputValue={inputValue}
+                onInputChange={setInputValue}
+              >
+                <Combobox.Input />
+                <Combobox.List>
+                  {items.map((item) => (
+                    <Combobox.Item key={item.value} value={item.value} label={item.label} />
+                  ))}
+                  <Combobox.LoadMore onLoadMore={() => {}} />
+                </Combobox.List>
+              </Combobox>
+            );
+          }
+          const user = userEvent.setup();
+          const { rerender } = render(<MultipleLoadMoreCombobox items={defaultFruits} />);
+          await moveToLastOption(user);
+          await user.keyboard('{ArrowDown}');
+
+          // 選択済みも候補に残す構成なので、選んだ後も active はメロンのまま
+          await user.keyboard('{Enter}');
+          expect(getOption('メロン')).toHaveAttribute('aria-selected', 'true');
+          rerender(<MultipleLoadMoreCombobox items={allFruits} />);
+
+          expect(getActiveId()).toContain('melon');
+        });
+      });
+    });
+
+    describe('ハイライトと aria-activedescendant', () => {
+      it('候補の挿入・フィルタ・追加分への移動の後も、ハイライトされている行と aria-activedescendant が一致する', async () => {
+        const user = userEvent.setup();
+        const { rerender } = render(<LoadMoreCombobox shouldFilter />);
+
+        await user.click(getCombobox());
+        expectHighlightToMatchActiveDescendant();
+
+        await user.keyboard('{ArrowDown}{ArrowDown}');
+        expect(getActiveId()).toContain('peach');
+        expectHighlightToMatchActiveDescendant();
+
+        // active より前に候補を挿入する
+        rerender(<LoadMoreCombobox shouldFilter items={[...moreFruits, ...defaultFruits]} />);
+        expect(getActiveId()).toContain('peach');
+        expectHighlightToMatchActiveDescendant();
+
+        // フィルタで active が先頭になる（「も」を含むのは「もも」だけ）
+        await user.keyboard('も');
+        expect(queryOptions()).toHaveLength(1);
+        expect(getActiveId()).toContain('peach');
+        expectHighlightToMatchActiveDescendant();
+
+        // 末尾の ↓ → 追加分の先頭へ移る
+        await user.keyboard('{ArrowDown}');
+        rerender(
+          <LoadMoreCombobox
+            shouldFilter
+            items={[...moreFruits, ...defaultFruits, { value: 'plum', label: 'すもも' }]}
+          />,
+        );
+        expect(getActiveId()).toContain('plum');
+        expectHighlightToMatchActiveDescendant();
+      });
+    });
+
+    describe('スクロールによる onLoadMore', () => {
+      // jsdom はレイアウトを計算しないため、内側 ul のスクロール寸法を差し替える。
+      // scrollTop は Combobox.List が open 時に 0 を代入するので書き込み可能にしておく。
+      const setScrollMetrics = (metrics: { scrollHeight?: number; clientHeight?: number; scrollTop?: number }) => {
+        const ul = getListbox();
+        Object.entries(metrics).forEach(([key, value]) => {
+          Object.defineProperty(ul, key, { configurable: true, writable: true, value });
+        });
+
+        return ul;
+      };
+      const scrollListTo = (scrollTop: number) => {
+        fireEvent.scroll(setScrollMetrics({ scrollTop }));
+      };
+      // 全体 1000 / 表示 200。下端付近（残り 200 以下）になるのは scrollTop が 600 以上のとき
+      const longList = { scrollHeight: 1000, clientHeight: 200 };
+      // 全体が 1 画面分に満たない（開いた時点で下端付近）
+      const shortList = { scrollHeight: 100, clientHeight: 200 };
+
+      it('下端付近に入る scroll で 1 回だけ呼ばれ、同じ位置で scroll が続いても呼ばれない', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        setScrollMetrics(longList);
+        await user.click(getCombobox());
+
+        scrollListTo(599);
+        expect(onLoadMore).not.toHaveBeenCalled();
+
+        scrollListTo(600);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+
+        scrollListTo(600);
+        scrollListTo(700);
+        scrollListTo(800);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+      });
+
+      it('下端付近から離れて戻ると、再び呼ばれる', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        setScrollMetrics(longList);
+        await user.click(getCombobox());
+        scrollListTo(700);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+
+        scrollListTo(100);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+        scrollListTo(700);
+
+        expect(onLoadMore).toHaveBeenCalledTimes(2);
+      });
+
+      it('onLoadMore の実行中に scroll イベントが起きても、重ねて呼ばれない', async () => {
+        const user = userEvent.setup();
+        // 呼ばれている最中に、同じ位置で scroll イベントを起こす
+        const onLoadMore = vi.fn(() => {
+          if (onLoadMore.mock.calls.length < 5) {
+            fireEvent.scroll(getListbox());
+          }
+        });
+        render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        setScrollMetrics(longList);
+        await user.click(getCombobox());
+
+        scrollListTo(700);
+
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+      });
+
+      it('isLoading のあいだは scroll で呼ばれない', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        render(<LoadMoreCombobox isLoading onLoadMore={onLoadMore} />);
+        setScrollMetrics(longList);
+        await user.click(getCombobox());
+
+        scrollListTo(700);
+        scrollListTo(100);
+        scrollListTo(700);
+
+        expect(onLoadMore).not.toHaveBeenCalled();
+      });
+
+      it('取得に失敗して候補が増えなかったときは、isLoading が戻っても・親が再レンダーしても呼ばれない', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        const { rerender } = render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        setScrollMetrics(longList);
+        await user.click(getCombobox());
+        scrollListTo(700);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+
+        // 取得中 → 失敗（候補は変わらない）
+        rerender(<LoadMoreCombobox isLoading onLoadMore={onLoadMore} />);
+        rerender(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+
+        // 中身が同じ候補を新しい配列で渡し直す
+        rerender(<LoadMoreCombobox items={defaultFruits.map((item) => ({ ...item }))} onLoadMore={onLoadMore} />);
+        scrollListTo(700);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+      });
+
+      it('キーボード（末尾の ↓）からの取得に失敗したときも、isLoading が戻っただけでは呼ばれない', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        const { rerender } = render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        setScrollMetrics(longList);
+        await user.click(getCombobox());
+        // 下端付近で 1 回呼ばれた後、上へ戻して再び武装した状態にする
+        scrollListTo(700);
+        scrollListTo(100);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+
+        // キーボードで末尾まで進め、さらに ↓ で取得を要求する
+        await user.keyboard('{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}');
+        expect(getActiveId()).toContain('melon');
+        expect(onLoadMore).toHaveBeenCalledTimes(2);
+
+        // 取得中に下端付近へスクロールし（末尾の項目の表示）、候補が増えないまま取得が終わる
+        rerender(<LoadMoreCombobox isLoading onLoadMore={onLoadMore} />);
+        scrollListTo(700);
+        rerender(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+
+        expect(onLoadMore).toHaveBeenCalledTimes(2);
+      });
+
+      it('候補の value の並びが同じなら、label が変わっても再び呼ばれない', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        const { rerender } = render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        setScrollMetrics(longList);
+        await user.click(getCombobox());
+        scrollListTo(700);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+
+        rerender(
+          <LoadMoreCombobox
+            items={defaultFruits.map((item) => ({ ...item, label: `${item.label}（旬）` }))}
+            onLoadMore={onLoadMore}
+          />,
+        );
+        expect(getOption('りんご（旬）')).toBeInTheDocument();
+
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+      });
+
+      it('作成行の文字が変わっただけでは、再び呼ばれない', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        render(<LoadMoreCombobox hasCreateItem onLoadMore={onLoadMore} />);
+        setScrollMetrics(longList);
+        await user.click(getCombobox());
+        scrollListTo(700);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+
+        await user.type(getCombobox(), 'x');
+        expect(getCreateOption('x')).toBeInTheDocument();
+        await user.type(getCombobox(), 'y');
+        expect(getCreateOption('xy')).toBeInTheDocument();
+
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+      });
+
+      describe('開いているリストに Combobox.LoadMore が mount したとき、下端付近なら 1 回だけ呼ばれる', () => {
+        function SelfLoadingCombobox({
+          hasLoadMore,
+          shouldSetLoading,
+          onLoadMore,
+        }: {
+          hasLoadMore: boolean;
+          shouldSetLoading: boolean;
+          onLoadMore: () => void;
+        }) {
+          const [isLoading, setIsLoading] = useState(false);
+
+          return (
+            <LoadMoreCombobox
+              hasLoadMore={hasLoadMore}
+              isLoading={isLoading}
+              onLoadMore={() => {
+                onLoadMore();
+                if (shouldSetLoading) {
+                  setIsLoading(true);
+                }
+              }}
+            />
+          );
+        }
+
+        it.each([
+          ['onLoadMore の中で isLoading を true にする利用側', true, false],
+          ['isLoading を使わない利用側', false, false],
+          ['StrictMode', true, true],
+        ])('%s', async (_name, shouldSetLoading, isStrict) => {
+          const user = userEvent.setup();
+          const onLoadMore = vi.fn();
+          const renderTree = (hasLoadMore: boolean) => {
+            const tree = (
+              <SelfLoadingCombobox
+                hasLoadMore={hasLoadMore}
+                shouldSetLoading={shouldSetLoading}
+                onLoadMore={onLoadMore}
+              />
+            );
+
+            return isStrict ? <StrictMode>{tree}</StrictMode> : tree;
+          };
+          const { rerender } = render(renderTree(false));
+          setScrollMetrics(shortList);
+          await user.click(getCombobox());
+
+          rerender(renderTree(true));
+
+          expect(onLoadMore).toHaveBeenCalledTimes(1);
+        });
+      });
+
+      it('候補が増えた後も下端付近（1 画面分に満たない）なら続けて呼ばれ、active は動かない', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        const { rerender } = render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        setScrollMetrics(shortList);
+        await user.click(getCombobox());
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+        expect(getActiveId()).toContain('apple');
+        const spy = Element.prototype.scrollIntoView as ReturnType<typeof vi.fn>;
+        spy.mockClear();
+
+        rerender(<LoadMoreCombobox items={allFruits} onLoadMore={onLoadMore} />);
+
+        expect(onLoadMore).toHaveBeenCalledTimes(2);
+        expect(getActiveId()).toContain('apple');
+        expectHighlightToMatchActiveDescendant();
+        expect(spy).not.toHaveBeenCalled();
+      });
+
+      it('候補が増えて下端付近でなくなったら、呼ばれない', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        const { rerender } = render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        setScrollMetrics(shortList);
+        await user.click(getCombobox());
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+
+        setScrollMetrics(longList);
+        rerender(<LoadMoreCombobox items={allFruits} onLoadMore={onLoadMore} />);
+
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+      });
+
+      it('開いた直後に下端付近（候補が少ない）なら呼ばれる', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        setScrollMetrics(shortList);
+        expect(onLoadMore).not.toHaveBeenCalled();
+
+        await user.click(getCombobox());
+
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+      });
+
+      it('閉じて開き直したとき、下端付近ならもう一度呼ばれる', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        setScrollMetrics(shortList);
+        await user.click(getCombobox());
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+
+        await user.keyboard('{Escape}');
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+        await user.keyboard('{ArrowDown}');
+
+        expect(onLoadMore).toHaveBeenCalledTimes(2);
+      });
+
+      it('開き直したときは scrollTop が先頭に戻ってから判定する', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        setScrollMetrics(longList);
+        await user.click(getCombobox());
+        scrollListTo(700);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+
+        await user.keyboard('{Escape}');
+        await user.keyboard('{ArrowDown}');
+
+        expect(getListbox().scrollTop).toBe(0);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+      });
+
+      it('閉じているときは呼ばれない', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        setScrollMetrics(longList);
+
+        scrollListTo(700);
+        expect(onLoadMore).not.toHaveBeenCalled();
+
+        // 開いて閉じた後も同じ
+        await user.click(getCombobox());
+        await user.keyboard('{Escape}');
+        scrollListTo(100);
+        scrollListTo(700);
+        expect(onLoadMore).not.toHaveBeenCalled();
+      });
+
+      it('clientHeight が 0 のときは呼ばれない', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        setScrollMetrics({ scrollHeight: 0, clientHeight: 0 });
+        await user.click(getCombobox());
+
+        scrollListTo(0);
+
+        expect(onLoadMore).not.toHaveBeenCalled();
+      });
+
+      it('Combobox.LoadMore を外した後は、scroll しても呼ばれない', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        const { rerender } = render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        setScrollMetrics(longList);
+        await user.click(getCombobox());
+
+        rerender(<LoadMoreCombobox hasLoadMore={false} onLoadMore={onLoadMore} />);
+        scrollListTo(700);
+
+        expect(onLoadMore).not.toHaveBeenCalled();
+      });
+
+      it('作成行を active にしたまま操作を止めると、先読みで候補が増えても続きを読み進めない', async () => {
+        const rowHeight = 32;
+        const pageSize = 20;
+        const createPages = (count: number): Fruit[] =>
+          Array.from({ length: count * pageSize }, (_, i) => ({ value: `item-${i}`, label: `候補${i}` }));
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        const { rerender } = render(<LoadMoreCombobox hasCreateItem items={createPages(1)} onLoadMore={onLoadMore} />);
+
+        // 行数に応じて伸びるリスト（3 行ぶんが見える）と、対象の行が見える位置まで scrollTop を進める scrollIntoView を模擬する
+        const ul = setScrollMetrics({ clientHeight: rowHeight * 3, scrollTop: 0 });
+        Object.defineProperty(ul, 'scrollHeight', { configurable: true, get: () => ul.children.length * rowHeight });
+        Element.prototype.scrollIntoView = vi.fn(function scrollIntoView(this: Element) {
+          const rowBottom = (Array.from(ul.children).indexOf(this) + 1) * rowHeight;
+          if (rowBottom - ul.clientHeight > ul.scrollTop) {
+            ul.scrollTop = rowBottom - ul.clientHeight;
+            fireEvent.scroll(ul);
+          }
+        });
+
+        await user.click(getCombobox());
+        await user.type(getCombobox(), 'x');
+        expect(onLoadMore).not.toHaveBeenCalled();
+
+        // ↓ で作成行（最下部）まで進む。途中で下端付近に入り、先読みが 1 回だけ始まる
+        await user.keyboard('{ArrowDown}'.repeat(pageSize));
+        expect(getActiveId()).toMatch(/-create-option$/);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+
+        // 以降は操作しない。取得が要求されるたびに次のページを足す
+        let loadedPages = 1;
+        for (let i = 0; i < 5 && onLoadMore.mock.calls.length >= loadedPages; i += 1) {
+          loadedPages += 1;
+          rerender(<LoadMoreCombobox hasCreateItem items={createPages(loadedPages)} onLoadMore={onLoadMore} />);
+        }
+
+        expect(loadedPages).toBe(2);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+        expect(getActiveId()).toMatch(/-create-option$/);
+        expectHighlightToMatchActiveDescendant();
+      });
+    });
+
+    it('Combobox.List の外に置くと throw する', () => {
+      // React が出すエラーログを抑える
+      vi.spyOn(console, 'error').mockImplementation(() => {});
+
+      expect(() =>
+        render(
+          <Combobox value={null} onChange={() => {}} inputValue="" onInputChange={() => {}}>
+            <Combobox.Input />
+            <Combobox.LoadMore onLoadMore={() => {}} />
+          </Combobox>,
+        ),
+      ).toThrow('<Combobox.LoadMore> must be used inside <Combobox.List>');
     });
   });
 
