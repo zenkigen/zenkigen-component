@@ -12,6 +12,7 @@ import { ComboboxCreateItem } from './combobox-create-item';
 import { ComboboxInput } from './combobox-input';
 import { ComboboxItem } from './combobox-item';
 import { ComboboxList } from './combobox-list';
+import { ComboboxLoadMore } from './combobox-load-more';
 import { ComboboxEmpty, ComboboxLoading } from './combobox-status';
 import { useCombobox } from './use-combobox';
 
@@ -239,9 +240,11 @@ function ComboboxBase(props: ComboboxProps) {
       registerCreateOnCreate: combobox.registerCreateOnCreate,
       selectCreate: combobox.selectCreate,
       registerFixedValue: combobox.registerFixedValue,
+      registerLoadMore: combobox.registerLoadMore,
       onClickClearButton,
       activeIndex: combobox.activeIndex,
       setActiveIndex: combobox.setActiveIndex,
+      activeItemKey: combobox.activeItemKey,
       inputMode: combobox.inputMode,
       setInputMode: combobox.setInputMode,
       items: combobox.items,
@@ -282,9 +285,11 @@ function ComboboxBase(props: ComboboxProps) {
       combobox.registerCreateOnCreate,
       combobox.selectCreate,
       combobox.registerFixedValue,
+      combobox.registerLoadMore,
       onClickClearButton,
       combobox.activeIndex,
       combobox.setActiveIndex,
+      combobox.activeItemKey,
       combobox.inputMode,
       combobox.setInputMode,
       combobox.items,
@@ -325,6 +330,7 @@ export const Combobox = Object.assign(ComboboxBase, {
   Item: ComboboxItem,
   Chip: ComboboxChip,
   CreateItem: ComboboxCreateItem,
+  LoadMore: ComboboxLoadMore,
   Loading: ComboboxLoading,
   Empty: ComboboxEmpty,
   HelperMessage: TextInputHelperMessage,
