@@ -8,7 +8,7 @@ export function ComboboxItem({ value, label, isDisabled = false, children }: Com
   const { baseId, items, activeIndex, selectedValues, selectValue, setActiveIndex, inputMode, setInputMode } =
     useComboboxContext('Combobox.Item');
 
-  const index = items.findIndex((item) => item.value === value);
+  const index = items.findIndex((item) => item.kind === 'option' && item.value === value);
   const isActive = index !== -1 && activeIndex === index;
   const isSelected = selectedValues.includes(value);
   const id = `${baseId}-option-${value}`;

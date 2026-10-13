@@ -27,6 +27,7 @@ import type { ComboboxInputProps, ComboboxMultipleChangeMeta, ComboboxProps } fr
  * - multiple: 追加 / toggle 削除 / Backspace / revert / aria-multiselectable / aria-live / 型
  * - Combobox.Chip: 描画 / 長いラベルの省略 / ✗ での削除（マウス・キーボード）/ 外せないチップ / フォーカス維持 / blur・Escape / disabled
  * - Combobox.Input の id / aria-label / aria-labelledby
+ * - Combobox.CreateItem: 表示条件（空・変換中・Loading・重複・checkDuplicate）/ 作成 / 作成直前の再検証 / キーボード / a11y
  *
  * 注意: popup は常時 DOM にあり visibility で制御するため、Testing Library の
  * `getByRole` にはデフォルトで hidden な要素が除外される。`{ hidden: true }` を渡す。
@@ -249,12 +250,101 @@ function MultipleComboboxWithChips({
   );
 }
 
+/**
+ * Combobox.CreateItem 付きの複数選択 Combobox。候補は選択済みを除外し、入力（trim）を含む label で絞り込む。
+ * - shouldAddOnCreate: onCreate で候補マスタに追加し value にも追加する（Chip が描画される）
+ * - shouldClearOnCreate: onCreate で入力を空にする
+ * - shouldShowLoadingOnCreate: onCreate 後に Combobox.Loading を描画し続ける（作成中の状態）
+ */
+function CreatableMultipleCombobox({
+  initialValue = [],
+  isLoading = false,
+  checkDuplicate,
+  shouldAddOnCreate = false,
+  shouldClearOnCreate = false,
+  shouldShowLoadingOnCreate = false,
+  onCreate,
+  onChange,
+  onOpenChange,
+  onInputValueChange,
+}: {
+  initialValue?: string[];
+  isLoading?: boolean;
+  checkDuplicate?: (text: string) => boolean;
+  shouldAddOnCreate?: boolean;
+  shouldClearOnCreate?: boolean;
+  shouldShowLoadingOnCreate?: boolean;
+  onCreate?: (text: string) => void;
+  onChange?: (value: string[], meta: ComboboxMultipleChangeMeta) => void;
+  onOpenChange?: (isOpen: boolean) => void;
+  onInputValueChange?: (inputValue: string) => void;
+}) {
+  const [fruits, setFruits] = useState<Fruit[]>(defaultFruits);
+  const [value, setValue] = useState<string[]>(initialValue);
+  const [inputValue, setInputValue] = useState('');
+  const [isCreating, setIsCreating] = useState(false);
+  const keyword = inputValue.trim();
+  const candidates = fruits.filter((fruit) => !value.includes(fruit.value) && fruit.label.includes(keyword));
+
+  const handleCreate = (text: string) => {
+    onCreate?.(text);
+    if (shouldShowLoadingOnCreate) {
+      setIsCreating(true);
+    }
+    if (shouldAddOnCreate) {
+      const created = { value: `created-${text}`, label: text };
+      setFruits((prev) => [...prev, created]);
+      setValue((prev) => [...prev, created.value]);
+    }
+    if (shouldClearOnCreate) {
+      setInputValue('');
+    }
+  };
+
+  return (
+    <Combobox
+      isMultiple
+      value={value}
+      onChange={(next, meta) => {
+        setValue(next);
+        onChange?.(next, meta);
+      }}
+      inputValue={inputValue}
+      onInputChange={(next) => {
+        setInputValue(next);
+        onInputValueChange?.(next);
+      }}
+      onOpenChange={onOpenChange}
+    >
+      <Combobox.Input aria-label="果物">
+        {value.map((selected) => (
+          <Combobox.Chip
+            key={selected}
+            value={selected}
+            label={fruits.find((fruit) => fruit.value === selected)?.label ?? selected}
+          />
+        ))}
+      </Combobox.Input>
+      <Combobox.List>
+        {(isLoading || isCreating) && <Combobox.Loading />}
+        {candidates.map((fruit) => (
+          <Combobox.Item key={fruit.value} value={fruit.value} label={fruit.label} />
+        ))}
+        {candidates.length === 0 && <Combobox.Empty />}
+        <Combobox.CreateItem onCreate={handleCreate} checkDuplicate={checkDuplicate} />
+      </Combobox.List>
+    </Combobox>
+  );
+}
+
 const getCombobox = () => screen.getByRole('combobox') as HTMLInputElement;
 const getListbox = () => screen.getByRole('listbox', { hidden: true });
 const getOption = (name: string | RegExp) => screen.getByRole('option', { name, hidden: true });
 const queryOptions = () => screen.queryAllByRole('option', { hidden: true });
 const getDeleteButton = (label: string) => screen.getByRole('button', { name: `${label}を削除` });
 const queryDeleteButton = (label: string) => screen.queryByRole('button', { name: `${label}を削除` });
+const getCreateOption = (text: string) => getOption(`「${text}」を作成`);
+const queryCreateOption = () => screen.queryByRole('option', { name: /を作成$/, hidden: true });
 
 beforeEach(() => {
   // scrollIntoView は jsdom で未実装。spy で検証するため vitest mock を差す
@@ -2696,6 +2786,453 @@ describe('Combobox', () => {
         const multiple: ComboboxProps = { ...common, isMultiple: true, value: ['apple'] };
 
         expect([singleWithArray, multipleWithClear, multiple]).toHaveLength(3);
+      });
+    });
+  });
+
+  describe('Combobox.CreateItem', () => {
+    const typeText = async (user: ReturnType<typeof userEvent.setup>, text: string) => {
+      await user.click(getCombobox());
+      await user.type(getCombobox(), text);
+    };
+
+    describe('表示条件', () => {
+      it('入力が空のときは表示しない', async () => {
+        const user = userEvent.setup();
+        render(<CreatableMultipleCombobox />);
+        await user.click(getCombobox());
+
+        expect(queryCreateOption()).toBeNull();
+      });
+
+      it('入力が空白のみのときは表示しない', async () => {
+        const user = userEvent.setup();
+        render(<CreatableMultipleCombobox />);
+        await typeText(user, '   ');
+
+        expect(queryCreateOption()).toBeNull();
+      });
+
+      it('候補 Item の label と完全一致するときは表示しない', async () => {
+        const user = userEvent.setup();
+        render(<CreatableMultipleCombobox />);
+        await typeText(user, 'りんご');
+
+        expect(getOption('りんご')).toBeInTheDocument();
+        expect(queryCreateOption()).toBeNull();
+      });
+
+      it('選択中の Chip の label と完全一致するときは表示しない（候補からは除外済み）', async () => {
+        const user = userEvent.setup();
+        render(<CreatableMultipleCombobox initialValue={['apple']} />);
+        await typeText(user, 'りんご');
+
+        expect(screen.queryByRole('option', { name: 'りんご', hidden: true })).toBeNull();
+        expect(queryCreateOption()).toBeNull();
+      });
+
+      it('部分一致のみのときは表示し、文言は trim した入力を使う', async () => {
+        const user = userEvent.setup();
+        render(<CreatableMultipleCombobox />);
+        await typeText(user, ' りん ');
+
+        expect(getOption('りんご')).toBeInTheDocument();
+        expect(getCreateOption('りん')).toBeInTheDocument();
+      });
+
+      it('compositionstart 〜 compositionend の間は表示せず、compositionend 後に表示する', async () => {
+        const user = userEvent.setup();
+        render(<CreatableMultipleCombobox />);
+        await typeText(user, 'ぶどう');
+        expect(getCreateOption('ぶどう')).toBeInTheDocument();
+
+        fireEvent.compositionStart(getCombobox());
+        expect(queryCreateOption()).toBeNull();
+
+        fireEvent.compositionEnd(getCombobox());
+        expect(getCreateOption('ぶどう')).toBeInTheDocument();
+      });
+
+      it('Combobox.Loading の描画中は表示しない', async () => {
+        const user = userEvent.setup();
+        render(<CreatableMultipleCombobox isLoading />);
+        await typeText(user, 'ぶどう');
+
+        expect(screen.getByText('読み込み中...')).toBeInTheDocument();
+        expect(queryCreateOption()).toBeNull();
+      });
+
+      it('checkDuplicate を渡すと既定の判定を置き換える（候補と一致しても false なら表示する）', async () => {
+        const user = userEvent.setup();
+        const checkDuplicate = vi.fn(() => false);
+        render(<CreatableMultipleCombobox checkDuplicate={checkDuplicate} />);
+        await typeText(user, ' りんご ');
+
+        expect(getCreateOption('りんご')).toBeInTheDocument();
+        expect(checkDuplicate).toHaveBeenLastCalledWith('りんご');
+      });
+
+      it('checkDuplicate が true を返すと表示しない', async () => {
+        const user = userEvent.setup();
+        render(<CreatableMultipleCombobox checkDuplicate={(text) => text === 'ぶどう'} />);
+        await typeText(user, 'ぶどう');
+
+        expect(queryCreateOption()).toBeNull();
+      });
+
+      it('非表示のときは区切り線も描画せず、hasOpenableContent にも数えない', async () => {
+        const user = userEvent.setup();
+        const noop = vi.fn();
+        const renderWithInput = (inputValue: string) => (
+          <Combobox isMultiple value={[]} onChange={noop} inputValue={inputValue} onInputChange={noop}>
+            <Combobox.Input aria-label="果物" />
+            <Combobox.List>
+              <Combobox.CreateItem onCreate={noop} />
+            </Combobox.List>
+          </Combobox>
+        );
+        const { rerender } = render(renderWithInput(''));
+        await user.click(getCombobox());
+
+        expect(getListbox().querySelector('li')).toBeNull();
+        expect(getListbox()).toHaveStyle({ visibility: 'hidden' });
+        expect(getCombobox()).toHaveAttribute('aria-expanded', 'false');
+        expect(screen.getByRole('button', { name: '候補を閉じる' })).toBeDisabled();
+
+        rerender(renderWithInput('ぶどう'));
+
+        expect(getCreateOption('ぶどう')).toBeInTheDocument();
+        expect(getListbox()).toHaveStyle({ visibility: 'visible' });
+        expect(getCombobox()).toHaveAttribute('aria-expanded', 'true');
+      });
+    });
+
+    describe('Chip の label との重複判定', () => {
+      const noop = () => {};
+      const renderWithChip = ({
+        value,
+        chipLabel,
+        onCreate = noop,
+      }: {
+        value: string[];
+        chipLabel: string | null;
+        onCreate?: (text: string) => void;
+      }) => (
+        <Combobox isMultiple value={value} onChange={noop} inputValue="新名称" onInputChange={noop} isOpen>
+          <Combobox.Input aria-label="タグ">
+            {chipLabel !== null && <Combobox.Chip value="t1" label={chipLabel} />}
+          </Combobox.Input>
+          <Combobox.List>
+            <Combobox.CreateItem onCreate={onCreate} />
+          </Combobox.List>
+        </Combobox>
+      );
+
+      it('入力・選択 ID を変えずに Chip の label だけを入力と同じに更新すると作成行が消え、Enter でも作成しない', () => {
+        const onCreate = vi.fn();
+        const { rerender } = render(renderWithChip({ value: ['t1'], chipLabel: '旧名称', onCreate }));
+        expect(getCreateOption('新名称')).toBeInTheDocument();
+
+        rerender(renderWithChip({ value: ['t1'], chipLabel: '新名称', onCreate }));
+
+        expect(queryCreateOption()).toBeNull();
+        fireEvent.keyDown(getCombobox(), { key: 'Enter' });
+        expect(onCreate).not.toHaveBeenCalled();
+      });
+
+      it('Chip を unmount すると、その label との重複判定も解除される', () => {
+        const { rerender } = render(renderWithChip({ value: ['t1'], chipLabel: '新名称' }));
+        expect(queryCreateOption()).toBeNull();
+
+        rerender(renderWithChip({ value: ['t1'], chipLabel: null }));
+
+        expect(getCreateOption('新名称')).toBeInTheDocument();
+      });
+
+      it('value に含まれない値の Chip の label とは重複とみなさない', () => {
+        const { rerender } = render(renderWithChip({ value: ['t1'], chipLabel: '新名称' }));
+        expect(queryCreateOption()).toBeNull();
+
+        rerender(renderWithChip({ value: [], chipLabel: '新名称' }));
+
+        expect(getCreateOption('新名称')).toBeInTheDocument();
+      });
+    });
+
+    describe('作成', () => {
+      it('クリックで trim 済みの文字列を onCreate に渡し、onChange / onInputChange は呼ばず、リストは開いたまま', async () => {
+        const user = userEvent.setup();
+        const onCreate = vi.fn();
+        const onChange = vi.fn();
+        const onOpenChange = vi.fn();
+        const onInputValueChange = vi.fn();
+        render(
+          <CreatableMultipleCombobox
+            onCreate={onCreate}
+            onChange={onChange}
+            onOpenChange={onOpenChange}
+            onInputValueChange={onInputValueChange}
+          />,
+        );
+        await typeText(user, ' ぶどう ');
+        onInputValueChange.mockClear();
+        onOpenChange.mockClear();
+
+        await user.click(getCreateOption('ぶどう'));
+
+        expect(onCreate).toHaveBeenCalledTimes(1);
+        expect(onCreate).toHaveBeenCalledWith('ぶどう');
+        expect(onChange).not.toHaveBeenCalled();
+        expect(onInputValueChange).not.toHaveBeenCalled();
+        expect(getCombobox()).toHaveValue(' ぶどう ');
+        expect(onOpenChange).not.toHaveBeenCalledWith(false);
+        expect(getListbox()).toHaveStyle({ visibility: 'visible' });
+      });
+
+      it('Empty と作成行だけのときは作成行が active になり、Enter で onCreate が呼ばれる', async () => {
+        const user = userEvent.setup();
+        const onCreate = vi.fn();
+        render(<CreatableMultipleCombobox onCreate={onCreate} />);
+        await typeText(user, 'ぶどう');
+
+        expect(screen.getByText('一致する情報が見つかりません')).toBeInTheDocument();
+        expect(getCombobox().getAttribute('aria-activedescendant')).toMatch(/-create-option$/);
+        expect(getCreateOption('ぶどう')).toHaveAttribute('id', getCombobox().getAttribute('aria-activedescendant'));
+
+        await user.keyboard('{Enter}');
+
+        expect(onCreate).toHaveBeenCalledWith('ぶどう');
+      });
+
+      it('onCreate 内で value への追加と入力クリアを行うと、Chip が描画され入力が空になる', async () => {
+        const user = userEvent.setup();
+        render(<CreatableMultipleCombobox shouldAddOnCreate shouldClearOnCreate />);
+        await typeText(user, 'ぶどう');
+
+        await user.keyboard('{Enter}');
+
+        expect(getDeleteButton('ぶどう')).toBeInTheDocument();
+        expect(getCombobox()).toHaveValue('');
+        expect(queryCreateOption()).toBeNull();
+      });
+
+      it('入力をクリアしなくても、Chip が追加されると作成行は消える（既定の重複判定）', async () => {
+        const user = userEvent.setup();
+        const onCreate = vi.fn();
+        render(<CreatableMultipleCombobox shouldAddOnCreate onCreate={onCreate} />);
+        await typeText(user, 'ぶどう');
+
+        await user.keyboard('{Enter}');
+
+        expect(getCombobox()).toHaveValue('ぶどう');
+        expect(getDeleteButton('ぶどう')).toBeInTheDocument();
+        expect(queryCreateOption()).toBeNull();
+        await user.keyboard('{Enter}');
+        expect(onCreate).toHaveBeenCalledTimes(1);
+      });
+
+      it('作成中に Combobox.Loading を描画すると作成行が消え、連打しても onCreate は 1 回', async () => {
+        const user = userEvent.setup();
+        const onCreate = vi.fn();
+        render(<CreatableMultipleCombobox shouldShowLoadingOnCreate onCreate={onCreate} />);
+        await typeText(user, 'ぶどう');
+
+        await user.keyboard('{Enter}{Enter}{Enter}');
+
+        expect(onCreate).toHaveBeenCalledTimes(1);
+        expect(screen.getByText('読み込み中...')).toBeInTheDocument();
+        expect(queryCreateOption()).toBeNull();
+      });
+
+      it('作成直前に表示条件を再検証する（再描画前に変換が始まった作成行をクリックしても作成しない）', async () => {
+        const user = userEvent.setup();
+        const onCreate = vi.fn();
+        render(<CreatableMultipleCombobox onCreate={onCreate} />);
+        await typeText(user, 'ぶどう');
+        const createOption = getCreateOption('ぶどう');
+
+        // 1 つの act にまとめ、compositionstart の再描画より先にクリックが届く状況を作る
+        act(() => {
+          fireEvent.compositionStart(getCombobox());
+          fireEvent.click(createOption);
+        });
+
+        expect(onCreate).not.toHaveBeenCalled();
+      });
+
+      it('IME 変換中の Enter では onCreate が呼ばれない', async () => {
+        const user = userEvent.setup();
+        const onCreate = vi.fn();
+        render(<CreatableMultipleCombobox onCreate={onCreate} />);
+        await typeText(user, 'ぶどう');
+
+        fireEvent.compositionStart(getCombobox());
+        fireEvent.keyDown(getCombobox(), { key: 'Enter', isComposing: true });
+
+        expect(onCreate).not.toHaveBeenCalled();
+      });
+
+      it('作成後に利用側が value に追加すると、aria-live に Chip の label で追加通知が出る', async () => {
+        const user = userEvent.setup();
+        const { container } = render(<CreatableMultipleCombobox shouldAddOnCreate shouldClearOnCreate />);
+        await typeText(user, 'ぶどう');
+
+        await user.keyboard('{Enter}');
+
+        expect(container.querySelector('[aria-live="polite"]')).toHaveTextContent('「ぶどう」を追加しました');
+      });
+
+      it('単一選択モードでは onCreate 後にリストを閉じる', async () => {
+        const user = userEvent.setup();
+        const onCreate = vi.fn();
+        const onOpenChange = vi.fn();
+        const SingleCreatable = () => {
+          const [inputValue, setInputValue] = useState('');
+
+          return (
+            <Combobox
+              value={null}
+              onChange={vi.fn()}
+              inputValue={inputValue}
+              onInputChange={setInputValue}
+              onOpenChange={onOpenChange}
+            >
+              <Combobox.Input aria-label="果物" />
+              <Combobox.List>
+                <Combobox.Item value="apple" label="りんご" />
+                <Combobox.CreateItem onCreate={onCreate} />
+              </Combobox.List>
+            </Combobox>
+          );
+        };
+        render(<SingleCreatable />);
+        await typeText(user, 'ぶどう');
+        onOpenChange.mockClear();
+
+        await user.click(getCreateOption('ぶどう'));
+
+        expect(onCreate).toHaveBeenCalledWith('ぶどう');
+        expect(onOpenChange).toHaveBeenCalledWith(false);
+        expect(getListbox()).toHaveStyle({ visibility: 'hidden' });
+      });
+
+      it('複数置いた場合は最初の 1 件のみ有効', async () => {
+        const user = userEvent.setup();
+        const onFirstCreate = vi.fn();
+        const onSecondCreate = vi.fn();
+        const noop = vi.fn();
+        render(
+          <Combobox isMultiple value={[]} onChange={noop} inputValue="ぶどう" onInputChange={noop}>
+            <Combobox.Input aria-label="果物" />
+            <Combobox.List>
+              <Combobox.CreateItem onCreate={onFirstCreate} />
+              <Combobox.CreateItem onCreate={onSecondCreate} />
+            </Combobox.List>
+          </Combobox>,
+        );
+        await user.click(getCombobox());
+
+        expect(screen.getAllByRole('option', { name: '「ぶどう」を作成', hidden: true })).toHaveLength(1);
+        await user.keyboard('{Enter}');
+        expect(onFirstCreate).toHaveBeenCalledWith('ぶどう');
+        expect(onSecondCreate).not.toHaveBeenCalled();
+      });
+
+      it('Fragment で包んだ CreateItem は直接の子の CreateItem と混在しても無効', async () => {
+        const user = userEvent.setup();
+        const onDirectCreate = vi.fn();
+        const onWrappedCreate = vi.fn();
+        const checkDirectDuplicate = vi.fn((text: string) => text === 'ばなな');
+        const checkWrappedDuplicate = vi.fn(() => false);
+        const noop = vi.fn();
+        const renderCombobox = (inputValue: string) => (
+          <Combobox isMultiple value={[]} onChange={noop} inputValue={inputValue} onInputChange={noop}>
+            <Combobox.Input aria-label="果物" />
+            <Combobox.List>
+              <Combobox.Item value="apple" label="りんご" />
+              <Combobox.CreateItem onCreate={onDirectCreate} checkDuplicate={checkDirectDuplicate} />
+              <>
+                <Combobox.CreateItem onCreate={onWrappedCreate} checkDuplicate={checkWrappedDuplicate} />
+              </>
+            </Combobox.List>
+          </Combobox>
+        );
+        const { rerender } = render(renderCombobox('ぶどう'));
+        await user.click(getCombobox());
+
+        expect(screen.getAllByRole('option', { name: '「ぶどう」を作成', hidden: true })).toHaveLength(1);
+        // 作成行の id は DOM 上で一意（aria-activedescendant の参照先が重複しない）
+        expect(document.querySelectorAll('[id$="-create-option"]')).toHaveLength(1);
+        await user.keyboard('{ArrowDown}');
+        await user.keyboard('{Enter}');
+        expect(onDirectCreate).toHaveBeenCalledWith('ぶどう');
+        expect(onWrappedCreate).not.toHaveBeenCalled();
+
+        // 重複判定には直接の子の checkDuplicate が使われる
+        rerender(renderCombobox('ばなな'));
+        expect(checkDirectDuplicate).toHaveBeenCalledWith('ばなな');
+        expect(checkWrappedDuplicate).not.toHaveBeenCalled();
+        expect(screen.queryByRole('option', { name: '「ばなな」を作成', hidden: true })).not.toBeInTheDocument();
+      });
+
+      it('Fragment で包んだ CreateItem だけを置いた場合は作成行を描画せず、候補にも含めない', async () => {
+        const user = userEvent.setup();
+        const onCreate = vi.fn();
+        const noop = vi.fn();
+        render(
+          <Combobox isMultiple value={[]} onChange={noop} inputValue="ぶどう" onInputChange={noop}>
+            <Combobox.Input aria-label="果物" />
+            <Combobox.List>
+              <Combobox.Item value="apple" label="りんご" />
+              <>
+                <Combobox.CreateItem onCreate={onCreate} />
+              </>
+            </Combobox.List>
+          </Combobox>,
+        );
+        await user.click(getCombobox());
+
+        expect(screen.queryByRole('option', { name: '「ぶどう」を作成', hidden: true })).not.toBeInTheDocument();
+        expect(document.querySelectorAll('[id$="-create-option"]')).toHaveLength(0);
+        // ↓ で巡回しても作成行に移らない（items に入っていない）
+        await user.keyboard('{ArrowDown}');
+        expect(getCombobox().getAttribute('aria-activedescendant') ?? '').not.toMatch(/-create-option$/);
+        await user.keyboard('{Enter}');
+        expect(onCreate).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('キーボードとアクセシビリティ', () => {
+      it('↑↓ の巡回に作成行が含まれる', async () => {
+        const user = userEvent.setup();
+        render(<CreatableMultipleCombobox />);
+        // 「ん」を含む候補はりんご・みかん（メロンはカタカナ）
+        await typeText(user, 'ん');
+        const activeId = () => getCombobox().getAttribute('aria-activedescendant') ?? '';
+
+        expect(activeId()).toContain('apple');
+        await user.keyboard('{ArrowDown}');
+        expect(activeId()).toContain('orange');
+        await user.keyboard('{ArrowDown}');
+        expect(activeId()).toMatch(/-create-option$/);
+        await user.keyboard('{ArrowDown}');
+        expect(activeId()).toContain('apple');
+        await user.keyboard('{ArrowUp}');
+        expect(activeId()).toMatch(/-create-option$/);
+      });
+
+      it('区切り線は aria-hidden で、作成行は plus の Icon と「「入力」を作成」を描画する', async () => {
+        const user = userEvent.setup();
+        render(<CreatableMultipleCombobox />);
+        await typeText(user, 'ぶどう');
+        const createOption = getCreateOption('ぶどう');
+
+        const separator = createOption.previousElementSibling;
+        expect(separator).toHaveAttribute('role', 'presentation');
+        expect(separator).toHaveAttribute('aria-hidden', 'true');
+        expect(createOption.querySelector('svg')).not.toBeNull();
+        expect(createOption).toHaveTextContent('「ぶどう」を作成');
+        expect(createOption).toHaveAttribute('aria-selected', 'false');
       });
     });
   });

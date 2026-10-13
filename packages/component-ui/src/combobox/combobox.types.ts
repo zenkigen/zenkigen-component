@@ -93,6 +93,20 @@ export type ComboboxChipProps = {
   isRemovable?: boolean;
 };
 
+/** 候補リストの末尾などに置く「「{入力文字}」を作成」行（`Combobox.List` の直接の子に置く） */
+export type ComboboxCreateItemProps = {
+  /**
+   * 作成行を Enter / クリックで選んだときに呼ばれる。text は入力文字を trim したもの。
+   * ライブラリは onChange も onInputChange も呼ばない（value への追加と、成功時の入力クリアは利用側で行う）。
+   */
+  onCreate: (text: string) => void;
+  /**
+   * 入力文字が既存と重複しているかを判定する同期関数（任意）。true を返すと作成行を出さない。
+   * 指定すると既定の判定（候補 Item の label、または value に含まれる値の Chip の label との完全一致）を置き換える。
+   */
+  checkDuplicate?: (text: string) => boolean;
+};
+
 export type ComboboxListProps = PropsWithChildren<{
   /** 候補リストの最大高さ（Combobox の listMaxHeight を上書き） */
   maxHeight?: CSSProperties['height'];

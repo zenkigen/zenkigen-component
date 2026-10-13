@@ -8,6 +8,7 @@ import { Popup } from '../popup';
 import { Combobox } from './combobox';
 import type {
   ComboboxChangeMeta,
+  ComboboxMultipleChangeMeta,
   ComboboxMultipleProps,
   ComboboxSingleProps,
   ComboboxSize,
@@ -1433,6 +1434,209 @@ export const MultipleWithCustomItem: MultipleStory = {
                 </span>
               </Combobox.Item>
             ))}
+          </Combobox.List>
+        </Combobox>
+      </div>
+    );
+  },
+};
+
+export const MultipleWithCreateItem: MultipleStory = {
+  decorators: [
+    (StoryFn) => (
+      <div style={{ paddingBottom: 280 }}>
+        <StoryFn />
+      </div>
+    ),
+  ],
+  render: function MultipleWithCreateItemRender() {
+    // 果物のマスタ（作成で増える）。選択状態は value（ID の配列）1 つで持ち、チップの表示はマスタから導出する
+    const [fruitMaster, setFruitMaster] = useState(fruits);
+    const [selectedValues, setSelectedValues] = useState<string[]>(['apple']);
+    const [inputText, setInputText] = useState('ベリー');
+    const [isOpen, setIsOpen] = useState(true);
+    const createdCountRef = useRef(0);
+
+    const selectedFruits = selectedValues.flatMap((value) => {
+      const fruit = fruitMaster.find((item) => item.value === value);
+
+      return fruit != null ? [fruit] : [];
+    });
+    const keyword = inputText.trim();
+    const candidates = fruitMaster.filter(
+      (fruit) => !selectedValues.includes(fruit.value) && fruit.label.includes(keyword),
+    );
+
+    // 作成行を出すかどうか（空・変換中・重複）はライブラリが判定する。利用側は作成処理だけを書く
+    const handleCreate = (text: string) => {
+      createdCountRef.current += 1;
+      const created = { value: `created-${createdCountRef.current}`, label: text };
+      setFruitMaster((prev) => [...prev, created]);
+      setSelectedValues((prev) => [...prev, created.value]);
+      // 作成に成功したら利用側で入力を空にする（ライブラリは作成後の入力を触らない）
+      setInputText('');
+    };
+
+    return (
+      <div style={{ width: 360 }}>
+        <Combobox
+          isMultiple
+          value={selectedValues}
+          onChange={(next) => setSelectedValues(next)}
+          inputValue={inputText}
+          onInputChange={setInputText}
+          isOpen={isOpen}
+          onOpenChange={setIsOpen}
+          placeholder="果物を検索・追加"
+          width="100%"
+        >
+          <Combobox.Input aria-label="果物">
+            {selectedFruits.map((fruit) => (
+              <Combobox.Chip key={fruit.value} value={fruit.value} label={fruit.label} />
+            ))}
+            <Combobox.HelperMessage>
+              候補に無い名前を入力すると末尾に作成行が出る。候補・選択中のチップと完全一致するときは出ない
+            </Combobox.HelperMessage>
+          </Combobox.Input>
+          <Combobox.List>
+            {candidates.length === 0 && <Combobox.Empty />}
+            {candidates.map((fruit) => (
+              <Combobox.Item key={fruit.value} value={fruit.value} label={fruit.label} />
+            ))}
+            <Combobox.CreateItem onCreate={handleCreate} />
+          </Combobox.List>
+        </Combobox>
+      </div>
+    );
+  },
+};
+
+type FruitItem = (typeof fruits)[number];
+
+const SEARCH_DELAY_MS = 600;
+const CREATE_DELAY_MS = 800;
+
+export const MultipleAsyncSearch: MultipleStory = {
+  parameters: {
+    // 擬似 API の待ち時間に依存するためスナップショットは撮らない
+    chromatic: { disable: true },
+  },
+  decorators: [
+    (StoryFn) => (
+      <div style={{ paddingBottom: 280 }}>
+        <StoryFn />
+      </div>
+    ),
+  ],
+  render: function MultipleAsyncSearchRender() {
+    // 擬似サーバーのデータ（作成で増える）
+    const serverFruitsRef = useRef<FruitItem[]>([...fruits]);
+    const [selectedValues, setSelectedValues] = useState<string[]>([]);
+    // 検索語が変わると選択済みの label が検索結果から消えるため、選択時に表示情報をキャッシュする
+    const [selectedCache, setSelectedCache] = useState<Map<string, FruitItem>>(new Map());
+    const [inputText, setInputText] = useState('');
+    // 検索結果は、どの検索語に対する結果かと組で持つ
+    const [searchResult, setSearchResult] = useState<{ keyword: string; items: FruitItem[] }>({
+      keyword: '',
+      items: [],
+    });
+    const [isCreating, setIsCreating] = useState(false);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+    const keyword = inputText.trim();
+    // 入力に対する結果がまだ届いていない間は検索中とみなす（古い結果で作成行が一瞬出るのを防ぐ）
+    const isSearching = keyword !== '' && searchResult.keyword !== keyword;
+    const results = isSearching ? [] : searchResult.items;
+
+    // 擬似的な非同期検索
+    useEffect(() => {
+      if (keyword === '') {
+        setSearchResult({ keyword: '', items: [] });
+
+        return;
+      }
+      const timer = setTimeout(() => {
+        setSearchResult({
+          keyword,
+          items: serverFruitsRef.current.filter((fruit) => fruit.label.includes(keyword)),
+        });
+      }, SEARCH_DELAY_MS);
+
+      return () => clearTimeout(timer);
+    }, [keyword]);
+
+    const handleChange = (next: string[], meta: ComboboxMultipleChangeMeta) => {
+      if (meta.type === 'add') {
+        const fruit = results.find((result) => result.value === meta.value);
+        if (fruit != null) {
+          setSelectedCache((prev) => new Map(prev).set(fruit.value, fruit));
+        }
+      }
+      setSelectedValues(next);
+    };
+
+    // 擬似的な非同期作成。名前に「失敗」を含むと失敗する
+    const handleCreate = (text: string) => {
+      setIsCreating(true);
+      setErrorMessage(null);
+      setTimeout(() => {
+        if (text.includes('失敗')) {
+          // 失敗時は入力を残し、そのまま再試行できるようにする
+          setErrorMessage(`「${text}」を作成できませんでした`);
+          setIsCreating(false);
+
+          return;
+        }
+        const created = { value: `created-${serverFruitsRef.current.length}`, label: text };
+        serverFruitsRef.current = [...serverFruitsRef.current, created];
+        setSelectedCache((prev) => new Map(prev).set(created.value, created));
+        setSelectedValues((prev) => [...prev, created.value]);
+        setInputText('');
+        setIsCreating(false);
+      }, CREATE_DELAY_MS);
+    };
+
+    const selectedFruits = selectedValues.flatMap((value) => {
+      const fruit = selectedCache.get(value);
+
+      return fruit != null ? [fruit] : [];
+    });
+    const candidates = results.filter((fruit) => !selectedValues.includes(fruit.value));
+
+    return (
+      <div style={{ width: 360 }}>
+        <Combobox
+          isMultiple
+          value={selectedValues}
+          onChange={handleChange}
+          inputValue={inputText}
+          onInputChange={setInputText}
+          isError={errorMessage !== null}
+          placeholder="入力すると 600ms 後に検索"
+          width="100%"
+        >
+          <Combobox.Input aria-label="果物">
+            {selectedFruits.map((fruit) => (
+              <Combobox.Chip key={fruit.value} value={fruit.value} label={fruit.label} />
+            ))}
+            {errorMessage !== null ? (
+              <Combobox.ErrorMessage>{errorMessage}</Combobox.ErrorMessage>
+            ) : (
+              <Combobox.HelperMessage>
+                検索中・作成中は Loading を出す（作成行が消え、二重作成を防ぐ）。名前に「失敗」を含むと作成に失敗する
+              </Combobox.HelperMessage>
+            )}
+          </Combobox.Input>
+          <Combobox.List>
+            {(isSearching || isCreating) && <Combobox.Loading />}
+            {!isSearching && keyword !== '' && candidates.length === 0 && <Combobox.Empty />}
+            {!isSearching &&
+              candidates.map((fruit) => <Combobox.Item key={fruit.value} value={fruit.value} label={fruit.label} />)}
+            {/* 画面に出ていない既存データとの重複はライブラリが検出できないため、選択済みを除外する前の検索結果で判定する */}
+            <Combobox.CreateItem
+              onCreate={handleCreate}
+              checkDuplicate={(text) => results.some((fruit) => fruit.label === text)}
+            />
           </Combobox.List>
         </Combobox>
       </div>

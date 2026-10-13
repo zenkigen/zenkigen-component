@@ -14,6 +14,7 @@
    - [Combobox.Chip](#comboboxchip)
    - [Combobox.List](#comboboxlist)
    - [Combobox.Item](#comboboxitem)
+   - [Combobox.CreateItem](#comboboxcreateitem)
    - [Combobox.Loading](#comboboxloading)
    - [Combobox.Empty](#comboboxempty)
    - [Combobox.HelperMessage](#comboboxhelpermessage)
@@ -23,6 +24,7 @@
    - [バリアントによるスタイル](#バリアントによるスタイル)
    - [状態に応じたスタイル](#状態に応じたスタイル)
    - [複数選択のチップ](#複数選択のチップ)
+   - [作成行](#作成行)
 7. [使用例](#使用例)
    - [基本的な使用例（同期データ）](#基本的な使用例同期データ)
    - [非同期サジェスト](#非同期サジェスト)
@@ -32,6 +34,7 @@
    - [入力欄に名前を付ける](#入力欄に名前を付ける)
    - [複数選択（チップ）](#複数選択チップ)
    - [外せないチップ](#外せないチップ)
+   - [作成行（Combobox.CreateItem）](#作成行comboboxcreateitem)
 8. [キーボード操作](#キーボード操作)
 9. [未確定入力の取り消し（revert）](#未確定入力の取り消しrevert)
 10. [候補リストの開閉判定ルール](#候補リストの開閉判定ルール)
@@ -155,6 +158,7 @@ const MyComponent = () => {
 | `Combobox.Chip`          | `Combobox.Input` 直下 | 複数選択の選択済みチップ（単一選択では描画しない）          |
 | `Combobox.List`          | `Combobox` 直下       | 候補リスト（FloatingPortal で描画）                         |
 | `Combobox.Item`          | `Combobox.List` 直下  | 個別の候補                                                  |
+| `Combobox.CreateItem`    | `Combobox.List` 直下  | 「「{入力文字}」を作成」行（表示はライブラリが判定）        |
 | `Combobox.Loading`       | `Combobox.List` 直下  | ローディング表示                                            |
 | `Combobox.Empty`         | `Combobox.List` 直下  | 該当候補なし表示                                            |
 | `Combobox.HelperMessage` | `Combobox.Input` 直下 | 補助メッセージ（TextInput.HelperMessage を再エクスポート）  |
@@ -162,7 +166,7 @@ const MyComponent = () => {
 
 ### Combobox.Input
 
-入力欄を描画する。内部で `InternalTextInput` を利用し、末尾に矢印ボタン（▼/▲）と、`Combobox` 本体に `onClickClearButton` が渡されている場合のみクリアボタン（×）を `IconButton` で配置する。children のうち `Combobox.Chip` は複数選択のチップとして入力欄の中（input の前）に描画し、それ以外（HelperMessage / ErrorMessage）は TextInput の children として素通しする。矢印ボタンは **`Combobox.List` 直下に `Combobox.Item` / `Combobox.Loading` / `Combobox.Empty` のいずれも存在しない** とき自動で disabled になり、開いても何も表示されない dead click を防ぐ（`Combobox` 本体の `isDisabled` とも OR で連動）。クリアボタンは `isDisabled` のとき・`inputValue` が空のときも非表示になる。
+入力欄を描画する。内部で `InternalTextInput` を利用し、末尾に矢印ボタン（▼/▲）と、`Combobox` 本体に `onClickClearButton` が渡されている場合のみクリアボタン（×）を `IconButton` で配置する。children のうち `Combobox.Chip` は複数選択のチップとして入力欄の中（input の前）に描画し、それ以外（HelperMessage / ErrorMessage）は TextInput の children として素通しする。矢印ボタンは **`Combobox.List` 直下に `Combobox.Item` / `Combobox.Loading` / `Combobox.Empty` / 表示中の `Combobox.CreateItem` のいずれも存在しない** とき自動で disabled になり、開いても何も表示されない dead click を防ぐ（`Combobox` 本体の `isDisabled` とも OR で連動）。クリアボタンは `isDisabled` のとき・`inputValue` が空のときも非表示になる。
 
 | プロパティ        | 型        | デフォルト値 | 説明                                                                 |
 | ----------------- | --------- | ------------ | -------------------------------------------------------------------- |
@@ -208,7 +212,7 @@ const MyComponent = () => {
 
 ### Combobox.List
 
-候補リストの container。children に `Combobox.Item` / `Combobox.Loading` / `Combobox.Empty` のいずれかが含まれる場合のみ候補リストを表示する。
+候補リストの container。children に `Combobox.Item` / `Combobox.Loading` / `Combobox.Empty` / 表示中の `Combobox.CreateItem` のいずれかが含まれる場合のみ候補リストを表示する。
 
 | プロパティ  | 型                        | デフォルト値                         | 説明                     |
 | ----------- | ------------------------- | ------------------------------------ | ------------------------ |
@@ -243,6 +247,43 @@ children の規約:
   </span>
 </Combobox.Item>
 ```
+
+### Combobox.CreateItem
+
+候補に無い名前を新しく作って選ぶための「「{入力文字}」を作成」行。`Combobox.List` の **直接の子** に置く（通常は末尾）。表示するかどうかはライブラリが判定し、利用側は置いて `onCreate` を渡すだけでよい。
+
+| プロパティ       | 型                          | 必須 | デフォルト値 | 説明                                                                                                                                                                   |
+| ---------------- | --------------------------- | :--: | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `onCreate`       | `(text: string) => void`    |  ✓   | -            | 作成行を `Enter` / クリックで選んだときに呼ばれる。`text` は `inputValue` を trim したもの。ライブラリは `onChange` も `onInputChange` も呼ばない                      |
+| `checkDuplicate` | `(text: string) => boolean` |      | 既定の判定   | 入力文字が既存と重複しているかを判定する **同期** 関数。`true` を返すと作成行を出さない。指定すると既定の判定を **置き換える**（候補との一致も含めて利用側が判定する） |
+
+表示条件（`text = inputValue.trim()`）。すべてを満たすときだけ描画し、候補（キーボード巡回・`aria-activedescendant` の対象）に含める:
+
+1. `text` が空でない（空白のみも出さない）
+2. IME 変換中でない（`compositionstart` 〜 `compositionend` の間は出さない）
+3. `Combobox.Loading` が描画されていない
+4. 重複していない。既定の判定は「`text` が候補の `Combobox.Item` のいずれかの `label`、または `value` に含まれる値の `Combobox.Chip` の `label` と完全一致（`===`）」。`checkDuplicate` を渡した場合はその戻り値で判定する
+
+満たさないときは区切り線も含めて何も描画せず、候補リストの開閉判定（`hasOpenableContent`）にも数えない。
+
+選んだときの動作:
+
+- 実行の直前に表示条件を最新の値でもう一度判定し、満たさなければ何もしない（描画から実行までの間に入力・変換状態・チップの `label` 等が変わった場合の保険）
+- `onCreate(text)` を呼ぶ。`onChange` / `onInputChange` は呼ばない。`value` への追加と、**作成が成功したときの入力のクリアは利用側で行う**（作成の成否はライブラリが知り得ないため。失敗時は入力が残り、そのまま再試行できる）
+- 複数選択モードでは候補リストを開いたままにする。単一選択モードでは閉じる（単一選択での利用は最小限のサポート）
+
+利用側が担うこと:
+
+- 作成処理（API 呼び出し）と、作成した値の `value` への追加・対応する `Combobox.Chip` の描画
+- 作成が非同期の場合は、**作成中に `Combobox.Loading` を描画する**（Loading の描画中は作成行が出ないため、連打による二重作成を防げる）
+- 画面に出ていない既存データとの重複（非同期検索）や、大文字小文字・全角半角・かなの同一視が必要な場合は `checkDuplicate` を渡す
+- 重複の最終的な防止はサーバー側の検証で行う
+
+制約:
+
+- 文言（`「{text}」を作成`）は固定で、差し替える props は無い
+- 1 つの `Combobox.List` に 1 つだけ置く。複数置いた場合は最初の 1 つだけが有効で、2 つ目以降は描画しない
+- `Combobox.List` の直接の子のみを認識する（Fragment やラッパーコンポーネントで包むと認識されない）。認識されなかったものは、直接の子の `Combobox.CreateItem` と併置した場合も含めて何も描画せず、`onCreate` も呼ばれない（有効なのは直接の子として認識された最初の 1 つだけ）
 
 ### Combobox.Loading
 
@@ -305,6 +346,11 @@ children の規約:
 - 無効状態（`isDisabled`）: ✗ を描画せず、チップの文字色を `text-disabled01` にする（形・余白は変えない）。**デザイン確認中の仮の見た目**で、今後変更する可能性がある
 - 外せないチップ（`isRemovable={false}`）: ✗ を描画しない。形・余白・文字色は通常のチップと同じ
 - 長いラベル: チップの最大幅は入力欄の中のチップ領域の幅で、超える場合は文字を 1 行で末尾を「…」で省略する（折り返さない）。✗ は縮めず常に表示する。全文は `title` 属性で確認でき、省略は見た目だけで、スクリーンリーダーには全文が伝わる
+
+### 作成行
+
+- 区切り線（`h-px`、`bg-uiBorder01`、上下 `my-2`）の下に、`plus` アイコン（`small`、`interactive01`）と `「{text}」を作成` のテキスト（`text-interactive01`）を並べる
+- 行の高さ・ハイライト（背景・左ボーダー）は通常の候補と同じ（`List.OptionItem`）。選択中の表示（チェック）は無い
 
 ## 使用例
 
@@ -563,22 +609,55 @@ const selectedFruits = selectedIds.flatMap((id) => {
 
 外せるかどうかは **現在描画されているチップの宣言だけ** で判定する。チップを描画していない値は外せる扱いになるため、外せない値は必ずチップを描画すること。
 
+### 作成行（Combobox.CreateItem）
+
+`Combobox.List` に置くだけで、入力に応じて作成行が表示される。作成後の入力のクリアは利用側で行う。
+
+```typescript
+const handleCreate = async (text: string) => {
+  setIsCreating(true); // 作成中は Loading を描画し、二重作成を防ぐ
+  try {
+    const created = await createFruit(text);
+    setFruits((prev) => [...prev, created]);
+    setSelectedIds((prev) => [...prev, created.value]);
+    setInputText(''); // 成功時のみ入力を空にする
+  } finally {
+    setIsCreating(false);
+  }
+};
+
+<Combobox.List>
+  {isCreating && <Combobox.Loading />}
+  {candidates.length === 0 && <Combobox.Empty />}
+  {candidates.map((fruit) => (
+    <Combobox.Item key={fruit.value} value={fruit.value} label={fruit.label} />
+  ))}
+  <Combobox.CreateItem onCreate={handleCreate} />
+</Combobox.List>
+```
+
+候補をサーバーで検索する場合は、画面に出ていない既存データとの重複をライブラリが検出できないため `checkDuplicate` を渡す。選択済みを候補から除外する前の検索結果で判定する。
+
+```typescript
+<Combobox.CreateItem onCreate={handleCreate} checkDuplicate={(text) => results.some((fruit) => fruit.label === text)} />
+```
+
 ## キーボード操作
 
 DOM フォーカスは常に input に維持される（`aria-activedescendant` 方式）。Item / Loading / Empty クリック時は `onMouseDown.preventDefault` でフォーカスを奪わない。
 
-| キー         | 動作                                                                                                                             |
-| ------------ | -------------------------------------------------------------------------------------------------------------------------------- |
-| `↓`          | アクティブ Item を次の有効 Item へ。閉じている場合は候補リストを開く                                                             |
-| `↑`          | アクティブ Item を前の有効 Item へ。閉じている場合は候補リストを開く                                                             |
-| `Enter`      | アクティブ Item を選択する（候補リストが開いていてアクティブがあるときのみ）。IME 変換確定の Enter は選択しない                  |
-| `Escape`     | 候補リストを閉じ、未確定入力を選択値の表示へ戻す（revert）。候補リストが開いているとき親要素（Popover / Modal 等）へは伝搬しない |
-| `Backspace`  | 複数選択モードで入力が空のときのみ、`value` の末尾から見て最初の外せる値を削除する（下記参照）。入力があるときは通常の文字削除   |
-| `Home`/`End` | input のカーソル移動（標準動作維持）                                                                                             |
-| `Alt + ↓`    | 候補リストを開く                                                                                                                 |
-| `Alt + ↑`    | 候補リストを閉じる                                                                                                               |
+| キー         | 動作                                                                                                                                                          |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `↓`          | アクティブ Item を次の有効 Item へ。閉じている場合は候補リストを開く                                                                                          |
+| `↑`          | アクティブ Item を前の有効 Item へ。閉じている場合は候補リストを開く                                                                                          |
+| `Enter`      | アクティブ Item を選択する（候補リストが開いていてアクティブがあるときのみ）。IME 変換確定の Enter は選択しない。作成行がアクティブのときは `onCreate` を呼ぶ |
+| `Escape`     | 候補リストを閉じ、未確定入力を選択値の表示へ戻す（revert）。候補リストが開いているとき親要素（Popover / Modal 等）へは伝搬しない                              |
+| `Backspace`  | 複数選択モードで入力が空のときのみ、`value` の末尾から見て最初の外せる値を削除する（下記参照）。入力があるときは通常の文字削除                                |
+| `Home`/`End` | input のカーソル移動（標準動作維持）                                                                                                                          |
+| `Alt + ↓`    | 候補リストを開く                                                                                                                                              |
+| `Alt + ↑`    | 候補リストを閉じる                                                                                                                                            |
 
-`↑` / `↓` は **`Combobox.Item` のみを巡回** する。`Combobox.Loading` / `Combobox.Empty` はスキップされる。`isDisabled` の Item もスキップされる。
+`↑` / `↓` は **`Combobox.Item` と表示中の作成行（`Combobox.CreateItem`）を children の順に巡回** する。`Combobox.Loading` / `Combobox.Empty` はスキップされる。`isDisabled` の Item もスキップされる。候補が 0 件で作成行だけがあるとき（`Combobox.Empty` と併記する場合を含む）は、作成行がアクティブになる。
 
 複数選択モードでの違い:
 
@@ -601,7 +680,7 @@ DOM フォーカスは常に input に維持される（`aria-activedescendant` 
 - 一致しない場合は先頭の有効 Item を active にする
 - 有効 Item が 1 件も無い場合は active なし（null）
 
-候補リストを開いた状態で items が変動した場合は、現在の active value が新 items に残っていれば維持され、残っていなければ先頭の有効 Item にフォールバックする。
+候補リストを開いた状態で items が変動した場合は、現在の active value が新 items に残っていれば維持され、残っていなければ先頭の有効 Item にフォールバックする。作成行は入力に合わせて文字列が変わっても同じ行とみなし、アクティブを維持する。
 
 ## 未確定入力の取り消し（revert）
 
@@ -626,13 +705,14 @@ DOM フォーカスは常に input に維持される（`aria-activedescendant` 
 - `Combobox.Item`
 - `Combobox.Loading`
 - `Combobox.Empty`
+- `Combobox.CreateItem`（表示条件を満たしているときのみ）
 
 いずれも含まれない場合、`isOpen === true` の状態でも候補リストは描画されない。これにより「未入力時は何も書かない」だけで候補リストを抑制できる。さらに `Combobox.Input` の矢印（▼/▲）ボタンは自動で disabled になり、クリックしてもアイコンだけが反応して候補リストは出ない dead click を防ぐ。
 
 ## アクセシビリティ
 
 - 入力欄に `role="combobox"` / `aria-expanded` / `aria-autocomplete="list"` を付与する。
-- `aria-expanded` / `aria-controls` は **画面上で候補リストが実際に見えている状態** と連動する。`isOpen === true` でも `Combobox.List` 直下に `Combobox.Item` / `Combobox.Loading` / `Combobox.Empty` のいずれも無い場合（候補リスト非表示）は `aria-expanded=false` / `aria-controls` なし になる。
+- `aria-expanded` / `aria-controls` は **画面上で候補リストが実際に見えている状態** と連動する。`isOpen === true` でも `Combobox.List` 直下に `Combobox.Item` / `Combobox.Loading` / `Combobox.Empty` / 表示中の `Combobox.CreateItem` のいずれも無い場合（候補リスト非表示）は `aria-expanded=false` / `aria-controls` なし になる。
 - 候補リストが開いている間は `aria-controls` で候補リストの `id` を指す。
 - アクティブ Item は `aria-activedescendant` で参照する（DOM フォーカスは input に残る）。
 - 候補リストは `role="listbox"` を持つ `<ul>`、各 Item は `role="option"` を持つ `<li>`。
@@ -645,7 +725,11 @@ DOM フォーカスは常に input に維持される（`aria-activedescendant` 
   - 追加・削除を `aria-live="polite"` の領域（視覚的に非表示）で読み上げる（例: `「りんご」を追加しました` / `「りんご」を削除しました`。複数の変化は「、」で連結）。前回の `value` との差分から生成するため、利用側が `value` を直接書き換えた場合も通知される。初期表示時は読み上げない。
   - 読み上げる label は、チップの `label`（最後に描画されたもの）または追加時に選んだ Item の `label` を使い、どちらも無ければ `value` の文字列を使う。
   - `value` に含まれるがチップを描画していない値は、見えないだけで選択中として扱う（`aria-selected`・再選択での解除・Backspace の削除対象・読み上げの対象に含める）。視覚的なフィードバックは無いため、すべての値のチップを描画すること。
-- マウスクリック時の入力フォーカス維持のため、Item / クリアボタン（表示時）/ 矢印ボタンに `onMouseDown.preventDefault` を実装している。
+- 作成行（`Combobox.CreateItem`）:
+  - `role="option"` の `<li>` で、`aria-activedescendant` の対象になる（id は内部で採番）。accessible name は `「{text}」を作成`（アイコンは `aria-hidden`）。`aria-selected` は常に `false`
+  - 区切り線は `role="presentation"` と `aria-hidden="true"` を付けた `<li>` で、読み上げ・巡回の対象外
+  - 作成後に利用側が `value` へ追加すると、`value` の差分から `「{チップの label}」を追加しました` と読み上げる
+- マウスクリック時の入力フォーカス維持のため、Item / 作成行 / クリアボタン（表示時）/ 矢印ボタンに `onMouseDown.preventDefault` を実装している。
 - 矢印ボタン・クリアボタン（表示時）は `tabIndex={-1}` で Tab キー巡回から除外し、フォーカスを input に集約する。
 
 ## 技術的な詳細
@@ -665,7 +749,11 @@ DOM フォーカスは常に input に維持される（`aria-activedescendant` 
 - `Combobox.Chip` は Tag の内部 prop `isTruncated` を指定する（文字を `truncate` の span で包んで `title` に全文を入れ、Tag に `min-w-0 max-w-full`、✗ に `shrink-0` を付ける）。チップのルート div にも `flex min-w-0 max-w-full` を付け、折り返しコンテナ（flex-wrap）の中で入力欄の幅を超えないようにする。
 - `Combobox.HelperMessage` / `Combobox.ErrorMessage` は `TextInput.HelperMessage` / `TextInput.ErrorMessage` をそのまま再エクスポートしている。
 - `Combobox.List` は children を `React.Children.forEach` で走査し、`Combobox.Item` の `value` / `label` 配列を Context 経由で本体に通知する。`Combobox.Item` の children は走査対象に含めない（選択・入力表示はすべて `label` を使うため）。
-- `activeIndex` は items 変動時に **value 基準で再引き当て** する。`useCombobox` 内で active Item の `value` を ref に保持し、新 items 内に同じ value の有効 Item が残っていれば該当 index を active にする。残っていない場合は先頭の有効 Item にフォールバックする。
+- `activeIndex` は items 変動時に **value 基準で再引き当て** する。`useCombobox` 内で active な項目の種別（候補 / 作成行）と `value` を ref に保持し、新 items 内に同じ項目が残っていれば該当 index を active にする（作成行は種別だけで同一とみなす）。残っていない場合は先頭の有効 Item にフォールバックする。
+- 作成行の表示判定は `Combobox.List` の描画時に行う（children の走査で得た Item の `label`・`Combobox.Loading` の有無・`checkDuplicate` と、本体の `inputValue`・変換状態・チップの `label` を使う）。表示するときだけ items に `kind: 'create'` の項目を差し込む。判定結果は List 専用の Context で `Combobox.CreateItem` に渡すため、表示の切り替えは同じ描画で反映される。
+- 重複判定に使うチップの `label` は **state**（`chipLabels`）で持つ。`Combobox.Chip` の `useLayoutEffect` から登録し、値が変わったときだけ更新（同じなら同じ Map を返して再描画しない）、unmount・`label` の変化で解除する。layout effect 内の更新は paint 前に同期で再描画されるため、入力・選択 ID を変えずにチップの `label` だけが変わった場合も、作成行の表示にちらつきなく反映される（ref だと再描画が起きず、一致しているのに作成行が残って重複作成できてしまう）。読み上げ用の label 登録（ref）とは別に持つ。
+- 変換状態は `Combobox.Input` の `compositionstart` / `compositionend` で更新する state で、作成直前の再判定用に ref でも即時に追跡する（変換開始の再描画より先に作成行がクリックされても、未確定の文字で作成しない）。
+- `Combobox.CreateItem` の `onCreate` と、`Combobox.List` の判定材料は本体の ref に登録する（items の state にコールバックを入れると、items の浅い比較が毎描画で崩れるため）。作成直前の再判定はこの ref と最新の props から行う。
 - 内部に `inputMode`（`'keyboard' | 'mouse'`）の状態を持ち、キーボード操作で active が変化したときのみ active Item を `scrollIntoView({ block: 'nearest' })` でスクロール表示する。マウスホバーで active が同期する場合はスクロールを発生させない。
 - 候補リストが open のとき Escape は `event.stopPropagation()` で親要素（Popover / Modal 等）への伝搬を止める。Combobox を内包する Popover / Modal が Escape で同時に閉じる二重 close を防ぐためである。候補リストが closed のときは Escape を素通しする（IME 変換中の Escape は除く。下記参照）。
 - IME 変換中（`isComposing` / `keyCode === 229`）の keydown は `handleKeyDown` の冒頭で判定し、どのキーも Combobox では扱わない。変換中の Escape のみ `event.stopPropagation()` する。Popover は自前の keydown ハンドラで Escape を処理し IME 変換中かを判定しないため、伝搬すると変換の取り消しで Popover まで閉じてしまうためである。変換の取り消し自体を妨げないよう `preventDefault` はしない。
@@ -681,6 +769,7 @@ DOM フォーカスは常に input に維持される（`aria-activedescendant` 
 7. 同じ `value` を持つ `Combobox.Item` を重複して配置しないこと（aria-activedescendant の一意性が崩れる）。
 8. 複数選択モードでは、`Combobox.Chip` を **`Combobox.Input` の直接の子** として、`value` の全要素について `value` と同じ順に 1 つずつ描画すること。
 9. 外せない値（`isRemovable={false}`）は、その値の `Combobox.Chip` を必ず描画すること。チップを描画していない値は外せる扱いになる。
+10. `Combobox.CreateItem` の `onCreate` 後、ライブラリは入力をクリアしない。作成が成功したら利用側で `inputValue` を空にすること。作成が非同期の場合は、作成中に `Combobox.Loading` を描画して二重作成を防ぐこと。
 
 ## スタイルのカスタマイズ
 
@@ -720,6 +809,10 @@ A: `aria-activedescendant` のターゲット ID が衝突し、キーボード�
 
 A: 利用側で候補配列から除外する（`fruits.filter((fruit) => !value.includes(fruit.value))`）。フィルタリングと同じく利用側の責務。除外しなかった場合は選択中の表示（チェック）になり、選ぶと選択を解除する。
 
+### Q: 作成行はいつ出す？
+
+A: 出すかどうかはライブラリが判定するため、利用側は `Combobox.CreateItem` を置くだけでよい。入力（trim 後）が空・IME 変換中・`Combobox.Loading` の描画中・候補の `label` または選択中のチップの `label` と完全一致するときは出ない。大文字小文字・全角半角・かなを同一視したい場合や、候補をサーバーで検索していて画面に出ていない既存データと照合したい場合は `checkDuplicate` を渡す。検索結果が上位 N 件のみで完全一致を含まない API もあり得るため、重複の最終的な防止はサーバー側の検証で行うこと。
+
 ### Q: チップの順序はどう決まる？
 
 A: 利用側が `Combobox.Chip` を並べた順に描画される。`value` と同じ順に並べること。Backspace は描画順ではなく `value` の末尾を削除するため、順序がずれると見た目の最後のチップと削除されるチップが一致しなくなる。
@@ -742,3 +835,4 @@ A: 複数選択モードにはクリアボタンを用意していない（`onCl
 | 2026-10-05 | `Combobox.Item` に `children`（候補行の見た目のみのカスタムレイアウト）を追加                                                                                                                    | -      |
 | 2026-10-05 | Floating UI の `reference` の取得を input の親要素の参照から `frameRef` 経由に変更（挙動は変わらない）                                                                                           | -      |
 | 2026-10-06 | 複数選択モード（`isMultiple`）と `Combobox.Chip` を追加（長いラベルは 1 行で省略表示。折り返し時の開閉ボタンは最後の行の横）。`Combobox.Input` に `id` / `aria-label` / `aria-labelledby` を追加 | -      |
+| 2026-10-06 | `Combobox.CreateItem`（「「{入力文字}」を作成」行。表示はライブラリが判定、`checkDuplicate` で重複判定を差し替え）を追加                                                                         | -      |

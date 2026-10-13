@@ -8,6 +8,7 @@ import { TextInputHelperMessage } from '../text-input/text-input-helper-message'
 import type { ComboboxProps } from './combobox.types';
 import { ComboboxChip } from './combobox-chip';
 import { ComboboxContextProvider } from './combobox-context';
+import { ComboboxCreateItem } from './combobox-create-item';
 import { ComboboxInput } from './combobox-input';
 import { ComboboxItem } from './combobox-item';
 import { ComboboxList } from './combobox-list';
@@ -231,6 +232,12 @@ function ComboboxBase(props: ComboboxProps) {
       selectValue: combobox.selectValue,
       removeSelected: combobox.removeSelected,
       registerChipLabel: combobox.registerChipLabel,
+      chipLabels: combobox.chipLabels,
+      isComposing: combobox.isComposing,
+      setIsComposing: combobox.setIsComposing,
+      registerCreateJudge: combobox.registerCreateJudge,
+      registerCreateOnCreate: combobox.registerCreateOnCreate,
+      selectCreate: combobox.selectCreate,
       registerFixedValue: combobox.registerFixedValue,
       onClickClearButton,
       activeIndex: combobox.activeIndex,
@@ -268,6 +275,12 @@ function ComboboxBase(props: ComboboxProps) {
       combobox.selectValue,
       combobox.removeSelected,
       combobox.registerChipLabel,
+      combobox.chipLabels,
+      combobox.isComposing,
+      combobox.setIsComposing,
+      combobox.registerCreateJudge,
+      combobox.registerCreateOnCreate,
+      combobox.selectCreate,
       combobox.registerFixedValue,
       onClickClearButton,
       combobox.activeIndex,
@@ -311,6 +324,7 @@ export const Combobox = Object.assign(ComboboxBase, {
   List: ComboboxList,
   Item: ComboboxItem,
   Chip: ComboboxChip,
+  CreateItem: ComboboxCreateItem,
   Loading: ComboboxLoading,
   Empty: ComboboxEmpty,
   HelperMessage: TextInputHelperMessage,

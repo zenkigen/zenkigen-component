@@ -25,7 +25,7 @@ export type UseComboboxReturn = {
   isOpen: boolean;
   setIsOpen: (next: boolean) => void;
   activeIndex: number | null;
-  /** activeIndex を設定（activeValueRef も同期される） */
+  /** activeIndex を設定（activeItemRef も同期される） */
   setActiveIndex: (index: number | null) => void;
   inputMode: ComboboxInputMode;
   setInputMode: (mode: ComboboxInputMode) => void;
@@ -40,8 +40,23 @@ export type UseComboboxReturn = {
   removeSelected: (value: string) => void;
   /** 複数選択: value の末尾から見て最初の外せる値を選択から外す（Backspace 用） */
   removeLastSelected: () => void;
-  /** 複数選択: aria-live 通知用の label を登録する（unmount では削除しない＝最後に知っていた label を保持） */
-  registerChipLabel: (value: string, label: string) => void;
+  /**
+   * 複数選択: Chip の label を登録する。aria-live 通知用（unmount では削除しない＝最後に知っていた label を保持）と、
+   * 作成行の重複判定用（戻り値の関数で解除する）の 2 つに登録する
+   */
+  registerChipLabel: (value: string, label: string) => () => void;
+  /** 複数選択: 描画中の Chip の label（作成行の重複判定用。Chip の追加・削除・label 変更で再描画される） */
+  chipLabels: ReadonlyMap<string, string>;
+  /** IME 変換中か */
+  isComposing: boolean;
+  /** IME 変換の開始・終了を通知する */
+  setIsComposing: (next: boolean) => void;
+  /** 作成行の重複判定の材料を登録する（Combobox.List から） */
+  registerCreateJudge: (judge: ComboboxCreateJudge | null) => void;
+  /** 作成行の onCreate を登録する（Combobox.CreateItem から）。戻り値の関数で解除する */
+  registerCreateOnCreate: (onCreate: (text: string) => void) => () => void;
+  /** 作成行を選ぶ（表示条件を最新の値で再検証し、満たすときだけ onCreate を呼ぶ） */
+  selectCreate: () => void;
   /** 複数選択: 外せない値を登録する。戻り値の関数で登録を解除する */
   registerFixedValue: (value: string) => () => void;
   /**
@@ -50,6 +65,57 @@ export type UseComboboxReturn = {
    */
   liveMessage: { id: number; text: string };
 };
+
+/** 作成行の表示判定のうち、Combobox.List の children から得る材料 */
+export type ComboboxCreateJudge = {
+  /** Combobox.Loading が描画されているか */
+  hasLoading: boolean;
+  /** 候補 Item の label */
+  optionLabels: string[];
+  /** Combobox.CreateItem の checkDuplicate（指定時は既定の重複判定を置き換える） */
+  checkDuplicate?: (text: string) => boolean;
+};
+
+/**
+ * 作成行に出す文字列を求める。出さないときは null。描画時（Combobox.List）と実行直前（selectCreate）で共有する。
+ * - 入力を trim して空 / IME 変換中 / Loading 描画中 / 重複 のときは出さない
+ * - 重複の既定判定: 候補 Item の label、または選択中の値の Chip の label と完全一致（===）
+ */
+export function resolveCreateText({
+  inputValue,
+  isComposing,
+  selectedValues,
+  chipLabels,
+  judge,
+}: {
+  inputValue: string;
+  isComposing: boolean;
+  selectedValues: string[];
+  chipLabels: ReadonlyMap<string, string>;
+  judge: ComboboxCreateJudge;
+}): string | null {
+  const text = inputValue.trim();
+  if (text === '' || isComposing || judge.hasLoading) {
+    return null;
+  }
+  const isDuplicate =
+    judge.checkDuplicate != null
+      ? judge.checkDuplicate(text)
+      : judge.optionLabels.includes(text) || selectedValues.some((value) => chipLabels.get(value) === text);
+
+  return isDuplicate ? null : text;
+}
+
+// active な項目の識別子。作成行は 1 つだけなので kind のみで同一とみなす（入力に合わせて文字列が変わっても active を保つ）。
+type ActiveItemKey = { kind: ComboboxItemMeta['kind']; value: string };
+
+function toActiveItemKey(item: ComboboxItemMeta | undefined): ActiveItemKey | null {
+  return item == null ? null : { kind: item.kind, value: item.value };
+}
+
+function isSameItem(item: ComboboxItemMeta, key: ActiveItemKey): boolean {
+  return item.kind === key.kind && (item.kind === 'create' || item.value === key.value);
+}
 
 // blur / Escape で未確定入力を破棄して戻す先の表示テキストを求める。
 // - 複数選択: 入力は常に未確定の検索テキストなので必ず ''
@@ -133,8 +199,8 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
   const itemsRef = useRef(items);
   itemsRef.current = items;
 
-  // 現 active item の value を ref で保持（items 変更時に再引き当てるための source of truth）
-  const activeValueRef = useRef<string | null>(null);
+  // 現 active item の識別子を ref で保持（items 変更時に再引き当てるための source of truth）
+  const activeItemRef = useRef<ActiveItemKey | null>(null);
 
   // open セッションごとの初期化済みフラグ
   const hasInitializedActiveRef = useRef(false);
@@ -142,15 +208,10 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
   // キー/マウスの操作モード（keyboard 中は scrollIntoView を発動）
   const [inputMode, setInputMode] = useState<ComboboxInputMode>('keyboard');
 
-  // activeIndex と activeValueRef を同期するラッパ
+  // activeIndex と activeItemRef を同期するラッパ
   const setActiveIndex = useCallback((index: number | null) => {
     setActiveIndexState(index);
-    if (index === null) {
-      activeValueRef.current = null;
-    } else {
-      const item = itemsRef.current[index];
-      activeValueRef.current = item?.value ?? null;
-    }
+    activeItemRef.current = index === null ? null : toActiveItemKey(itemsRef.current[index]);
   }, []);
 
   const setItems = useCallback((next: ComboboxItemMeta[]) => {
@@ -159,7 +220,11 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
       if (
         prev.length === next.length &&
         prev.every(
-          (p, i) => p.value === next[i]?.value && p.label === next[i]?.label && p.isDisabled === next[i]?.isDisabled,
+          (p, i) =>
+            p.kind === next[i]?.kind &&
+            p.value === next[i]?.value &&
+            p.label === next[i]?.label &&
+            p.isDisabled === next[i]?.isDisabled,
         )
       ) {
         return prev;
@@ -177,7 +242,7 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
       setInputMode('keyboard');
     } else {
       hasInitializedActiveRef.current = false;
-      activeValueRef.current = null;
+      activeItemRef.current = null;
       setActiveIndexState(null);
     }
   }, [isOpen]);
@@ -190,7 +255,7 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
 
     if (items.length === 0) {
       setActiveIndexState(null);
-      activeValueRef.current = null;
+      activeItemRef.current = null;
 
       return;
     }
@@ -199,10 +264,10 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
     const fallbackToFirstEnabled = () => {
       if (firstEnabledIdx === -1) {
         setActiveIndexState(null);
-        activeValueRef.current = null;
+        activeItemRef.current = null;
       } else {
         setActiveIndexState(firstEnabledIdx);
-        activeValueRef.current = items[firstEnabledIdx]?.value ?? null;
+        activeItemRef.current = toActiveItemKey(items[firstEnabledIdx]);
       }
     };
 
@@ -211,10 +276,12 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
       // 複数選択は選択済みが通常候補から除外されるため、value 一致を優先せず先頭 enabled にする。
       const selectedValue = paramsRef.current.isMultiple === true ? null : paramsRef.current.value;
       const selectedIdx =
-        selectedValue === null ? -1 : items.findIndex((item) => item.value === selectedValue && !item.isDisabled);
+        selectedValue === null
+          ? -1
+          : items.findIndex((item) => item.kind === 'option' && item.value === selectedValue && !item.isDisabled);
       if (selectedIdx !== -1) {
         setActiveIndexState(selectedIdx);
-        activeValueRef.current = items[selectedIdx]?.value ?? null;
+        activeItemRef.current = toActiveItemKey(items[selectedIdx]);
       } else {
         fallbackToFirstEnabled();
       }
@@ -223,10 +290,10 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
       return;
     }
 
-    // 初期化済: 現 active value を新 items から引き直す（index ではなく value で同一性を判定）
-    const currentActiveValue = activeValueRef.current;
-    if (currentActiveValue !== null) {
-      const newIdx = items.findIndex((item) => item.value === currentActiveValue && !item.isDisabled);
+    // 初期化済: 現 active を新 items から引き直す（index ではなく value（作成行は kind）で同一性を判定）
+    const currentActiveItem = activeItemRef.current;
+    if (currentActiveItem !== null) {
+      const newIdx = items.findIndex((item) => isSameItem(item, currentActiveItem) && !item.isDisabled);
       if (newIdx !== -1) {
         setActiveIndexState(newIdx);
 
@@ -244,8 +311,58 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
   // 複数選択: 外せない値の集合。Combobox.Chip（isRemovable=false）が登録し、unmount / 変化時に解除する。
   const fixedValuesRef = useRef<Set<string>>(new Set());
 
+  // 複数選択: 作成行の重複判定用の Chip label（value → label）。描画中の判定に使うため ref ではなく state で持つ。
+  // ref だと、入力・選択 ID を変えずに Chip の label だけが変わったとき再描画されず、完全一致しているのに作成行が残る。
+  // Chip の layout effect から更新するため paint 前に同期で再描画され、作成行の表示がちらつかない。
+  const [chipLabels, setChipLabels] = useState<ReadonlyMap<string, string>>(() => new Map());
+  // 作成直前の再検証（selectCreate）で最新の値を参照するための ref
+  const chipLabelsStateRef = useRef(chipLabels);
+  chipLabelsStateRef.current = chipLabels;
+
   const registerChipLabel = useCallback((value: string, label: string) => {
     chipLabelsRef.current.set(value, label);
+    // 同値なら同じ Map を返して再描画しない
+    setChipLabels((prev) => (prev.get(value) === label ? prev : new Map(prev).set(value, label)));
+
+    return () => {
+      setChipLabels((prev) => {
+        if (prev.get(value) !== label) {
+          return prev;
+        }
+        const next = new Map(prev);
+        next.delete(value);
+
+        return next;
+      });
+    };
+  }, []);
+
+  // IME 変換中か。作成行の表示を切り替えるため state で持ち、作成直前の再検証用に ref でも即時に追跡する
+  // （compositionstart の直後、再描画前に作成行がクリックされても未確定の文字で作成しないため）。
+  const [isComposing, setIsComposingState] = useState(false);
+  const isComposingRef = useRef(false);
+  const setIsComposing = useCallback((next: boolean) => {
+    isComposingRef.current = next;
+    setIsComposingState(next);
+  }, []);
+
+  // 作成行: 重複判定の材料（Combobox.List が登録）と onCreate（Combobox.CreateItem が登録）。
+  // items state にコールバックを入れると setItems の浅い比較が毎レンダー崩れるため、ref で持つ。
+  const createJudgeRef = useRef<ComboboxCreateJudge | null>(null);
+  const createOnCreateRef = useRef<((text: string) => void) | null>(null);
+
+  const registerCreateJudge = useCallback((judge: ComboboxCreateJudge | null) => {
+    createJudgeRef.current = judge;
+  }, []);
+
+  const registerCreateOnCreate = useCallback((onCreate: (text: string) => void) => {
+    createOnCreateRef.current = onCreate;
+
+    return () => {
+      if (createOnCreateRef.current === onCreate) {
+        createOnCreateRef.current = null;
+      }
+    };
   }, []);
 
   const registerFixedValue = useCallback((value: string) => {
@@ -315,12 +432,39 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
       current.onChange(value, { label });
       current.onInputChange(label);
       setIsOpen(false);
-      // isOpen useEffect 側で activeIndex / activeValueRef / hasInitializedActiveRef は null/false にリセットされる
+      // isOpen useEffect 側で activeIndex / activeItemRef / hasInitializedActiveRef は null/false にリセットされる
     },
     [setIsOpen],
   );
 
-  // value も inputValue も空になったら active 系（activeIndex / activeValueRef）をリセットする。
+  // 作成行を選ぶ。描画と実行の間に入力・変換状態・Chip の label 等が変わった場合に備え、
+  // 表示条件を最新の値で再検証し、満たさなければ何もしない。
+  // 作成後、入力は触らない（作成の成否を知っている利用側が成功時にクリアする。失敗時は文字が残り再試行できる）。
+  const selectCreate = useCallback(() => {
+    const current = paramsRef.current;
+    const judge = createJudgeRef.current;
+    const onCreate = createOnCreateRef.current;
+    if (current.isDisabled === true || judge === null || onCreate === null) {
+      return;
+    }
+    const text = resolveCreateText({
+      inputValue: current.inputValue,
+      isComposing: isComposingRef.current,
+      selectedValues: current.isMultiple === true ? current.value : [],
+      chipLabels: chipLabelsStateRef.current,
+      judge,
+    });
+    if (text === null) {
+      return;
+    }
+    onCreate(text);
+    // 複数選択は続けて選べるよう開いたまま。単一選択は確定操作として閉じる
+    if (current.isMultiple !== true) {
+      setIsOpen(false);
+    }
+  }, [setIsOpen]);
+
+  // value も inputValue も空になったら active 系（activeIndex / activeItemRef）をリセットする。
   // クリアボタン経由（利用者が onClickClearButton で onChange(null,null) + onInputChange('') する）に加え、
   // 外部から完全リセットされた場合も含めて state-driven に揃える。
   // - value !== null のまま inputValue だけ空（例: 選択済みのまま Ctrl+A Delete）はリセットしない
@@ -331,7 +475,7 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
   useEffect(() => {
     if (params.isMultiple !== true && params.inputValue === '' && params.value === null) {
       setActiveIndexState(null);
-      activeValueRef.current = null;
+      activeItemRef.current = null;
     }
   }, [params.isMultiple, params.inputValue, params.value]);
 
@@ -385,12 +529,8 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
         nextIndex = enabledIndices[nextPos] ?? null;
       }
 
-      // activeValueRef を同期
-      if (nextIndex === null) {
-        activeValueRef.current = null;
-      } else {
-        activeValueRef.current = currentItems[nextIndex]?.value ?? null;
-      }
+      // activeItemRef を同期
+      activeItemRef.current = nextIndex === null ? null : toActiveItemKey(currentItems[nextIndex]);
 
       return nextIndex;
     });
@@ -472,7 +612,12 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
         }
         event.preventDefault();
         const item = items[activeIndex];
-        if (item != null && !item.isDisabled) {
+        if (item == null || item.isDisabled) {
+          return;
+        }
+        if (item.kind === 'create') {
+          selectCreate();
+        } else {
           selectValue(item.value, item.label);
         }
 
@@ -491,7 +636,17 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
         }
       }
     },
-    [isOpen, activeIndex, items, moveActive, setIsOpen, selectValue, revertInputToCommitted, removeLastSelected],
+    [
+      isOpen,
+      activeIndex,
+      items,
+      moveActive,
+      setIsOpen,
+      selectValue,
+      selectCreate,
+      revertInputToCommitted,
+      removeLastSelected,
+    ],
   );
 
   return {
@@ -512,6 +667,12 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
     removeSelected,
     removeLastSelected,
     registerChipLabel,
+    chipLabels,
+    isComposing,
+    setIsComposing,
+    registerCreateJudge,
+    registerCreateOnCreate,
+    selectCreate,
     registerFixedValue,
     liveMessage,
   };
