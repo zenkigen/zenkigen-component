@@ -159,8 +159,8 @@ const MyComponent = () => {
 | `Combobox.List`          | `Combobox` 直下       | 候補リスト（FloatingPortal で描画）                         |
 | `Combobox.Item`          | `Combobox.List` 直下  | 個別の候補                                                  |
 | `Combobox.CreateItem`    | `Combobox.List` 直下  | 「「{入力文字}」を作成」行（表示はライブラリが判定）        |
-| `Combobox.Loading`       | `Combobox.List` 直下  | ローディング表示                                            |
-| `Combobox.Empty`         | `Combobox.List` 直下  | 該当候補なし表示                                            |
+| `Combobox.Loading`       | `Combobox.List` 直下  | ローディング表示（children で文言を差し替え可能）           |
+| `Combobox.Empty`         | `Combobox.List` 直下  | 該当候補なし表示（children で文言を差し替え可能）           |
 | `Combobox.HelperMessage` | `Combobox.Input` 直下 | 補助メッセージ（TextInput.HelperMessage を再エクスポート）  |
 | `Combobox.ErrorMessage`  | `Combobox.Input` 直下 | エラーメッセージ（TextInput.ErrorMessage を再エクスポート） |
 
@@ -287,11 +287,41 @@ children の規約:
 
 ### Combobox.Loading
 
-ローディング表示用。中央寄せのテキストとして固定文言 `読み込み中...` を描画する。`role="presentation"` で配置され、キーボード巡回対象外。props は取らない（children / 文言差し替えは現時点では非対応）。
+ローディング表示用。中央寄せのテキストとして children を描画する。children を省略した場合は既定文言 `読み込み中...` を描画する。`role="presentation"` で配置され、キーボード巡回対象外。
+
+| プロパティ | 型          | 必須 | デフォルト値    | 説明                                                  |
+| ---------- | ----------- | :--: | --------------- | ----------------------------------------------------- |
+| `children` | `ReactNode` |      | `読み込み中...` | 表示の中身。未指定時は既定文言「読み込み中...」を描画 |
+
+children の規約は `Combobox.Empty` と共通（下記「Combobox.Empty」参照）。
 
 ### Combobox.Empty
 
-該当なし表示用。中央寄せのテキストとして固定文言 `一致する情報が見つかりません` を描画する。`role="presentation"` で配置され、キーボード巡回対象外。props は取らない（children / 文言差し替えは現時点では非対応）。
+該当なし表示用。中央寄せのテキストとして children を描画する。children を省略した場合は既定文言 `一致する情報が見つかりません` を描画する。`role="presentation"` で配置され、キーボード巡回対象外。
+
+| プロパティ | 型          | 必須 | デフォルト値                   | 説明                                                                 |
+| ---------- | ----------- | :--: | ------------------------------ | -------------------------------------------------------------------- |
+| `children` | `ReactNode` |      | `一致する情報が見つかりません` | 表示の中身。未指定時は既定文言「一致する情報が見つかりません」を描画 |
+
+children の規約（`Combobox.Loading` / `Combobox.Empty` 共通）:
+
+- **テキストまたはインライン要素を渡す**。文言のほか、アイコンや強調などのインライン要素を置ける。
+- **インタラクティブ要素を置かない**。リンク・ボタンなどは置けない。フォーカスは常に入力欄にあり、この行はキーボード巡回の対象外のため、キーボードで到達できない。
+- **高さは 1 行固定**（`size` に応じた行の高さ）。はみ出した分は末尾を省略する（折り返さない）。
+- **boolean・空文字は未指定の扱い**。`{条件 && '文言'}` の `false` や、変数経由の空文字 `''` が渡った場合は既定文言を描画する（空の行にはならない）。
+
+状態に応じて文言を切り替える場合は、利用側で条件分岐して出し分ける（例: 入力前 / 検索 0 件 / ローディング）。
+
+```tsx
+<Combobox.List>
+  {isLoading && <Combobox.Loading>果物を検索中...</Combobox.Loading>}
+  {!isLoading && inputText.length === 0 && <Combobox.Empty>果物の名前を入力してください</Combobox.Empty>}
+  {!isLoading && inputText.length > 0 && results.length === 0 && (
+    <Combobox.Empty>一致する果物が見つかりません</Combobox.Empty>
+  )}
+  {!isLoading && results.map((opt) => <Combobox.Item key={opt.value} value={opt.value} label={opt.label} />)}
+</Combobox.List>
+```
 
 ### Combobox.HelperMessage
 
@@ -836,3 +866,4 @@ A: 複数選択モードにはクリアボタンを用意していない（`onCl
 | 2026-10-05 | Floating UI の `reference` の取得を input の親要素の参照から `frameRef` 経由に変更（挙動は変わらない）                                                                                           | -      |
 | 2026-10-06 | 複数選択モード（`isMultiple`）と `Combobox.Chip` を追加（長いラベルは 1 行で省略表示。折り返し時の開閉ボタンは最後の行の横）。`Combobox.Input` に `id` / `aria-label` / `aria-labelledby` を追加 | -      |
 | 2026-10-06 | `Combobox.CreateItem`（「「{入力文字}」を作成」行。表示はライブラリが判定、`checkDuplicate` で重複判定を差し替え）を追加                                                                         | -      |
+| 2026-10-13 | `Combobox.Loading` / `Combobox.Empty` に `children`（表示の中身の差し替え。未指定時は既定文言）を追加                                                                                            | -      |
