@@ -5,11 +5,13 @@ import type { ComboboxItemProps } from './combobox.types';
 import { useComboboxContext } from './combobox-context';
 
 export function ComboboxItem({ value, label, isDisabled = false, children }: ComboboxItemProps) {
-  const { baseId, items, activeIndex, selectedValues, selectValue, setActiveIndex, inputMode, setInputMode } =
+  const { baseId, items, activeItemKey, selectedValues, selectValue, setActiveIndex, inputMode, setInputMode } =
     useComboboxContext('Combobox.Item');
 
   const index = items.findIndex((item) => item.kind === 'option' && item.value === value);
-  const isActive = index !== -1 && activeIndex === index;
+  // index ではなく項目の同一性で判定する。active より前に候補が挿入されて index がずれても isActive が瞬断せず、
+  // 下の scrollIntoView が「active の項目そのものが変わったとき」だけ発火する。
+  const isActive = activeItemKey !== null && activeItemKey.kind === 'option' && activeItemKey.value === value;
   const isSelected = selectedValues.includes(value);
   const id = `${baseId}-option-${value}`;
 

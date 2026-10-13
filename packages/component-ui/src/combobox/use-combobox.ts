@@ -27,6 +27,8 @@ export type UseComboboxReturn = {
   activeIndex: number | null;
   /** activeIndex を設定（activeItemRef も同期される） */
   setActiveIndex: (index: number | null) => void;
+  /** active な項目の識別子。候補の追加・挿入で index がずれても変わらない（Item / CreateItem のハイライト判定用） */
+  activeItemKey: ComboboxActiveItemKey | null;
   inputMode: ComboboxInputMode;
   setInputMode: (mode: ComboboxInputMode) => void;
   items: ComboboxItemMeta[];
@@ -59,6 +61,8 @@ export type UseComboboxReturn = {
   selectCreate: () => void;
   /** 複数選択: 外せない値を登録する。戻り値の関数で登録を解除する */
   registerFixedValue: (value: string) => () => void;
+  /** 追加読み込みの要求を登録する（Combobox.LoadMore から。null で解除） */
+  registerLoadMore: (request: (() => void) | null) => void;
   /**
    * 複数選択: aria-live 領域に出すメッセージ（value の差分から生成。単一選択では常に空）。
    * id は通知ごとに増える連番。同じ文言が続いても別の通知として描画し直すために使う。
@@ -106,15 +110,39 @@ export function resolveCreateText({
   return isDuplicate ? null : text;
 }
 
-// active な項目の識別子。作成行は 1 つだけなので kind のみで同一とみなす（入力に合わせて文字列が変わっても active を保つ）。
-type ActiveItemKey = { kind: ComboboxItemMeta['kind']; value: string };
+// 末尾の ↓ による移動の予約。after: その value の候補行の直後の有効な候補行へ / first: 最初の有効な候補行へ（候補行が無かったとき）。
+// isExpiring: Combobox.LoadMore が外れた後の予約。次の候補の更新で移動を試みたら（移れなくても）取り消す。
+type LoadMoreAnchor = ({ kind: 'after'; value: string } | { kind: 'first' }) & { isExpiring?: boolean };
 
-function toActiveItemKey(item: ComboboxItemMeta | undefined): ActiveItemKey | null {
+// active な項目の識別子。作成行は 1 つだけなので kind のみで同一とみなす（入力に合わせて文字列が変わっても active を保つ）。
+export type ComboboxActiveItemKey = { kind: ComboboxItemMeta['kind']; value: string };
+
+function toActiveItemKey(item: ComboboxItemMeta | undefined): ComboboxActiveItemKey | null {
   return item == null ? null : { kind: item.kind, value: item.value };
 }
 
-function isSameItem(item: ComboboxItemMeta, key: ActiveItemKey): boolean {
-  return item.kind === key.kind && (item.kind === 'create' || item.value === key.value);
+type ComboboxItemIdentity = Pick<ComboboxItemMeta, 'kind' | 'value'>;
+
+function isSameItem(a: ComboboxItemIdentity | null, b: ComboboxItemIdentity | null): boolean {
+  if (a === null || b === null) {
+    return a === b;
+  }
+
+  return a.kind === b.kind && (a.kind === 'create' || a.value === b.value);
+}
+
+// items の浅い比較（setItems のループ更新の回避と、候補が実際に変わったかの判定に使う）
+function isSameItems(prev: ComboboxItemMeta[], next: ComboboxItemMeta[]): boolean {
+  return (
+    prev.length === next.length &&
+    prev.every(
+      (p, i) =>
+        p.kind === next[i]?.kind &&
+        p.value === next[i]?.value &&
+        p.label === next[i]?.label &&
+        p.isDisabled === next[i]?.isDisabled,
+    )
+  );
 }
 
 // blur / Escape で未確定入力を破棄して戻す先の表示テキストを求める。
@@ -200,7 +228,28 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
   itemsRef.current = items;
 
   // 現 active item の識別子を ref で保持（items 変更時に再引き当てるための source of truth）
-  const activeItemRef = useRef<ActiveItemKey | null>(null);
+  const activeItemRef = useRef<ComboboxActiveItemKey | null>(null);
+  // 同じ識別子を state でも持つ（Item / CreateItem のハイライト判定用）。activeIndex は items の更新から
+  // 1 レンダー遅れて引き直されるため、index で判定すると active より前に候補が挿入されたときに判定が瞬断する。
+  const [activeItemKey, setActiveItemKey] = useState<ComboboxActiveItemKey | null>(null);
+  // 現在の activeIndex（moveActive が state updater の外で端を判定するために参照する）
+  const activeIndexRef = useRef<number | null>(null);
+
+  // 追加読み込み（Combobox.LoadMore）の要求。登録されているあいだ ↑↓ は端でループしない。
+  const loadMoreRef = useRef<(() => void) | null>(null);
+  // 末尾の項目で ↓ が押されたときの、最後の候補行（↓ による移動の予約）。
+  // 候補が増えてこの行の直後に有効な候補行が現れたら、active をそこへ移す。
+  // 候補行が 1 件も無かった（作成行だけだった）ときは、最初の有効な候補行へ移す。
+  const loadMoreAnchorRef = useRef<LoadMoreAnchor | null>(null);
+
+  // 解除（Combobox.LoadMore が外れた）時、予約はその場では消さない。最終ページの追加と同時に外れた場合に
+  // 追加分の先頭へ移れるよう、同じ更新で届く候補（setItems）を待ってから取り消す。
+  const registerLoadMore = useCallback((request: (() => void) | null) => {
+    loadMoreRef.current = request;
+    if (request === null && loadMoreAnchorRef.current !== null) {
+      loadMoreAnchorRef.current = { ...loadMoreAnchorRef.current, isExpiring: true };
+    }
+  }, []);
 
   // open セッションごとの初期化済みフラグ
   const hasInitializedActiveRef = useRef(false);
@@ -208,30 +257,36 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
   // キー/マウスの操作モード（keyboard 中は scrollIntoView を発動）
   const [inputMode, setInputMode] = useState<ComboboxInputMode>('keyboard');
 
-  // activeIndex と activeItemRef を同期するラッパ
-  const setActiveIndex = useCallback((index: number | null) => {
+  // active を更新する唯一の経路。index（aria-activedescendant・キーボード移動用）と
+  // 識別子（activeItemRef / activeItemKey）を必ず同時に更新し、両者が食い違わないようにする。
+  // sourceItems は index を引く対象（items の effect からは、その effect が見ている items を渡す）。
+  const commitActive = useCallback((index: number | null, sourceItems: ComboboxItemMeta[] = itemsRef.current) => {
+    const key = index === null ? null : toActiveItemKey(sourceItems[index]);
+    activeIndexRef.current = index;
+    activeItemRef.current = key;
     setActiveIndexState(index);
-    activeItemRef.current = index === null ? null : toActiveItemKey(itemsRef.current[index]);
+    // 同じ項目なら同じ参照を返して再描画しない（作成行は入力に合わせて文字列が変わっても同じ項目）
+    setActiveItemKey((prev) => (isSameItem(prev, key) ? prev : key));
   }, []);
 
-  const setItems = useCallback((next: ComboboxItemMeta[]) => {
-    setItemsState((prev) => {
-      // 浅い比較でループ更新を避ける
-      if (
-        prev.length === next.length &&
-        prev.every(
-          (p, i) =>
-            p.kind === next[i]?.kind &&
-            p.value === next[i]?.value &&
-            p.label === next[i]?.label &&
-            p.isDisabled === next[i]?.isDisabled,
-        )
-      ) {
-        return prev;
-      }
+  // activeIndex と activeItemRef を同期するラッパ（hover 等。↓ による移動の予約は取り消す）
+  const setActiveIndex = useCallback(
+    (index: number | null) => {
+      loadMoreAnchorRef.current = null;
+      commitActive(index);
+    },
+    [commitActive],
+  );
 
-      return next;
-    });
+  const setItems = useCallback((next: ComboboxItemMeta[]) => {
+    // Combobox.LoadMore が外れた更新で候補が変わらなかったら、残しておいた予約をここで取り消す
+    // （候補が変わった場合は、下の items の effect が移動を試みてから取り消す）。
+    // state の更新関数は StrictMode で 2 回呼ばれるため、その外で判定する。
+    if (loadMoreAnchorRef.current?.isExpiring === true && isSameItems(itemsRef.current, next)) {
+      loadMoreAnchorRef.current = null;
+    }
+    // 浅い比較でループ更新を避ける
+    setItemsState((prev) => (isSameItems(prev, next) ? prev : next));
   }, []);
 
   // isOpen の切替を検知
@@ -242,10 +297,15 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
       setInputMode('keyboard');
     } else {
       hasInitializedActiveRef.current = false;
-      activeItemRef.current = null;
-      setActiveIndexState(null);
+      loadMoreAnchorRef.current = null;
+      commitActive(null);
     }
-  }, [isOpen]);
+  }, [isOpen, commitActive]);
+
+  // 入力文字が変わったら、↓ による移動の予約を取り消す（下の items の effect より先に評価する）
+  useEffect(() => {
+    loadMoreAnchorRef.current = null;
+  }, [params.inputValue]);
 
   // items 変更 + open 状態 → 初期化 or value 再引き当て
   useEffect(() => {
@@ -254,8 +314,10 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
     }
 
     if (items.length === 0) {
-      setActiveIndexState(null);
-      activeItemRef.current = null;
+      // 候補がいったん空になったら、↓ による移動の予約も取り消す（予約した行が消えたのと同じ。
+      // 残すと、後で届いた候補に以前の末尾が含まれていた場合に、その直後へ移って先頭側の候補を飛ばす）
+      loadMoreAnchorRef.current = null;
+      commitActive(null);
 
       return;
     }
@@ -263,11 +325,9 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
     const firstEnabledIdx = items.findIndex((item) => !item.isDisabled);
     const fallbackToFirstEnabled = () => {
       if (firstEnabledIdx === -1) {
-        setActiveIndexState(null);
-        activeItemRef.current = null;
+        commitActive(null);
       } else {
-        setActiveIndexState(firstEnabledIdx);
-        activeItemRef.current = toActiveItemKey(items[firstEnabledIdx]);
+        commitActive(firstEnabledIdx, items);
       }
     };
 
@@ -280,8 +340,7 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
           ? -1
           : items.findIndex((item) => item.kind === 'option' && item.value === selectedValue && !item.isDisabled);
       if (selectedIdx !== -1) {
-        setActiveIndexState(selectedIdx);
-        activeItemRef.current = toActiveItemKey(items[selectedIdx]);
+        commitActive(selectedIdx, items);
       } else {
         fallbackToFirstEnabled();
       }
@@ -290,19 +349,45 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
       return;
     }
 
-    // 初期化済: 現 active を新 items から引き直す（index ではなく value（作成行は kind）で同一性を判定）
+    // 初期化済: 末尾の ↓ による移動の予約があり、その行の直後に有効な候補行が現れていれば、そこ（追加分の先頭）へ進める。
+    // まだ現れていなければ（取得中・取得失敗）予約は残す。予約した行が候補から消えていたら予約を取り消す。
+    // 候補行が無いときの予約（first）は、最初の有効な候補行が現れたらそこへ進める。
+    const anchor = loadMoreAnchorRef.current;
+    if (anchor !== null) {
+      const anchorIdx =
+        anchor.kind === 'first' ? -1 : items.findIndex((item) => item.kind === 'option' && item.value === anchor.value);
+      if (anchor.kind === 'after' && anchorIdx === -1) {
+        loadMoreAnchorRef.current = null;
+      } else {
+        const nextIdx = items.findIndex(
+          (item, index) => index > anchorIdx && item.kind === 'option' && !item.isDisabled,
+        );
+        if (nextIdx !== -1) {
+          loadMoreAnchorRef.current = null;
+          commitActive(nextIdx, items);
+
+          return;
+        }
+        // Combobox.LoadMore が外れた後の予約は、移れなかったらここで取り消す（後の更新には持ち越さない）
+        if (anchor.isExpiring === true) {
+          loadMoreAnchorRef.current = null;
+        }
+      }
+    }
+
+    // 現 active を新 items から引き直す（index ではなく value（作成行は kind）で同一性を判定）
     const currentActiveItem = activeItemRef.current;
     if (currentActiveItem !== null) {
       const newIdx = items.findIndex((item) => isSameItem(item, currentActiveItem) && !item.isDisabled);
       if (newIdx !== -1) {
-        setActiveIndexState(newIdx);
+        commitActive(newIdx, items);
 
         return;
       }
     }
     // 残っていない（フィルタで落ちた / disabled 化）→ 先頭 enabled にフォールバック
     fallbackToFirstEnabled();
-  }, [items, isOpen]);
+  }, [items, isOpen, commitActive]);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -406,6 +491,8 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
   const selectValue = useCallback(
     (value: string, label: string) => {
       const current = paramsRef.current;
+      // 選択は ↓ による移動の予約を取り消す
+      loadMoreAnchorRef.current = null;
       if (current.isMultiple === true) {
         // 複数選択: 選択済みなら外し（toggle）、未選択なら追加する。リストは閉じない。
         if (current.value.includes(value)) {
@@ -457,6 +544,7 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
     if (text === null) {
       return;
     }
+    loadMoreAnchorRef.current = null;
     onCreate(text);
     // 複数選択は続けて選べるよう開いたまま。単一選択は確定操作として閉じる
     if (current.isMultiple !== true) {
@@ -474,10 +562,9 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
   // - 複数選択では行わない（チップを全削除しても、開いているリストの active は維持する）。
   useEffect(() => {
     if (params.isMultiple !== true && params.inputValue === '' && params.value === null) {
-      setActiveIndexState(null);
-      activeItemRef.current = null;
+      commitActive(null);
     }
-  }, [params.isMultiple, params.inputValue, params.value]);
+  }, [params.isMultiple, params.inputValue, params.value, commitActive]);
 
   // 複数選択: value の前回との差分（value キー）から aria-live のメッセージを作る。
   // onChange 起点ではなく差分方式にするのは、利用側のプログラム的な変更も通知するため。mount 時は通知しない。
@@ -510,15 +597,41 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
     });
   }, [params.value]);
 
-  const moveActive = useCallback((direction: 'next' | 'prev') => {
-    const currentItems = itemsRef.current;
-    const enabledIndices = currentItems.flatMap((item, i) => (item.isDisabled ? [] : [i]));
-    if (enabledIndices.length === 0) {
-      return;
-    }
+  const moveActive = useCallback(
+    (direction: 'next' | 'prev') => {
+      const currentItems = itemsRef.current;
+      const enabledIndices = currentItems.flatMap((item, i) => (item.isDisabled ? [] : [i]));
 
-    setActiveIndexState((prev) => {
-      const currentPos = prev === null ? -1 : enabledIndices.indexOf(prev);
+      // 端の判定と onLoadMore の呼び出しは state updater の外で行う（updater は StrictMode で 2 回呼ばれる）
+      const currentIndex = activeIndexRef.current;
+      const currentPos = currentIndex === null ? -1 : enabledIndices.indexOf(currentIndex);
+      const requestLoadMore = loadMoreRef.current;
+
+      // Combobox.LoadMore が置かれているあいだは端でループしない
+      if (requestLoadMore !== null) {
+        // 有効な項目が 1 件も無い（表示中の候補がすべて disabled）ときも、↓ は末尾での ↓ として扱う
+        // （次ページの有効な候補へキーボードで進めるようにする）。
+        const isAtEnd = enabledIndices.length === 0 || currentPos === enabledIndices.length - 1;
+        if (direction === 'next' && isAtEnd) {
+          // 末尾でさらに ↓: active は動かさず、追加分の先頭への移動を予約して取得を要求する。
+          // 予約は取得を始めるかどうか（取得中なら要求側が何もしない）と無関係に行う。
+          const lastOption = [...currentItems].reverse().find((item) => item.kind === 'option');
+          loadMoreAnchorRef.current =
+            lastOption == null ? { kind: 'first' } : { kind: 'after', value: lastOption.value };
+          requestLoadMore();
+
+          return;
+        }
+        if (direction === 'prev' && currentPos === 0) {
+          loadMoreAnchorRef.current = null;
+
+          return;
+        }
+      }
+
+      if (enabledIndices.length === 0) {
+        return;
+      }
 
       let nextIndex: number | null;
       if (direction === 'next') {
@@ -529,12 +642,11 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
         nextIndex = enabledIndices[nextPos] ?? null;
       }
 
-      // activeItemRef を同期
-      activeItemRef.current = nextIndex === null ? null : toActiveItemKey(currentItems[nextIndex]);
-
-      return nextIndex;
-    });
-  }, []);
+      loadMoreAnchorRef.current = null;
+      commitActive(nextIndex, currentItems);
+    },
+    [commitActive],
+  );
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent<HTMLInputElement>) => {
@@ -656,6 +768,7 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
     setIsOpen,
     activeIndex,
     setActiveIndex,
+    activeItemKey,
     inputMode,
     setInputMode,
     items,
@@ -674,6 +787,7 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
     registerCreateOnCreate,
     selectCreate,
     registerFixedValue,
+    registerLoadMore,
     liveMessage,
   };
 }

@@ -10,8 +10,16 @@ import { useComboboxContext, useComboboxCreateItemContext } from './combobox-con
  * 条件を満たさないときは区切り線も含めて何も描画しない。利用側は List に置いて onCreate を渡すだけでよい。
  */
 export function ComboboxCreateItem({ onCreate }: ComboboxCreateItemProps) {
-  const { baseId, items, activeIndex, setActiveIndex, inputMode, setInputMode, selectCreate, registerCreateOnCreate } =
-    useComboboxContext('Combobox.CreateItem');
+  const {
+    baseId,
+    items,
+    activeItemKey,
+    setActiveIndex,
+    inputMode,
+    setInputMode,
+    selectCreate,
+    registerCreateOnCreate,
+  } = useComboboxContext('Combobox.CreateItem');
   // List の直接の子として認識された最初の 1 件だけが値を受け取る。それ以外（Fragment / ラッパーで包んだもの・
   // 2 件目以降）は null で、何も描画せず onCreate も登録しない。
   const createItemContext = useComboboxCreateItemContext();
@@ -29,7 +37,8 @@ export function ComboboxCreateItem({ onCreate }: ComboboxCreateItemProps) {
   }, [isEnabled, onCreate, registerCreateOnCreate]);
 
   const index = items.findIndex((item) => item.kind === 'create');
-  const isActive = index !== -1 && activeIndex === index;
+  // index ではなく項目の同一性で判定する（Combobox.Item と同じ。作成行は 1 つだけなので kind で決まる）
+  const isActive = activeItemKey !== null && activeItemKey.kind === 'create';
 
   const liRef = useRef<HTMLLIElement | null>(null);
 
