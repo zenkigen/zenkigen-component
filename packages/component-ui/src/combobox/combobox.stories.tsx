@@ -738,6 +738,62 @@ export const Empty: Story = {
   ),
 };
 
+// Combobox.Loading / Combobox.Empty の children で、状態（入力前 / 検索 0 件 / ローディング）ごとに文言を切り替える例。
+export const CustomStatusMessage: Story = {
+  parameters: {
+    chromatic: { disable: true },
+  },
+  render: function CustomStatusMessageRender() {
+    const [value, setValue] = useState<string | null>(null);
+    const [inputText, setInputText] = useState('');
+    const [results, setResults] = useState<typeof fruits>([]);
+    const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+      if (inputText.length === 0) {
+        setResults([]);
+        setIsLoading(false);
+
+        return;
+      }
+      setIsLoading(true);
+      const timer = setTimeout(() => {
+        setResults(fruits.filter((f) => f.label.toLowerCase().includes(inputText.toLowerCase())));
+        setIsLoading(false);
+      }, 600);
+
+      return () => clearTimeout(timer);
+    }, [inputText]);
+
+    return (
+      <div style={{ width: 300 }}>
+        <Combobox
+          value={value}
+          onChange={(next, meta) => {
+            setValue(next);
+            setInputText(meta?.label ?? '');
+          }}
+          inputValue={inputText}
+          onInputChange={setInputText}
+          placeholder="果物を検索..."
+        >
+          <Combobox.Input>
+            <Combobox.HelperMessage>状態に応じて文言を切り替える例（疑似 API）</Combobox.HelperMessage>
+          </Combobox.Input>
+          <Combobox.List>
+            {isLoading && <Combobox.Loading>果物を検索中...</Combobox.Loading>}
+            {!isLoading && inputText.length === 0 && <Combobox.Empty>果物の名前を入力してください</Combobox.Empty>}
+            {!isLoading && inputText.length > 0 && results.length === 0 && (
+              <Combobox.Empty>一致する果物が見つかりません</Combobox.Empty>
+            )}
+            {!isLoading && results.map((opt) => <Combobox.Item key={opt.value} value={opt.value} label={opt.label} />)}
+          </Combobox.List>
+        </Combobox>
+      </div>
+    );
+  },
+};
+
 export const MatchListToTrigger: Story = {
   decorators: [
     (StoryFn) => (
