@@ -64,7 +64,7 @@ const MyForm = () => {
 
 ### 非同期サジェスト
 
-`Combobox.Loading` / `Combobox.Empty` を Compound として配置することで、ローディング表示と該当なし表示を制御します。本体に `isLoading` / `noOptionsMessage` のような prop はありません。いずれも文言は固定（Loading: `読み込み中...` / Empty: `一致する情報が見つかりません`）で、現時点では children を渡せません。
+`Combobox.Loading` / `Combobox.Empty` を Compound として配置することで、ローディング表示と該当なし表示を制御します。本体に `isLoading` / `noOptionsMessage` のような prop はありません。children を省略すると既定の文言（Loading: `読み込み中...` / Empty: `一致する情報が見つかりません`）を描画します。文言を変えたい場合は次節の children を使います。
 
 ```tsx
 <Combobox value={value} onChange={...} inputValue={inputText} onInputChange={setInputText}>
@@ -78,6 +78,36 @@ const MyForm = () => {
   </Combobox.List>
 </Combobox>
 ```
+
+### ローディング / 該当なしの文言（`Combobox.Loading` / `Combobox.Empty` の children）
+
+`Combobox.Loading` / `Combobox.Empty` に children を渡すと、表示の中身を差し替えられます。状態に応じて文言を切り替える場合は、利用側で条件分岐して出し分けます（例: 入力前 / 検索 0 件 / ローディング）。
+
+```tsx
+<Combobox value={value} onChange={...} inputValue={inputText} onInputChange={setInputText}>
+  <Combobox.Input />
+  <Combobox.List>
+    {/* ローディング */}
+    {isLoading && <Combobox.Loading>果物を検索中...</Combobox.Loading>}
+    {/* 入力前 */}
+    {!isLoading && inputText.length === 0 && <Combobox.Empty>果物の名前を入力してください</Combobox.Empty>}
+    {/* 検索 0 件 */}
+    {!isLoading && inputText.length > 0 && results.length === 0 && (
+      <Combobox.Empty>一致する果物が見つかりません</Combobox.Empty>
+    )}
+    {!isLoading && results.map((opt) => (
+      <Combobox.Item key={opt.value} value={opt.value} label={opt.label} />
+    ))}
+  </Combobox.List>
+</Combobox>
+```
+
+children の規約:
+
+- **テキストまたはインライン要素を渡す**: 文言のほか、アイコンや強調などのインライン要素を置けます。未指定時は既定の文言を描画します
+- **インタラクティブ要素を置かない**: リンク・ボタンなどは置けません。フォーカスは常に入力欄にあり、この行はキーボード巡回の対象外のため、キーボードで到達できません
+- **高さは 1 行固定**: 行の高さは `size` に応じて固定です。はみ出した分は末尾を省略します（折り返しません）
+- **boolean・空文字は未指定の扱い**: `{条件 && '文言'}` の `false` や、変数経由の空文字 `''` が渡った場合は既定の文言を描画します（空の行にはなりません）
 
 ### 大量データの popup 抑制
 

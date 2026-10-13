@@ -26,6 +26,7 @@ import type { ComboboxInputProps, ComboboxMultipleChangeMeta, ComboboxProps } fr
  * - isError / isDisabled: 視覚 / 操作抑止
  * - multiple: 追加 / toggle 削除 / Backspace / revert / aria-multiselectable / aria-live / 型
  * - Combobox.Chip: 描画 / 長いラベルの省略 / ✗ での削除（マウス・キーボード）/ 外せないチップ / フォーカス維持 / blur・Escape / disabled
+ * - Combobox.Empty / Combobox.Loading の children: 指定時はその内容、未指定・boolean・null・空文字は既定文言。role / popup の開閉 / 作成行の抑止は不変
  * - Combobox.Input の id / aria-label / aria-labelledby
  * - Combobox.CreateItem: 表示条件（空・変換中・Loading・重複・checkDuplicate）/ 作成 / 作成直前の再検証 / キーボード / a11y
  *
@@ -1773,6 +1774,195 @@ describe('Combobox', () => {
       await user.click(input);
       expect(input).toHaveAttribute('aria-expanded', 'true');
       expect(input).toHaveAttribute('aria-controls', expect.any(String));
+    });
+  });
+
+  describe('Combobox.Empty / Combobox.Loading の children', () => {
+    function StatusCombobox({ children }: { children: ReactNode }) {
+      const [value, setValue] = useState<string | null>(null);
+      const [input, setInput] = useState('');
+
+      return (
+        <Combobox
+          value={value}
+          onChange={(next, meta) => {
+            setValue(next);
+            setInput(meta?.label ?? '');
+          }}
+          inputValue={input}
+          onInputChange={setInput}
+        >
+          <Combobox.Input />
+          <Combobox.List>{children}</Combobox.List>
+        </Combobox>
+      );
+    }
+
+    it('Combobox.Empty に children を渡すと、既定文言の代わりにその内容を描画する', () => {
+      render(
+        <StatusCombobox>
+          <Combobox.Empty>候補がありません</Combobox.Empty>
+        </StatusCombobox>,
+      );
+
+      expect(screen.getByText('候補がありません')).toBeInTheDocument();
+      expect(screen.queryByText('一致する情報が見つかりません')).toBeNull();
+    });
+
+    it('Combobox.Loading に children を渡すと、既定文言の代わりにその内容を描画する', () => {
+      render(
+        <StatusCombobox>
+          <Combobox.Loading>検索中です</Combobox.Loading>
+        </StatusCombobox>,
+      );
+
+      expect(screen.getByText('検索中です')).toBeInTheDocument();
+      expect(screen.queryByText('読み込み中...')).toBeNull();
+    });
+
+    it('children にはテキスト以外の要素も渡せる', () => {
+      render(
+        <StatusCombobox>
+          <Combobox.Empty>
+            一致する<strong>果物</strong>が見つかりません
+          </Combobox.Empty>
+        </StatusCombobox>,
+      );
+
+      expect(screen.getByText('果物').tagName).toBe('STRONG');
+      expect(getListbox()).toHaveTextContent('一致する果物が見つかりません');
+    });
+
+    it('Combobox.Empty の children を省略すると既定文言を描画する', () => {
+      render(
+        <StatusCombobox>
+          <Combobox.Empty />
+        </StatusCombobox>,
+      );
+
+      expect(screen.getByText('一致する情報が見つかりません')).toBeInTheDocument();
+    });
+
+    it.each([
+      ['null', null],
+      ['false', false],
+      ['空文字', ''],
+    ])('Combobox.Empty の children が %s のときは既定文言を描画する', (_, children) => {
+      render(
+        <StatusCombobox>
+          <Combobox.Empty>{children}</Combobox.Empty>
+        </StatusCombobox>,
+      );
+
+      expect(screen.getByText('一致する情報が見つかりません')).toBeInTheDocument();
+    });
+
+    it('Combobox.Loading の children を省略すると既定文言を描画する', () => {
+      render(
+        <StatusCombobox>
+          <Combobox.Loading />
+        </StatusCombobox>,
+      );
+
+      expect(screen.getByText('読み込み中...')).toBeInTheDocument();
+    });
+
+    it.each([
+      ['null', null],
+      ['false', false],
+      ['空文字', ''],
+    ])('Combobox.Loading の children が %s のときは既定文言を描画する', (_, children) => {
+      render(
+        <StatusCombobox>
+          <Combobox.Loading>{children}</Combobox.Loading>
+        </StatusCombobox>,
+      );
+
+      expect(screen.getByText('読み込み中...')).toBeInTheDocument();
+    });
+
+    it('children を渡しても role="presentation" のままで、option にはならない', () => {
+      render(
+        <StatusCombobox>
+          <Combobox.Loading>検索中です</Combobox.Loading>
+          <Combobox.Empty>候補がありません</Combobox.Empty>
+        </StatusCombobox>,
+      );
+
+      expect(screen.getByText('検索中です').closest('li')).toHaveAttribute('role', 'presentation');
+      expect(screen.getByText('候補がありません').closest('li')).toHaveAttribute('role', 'presentation');
+      expect(queryOptions()).toHaveLength(0);
+    });
+
+    it('children を渡した行は ArrowDown / ArrowUp で aria-activedescendant の対象にならない', async () => {
+      const user = userEvent.setup();
+      render(
+        <StatusCombobox>
+          <Combobox.Loading>検索中です</Combobox.Loading>
+          <Combobox.Item value="apple" label="りんご" />
+          <Combobox.Empty>候補がありません</Combobox.Empty>
+        </StatusCombobox>,
+      );
+      const input = getCombobox();
+
+      await user.click(input);
+      const optionId = getOption('りんご').id;
+      expect(optionId).not.toBe('');
+      expect(input).toHaveAttribute('aria-activedescendant', optionId);
+
+      await user.keyboard('{ArrowDown}');
+      expect(input).toHaveAttribute('aria-activedescendant', optionId);
+
+      await user.keyboard('{ArrowUp}');
+      expect(input).toHaveAttribute('aria-activedescendant', optionId);
+    });
+
+    it('children を渡した Combobox.Empty だけでも popup が開く', async () => {
+      const user = userEvent.setup();
+      render(
+        <StatusCombobox>
+          <Combobox.Empty>候補がありません</Combobox.Empty>
+        </StatusCombobox>,
+      );
+      const input = getCombobox();
+
+      await user.click(input);
+      expect(input).toHaveAttribute('aria-expanded', 'true');
+      expect(screen.getByRole('button', { name: '候補を閉じる' })).not.toBeDisabled();
+    });
+
+    it('children を渡した Combobox.Loading だけでも popup が開く', async () => {
+      const user = userEvent.setup();
+      render(
+        <StatusCombobox>
+          <Combobox.Loading>検索中です</Combobox.Loading>
+        </StatusCombobox>,
+      );
+      const input = getCombobox();
+
+      await user.click(input);
+      expect(input).toHaveAttribute('aria-expanded', 'true');
+      expect(screen.getByRole('button', { name: '候補を閉じる' })).not.toBeDisabled();
+    });
+
+    it('children を渡した Combobox.Loading の描画中も作成行（Combobox.CreateItem）は表示しない', async () => {
+      const user = userEvent.setup();
+      const onCreate = vi.fn();
+      render(
+        <StatusCombobox>
+          <Combobox.Loading>検索中です</Combobox.Loading>
+          <Combobox.CreateItem onCreate={onCreate} />
+        </StatusCombobox>,
+      );
+
+      await user.click(getCombobox());
+      await user.type(getCombobox(), 'ぶどう');
+
+      expect(screen.getByText('検索中です')).toBeInTheDocument();
+      expect(queryCreateOption()).toBeNull();
+
+      await user.keyboard('{Enter}');
+      expect(onCreate).not.toHaveBeenCalled();
     });
   });
 
