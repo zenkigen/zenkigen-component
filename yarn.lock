@@ -3685,7 +3685,9 @@ __metadata:
     "@zenkigen-inc/component-theme": "workspace:*"
     clsx: "npm:2.1.1"
     hygen: "npm:6.2.11"
+    postcss: "npm:8.5.25"
     react-day-picker: "npm:9.14.0"
+    tailwindcss: "npm:3.4.19"
     tsup: "npm:8.5.1"
     typescript: "npm:5.9.3"
   peerDependencies:
