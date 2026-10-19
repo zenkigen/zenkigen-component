@@ -3654,6 +3654,7 @@ __metadata:
   dependencies:
     cheerio: "npm:1.2.0"
     ejs: "npm:3.1.10"
+    lucide-static: "npm:1.25.0"
     tsup: "npm:8.5.1"
     typescript: "npm:5.9.3"
   peerDependencies:
@@ -7170,6 +7171,13 @@ __metadata:
   dependencies:
     yallist: "npm:^3.0.2"
   checksum: 10c0/89b2ef2ef45f543011e38737b8a8622a2f8998cddf0e5437174ef8f1f70a8b9d14a918ab3e232cb3ba343b7abddffa667f0b59075b2b80e6b4d63c3de6127482
+  languageName: node
+  linkType: hard
+
+"lucide-static@npm:1.25.0":
+  version: 1.25.0
+  resolution: "lucide-static@npm:1.25.0"
+  checksum: 10c0/a58b783715f35fbc49d3fb34d95206419c651e6c60656b15f3d89580b045b0508cd319eb4f16c1fb67b47598207f7ef92f9e57b31c6af1290fa60ab273e28362
   languageName: node
   linkType: hard
 
