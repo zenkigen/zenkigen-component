@@ -52,11 +52,17 @@ export function ComboboxInput({
     onClickClearButton,
     isMultiple,
     selectedValues,
+    hasRemovableSelection,
     chipsRef,
   } = useComboboxContext('Combobox.Input');
 
-  // クリアボタンは onClickClearButton が渡されたときのみ表示する（TextInput と同一仕様）。複数選択では提供しない。
-  const isClearButtonVisible = !isMultiple && onClickClearButton != null && inputValue.length > 0 && !isDisabled;
+  // クリアボタンは onClickClearButton が渡されたときのみ表示する（TextInput と同一仕様）。
+  // 単一選択は選択後の入力文字が選択中の label なので、入力の有無で「入力か選択がある」を表せる。
+  // 複数選択は選択後に入力が空に戻るため、外せる選択があるかも見る（外せないチップだけなら消せるものが無いので出さない）。
+  const hasClearableContent = isMultiple ? inputValue.length > 0 || hasRemovableSelection : inputValue.length > 0;
+  const isClearButtonVisible = onClickClearButton != null && hasClearableContent && !isDisabled;
+  // 何を消すかは利用側のハンドラが決める。読み上げ名は Docs で案内する使い方（入力中は入力、未入力なら選択）に合わせる。
+  const clearButtonLabel = isMultiple && inputValue.length === 0 ? '選択をすべて削除' : '入力をクリア';
 
   // 単一選択では Chip を描画しない（捨てる）。
   const { chips, others } = splitChildren(children);
@@ -191,7 +197,7 @@ export function ComboboxInput({
               size="small"
               onClick={handleClear}
               onMouseDown={preventBlur}
-              aria-label="入力をクリア"
+              aria-label={clearButtonLabel}
               tabIndex={-1}
             />
           )}

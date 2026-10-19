@@ -132,12 +132,12 @@ const MyComponent = () => {
 
 `isMultiple` を判別キーとするユニオン型（`ComboboxProps = ComboboxSingleProps | ComboboxMultipleProps`）。`isMultiple: true` のとき `value` / `onChange` が配列を扱う型に切り替わる。上記以外の共通 props（`inputValue` / `onInputChange` / `size` / `isDisabled` 等）は単一選択と同じ。
 
-| プロパティ           | 型                                                                            | 説明                                                                                                             |
-| -------------------- | ----------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `isMultiple`         | `true`                                                                        | 複数選択モードにする（単一選択では指定しない、または `false`）                                                   |
-| `value`              | `string[]`                                                                    | 選択済みの値の配列。controlled。`aria-selected`・再選択での解除・Backspace の削除対象はこの配列で判定する        |
-| `onChange`           | `(value: string[], meta: { type: 'add' \| 'remove'; value: string }) => void` | 追加・削除のたびに **次の配列** と差分（`ComboboxMultipleChangeMeta`）を渡す。通常は `setValue(next)` だけでよい |
-| `onClickClearButton` | `never`                                                                       | 指定できない（型で禁止）。複数選択ではクリアボタンを表示しない                                                   |
+| プロパティ           | 型                                                                            | 説明                                                                                                                |
+| -------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `isMultiple`         | `true`                                                                        | 複数選択モードにする（単一選択では指定しない、または `false`）                                                      |
+| `value`              | `string[]`                                                                    | 選択済みの値の配列。controlled。`aria-selected`・再選択での解除・Backspace の削除対象はこの配列で判定する           |
+| `onChange`           | `(value: string[], meta: { type: 'add' \| 'remove'; value: string }) => void` | 追加・削除のたびに **次の配列** と差分（`ComboboxMultipleChangeMeta`）を渡す。通常は `setValue(next)` だけでよい    |
+| `onClickClearButton` | `() => void`                                                                  | 渡したときのみクリアボタンを表示する。表示条件と読み上げ名は [クリアボタンを表示する](#クリアボタンを表示する) 参照 |
 
 - チップの表示は `value` とは別に、利用側が `Combobox.Chip` を `Combobox.Input` の children に並べて宣言する（[Combobox.Chip](#comboboxchip) 参照）
 - 候補を選ぶ（クリック / `Enter`）と、未選択なら追加・選択済みなら解除（toggle）し、入力を空に戻す。**候補リストは閉じない**
@@ -162,7 +162,7 @@ const MyComponent = () => {
 
 ### Combobox.Input
 
-入力欄を描画する。内部で `InternalTextInput` を利用し、末尾に矢印ボタン（▼/▲）と、`Combobox` 本体に `onClickClearButton` が渡されている場合のみクリアボタン（×）を `IconButton` で配置する。children のうち `Combobox.Chip` は複数選択のチップとして入力欄の中（input の前）に描画し、それ以外（HelperMessage / ErrorMessage）は TextInput の children として素通しする。矢印ボタンは **`Combobox.List` 直下に `Combobox.Item` / `Combobox.Loading` / `Combobox.Empty` のいずれも存在しない** とき自動で disabled になり、開いても何も表示されない dead click を防ぐ（`Combobox` 本体の `isDisabled` とも OR で連動）。クリアボタンは `isDisabled` のとき・`inputValue` が空のときも非表示になる。
+入力欄を描画する。内部で `InternalTextInput` を利用し、末尾に矢印ボタン（▼/▲）と、`Combobox` 本体に `onClickClearButton` が渡されている場合のみクリアボタン（×）を `IconButton` で配置する。children のうち `Combobox.Chip` は複数選択のチップとして入力欄の中（input の前）に描画し、それ以外（HelperMessage / ErrorMessage）は TextInput の children として素通しする。矢印ボタンは **`Combobox.List` 直下に `Combobox.Item` / `Combobox.Loading` / `Combobox.Empty` のいずれも存在しない** とき自動で disabled になり、開いても何も表示されない dead click を防ぐ（`Combobox` 本体の `isDisabled` とも OR で連動）。クリアボタンは `isDisabled` のとき・消せるものが無いとき（単一選択は `inputValue` が空、複数選択は `inputValue` が空かつ外せる選択が無い）も非表示になる。
 
 | プロパティ        | 型        | デフォルト値 | 説明                                                                 |
 | ----------------- | --------- | ------------ | -------------------------------------------------------------------- |
@@ -456,6 +456,31 @@ const handleClickClearButton = () => {
 
 クリアボタンを表示しない場合は `onClickClearButton` を渡さない。`inputValue` をキーボードで全削除すれば値はクリアできる。
 
+#### 複数選択のとき
+
+複数選択でも `onClickClearButton` を渡したときのみ表示する。何を消すかは単一選択と同じく利用者のハンドラで決める。推奨は「入力中は入力だけを消し、未入力なら外せる選択をすべて外す」。
+
+```typescript
+const handleClickClearButton = () => {
+  if (inputText !== '') {
+    setInputText(''); // 入力中: 入力だけを消す
+    return;
+  }
+  setSelectedIds((prev) => prev.filter((id) => fixedIds.includes(id))); // 未入力: 外せる選択をすべて外す
+};
+```
+
+| 項目             | 内容                                                                                                                                                 |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 表示条件         | `onClickClearButton` 指定 かつ `isDisabled` でない かつ（`inputValue` が空でない または 外せる選択がある）                                           |
+| 外せる選択       | `value` のうち、描画中の `Combobox.Chip` が `isRemovable={false}` を宣言していない値（チップを描画していない値も外せる扱い。`Backspace` と同じ基準） |
+| 読み上げ名       | `inputValue` が空でなければ「入力をクリア」、空なら「選択をすべて削除」                                                                              |
+| フォーカス・開閉 | 単一選択と同じく、押しても input のフォーカスと候補リストの開閉は変わらない                                                                          |
+| 通知             | 利用者が `value` を差し替えるだけなので `onChange` は呼ばれない。外れた値は `aria-live` で「「A」、「B」を削除しました」とまとめて読み上げる         |
+
+- 読み上げ名は推奨の使い方を前提にしている。1 回で入力と選択を両方消すハンドラにすると、入力中の「入力をクリア」は実際の動作より狭い名前になる
+- ボタンの位置は変わらないため、入力を消すつもりで続けて押すと選択まで外れる。選択を一度に外すのが困る画面では、未入力のときに何もしないハンドラにする
+
 ### 入力欄に名前を付ける
 
 ```typescript
@@ -730,7 +755,7 @@ A: 現時点では指定できない（`gray` 固定）。
 
 ### Q: 選択をまとめてクリアしたい
 
-A: 複数選択モードにはクリアボタンを用意していない（`onClickClearButton` は指定できない）。利用側のボタン等で `value` を空配列にすれば、削除は読み上げ（`aria-live`）でも通知される。
+A: `onClickClearButton` でクリアボタンを表示し、ハンドラで外せる選択を `value` から外す（[複数選択のとき](#複数選択のとき) 参照）。利用側のボタン等で `value` を差し替えても同じく、削除は読み上げ（`aria-live`）で通知される。
 
 ## 更新履歴
 
@@ -742,5 +767,6 @@ A: 複数選択モードにはクリアボタンを用意していない（`onCl
 | 2026-10-05 | `Combobox.Item` に `children`（候補行の見た目のみのカスタムレイアウト）を追加                                                                                                                    | -      |
 | 2026-10-05 | Floating UI の `reference` の取得を input の親要素の参照から `frameRef` 経由に変更（挙動は変わらない）                                                                                           | -      |
 | 2026-10-06 | 複数選択モード（`isMultiple`）と `Combobox.Chip` を追加（長いラベルは 1 行で省略表示。折り返し時の開閉ボタンは最後の行の横）。`Combobox.Input` に `id` / `aria-label` / `aria-labelledby` を追加 | -      |
+| 2026-10-19 | 複数選択でも `onClickClearButton` を指定できるようにした（入力があるか、外せる選択があるときに表示。読み上げ名は入力の有無で切り替え）                                                           | -      |
 | 2026-10-21 | `Combobox.Item` の children が空の配列・空文字のときも `label` を描画するよう修正                                                                                                                | -      |
 | 2026-10-21 | 候補アイテムの色は `isError` で変わらないことに記載を合わせた                                                                                                                                    | -      |

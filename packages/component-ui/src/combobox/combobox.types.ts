@@ -66,8 +66,13 @@ export type ComboboxMultipleProps = ComboboxCommonProps & {
   value: string[];
   /** 追加・削除のたびに、次の配列と差分情報を渡すコールバック */
   onChange: (value: string[], meta: ComboboxMultipleChangeMeta) => void;
-  /** 複数選択モードではクリアボタンを提供しない */
-  onClickClearButton?: never;
+  /**
+   * クリアボタンのクリック時に呼ばれるコールバック。
+   * このコールバックを渡したときのみクリアボタンが表示される（入力があるか、外せる選択があるとき）。
+   * 何を消すかは利用者側で決める。推奨は「入力中は入力だけを消し（`onInputChange('')`）、
+   * 未入力なら外せる選択をすべて外す」。読み上げ名もこれに合わせて「入力をクリア」「選択をすべて削除」と切り替わる。
+   */
+  onClickClearButton?: () => void;
 };
 
 export type ComboboxProps = ComboboxSingleProps | ComboboxMultipleProps;

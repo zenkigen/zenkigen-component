@@ -180,6 +180,7 @@ function ControlledMultipleCombobox({
  * - fixedValues: isRemovable={false} にする値
  * - chipLabels: Chip の label を Item の label から差し替える（aria-live の label の出所の検証用）
  * - chipValues: Chip を描画する値（未指定時は value と同じ。value に無い値の Chip の検証用）
+ * - hasClearButton: Docs で案内する 2 段階のクリア（入力中は入力だけ、未入力なら外せる選択をすべて外す）を渡す
  */
 function MultipleComboboxWithChips({
   initialValue = [],
@@ -193,6 +194,7 @@ function MultipleComboboxWithChips({
   onChange,
   onOpenChange,
   onInputValueChange,
+  hasClearButton = false,
 }: {
   initialValue?: string[];
   fixedValues?: string[];
@@ -205,11 +207,20 @@ function MultipleComboboxWithChips({
   onChange?: (value: string[], meta: ComboboxMultipleChangeMeta) => void;
   onOpenChange?: (isOpen: boolean) => void;
   onInputValueChange?: (inputValue: string) => void;
+  hasClearButton?: boolean;
 }) {
   const [value, setValue] = useState<string[]>(initialValue);
   const [inputValue, setInputValue] = useState('');
   const labelOf = (target: string) =>
     chipLabels[target] ?? defaultFruits.find((fruit) => fruit.value === target)?.label ?? target;
+  const handleClickClearButton = () => {
+    if (inputValue !== '') {
+      setInputValue('');
+
+      return;
+    }
+    setValue((prev) => prev.filter((selected) => fixedValues.includes(selected)));
+  };
 
   return (
     <Combobox
@@ -228,6 +239,7 @@ function MultipleComboboxWithChips({
       isDisabled={isDisabled}
       isError={isError}
       placeholder={placeholder}
+      {...(hasClearButton ? { onClickClearButton: handleClickClearButton } : {})}
     >
       <Combobox.Input aria-label="果物">
         {(chipValues ?? value).map((chipValue) => (
@@ -2269,12 +2281,141 @@ describe('Combobox', () => {
         expect(document.activeElement).not.toBe(getCombobox());
       });
 
-      it('クリアボタンを描画しない', async () => {
-        const user = userEvent.setup();
-        render(<MultipleComboboxWithChips initialValue={['apple']} />);
-        await user.type(getCombobox(), 'み');
+      describe('クリアボタン', () => {
+        const queryClearInputButton = () => screen.queryByRole('button', { name: '入力をクリア' });
+        const queryClearSelectionButton = () => screen.queryByRole('button', { name: '選択をすべて削除' });
+        const getButton = (button: HTMLElement | null) => {
+          if (button == null) {
+            throw new Error('クリアボタンが描画されていない');
+          }
 
-        expect(screen.queryByRole('button', { name: '入力をクリア' })).toBeNull();
+          return button;
+        };
+
+        it('onClickClearButton 未指定のときは、入力や選択があっても描画しない', async () => {
+          const user = userEvent.setup();
+          render(<MultipleComboboxWithChips initialValue={['apple']} />);
+
+          expect(queryClearSelectionButton()).toBeNull();
+
+          await user.type(getCombobox(), 'み');
+
+          expect(queryClearInputButton()).toBeNull();
+        });
+
+        it('入力も選択もないときは描画しない', () => {
+          render(<MultipleComboboxWithChips hasClearButton />);
+
+          expect(queryClearInputButton()).toBeNull();
+          expect(queryClearSelectionButton()).toBeNull();
+        });
+
+        it('入力があるときは「入力をクリア」として描画する（選択が無くても）', async () => {
+          const user = userEvent.setup();
+          render(<MultipleComboboxWithChips hasClearButton />);
+          await user.type(getCombobox(), 'み');
+
+          expect(queryClearInputButton()).toBeInTheDocument();
+          expect(queryClearSelectionButton()).toBeNull();
+        });
+
+        it('入力が空で外せる選択があるときは「選択をすべて削除」として描画する', () => {
+          render(<MultipleComboboxWithChips hasClearButton initialValue={['apple']} />);
+
+          expect(queryClearSelectionButton()).toBeInTheDocument();
+          expect(queryClearInputButton()).toBeNull();
+        });
+
+        it('外せないチップだけが選択されているときは、入力が空なら描画しない', () => {
+          render(<MultipleComboboxWithChips hasClearButton initialValue={['apple']} fixedValues={['apple']} />);
+
+          expect(queryClearSelectionButton()).toBeNull();
+        });
+
+        it('外せない値の Chip が描画されなくなると、外せる選択として描画する', () => {
+          const { rerender } = render(
+            <MultipleComboboxWithChips hasClearButton initialValue={['apple']} fixedValues={['apple']} />,
+          );
+
+          expect(queryClearSelectionButton()).toBeNull();
+
+          // value は apple のまま、Chip だけを描画しない（外せるかは描画中の Chip の宣言だけで決まる）
+          rerender(
+            <MultipleComboboxWithChips
+              hasClearButton
+              initialValue={['apple']}
+              fixedValues={['apple']}
+              chipValues={[]}
+            />,
+          );
+
+          expect(queryClearSelectionButton()).toBeInTheDocument();
+        });
+
+        it('描画中の Chip が外せないに変わると描画しなくなる', () => {
+          const { rerender } = render(<MultipleComboboxWithChips hasClearButton initialValue={['apple']} />);
+
+          expect(queryClearSelectionButton()).toBeInTheDocument();
+
+          rerender(<MultipleComboboxWithChips hasClearButton initialValue={['apple']} fixedValues={['apple']} />);
+
+          expect(queryClearSelectionButton()).toBeNull();
+        });
+
+        it('isDisabled のときは描画しない', () => {
+          render(<MultipleComboboxWithChips hasClearButton initialValue={['apple']} isDisabled />);
+
+          expect(queryClearSelectionButton()).toBeNull();
+        });
+
+        it('入力中に押すと入力だけが消え、続けて押すと外せる選択だけが外れてボタンが消える', async () => {
+          const user = userEvent.setup();
+          const handleChange = vi.fn();
+          render(
+            <MultipleComboboxWithChips
+              hasClearButton
+              initialValue={['apple', 'orange']}
+              fixedValues={['apple']}
+              onChange={handleChange}
+            />,
+          );
+          await user.type(getCombobox(), 'み');
+          await user.click(getButton(queryClearInputButton()));
+
+          expect(getCombobox()).toHaveValue('');
+          expect(getDeleteButton('みかん')).toBeInTheDocument();
+
+          await user.click(getButton(queryClearSelectionButton()));
+
+          expect(queryDeleteButton('みかん')).toBeNull();
+          // 外せない値は選択に残り、外せる値だけが外れる
+          expect(getOption('りんご')).toHaveAttribute('aria-selected', 'true');
+          expect(getOption('みかん')).toHaveAttribute('aria-selected', 'false');
+          expect(queryClearSelectionButton()).toBeNull();
+          // クリアは利用側が value を差し替えるだけで、onChange は呼ばれない
+          expect(handleChange).not.toHaveBeenCalled();
+        });
+
+        it('選択をまとめて外すと、外した値をまとめて読み上げる', async () => {
+          const user = userEvent.setup();
+          const { container } = render(<MultipleComboboxWithChips hasClearButton initialValue={['apple', 'orange']} />);
+          await user.click(getButton(queryClearSelectionButton()));
+
+          expect(getLiveRegion(container)).toHaveTextContent('「りんご」、「みかん」を削除しました');
+        });
+
+        it('押しても input のフォーカスとリストの開閉は変わらない', async () => {
+          const user = userEvent.setup();
+          render(<MultipleComboboxWithChips hasClearButton initialValue={['apple']} />);
+          await user.click(getCombobox());
+
+          expect(getCombobox()).toHaveAttribute('aria-expanded', 'true');
+
+          await user.click(getButton(queryClearSelectionButton()));
+
+          expect(document.activeElement).toBe(getCombobox());
+          expect(getCombobox()).toHaveAttribute('aria-expanded', 'true');
+        });
       });
 
       it('単一選択では Chip を描画せず、DOM は Chip を置かない場合と同じ', () => {
@@ -2711,12 +2852,11 @@ describe('Combobox', () => {
     });
 
     describe('型', () => {
-      it('isMultiple 無しの配列 value と、multiple での onClickClearButton は型エラーになる', () => {
+      it('isMultiple 無しの配列 value は型エラーになり、multiple でも onClickClearButton は指定できる', () => {
         const noop = vi.fn();
         const common = { inputValue: '', onInputChange: noop, onChange: noop };
         // @ts-expect-error isMultiple を指定しない場合、value に配列は渡せない
         const singleWithArray: ComboboxProps = { ...common, value: ['apple'] };
-        // @ts-expect-error 複数選択ではクリアボタンを指定できない
         const multipleWithClear: ComboboxProps = { ...common, isMultiple: true, value: [], onClickClearButton: noop };
         const multiple: ComboboxProps = { ...common, isMultiple: true, value: ['apple'] };
 

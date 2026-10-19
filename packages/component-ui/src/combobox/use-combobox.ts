@@ -44,6 +44,8 @@ export type UseComboboxReturn = {
   registerChipLabel: (value: string, label: string) => void;
   /** 複数選択: 外せない値を登録する。戻り値の関数で登録を解除する */
   registerFixedValue: (value: string) => () => void;
+  /** 複数選択: value に外せる値が 1 つ以上あるか（単一選択では常に false） */
+  hasRemovableSelection: boolean;
   /**
    * 複数選択: aria-live 領域に出すメッセージ（value の差分から生成。単一選択では常に空）。
    * id は通知ごとに増える連番。同じ文言が続いても別の通知として描画し直すために使う。
@@ -243,6 +245,9 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
   const chipLabelsRef = useRef<Map<string, string>>(new Map());
   // 複数選択: 外せない値の集合。Combobox.Chip（isRemovable=false）が登録し、unmount / 変化時に解除する。
   const fixedValuesRef = useRef<Set<string>>(new Set());
+  // 同じ集合の描画用の写し。ref は更新しても再描画されないため、クリアボタンの表示判定はこちらを使う。
+  // 削除の可否（removeSelected / Backspace）は操作のその場で判定するため、引き続き ref を参照する。
+  const [fixedValues, setFixedValues] = useState<ReadonlySet<string>>(() => new Set());
 
   const registerChipLabel = useCallback((value: string, label: string) => {
     chipLabelsRef.current.set(value, label);
@@ -250,11 +255,21 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
 
   const registerFixedValue = useCallback((value: string) => {
     fixedValuesRef.current.add(value);
+    setFixedValues((prev) => new Set(prev).add(value));
 
     return () => {
       fixedValuesRef.current.delete(value);
+      setFixedValues((prev) => {
+        const next = new Set(prev);
+        next.delete(value);
+
+        return next;
+      });
     };
   }, []);
+
+  // 複数選択: value の中に外せる値（外せないと宣言されていない値）があるか。クリアボタンの表示判定に使う。
+  const hasRemovableSelection = params.isMultiple === true && params.value.some((value) => !fixedValues.has(value));
 
   const removeSelected = useCallback((value: string) => {
     const current = paramsRef.current;
@@ -513,6 +528,7 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
     removeLastSelected,
     registerChipLabel,
     registerFixedValue,
+    hasRemovableSelection,
     liveMessage,
   };
 }

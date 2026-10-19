@@ -48,7 +48,6 @@ function ComboboxBase(props: ComboboxProps) {
     onClickClearButton,
   } = props;
   // value / onChange は isMultiple と型が連動するため、分割代入せずユニオンのまま扱う。
-  // onClickClearButton は複数選択では型で禁止（never）しているため、複数選択では常に未指定になる。
   const isMultiple = props.isMultiple === true;
   const selection =
     props.isMultiple === true
@@ -232,6 +231,7 @@ function ComboboxBase(props: ComboboxProps) {
       removeSelected: combobox.removeSelected,
       registerChipLabel: combobox.registerChipLabel,
       registerFixedValue: combobox.registerFixedValue,
+      hasRemovableSelection: combobox.hasRemovableSelection,
       onClickClearButton,
       activeIndex: combobox.activeIndex,
       setActiveIndex: combobox.setActiveIndex,
@@ -269,6 +269,7 @@ function ComboboxBase(props: ComboboxProps) {
       combobox.removeSelected,
       combobox.registerChipLabel,
       combobox.registerFixedValue,
+      combobox.hasRemovableSelection,
       onClickClearButton,
       combobox.activeIndex,
       combobox.setActiveIndex,

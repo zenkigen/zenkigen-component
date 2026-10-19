@@ -45,6 +45,8 @@ export type ComboboxContextValue = {
   registerChipLabel: (value: string, label: string) => void;
   /** 複数選択: 外せない値を登録する。戻り値の関数で登録を解除する */
   registerFixedValue: (value: string) => () => void;
+  /** 複数選択: value に外せる値が 1 つ以上あるか（クリアボタンの表示判定に使う。単一選択では常に false） */
+  hasRemovableSelection: boolean;
   /** クリアボタンのクリック時に呼ばれる利用者コールバック（渡されたときのみクリアボタンを表示） */
   onClickClearButton?: () => void;
   /** キーボードフォーカス中の Item index（items 配列上） */

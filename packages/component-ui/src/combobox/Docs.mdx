@@ -210,7 +210,8 @@ const candidates = fruits.filter((fruit) => !selectedIds.includes(fruit.value) &
 - 候補を選ぶ（クリック / `Enter`）とチップが追加され、入力が空に戻ります。**候補リストは閉じません**。選択済みの候補を選ぶと選択を解除します
 - 削除はチップの ✗（クリック、または `Shift + Tab` で ✗ に移動して `Enter` / `Space`）と、入力が空のときの `Backspace`（`value` の末尾を削除）で行います
 - 入力欄の文字は常に未確定の検索語です。blur・`Escape`・✗ へのフォーカス移動で空に戻り、`value` は変わりません
-- 選択がある間は placeholder を表示しません。クリアボタンはありません（`onClickClearButton` は指定できません）
+- 選択がある間は placeholder を表示しません
+- `onClickClearButton` を渡すとクリアボタンを表示します（下記「クリアボタン」）
 - 追加・削除は `aria-live` で読み上げます（チップの `label` を使用）
 
 チップの規約:
@@ -271,5 +272,26 @@ const selectedFruits = selectedIds.flatMap((id) => {
   ))}
 </Combobox.Input>
 ```
+
+### クリアボタン（複数選択）
+
+複数選択でも、`onClickClearButton` を渡したときだけクリアボタン（×）を表示します。何を消すかは単一選択と同じく利用側のハンドラで決めます。おすすめは「入力中は入力だけを消し、未入力なら外せる選択をすべて外す」です。
+
+```tsx
+const handleClickClearButton = () => {
+  if (inputText !== '') {
+    setInputText(''); // 入力中: 入力だけを消す
+    return;
+  }
+  setSelectedIds((prev) => prev.filter((id) => fixedIds.includes(id))); // 未入力: 外せる選択をすべて外す
+};
+
+<Combobox isMultiple onClickClearButton={handleClickClearButton} /* ... */>
+```
+
+- 表示するのは、入力があるとき、または外せる選択（`isRemovable={false}` を宣言していないチップの値）があるときです。外せないチップだけのときと、`isDisabled` のときは表示しません
+- 読み上げ名は、入力があるときは「入力をクリア」、未入力のときは「選択をすべて削除」です（上のおすすめの使い方に合わせています）
+- ボタンの位置は変わらないため、入力を消すつもりで続けて押すと選択まで外れます。選択を一度に外すのが困る画面では、未入力のときに何もしない（入力だけを消す）ハンドラにしてください
+- 押しても入力欄のフォーカスと候補リストの開閉は変わりません。選択を外すときは利用側が `value` を差し替えるだけなので `onChange` は呼ばれず、外れたことは `aria-live` で読み上げます（Story: `MultipleWithClearButton`）
 
 `Combobox.Item` の children（候補行のカスタムレイアウト）は複数選択でも同じように使えます（Story: `MultipleWithCustomItem`）。

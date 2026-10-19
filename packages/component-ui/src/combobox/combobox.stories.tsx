@@ -1234,6 +1234,8 @@ type MultipleFruitComboboxProps = {
   helperMessage?: string;
   /** 候補と Chip の label の元データ（未指定時は fruits） */
   items?: { value: string; label: string }[];
+  /** 2 段階のクリア（入力中は入力だけ、未入力なら外せる選択をすべて外す）を渡してクリアボタンを出す */
+  hasClearButton?: boolean;
 };
 
 // 利用側のデータ（fruits）から value と Combobox.Chip を導出する。候補は選択済みを除外して入力で絞り込む（利用側の責務）。
@@ -1245,6 +1247,7 @@ function MultipleFruitCombobox({
   isOpenInitially = false,
   helperMessage,
   items = fruits,
+  hasClearButton = false,
 }: MultipleFruitComboboxProps) {
   const [selectedValues, setSelectedValues] = useState<string[]>(initialValue);
   const [inputText, setInputText] = useState('');
@@ -1257,9 +1260,19 @@ function MultipleFruitCombobox({
   });
   const candidates = items.filter((fruit) => !selectedValues.includes(fruit.value) && fruit.label.includes(inputText));
 
+  const handleClickClearButton = () => {
+    if (inputText !== '') {
+      setInputText('');
+
+      return;
+    }
+    setSelectedValues((prev) => prev.filter((value) => fixedValues.includes(value)));
+  };
+
   return (
     <Combobox
       isMultiple
+      {...(hasClearButton ? { onClickClearButton: handleClickClearButton } : {})}
       value={selectedValues}
       onChange={(next) => setSelectedValues(next)}
       inputValue={inputText}
@@ -1321,6 +1334,31 @@ export const MultipleWithFixedChip: MultipleStory = {
           initialValue={['apple', 'banana', 'strawberry']}
           fixedValues={['apple']}
           helperMessage="「りんご」は外せないチップ（✗ が無く、Backspace・候補の再選択でも外れない）"
+        />
+      </div>
+    );
+  },
+};
+
+export const MultipleWithClearButton: MultipleStory = {
+  render: function MultipleWithClearButtonRender() {
+    return (
+      <div className="flex flex-col gap-4" style={{ width: 360 }}>
+        <MultipleFruitCombobox
+          initialValue={['apple', 'banana', 'strawberry']}
+          fixedValues={['apple']}
+          hasClearButton
+          helperMessage="入力中の × は入力だけを消し、未入力の × は外せる選択をすべて外す（「りんご」は外せないので残る）"
+        />
+        <MultipleFruitCombobox
+          initialValue={['apple', 'banana', 'strawberry', 'grape', 'melon', 'peach', 'orange']}
+          hasClearButton
+          helperMessage="チップが折り返しても × と開閉ボタンが並ぶ"
+        />
+        <MultipleFruitCombobox
+          size="large"
+          initialValue={['apple', 'banana', 'strawberry', 'grape', 'melon', 'peach', 'orange']}
+          hasClearButton
         />
       </div>
     );
