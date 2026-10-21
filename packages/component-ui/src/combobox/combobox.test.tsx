@@ -2674,12 +2674,21 @@ describe('Combobox', () => {
         async ({ key }) => {
           const user = userEvent.setup();
           const onChange = vi.fn();
-          render(<MultipleComboboxWithChips initialValue={['apple', 'orange', 'peach']} onChange={onChange} />);
+          const onOpenChange = vi.fn();
+          render(
+            <MultipleComboboxWithChips
+              initialValue={['apple', 'orange', 'peach']}
+              onChange={onChange}
+              onOpenChange={onOpenChange}
+            />,
+          );
           await user.click(getCombobox());
 
           await user.tab({ shift: true });
           await user.tab({ shift: true });
           expect(document.activeElement).toBe(getDeleteButton('みかん'));
+          // ✗ に移った時点でリストは閉じている
+          expect(onOpenChange).toHaveBeenLastCalledWith(false);
 
           await user.keyboard(key);
 
@@ -2688,6 +2697,8 @@ describe('Combobox', () => {
           expect(getDeleteButton('りんご')).toBeInTheDocument();
           expect(getDeleteButton('もも')).toBeInTheDocument();
           expect(document.activeElement).toBe(getCombobox());
+          // input に戻ると、Tab で input に入ったときと同じくリストが開く（マウスでの削除は開閉を変えない）
+          expect(onOpenChange).toHaveBeenLastCalledWith(true);
         },
       );
 
