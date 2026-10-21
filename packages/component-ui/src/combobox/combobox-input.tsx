@@ -61,7 +61,7 @@ export function ComboboxInput({
   // 複数選択は選択後に入力が空に戻るため、外せる選択があるかも見る（外せないチップだけなら消せるものが無いので出さない）。
   const hasClearableContent = isMultiple ? inputValue.length > 0 || hasRemovableSelection : inputValue.length > 0;
   const isClearButtonVisible = onClickClearButton != null && hasClearableContent && !isDisabled;
-  // 何を消すかは利用側のハンドラが決める。読み上げ名は Docs で案内する使い方（入力中は入力、未入力なら選択）に合わせる。
+  // 何を消すかは利用側のハンドラが決める。未入力で表示されるのは選択をまとめて外す使い方のときなので、その名前にする。
   const clearButtonLabel = isMultiple && inputValue.length === 0 ? '選択をすべて削除' : '入力をクリア';
 
   // 単一選択では Chip を描画しない（捨てる）。
