@@ -170,7 +170,7 @@ children の規約:
 - **インタラクティブ要素を置かない**。候補行は `role="option"` のため、ボタン・リンク・入力などを子孫に置けない。静的な表示要素のみとする。
 - **高さは 1 行固定**（`size` に応じた行の高さ）。複数行レイアウトには対応しない。はみ出し対策（`truncate` / `min-w-0` / `shrink-0`）は children 側で行う。
 - **背景色を付けない**。ハイライト（背景・左ボーダー）と選択チェックは行（`li`）側で描画するため、children に背景色を付けると隠れる。
-- **文字色は行の状態に応じて継承する**（既定 `interactive02`、選択中 `interactive01`、無効 `disabled01`、エラー時の選択中 `supportError`）。補足テキストの色を children 側で固定すると、無効・エラー時も色が変わらなくなる点に注意する。
+- **文字色は行の状態に応じて継承する**（既定 `interactive02`、選択中 `interactive01`、無効 `disabled01`）。補足テキストの色を children 側で固定すると、無効時も色が変わらなくなる点に注意する。
 - **読み上げ不要な要素（装飾アイコン・記号・重複情報）には利用側で `aria-hidden` を付ける**（下記「アクセシビリティ」参照）。
 
 ```tsx
@@ -229,7 +229,7 @@ children の規約:
 - 通常: `bg-uiBackground01`、ホバー時 `hover:bg-hover02`、押下時 `active:bg-active02`
 - キーボードフォーカス中（active）: `bg-hover02`
 - 選択済み: `bg-selectedUi text-interactive01 fill-interactive01`
-- 選択済み + isError: `bg-uiBackgroundError text-supportError fill-supportError`
+- `isError` は入力欄にのみ反映し、候補アイテムの色は変わらない（選択済みも上記のまま）
 - 無効: `cursor-not-allowed text-disabled01 fill-disabled01`
 
 選択中の Item には label の右端に check アイコン（16px）が表示される。`Combobox.List` は内部で `List` の `selectionIndicator='right'` を固定で適用しているため、非選択 Item もアイコン領域を確保し、Item 間で label の開始位置が揃う。
@@ -515,3 +515,4 @@ A: `aria-activedescendant` のターゲット ID が衝突し、キーボード�
 | 2026-10-05 | IME 変換中の `↑` / `↓` / `Escape` を Combobox で扱わないよう修正（従来は `Enter` のみ）                   | -      |
 | 2026-10-05 | `Combobox.Item` に `children`（候補行の見た目のみのカスタムレイアウト）を追加                             | -      |
 | 2026-10-21 | `Combobox.Item` の children が空の配列・空文字のときも `label` を描画するよう修正                         | -      |
+| 2026-10-21 | 候補アイテムの色は `isError` で変わらないことに記載を合わせた                                             | -      |
