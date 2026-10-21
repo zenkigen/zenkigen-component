@@ -23,10 +23,13 @@ function useComboboxChip({ value, label, isRemovable, rootRef }: UseComboboxChip
 
   // aria-live の削除通知で使う label を登録する。子の layout effect は親の passive effect より先に走るため、
   // 同じコミットで追加・label 変更されたチップの label も通知に間に合う。
+  // 描画中は value から外れていても label が消されないよう、unmount・label 変更時に登録を戻す。
   useLayoutEffect(() => {
-    if (isMultiple) {
-      registerChipLabel(value, label);
+    if (!isMultiple) {
+      return;
     }
+
+    return registerChipLabel(value, label);
   }, [isMultiple, value, label, registerChipLabel]);
 
   // 外せないチップの値を登録し、unmount / isRemovable の変化で即解除する（未描画の値を外せないまま残さない）。

@@ -40,8 +40,11 @@ export type UseComboboxReturn = {
   removeSelected: (value: string) => void;
   /** 複数選択: value の末尾から見て最初の外せる値を選択から外す（Backspace 用） */
   removeLastSelected: () => void;
-  /** 複数選択: aria-live 通知用の label を登録する（unmount では削除しない＝最後に知っていた label を保持） */
-  registerChipLabel: (value: string, label: string) => void;
+  /**
+   * 複数選択: aria-live 通知用の label を登録する。戻り値の関数で描画中の数を戻す
+   * （unmount では label を削除しない＝最後に知っていた label を保持）
+   */
+  registerChipLabel: (value: string, label: string) => () => void;
   /** 複数選択: 外せない値を登録する。戻り値の関数で登録を解除する */
   registerFixedValue: (value: string) => () => void;
   /** 複数選択: value に外せる値が 1 つ以上あるか（単一選択では常に false） */
@@ -76,6 +79,20 @@ function buildLiveMessage(added: string[], removed: string[], getLabel: (value: 
   }
 
   return messages.join('、');
+}
+
+// 値ごとの件数を 1 増やす / 1 減らす（0 になったらキーごと消す）。同じ value の Chip が複数描画される場合に使う。
+function incrementCount(counts: Map<string, number>, key: string) {
+  counts.set(key, (counts.get(key) ?? 0) + 1);
+}
+
+function decrementCount(counts: Map<string, number>, key: string) {
+  const count = counts.get(key) ?? 0;
+  if (count <= 1) {
+    counts.delete(key);
+  } else {
+    counts.set(key, count - 1);
+  }
 }
 
 export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
@@ -243,28 +260,34 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
 
   // 複数選択: aria-live 通知用の label 登録簿（value → 最後に知っていた label）。描画には使わない。
   const chipLabelsRef = useRef<Map<string, string>>(new Map());
-  // 複数選択: 外せない値の集合。Combobox.Chip（isRemovable=false）が登録し、unmount / 変化時に解除する。
-  const fixedValuesRef = useRef<Set<string>>(new Set());
-  // 同じ集合の描画用の写し。ref は更新しても再描画されないため、クリアボタンの表示判定はこちらを使う。
+  // 複数選択: value ごとの描画中の Chip の数。描画中の Chip の label は、value から外れていても登録簿から消さない
+  // （Chip は value / label が変わったときしか登録し直さないため、消すと次の追加通知で label が使えない）。
+  const mountedChipCountsRef = useRef<Map<string, number>>(new Map());
+  // 複数選択: 外せない値ごとの、isRemovable=false を宣言している描画中の Chip の数。
+  // 同じ value の Chip が複数あっても、すべて unmount / 外せるに変わるまで外せないままにする。
+  const fixedValueCountsRef = useRef<Map<string, number>>(new Map());
+  // 外せない値の描画用の写し。ref は更新しても再描画されないため、クリアボタンの表示判定はこちらを使う。
   // 削除の可否（removeSelected / Backspace）は操作のその場で判定するため、引き続き ref を参照する。
   const [fixedValues, setFixedValues] = useState<ReadonlySet<string>>(() => new Set());
 
   const registerChipLabel = useCallback((value: string, label: string) => {
     chipLabelsRef.current.set(value, label);
+    incrementCount(mountedChipCountsRef.current, value);
+
+    // unmount・label 変更時は描画中の数だけを戻す（label は最後に知っていたものとして残し、削除の通知に使う）
+    return () => {
+      decrementCount(mountedChipCountsRef.current, value);
+    };
   }, []);
 
   const registerFixedValue = useCallback((value: string) => {
-    fixedValuesRef.current.add(value);
-    setFixedValues((prev) => new Set(prev).add(value));
+    const counts = fixedValueCountsRef.current;
+    incrementCount(counts, value);
+    setFixedValues(new Set(counts.keys()));
 
     return () => {
-      fixedValuesRef.current.delete(value);
-      setFixedValues((prev) => {
-        const next = new Set(prev);
-        next.delete(value);
-
-        return next;
-      });
+      decrementCount(counts, value);
+      setFixedValues(new Set(counts.keys()));
     };
   }, []);
 
@@ -276,7 +299,7 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
     if (current.isMultiple !== true) {
       return;
     }
-    if (!current.value.includes(value) || fixedValuesRef.current.has(value)) {
+    if (!current.value.includes(value) || fixedValueCountsRef.current.has(value)) {
       return;
     }
     current.onChange(
@@ -291,7 +314,7 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
       return;
     }
     // Chip の描画有無は問わず、value の配列順で末尾から外せる値を探す
-    const target = [...current.value].reverse().find((selected) => !fixedValuesRef.current.has(selected));
+    const target = [...current.value].reverse().find((selected) => !fixedValueCountsRef.current.has(selected));
     if (target == null) {
       return;
     }
@@ -307,7 +330,7 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
       if (current.isMultiple === true) {
         // 複数選択: 選択済みなら外し（toggle）、未選択なら追加する。リストは閉じない。
         if (current.value.includes(value)) {
-          if (fixedValuesRef.current.has(value)) {
+          if (fixedValueCountsRef.current.has(value)) {
             return;
           }
           current.onChange(
@@ -373,9 +396,9 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
     // 同じ label の別の値を続けて追加・削除すると文言が前回と同じになる。連番を進めて毎回別の通知にする
     setLiveMessage((prevMessage) => ({ id: prevMessage.id + 1, text }));
 
-    // 通知に使い終えた、現在の value に無い label を掃除する
+    // 通知に使い終えた、現在の value に無い label を掃除する（描画中の Chip の label は残す）
     Array.from(labels.keys()).forEach((key) => {
-      if (!next.includes(key)) {
+      if (!next.includes(key) && !mountedChipCountsRef.current.has(key)) {
         labels.delete(key);
       }
     });

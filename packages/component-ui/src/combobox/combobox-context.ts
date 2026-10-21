@@ -41,8 +41,8 @@ export type ComboboxContextValue = {
   selectValue: (value: string, label: string) => void;
   /** 複数選択: 指定した値を選択から外す（value に無い・外せない値なら何もしない） */
   removeSelected: (value: string) => void;
-  /** 複数選択: aria-live 通知用の label を登録する */
-  registerChipLabel: (value: string, label: string) => void;
+  /** 複数選択: aria-live 通知用の label を登録する。戻り値の関数で登録（描画中の数）を戻す */
+  registerChipLabel: (value: string, label: string) => () => void;
   /** 複数選択: 外せない値を登録する。戻り値の関数で登録を解除する */
   registerFixedValue: (value: string) => () => void;
   /** 複数選択: value に外せる値が 1 つ以上あるか（クリアボタンの表示判定に使う。単一選択では常に false） */

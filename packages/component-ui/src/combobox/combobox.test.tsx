@@ -2107,6 +2107,30 @@ describe('Combobox', () => {
         expect(getLiveRegion(container)).toBeNull();
       });
 
+      it('value に無い値の Chip を描画している間は、ほかの選択が変わっても label を保ち、後から追加したとき label で通知する', () => {
+        const noop = vi.fn();
+        const renderWithValue = (value: string[]) => (
+          <Combobox isMultiple value={value} onChange={noop} inputValue="" onInputChange={noop}>
+            <Combobox.Input aria-label="果物">
+              <Combobox.Chip value="apple" label="りんご" />
+              <Combobox.Chip value="orange" label="みかん" />
+              <Combobox.Chip value="peach" label="もも" />
+            </Combobox.Input>
+            <Combobox.List>
+              <Combobox.Item value="apple" label="りんご" />
+            </Combobox.List>
+          </Combobox>
+        );
+        const { container, rerender } = render(renderWithValue(['apple']));
+
+        // peach を含まない value の変更（このとき value に無い label の掃除が走る）
+        rerender(renderWithValue(['apple', 'orange']));
+        expect(getLiveRegion(container)).toHaveTextContent('「みかん」を追加しました');
+
+        rerender(renderWithValue(['apple', 'orange', 'peach']));
+        expect(getLiveRegion(container)).toHaveTextContent('「もも」を追加しました');
+      });
+
       it('追加は Item の label で、削除は登録済みの label で通知する', async () => {
         const user = userEvent.setup();
         const { container } = render(<ControlledMultipleCombobox />);
@@ -2604,6 +2628,42 @@ describe('Combobox', () => {
 
         expect(onChange).toHaveBeenCalledTimes(1);
         expect(onChange).toHaveBeenCalledWith(['peach'], { type: 'remove', value: 'apple' });
+      });
+
+      it('同じ value の外せない Chip が 2 つあり片方が外れても、残りの Chip があれば外せないまま', async () => {
+        const user = userEvent.setup();
+        const onChange = vi.fn();
+        const noop = vi.fn();
+        const renderWithFixedChips = (chipKeys: string[]) => (
+          <Combobox
+            isMultiple
+            value={['apple']}
+            onChange={onChange}
+            inputValue=""
+            onInputChange={noop}
+            onClickClearButton={noop}
+          >
+            <Combobox.Input aria-label="果物">
+              {chipKeys.map((chipKey) => (
+                <Combobox.Chip key={chipKey} value="apple" label="りんご" isRemovable={false} />
+              ))}
+            </Combobox.Input>
+            <Combobox.List>
+              <Combobox.Item value="apple" label="りんご" />
+            </Combobox.List>
+          </Combobox>
+        );
+        const { rerender } = render(renderWithFixedChips(['first', 'second']));
+
+        rerender(renderWithFixedChips(['second']));
+
+        // Backspace・候補の再選択でも外れず、クリアボタンも表示されない
+        await user.click(getCombobox());
+        await user.keyboard('{Backspace}');
+        await user.click(getOption('りんご'));
+
+        expect(onChange).not.toHaveBeenCalled();
+        expect(screen.queryByRole('button', { name: '選択をすべて削除' })).toBeNull();
       });
 
       it.each([
