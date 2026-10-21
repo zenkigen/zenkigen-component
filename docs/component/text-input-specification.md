@@ -296,7 +296,7 @@ Outline との主な差分:
 - クリアボタンは `IconButton`（`variant="text"`, `icon="close"`, `size="small"`）で実装され、`@zenkigen-inc/component-icons` の `Icon` を内部で利用する。
 - 内部実装用に `after?: ReactNode` プロパティを持つ `InternalProps` 型が定義されており、入力欄の末尾にカスタム要素を配置できる（公開APIではない）。
 - 内部実装用の `InternalProps` には、ほかに次のプロパティがある（いずれも公開APIではなく、公開 `TextInputProps` は変わらない）。
-  - `before?: ReactNode`: 入力欄の先頭に要素を配置する。指定時のみ input を折り返し可能なコンテナ（`flex-wrap`）で包み、その先頭に描画する。コンテナが `min-height`（medium 32px / large 40px / x-large 48px）と横 padding（`text` バリアントでは付けない）を持つため、1 行時の高さは未指定時と同じ。未指定時の DOM・クラスは従来と同一。中身が空でもコンテナは描画され、中身の増減で input が再マウントされない（フォーカスが維持される）。
+  - `before?: ReactNode`: 入力欄の先頭に要素を配置する。指定時のみ input を折り返し可能なコンテナ（`flex-wrap`）で包み、その先頭に描画する。コンテナが `min-height`（medium 32px / large 40px / x-large 48px）と横 padding（`text` バリアントでは付けない）を持つため、1 行時の高さは未指定時と同じ。未指定時の DOM・クラスは従来と同一。中身が空でもコンテナは描画され、中身の増減で input が再マウントされない（フォーカスが維持される）。**一度使う場合は中身が空でも常に `before` を渡すこと**。有無を切り替える（`before={hasChips ? chips : undefined}` など）と input の置き場所が変わって再マウントされ、フォーカスや IME 変換中の入力が失われる。
   - `frameRef?: Ref<HTMLDivElement>`: 枠線を持つ外側の div への ref。`before` の有無にかかわらず同じ要素を指す。フローティング要素の位置基準として使う。
 - `TextInput.HelperMessage` はマウント時に `aria-describedby` へ ID を登録する。
 - `TextInput.ErrorMessage` は `isError === true` のときのみレンダーされ、そのときのみ `aria-describedby` と `aria-invalid` の計算に参加する。
@@ -319,6 +319,7 @@ Outline との主な差分:
 
 | 日付                 | 内容                                                                  | 担当者 |
 | -------------------- | --------------------------------------------------------------------- | ------ |
+| 2026-10-21 14:29 JST | `before` の有無を切り替えないよう注意書きを追記                       | -      |
 | 2026-10-05 13:46 JST | 内部実装用 `before` / `frameRef` プロパティについての技術的詳細を追記 | -      |
 | 2026-05-19 00:00 JST | `size` に `'x-large'` を追加（高さ 48px / 16px フォント）             | -      |
 | 2026-02-25 13:00 JST | `variant` プロパティ（`'outline' \| 'text'`）を追加し仕様を更新       | -      |

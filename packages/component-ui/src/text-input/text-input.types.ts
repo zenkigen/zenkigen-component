@@ -15,6 +15,8 @@ export type TextInputInternalProps = TextInputProps & {
   /**
    * 入力欄の先頭に表示する要素（内部実装用）。
    * 指定時のみ input を折り返し可能なコンテナで包み、その先頭に描画する。未指定時の DOM は変わらない。
+   * 一度使う場合は、中身が空でも常に渡すこと（例: `before={chips}` で chips が空配列）。
+   * 有無を切り替える（`before={hasChips ? chips : undefined}` など）と input が再マウントされ、フォーカスや IME 変換中の入力が失われる。
    */
   before?: ReactNode;
   /** 枠線を持つ外側 div への ref（内部実装用）。フローティング要素の位置基準に使う */
