@@ -26,7 +26,7 @@ import type { ComboboxInputProps, ComboboxMultipleChangeMeta, ComboboxProps } fr
  * - isError / isDisabled: 視覚 / 操作抑止
  * - multiple: 追加 / toggle 削除 / Backspace / revert / aria-multiselectable / aria-live / 型
  * - Combobox.Chip: 描画 / 長いラベルの省略 / ✗ での削除（マウス・キーボード）/ 外せないチップ / フォーカス維持 / blur・Escape / disabled
- * - Combobox.Empty / Combobox.Loading の children: 指定時はその内容、未指定・boolean・null・空文字は既定文言。role / popup の開閉 / 作成行の抑止は不変
+ * - Combobox.Empty / Combobox.Loading の children: 指定時はその内容、未指定・boolean・null・空文字（それらだけの配列を含む）は既定文言。role / popup の開閉 / 作成行の抑止は不変
  * - Combobox.Input の id / aria-label / aria-labelledby
  * - Combobox.CreateItem: 表示条件（空・変換中・Loading・重複・checkDuplicate）/ 作成 / 作成直前の再検証 / キーボード / a11y
  *
@@ -1843,10 +1843,13 @@ describe('Combobox', () => {
       expect(screen.getByText('一致する情報が見つかりません')).toBeInTheDocument();
     });
 
-    it.each([
+    it.each<[string, ReactNode]>([
       ['null', null],
       ['false', false],
       ['空文字', ''],
+      ['空文字だけの配列（{prefix}{message} が両方空）', ['', '']],
+      ['false だけの配列', [false, false]],
+      ['空の配列', []],
     ])('Combobox.Empty の children が %s のときは既定文言を描画する', (_, children) => {
       render(
         <StatusCombobox>
@@ -1867,10 +1870,13 @@ describe('Combobox', () => {
       expect(screen.getByText('読み込み中...')).toBeInTheDocument();
     });
 
-    it.each([
+    it.each<[string, ReactNode]>([
       ['null', null],
       ['false', false],
       ['空文字', ''],
+      ['空文字だけの配列（{prefix}{message} が両方空）', ['', '']],
+      ['false だけの配列', [false, false]],
+      ['空の配列', []],
     ])('Combobox.Loading の children が %s のときは既定文言を描画する', (_, children) => {
       render(
         <StatusCombobox>

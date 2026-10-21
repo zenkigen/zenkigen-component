@@ -115,7 +115,7 @@ export type ComboboxCreateItemProps = {
 /** 候補取得中の表示（`Combobox.List` の直接の子に置く） */
 export type ComboboxLoadingProps = {
   /**
-   * 表示の中身（任意）。未指定・boolean・空文字のときは「読み込み中...」を描画する。
+   * 表示の中身（任意）。未指定・boolean・空文字（それらだけの配列を含む）のときは「読み込み中...」を描画する。
    * インタラクティブ要素は置かない。高さは 1 行固定で、はみ出した分は末尾を省略する。
    */
   children?: ReactNode;
@@ -124,7 +124,7 @@ export type ComboboxLoadingProps = {
 /** 該当する候補が無いときの表示（`Combobox.List` の直接の子に置く） */
 export type ComboboxEmptyProps = {
   /**
-   * 表示の中身（任意）。未指定・boolean・空文字のときは「一致する情報が見つかりません」を描画する。
+   * 表示の中身（任意）。未指定・boolean・空文字（それらだけの配列を含む）のときは「一致する情報が見つかりません」を描画する。
    * インタラクティブ要素は置かない。高さは 1 行固定で、はみ出した分は末尾を省略する。
    */
   children?: ReactNode;
