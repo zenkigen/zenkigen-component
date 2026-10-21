@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react';
 import { ListOptionItem } from '../list/list-option-item';
 import type { ComboboxItemProps } from './combobox.types';
 import { useComboboxContext } from './combobox-context';
+import { hasRenderableChildren } from './has-renderable-children';
 
 export function ComboboxItem({ value, label, isDisabled = false, children }: ComboboxItemProps) {
   const { baseId, items, activeIndex, selectedValue, selectValue, setActiveIndex, inputMode, setInputMode } =
@@ -44,8 +45,8 @@ export function ComboboxItem({ value, label, isDisabled = false, children }: Com
     }
   };
 
-  // `{isX && <Badge />}` のように boolean が渡った場合は未指定とみなし、label を描画する（空の行にしない）
-  const hasCustomContent = children != null && typeof children !== 'boolean';
+  // `{isX && <Badge />}` が false の場合など、描画されるものが無い children は未指定とみなし、label を描画する（空の行にしない）
+  const hasCustomContent = hasRenderableChildren(children);
 
   return (
     <ListOptionItem

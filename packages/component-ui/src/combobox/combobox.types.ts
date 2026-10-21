@@ -64,6 +64,7 @@ export type ComboboxItemProps = {
   /**
    * 候補行の見た目（任意）。指定時は label の代わりに描画する。見た目のみで、選択時の値・input 表示には label を使う。
    * インタラクティブ要素は置かない。高さは 1 行固定のため、はみ出し対策（truncate / min-w-0）は children 側で行う。
+   * 描画されるものが無い children（false / null / 空文字 / それらだけの配列）は未指定とみなし、label を描画する。
    */
   children?: ReactNode;
 };

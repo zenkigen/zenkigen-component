@@ -1217,6 +1217,31 @@ describe('Combobox', () => {
       expect(option.children[0]?.textContent).toBe('りんご');
     });
 
+    it.each<{ name: string; children: ReactNode }>([
+      { name: '条件付きの要素が複数並びすべて false（[false, false]）', children: [false, false] },
+      { name: '空の配列（空の map 結果）', children: [] },
+      { name: '空文字', children: '' },
+      { name: '空文字と null の配列', children: ['', null] },
+    ])('children に描画されるものが無いとき（$name）は未指定とみなし label を描画する', async ({ children }) => {
+      const user = userEvent.setup();
+      render(
+        <Combobox value={null} onChange={vi.fn()} inputValue="" onInputChange={vi.fn()}>
+          <Combobox.Input />
+          <Combobox.List>
+            <Combobox.Item value="apple" label="りんご">
+              {children}
+            </Combobox.Item>
+          </Combobox.List>
+        </Combobox>,
+      );
+      await user.click(getCombobox());
+
+      // 空の行にならず、accessible name も label になる
+      const option = getOption('りんご');
+      expect(option.children[0]?.className).toBe('min-w-0 flex-1 truncate');
+      expect(option.children[0]?.textContent).toBe('りんご');
+    });
+
     it('option の accessible name は children のテキストの連結になり、aria-hidden の要素は含まれない', async () => {
       const user = userEvent.setup();
       render(<ChildrenCombobox />);

@@ -163,7 +163,7 @@ const MyComponent = () => {
 | `isDisabled` | `boolean`   |      | 個別アイテムの無効化（キーボード巡回でスキップされる）                                                                                  |
 | `children`   | `ReactNode` |      | 候補行の見た目（例: 名前 + 右寄せの補足テキスト）。見た目のみで、選択時の入力値・`onChange` の `meta.label` には常に `label` が使われる |
 
-children は `<span className="flex min-w-0 flex-1 items-center">` で包んで描画する（右端の選択チェックと共存させるため残り幅を取る）。children は Item の登録情報（`value` / `label` / `isDisabled`）には含まれない。
+children は `<span className="flex min-w-0 flex-1 items-center">` で包んで描画する（右端の選択チェックと共存させるため残り幅を取る）。children は Item の登録情報（`value` / `label` / `isDisabled`）には含まれない。描画されるものが無い children（`false` / `null` / `''`、それらだけの配列、空の配列）は未指定とみなし、`label` を描画する（空の行にしない）。フラグメントで包んだ場合（`<>{cond && <Badge />}</>`）は中身が空でも判定できないため対象外。
 
 children の規約:
 
@@ -514,3 +514,4 @@ A: `aria-activedescendant` のターゲット ID が衝突し、キーボード�
 | 2026-06-29 | クリアボタンの仕様変更（`onClickClearButton` を渡したときのみ表示、値のクリアは利用者責務）に伴う記述更新 | -      |
 | 2026-10-05 | IME 変換中の `↑` / `↓` / `Escape` を Combobox で扱わないよう修正（従来は `Enter` のみ）                   | -      |
 | 2026-10-05 | `Combobox.Item` に `children`（候補行の見た目のみのカスタムレイアウト）を追加                             | -      |
+| 2026-10-21 | `Combobox.Item` の children が空の配列・空文字のときも `label` を描画するよう修正                         | -      |
