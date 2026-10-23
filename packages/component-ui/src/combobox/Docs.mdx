@@ -64,7 +64,7 @@ const MyForm = () => {
 
 ### 非同期サジェスト
 
-`Combobox.Loading` / `Combobox.Empty` を Compound として配置することで、ローディング表示と該当なし表示を制御します。本体に `isLoading` / `noOptionsMessage` のような prop はありません。いずれも文言は固定（Loading: `読み込み中...` / Empty: `一致する情報が見つかりません`）で、現時点では children を渡せません。
+`Combobox.Loading` / `Combobox.Empty` を Compound として配置することで、ローディング表示と該当なし表示を制御します。本体に `isLoading` / `noOptionsMessage` のような prop はありません。children を省略すると既定の文言（Loading: `読み込み中...` / Empty: `一致する情報が見つかりません`）を描画します。文言を変えたい場合は次節の children を使います。
 
 ```tsx
 <Combobox value={value} onChange={...} inputValue={inputText} onInputChange={setInputText}>
@@ -78,6 +78,36 @@ const MyForm = () => {
   </Combobox.List>
 </Combobox>
 ```
+
+### ローディング / 該当なしの文言（`Combobox.Loading` / `Combobox.Empty` の children）
+
+`Combobox.Loading` / `Combobox.Empty` に children を渡すと、表示の中身を差し替えられます。状態に応じて文言を切り替える場合は、利用側で条件分岐して出し分けます（例: 入力前 / 検索 0 件 / ローディング）。
+
+```tsx
+<Combobox value={value} onChange={...} inputValue={inputText} onInputChange={setInputText}>
+  <Combobox.Input />
+  <Combobox.List>
+    {/* ローディング */}
+    {isLoading && <Combobox.Loading>果物を検索中...</Combobox.Loading>}
+    {/* 入力前 */}
+    {!isLoading && inputText.length === 0 && <Combobox.Empty>果物の名前を入力してください</Combobox.Empty>}
+    {/* 検索 0 件 */}
+    {!isLoading && inputText.length > 0 && results.length === 0 && (
+      <Combobox.Empty>一致する果物が見つかりません</Combobox.Empty>
+    )}
+    {!isLoading && results.map((opt) => (
+      <Combobox.Item key={opt.value} value={opt.value} label={opt.label} />
+    ))}
+  </Combobox.List>
+</Combobox>
+```
+
+children の規約:
+
+- **テキストまたはインライン要素を渡す**: 文言のほか、アイコンや強調などのインライン要素を置けます。未指定時は既定の文言を描画します
+- **インタラクティブ要素を置かない**: リンク・ボタンなどは置けません。フォーカスは常に入力欄にあり、この行はキーボード巡回の対象外のため、キーボードで到達できません
+- **高さは 1 行固定**: 行の高さは `size` に応じて固定です。はみ出した分は末尾を省略します（折り返しません）
+- **boolean・空文字は未指定の扱い**: `{条件 && '文言'}` の `false` や、変数経由の空文字 `''`、それらだけを並べた場合（`{prefix}{message}` が両方空など）は既定の文言を描画します（空の行にはなりません）。フラグメントで包んだ場合（`<>{条件 && '文言'}</>`）は対象外です
 
 ### 大量データの popup 抑制
 
@@ -99,7 +129,42 @@ const filtered = useMemo(() => {
 </Combobox>;
 ```
 
-`Combobox.Item` は `label` を 1 行 `truncate` 表示で自動レンダリングします。カスタム描画には現時点では対応していません。
+`Combobox.Item` は children を省略すると `label` を 1 行 `truncate` 表示で自動レンダリングします。行の見た目を変えたい場合は次節の children を使います。
+
+### 候補行のカスタムレイアウト（`Combobox.Item` の children）
+
+`Combobox.Item` に children を渡すと、候補行の中身を自由にレイアウトできます（例: 名前 + 右寄せの補足テキスト）。children は**見た目のみ**で、`label` は引き続き必須です。選択時の入力値・`onChange` の `meta.label` には常に `label` が使われます。
+
+```tsx
+<Combobox.List>
+  {filtered.map((fruit) => (
+    <Combobox.Item key={fruit.value} value={fruit.value} label={fruit.label}>
+      <span className="flex w-full min-w-0 items-center justify-between gap-4">
+        <span className="truncate">{fruit.label}</span>
+        <span className="typography-label12regular shrink-0">{fruit.origin}</span>
+      </span>
+    </Combobox.Item>
+  ))}
+</Combobox.List>
+```
+
+children の規約:
+
+- **インタラクティブ要素を置かない**: 候補行は `role="option"` のため、ボタン・リンク・入力などを子孫に置けません。静的な表示要素のみにしてください
+- **高さは 1 行固定**: 行の高さは `size` に応じて固定です。はみ出し対策（`truncate` / `min-w-0` / `shrink-0`）は children 側で行ってください
+- **背景色を付けない**: ハイライト（背景・左ボーダー）と選択チェックは行側で描画します。children に背景色を付けると隠れてしまいます
+- **描画されるものが無いときは label を表示**: `{hasBadge && <Badge />}` が `false` の場合や、それらを並べてすべて `false` の場合、空の配列・空文字のときは、children を省略したときと同じく `label` を表示します。フラグメントで包んだ場合（`<>{cond && <Badge />}</>`）は対象外です
+- **文字色は行の状態に応じて継承**: 既定は `interactive02`、選択中は `interactive01`、無効（`isDisabled`）は `disabled01` になります。補足テキストの色を children 側で固定すると、無効時も色が変わらなくなる点に注意してください
+- **読み上げ**: 候補の accessible name は children のテキストの連結になります（上の例では「りんご 青森県」）。読み上げ不要な要素（装飾アイコン・区切り記号・重複情報）には、利用側で `aria-hidden` を付けてください
+
+```tsx
+<Combobox.Item value={fruit.value} label={fruit.label}>
+  <span className="truncate">{fruit.label}</span>
+  {/* 装飾の区切り記号は読み上げない */}
+  <span aria-hidden="true">・</span>
+  <span className="typography-label12regular shrink-0">{fruit.origin}</span>
+</Combobox.Item>
+```
 
 ### ヘルパー / エラーメッセージ
 
@@ -114,3 +179,359 @@ const filtered = useMemo(() => {
   <Combobox.List>{/* ... */}</Combobox.List>
 </Combobox>
 ```
+
+### 入力欄に名前を付ける
+
+placeholder だけでは入力欄の accessible name になりません。`Combobox.Input` の `id`（`<label htmlFor>` と関連付け）/ `aria-label` / `aria-labelledby` のいずれかで名前を付けてください。単一選択・複数選択のどちらでも使えます。
+
+```tsx
+<label htmlFor="favorite-fruit">好きな果物</label>
+<Combobox /* ... */>
+  <Combobox.Input id="favorite-fruit" />
+  <Combobox.List>{/* ... */}</Combobox.List>
+</Combobox>
+
+{/* 画面上にラベルが無い場合 */}
+<Combobox /* ... */>
+  <Combobox.Input aria-label="好きな果物" />
+  <Combobox.List>{/* ... */}</Combobox.List>
+</Combobox>
+```
+
+### 複数選択（チップ）
+
+`isMultiple` を指定すると複数選択モードになり、`value` は ID の配列（`string[]`）、`onChange` は「次の配列」と差分（`{ type: 'add' | 'remove', value }`）を受け取ります。選択済みの値は、利用側が `Combobox.Chip` を `Combobox.Input` の children に並べて表示します。
+
+```tsx
+const [selectedIds, setSelectedIds] = useState<string[]>([]);
+const [inputText, setInputText] = useState('');
+
+// チップ表示用（state ではなく value からの導出）。value の順に並べる
+const selectedFruits = selectedIds.flatMap((id) => {
+  const fruit = fruits.find((item) => item.value === id);
+  return fruit != null ? [fruit] : [];
+});
+// 候補: 選択済みを除外し、入力で絞り込む（利用側の責務）
+const candidates = fruits.filter((fruit) => !selectedIds.includes(fruit.value) && fruit.label.includes(inputText));
+
+<Combobox
+  isMultiple
+  value={selectedIds}
+  onChange={(next) => setSelectedIds(next)}
+  inputValue={inputText}
+  onInputChange={setInputText}
+  placeholder="果物を検索..."
+>
+  <Combobox.Input aria-label="果物">
+    {selectedFruits.map((fruit) => (
+      <Combobox.Chip key={fruit.value} value={fruit.value} label={fruit.label} />
+    ))}
+  </Combobox.Input>
+  <Combobox.List>
+    {candidates.map((fruit) => (
+      <Combobox.Item key={fruit.value} value={fruit.value} label={fruit.label} />
+    ))}
+  </Combobox.List>
+</Combobox>;
+```
+
+ふるまい:
+
+- 候補を選ぶ（クリック / `Enter`）とチップが追加され、入力が空に戻ります。**候補リストは閉じません**。選択済みの候補を選ぶと選択を解除します
+- 削除はチップの ✗（クリック、または `Shift + Tab` で ✗ に移動して `Enter` / `Space`）と、入力が空のときの `Backspace`（`value` の末尾を削除）で行います
+- 入力欄の文字は常に未確定の検索語です。blur・`Escape`・✗ へのフォーカス移動で空に戻り、`value` は変わりません
+- 選択がある間は placeholder を表示しません
+- `onClickClearButton` を渡すとクリアボタンを表示します（下記「クリアボタン」）
+- 追加・削除は `aria-live` で読み上げます（チップの `label` を使用）
+
+チップの規約:
+
+- **`value` の全要素について、`value` と同じ順にチップを並べてください**。`Backspace` は描画順ではなく `value` の末尾を削除します。`value` にあってチップを描画していない値も、見えないだけで選択中として扱われます
+- 1 つの `value` につきチップは 1 つにしてください
+- チップは `Combobox.Input` の **直接の子** に置いてください（Fragment やラッパーコンポーネントで包むと認識されません）
+- 色は `gray` 固定で、`size="large"` でもチップは `medium` のままです。単一選択モードでは描画されません
+- 長いラベルは 1 行で末尾を「…」で省略します（チップの最大幅は入力欄の中のチップ領域の幅）。✗ は常に表示され、全文は `title`（マウスオーバー）とスクリーンリーダーで伝わります
+
+追加・削除に応じた副作用（API 呼び出し等）は `onChange` の第 2 引数で受け取れます。
+
+```tsx
+const handleChange = (next: string[], meta: ComboboxMultipleChangeMeta) => {
+  setSelectedIds(next);
+  if (meta.type === 'add') {
+    attachTag(meta.value);
+  } else {
+    detachTag(meta.value);
+  }
+};
+```
+
+### 作成行（`Combobox.CreateItem`）
+
+候補に無い名前を新しく作って選べるようにするには、`Combobox.List` に `Combobox.CreateItem` を置きます。入力に応じて末尾に `「{入力文字}」を作成` 行が表示され、Enter / クリックで `onCreate(text)` が呼ばれます（`text` は入力を trim したもの）。
+
+```tsx
+const [fruits, setFruits] = useState<Fruit[]>(initialFruits); // マスタ（作成で増える）
+const [selectedIds, setSelectedIds] = useState<string[]>([]);
+const [inputText, setInputText] = useState('');
+
+const handleCreate = (text: string) => {
+  const created = { value: crypto.randomUUID(), label: text }; // 実際は API で作成
+  setFruits((prev) => [...prev, created]);
+  setSelectedIds((prev) => [...prev, created.value]);
+  setInputText(''); // 作成に成功したら利用側で入力を空にする
+};
+
+<Combobox
+  isMultiple
+  value={selectedIds}
+  onChange={(next) => setSelectedIds(next)}
+  inputValue={inputText}
+  onInputChange={setInputText}
+>
+  <Combobox.Input aria-label="果物">
+    {selectedFruits.map((fruit) => (
+      <Combobox.Chip key={fruit.value} value={fruit.value} label={fruit.label} />
+    ))}
+  </Combobox.Input>
+  <Combobox.List>
+    {candidates.length === 0 && <Combobox.Empty />}
+    {candidates.map((fruit) => (
+      <Combobox.Item key={fruit.value} value={fruit.value} label={fruit.label} />
+    ))}
+    <Combobox.CreateItem onCreate={handleCreate} />
+  </Combobox.List>
+</Combobox>;
+```
+
+- **表示するかどうかはライブラリが判定します。利用側は置くだけです**。入力が空（空白のみを含む）・IME 変換中・`Combobox.Loading` の描画中・既存と重複しているときは、区切り線も含めて何も表示しません
+- 重複の既定の判定は「候補の `Combobox.Item` の `label`、または選択中のチップの `label` と完全一致（`===`）」です。選択済みを候補から除外していても、チップの `label` と一致すれば作成行は出ません
+- 大文字小文字・全角半角・かなを同一視したい場合や、画面に出ていない既存データと照合したい場合は `checkDuplicate`（同期関数。`true` で作成行を出さない）を渡します。指定すると既定の判定を**置き換えます**（候補との一致も含めて利用側で判定してください）
+- `onCreate` の後、ライブラリは `onChange` も `onInputChange` も呼びません。`value` への追加と、**成功時の入力のクリアは利用側で行います**。入力をクリアしなくても、追加したチップの `label` と一致するため作成行は消えます（既定の判定の場合）
+- 複数選択では作成後も候補リストは開いたままです
+- 候補が 0 件のときは `Combobox.Empty` と作成行を並べて表示でき、作成行が active になります
+- 文言（`「{入力文字}」を作成`）は固定です。`Combobox.CreateItem` は `Combobox.List` の **直接の子** として 1 つだけ置いてください（2 つ目以降や、Fragment・ラッパーコンポーネントで包んだものは何も表示されず、`onCreate` も呼ばれません）
+- 重複の最終的な防止はサーバー側の検証で行ってください
+
+作成 API が非同期の場合は、**作成中に `Combobox.Loading` を描画して二重作成を防ぎ**、失敗時は入力を残して再試行できるようにします。
+
+```tsx
+const [isCreating, setIsCreating] = useState(false);
+
+const handleCreate = async (text: string) => {
+  setIsCreating(true); // Loading の描画中は作成行が出ないため、連打しても二重に作成されない
+  try {
+    const created = await createFruit(text);
+    setSelectedCache((prev) => new Map(prev).set(created.value, created));
+    setSelectedIds((prev) => [...prev, created.value]);
+    setInputText(''); // 成功時のみクリアする
+  } catch {
+    setErrorMessage(`「${text}」を作成できませんでした`); // 入力は残るので、そのまま再試行できる
+  } finally {
+    setIsCreating(false);
+  }
+};
+
+<Combobox.List>
+  {isCreating && <Combobox.Loading />}
+  {/* ... */}
+  <Combobox.CreateItem onCreate={handleCreate} />
+</Combobox.List>;
+```
+
+### 複数選択の非同期検索
+
+候補をサーバーで検索する場合は、検索語が変わると選択済みの表示情報が検索結果から消えるため、追加時に保持しておきます。作成行には、画面に出ていない既存データとの重複をライブラリが検出できないため `checkDuplicate` を渡し、**選択済みを除外する前の検索結果**で判定します（Story: `MultipleAsyncSearch`）。
+
+```tsx
+const [selectedIds, setSelectedIds] = useState<string[]>([]);
+const [selectedCache, setSelectedCache] = useState<Map<string, Fruit>>(new Map());
+const { data: results = [], isLoading } = useFruitSearch(inputText); // 利用側の検索フック
+// isCreating / handleCreate は「作成行（Combobox.CreateItem）」節の非同期版と同じ定義を使う
+
+const handleChange = (next: string[], meta: ComboboxMultipleChangeMeta) => {
+  if (meta.type === 'add') {
+    const fruit = results.find((result) => result.value === meta.value);
+    if (fruit != null) {
+      setSelectedCache((prev) => new Map(prev).set(fruit.value, fruit));
+    }
+  }
+  setSelectedIds(next);
+};
+
+const selectedFruits = selectedIds.flatMap((id) => {
+  const fruit = selectedCache.get(id);
+  return fruit != null ? [fruit] : [];
+});
+
+<Combobox isMultiple value={selectedIds} onChange={handleChange} inputValue={inputText} onInputChange={setInputText}>
+  <Combobox.Input aria-label="果物">
+    {selectedFruits.map((fruit) => (
+      <Combobox.Chip key={fruit.value} value={fruit.value} label={fruit.label} />
+    ))}
+  </Combobox.Input>
+  <Combobox.List>
+    {(isLoading || isCreating) && <Combobox.Loading />}
+    {!isLoading &&
+      results
+        .filter((fruit) => !selectedIds.includes(fruit.value)) // 選択済みは候補から除外（再検索で戻ってくるため）
+        .map((fruit) => <Combobox.Item key={fruit.value} value={fruit.value} label={fruit.label} />)}
+    <Combobox.CreateItem
+      onCreate={handleCreate}
+      checkDuplicate={(text) => results.some((fruit) => fruit.label === text)}
+    />
+  </Combobox.List>
+</Combobox>;
+```
+
+- 検索中は `Combobox.Loading` を描画してください。Loading の描画中は作成行が出ないため、古い検索結果で一瞬「作成」が出ることを防げます
+- 初期値（編集画面など）がある場合は、初期表示時に選択済みの値の表示情報を取得してキャッシュに入れてください
+
+### 候補の追加読み込み（`Combobox.LoadMore`）
+
+候補が多いときに、最初は一部だけを表示し、候補リストの下端に近づいたら続きを追加できます。`Combobox.List` に `Combobox.LoadMore` を置くと、続きが必要になったときに `onLoadMore` が呼ばれます。何件ずつ取得するか・続きがあるかどうかは利用側で持ちます（ライブラリは件数やページの状態を持ちません）。
+
+| prop         | 型           | 既定値          | 説明                                                                                        |
+| ------------ | ------------ | --------------- | ------------------------------------------------------------------------------------------- |
+| `onLoadMore` | `() => void` | -（必須）       | 続きの候補が必要になったときに呼ばれる                                                      |
+| `isLoading`  | `boolean`    | `false`         | 追加読み込み中か。`true` のあいだは `onLoadMore` を呼ばず、末尾に読み込み中の行を表示する   |
+| `children`   | `ReactNode`  | `読み込み中...` | 読み込み中の行の中身。規約は `Combobox.Loading` と同じ（未指定・boolean・空文字は既定文言） |
+
+サーバーから続きを取得する場合（例: TanStack Query の `useInfiniteQuery`）。`onLoadMore` には Promise を返す関数もそのまま渡せます。
+
+```tsx
+const { data, hasNextPage, isFetchingNextPage, fetchNextPage } = useFruitPages(inputText); // 利用側の取得フック
+const results = data?.pages.flatMap((page) => page.items) ?? [];
+
+<Combobox.List>
+  {results.map((fruit) => (
+    <Combobox.Item key={fruit.value} value={fruit.value} label={fruit.label} />
+  ))}
+  {hasNextPage && <Combobox.LoadMore isLoading={isFetchingNextPage} onLoadMore={() => fetchNextPage()} />}
+</Combobox.List>;
+```
+
+全件を手元に持ち、表示件数を 100 件ずつ増やす場合（Story: `LoadMore`）。取得を伴わないので `isLoading` は不要です。入力が変わったら表示件数を初期値に戻します。
+
+```tsx
+const PAGE_SIZE = 100;
+const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+
+const filtered = useMemo(() => allItems.filter((item) => item.label.includes(inputText)), [inputText]);
+const visibleItems = filtered.slice(0, visibleCount);
+
+<Combobox
+  /* ... */
+  inputValue={inputText}
+  onInputChange={(next) => {
+    setInputText(next);
+    setVisibleCount(PAGE_SIZE);
+  }}
+>
+  <Combobox.Input />
+  <Combobox.List>
+    {visibleItems.map((item) => (
+      <Combobox.Item key={item.value} value={item.value} label={item.label} />
+    ))}
+    {visibleCount < filtered.length && (
+      <Combobox.LoadMore onLoadMore={() => setVisibleCount((count) => count + PAGE_SIZE)} />
+    )}
+  </Combobox.List>
+</Combobox>;
+```
+
+置き方:
+
+- **これ以上の候補が無くなったら `Combobox.LoadMore` を描画しません**。終端を表す専用の prop はありません（`{hasNextPage && <Combobox.LoadMore ... />}` のように条件で出し分けます）
+- `Combobox.List` の **直接の子** として、候補（`Combobox.Item`）の後ろに 1 つだけ置いてください。`Combobox.List` の外に置くとエラーになります
+- `Combobox.CreateItem` を使う場合は、その **前** に置きます。作成行が区切り線付きで最下部に残ります（Story: `LoadMoreAsync`）
+
+```tsx
+<Combobox.List>
+  {candidates.map((fruit) => (
+    <Combobox.Item key={fruit.value} value={fruit.value} label={fruit.label} />
+  ))}
+  {hasNextPage && <Combobox.LoadMore isLoading={isFetchingNextPage} onLoadMore={() => fetchNextPage()} />}
+  <Combobox.CreateItem onCreate={handleCreate} />
+</Combobox.List>
+```
+
+`onLoadMore` が呼ばれるタイミング:
+
+- 候補リストをスクロールして、下端から 1 画面分手前まで近づいたとき
+- 候補リストを開いた直後や候補が増えた直後に、候補が少なくリストが埋まっていないとき（埋まるまで続けて呼ばれます）
+- キーボードで末尾の項目からさらに `↓` を押したとき
+- `isLoading` が `true` のあいだは呼ばれません。同じ位置で連続して呼ばれないようライブラリが抑止するため、利用側で連打を防ぐ処理は不要です
+
+取得に失敗したとき:
+
+- `onLoadMore` の後に候補が増えなければ、自動では再度呼ばれません（失敗しても呼び続けることはありません）
+- 利用者がスクロールで下端からいったん離れて戻すか、末尾の項目で `↓` を押すと、再度呼ばれます
+
+アクセシビリティ上の制約:
+
+- 追加読み込みの開始・失敗・終端や、`↑` / `↓` が端でループしないことは、スクリーンリーダーには通知されません。必要な場合は利用側で通知してください
+
+キーボード操作:
+
+- `Combobox.LoadMore` を置いているあいだ、`↑` / `↓` は端でループしません（先頭で `↑`、末尾で `↓` を押しても反対側へ移りません）
+- 末尾の項目（作成行を含む）で `↓` を押すと `onLoadMore` が呼ばれ、取得が終わって候補が増えると、追加された候補の先頭へ移ります。最後のページの追加と同時に `Combobox.LoadMore` を描画しなくなった場合も同じです
+- 表示中の候補がすべて `isDisabled` のときも、`↓` で `onLoadMore` が呼ばれます（続きにある有効な候補へ進めます）
+- `Combobox.LoadMore` を描画しなくなると（終端）、従来どおり端でループします
+
+読み込み中の行:
+
+- `isLoading` が `true` のあいだ、`Combobox.LoadMore` を置いた位置に「読み込み中...」の行を表示します。children で中身を差し替えられます（規約は「ローディング / 該当なしの文言」節と同じ）
+- `Combobox.Loading`（リスト全体の読み込み）とは役割が異なります。`Combobox.Loading` の描画中は作成行が出ませんが、`Combobox.LoadMore` の読み込み中は作成行を隠しません
+- **初回の読み込みには従来どおり `Combobox.Loading` を使ってください**。`Combobox.LoadMore` は候補ではないため、それだけでは候補リストは開きません
+
+### 外せないチップ
+
+最初から設定されていて外せない値は、そのチップに `isRemovable={false}` を指定します。✗ が表示されず、`Backspace`・候補の再選択でも外れません。外せるかどうかは**描画中のチップの宣言だけ**で判定するため、外せない値のチップは必ず描画してください。
+
+```tsx
+<Combobox.Input aria-label="果物">
+  {selectedFruits.map((fruit) => (
+    <Combobox.Chip
+      key={fruit.value}
+      value={fruit.value}
+      label={fruit.label}
+      isRemovable={!fixedIds.includes(fruit.value)}
+    />
+  ))}
+</Combobox.Input>
+```
+
+### クリアボタン（複数選択）
+
+複数選択でも、`onClickClearButton` を渡したときだけクリアボタン（×）を表示します。何を消すかは単一選択と同じく利用側のハンドラで決めます。
+
+**基本は、入力中だけハンドラを渡して入力だけを消す使い方です。** 未入力ではボタンが表示されないため、うっかり押して選択がまとめて外れることがありません。
+
+```tsx
+<Combobox
+  isMultiple
+  {...(inputText !== '' ? { onClickClearButton: () => setInputText('') } : {})}
+  /* ... */
+>
+```
+
+選択をまとめて外せるようにしたい画面に限り、常にハンドラを渡し、未入力なら外せる選択をすべて外すこともできます。
+
+```tsx
+const handleClickClearButton = () => {
+  if (inputText !== '') {
+    setInputText(''); // 入力中: 入力だけを消す
+    return;
+  }
+  setSelectedIds((prev) => prev.filter((id) => fixedIds.includes(id))); // 未入力: 外せる選択をすべて外す
+};
+
+<Combobox isMultiple onClickClearButton={handleClickClearButton} /* ... */>
+```
+
+- 表示するのは、ハンドラを渡していて、入力があるとき、または外せる選択（`isRemovable={false}` を宣言していないチップの値）があるときです。外せないチップだけのときと、`isDisabled` のときは表示しません
+- 読み上げ名は、入力があるときは「入力をクリア」、未入力のときは「選択をすべて削除」です
+- 選択をまとめて外す使い方では、ボタンの位置が変わらないため、入力を消すつもりで続けて押すと選択まで外れます。誤操作で困る画面では基本の使い方にしてください
+- 押しても入力欄のフォーカスと候補リストの開閉は変わりません。選択を外すときは利用側が `value` を差し替えるだけなので `onChange` は呼ばれず、外れたことは `aria-live` で読み上げます（Story: `MultipleWithClearButton`）
+
+`Combobox.Item` の children（候補行のカスタムレイアウト）は複数選択でも同じように使えます（Story: `MultipleWithCustomItem`）。

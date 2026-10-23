@@ -1,14 +1,17 @@
 import type { KeyboardEvent } from 'react';
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
 
-import type { ComboboxChangeMeta } from './combobox.types';
+import type { ComboboxMultipleProps, ComboboxSingleProps } from './combobox.types';
 import type { ComboboxItemMeta } from './combobox-context';
 
 export type ComboboxInputMode = 'keyboard' | 'mouse';
 
-export type UseComboboxParams = {
-  value: string | null;
-  onChange: (value: string | null, meta: ComboboxChangeMeta | null) => void;
+/** 選択値まわりの params。props と同じく isMultiple で判別する */
+type UseComboboxSelectionParams =
+  | Pick<ComboboxSingleProps, 'isMultiple' | 'value' | 'onChange'>
+  | Pick<ComboboxMultipleProps, 'isMultiple' | 'value' | 'onChange'>;
+
+export type UseComboboxParams = UseComboboxSelectionParams & {
   inputValue: string;
   onInputChange: (value: string) => void;
   isOpen?: boolean;
@@ -22,8 +25,10 @@ export type UseComboboxReturn = {
   isOpen: boolean;
   setIsOpen: (next: boolean) => void;
   activeIndex: number | null;
-  /** activeIndex を設定（activeValueRef も同期される） */
+  /** activeIndex を設定（activeItemRef も同期される） */
   setActiveIndex: (index: number | null) => void;
+  /** active な項目の識別子。候補の追加・挿入で index がずれても変わらない（Item / CreateItem のハイライト判定用） */
+  activeItemKey: ComboboxActiveItemKey | null;
   inputMode: ComboboxInputMode;
   setInputMode: (mode: ComboboxInputMode) => void;
   items: ComboboxItemMeta[];
@@ -33,7 +38,153 @@ export type UseComboboxReturn = {
   revertInputToCommitted: () => void;
   inputRef: React.RefObject<HTMLInputElement | null>;
   handleKeyDown: (event: KeyboardEvent<HTMLInputElement>) => void;
+  /** 複数選択: 指定した値を選択から外す（value に無い・外せない値なら何もしない。開閉状態は変えない） */
+  removeSelected: (value: string) => void;
+  /** 複数選択: value の末尾から見て最初の外せる値を選択から外す（Backspace 用） */
+  removeLastSelected: () => void;
+  /**
+   * 複数選択: Chip の label を登録する。aria-live 通知用（unmount では削除しない＝最後に知っていた label を保持）と、
+   * 作成行の重複判定用（戻り値の関数で解除する）の 2 つに登録する。戻り値の関数は描画中の数も戻す
+   */
+  registerChipLabel: (value: string, label: string) => () => void;
+  /** 複数選択: 描画中の Chip の label（作成行の重複判定用。Chip の追加・削除・label 変更で再描画される） */
+  chipLabels: ReadonlyMap<string, string>;
+  /** IME 変換中か */
+  isComposing: boolean;
+  /** IME 変換の開始・終了を通知する */
+  setIsComposing: (next: boolean) => void;
+  /** 作成行の重複判定の材料を登録する（Combobox.List から） */
+  registerCreateJudge: (judge: ComboboxCreateJudge | null) => void;
+  /** 作成行の onCreate を登録する（Combobox.CreateItem から）。戻り値の関数で解除する */
+  registerCreateOnCreate: (onCreate: (text: string) => void) => () => void;
+  /** 作成行を選ぶ（表示条件を最新の値で再検証し、満たすときだけ onCreate を呼ぶ） */
+  selectCreate: () => void;
+  /** 複数選択: 外せない値を登録する。戻り値の関数で登録を解除する */
+  registerFixedValue: (value: string) => () => void;
+  /** 複数選択: value に外せる値が 1 つ以上あるか（単一選択では常に false） */
+  hasRemovableSelection: boolean;
+  /** 追加読み込みの要求を登録する（Combobox.LoadMore から。null で解除） */
+  registerLoadMore: (request: (() => void) | null) => void;
+  /**
+   * 複数選択: aria-live 領域に出すメッセージ（value の差分から生成。単一選択では常に空）。
+   * id は通知ごとに増える連番。同じ文言が続いても別の通知として描画し直すために使う。
+   */
+  liveMessage: { id: number; text: string };
 };
+
+/** 作成行の表示判定のうち、Combobox.List の children から得る材料 */
+export type ComboboxCreateJudge = {
+  /** Combobox.Loading が描画されているか */
+  hasLoading: boolean;
+  /** 候補 Item の label */
+  optionLabels: string[];
+  /** Combobox.CreateItem の checkDuplicate（指定時は既定の重複判定を置き換える） */
+  checkDuplicate?: (text: string) => boolean;
+};
+
+/**
+ * 作成行に出す文字列を求める。出さないときは null。描画時（Combobox.List）と実行直前（selectCreate）で共有する。
+ * - 入力を trim して空 / IME 変換中 / Loading 描画中 / 重複 のときは出さない
+ * - 重複の既定判定: 候補 Item の label、または選択中の値の Chip の label と完全一致（===）
+ */
+export function resolveCreateText({
+  inputValue,
+  isComposing,
+  selectedValues,
+  chipLabels,
+  judge,
+}: {
+  inputValue: string;
+  isComposing: boolean;
+  selectedValues: string[];
+  chipLabels: ReadonlyMap<string, string>;
+  judge: ComboboxCreateJudge;
+}): string | null {
+  const text = inputValue.trim();
+  if (text === '' || isComposing || judge.hasLoading) {
+    return null;
+  }
+  const isDuplicate =
+    judge.checkDuplicate != null
+      ? judge.checkDuplicate(text)
+      : judge.optionLabels.includes(text) || selectedValues.some((value) => chipLabels.get(value) === text);
+
+  return isDuplicate ? null : text;
+}
+
+// 末尾の ↓ による移動の予約。after: その value の候補行の直後の有効な候補行へ / first: 最初の有効な候補行へ（候補行が無かったとき）。
+// isExpiring: Combobox.LoadMore が外れた後の予約。次の候補の更新で移動を試みたら（移れなくても）取り消す。
+type LoadMoreAnchor = ({ kind: 'after'; value: string } | { kind: 'first' }) & { isExpiring?: boolean };
+
+// active な項目の識別子。作成行は 1 つだけなので kind のみで同一とみなす（入力に合わせて文字列が変わっても active を保つ）。
+export type ComboboxActiveItemKey = { kind: ComboboxItemMeta['kind']; value: string };
+
+function toActiveItemKey(item: ComboboxItemMeta | undefined): ComboboxActiveItemKey | null {
+  return item == null ? null : { kind: item.kind, value: item.value };
+}
+
+type ComboboxItemIdentity = Pick<ComboboxItemMeta, 'kind' | 'value'>;
+
+function isSameItem(a: ComboboxItemIdentity | null, b: ComboboxItemIdentity | null): boolean {
+  if (a === null || b === null) {
+    return a === b;
+  }
+
+  return a.kind === b.kind && (a.kind === 'create' || a.value === b.value);
+}
+
+// items の浅い比較（setItems のループ更新の回避と、候補が実際に変わったかの判定に使う）
+function isSameItems(prev: ComboboxItemMeta[], next: ComboboxItemMeta[]): boolean {
+  return (
+    prev.length === next.length &&
+    prev.every(
+      (p, i) =>
+        p.kind === next[i]?.kind &&
+        p.value === next[i]?.value &&
+        p.label === next[i]?.label &&
+        p.isDisabled === next[i]?.isDisabled,
+    )
+  );
+}
+
+// blur / Escape で未確定入力を破棄して戻す先の表示テキストを求める。
+// - 複数選択: 入力は常に未確定の検索テキストなので必ず ''
+// - 単一選択: value===null のとき ''、それ以外は確定時の inputValue
+function getCommittedInputValue(params: UseComboboxParams): string {
+  if (params.isMultiple === true || params.value === null) {
+    return '';
+  }
+
+  return params.inputValue;
+}
+
+// 複数選択の value の差分から aria-live のメッセージを組み立てる（削除 → 追加の順、「、」で連結）。
+function buildLiveMessage(added: string[], removed: string[], getLabel: (value: string) => string): string {
+  const toLabels = (values: string[]) => values.map((value) => `「${getLabel(value)}」`).join('、');
+  const messages: string[] = [];
+  if (removed.length > 0) {
+    messages.push(`${toLabels(removed)}を削除しました`);
+  }
+  if (added.length > 0) {
+    messages.push(`${toLabels(added)}を追加しました`);
+  }
+
+  return messages.join('、');
+}
+
+// 値ごとの件数を 1 増やす / 1 減らす（0 になったらキーごと消す）。同じ value の Chip が複数描画される場合に使う。
+function incrementCount(counts: Map<string, number>, key: string) {
+  counts.set(key, (counts.get(key) ?? 0) + 1);
+}
+
+function decrementCount(counts: Map<string, number>, key: string) {
+  const count = counts.get(key) ?? 0;
+  if (count <= 1) {
+    counts.delete(key);
+  } else {
+    counts.set(key, count - 1);
+  }
+}
 
 export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
   const baseId = useId();
@@ -71,12 +222,13 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
   );
 
   // blur / Escape で未確定入力を破棄して戻す先の表示テキスト。
-  // 不変条件: value===null のとき必ず ''、それ以外は最後に確定した label（＝確定時の inputValue）。
-  const committedInputValueRef = useRef(params.value === null ? '' : params.inputValue);
+  // 不変条件（単一選択）: value===null のとき必ず ''、それ以外は最後に確定した label（＝確定時の inputValue）。
+  // 不変条件（複数選択）: 常に ''（入力は常に未確定の検索テキスト。選択値はチップ側に保持される）。
+  const committedInputValueRef = useRef(getCommittedInputValue(params));
 
   // 外部からの value 変更（プログラム的セット）に committed を追従させる。null は必ず空に正規化。
   useEffect(() => {
-    committedInputValueRef.current = paramsRef.current.value === null ? '' : paramsRef.current.inputValue;
+    committedInputValueRef.current = getCommittedInputValue(paramsRef.current);
   }, [params.value]);
 
   const revertInputToCommitted = useCallback(() => {
@@ -91,8 +243,29 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
   const itemsRef = useRef(items);
   itemsRef.current = items;
 
-  // 現 active item の value を ref で保持（items 変更時に再引き当てるための source of truth）
-  const activeValueRef = useRef<string | null>(null);
+  // 現 active item の識別子を ref で保持（items 変更時に再引き当てるための source of truth）
+  const activeItemRef = useRef<ComboboxActiveItemKey | null>(null);
+  // 同じ識別子を state でも持つ（Item / CreateItem のハイライト判定用）。activeIndex は items の更新から
+  // 1 レンダー遅れて引き直されるため、index で判定すると active より前に候補が挿入されたときに判定が瞬断する。
+  const [activeItemKey, setActiveItemKey] = useState<ComboboxActiveItemKey | null>(null);
+  // 現在の activeIndex（moveActive が state updater の外で端を判定するために参照する）
+  const activeIndexRef = useRef<number | null>(null);
+
+  // 追加読み込み（Combobox.LoadMore）の要求。登録されているあいだ ↑↓ は端でループしない。
+  const loadMoreRef = useRef<(() => void) | null>(null);
+  // 末尾の項目で ↓ が押されたときの、最後の候補行（↓ による移動の予約）。
+  // 候補が増えてこの行の直後に有効な候補行が現れたら、active をそこへ移す。
+  // 候補行が 1 件も無かった（作成行だけだった）ときは、最初の有効な候補行へ移す。
+  const loadMoreAnchorRef = useRef<LoadMoreAnchor | null>(null);
+
+  // 解除（Combobox.LoadMore が外れた）時、予約はその場では消さない。最終ページの追加と同時に外れた場合に
+  // 追加分の先頭へ移れるよう、同じ更新で届く候補（setItems）を待ってから取り消す。
+  const registerLoadMore = useCallback((request: (() => void) | null) => {
+    loadMoreRef.current = request;
+    if (request === null && loadMoreAnchorRef.current !== null) {
+      loadMoreAnchorRef.current = { ...loadMoreAnchorRef.current, isExpiring: true };
+    }
+  }, []);
 
   // open セッションごとの初期化済みフラグ
   const hasInitializedActiveRef = useRef(false);
@@ -100,31 +273,36 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
   // キー/マウスの操作モード（keyboard 中は scrollIntoView を発動）
   const [inputMode, setInputMode] = useState<ComboboxInputMode>('keyboard');
 
-  // activeIndex と activeValueRef を同期するラッパ
-  const setActiveIndex = useCallback((index: number | null) => {
+  // active を更新する唯一の経路。index（aria-activedescendant・キーボード移動用）と
+  // 識別子（activeItemRef / activeItemKey）を必ず同時に更新し、両者が食い違わないようにする。
+  // sourceItems は index を引く対象（items の effect からは、その effect が見ている items を渡す）。
+  const commitActive = useCallback((index: number | null, sourceItems: ComboboxItemMeta[] = itemsRef.current) => {
+    const key = index === null ? null : toActiveItemKey(sourceItems[index]);
+    activeIndexRef.current = index;
+    activeItemRef.current = key;
     setActiveIndexState(index);
-    if (index === null) {
-      activeValueRef.current = null;
-    } else {
-      const item = itemsRef.current[index];
-      activeValueRef.current = item?.value ?? null;
-    }
+    // 同じ項目なら同じ参照を返して再描画しない（作成行は入力に合わせて文字列が変わっても同じ項目）
+    setActiveItemKey((prev) => (isSameItem(prev, key) ? prev : key));
   }, []);
 
-  const setItems = useCallback((next: ComboboxItemMeta[]) => {
-    setItemsState((prev) => {
-      // 浅い比較でループ更新を避ける
-      if (
-        prev.length === next.length &&
-        prev.every(
-          (p, i) => p.value === next[i]?.value && p.label === next[i]?.label && p.isDisabled === next[i]?.isDisabled,
-        )
-      ) {
-        return prev;
-      }
+  // activeIndex と activeItemRef を同期するラッパ（hover 等。↓ による移動の予約は取り消す）
+  const setActiveIndex = useCallback(
+    (index: number | null) => {
+      loadMoreAnchorRef.current = null;
+      commitActive(index);
+    },
+    [commitActive],
+  );
 
-      return next;
-    });
+  const setItems = useCallback((next: ComboboxItemMeta[]) => {
+    // Combobox.LoadMore が外れた更新で候補が変わらなかったら、残しておいた予約をここで取り消す
+    // （候補が変わった場合は、下の items の effect が移動を試みてから取り消す）。
+    // state の更新関数は StrictMode で 2 回呼ばれるため、その外で判定する。
+    if (loadMoreAnchorRef.current?.isExpiring === true && isSameItems(itemsRef.current, next)) {
+      loadMoreAnchorRef.current = null;
+    }
+    // 浅い比較でループ更新を避ける
+    setItemsState((prev) => (isSameItems(prev, next) ? prev : next));
   }, []);
 
   // isOpen の切替を検知
@@ -135,10 +313,15 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
       setInputMode('keyboard');
     } else {
       hasInitializedActiveRef.current = false;
-      activeValueRef.current = null;
-      setActiveIndexState(null);
+      loadMoreAnchorRef.current = null;
+      commitActive(null);
     }
-  }, [isOpen]);
+  }, [isOpen, commitActive]);
+
+  // 入力文字が変わったら、↓ による移動の予約を取り消す（下の items の effect より先に評価する）
+  useEffect(() => {
+    loadMoreAnchorRef.current = null;
+  }, [params.inputValue]);
 
   // items 変更 + open 状態 → 初期化 or value 再引き当て
   useEffect(() => {
@@ -147,8 +330,10 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
     }
 
     if (items.length === 0) {
-      setActiveIndexState(null);
-      activeValueRef.current = null;
+      // 候補がいったん空になったら、↓ による移動の予約も取り消す（予約した行が消えたのと同じ。
+      // 残すと、後で届いた候補に以前の末尾が含まれていた場合に、その直後へ移って先頭側の候補を飛ばす）
+      loadMoreAnchorRef.current = null;
+      commitActive(null);
 
       return;
     }
@@ -156,20 +341,22 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
     const firstEnabledIdx = items.findIndex((item) => !item.isDisabled);
     const fallbackToFirstEnabled = () => {
       if (firstEnabledIdx === -1) {
-        setActiveIndexState(null);
-        activeValueRef.current = null;
+        commitActive(null);
       } else {
-        setActiveIndexState(firstEnabledIdx);
-        activeValueRef.current = items[firstEnabledIdx]?.value ?? null;
+        commitActive(firstEnabledIdx, items);
       }
     };
 
     if (!hasInitializedActiveRef.current) {
-      // 初回（この open セッションの最初）: selectedValue 優先で初期化
-      const selectedIdx = items.findIndex((item) => item.value === paramsRef.current.value && !item.isDisabled);
+      // 初回（この open セッションの最初）: 単一選択は selectedValue 優先で初期化。
+      // 複数選択は選択済みが通常候補から除外されるため、value 一致を優先せず先頭 enabled にする。
+      const selectedValue = paramsRef.current.isMultiple === true ? null : paramsRef.current.value;
+      const selectedIdx =
+        selectedValue === null
+          ? -1
+          : items.findIndex((item) => item.kind === 'option' && item.value === selectedValue && !item.isDisabled);
       if (selectedIdx !== -1) {
-        setActiveIndexState(selectedIdx);
-        activeValueRef.current = items[selectedIdx]?.value ?? null;
+        commitActive(selectedIdx, items);
       } else {
         fallbackToFirstEnabled();
       }
@@ -178,56 +365,305 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
       return;
     }
 
-    // 初期化済: 現 active value を新 items から引き直す（index ではなく value で同一性を判定）
-    const currentActiveValue = activeValueRef.current;
-    if (currentActiveValue !== null) {
-      const newIdx = items.findIndex((item) => item.value === currentActiveValue && !item.isDisabled);
+    // 初期化済: 末尾の ↓ による移動の予約があり、その行の直後に有効な候補行が現れていれば、そこ（追加分の先頭）へ進める。
+    // まだ現れていなければ（取得中・取得失敗）予約は残す。予約した行が候補から消えていたら予約を取り消す。
+    // 候補行が無いときの予約（first）は、最初の有効な候補行が現れたらそこへ進める。
+    const anchor = loadMoreAnchorRef.current;
+    if (anchor !== null) {
+      const anchorIdx =
+        anchor.kind === 'first' ? -1 : items.findIndex((item) => item.kind === 'option' && item.value === anchor.value);
+      if (anchor.kind === 'after' && anchorIdx === -1) {
+        loadMoreAnchorRef.current = null;
+      } else {
+        const nextIdx = items.findIndex(
+          (item, index) => index > anchorIdx && item.kind === 'option' && !item.isDisabled,
+        );
+        if (nextIdx !== -1) {
+          loadMoreAnchorRef.current = null;
+          commitActive(nextIdx, items);
+
+          return;
+        }
+        // Combobox.LoadMore が外れた後の予約は、移れなかったらここで取り消す（後の更新には持ち越さない）
+        if (anchor.isExpiring === true) {
+          loadMoreAnchorRef.current = null;
+        }
+      }
+    }
+
+    // 現 active を新 items から引き直す（index ではなく value（作成行は kind）で同一性を判定）
+    const currentActiveItem = activeItemRef.current;
+    if (currentActiveItem !== null) {
+      const newIdx = items.findIndex((item) => isSameItem(item, currentActiveItem) && !item.isDisabled);
       if (newIdx !== -1) {
-        setActiveIndexState(newIdx);
+        commitActive(newIdx, items);
 
         return;
       }
     }
     // 残っていない（フィルタで落ちた / disabled 化）→ 先頭 enabled にフォールバック
     fallbackToFirstEnabled();
-  }, [items, isOpen]);
+  }, [items, isOpen, commitActive]);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // 複数選択: aria-live 通知用の label 登録簿（value → 最後に知っていた label）。描画には使わない。
+  const chipLabelsRef = useRef<Map<string, string>>(new Map());
+  // 複数選択: value ごとの描画中の Chip の数。描画中の Chip の label は、value から外れていても登録簿から消さない
+  // （Chip は value / label が変わったときしか登録し直さないため、消すと次の追加通知で label が使えない）。
+  const mountedChipCountsRef = useRef<Map<string, number>>(new Map());
+  // 複数選択: 外せない値ごとの、isRemovable=false を宣言している描画中の Chip の数。
+  // 同じ value の Chip が複数あっても、すべて unmount / 外せるに変わるまで外せないままにする。
+  const fixedValueCountsRef = useRef<Map<string, number>>(new Map());
+  // 外せない値の描画用の写し。ref は更新しても再描画されないため、クリアボタンの表示判定はこちらを使う。
+  // 削除の可否（removeSelected / Backspace）は操作のその場で判定するため、引き続き ref を参照する。
+  const [fixedValues, setFixedValues] = useState<ReadonlySet<string>>(() => new Set());
+
+  // 複数選択: 作成行の重複判定用の Chip label（value → label）。描画中の判定に使うため ref ではなく state で持つ。
+  // ref だと、入力・選択 ID を変えずに Chip の label だけが変わったとき再描画されず、完全一致しているのに作成行が残る。
+  // Chip の layout effect から更新するため paint 前に同期で再描画され、作成行の表示がちらつかない。
+  const [chipLabels, setChipLabels] = useState<ReadonlyMap<string, string>>(() => new Map());
+  // 作成直前の再検証（selectCreate）で最新の値を参照するための ref
+  const chipLabelsStateRef = useRef(chipLabels);
+  chipLabelsStateRef.current = chipLabels;
+
+  const registerChipLabel = useCallback((value: string, label: string) => {
+    chipLabelsRef.current.set(value, label);
+    incrementCount(mountedChipCountsRef.current, value);
+    // 同値なら同じ Map を返して再描画しない
+    setChipLabels((prev) => (prev.get(value) === label ? prev : new Map(prev).set(value, label)));
+
+    // unmount・label 変更時は描画中の数を戻し、重複判定用の登録を解除する（label は最後に知っていたものとして残し、削除の通知に使う）
+    return () => {
+      decrementCount(mountedChipCountsRef.current, value);
+      setChipLabels((prev) => {
+        if (prev.get(value) !== label) {
+          return prev;
+        }
+        const next = new Map(prev);
+        next.delete(value);
+
+        return next;
+      });
+    };
+  }, []);
+
+  // IME 変換中か。作成行の表示を切り替えるため state で持ち、作成直前の再検証用に ref でも即時に追跡する
+  // （compositionstart の直後、再描画前に作成行がクリックされても未確定の文字で作成しないため）。
+  const [isComposing, setIsComposingState] = useState(false);
+  const isComposingRef = useRef(false);
+  const setIsComposing = useCallback((next: boolean) => {
+    isComposingRef.current = next;
+    setIsComposingState(next);
+  }, []);
+
+  // 作成行: 重複判定の材料（Combobox.List が登録）と onCreate（Combobox.CreateItem が登録）。
+  // items state にコールバックを入れると setItems の浅い比較が毎レンダー崩れるため、ref で持つ。
+  const createJudgeRef = useRef<ComboboxCreateJudge | null>(null);
+  const createOnCreateRef = useRef<((text: string) => void) | null>(null);
+
+  const registerCreateJudge = useCallback((judge: ComboboxCreateJudge | null) => {
+    createJudgeRef.current = judge;
+  }, []);
+
+  const registerCreateOnCreate = useCallback((onCreate: (text: string) => void) => {
+    createOnCreateRef.current = onCreate;
+
+    return () => {
+      if (createOnCreateRef.current === onCreate) {
+        createOnCreateRef.current = null;
+      }
+    };
+  }, []);
+
+  const registerFixedValue = useCallback((value: string) => {
+    const counts = fixedValueCountsRef.current;
+    incrementCount(counts, value);
+    setFixedValues(new Set(counts.keys()));
+
+    return () => {
+      decrementCount(counts, value);
+      setFixedValues(new Set(counts.keys()));
+    };
+  }, []);
+
+  // 複数選択: value の中に外せる値（外せないと宣言されていない値）があるか。クリアボタンの表示判定に使う。
+  const hasRemovableSelection = params.isMultiple === true && params.value.some((value) => !fixedValues.has(value));
+
+  const removeSelected = useCallback((value: string) => {
+    const current = paramsRef.current;
+    if (current.isMultiple !== true) {
+      return;
+    }
+    if (!current.value.includes(value) || fixedValueCountsRef.current.has(value)) {
+      return;
+    }
+    current.onChange(
+      current.value.filter((selected) => selected !== value),
+      { type: 'remove', value },
+    );
+  }, []);
+
+  const removeLastSelected = useCallback(() => {
+    const current = paramsRef.current;
+    if (current.isMultiple !== true) {
+      return;
+    }
+    // Chip の描画有無は問わず、value の配列順で末尾から外せる値を探す
+    const target = [...current.value].reverse().find((selected) => !fixedValueCountsRef.current.has(selected));
+    if (target == null) {
+      return;
+    }
+    current.onChange(
+      current.value.filter((selected) => selected !== target),
+      { type: 'remove', value: target },
+    );
+  }, []);
+
   const selectValue = useCallback(
     (value: string, label: string) => {
+      const current = paramsRef.current;
+      // 選択は ↓ による移動の予約を取り消す
+      loadMoreAnchorRef.current = null;
+      if (current.isMultiple === true) {
+        // 複数選択: 選択済みなら外し（toggle）、未選択なら追加する。リストは閉じない。
+        if (current.value.includes(value)) {
+          if (fixedValueCountsRef.current.has(value)) {
+            return;
+          }
+          current.onChange(
+            current.value.filter((selected) => selected !== value),
+            { type: 'remove', value },
+          );
+        } else {
+          // aria-live の追加通知で Item の label を使えるよう、onChange より先に登録する
+          chipLabelsRef.current.set(value, label);
+          current.onChange([...current.value, value], { type: 'add', value });
+        }
+        if (current.inputValue !== '') {
+          current.onInputChange('');
+        }
+
+        return;
+      }
+
       committedInputValueRef.current = label;
-      paramsRef.current.onChange(value, { label });
-      paramsRef.current.onInputChange(label);
+      current.onChange(value, { label });
+      current.onInputChange(label);
       setIsOpen(false);
-      // isOpen useEffect 側で activeIndex / activeValueRef / hasInitializedActiveRef は null/false にリセットされる
+      // isOpen useEffect 側で activeIndex / activeItemRef / hasInitializedActiveRef は null/false にリセットされる
     },
     [setIsOpen],
   );
 
-  // value も inputValue も空になったら active 系（activeIndex / activeValueRef）をリセットする。
+  // 作成行を選ぶ。描画と実行の間に入力・変換状態・Chip の label 等が変わった場合に備え、
+  // 表示条件を最新の値で再検証し、満たさなければ何もしない。
+  // 作成後、入力は触らない（作成の成否を知っている利用側が成功時にクリアする。失敗時は文字が残り再試行できる）。
+  const selectCreate = useCallback(() => {
+    const current = paramsRef.current;
+    const judge = createJudgeRef.current;
+    const onCreate = createOnCreateRef.current;
+    if (current.isDisabled === true || judge === null || onCreate === null) {
+      return;
+    }
+    const text = resolveCreateText({
+      inputValue: current.inputValue,
+      isComposing: isComposingRef.current,
+      selectedValues: current.isMultiple === true ? current.value : [],
+      chipLabels: chipLabelsStateRef.current,
+      judge,
+    });
+    if (text === null) {
+      return;
+    }
+    loadMoreAnchorRef.current = null;
+    onCreate(text);
+    // 複数選択は続けて選べるよう開いたまま。単一選択は確定操作として閉じる
+    if (current.isMultiple !== true) {
+      setIsOpen(false);
+    }
+  }, [setIsOpen]);
+
+  // value も inputValue も空になったら active 系（activeIndex / activeItemRef）をリセットする。
   // クリアボタン経由（利用者が onClickClearButton で onChange(null,null) + onInputChange('') する）に加え、
   // 外部から完全リセットされた場合も含めて state-driven に揃える。
   // - value !== null のまま inputValue だけ空（例: 選択済みのまま Ctrl+A Delete）はリセットしない
   //   ＝ 既存仕様「selectedValue がある間は active 位置を維持」を保つため。
   // - active を残すと open 中のクリア後に aria-activedescendant / Enter 選択対象が
   //   クリア前のまま残るため、完全クリア時は明示的に null へ戻す。
+  // - 複数選択では行わない（チップを全削除しても、開いているリストの active は維持する）。
   useEffect(() => {
-    if (params.inputValue === '' && params.value === null) {
-      setActiveIndexState(null);
-      activeValueRef.current = null;
+    if (params.isMultiple !== true && params.inputValue === '' && params.value === null) {
+      commitActive(null);
     }
-  }, [params.inputValue, params.value]);
+  }, [params.isMultiple, params.inputValue, params.value, commitActive]);
 
-  const moveActive = useCallback((direction: 'next' | 'prev') => {
-    const currentItems = itemsRef.current;
-    const enabledIndices = currentItems.flatMap((item, i) => (item.isDisabled ? [] : [i]));
-    if (enabledIndices.length === 0) {
+  // 複数選択: value の前回との差分（value キー）から aria-live のメッセージを作る。
+  // onChange 起点ではなく差分方式にするのは、利用側のプログラム的な変更も通知するため。mount 時は通知しない。
+  const [liveMessage, setLiveMessage] = useState<{ id: number; text: string }>({ id: 0, text: '' });
+  const prevSelectedValuesRef = useRef<string[]>(params.isMultiple === true ? params.value : []);
+  useEffect(() => {
+    const current = paramsRef.current;
+    if (current.isMultiple !== true) {
       return;
     }
+    const prev = prevSelectedValuesRef.current;
+    const next = current.value;
+    prevSelectedValuesRef.current = next;
 
-    setActiveIndexState((prev) => {
-      const currentPos = prev === null ? -1 : enabledIndices.indexOf(prev);
+    const added = next.filter((value) => !prev.includes(value));
+    const removed = prev.filter((value) => !next.includes(value));
+    if (added.length === 0 && removed.length === 0) {
+      return;
+    }
+    const labels = chipLabelsRef.current;
+    const text = buildLiveMessage(added, removed, (value) => labels.get(value) ?? value);
+    // 同じ label の別の値を続けて追加・削除すると文言が前回と同じになる。連番を進めて毎回別の通知にする
+    setLiveMessage((prevMessage) => ({ id: prevMessage.id + 1, text }));
+
+    // 通知に使い終えた、現在の value に無い label を掃除する（描画中の Chip の label は残す）
+    Array.from(labels.keys()).forEach((key) => {
+      if (!next.includes(key) && !mountedChipCountsRef.current.has(key)) {
+        labels.delete(key);
+      }
+    });
+  }, [params.value]);
+
+  const moveActive = useCallback(
+    (direction: 'next' | 'prev') => {
+      const currentItems = itemsRef.current;
+      const enabledIndices = currentItems.flatMap((item, i) => (item.isDisabled ? [] : [i]));
+
+      // 端の判定と onLoadMore の呼び出しは state updater の外で行う（updater は StrictMode で 2 回呼ばれる）
+      const currentIndex = activeIndexRef.current;
+      const currentPos = currentIndex === null ? -1 : enabledIndices.indexOf(currentIndex);
+      const requestLoadMore = loadMoreRef.current;
+
+      // Combobox.LoadMore が置かれているあいだは端でループしない
+      if (requestLoadMore !== null) {
+        // 有効な項目が 1 件も無い（表示中の候補がすべて disabled）ときも、↓ は末尾での ↓ として扱う
+        // （次ページの有効な候補へキーボードで進めるようにする）。
+        const isAtEnd = enabledIndices.length === 0 || currentPos === enabledIndices.length - 1;
+        if (direction === 'next' && isAtEnd) {
+          // 末尾でさらに ↓: active は動かさず、追加分の先頭への移動を予約して取得を要求する。
+          // 予約は取得を始めるかどうか（取得中なら要求側が何もしない）と無関係に行う。
+          const lastOption = [...currentItems].reverse().find((item) => item.kind === 'option');
+          loadMoreAnchorRef.current =
+            lastOption == null ? { kind: 'first' } : { kind: 'after', value: lastOption.value };
+          requestLoadMore();
+
+          return;
+        }
+        if (direction === 'prev' && currentPos === 0) {
+          loadMoreAnchorRef.current = null;
+
+          return;
+        }
+      }
+
+      if (enabledIndices.length === 0) {
+        return;
+      }
 
       let nextIndex: number | null;
       if (direction === 'next') {
@@ -238,20 +674,39 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
         nextIndex = enabledIndices[nextPos] ?? null;
       }
 
-      // activeValueRef を同期
-      if (nextIndex === null) {
-        activeValueRef.current = null;
-      } else {
-        activeValueRef.current = currentItems[nextIndex]?.value ?? null;
-      }
-
-      return nextIndex;
-    });
-  }, []);
+      loadMoreAnchorRef.current = null;
+      commitActive(nextIndex, currentItems);
+    },
+    [commitActive],
+  );
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent<HTMLInputElement>) => {
       if (paramsRef.current.isDisabled === true) {
+        return;
+      }
+
+      // IME 変換中（keydown 時点で isComposing=true、一部環境では keyCode=229）のキーは Combobox では扱わない。
+      // - ↑↓: IME の変換候補の移動に使われる。扱うと preventDefault で候補移動を妨げ、active まで動いてしまう
+      // - Enter: 変換の確定に使われる。候補選択として扱うと input が controlled value（候補ラベル）に更新された直後、
+      //   IME 確定文字が追記され「(候補ラベル)(入力中の文字)」の二重入力になる
+      // - Escape: 変換の取り消しに使われる。扱うと List が閉じ、未確定入力も選択値の表示へ戻されてしまう
+      if (event.nativeEvent.isComposing === true || event.nativeEvent.keyCode === 229) {
+        if (event.key === 'Escape') {
+          // 親要素（Popover 等）は自前の keydown で Escape を処理し、IME 変換中かを判定しないため、
+          // 伝搬すると変換の取り消しで親まで閉じてしまう。変換の取り消しを妨げないよう preventDefault はしない。
+          event.stopPropagation();
+        }
+
+        return;
+      }
+
+      // 複数選択で入力が空のときの Backspace は、value の末尾（外せる値）を選択から外す。
+      // IME 変換中の Backspace は上の共通ガードで除外される（変換中の文字削除として IME が処理する）。
+      if (event.key === 'Backspace' && paramsRef.current.isMultiple === true && paramsRef.current.inputValue === '') {
+        event.preventDefault();
+        removeLastSelected();
+
         return;
       }
 
@@ -296,18 +751,17 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
       }
 
       if (event.key === 'Enter') {
-        // IME 変換確定の Enter（keydown 時点で isComposing=true、一部環境では keyCode=229）は
-        // 候補選択として扱わない。選択すると input が controlled value（候補ラベル）に更新された直後、
-        // IME 確定文字が追記され「(候補ラベル)(入力中の文字)」の二重入力になるため。
-        if (event.nativeEvent.isComposing === true || event.nativeEvent.keyCode === 229) {
-          return;
-        }
         if (!isOpen || activeIndex === null) {
           return;
         }
         event.preventDefault();
         const item = items[activeIndex];
-        if (item != null && !item.isDisabled) {
+        if (item == null || item.isDisabled) {
+          return;
+        }
+        if (item.kind === 'create') {
+          selectCreate();
+        } else {
           selectValue(item.value, item.label);
         }
 
@@ -326,7 +780,17 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
         }
       }
     },
-    [isOpen, activeIndex, items, moveActive, setIsOpen, selectValue, revertInputToCommitted],
+    [
+      isOpen,
+      activeIndex,
+      items,
+      moveActive,
+      setIsOpen,
+      selectValue,
+      selectCreate,
+      revertInputToCommitted,
+      removeLastSelected,
+    ],
   );
 
   return {
@@ -336,6 +800,7 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
     setIsOpen,
     activeIndex,
     setActiveIndex,
+    activeItemKey,
     inputMode,
     setInputMode,
     items,
@@ -344,5 +809,18 @@ export function useCombobox(params: UseComboboxParams): UseComboboxReturn {
     revertInputToCommitted,
     inputRef,
     handleKeyDown,
+    removeSelected,
+    removeLastSelected,
+    registerChipLabel,
+    chipLabels,
+    isComposing,
+    setIsComposing,
+    registerCreateJudge,
+    registerCreateOnCreate,
+    selectCreate,
+    registerFixedValue,
+    hasRemovableSelection,
+    registerLoadMore,
+    liveMessage,
   };
 }
