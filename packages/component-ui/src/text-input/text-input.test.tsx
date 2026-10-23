@@ -438,7 +438,7 @@ describe('InternalTextInput', () => {
       const input = screen.getByRole('textbox');
       const frame = input.parentElement;
       expect(frame).toHaveClass('relative', 'flex', 'items-center', 'gap-2', 'overflow-hidden', 'rounded', 'border');
-      expect(input).toHaveClass('flex-1', 'bg-transparent', 'outline-none', 'min-h-8', 'px-2');
+      expect(input).toHaveClass('flex-1', 'bg-transparent', 'outline-hidden', 'min-h-8', 'px-2');
     });
 
     it('frameRef が枠 div を指すこと', () => {
