@@ -19,7 +19,7 @@ runs:
     # 匿名モード（bot-id なし / Tier A ブロッキングのみ）のため id-token 権限は不要で、fork PR でも動作する。
     # cache にある依存は再 fetch されないため、screen 対象は cache-miss する新規/更新依存（方針A）。
     - name: Setup Takumi Guard (anonymous, blocking only)
-      uses: flatt-security/setup-takumi-guard-npm@9a5d797c2085b6326d3a2985c08e3a114b9b88c1 # v1.1.1
+      uses: flatt-security/setup-takumi-guard-npm@14f07d0cbc739b42a1b7c70a04c2b84cd1318ddd # v1.4.0
 
     - name: Install dependencies
       shell: bash
