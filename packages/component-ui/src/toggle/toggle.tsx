@@ -37,7 +37,7 @@ export function Toggle({
     'w-12 h-6 px-1': size === 'medium' || size === 'large',
   });
   const inputClasses = clsx(
-    'peer absolute inset-0 z-[1] opacity-0',
+    'peer absolute inset-0 z-[1] appearance-none opacity-0',
     isDisabled ? 'cursor-not-allowed' : 'cursor-pointer',
   );
   const indicatorClasses = clsx('rounded-full bg-iconOnColor', {
@@ -55,7 +55,7 @@ export function Toggle({
   });
 
   return (
-    <div className="relative flex flex-[0_0_auto] items-center">
+    <div className="relative flex w-fit flex-[0_0_auto] items-center">
       {label != null && labelPosition === 'left' && (
         <label htmlFor={id} className={labelClasses}>
           {label}
