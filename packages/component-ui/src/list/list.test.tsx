@@ -56,6 +56,22 @@ describe('List', () => {
       expect(list).toHaveAttribute('aria-label', 'リスト');
       expect(list).toHaveAttribute('aria-labelledby', 'label-id');
     });
+
+    it('aria-multiselectable を listbox に反映する（未指定時は付かない）', () => {
+      const { rerender } = render(
+        <List aria-label="リスト">
+          <li id="x">item</li>
+        </List>,
+      );
+      expect(screen.getByRole('listbox')).not.toHaveAttribute('aria-multiselectable');
+
+      rerender(
+        <List aria-label="リスト" aria-multiselectable>
+          <li id="x">item</li>
+        </List>,
+      );
+      expect(screen.getByRole('listbox')).toHaveAttribute('aria-multiselectable', 'true');
+    });
   });
 
   describe('variant', () => {
