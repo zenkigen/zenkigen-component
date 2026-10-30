@@ -219,3 +219,10 @@ import { Icon } from '@zenkigen-inc/component-ui';
 
 @zenkigen-inc/component-icons は MIT ライセンスに基づいています。  
 ただし、SVG ファイルは [Shape](https://shape.so/) の[利用規約](https://shape.so/terms)に準拠します。
+
+### lucide 由来のアイコン
+
+`src/svg/lucide/` 配下のアイコンは [lucide](https://lucide.dev)（`lucide-static`）から取り込んだものです。lucide は ISC License（Feather Icons 由来の一部アイコンは MIT License）で提供されており、原文は本パッケージ同梱の [LICENSE-lucide](./LICENSE-lucide) を参照してください。
+
+- 取り込み定義: `lucide-import.json`（現行アイコン名 → lucide 名のマッピング。アクセントカラー用の path 加工指示を含む）
+- 取り込みコマンド: `yarn workspace @zenkigen-inc/component-icons import-lucide`（`--dry-run` で計画のみ表示）
