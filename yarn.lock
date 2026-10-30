@@ -2941,23 +2941,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-mcp@npm:0.7.0":
-  version: 0.7.0
-  resolution: "@storybook/addon-mcp@npm:0.7.0"
+"@storybook/addon-mcp@npm:10.6.5":
+  version: 10.6.5
+  resolution: "@storybook/addon-mcp@npm:10.6.5"
   dependencies:
-    "@storybook/mcp": "npm:0.8.0"
     "@tmcp/adapter-valibot": "npm:^0.1.5"
     "@tmcp/transport-http": "npm:^0.8.5"
-    picoquery: "npm:^2.5.0"
     tmcp: "npm:^1.19.4"
-    valibot: "npm:1.2.0"
+    valibot: "npm:^1.4.0"
   peerDependencies:
-    "@storybook/addon-vitest": ^0.0.0-0 || ^9.1.16 || ^10.0.0 || ^10.1.0-0 || ^10.2.0-0 || ^10.3.0-0 || ^10.4.0-0 || ^10.5.0-0
-    storybook: ^0.0.0-0 || ^9.1.16 || ^10.0.0 || ^10.1.0-0 || ^10.2.0-0 || ^10.3.0-0 || ^10.4.0-0 || ^10.5.0-0
+    "@storybook/addon-vitest": ^10.6.5
+    storybook: ^10.6.5
   peerDependenciesMeta:
     "@storybook/addon-vitest":
       optional: true
-  checksum: 10c0/c33c506062eeec37d47cfa2dcd0d3076bdc43229b88dae27336af4a33d65c408e3e7de036c36bc99db81a9b3f194fb750de7b1fae98b309433cf03376dd04d18
+  checksum: 10c0/8dad50e71eda3f204db7ebca73be769477746cd974868416306790709e010fe149636aac3e9ae7a39d35a0aa6282c23e5a162b9c1f1b4834a32dc40d61e82e05
   languageName: node
   linkType: hard
 
@@ -2986,18 +2984,6 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
   checksum: 10c0/ff0eabc01f0ded465b0f80e9bdeabd9827b8e6753c3ea6cee6c0c08c6f04d17b0a1e94621edf3364dc17b4807465de602978e490d722677c7cb0f4c0c029e974
-  languageName: node
-  linkType: hard
-
-"@storybook/mcp@npm:0.8.0":
-  version: 0.8.0
-  resolution: "@storybook/mcp@npm:0.8.0"
-  dependencies:
-    "@tmcp/adapter-valibot": "npm:^0.1.5"
-    "@tmcp/transport-http": "npm:^0.8.5"
-    tmcp: "npm:^1.19.4"
-    valibot: "npm:1.2.0"
-  checksum: 10c0/774c6f67c62c7ce6438df46f83ed2a4a75066a2d7003d2db5569ee1d77c174ac6ddb4f7ea0240deb284b614cbe0a8f4bf128dbb4d5484c8d4d84cee29c21605f
   languageName: node
   linkType: hard
 
@@ -7911,13 +7897,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"picoquery@npm:^2.5.0":
-  version: 2.5.0
-  resolution: "picoquery@npm:2.5.0"
-  checksum: 10c0/ac22a7622ecf6f6c0d2657b04d2ca346f814ff4d343827e6ca53d2d5cecfebee18d80b1290b916d11db6f62866bec26e92bb0a0d7939bd15971e60320db8d265
-  languageName: node
-  linkType: hard
-
 "pirates@npm:^4.0.1":
   version: 4.0.7
   resolution: "pirates@npm:4.0.7"
@@ -9869,19 +9848,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"valibot@npm:1.2.0":
-  version: 1.2.0
-  resolution: "valibot@npm:1.2.0"
-  peerDependencies:
-    typescript: ">=5"
-  peerDependenciesMeta:
-    typescript:
-      optional: true
-  checksum: 10c0/e6897ed2008fc900380a6ce39b62bc5fca45fd5e070f70571c6380ede3ba026d0b7016230215d87f7f3d672a28dbde5a0522d39830b493fdc3dccd1a59ef4ee6
-  languageName: node
-  linkType: hard
-
-"valibot@npm:^1.1.0":
+"valibot@npm:^1.1.0, valibot@npm:^1.4.0":
   version: 1.5.0
   resolution: "valibot@npm:1.5.0"
   peerDependencies:
@@ -10312,7 +10279,7 @@ __metadata:
     "@storybook/addon-a11y": "npm:10.6.3"
     "@storybook/addon-docs": "npm:10.6.3"
     "@storybook/addon-links": "npm:10.6.3"
-    "@storybook/addon-mcp": "npm:0.7.0"
+    "@storybook/addon-mcp": "npm:10.6.5"
     "@storybook/react-vite": "npm:10.6.3"
     "@testing-library/dom": "npm:10.4.2"
     "@testing-library/jest-dom": "npm:6.9.1"
