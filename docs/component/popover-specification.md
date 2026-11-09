@@ -408,15 +408,35 @@ Popoverの外側をクリックした時やEscapeキーが押された時に`onC
 
 **実装の特徴**
 
-- **外部クリック検知**: `document`の`pointerdown`イベントをcapture段階で自前でリスンし（途中の要素が`stopPropagation`しても検知できる）、Floating要素とトリガー（または`anchorRef`で指定した参照要素）の両方の外側をクリックした時のみ発火。`composedPath`でも内側判定するため、クリックで再レンダリングされてDOMから外れた要素（トリガー内のアイコン等）も内側として扱う
+- **外部クリック検知**: floating-uiの`useDismiss`の外側判定を移したもの。`document`の`pointerdown`イベントをcapture段階で受け（途中の要素が`stopPropagation`しても検知できる）、判定は押された要素にイベントが届くまで遅らせる。Floating要素とトリガー（または`anchorRef`で指定した参照要素）の両方の外側をクリックした時のみ発火。`composedPath`でも内側判定するため、クリックで再レンダリングされてDOMから外れた要素（トリガー内のアイコン等）も内側として扱う
+- **Reactツリー上の内側の除外**: Popoverの中身が`createPortal`で別の場所に描いた要素のクリックでは閉じない。DOM上は外側でも、Reactツリー上はPopoverの内側にあるため。Floating要素の`onPointerDownCapture`で内側の印を立て、外側判定の前に確かめる（判定を遅らせるのは、この印がReactのイベント処理で立つのを待つため）
 - **Modal内でも閉じる**: Modal内に置いたPopoverも、Modal内の別の要素（別のDatePicker・Select・本文等）をクリックすると閉じる。floating-uiの`useDismiss`は使わない。`useDismiss`は、Modalの`FloatingFocusManager`が背面に付ける`data-floating-ui-inert`マーカーが文書内にあると、「マーカーを含まない根要素へのクリック」を後から挿入された第三者の要素とみなして無視するため、Modal内のクリックがすべて無視されてしまう
-- **スクロールバー押下の除外**: スクロール可能な要素のスクロールバー上の押下では閉じない（Modal本文のようなoverflow領域でPopoverを開いたままスクロールできる）
+- **スクロールバー押下の除外**: スクロール可能な要素のスクロールバー上の押下では閉じない（Modal本文のようなoverflow領域でPopoverを開いたままスクロールできる）。`direction: rtl`の領域では左側の縦スクロールバーを判定する。判定に使う要素は`composedPath()[0]`から取るため、Shadow DOMの中のスクロール領域でも効く
 - **Escapeキー対応**: `event.stopPropagation()`でイベントの伝播を停止
 - **reasonパラメータ**: 閉じる理由を`'outside-click'`または`'escape-key-down'`で区別
 - **他のポータル要素のクリック除外**: クリックターゲットが`.z-popover`・`.z-dropdown`・`.z-tooltip`内（Popover内で開いたSelect/Dropdown/Tooltip等の別ポータル）にある場合は、自己以外のFloating UIとして除外して閉じない
 
 ```typescript
-// 外部クリック検知（document の pointerdown）
+// document の capture 段階で受け、判定は押された要素まで遅らせる
+document.addEventListener(
+  'pointerdown',
+  (event) => {
+    isPressInsideReactTree = false;
+    getEventTarget(event)?.addEventListener('pointerdown', closeIfOutside, { once: true });
+  },
+  { capture: true },
+);
+
+// Floating 要素の onPointerDownCapture で、React ツリー上の内側の印を立てる
+const onPointerDownCapture = () => {
+  isPressInsideReactTree = true;
+};
+
+// closeIfOutside の中身。target は composedPath()[0]
+if (isPressInsideReactTree) {
+  return;
+}
+
 const isInside = (element: Element | null) =>
   element != null && (element.contains(target) || composedPath.some((node) => element.contains(node)));
 
@@ -517,11 +537,11 @@ Popoverコンポーネント自体は最小限のスタイルのみを適用し�
 
 ## 更新履歴
 
-| 日付                 | 内容                                                                                                                                                   | 担当者 |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------ |
-| 2026-11-06 17:38 JST | 外側クリックの検知を floating-ui の useDismiss から自前の pointerdown リスナーに変更（Modal 内で閉じない不具合の修正。スクロールバー押下の除外は踏襲） | -      |
-| 2026-08-06 11:16 JST | flip / shift ミドルウェアを追加（ビューポート端でのはみ出しを自動回避）                                                                                | -      |
-| 2025-10-27 15:43 JST | onClose型をPopoverCloseEventオブジェクト形式に変更                                                                                                     | -      |
-| 2025-10-27 14:56 JST | anchorRef追加・技術詳細/使用例反映                                                                                                                     | -      |
-| 2025-10-22 16:30 JST | API統合: onOutsideClick/onEscapeKeyDown → onClose                                                                                                      | -      |
-| 2025-10-17 15:00 JST | 新規作成                                                                                                                                               | -      |
+| 日付                 | 内容                                                                                                                                                                                                               | 担当者 |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------ |
+| 2026-11-06 17:38 JST | 外側クリックの検知を floating-ui の useDismiss から自前の pointerdown リスナーに変更（Modal 内で閉じない不具合の修正。React ツリー上の内側・RTL と Shadow DOM のスクロールバー押下の除外も useDismiss から移した） | -      |
+| 2026-08-06 11:16 JST | flip / shift ミドルウェアを追加（ビューポート端でのはみ出しを自動回避）                                                                                                                                            | -      |
+| 2025-10-27 15:43 JST | onClose型をPopoverCloseEventオブジェクト形式に変更                                                                                                                                                                 | -      |
+| 2025-10-27 14:56 JST | anchorRef追加・技術詳細/使用例反映                                                                                                                                                                                 | -      |
+| 2025-10-22 16:30 JST | API統合: onOutsideClick/onEscapeKeyDown → onClose                                                                                                                                                                  | -      |
+| 2025-10-17 15:00 JST | 新規作成                                                                                                                                                                                                           | -      |

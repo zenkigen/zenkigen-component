@@ -17,9 +17,10 @@ type ChildProps = {
 };
 
 /**
- * スクロールバー上の押下かどうか（useDismiss が持っていた判定の踏襲。LTR 前提）。
+ * スクロールバー上の押下かどうか（floating-ui の useDismiss の判定を移したもの）。
  * スクロールバーの押下で閉じてしまうと、Modal 本文のような overflow 領域で Popover を開いたままスクロールできない。
- * jsdom では clientWidth / clientHeight が 0 のため常に false になる（ブラウザでのみ効く）。
+ * `direction: rtl` の領域では縦スクロールバーが左側に付くため、左右で判定を分ける。
+ * jsdom では clientWidth / clientHeight が 0 のため、寸法を与えない限り常に false になる。
  */
 const isPointerOnScrollbar = (target: HTMLElement, event: PointerEvent) => {
   const isRoot = target === document.documentElement || target === document.body;
@@ -32,8 +33,24 @@ const isPointerOnScrollbar = (target: HTMLElement, event: PointerEvent) => {
     (isRoot || /auto|scroll/.test(style.overflowY)) &&
     target.clientHeight > 0 &&
     target.scrollHeight > target.clientHeight;
+  const isRtl = style.direction === 'rtl';
 
-  return (canScrollY && event.offsetX > target.clientWidth) || (canScrollX && event.offsetY > target.clientHeight);
+  const isOnVerticalScrollbar =
+    canScrollY &&
+    (isRtl ? event.offsetX <= target.offsetWidth - target.clientWidth : event.offsetX > target.clientWidth);
+  const isOnHorizontalScrollbar = canScrollX && event.offsetY > target.clientHeight;
+
+  return isOnVerticalScrollbar || isOnHorizontalScrollbar;
+};
+
+/**
+ * イベントが実際に起きた要素。Shadow DOM の中で起きたイベントは、document で受けると event.target が
+ * ホスト要素に置き換わるため、composedPath の先頭を使う（floating-ui の getTarget と同じ）。
+ */
+const getEventTarget = (event: Event): EventTarget | null => {
+  const path = typeof event.composedPath === 'function' ? event.composedPath() : [];
+
+  return path[0] ?? event.target;
 };
 
 export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(function PopoverContent(
@@ -44,9 +61,13 @@ export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(fu
 
   const interactions = useInteractions([useRole(floating.context, { role: 'dialog' })]);
 
-  // 外側クリックの検知。document の pointerdown を自前で監視する（Select 等の useOutsideClick と同じ方式）。
+  // 押下が React ツリー上で Popover の内側から来たか。Popover の中身が createPortal で別の場所に描いた要素は、
+  // DOM 上は外側でも React ツリー上は内側なので、閉じない（floating-ui の useDismiss の insideReactTree と同じ）。
+  const isPressInsideReactTreeRef = useRef(false);
+
+  // 外側クリックの検知。floating-ui の useDismiss の外側判定を移したもの。
   //
-  // floating-ui の useDismiss は使わない。useDismiss は、文書内に FloatingFocusManager（Modal）が付けた
+  // useDismiss そのものは使わない。useDismiss は、文書内に FloatingFocusManager（Modal）が付けた
   // data-floating-ui-inert マーカーがあると、「マーカーを含まない根要素へのクリック」を後から挿入された
   // 第三者の要素（toast 等）とみなして無視する。Modal の中身にはマーカーが付かないため、Modal 内で開いた
   // Popover は Modal 内のどこを押しても閉じなくなる（別の DatePicker / Select を押しても閉じない）。
@@ -55,14 +76,23 @@ export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(fu
       return;
     }
 
-    const listener = (event: PointerEvent) => {
-      const target = event.target;
+    let isActive = true;
+
+    const closeIfOutside = (event: PointerEvent) => {
+      const isInsideReactTree = isPressInsideReactTreeRef.current;
+      isPressInsideReactTreeRef.current = false;
+
+      if (!isActive || isInsideReactTree) {
+        return;
+      }
+
+      const target = getEventTarget(event);
       if (!(target instanceof Element)) {
         return;
       }
 
       // 再レンダリングで target が DOM から外れている場合（トリガー内の icon の差し替え等）に備え、
-      // イベント発火時点の祖先が残る composedPath でも内側判定する（useOutsideClick と同じ）
+      // イベント発火時点の祖先が残る composedPath でも内側判定する（useOutsideClick の内側判定と同じ）
       const path = typeof event.composedPath === 'function' ? event.composedPath() : [];
       // contains() の戻り値は strict-boolean-expressions 対策で Boolean() で明示変換する（useOutsideClick と同じ）
       const isInside = (element: Element | null | undefined): boolean =>
@@ -91,10 +121,25 @@ export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(fu
       onClose?.({ reason: 'outside-click' });
     };
 
-    // capture 段階で登録し、途中の要素が stopPropagation しても検知できるようにする（useDismiss の既定と同じ）
+    // document の capture 段階で受け、判定は押された要素に届くまで遅らせる（useDismiss の closeOnPressOutsideCapture と同じ）。
+    // - capture で受けるのは、途中の要素が stopPropagation しても検知できるようにするため
+    // - 遅らせるのは、React の onPointerDownCapture（isPressInsideReactTreeRef を立てる）が先に動くようにするため。
+    //   React のリスナーはアプリの根要素にあり、document の capture より後、押された要素より前に動く
+    const listener = (event: PointerEvent) => {
+      isPressInsideReactTreeRef.current = false;
+      const target = getEventTarget(event);
+      if (target == null) {
+        return;
+      }
+      target.addEventListener('pointerdown', closeIfOutside as EventListener, { once: true });
+    };
+
     document.addEventListener('pointerdown', listener, { capture: true });
 
-    return () => document.removeEventListener('pointerdown', listener, { capture: true });
+    return () => {
+      isActive = false;
+      document.removeEventListener('pointerdown', listener, { capture: true });
+    };
   }, [isOpen, floating.refs, triggerRef, onClose]);
 
   // Modal が開かれた際に Popover を閉じる（利用側で reason='modal-open' を判定して挙動を変更可能）
@@ -155,6 +200,9 @@ export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(fu
             ref: composeRefs(floating.refs.setFloating, ref),
             tabIndex: -1,
             onKeyDown: handleKeyDown,
+            onPointerDownCapture: () => {
+              isPressInsideReactTreeRef.current = true;
+            },
             className: 'z-popover',
             style: {
               position: floating.strategy,

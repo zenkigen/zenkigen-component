@@ -1,6 +1,7 @@
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, createEvent, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { Button } from '../button';
@@ -490,6 +491,115 @@ describe('Popover', () => {
       expect(onClose).toHaveBeenCalledTimes(1);
       expect(screen.queryByTestId('popover-content')).not.toBeInTheDocument();
     });
+  });
+
+  describe('外部クリック検知（floating-ui の useDismiss から移した判定）', () => {
+    /** スクロール可能な要素の寸法を与える（jsdom はレイアウトしないため clientWidth 等が 0 になる） */
+    const setScrollableSize = (element: HTMLElement) => {
+      Object.defineProperties(element, {
+        clientWidth: { configurable: true, value: 85 },
+        offsetWidth: { configurable: true, value: 100 },
+        clientHeight: { configurable: true, value: 100 },
+        scrollHeight: { configurable: true, value: 300 },
+        scrollWidth: { configurable: true, value: 85 },
+      });
+    };
+
+    /** offsetX を指定して pointerdown を発火する（jsdom の PointerEvent は offsetX を初期化できない） */
+    const pointerDownAt = (element: Element, offsetX: number) => {
+      const event = createEvent.pointerDown(element, { composed: true });
+      Object.defineProperty(event, 'offsetX', { value: offsetX });
+      Object.defineProperty(event, 'offsetY', { value: 50 });
+      fireEvent(element, event);
+    };
+
+    it('Popover の中身が createPortal で別の場所に描いた要素を押しても閉じず、その要素の onClick が動くこと', async () => {
+      // DOM 上は Popover の外でも、React ツリー上は内側なので閉じない（useDismiss の insideReactTree と同じ）
+      const user = userEvent.setup();
+      const onClose = vi.fn();
+      const onPick = vi.fn();
+      render(
+        <>
+          <div data-testid="outside-element">Outside</div>
+          <Popover isOpen onClose={onClose}>
+            <Popover.Trigger>
+              <Button>Open Popover</Button>
+            </Popover.Trigger>
+            <Popover.Content>
+              <div>
+                {createPortal(
+                  <button type="button" onClick={onPick}>
+                    ポータルの候補
+                  </button>,
+                  document.body,
+                )}
+              </div>
+            </Popover.Content>
+          </Popover>
+        </>,
+      );
+
+      await user.click(screen.getByRole('button', { name: 'ポータルの候補' }));
+
+      expect(onPick).toHaveBeenCalledTimes(1);
+      expect(onClose).not.toHaveBeenCalled();
+
+      // 内側の印は押下ごとに戻るので、続けて外側を押すと閉じる
+      fireEvent.pointerDown(screen.getByTestId('outside-element'));
+      expect(onClose).toHaveBeenCalledWith({ reason: 'outside-click' });
+    });
+
+    it.each([
+      { direction: 'ltr', offsetX: 90, isClosed: false, label: '右側の縦スクロールバー' },
+      { direction: 'ltr', offsetX: 50, isClosed: true, label: '中身' },
+      { direction: 'rtl', offsetX: 5, isClosed: false, label: '左側の縦スクロールバー' },
+      { direction: 'rtl', offsetX: 90, isClosed: true, label: '中身' },
+    ])(
+      'direction: $direction の領域で $label を押したとき、閉じるのは $isClosed であること',
+      ({ direction, offsetX, isClosed }) => {
+        const onClose = vi.fn();
+        render(
+          <>
+            <div data-testid="scrollable" style={{ overflowY: 'auto', direction: direction as 'ltr' | 'rtl' }}>
+              スクロール領域
+            </div>
+            <PopoverTestWrapper isOpen onClose={onClose} />
+          </>,
+        );
+        const scrollable = screen.getByTestId('scrollable');
+        setScrollableSize(scrollable);
+
+        pointerDownAt(scrollable, offsetX);
+
+        expect(onClose).toHaveBeenCalledTimes(isClosed ? 1 : 0);
+      },
+    );
+
+    it.each([
+      { offsetX: 90, isClosed: false, label: 'スクロールバー' },
+      { offsetX: 50, isClosed: true, label: '中身' },
+    ])(
+      'Shadow DOM の中のスクロール領域で $label を押したとき、閉じるのは $isClosed であること',
+      ({ offsetX, isClosed }) => {
+        // document で受けた event.target はホスト要素に置き換わるため、composedPath の先頭で判定する
+        const onClose = vi.fn();
+        render(
+          <>
+            <div data-testid="shadow-host" />
+            <PopoverTestWrapper isOpen onClose={onClose} />
+          </>,
+        );
+        const shadowRoot = screen.getByTestId('shadow-host').attachShadow({ mode: 'open' });
+        const scrollable = document.createElement('div');
+        scrollable.style.overflowY = 'auto';
+        shadowRoot.appendChild(scrollable);
+        setScrollableSize(scrollable);
+
+        pointerDownAt(scrollable, offsetX);
+
+        expect(onClose).toHaveBeenCalledTimes(isClosed ? 1 : 0);
+      },
+    );
   });
 
   describe('配置位置 (placement)', () => {
