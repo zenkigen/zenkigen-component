@@ -3,6 +3,8 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
 import { MODAL_OPEN_EVENT } from '../hooks/use-dismiss-on-modal-open';
+import { Modal } from '../modal';
+import { Select } from '../select';
 import { DatePicker } from './date-picker';
 
 const openPopover = async (user: ReturnType<typeof userEvent.setup>) => {
@@ -275,6 +277,69 @@ describe('DatePicker', () => {
       await waitFor(() => {
         expect(screen.queryByRole('dialog', { name: '日付選択' })).not.toBeInTheDocument();
       });
+    });
+  });
+
+  describe('Modal 内での開閉', () => {
+    // Modal の FloatingFocusManager が背面に付ける data-floating-ui-inert マーカーを floating-ui の useDismiss が
+    // 誤判定し、Modal 内のクリックで開いたカレンダーが閉じなくなっていた回帰の確認
+    const selectOptions = [{ id: '1', value: 'interview', label: '面接' }];
+
+    const renderInModal = () =>
+      render(
+        <Modal isOpen>
+          <Modal.Body>
+            <p>本文</p>
+            <DatePicker value={null} onChange={vi.fn()} aria-label="開始日" />
+            <DatePicker value={null} onChange={vi.fn()} aria-label="終了日" />
+            <Select placeholder="種別" aria-label="種別" onChange={vi.fn()}>
+              {selectOptions.map((option) => (
+                <Select.Option key={option.id} option={option} />
+              ))}
+            </Select>
+          </Modal.Body>
+        </Modal>,
+      );
+
+    const isExpanded = (name: string) => screen.getByRole('button', { name }).getAttribute('aria-expanded') === 'true';
+
+    const openCalendar = async (user: ReturnType<typeof userEvent.setup>, name: string) => {
+      await screen.findByText('本文');
+      await user.click(screen.getByRole('button', { name }));
+      expect(isExpanded(name)).toBe(true);
+    };
+
+    it('開いたカレンダーは、Modal 内の別の DatePicker を押すと閉じること', async () => {
+      const user = userEvent.setup();
+      renderInModal();
+      await openCalendar(user, '開始日');
+
+      await user.click(screen.getByRole('button', { name: '終了日' }));
+
+      await waitFor(() => expect(isExpanded('開始日')).toBe(false));
+      expect(isExpanded('終了日')).toBe(true);
+      expect(screen.getAllByRole('dialog', { name: '日付選択' })).toHaveLength(1);
+    });
+
+    it('開いたカレンダーは、Modal 本文を押すと閉じること', async () => {
+      const user = userEvent.setup();
+      renderInModal();
+      await openCalendar(user, '開始日');
+
+      await user.click(screen.getByText('本文'));
+
+      await waitFor(() => expect(isExpanded('開始日')).toBe(false));
+    });
+
+    it('開いたカレンダーは、Modal 内の Select を押すと閉じること', async () => {
+      const user = userEvent.setup();
+      renderInModal();
+      await openCalendar(user, '開始日');
+
+      await user.click(screen.getByRole('button', { name: '種別' }));
+
+      expect(screen.getByText('面接')).toBeInTheDocument();
+      await waitFor(() => expect(isExpanded('開始日')).toBe(false));
     });
   });
 

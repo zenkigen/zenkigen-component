@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { Button } from '../button';
 import { MODAL_OPEN_EVENT } from '../hooks/use-dismiss-on-modal-open';
+import { Modal } from '../modal';
 import { Popover } from './popover';
 import type { PopoverCloseEvent } from './popover-context';
 
@@ -460,6 +461,35 @@ describe('Popover', () => {
 
       expect(onClose).not.toHaveBeenCalled();
     });
+
+    it('Modal 内で開いた Popover は、Modal 内の別の要素をクリックすると onClose が呼ばれること', async () => {
+      // Modal の FloatingFocusManager が背面に付ける data-floating-ui-inert マーカーを floating-ui の useDismiss が
+      // 誤判定し、Modal 内のクリックを「後から挿入された要素」として無視していた回帰の確認
+      const user = userEvent.setup();
+      const onClose = vi.fn();
+      render(
+        <Modal isOpen>
+          <Modal.Body>
+            <div data-testid="outside-element">Outside</div>
+            <PopoverTestWrapper onClose={onClose} />
+          </Modal.Body>
+        </Modal>,
+      );
+
+      await user.click(await screen.findByRole('button', { name: 'Open Popover' }));
+      await waitFor(() => {
+        expect(screen.getByTestId('popover-content')).toBeInTheDocument();
+      });
+      expect(document.querySelectorAll('[data-floating-ui-inert]').length).toBeGreaterThan(0);
+
+      fireEvent.pointerDown(screen.getByTestId('outside-element'));
+
+      await waitFor(() => {
+        expect(onClose).toHaveBeenCalledWith({ reason: 'outside-click' });
+      });
+      expect(onClose).toHaveBeenCalledTimes(1);
+      expect(screen.queryByTestId('popover-content')).not.toBeInTheDocument();
+    });
   });
 
   describe('配置位置 (placement)', () => {
@@ -793,7 +823,7 @@ describe('Popover', () => {
    * 成立しない。要素別に固定 rect を返す mock を入れて計算を決定的にし、算出された inline style の
    * 数値を手計算値と突き合わせる（combobox.test.tsx と同じ手法）。
    *
-   * mock はこの describe 内に閉じている。ファイル全体に spy を張ると useDismiss のポインタ判定など
+   * mock はこの describe 内に閉じている。ファイル全体に spy を張ると外側クリック判定など
    * 既存テストへの影響が読めないため。
    */
   describe('ビューポートはみ出し回避 (flip / shift)', () => {
