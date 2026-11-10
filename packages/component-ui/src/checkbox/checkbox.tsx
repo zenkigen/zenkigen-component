@@ -58,7 +58,7 @@ export function Checkbox({
 
   const sizeBox = size === 'large' ? 'size-6' : 'size-5';
 
-  const baseInputClasses = clsx('peer absolute inset-0 z-[1] opacity-0', {
+  const baseInputClasses = clsx('peer absolute inset-0 z-[1] appearance-none opacity-0', {
     'cursor-not-allowed': isDisabled,
     'cursor-pointer': !isDisabled,
   });
