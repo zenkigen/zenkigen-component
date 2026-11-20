@@ -25,7 +25,8 @@
     "build-lib": "rimraf dist && tsup src/index.ts --format cjs,esm --dts && node src/generate-styles.mts"
   },
   "devDependencies": {
-    "style-dictionary": "5.7.1",
+    "rimraf": "catalog:",
+    "style-dictionary": "5.8.0",
     "token-transformer": "0.0.33",
     "tsup": "catalog:",
     "typescript": "catalog:"

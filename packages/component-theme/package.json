@@ -24,7 +24,8 @@
     "build-lib": "rimraf dist && tsup src/index.ts --format cjs,esm --dts"
   },
   "devDependencies": {
-    "tsup": "8.5.1",
-    "typescript": "5.9.3"
+    "rimraf": "catalog:",
+    "tsup": "catalog:",
+    "typescript": "catalog:"
   }
 }
