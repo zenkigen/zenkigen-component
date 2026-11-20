@@ -65,7 +65,7 @@
     // =========================================================================
     // 2. まとめかた
     //    自動マージしない方針のため、PR 数を抑えないとレビューが追いつかない。
-    //    non-major はマネージャ単位でまとめる（現行 renovate.json の運用を踏襲）
+    //    non-major はマネージャ単位でまとめる（移行前の renovate.json の運用を踏襲）
     // =========================================================================
     {
       "description": "npm の non-major",
@@ -129,7 +129,6 @@
     },
     {
       // flat config への追随は一括更新でないと lint が通らないため 1 グループに集約する。
-      // eslint-config-next 相当のものは無いが、将来の取り違えを避けて明示的に列挙する
       "description": "ESLint 本体とプラグイン・設定",
       "matchManagers": ["npm"],
       "matchPackageNames": ["eslint", "eslint-*", "@eslint/*", "@typescript-eslint/*", "typescript-eslint"],
