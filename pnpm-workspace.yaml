@@ -1,0 +1,54 @@
+# pnpm の設定はすべてここに集約する。
+# pnpm 11 以降、.npmrc からは auth / registry しか読まれない。それ以外の設定を .npmrc に
+# 書いてもエラーも警告もなく無視されるため、設定の置き場をこのファイルに一本化する。
+
+packages:
+  - packages/*
+
+# Takumi Guard（検査済みプロキシ）を既定のレジストリにする。CI だけでなくローカル install も
+# ここを経由させる。Renovate もこの値を読む。
+registries:
+  default: https://npm.flatt.tech/
+
+engineStrict: true # engines のバージョン指定を厳格化する
+saveExact: true # package.json に保存するバージョンを完全固定する（yarn の defaultSemverRangePrefix: '' 相当）
+
+# ネットワークエラーのリトライ設定。既定（2 回）では一時的な取得失敗に対する耐性が不足するため増やす。
+# factor は既定の 10 だと 2 回目で上限に張り付くため 2 に下げ、総待機を 5+10+20+40+60=135 秒に抑える。
+fetchRetries: 5
+fetchRetryFactor: 2
+fetchRetryMintimeout: 5000
+fetchRetryMaxtimeout: 60000
+
+# 複数パッケージで共有する依存のバージョンを 1 箇所に固定する（package.json 側は "catalog:"）。
+# strict: catalog と異なるバージョンの add を ERR_PNPM_CATALOG_VERSION_MISMATCH で拒否し、
+# ドリフトを防ぐ。新規パッケージは catalog へ自動登録される。
+catalogMode: strict
+# strict による自動追加と対を成す自動削除。install 時に未参照の項目を除去する。
+cleanupUnusedCatalogs: true
+
+catalog:
+  rimraf: 6.1.4
+  tailwindcss: 3.4.19
+  tsup: 8.5.1
+  typescript: 5.9.3
+
+# 依存パッケージのビルドスクリプト（preinstall / install / postinstall）の allowlist。
+# pnpm は既定でこれらを実行しないため、install 時の任意コード実行（認証情報・publish トークンの
+# 窃取／自己増殖）を遮断できる。ビルドが必要なパッケージのみここに列挙する。
+allowBuilds:
+  esbuild: true
+
+# リリースから 3 日未満のバージョンを install 対象外にする（0-day / 改ざん版対策）。
+# 推移的依存も対象になる。
+#
+# 緊急時は minimumReleaseAgeExclude に 'pkg@version' 形式で追記する。ただしこれは待機期間の免除、
+# すなわちサプライチェーン防御の穴であり、対象が待機期間を過ぎたら速やかに削除すること。
+minimumReleaseAge: 4320
+# 条件を満たすバージョンが無いとき、古いバージョンへ黙って落ちずに解決を失敗させる。
+minimumReleaseAgeStrict: true
+# 公開日時を返さないレジストリ経由のとき、待機期間の判定を黙ってスキップせず失敗させる。
+# 既定は true（スキップ）で、これだと防御が静かに外れるため false にする。
+minimumReleaseAgeIgnoreMissingTime: false
+# add / update / remove 時に、lockfile が解決しなくなった除外エントリを自動削除する。
+minimumReleaseAgeExcludePrune: true

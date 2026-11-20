@@ -28,11 +28,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Yarn install
-        uses: ./.github/actions/yarn-install
+      - name: Install dependencies
+        uses: ./.github/actions/pnpm-install
 
       - name: Build
-        run: yarn build:all
+        run: pnpm build:all
 
       - name: Publish to Chromatic
         id: chromatic
