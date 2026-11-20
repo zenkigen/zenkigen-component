@@ -52,3 +52,6 @@ minimumReleaseAgeStrict: true
 minimumReleaseAgeIgnoreMissingTime: false
 # add / update / remove 時に、lockfile が解決しなくなった除外エントリを自動削除する。
 minimumReleaseAgeExcludePrune: true
+minimumReleaseAgeExclude:
+  # Renovate security update: vitest@4.1.11
+  - vitest@4.1.11
