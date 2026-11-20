@@ -76,7 +76,7 @@
     "tsup": "catalog:",
     "typescript": "catalog:",
     "vite": "7.3.8",
-    "vitest": "3.2.7"
+    "vitest": "4.1.11"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
