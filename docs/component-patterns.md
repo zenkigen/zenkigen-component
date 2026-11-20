@@ -97,7 +97,7 @@ type Props<T extends ElementAs> = PolymorphicPropsWithoutRef<
 新しいコンポーネントを開発する際は、hygenを使って雛形を生成します：
 
 ```bash
-pnpm generate-component
+pnpm create-component
 ```
 
 このコマンドは、適切なディレクトリ構造とファイルテンプレートを作成します。

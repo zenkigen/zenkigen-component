@@ -109,6 +109,8 @@ packages/component-ui:
    - CI の中身: `pnpm install --frozen-lockfile` → `pnpm build-lib:all` → `pnpm publish:all --tag <dist-tag> --no-git-checks`。
    - `publish:all` = `pnpm -r publish`。`--no-git-checks` はタグからの checkout が detached HEAD になり、
      publish ブランチの判定に掛かるため付けている。`--tag` は CI がタグ名から判定（安定版 → `latest` / プレリリース → `next`）。
+   - 同じ `publish.yaml` は PR と手動実行（`workflow_dispatch`）でも動くが、そのときは `pnpm publish:all --dry-run --force --no-git-checks` で経路を確かめるだけで、公開はしない。
+     publish に関わる変更を入れた PR では、この dry-run の出力に 4 パッケージすべてが並んでいることを確かめておく（`--force` が無いと公開済みとして全部スキップされ、何も確かめずに成功する）。
 
 8. **npm に公開されたことを確認する**
    - `npm view @zenkigen-inc/component-ui version`
