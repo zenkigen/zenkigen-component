@@ -43,7 +43,7 @@ const Component = () => {
 hygen で雛形を生成することができるので、必ずこのコマンドから生成されたファイルを元に実装を始めてください。
 
 ```bash
-yarn generate-component
+pnpm create-component
 ```
 
 ### 実装したコンポーネントを export する

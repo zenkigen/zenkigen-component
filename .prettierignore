@@ -1,4 +1,4 @@
-.yarn/
+pnpm-lock.yaml
 **/dist
 packages/component-icons/src/icon.tsx
 packages/component-icons/src/icons/*.tsx
