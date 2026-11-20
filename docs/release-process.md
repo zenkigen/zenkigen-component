@@ -244,7 +244,7 @@ npm dist-tag ls @zenkigen-inc/component-ui            # latest は据え置き /
 - 各 `package.json` の `publishConfig`:
   - `access: public`。
   - `registry: 'https://registry.npmjs.org/'` … **既定レジストリが Takumi Guard のため、これが無いと publish 先がプロキシになる。**
-- パッケージマネージャ: `pnpm@12.4.0`。Node と pnpm のバージョンの源は
+- パッケージマネージャ: pnpm（版はルート `package.json` の `packageManager` で固定）。Node と pnpm のバージョンの源は
   ルート `package.json` の `packageManager` / `engines` と `.node-version` の 3 つだけ。
 - **dist-tag**: タグ名から自動判定する（[npm dist-tag の判定ルール](#npm-dist-tag-の判定ルール)）。安定版（ハイフンなし）は `latest`、プレリリース（ハイフンあり）は `next`。`publish:all` には CI が `--tag <判定結果> --no-git-checks` を付けて実行する。
   - **公開済みバージョンのスキップは pnpm の標準挙動**（`pnpm -r publish` は「まだ公開されていないバージョン」だけを publish する）。yarn 時代の `--tolerate-republish` に相当するフラグは不要になった。
