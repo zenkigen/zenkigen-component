@@ -168,7 +168,7 @@ packages/component-icons/src/svg/
 以下のコマンドを実行してアイコンをビルドします:
 
 ```bash
-yarn build:all
+pnpm build:all
 ```
 
 このビルドプロセスで以下の処理が行われます:

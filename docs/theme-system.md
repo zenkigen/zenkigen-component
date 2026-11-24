@@ -128,7 +128,7 @@ Tailwind CSS の CSS-first 構成に対応するため、`component-config` は�
 デザイントークンは、Figmaなどのデザインツールからエクスポートされ、Style Dictionaryを使用して変換・管理されています。
 
 ```bash
-yarn update-tokens # トークンの更新コマンド
+pnpm update-tokens # トークンの更新コマンド
 ```
 
 このコマンドは以下のプロセスを実行します：
