@@ -8,7 +8,7 @@
  * - accent.markPaths: d が完全一致する既存 path に class="accent" を付与（一致がちょうど 1 件でなければエラー）
  * - accent.addPaths: <path class="accent" d="..."/> を末尾に追加
  *
- * 使い方: yarn workspace @zenkigen-inc/component-icons import-lucide [--dry-run]
+ * 使い方: pnpm --filter @zenkigen-inc/component-icons run import-lucide [--dry-run]
  */
 const fs = require('fs');
 const path = require('path');

@@ -225,4 +225,4 @@ import { Icon } from '@zenkigen-inc/component-ui';
 `src/svg/lucide/` 配下のアイコンは [lucide](https://lucide.dev)（`lucide-static`）から取り込んだものです。lucide は ISC License（Feather Icons 由来の一部アイコンは MIT License）で提供されており、原文は本パッケージ同梱の [LICENSE-lucide](./LICENSE-lucide) を参照してください。
 
 - 取り込み定義: `lucide-import.json`（現行アイコン名 → lucide 名のマッピング。アクセントカラー用の path 加工指示を含む）
-- 取り込みコマンド: `yarn workspace @zenkigen-inc/component-icons import-lucide`（`--dry-run` で計画のみ表示）
+- 取り込みコマンド: `pnpm --filter @zenkigen-inc/component-icons run import-lucide`（`--dry-run` で計画のみ表示）
