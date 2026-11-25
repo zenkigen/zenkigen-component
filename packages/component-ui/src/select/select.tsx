@@ -1,4 +1,4 @@
-import { autoUpdate, FloatingPortal, offset, size as sizeMiddleware, useFloating } from '@floating-ui/react';
+import { autoUpdate, flip, FloatingPortal, offset, size as sizeMiddleware, useFloating } from '@floating-ui/react';
 import type { IconName } from '@zenkigen-inc/component-icons';
 import { focusVisible, selectColors } from '@zenkigen-inc/component-theme';
 import clsx from 'clsx';
@@ -6,8 +6,10 @@ import type { AriaAttributes, CSSProperties, PropsWithChildren, RefObject } from
 import { useRef, useState } from 'react';
 
 import { useDismissOnModalOpen } from '../hooks/use-dismiss-on-modal-open';
+import { useDismissOnScroll } from '../hooks/use-dismiss-on-scroll';
 import { useOutsideClick } from '../hooks/use-outside-click';
 import { Icon } from '../icon';
+import { resolveListMaxHeight } from './resolve-list-max-height';
 import { SelectContext } from './select-context';
 import { SelectItem } from './select-item';
 import { SelectList } from './select-list';
@@ -15,6 +17,8 @@ import type { SelectOption } from './type';
 
 // Floating UI の定数
 const FLOATING_OFFSET = 4;
+/** オプションリストを画面の端からどれだけ内側に収めるか（Combobox と同じ値） */
+const FLOATING_VIEWPORT_PADDING = 8;
 
 /** オプション 1 件の高さ（select-item.tsx・select-list.tsx の h-8 / h-10 と対応） */
 const OPTION_HEIGHT_PX = { 'x-small': 32, small: 32, medium: 32, large: 40 } as const;
@@ -42,7 +46,10 @@ type Props = {
   placeholderIcon?: IconName;
   /** 現在選択されているオプション */
   selectedOption?: SelectOption | null;
-  /** オプションリストの最大高さ。未指定の場合はオプション 8.5 個分（x-small / small / medium: 282px、large: 350px）。"none" で制限を解除する */
+  /**
+   * オプションリストの最大高さの上限。未指定の場合はオプション 8.5 個分（x-small / small / medium: 282px、large: 350px）。
+   * 画面内の空きのほうが小さいときは、空きの高さまで縮む。"none" で上限を外す（その場合も画面内には収まる）
+   */
   optionListMaxHeight?: CSSProperties['height'];
   /** 無効状態の制御 */
   isDisabled?: boolean;
@@ -82,6 +89,8 @@ export function Select({
   'aria-describedby': ariaDescribedby,
 }: PropsWithChildren<Props>) {
   const [isOptionListOpen, setIsOptionListOpen] = useState(false);
+  // 画面内でオプションリストに使える高さ（px）。測れないときは null（高さを制限しない）
+  const [availableListHeight, setAvailableListHeight] = useState<number | null>(null);
   const targetRef = useRef<HTMLDivElement>(null);
   useOutsideClick(targetRef, () => setIsOptionListOpen(false));
   useDismissOnModalOpen(() => {
@@ -89,6 +98,10 @@ export function Select({
       setIsOptionListOpen(false);
     }
   });
+  // トリガーを内側に含む領域（ページ全体・Modal の本文など）がスクロールされたら閉じる。
+  // オプションリスト自身のスクロールと、トリガーを含まない無関係な領域のスクロールでは閉じない。
+  // 閉じたときにフォーカスをトリガーへ戻す処理はしない（項目の選択・外側クリックなど、ほかの閉じ方と同じ）
+  useDismissOnScroll(targetRef, () => setIsOptionListOpen(false), isOptionListOpen);
 
   // Floating UI の設定
   const { refs, floatingStyles } = useFloating({
@@ -97,8 +110,10 @@ export function Select({
     placement: 'bottom-start',
     middleware: [
       offset(FLOATING_OFFSET),
+      flip({ padding: FLOATING_VIEWPORT_PADDING }),
       sizeMiddleware({
-        apply({ availableWidth, elements, rects }) {
+        padding: FLOATING_VIEWPORT_PADDING,
+        apply({ availableHeight, availableWidth, elements, rects }) {
           const referenceWidth = rects.reference.width;
           if (matchListToTrigger) {
             // トリガーボタンの幅に固定
@@ -108,16 +123,30 @@ export function Select({
             elements.floating.style.minWidth = `${referenceWidth}px`;
             elements.floating.style.maxWidth = `${availableWidth}px`;
           }
+          // 高さは maxHeight を React の style で管理しているため、DOM を直接書き換えず state 経由で反映する。
+          // （直接書き換えると、選択中のオプションへの自動スクロールが maxHeight の変化で再実行されない）
+          // 同じ値なら React が再描画を省くので、autoUpdate で繰り返し呼ばれても描画は繰り返さない。
+          // 0 以下（寸法を測れない・極端に狭い）は「制限なし」として扱う
+          setAvailableListHeight(availableHeight > 0 ? availableHeight : null);
         },
       }),
     ],
     whileElementsMounted: autoUpdate,
   });
 
-  const handleClickToggle = () => setIsOptionListOpen((prev) => !prev);
+  const handleClickToggle = () => {
+    if (!isOptionListOpen) {
+      // 前回開いたときの空きの高さが、次に開いた直後の表示と 1 回目の位置計算に残らないようにする。
+      // 閉じるときではなく開くときに戻すのは、閉じた後に終わった位置計算が値を書き戻すことがあるため
+      setAvailableListHeight(null);
+    }
+    setIsOptionListOpen((prev) => !prev);
+  };
 
   // 未指定のときのみ既定値を使う（0 を潰さないため ?? を使用する）
   const resolvedOptionListMaxHeight = optionListMaxHeight ?? getDefaultOptionListMaxHeight(size);
+  // optionListMaxHeight は上限として扱い、画面内の空きのほうが小さいときは空きの高さに縮める
+  const listMaxHeight = resolveListMaxHeight(resolvedOptionListMaxHeight, availableListHeight);
 
   const buttonVariant: 'outline' | 'text' | 'outlineError' | 'textError' =
     isError && !isDisabled ? (`${variant}Error` as 'outlineError' | 'textError') : variant;
@@ -212,7 +241,7 @@ export function Select({
         {isOptionListOpen && !isDisabled && (
           <FloatingPortal>
             <div className="relative z-popover">
-              <SelectList ref={refs.setFloating} maxHeight={resolvedOptionListMaxHeight}>
+              <SelectList ref={refs.setFloating} maxHeight={listMaxHeight}>
                 {children}
               </SelectList>
             </div>

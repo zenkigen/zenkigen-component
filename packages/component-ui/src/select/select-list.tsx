@@ -58,7 +58,7 @@ export const SelectList = forwardRef<HTMLUListElement, PropsWithChildren<Props>>
     });
   }, [selectedOption, maxHeight, floatingRef]);
 
-  const listClasses = clsx('overflow-y-auto rounded bg-uiBackground01 py-2 shadow-floatingShadow', {
+  const listClasses = clsx('overflow-y-auto overscroll-contain rounded bg-uiBackground01 py-2 shadow-floatingShadow', {
     'border-solid border border-uiBorder01': variant === 'outline',
   });
 

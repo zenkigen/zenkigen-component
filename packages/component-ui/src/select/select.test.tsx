@@ -292,6 +292,92 @@ describe('Select', () => {
     });
   });
 
+  describe('スクロール連動', () => {
+    it('ページ（window）がスクロールされるとオプションリストが閉じること', () => {
+      render(<SelectTestComponent placeholder="選択" />);
+
+      fireEvent.click(screen.getByRole('button'));
+      expect(screen.getByRole('list')).toBeInTheDocument();
+
+      fireEvent.scroll(window);
+
+      expect(screen.queryByRole('list')).not.toBeInTheDocument();
+    });
+
+    it('トリガーを含むスクロール領域がスクロールされるとオプションリストが閉じること', () => {
+      render(<SelectTestComponent placeholder="選択" data-testid="scroll-container" />);
+
+      fireEvent.click(screen.getByRole('button'));
+      expect(screen.getByRole('list')).toBeInTheDocument();
+
+      fireEvent.scroll(screen.getByTestId('scroll-container'));
+
+      expect(screen.queryByRole('list')).not.toBeInTheDocument();
+    });
+
+    it('オプションリスト自身がスクロールされても閉じないこと', () => {
+      render(<SelectTestComponent placeholder="選択" />);
+
+      fireEvent.click(screen.getByRole('button'));
+      const list = screen.getByRole('list');
+
+      fireEvent.scroll(list);
+
+      expect(screen.getByRole('list')).toBeInTheDocument();
+    });
+
+    it('トリガーを含まない領域がスクロールされても閉じないこと', () => {
+      render(
+        <div>
+          <SelectTestComponent placeholder="選択" />
+          <div data-testid="unrelated-scroll-area">無関係な領域</div>
+        </div>,
+      );
+
+      fireEvent.click(screen.getByRole('button'));
+      expect(screen.getByRole('list')).toBeInTheDocument();
+
+      fireEvent.scroll(screen.getByTestId('unrelated-scroll-area'));
+
+      expect(screen.getByRole('list')).toBeInTheDocument();
+    });
+
+    it('スクロールで閉じてもonChangeが呼ばれないこと', () => {
+      const handleChange = vi.fn();
+      render(<SelectTestComponent placeholder="選択" initialOption={testOptions[0]} onChange={handleChange} />);
+
+      fireEvent.click(screen.getByRole('button'));
+      expect(screen.getByRole('list')).toBeInTheDocument();
+
+      fireEvent.scroll(window);
+
+      expect(screen.queryByRole('list')).not.toBeInTheDocument();
+      expect(handleChange).not.toHaveBeenCalled();
+    });
+
+    it('スクロールで閉じたあと、もう一度開けること', () => {
+      render(<SelectTestComponent placeholder="選択" />);
+
+      const selectButton = screen.getByRole('button');
+      fireEvent.click(selectButton);
+      fireEvent.scroll(window);
+      expect(screen.queryByRole('list')).not.toBeInTheDocument();
+
+      fireEvent.click(selectButton);
+
+      expect(screen.getByRole('list')).toBeInTheDocument();
+    });
+
+    it('閉じている間にスクロールされてもオプションリストが表示されないこと', () => {
+      render(<SelectTestComponent placeholder="選択" />);
+
+      fireEvent.scroll(window);
+
+      expect(screen.queryByRole('list')).not.toBeInTheDocument();
+      expect(screen.getByRole('button')).toBeInTheDocument();
+    });
+  });
+
   describe('サイズバリエーション', () => {
     it('x-smallサイズのスタイルが適用されること', () => {
       render(<SelectTestComponent size="x-small" data-testid="select" />);
@@ -646,6 +732,132 @@ describe('Select', () => {
       fireEvent.click(screen.getByRole('button'));
 
       expect(scrollToMock).not.toHaveBeenCalled();
+    });
+  });
+
+  // 上に開くこと（flip）はここでは検証しない。jsdom はリストの高さを 0 と測るため、
+  // 「下に収まらない」状態を作るには寸法の mock を重ねる必要があり、位置の数値に頼る壊れやすいテストになる。
+  // flip は Story と実機で確かめている。
+  describe('オプションリストの表示位置と高さ', () => {
+    const VIEWPORT_HEIGHT = 768;
+
+    // jsdom では寸法が常に 0 のため、画面（documentElement / body）とトリガーの寸法を mock する。
+    // 空きの高さ = 画面の高さ - トリガーの下端 - offset 4px - 画面端の余白 8px
+    const mockViewportAndTrigger = (triggerBottom: number) => {
+      const viewportRect = {
+        width: 1024,
+        height: VIEWPORT_HEIGHT,
+        top: 0,
+        left: 0,
+        right: 1024,
+        bottom: VIEWPORT_HEIGHT,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      } as DOMRect;
+      const triggerRect = {
+        width: 200,
+        height: 32,
+        top: triggerBottom - 32,
+        left: 0,
+        right: 200,
+        bottom: triggerBottom,
+        x: 0,
+        y: triggerBottom - 32,
+        toJSON: () => ({}),
+      } as DOMRect;
+      vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(function mocked(this: Element) {
+        if (this === document.documentElement || this === document.body) {
+          return viewportRect;
+        }
+
+        return triggerRect;
+      });
+      // Floating UI は画面の大きさを documentElement の clientWidth / clientHeight から求める
+      Object.defineProperty(document.documentElement, 'clientHeight', { configurable: true, value: VIEWPORT_HEIGHT });
+      Object.defineProperty(document.documentElement, 'clientWidth', { configurable: true, value: 1024 });
+    };
+
+    // 位置の計算（Promise）が終わるまで待つ
+    const flushPositionUpdate = async () => {
+      await act(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      });
+    };
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+      Reflect.deleteProperty(document.documentElement, 'clientHeight');
+      Reflect.deleteProperty(document.documentElement, 'clientWidth');
+    });
+
+    it('画面内の空きが十分なときはoptionListMaxHeightがそのまま適用されること', async () => {
+      // 空きの高さ = 768 - 132 - 4 - 8 = 624
+      mockViewportAndTrigger(132);
+      render(<SelectTestComponent />);
+
+      fireEvent.click(screen.getByRole('button'));
+      await flushPositionUpdate();
+
+      expect(screen.getByRole('list').style.maxHeight).toBe('282px');
+    });
+
+    it('画面内の空きがoptionListMaxHeightより小さいときは空きの高さに制限されること', async () => {
+      // 空きの高さ = 768 - 600 - 4 - 8 = 156
+      mockViewportAndTrigger(600);
+      render(<SelectTestComponent />);
+
+      fireEvent.click(screen.getByRole('button'));
+
+      await waitFor(() => {
+        expect(screen.getByRole('list').style.maxHeight).toBe('156px');
+      });
+    });
+
+    it('optionListMaxHeight="none"でも画面内の空きの高さに制限されること', async () => {
+      mockViewportAndTrigger(132);
+      render(<SelectTestComponent optionListMaxHeight="none" />);
+
+      fireEvent.click(screen.getByRole('button'));
+
+      await waitFor(() => {
+        expect(screen.getByRole('list').style.maxHeight).toBe('624px');
+      });
+    });
+
+    it('画面内の空きを測れないときは制限を加えないこと', async () => {
+      // 寸法を mock しない（jsdom では画面の高さが 0 になり、空きの高さが 0 以下になる）
+      render(<SelectTestComponent optionListMaxHeight="none" />);
+
+      fireEvent.click(screen.getByRole('button'));
+      await flushPositionUpdate();
+
+      expect(screen.getByRole('list').style.maxHeight).toBe('none');
+    });
+
+    it('高さが制限されてスクロールが必要になったとき、選択中のオプションへ自動スクロールされること', async () => {
+      const scrollToMock = vi.fn();
+      Element.prototype.scrollTo = scrollToMock as unknown as Element['scrollTo'];
+      mockViewportAndTrigger(600);
+      // リストの中身の高さは 282px。表示される高さは maxHeight に従う
+      vi.spyOn(Element.prototype, 'scrollHeight', 'get').mockReturnValue(282);
+      vi.spyOn(Element.prototype, 'clientHeight', 'get').mockImplementation(function mocked(this: Element) {
+        const maxHeight = this instanceof HTMLElement ? parseFloat(this.style.maxHeight) : NaN;
+
+        return Number.isFinite(maxHeight) ? maxHeight : 282;
+      });
+      vi.spyOn(HTMLElement.prototype, 'offsetTop', 'get').mockReturnValue(320);
+      vi.spyOn(HTMLElement.prototype, 'offsetHeight', 'get').mockReturnValue(32);
+      render(<SelectTestComponent initialOption={testOptions[1]} />);
+
+      fireEvent.click(screen.getByRole('button'));
+      // 開いた直後は 282px で全件が収まるため、スクロールされない
+      expect(scrollToMock).not.toHaveBeenCalled();
+
+      // offsetTop 320 - (clientHeight 156 - offsetHeight 32) / 2 = 258
+      await waitFor(() => {
+        expect(scrollToMock).toHaveBeenCalledWith({ top: 258 });
+      });
     });
   });
 

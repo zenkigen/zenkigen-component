@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { IconName } from '@zenkigen-inc/component-icons';
 import { iconElements } from '@zenkigen-inc/component-icons';
+import type { CSSProperties } from 'react';
 import { useEffect, useRef, useState } from 'react';
 
 import { Button } from '../button';
@@ -29,7 +30,7 @@ const meta: Meta<typeof Select> = {
     optionListMaxHeight: {
       type: 'string',
       description:
-        'オプションリストの最大高さ。未指定の場合はオプション 8.5 個分（large: 350px、それ以外: 282px）。"none" で制限を解除',
+        'オプションリストの最大高さの上限。未指定の場合はオプション 8.5 個分（large: 350px、それ以外: 282px）。画面内の空きのほうが小さいときは、空きの高さまで縮む。"none" で上限を外す（その場合も画面内には収まる）',
     },
     placeholder: {
       type: 'string',
@@ -1073,7 +1074,7 @@ function DefaultOptionListMaxHeightContent() {
           </Select>
         </div>
         <div style={columnStyle}>
-          <span style={captionStyle}>optionListMaxHeight=&quot;none&quot;（制限解除・12 件すべて表示）</span>
+          <span style={captionStyle}>optionListMaxHeight=&quot;none&quot;（上限を外す・画面内に収まる範囲で表示）</span>
           <Select
             size="medium"
             placeholder="選択"
@@ -1104,7 +1105,240 @@ export const DefaultOptionListMaxHeight: Story = {
           '',
           '下段左: **選択解除ボタンを表示している場合は、そのボタンも 8.5 個に含まれる**ため、選択済みのときは表示されるオプション数がその分減る（表示の有無は `hasDeselectButton` で制御する）。開くと選択中の項目（選択肢10）が中央付近へスクロールされる。',
           '',
-          '下段右: 高さ制限を外して全件表示したい場合は `optionListMaxHeight="none"` を指定する。',
+          '下段右: 高さの上限を外したい場合は `optionListMaxHeight="none"` を指定する。その場合も、画面内に収まる高さまでは縮む。',
+        ].join('\n'),
+      },
+    },
+  },
+};
+
+// ここから下は、スクロールで閉じる挙動と、オプションリストを画面内に収める挙動を確認するための Story
+
+// 項目が多く、既定の高さでもリストの中がスクロールする選択肢（50 件）
+const manyOptionsList: SelectOption[] = Array.from({ length: 50 }, (_, index) => ({
+  id: `${index + 1}`,
+  label: `選択肢${index + 1}`,
+  value: `${index + 1}`,
+}));
+
+type StatefulSelectProps = {
+  options: SelectOption[];
+  initialOption?: SelectOption | null;
+  optionListMaxHeight?: CSSProperties['height'];
+};
+
+// 選択状態を自分で持つ Select。確認用 Story で同じ記述を繰り返さないためのもの
+function StatefulSelect({ options, initialOption = null, optionListMaxHeight }: StatefulSelectProps) {
+  const [selectedOption, setSelectedOption] = useState<SelectOption | null>(initialOption);
+
+  return (
+    <Select
+      size="medium"
+      variant="outline"
+      placeholder="選択"
+      width={240}
+      optionListMaxHeight={optionListMaxHeight}
+      selectedOption={selectedOption}
+      onChange={(option) => setSelectedOption(option)}
+    >
+      {options.map((option) => (
+        <Select.Option key={option.id} option={option} />
+      ))}
+    </Select>
+  );
+}
+
+// スクロールさせるための余白
+function ScrollSpacer({ height, label }: { height: number; label: string }) {
+  return (
+    <div
+      className="typography-body13regular flex shrink-0 items-center justify-center rounded bg-uiBackground02 text-text02"
+      style={{ height }}
+    >
+      {label}
+    </div>
+  );
+}
+
+function DismissOnScrollContent() {
+  return (
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-2 rounded border border-uiBorder01 bg-uiBackgroundBlue p-4">
+        <p className="typography-label14bold text-text01">スクロールで Select の List が閉じることを確認する</p>
+        <p className="typography-body14regular text-text01">
+          Select を開いてから、ページ、または Select を含む枠をスクロールすると閉じる。List の中のスクロールと、Select
+          を含まない枠のスクロールでは閉じない。
+        </p>
+      </div>
+      <ScrollSpacer height={400} label="ページをスクロールするための余白" />
+      <div className="flex flex-col gap-2">
+        <p className="typography-label14regular text-text01">
+          ページの中ほどの Select（12 件。List の中がスクロールする）
+        </p>
+        <StatefulSelect options={longOptionsList} />
+      </div>
+      <div className="flex flex-col gap-2">
+        <p className="typography-label14regular text-text01">
+          ページの中ほどの Select（6 件。List の中はスクロールしない）
+        </p>
+        <StatefulSelect options={optionsList} />
+      </div>
+      <div className="flex items-start gap-12">
+        <div className="flex flex-col gap-2">
+          <p className="typography-label14regular text-text01">Select を含む枠（スクロールすると閉じる）</p>
+          <div
+            className="flex flex-col gap-4 overflow-y-auto rounded border border-uiBorder01 p-4"
+            style={{ width: 320, height: 240 }}
+          >
+            <ScrollSpacer height={120} label="枠の中の余白" />
+            <StatefulSelect options={longOptionsList} />
+            <ScrollSpacer height={360} label="枠の中の余白" />
+          </div>
+        </div>
+        <div className="flex flex-col gap-2">
+          <p className="typography-label14regular text-text01">Select を含まない枠（スクロールしても閉じない）</p>
+          <div
+            className="flex flex-col gap-4 overflow-y-auto rounded border border-uiBorder01 p-4"
+            style={{ width: 320, height: 240 }}
+          >
+            <ScrollSpacer height={600} label="Select を含まない枠の中の余白" />
+          </div>
+        </div>
+      </div>
+      <ScrollSpacer height={1200} label="ページをスクロールするための余白" />
+    </div>
+  );
+}
+
+export const DismissOnScroll: Story = {
+  render: () => <DismissOnScrollContent />,
+  parameters: {
+    chromatic: { disable: true },
+    docs: {
+      description: {
+        story: [
+          'スクロールで Select の List が閉じることを確認する Story。**Select を開いてからスクロールして確認する。**',
+          '',
+          '- 閉じる: ページ全体のスクロール、Select を含む枠のスクロール',
+          '- 閉じない: List の中のスクロール、Select を含まない枠のスクロール',
+          '',
+          'List の中を端までスクロールしたあとも、そのスクロールはページへ伝わらない（List に `overscroll-contain` を指定している）。ただし、全件が収まっていてスクロールしない List（6 件の Select）の上でホイールを回すと、ブラウザによってはページがスクロールされ、List が閉じる。',
+        ].join('\n'),
+      },
+    },
+  },
+};
+
+function DismissOnScrollInModalContent() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2 rounded border border-uiBorder01 bg-uiBackgroundBlue p-4">
+        <p className="typography-label14bold text-text01">
+          Modal の本文をスクロールすると Select の List が閉じることを確認する
+        </p>
+        <p className="typography-body14regular text-text01">
+          ボタンで Modal を開き、本文の中の Select を開いてから本文をスクロールする。List が閉じ、Modal の
+          Header・Footer の上に List が残らなければ成功。
+        </p>
+      </div>
+      <div>
+        <Button variant="fill" size="medium" onClick={() => setIsModalOpen(true)}>
+          Modal を開く
+        </Button>
+      </div>
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} width={480} height={480}>
+        <Modal.Header>本文がスクロールする Modal</Modal.Header>
+        <Modal.Body>
+          <div className="flex flex-col gap-4 px-6 py-4">
+            <ScrollSpacer height={240} label="本文の余白" />
+            <div className="flex flex-col gap-2">
+              <p className="typography-label14regular text-text01">本文の中ほどの Select</p>
+              <StatefulSelect options={longOptionsList} />
+            </div>
+            <ScrollSpacer height={480} label="本文の余白" />
+            <div className="flex flex-col gap-2">
+              <p className="typography-label14regular text-text01">本文の末尾の Select</p>
+              <StatefulSelect options={longOptionsList} />
+            </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <div className="flex w-full items-center justify-end">
+            <Button variant="outline" size="medium" onClick={() => setIsModalOpen(false)}>
+              閉じる
+            </Button>
+          </div>
+        </Modal.Footer>
+      </Modal>
+    </div>
+  );
+}
+
+export const DismissOnScrollInModal: Story = {
+  render: () => <DismissOnScrollInModalContent />,
+  parameters: {
+    chromatic: { disable: true },
+    docs: {
+      description: {
+        story: [
+          'Modal の本文をスクロールすると Select の List が閉じることを確認する Story。**ボタンで Modal を開いて確認する。**',
+          '',
+          '- 本文の中の Select を開いてから本文をスクロールすると List が閉じ、Modal の Header・Footer の上に List が残らない',
+          '- 本文の末尾の Select は、下に収まらないときは上に開くか、画面内に収まる高さに縮む',
+        ].join('\n'),
+      },
+    },
+  },
+};
+
+function OptionListFitsViewportContent() {
+  return (
+    <div className="flex flex-col justify-between gap-6 p-4" style={{ minHeight: '100vh' }}>
+      <div className="flex flex-col gap-2">
+        <p className="typography-label14regular text-text01">画面の上端の Select（下に開く）</p>
+        <StatefulSelect options={longOptionsList} />
+      </div>
+      <div className="flex items-end gap-6">
+        <div className="flex flex-col gap-2">
+          <p className="typography-label14regular text-text01">
+            50 件・optionListMaxHeight=&quot;none&quot;（画面内に収まる高さに縮み、List の中がスクロールする。選択肢40
+            が選択済み）
+          </p>
+          <StatefulSelect options={manyOptionsList} initialOption={manyOptionsList[39]} optionListMaxHeight="none" />
+        </div>
+        <div className="flex flex-col gap-2">
+          <p className="typography-label14regular text-text01">
+            50 件・optionListMaxHeight 未指定（既定の高さ。選択肢40 が選択済み）
+          </p>
+          <StatefulSelect options={manyOptionsList} initialOption={manyOptionsList[39]} />
+        </div>
+      </div>
+      <div className="flex flex-col gap-2">
+        <p className="typography-label14regular text-text01">画面の下端の Select（上に開く）</p>
+        <StatefulSelect options={longOptionsList} />
+      </div>
+    </div>
+  );
+}
+
+export const OptionListFitsViewport: Story = {
+  render: () => <OptionListFitsViewportContent />,
+  parameters: {
+    layout: 'fullscreen',
+    chromatic: { disable: true },
+    docs: {
+      description: {
+        story: [
+          'オプションリストが画面内に収まることを確認する Story。**Canvas（Story 単独の表示）で、それぞれの Select を開いて確認する。**',
+          '',
+          '- 上端の Select: いままでどおり下に開く',
+          '- 下端の Select: 下に収まらないので、上に開く',
+          '- 50 件で `optionListMaxHeight="none"` の Select: 画面の端から 8px 内側までの高さに縮み、List の中のスクロールですべての項目に届く。開くと選択中の項目（選択肢40）が見える位置までスクロールされる',
+          '- 同じ高さに並べた `optionListMaxHeight` 未指定の Select: 既定の高さ（オプション 8.5 個分）で開く。`"none"` の Select と開く向きを見比べられる',
+          '',
+          'ブラウザの高さを縮めて開くと、List の高さも画面内に収まるように縮む。',
         ].join('\n'),
       },
     },
