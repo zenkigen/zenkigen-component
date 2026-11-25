@@ -451,9 +451,15 @@ importers:
       hygen:
         specifier: 6.2.11
         version: 6.2.11(supports-color@7.2.0)
+      postcss:
+        specifier: 8.5.33
+        version: 8.5.33
       rimraf:
         specifier: 'catalog:'
         version: 6.1.4
+      tailwindcss:
+        specifier: 'catalog:'
+        version: 3.4.19(yaml@2.9.1)
       tsup:
         specifier: 'catalog:'
         version: 8.5.1(jiti@2.7.0)(postcss@8.5.33)(supports-color@7.2.0)(typescript@5.9.3)(yaml@2.9.1)
