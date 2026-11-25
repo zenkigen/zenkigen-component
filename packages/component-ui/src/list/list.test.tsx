@@ -133,6 +133,7 @@ describe('List', () => {
       expect(list.className).toMatch(/overflow-y-auto/);
       expect(list.className).toMatch(/flex-1/);
       expect(list.className).toMatch(/min-h-0/);
+      expect(list.className).toMatch(/overscroll-contain/);
     });
   });
 

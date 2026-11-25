@@ -2,6 +2,7 @@ import { autoUpdate, flip, offset, size as sizeMiddleware, useFloating } from '@
 import type { FocusEvent } from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+import { useDismissOnScroll } from '../hooks/use-dismiss-on-scroll';
 import { useOutsideClick } from '../hooks/use-outside-click';
 import { TextInputErrorMessage } from '../text-input/text-input-error-message';
 import { TextInputHelperMessage } from '../text-input/text-input-helper-message';
@@ -168,6 +169,12 @@ function ComboboxBase(props: ComboboxProps) {
     [setIsOpen],
   );
   useOutsideClick(wrapperRef, handleOutsideClick);
+  // 入力欄を内側に含む領域（ページ全体・Modal の本文など）がスクロールされたら閉じる。
+  // 入力欄の中・チップ・候補リスト（wrapper の外の portal）のスクロールでは閉じない。
+  // 入力中の文字は戻さない（フォーカスは入力欄に残り、編集の途中かもしれないため）。戻すのはフォーカスが外れたとき。
+  // 候補が無くて見た目が閉じている間（isOpen は true）のスクロールでも onOpenChange(false) が呼ばれる。
+  // 入力・↓・開閉ボタンで開き直せるため、そのままにしている。
+  useDismissOnScroll(wrapperRef, () => setIsOpen(false), combobox.isOpen);
 
   // input が Combobox の外（wrapper / 候補リスト以外）へフォーカスを移したら close + revert する。
   // - 候補リストは FloatingPortal で wrapper の DOM 外に描画されるため listElementRef でも判定する。
