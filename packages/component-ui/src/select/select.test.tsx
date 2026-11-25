@@ -723,7 +723,7 @@ describe('Select', () => {
       render(<SelectTestComponent />);
       const selectButton = screen.getByRole('button');
 
-      const downIcon = selectButton.querySelector('[aria-label="angleSmallDown"]');
+      const downIcon = selectButton.querySelector('[aria-label="angleDown"]');
       expect(downIcon).toBeInTheDocument();
     });
 
@@ -733,10 +733,10 @@ describe('Select', () => {
 
       fireEvent.click(selectButton);
 
-      const upIcon = selectButton.querySelector('[aria-label="angleSmallUp"]');
+      const upIcon = selectButton.querySelector('[aria-label="angleUp"]');
       expect(upIcon).toBeInTheDocument();
 
-      const downIcon = selectButton.querySelector('[aria-label="angleSmallDown"]');
+      const downIcon = selectButton.querySelector('[aria-label="angleDown"]');
       expect(downIcon).not.toBeInTheDocument();
     });
   });
