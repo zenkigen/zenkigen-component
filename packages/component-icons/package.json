@@ -19,12 +19,14 @@
   },
   "scripts": {
     "generate": "node ./codegen.cjs",
+    "import-lucide": "node ./scripts/import-lucide.cjs",
     "build": "rimraf dist && pnpm generate && tsup",
     "build-lib": "rimraf dist && pnpm generate && tsup"
   },
   "devDependencies": {
     "cheerio": "1.2.0",
     "ejs": "3.1.10",
+    "lucide-static": "1.25.0",
     "rimraf": "catalog:",
     "tsup": "catalog:",
     "typescript": "catalog:"
