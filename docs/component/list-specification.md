@@ -195,7 +195,7 @@ import { List } from '@zenkigen-inc/component-ui';
 ## 技術的な詳細
 
 - `List` は `forwardRef<HTMLUListElement, ListProps>` で実装され、`Object.assign` で `OptionItem` を Compound として attach する。
-- DOM 構造は **2 層構造**: 外側 `<div>` (wrapper) が装飾 (bg / rounded / shadow / `overflow-hidden`) と `maxHeight` を担当し、内側 `<ul>` が scrollable 領域 (`overflow-y-auto`) と ARIA role を担当する。これは macOS の rubber-band bounce 時に List 内部が透過する問題への対処（wrapper の bg が bounce の裏に常に存在し、`overflow-hidden` で rounded 枠から漏れない）。
+- DOM 構造は **2 層構造**: 外側 `<div>` (wrapper) が装飾 (bg / rounded / shadow / `overflow-hidden`) と `maxHeight` を担当し、内側 `<ul>` が scrollable 領域 (`overflow-y-auto`。`overscroll-contain` で、端まで送ったあとのスクロールを外側へ伝えない) と ARIA role を担当する。これは macOS の rubber-band bounce 時に List 内部が透過する問題への対処（wrapper の bg が bounce の裏に常に存在し、`overflow-hidden` で rounded 枠から漏れない）。
 - 外部公開する `ref` は内側 `<ul>` を指す。外側 wrapper への ref は `containerRef` で expose する。
 - `size` / `variant` / `selectionIndicator` は React Context（`ListContext`）で `List.OptionItem` に伝播する。
 - `List.OptionItem` は List 外で使用するとエラー（`<List.OptionItem> must be used inside <List>`）を投げる。
@@ -220,3 +220,4 @@ import { List } from '@zenkigen-inc/component-ui';
 | ---------- | ----------------------------- | ------ |
 | 2026-04-17 | 新規作成                      | -      |
 | 2026-10-05 | `aria-multiselectable` を追加 | -      |
+| 2026-11-25 | `overscroll-contain` を追加   | -      |

@@ -1976,3 +1976,81 @@ export const LoadMoreAsync: MultipleStory = {
     );
   },
 };
+
+// ---- スクロールで閉じる（確認用。VRT 除外） ----
+
+const dismissOnScrollInitialValue = ['apple', 'banana', 'strawberry', 'blueberry', 'melon'];
+
+function ScrollSpacer({ height, label }: { height: number; label: string }) {
+  return (
+    <div
+      className="typography-body13regular flex shrink-0 items-center justify-center rounded bg-uiBackground02 text-text02"
+      style={{ height }}
+    >
+      {label}
+    </div>
+  );
+}
+
+// チップが折り返す幅の複数選択 Combobox（選択済みの 5 件を除いた 25 件が候補に並び、候補リストの中がスクロールする）
+function DismissOnScrollCombobox() {
+  return (
+    <div style={{ width: 240 }}>
+      <MultipleFruitCombobox
+        initialValue={dismissOnScrollInitialValue}
+        helperMessage="開いてからスクロールして確認する"
+      />
+    </div>
+  );
+}
+
+export const DismissOnScroll: MultipleStory = {
+  parameters: {
+    chromatic: { disable: true },
+    docs: {
+      description: {
+        story: [
+          'スクロールで Combobox の候補リストが閉じることを確認する Story。**候補リストを開いてからスクロールして確認する。**',
+          '',
+          '- 閉じる: ページ全体のスクロール、Modal の本文のスクロール',
+          '- 閉じない: 候補リストの中のスクロール（端まで送ってもページや Modal の本文は動かない）、入力欄の中のスクロール',
+          '- 閉じても、入力中の文字とチップは残る。続けて入力するか、`↓`・開閉ボタンで開く',
+          '- 入力欄が画面の外（またはスクロールする枠の外）にある状態で、Tab などでフォーカスが入ると、ブラウザが入力欄を見える位置までスクロールするため、候補リストは開いた直後に閉じる。続けて入力するか、`↓`・開閉ボタンで開く',
+        ].join('\n'),
+      },
+    },
+  },
+  render: function DismissOnScrollRender() {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    return (
+      <div className="flex flex-col gap-6">
+        <ScrollSpacer height={600} label="ページをスクロールするための余白" />
+        <div className="flex flex-col items-start gap-2">
+          <Button variant="fill" size="medium" onClick={() => setIsModalOpen(true)}>
+            Modal を開く
+          </Button>
+          <DismissOnScrollCombobox />
+        </div>
+        <ScrollSpacer height={1200} label="ページをスクロールするための余白" />
+        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} width={480} height={480}>
+          <Modal.Header>本文がスクロールする Modal</Modal.Header>
+          <Modal.Body>
+            <div className="flex flex-col gap-4 px-6 py-4">
+              <ScrollSpacer height={320} label="本文の余白" />
+              <DismissOnScrollCombobox />
+              <ScrollSpacer height={480} label="本文の余白" />
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <div className="flex w-full items-center justify-end">
+              <Button variant="outline" size="medium" onClick={() => setIsModalOpen(false)}>
+                閉じる
+              </Button>
+            </div>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    );
+  },
+};
