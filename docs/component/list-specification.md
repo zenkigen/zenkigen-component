@@ -60,20 +60,21 @@ import { List } from '@zenkigen-inc/component-ui';
 
 ### List のプロパティ
 
-| プロパティ           | 型                            | デフォルト値 | 説明                                                                                                           |
-| -------------------- | ----------------------------- | ------------ | -------------------------------------------------------------------------------------------------------------- |
-| `size`               | `'medium' \| 'large'`         | `'medium'`   | リスト全体のサイズ                                                                                             |
-| `variant`            | `'outline' \| 'borderless'`   | `'outline'`  | 枠線の有無                                                                                                     |
-| `maxHeight`          | `CSSProperties['height']`     | `undefined`  | リストの最大高さ。指定時は内部スクロール                                                                       |
-| `width`              | `CSSProperties['width']`      | `undefined`  | リストの幅                                                                                                     |
-| `style`              | `CSSProperties`               | `undefined`  | 外側 wrapper に適用する追加 style。Floating UI の `floatingStyles` を渡す用途等                                |
-| `className`          | `string`                      | `undefined`  | 外側 wrapper に追加する className。`z-index` 制御等の用途                                                      |
-| `role`               | `'listbox' \| 'menu'`         | `'listbox'`  | ARIA role                                                                                                      |
-| `id`                 | `string`                      | `undefined`  | 要素 ID（aria-controls のターゲットに使う）                                                                    |
-| `aria-label`         | `string`                      | `undefined`  | アクセシブルな名前                                                                                             |
-| `aria-labelledby`    | `string`                      | `undefined`  | アクセシブルな名前（参照）                                                                                     |
-| `containerRef`       | `Ref<HTMLDivElement>`         | `undefined`  | 外側 wrapper div への ref。Floating UI の `floating element` として扱う用途等。通常の `ref` は内側 ul を指す。 |
-| `selectionIndicator` | `'left' \| 'right' \| 'none'` | `'none'`     | 選択項目のチェックマーク位置。非選択項目もアイコン領域を占有し、item 間で text 位置が揃う                      |
+| プロパティ             | 型                            | デフォルト値 | 説明                                                                                                           |
+| ---------------------- | ----------------------------- | ------------ | -------------------------------------------------------------------------------------------------------------- |
+| `size`                 | `'medium' \| 'large'`         | `'medium'`   | リスト全体のサイズ                                                                                             |
+| `variant`              | `'outline' \| 'borderless'`   | `'outline'`  | 枠線の有無                                                                                                     |
+| `maxHeight`            | `CSSProperties['height']`     | `undefined`  | リストの最大高さ。指定時は内部スクロール                                                                       |
+| `width`                | `CSSProperties['width']`      | `undefined`  | リストの幅                                                                                                     |
+| `style`                | `CSSProperties`               | `undefined`  | 外側 wrapper に適用する追加 style。Floating UI の `floatingStyles` を渡す用途等                                |
+| `className`            | `string`                      | `undefined`  | 外側 wrapper に追加する className。`z-index` 制御等の用途                                                      |
+| `role`                 | `'listbox' \| 'menu'`         | `'listbox'`  | ARIA role                                                                                                      |
+| `id`                   | `string`                      | `undefined`  | 要素 ID（aria-controls のターゲットに使う）                                                                    |
+| `aria-label`           | `string`                      | `undefined`  | アクセシブルな名前                                                                                             |
+| `aria-labelledby`      | `string`                      | `undefined`  | アクセシブルな名前（参照）                                                                                     |
+| `aria-multiselectable` | `boolean`                     | `undefined`  | 複数選択可能かどうか。`role="listbox"` のとき内側 ul にそのまま反映する                                        |
+| `containerRef`         | `Ref<HTMLDivElement>`         | `undefined`  | 外側 wrapper div への ref。Floating UI の `floating element` として扱う用途等。通常の `ref` は内側 ul を指す。 |
+| `selectionIndicator`   | `'left' \| 'right' \| 'none'` | `'none'`     | 選択項目のチェックマーク位置。非選択項目もアイコン領域を占有し、item 間で text 位置が揃う                      |
 
 ### List.OptionItem のプロパティ
 
@@ -187,6 +188,7 @@ import { List } from '@zenkigen-inc/component-ui';
 - `List.OptionItem` は `<li>` で描画され、`role="option"` 固定。
 - `aria-selected` は `isSelected` から自動補完する（明示指定で上書き可能）。
 - `aria-disabled` は `isDisabled` から自動補完する。
+- 複数選択のリストでは `aria-multiselectable` を指定する（内側 `<ul>` に反映）。
 - `onMouseDown` で `event.preventDefault()` を実行し、Combobox の input フォーカスが奪われないようにしている（`aria-activedescendant` 方式と整合させるため）。
 - `id` は必須。Combobox 等の親が `aria-activedescendant` で参照する。
 
@@ -214,6 +216,7 @@ import { List } from '@zenkigen-inc/component-ui';
 
 ## 更新履歴
 
-| 日付       | 内容     | 担当者 |
-| ---------- | -------- | ------ |
-| 2026-04-17 | 新規作成 | -      |
+| 日付       | 内容                          | 担当者 |
+| ---------- | ----------------------------- | ------ |
+| 2026-04-17 | 新規作成                      | -      |
+| 2026-10-05 | `aria-multiselectable` を追加 | -      |

@@ -1,10 +1,11 @@
 {
   "name": "@zenkigen-inc/component-ui",
-  "version": "1.24.0",
+  "version": "1.26.0",
   "repository": "https://github.com/zenkigen/zenkigen-component",
   "license": "MIT",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
   "source": "./src/index.ts",
   "main": "./dist/index.js",
@@ -25,14 +26,15 @@
     "test:ci": "vitest run"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "6.9.1",
-    "@testing-library/react": "16.3.2",
-    "@testing-library/user-event": "14.6.1",
+    "@testing-library/jest-dom": "7.0.1",
+    "@testing-library/react": "16.3.3",
+    "@testing-library/user-event": "14.6.10",
     "hygen": "6.2.11",
-    "postcss": "8.5.25",
-    "tailwindcss": "3.4.19",
-    "tsup": "8.5.1",
-    "typescript": "5.9.3"
+    "postcss": "8.5.33",
+    "rimraf": "catalog:",
+    "tailwindcss": "catalog:",
+    "tsup": "catalog:",
+    "typescript": "catalog:"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",

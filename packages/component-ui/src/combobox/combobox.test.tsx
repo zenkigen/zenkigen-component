@@ -1,10 +1,12 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import type { ReactNode } from 'react';
-import { useMemo, useState } from 'react';
+import type { ComponentProps, ReactNode } from 'react';
+import { StrictMode, useMemo, useState } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { Popover } from '../popover';
 import { Combobox } from './combobox';
+import type { ComboboxInputProps, ComboboxMultipleChangeMeta, ComboboxProps } from './combobox.types';
 
 /**
  * Combobox テスト
@@ -14,12 +16,21 @@ import { Combobox } from './combobox';
  * - open / close: focus / Escape / outside click
  * - 選択動作: クリック、Enter で onChange が呼ばれる
  * - キーボード操作: ArrowUp/Down/Enter/Escape/Alt
+ * - IME 変換中のキー操作: ArrowUp/Down/Enter/Escape を Combobox では扱わない
  * - activeIndex 初期化: selectedValue 優先 / 先頭 enabled / close → 再 open
  * - items 更新時の active 維持: 並び替え / フィルタ絞り込み / フィルタで消えた場合
  * - 選択済み視覚強調 (isSelected の DOM 伝搬)
+ * - Combobox.Item の children: 見た目のみ。選択値・input 表示は label、accessible name は children のテキスト
  * - scrollIntoView / inputMode: keyboard のみで scroll、mouse では抑止、reopen で keyboard に戻る
  * - scrollTop リセット: open 直後に 0
  * - isError / isDisabled: 視覚 / 操作抑止
+ * - multiple: 追加 / toggle 削除 / Backspace / revert / aria-multiselectable / aria-live / 型
+ * - Combobox.Chip: 描画 / 長いラベルの省略 / ✗ での削除（マウス・キーボード）/ 外せないチップ / フォーカス維持 / blur・Escape / disabled
+ * - Combobox.Empty / Combobox.Loading の children: 指定時はその内容、未指定・boolean・null・空文字（それらだけの配列を含む）は既定文言。role / popup の開閉 / 作成行の抑止は不変
+ * - Combobox.Input の id / aria-label / aria-labelledby
+ * - Combobox.CreateItem: 表示条件（空・変換中・Loading・重複・checkDuplicate）/ 作成 / 作成直前の再検証 / キーボード / a11y
+ * - Combobox.LoadMore: 読み込み中の行の描画 / ↑↓ の端停止と末尾の ↓ での onLoadMore / 取得後に追加分の先頭へ進む（アンカー）/
+ *   ハイライトと aria-activedescendant の一致
  *
  * 注意: popup は常時 DOM にあり visibility で制御するため、Testing Library の
  * `getByRole` にはデフォルトで hidden な要素が除外される。`{ hidden: true }` を渡す。
@@ -49,6 +60,7 @@ function ControlledCombobox({
   extraChildren,
   onSelectionChange,
   onOpenChange,
+  onInputValueChange,
   enableClearButton,
   onClearButtonClick,
 }: {
@@ -62,6 +74,7 @@ function ControlledCombobox({
   extraChildren?: ReactNode;
   onSelectionChange?: (value: string | null) => void;
   onOpenChange?: (isOpen: boolean) => void;
+  onInputValueChange?: (inputValue: string) => void;
   enableClearButton?: boolean;
   onClearButtonClick?: () => void;
 }) {
@@ -98,7 +111,10 @@ function ControlledCombobox({
         onSelectionChange?.(next);
       }}
       inputValue={inputValue}
-      onInputChange={setInputValue}
+      onInputChange={(next) => {
+        setInputValue(next);
+        onInputValueChange?.(next);
+      }}
       {...clearButtonProps}
       onOpenChange={onOpenChange}
       isError={isError}
@@ -116,10 +132,309 @@ function ControlledCombobox({
   );
 }
 
+/**
+ * 複数選択モードの Controlled Combobox。候補は選択済みも含めて全件表示する（toggle 削除の検証用）。
+ */
+function ControlledMultipleCombobox({
+  initialValue = [],
+  initialInputValue = '',
+  isDisabled,
+  onChange,
+  onOpenChange,
+  onInputValueChange,
+}: {
+  initialValue?: string[];
+  initialInputValue?: string;
+  isDisabled?: boolean;
+  onChange?: (value: string[], meta: ComboboxMultipleChangeMeta) => void;
+  onOpenChange?: (isOpen: boolean) => void;
+  onInputValueChange?: (inputValue: string) => void;
+}) {
+  const [value, setValue] = useState<string[]>(initialValue);
+  const [inputValue, setInputValue] = useState(initialInputValue);
+
+  return (
+    <Combobox
+      isMultiple
+      value={value}
+      onChange={(next, meta) => {
+        setValue(next);
+        onChange?.(next, meta);
+      }}
+      inputValue={inputValue}
+      onInputChange={(next) => {
+        setInputValue(next);
+        onInputValueChange?.(next);
+      }}
+      onOpenChange={onOpenChange}
+      isDisabled={isDisabled}
+    >
+      <Combobox.Input />
+      <Combobox.List>
+        {defaultFruits.map((opt) => (
+          <Combobox.Item key={opt.value} value={opt.value} label={opt.label} />
+        ))}
+      </Combobox.List>
+    </Combobox>
+  );
+}
+
+/**
+ * 複数選択モードで Combobox.Chip を value の順に描画する Controlled Combobox。
+ * - fixedValues: isRemovable={false} にする値
+ * - chipLabels: Chip の label を Item の label から差し替える（aria-live の label の出所の検証用）
+ * - chipValues: Chip を描画する値（未指定時は value と同じ。value に無い値の Chip の検証用）
+ * - clearMode: クリアボタンの使い方。input は入力中だけハンドラを渡して入力だけを消す（基本）。
+ *   all は常にハンドラを渡し、入力中は入力だけ、未入力なら外せる選択をすべて外す
+ */
+function MultipleComboboxWithChips({
+  initialValue = [],
+  fixedValues = [],
+  chipLabels = {},
+  chipValues,
+  isDisabled,
+  isError,
+  placeholder,
+  inputChildren,
+  onChange,
+  onOpenChange,
+  onInputValueChange,
+  clearMode,
+}: {
+  initialValue?: string[];
+  fixedValues?: string[];
+  chipLabels?: Record<string, string>;
+  chipValues?: string[];
+  isDisabled?: boolean;
+  isError?: boolean;
+  placeholder?: string;
+  inputChildren?: ReactNode;
+  onChange?: (value: string[], meta: ComboboxMultipleChangeMeta) => void;
+  onOpenChange?: (isOpen: boolean) => void;
+  onInputValueChange?: (inputValue: string) => void;
+  clearMode?: 'input' | 'all';
+}) {
+  const [value, setValue] = useState<string[]>(initialValue);
+  const [inputValue, setInputValue] = useState('');
+  const labelOf = (target: string) =>
+    chipLabels[target] ?? defaultFruits.find((fruit) => fruit.value === target)?.label ?? target;
+  const handleClearAll = () => {
+    if (inputValue !== '') {
+      setInputValue('');
+
+      return;
+    }
+    setValue((prev) => prev.filter((selected) => fixedValues.includes(selected)));
+  };
+  const clearButtonProps =
+    clearMode === 'all'
+      ? { onClickClearButton: handleClearAll }
+      : clearMode === 'input' && inputValue !== ''
+        ? { onClickClearButton: () => setInputValue('') }
+        : {};
+
+  return (
+    <Combobox
+      isMultiple
+      value={value}
+      onChange={(next, meta) => {
+        setValue(next);
+        onChange?.(next, meta);
+      }}
+      inputValue={inputValue}
+      onInputChange={(next) => {
+        setInputValue(next);
+        onInputValueChange?.(next);
+      }}
+      onOpenChange={onOpenChange}
+      isDisabled={isDisabled}
+      isError={isError}
+      placeholder={placeholder}
+      {...clearButtonProps}
+    >
+      <Combobox.Input aria-label="果物">
+        {(chipValues ?? value).map((chipValue) => (
+          <Combobox.Chip
+            key={chipValue}
+            value={chipValue}
+            label={labelOf(chipValue)}
+            isRemovable={!fixedValues.includes(chipValue)}
+          />
+        ))}
+        {inputChildren}
+      </Combobox.Input>
+      <Combobox.List>
+        {defaultFruits.map((opt) => (
+          <Combobox.Item key={opt.value} value={opt.value} label={opt.label} />
+        ))}
+      </Combobox.List>
+    </Combobox>
+  );
+}
+
+/**
+ * Combobox.CreateItem 付きの複数選択 Combobox。候補は選択済みを除外し、入力（trim）を含む label で絞り込む。
+ * - shouldAddOnCreate: onCreate で候補マスタに追加し value にも追加する（Chip が描画される）
+ * - shouldClearOnCreate: onCreate で入力を空にする
+ * - shouldShowLoadingOnCreate: onCreate 後に Combobox.Loading を描画し続ける（作成中の状態）
+ */
+function CreatableMultipleCombobox({
+  initialValue = [],
+  isLoading = false,
+  checkDuplicate,
+  shouldAddOnCreate = false,
+  shouldClearOnCreate = false,
+  shouldShowLoadingOnCreate = false,
+  onCreate,
+  onChange,
+  onOpenChange,
+  onInputValueChange,
+}: {
+  initialValue?: string[];
+  isLoading?: boolean;
+  checkDuplicate?: (text: string) => boolean;
+  shouldAddOnCreate?: boolean;
+  shouldClearOnCreate?: boolean;
+  shouldShowLoadingOnCreate?: boolean;
+  onCreate?: (text: string) => void;
+  onChange?: (value: string[], meta: ComboboxMultipleChangeMeta) => void;
+  onOpenChange?: (isOpen: boolean) => void;
+  onInputValueChange?: (inputValue: string) => void;
+}) {
+  const [fruits, setFruits] = useState<Fruit[]>(defaultFruits);
+  const [value, setValue] = useState<string[]>(initialValue);
+  const [inputValue, setInputValue] = useState('');
+  const [isCreating, setIsCreating] = useState(false);
+  const keyword = inputValue.trim();
+  const candidates = fruits.filter((fruit) => !value.includes(fruit.value) && fruit.label.includes(keyword));
+
+  const handleCreate = (text: string) => {
+    onCreate?.(text);
+    if (shouldShowLoadingOnCreate) {
+      setIsCreating(true);
+    }
+    if (shouldAddOnCreate) {
+      const created = { value: `created-${text}`, label: text };
+      setFruits((prev) => [...prev, created]);
+      setValue((prev) => [...prev, created.value]);
+    }
+    if (shouldClearOnCreate) {
+      setInputValue('');
+    }
+  };
+
+  return (
+    <Combobox
+      isMultiple
+      value={value}
+      onChange={(next, meta) => {
+        setValue(next);
+        onChange?.(next, meta);
+      }}
+      inputValue={inputValue}
+      onInputChange={(next) => {
+        setInputValue(next);
+        onInputValueChange?.(next);
+      }}
+      onOpenChange={onOpenChange}
+    >
+      <Combobox.Input aria-label="果物">
+        {value.map((selected) => (
+          <Combobox.Chip
+            key={selected}
+            value={selected}
+            label={fruits.find((fruit) => fruit.value === selected)?.label ?? selected}
+          />
+        ))}
+      </Combobox.Input>
+      <Combobox.List>
+        {(isLoading || isCreating) && <Combobox.Loading />}
+        {candidates.map((fruit) => (
+          <Combobox.Item key={fruit.value} value={fruit.value} label={fruit.label} />
+        ))}
+        {candidates.length === 0 && <Combobox.Empty />}
+        <Combobox.CreateItem onCreate={handleCreate} checkDuplicate={checkDuplicate} />
+      </Combobox.List>
+    </Combobox>
+  );
+}
+
+const moreFruits: Fruit[] = [
+  { value: 'grape', label: 'ぶどう' },
+  { value: 'banana', label: 'バナナ' },
+];
+
+/**
+ * Combobox.LoadMore 付きの単一選択 Combobox。候補・isLoading・LoadMore の有無は props で与え、
+ * テストから rerender で「取得の完了（候補の追加）」「終端（LoadMore を外す）」を再現する。
+ * - hasCreateItem: Combobox.CreateItem を LoadMore の後ろ（最下部）に置く
+ * - shouldFilter: 入力を含む label で候補を絞り込む
+ * onLoadMore は毎レンダー新しい関数で渡す（利用側がインライン関数で渡す場合の再現）。
+ */
+function LoadMoreCombobox({
+  items = defaultFruits,
+  hasLoadMore = true,
+  isLoading,
+  loadMoreChildren,
+  hasCreateItem = false,
+  shouldFilter = false,
+  onLoadMore,
+}: {
+  items?: (Fruit & { isDisabled?: boolean })[];
+  hasLoadMore?: boolean;
+  isLoading?: boolean;
+  loadMoreChildren?: ReactNode;
+  hasCreateItem?: boolean;
+  shouldFilter?: boolean;
+  onLoadMore?: () => void;
+}) {
+  const [value, setValue] = useState<string | null>(null);
+  const [inputValue, setInputValue] = useState('');
+  const visibleItems = shouldFilter ? items.filter((item) => item.label.includes(inputValue)) : items;
+
+  return (
+    <Combobox
+      value={value}
+      onChange={(next, meta) => {
+        setValue(next);
+        setInputValue(meta?.label ?? '');
+      }}
+      inputValue={inputValue}
+      onInputChange={setInputValue}
+    >
+      <Combobox.Input />
+      <Combobox.List>
+        {visibleItems.map((item) => (
+          <Combobox.Item key={item.value} value={item.value} label={item.label} isDisabled={item.isDisabled} />
+        ))}
+        {hasLoadMore && (
+          <Combobox.LoadMore isLoading={isLoading} onLoadMore={() => onLoadMore?.()}>
+            {loadMoreChildren}
+          </Combobox.LoadMore>
+        )}
+        {hasCreateItem && <Combobox.CreateItem onCreate={() => {}} />}
+      </Combobox.List>
+    </Combobox>
+  );
+}
+
 const getCombobox = () => screen.getByRole('combobox') as HTMLInputElement;
 const getListbox = () => screen.getByRole('listbox', { hidden: true });
 const getOption = (name: string | RegExp) => screen.getByRole('option', { name, hidden: true });
 const queryOptions = () => screen.queryAllByRole('option', { hidden: true });
+const getDeleteButton = (label: string) => screen.getByRole('button', { name: `${label}を削除` });
+const queryDeleteButton = (label: string) => screen.queryByRole('button', { name: `${label}を削除` });
+const getCreateOption = (text: string) => getOption(`「${text}」を作成`);
+const queryCreateOption = () => screen.queryByRole('option', { name: /を作成$/, hidden: true });
+const getActiveId = () => getCombobox().getAttribute('aria-activedescendant') ?? '';
+// ハイライト（active の左ボーダー）が付いている行
+const getHighlightedOptions = () =>
+  queryOptions().filter((option) => option.classList.contains('border-l-interactive03') === true);
+const expectHighlightToMatchActiveDescendant = () => {
+  const highlighted = getHighlightedOptions();
+  expect(highlighted).toHaveLength(1);
+  expect(highlighted[0]?.id).toBe(getActiveId());
+};
 
 beforeEach(() => {
   // scrollIntoView は jsdom で未実装。spy で検証するため vitest mock を差す
@@ -563,6 +878,130 @@ describe('Combobox', () => {
     });
   });
 
+  describe('IME 変換中のキー操作', () => {
+    // 日本語入力の変換中は keydown 時点で isComposing=true（一部環境では keyCode=229 のみ）。
+    // ↑↓ は変換候補の移動、Enter は確定、Escape は変換の取り消しに使われるため Combobox では扱わない。
+    const composingCases = [
+      { name: 'isComposing=true', init: { isComposing: true } },
+      { name: 'keyCode=229', init: { keyCode: 229 } },
+    ];
+
+    describe.each(composingCases)('$name', ({ init }) => {
+      it('ArrowDown / ArrowUp で active が動かない', async () => {
+        const user = userEvent.setup();
+        render(<ControlledCombobox />);
+        await user.click(getCombobox());
+        const input = getCombobox();
+        const initialActiveId = input.getAttribute('aria-activedescendant');
+        expect(initialActiveId).toContain('apple');
+
+        fireEvent.keyDown(input, { key: 'ArrowDown', ...init });
+        expect(input).toHaveAttribute('aria-activedescendant', initialActiveId);
+
+        fireEvent.keyDown(input, { key: 'ArrowUp', ...init });
+        expect(input).toHaveAttribute('aria-activedescendant', initialActiveId);
+      });
+
+      it('ArrowDown / ArrowUp の既定動作を妨げない（preventDefault しない）', async () => {
+        const user = userEvent.setup();
+        render(<ControlledCombobox />);
+        await user.click(getCombobox());
+        const input = getCombobox();
+
+        // fireEvent は preventDefault されると false を返す
+        expect(fireEvent.keyDown(input, { key: 'ArrowDown', ...init })).toBe(true);
+        expect(fireEvent.keyDown(input, { key: 'ArrowUp', ...init })).toBe(true);
+      });
+
+      it('閉じている状態の ArrowDown / ArrowUp でリストが開かない', async () => {
+        const user = userEvent.setup();
+        render(<ControlledCombobox />);
+        await user.click(getCombobox());
+        await user.keyboard('{Escape}');
+        const input = getCombobox();
+        expect(getListbox()).toHaveStyle({ visibility: 'hidden' });
+
+        fireEvent.keyDown(input, { key: 'ArrowDown', ...init });
+        expect(getListbox()).toHaveStyle({ visibility: 'hidden' });
+
+        fireEvent.keyDown(input, { key: 'ArrowUp', ...init });
+        expect(getListbox()).toHaveStyle({ visibility: 'hidden' });
+      });
+
+      it('Enter で選択しない', async () => {
+        const user = userEvent.setup();
+        const onSelectionChange = vi.fn();
+        render(<ControlledCombobox onSelectionChange={onSelectionChange} />);
+        await user.click(getCombobox());
+
+        fireEvent.keyDown(getCombobox(), { key: 'Enter', ...init });
+        expect(onSelectionChange).not.toHaveBeenCalled();
+        expect(getListbox()).toHaveStyle({ visibility: 'visible' });
+      });
+
+      it('Escape でリストが閉じず、入力も選択値の表示へ戻らない', async () => {
+        const user = userEvent.setup();
+        const onInputValueChange = vi.fn();
+        render(<ControlledCombobox onInputValueChange={onInputValueChange} />);
+        const input = getCombobox();
+        await user.click(input);
+        await user.click(getOption('りんご'));
+        await user.click(input);
+        await user.clear(input);
+        await user.type(input, 'にん');
+        onInputValueChange.mockClear();
+
+        fireEvent.keyDown(input, { key: 'Escape', ...init });
+        expect(getListbox()).toHaveStyle({ visibility: 'visible' });
+        expect(onInputValueChange).not.toHaveBeenCalled();
+        expect(input).toHaveValue('にん');
+      });
+
+      it('Escape は親要素に伝搬しない（変換の取り消しで Popover 等が閉じないように）', async () => {
+        const user = userEvent.setup();
+        const handleParentEscape = vi.fn();
+        render(
+          <div onKeyDown={(e) => e.key === 'Escape' && handleParentEscape()}>
+            <ControlledCombobox />
+          </div>,
+        );
+        await user.click(getCombobox());
+        // List を閉じた状態でも、変換中の Escape は親に伝搬しない
+        await user.keyboard('{Escape}');
+
+        fireEvent.keyDown(getCombobox(), { key: 'Escape', ...init });
+        expect(handleParentEscape).not.toHaveBeenCalled();
+      });
+    });
+
+    it('Popover 内の Combobox で変換中に Escape を押しても Popover は閉じない', async () => {
+      const user = userEvent.setup();
+      const onClose = vi.fn();
+      render(
+        <Popover isOpen onClose={onClose}>
+          <Popover.Trigger>
+            <button type="button">trigger</button>
+          </Popover.Trigger>
+          <Popover.Content>
+            <div>
+              <ControlledCombobox />
+            </div>
+          </Popover.Content>
+        </Popover>,
+      );
+      await user.click(getCombobox());
+
+      fireEvent.keyDown(getCombobox(), { key: 'Escape', isComposing: true });
+      expect(onClose).not.toHaveBeenCalled();
+
+      // 変換していない Escape は従来どおり: 1 回目で List を閉じ、2 回目で Popover を閉じる
+      await user.keyboard('{Escape}');
+      expect(onClose).not.toHaveBeenCalled();
+      await user.keyboard('{Escape}');
+      expect(onClose).toHaveBeenCalledWith({ reason: 'escape-key-down' });
+    });
+  });
+
   describe('activeIndex 初期化', () => {
     it('selectedValue 一致の item が初期 active になる', async () => {
       const user = userEvent.setup();
@@ -792,6 +1231,57 @@ describe('Combobox', () => {
       // 初期 active への scrollIntoView が呼ばれるはず
       expect(spy).toHaveBeenCalled();
     });
+
+    it('mouse mode で hover した後、ArrowDown で keyboard mode に戻ると scrollIntoView が呼ばれる', async () => {
+      const user = userEvent.setup();
+      render(<ControlledCombobox />);
+
+      await user.click(getCombobox());
+      await user.hover(getOption('みかん'));
+      const spy = Element.prototype.scrollIntoView as ReturnType<typeof vi.fn>;
+      spy.mockClear();
+
+      await user.keyboard('{ArrowDown}');
+      expect(getActiveId()).toContain('peach');
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it('active の候補行より前に候補が挿入されても scrollIntoView は呼ばれない', async () => {
+      const user = userEvent.setup();
+      const { rerender } = render(<LoadMoreCombobox hasLoadMore={false} />);
+
+      await user.click(getCombobox());
+      await user.keyboard('{ArrowDown}{ArrowDown}');
+      expect(getActiveId()).toContain('peach');
+      const spy = Element.prototype.scrollIntoView as ReturnType<typeof vi.fn>;
+      spy.mockClear();
+
+      // 先頭側に 2 件挿入する（peach の index が 2 → 4 にずれる）
+      rerender(<LoadMoreCombobox hasLoadMore={false} items={[...moreFruits, ...defaultFruits]} />);
+
+      expect(getActiveId()).toContain('peach');
+      expectHighlightToMatchActiveDescendant();
+      expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('作成行が active のとき、その前に候補が追加されても scrollIntoView は呼ばれない', async () => {
+      const user = userEvent.setup();
+      const { rerender } = render(<LoadMoreCombobox hasLoadMore={false} hasCreateItem />);
+
+      await user.click(getCombobox());
+      await user.type(getCombobox(), 'x');
+      await user.keyboard('{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}');
+      expect(getActiveId()).toMatch(/-create-option$/);
+      const spy = Element.prototype.scrollIntoView as ReturnType<typeof vi.fn>;
+      spy.mockClear();
+
+      // 候補は作成行の前に追加される（作成行の index が 4 → 6 にずれる）
+      rerender(<LoadMoreCombobox hasLoadMore={false} hasCreateItem items={[...defaultFruits, ...moreFruits]} />);
+
+      expect(getActiveId()).toMatch(/-create-option$/);
+      expectHighlightToMatchActiveDescendant();
+      expect(spy).not.toHaveBeenCalled();
+    });
   });
 
   describe('scrollTop リセット', () => {
@@ -813,6 +1303,45 @@ describe('Combobox', () => {
       await user.keyboard('{ArrowDown}');
 
       expect(listbox.scrollTop).toBe(0);
+    });
+  });
+
+  describe('Floating UI の reference', () => {
+    it('候補リストの最小幅が入力欄の枠 div の幅に揃う', async () => {
+      const user = userEvent.setup();
+      // beforeEach の mock は全要素に同じ rect を返すため、枠 div だけ幅の異なる rect を返す mock に差し替える
+      const rectOf = (width: number, height: number, top: number) =>
+        ({
+          width,
+          height,
+          top,
+          left: 0,
+          right: width,
+          bottom: top + height,
+          x: 0,
+          y: top,
+          toJSON: () => ({}),
+        }) as DOMRect;
+      let frameElement: Element | null = null;
+      vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(function mocked(this: Element) {
+        if (this === document.documentElement || this === document.body) {
+          return rectOf(1024, 768, 0);
+        }
+        if (frameElement != null && this === frameElement) {
+          return rectOf(320, 32, 100);
+        }
+
+        return rectOf(200, 32, 100);
+      });
+      render(<ControlledCombobox />);
+      frameElement = getCombobox().parentElement;
+
+      await user.click(getCombobox());
+
+      const listWrapper = getListbox().parentElement;
+      await vi.waitFor(() => {
+        expect(listWrapper?.style.minWidth).toBe('320px');
+      });
     });
   });
 
@@ -984,6 +1513,183 @@ describe('Combobox', () => {
       expect(textSpan?.textContent).toBe('りんご');
       expect(textSpan?.className).toMatch(/truncate/);
       expect(textSpan?.className).toMatch(/min-w-0/);
+    });
+  });
+
+  describe('Combobox.Item の children', () => {
+    type FruitOrigin = { value: string; label: string; origin: string };
+
+    const fruitOrigins: FruitOrigin[] = [
+      { value: 'apple', label: 'りんご', origin: '青森県' },
+      { value: 'banana', label: 'バナナ', origin: 'フィリピン' },
+    ];
+
+    function ChildrenCombobox({
+      initialValue = null,
+      initialInputValue = '',
+      onChange,
+      onInputChange,
+    }: {
+      initialValue?: string | null;
+      initialInputValue?: string;
+      onChange?: (value: string | null, meta: { label: string } | null) => void;
+      onInputChange?: (value: string) => void;
+    }) {
+      const [value, setValue] = useState<string | null>(initialValue);
+      const [inputValue, setInputValue] = useState(initialInputValue);
+
+      return (
+        <Combobox
+          value={value}
+          onChange={(next, meta) => {
+            setValue(next);
+            onChange?.(next, meta);
+          }}
+          inputValue={inputValue}
+          onInputChange={(next) => {
+            setInputValue(next);
+            onInputChange?.(next);
+          }}
+        >
+          <Combobox.Input />
+          <Combobox.List>
+            {fruitOrigins.map((item) => (
+              <Combobox.Item key={item.value} value={item.value} label={item.label}>
+                <span className="truncate" data-testid={`label-${item.value}`}>
+                  {item.label}
+                </span>
+                {/* 読み上げ不要な装飾の区切り記号 */}
+                <span aria-hidden="true">・</span>
+                <span className="shrink-0">{item.origin}</span>
+              </Combobox.Item>
+            ))}
+          </Combobox.List>
+        </Combobox>
+      );
+    }
+
+    it('children 未指定のとき option の直下は label の span と選択チェックのみ（DOM 不変）', async () => {
+      const user = userEvent.setup();
+      render(<ControlledCombobox />);
+      await user.click(getCombobox());
+
+      const option = getOption('りんご');
+      const childSpans = Array.from(option.children);
+      expect(childSpans).toHaveLength(2);
+      expect(childSpans[0]?.className).toBe('min-w-0 flex-1 truncate');
+      expect(childSpans[0]?.textContent).toBe('りんご');
+      expect(childSpans[1]).toHaveAttribute('data-selection-indicator');
+    });
+
+    it('children が行内のラッパー span に描画される', async () => {
+      const user = userEvent.setup();
+      render(<ChildrenCombobox />);
+      await user.click(getCombobox());
+
+      const labelSpan = screen.getByTestId('label-apple');
+      const wrapper = labelSpan.parentElement;
+      expect(wrapper?.tagName).toBe('SPAN');
+      expect(wrapper?.className).toBe('flex min-w-0 flex-1 items-center');
+      expect(wrapper?.parentElement).toHaveAttribute('role', 'option');
+      expect(wrapper?.textContent).toContain('青森県');
+    });
+
+    it('children が boolean（条件付き描画で false）のときは未指定とみなし label を描画する', async () => {
+      const user = userEvent.setup();
+      const hasBadge = false;
+      render(
+        <Combobox value={null} onChange={vi.fn()} inputValue="" onInputChange={vi.fn()}>
+          <Combobox.Input />
+          <Combobox.List>
+            <Combobox.Item value="apple" label="りんご">
+              {hasBadge && <span>バッジ</span>}
+            </Combobox.Item>
+          </Combobox.List>
+        </Combobox>,
+      );
+      await user.click(getCombobox());
+
+      const option = getOption('りんご');
+      expect(option.children[0]?.className).toBe('min-w-0 flex-1 truncate');
+      expect(option.children[0]?.textContent).toBe('りんご');
+    });
+
+    it.each<{ name: string; children: ReactNode }>([
+      { name: '条件付きの要素が複数並びすべて false（[false, false]）', children: [false, false] },
+      { name: '空の配列（空の map 結果）', children: [] },
+      { name: '空文字', children: '' },
+      { name: '空文字と null の配列', children: ['', null] },
+    ])('children に描画されるものが無いとき（$name）は未指定とみなし label を描画する', async ({ children }) => {
+      const user = userEvent.setup();
+      render(
+        <Combobox value={null} onChange={vi.fn()} inputValue="" onInputChange={vi.fn()}>
+          <Combobox.Input />
+          <Combobox.List>
+            <Combobox.Item value="apple" label="りんご">
+              {children}
+            </Combobox.Item>
+          </Combobox.List>
+        </Combobox>,
+      );
+      await user.click(getCombobox());
+
+      // 空の行にならず、accessible name も label になる
+      const option = getOption('りんご');
+      expect(option.children[0]?.className).toBe('min-w-0 flex-1 truncate');
+      expect(option.children[0]?.textContent).toBe('りんご');
+    });
+
+    it('option の accessible name は children のテキストの連結になり、aria-hidden の要素は含まれない', async () => {
+      const user = userEvent.setup();
+      render(<ChildrenCombobox />);
+      await user.click(getCombobox());
+
+      const option = getOption('りんご 青森県');
+      expect(option).toHaveAttribute('id', expect.stringContaining('apple'));
+      expect(screen.queryByRole('option', { name: /・/, hidden: true })).toBeNull();
+    });
+
+    it('選択時の onChange の meta と onInputChange には children のテキストではなく label が渡る', async () => {
+      const user = userEvent.setup();
+      const handleChange = vi.fn();
+      const handleInputChange = vi.fn();
+      render(<ChildrenCombobox onChange={handleChange} onInputChange={handleInputChange} />);
+      await user.click(getCombobox());
+      await user.click(getOption('バナナ フィリピン'));
+
+      expect(handleChange).toHaveBeenCalledWith('banana', { label: 'バナナ' });
+      expect(handleInputChange).toHaveBeenLastCalledWith('バナナ');
+      expect(getCombobox().value).toBe('バナナ');
+    });
+
+    it('Enter で選択したときも label が使われる', async () => {
+      const user = userEvent.setup();
+      const handleChange = vi.fn();
+      render(<ChildrenCombobox onChange={handleChange} />);
+      await user.click(getCombobox());
+      await user.keyboard('{Enter}');
+
+      expect(handleChange).toHaveBeenCalledWith('apple', { label: 'りんご' });
+      expect(getCombobox().value).toBe('りんご');
+    });
+
+    it('children 指定時もハイライトと選択状態（aria-selected・選択チェック）が表示される', async () => {
+      const user = userEvent.setup();
+      render(<ChildrenCombobox initialValue="banana" initialInputValue="バナナ" />);
+      await user.click(getCombobox());
+
+      const selected = getOption('バナナ フィリピン');
+      expect(selected).toHaveAttribute('aria-selected', 'true');
+      expect(selected.className).toMatch(/bg-selectedUi/);
+      expect(selected.className).toMatch(/border-l-interactive03/);
+      expect(selected.querySelector('[data-selection-indicator] svg')).not.toBeNull();
+
+      await user.keyboard('{ArrowDown}');
+      const active = getOption('りんご 青森県');
+      expect(active.className).toMatch(/bg-hover02/);
+      expect(active.className).toMatch(/border-l-interactive03/);
+      expect(active).toHaveAttribute('aria-selected', 'false');
+      expect(active.querySelector('[data-selection-indicator] svg')).toBeNull();
     });
   });
 
@@ -1192,6 +1898,201 @@ describe('Combobox', () => {
     });
   });
 
+  describe('Combobox.Empty / Combobox.Loading の children', () => {
+    function StatusCombobox({ children }: { children: ReactNode }) {
+      const [value, setValue] = useState<string | null>(null);
+      const [input, setInput] = useState('');
+
+      return (
+        <Combobox
+          value={value}
+          onChange={(next, meta) => {
+            setValue(next);
+            setInput(meta?.label ?? '');
+          }}
+          inputValue={input}
+          onInputChange={setInput}
+        >
+          <Combobox.Input />
+          <Combobox.List>{children}</Combobox.List>
+        </Combobox>
+      );
+    }
+
+    it('Combobox.Empty に children を渡すと、既定文言の代わりにその内容を描画する', () => {
+      render(
+        <StatusCombobox>
+          <Combobox.Empty>候補がありません</Combobox.Empty>
+        </StatusCombobox>,
+      );
+
+      expect(screen.getByText('候補がありません')).toBeInTheDocument();
+      expect(screen.queryByText('一致する情報が見つかりません')).toBeNull();
+    });
+
+    it('Combobox.Loading に children を渡すと、既定文言の代わりにその内容を描画する', () => {
+      render(
+        <StatusCombobox>
+          <Combobox.Loading>検索中です</Combobox.Loading>
+        </StatusCombobox>,
+      );
+
+      expect(screen.getByText('検索中です')).toBeInTheDocument();
+      expect(screen.queryByText('読み込み中...')).toBeNull();
+    });
+
+    it('children にはテキスト以外の要素も渡せる', () => {
+      render(
+        <StatusCombobox>
+          <Combobox.Empty>
+            一致する<strong>果物</strong>が見つかりません
+          </Combobox.Empty>
+        </StatusCombobox>,
+      );
+
+      expect(screen.getByText('果物').tagName).toBe('STRONG');
+      expect(getListbox()).toHaveTextContent('一致する果物が見つかりません');
+    });
+
+    it('Combobox.Empty の children を省略すると既定文言を描画する', () => {
+      render(
+        <StatusCombobox>
+          <Combobox.Empty />
+        </StatusCombobox>,
+      );
+
+      expect(screen.getByText('一致する情報が見つかりません')).toBeInTheDocument();
+    });
+
+    it.each<[string, ReactNode]>([
+      ['null', null],
+      ['false', false],
+      ['空文字', ''],
+      ['空文字だけの配列（{prefix}{message} が両方空）', ['', '']],
+      ['false だけの配列', [false, false]],
+      ['空の配列', []],
+    ])('Combobox.Empty の children が %s のときは既定文言を描画する', (_, children) => {
+      render(
+        <StatusCombobox>
+          <Combobox.Empty>{children}</Combobox.Empty>
+        </StatusCombobox>,
+      );
+
+      expect(screen.getByText('一致する情報が見つかりません')).toBeInTheDocument();
+    });
+
+    it('Combobox.Loading の children を省略すると既定文言を描画する', () => {
+      render(
+        <StatusCombobox>
+          <Combobox.Loading />
+        </StatusCombobox>,
+      );
+
+      expect(screen.getByText('読み込み中...')).toBeInTheDocument();
+    });
+
+    it.each<[string, ReactNode]>([
+      ['null', null],
+      ['false', false],
+      ['空文字', ''],
+      ['空文字だけの配列（{prefix}{message} が両方空）', ['', '']],
+      ['false だけの配列', [false, false]],
+      ['空の配列', []],
+    ])('Combobox.Loading の children が %s のときは既定文言を描画する', (_, children) => {
+      render(
+        <StatusCombobox>
+          <Combobox.Loading>{children}</Combobox.Loading>
+        </StatusCombobox>,
+      );
+
+      expect(screen.getByText('読み込み中...')).toBeInTheDocument();
+    });
+
+    it('children を渡しても role="presentation" のままで、option にはならない', () => {
+      render(
+        <StatusCombobox>
+          <Combobox.Loading>検索中です</Combobox.Loading>
+          <Combobox.Empty>候補がありません</Combobox.Empty>
+        </StatusCombobox>,
+      );
+
+      expect(screen.getByText('検索中です').closest('li')).toHaveAttribute('role', 'presentation');
+      expect(screen.getByText('候補がありません').closest('li')).toHaveAttribute('role', 'presentation');
+      expect(queryOptions()).toHaveLength(0);
+    });
+
+    it('children を渡した行は ArrowDown / ArrowUp で aria-activedescendant の対象にならない', async () => {
+      const user = userEvent.setup();
+      render(
+        <StatusCombobox>
+          <Combobox.Loading>検索中です</Combobox.Loading>
+          <Combobox.Item value="apple" label="りんご" />
+          <Combobox.Empty>候補がありません</Combobox.Empty>
+        </StatusCombobox>,
+      );
+      const input = getCombobox();
+
+      await user.click(input);
+      const optionId = getOption('りんご').id;
+      expect(optionId).not.toBe('');
+      expect(input).toHaveAttribute('aria-activedescendant', optionId);
+
+      await user.keyboard('{ArrowDown}');
+      expect(input).toHaveAttribute('aria-activedescendant', optionId);
+
+      await user.keyboard('{ArrowUp}');
+      expect(input).toHaveAttribute('aria-activedescendant', optionId);
+    });
+
+    it('children を渡した Combobox.Empty だけでも popup が開く', async () => {
+      const user = userEvent.setup();
+      render(
+        <StatusCombobox>
+          <Combobox.Empty>候補がありません</Combobox.Empty>
+        </StatusCombobox>,
+      );
+      const input = getCombobox();
+
+      await user.click(input);
+      expect(input).toHaveAttribute('aria-expanded', 'true');
+      expect(screen.getByRole('button', { name: '候補を閉じる' })).not.toBeDisabled();
+    });
+
+    it('children を渡した Combobox.Loading だけでも popup が開く', async () => {
+      const user = userEvent.setup();
+      render(
+        <StatusCombobox>
+          <Combobox.Loading>検索中です</Combobox.Loading>
+        </StatusCombobox>,
+      );
+      const input = getCombobox();
+
+      await user.click(input);
+      expect(input).toHaveAttribute('aria-expanded', 'true');
+      expect(screen.getByRole('button', { name: '候補を閉じる' })).not.toBeDisabled();
+    });
+
+    it('children を渡した Combobox.Loading の描画中も作成行（Combobox.CreateItem）は表示しない', async () => {
+      const user = userEvent.setup();
+      const onCreate = vi.fn();
+      render(
+        <StatusCombobox>
+          <Combobox.Loading>検索中です</Combobox.Loading>
+          <Combobox.CreateItem onCreate={onCreate} />
+        </StatusCombobox>,
+      );
+
+      await user.click(getCombobox());
+      await user.type(getCombobox(), 'ぶどう');
+
+      expect(screen.getByText('検索中です')).toBeInTheDocument();
+      expect(queryCreateOption()).toBeNull();
+
+      await user.keyboard('{Enter}');
+      expect(onCreate).not.toHaveBeenCalled();
+    });
+  });
+
   describe('クリアボタン', () => {
     const getClearButton = () => screen.queryByRole('button', { name: '入力をクリア' });
 
@@ -1288,6 +2189,2606 @@ describe('Combobox', () => {
       await user.keyboard('{Enter}');
 
       expect(onSelectionChange).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Combobox.Input の accessible name', () => {
+    const noop = () => {
+      // intentionally empty
+    };
+    const renderCombobox = (isMultiple: boolean, inputProps: ComboboxInputProps, before?: ReactNode) =>
+      render(
+        <>
+          {before}
+          {isMultiple ? (
+            <Combobox isMultiple value={[]} onChange={noop} inputValue="" onInputChange={noop}>
+              <Combobox.Input {...inputProps} />
+              <Combobox.List>
+                <Combobox.Item value="apple" label="りんご" />
+              </Combobox.List>
+            </Combobox>
+          ) : (
+            <Combobox value={null} onChange={noop} inputValue="" onInputChange={noop}>
+              <Combobox.Input {...inputProps} />
+              <Combobox.List>
+                <Combobox.Item value="apple" label="りんご" />
+              </Combobox.List>
+            </Combobox>
+          )}
+        </>,
+      );
+
+    describe.each([
+      { mode: '単一選択', isMultiple: false },
+      { mode: '複数選択', isMultiple: true },
+    ])('$mode', ({ isMultiple }) => {
+      it('id を指定すると input に反映され、<label htmlFor> で名前が付く', () => {
+        renderCombobox(isMultiple, { id: 'fruit-input' }, <label htmlFor="fruit-input">好きな果物</label>);
+
+        expect(getCombobox()).toHaveAttribute('id', 'fruit-input');
+        expect(screen.getByRole('combobox', { name: '好きな果物' })).toBe(getCombobox());
+      });
+
+      it('aria-label を指定すると input の名前になる', () => {
+        renderCombobox(isMultiple, { 'aria-label': '果物' });
+
+        expect(screen.getByRole('combobox', { name: '果物' })).toBe(getCombobox());
+      });
+
+      it('aria-labelledby を指定すると、参照先の要素のテキストが input の名前になる', () => {
+        renderCombobox(isMultiple, { 'aria-labelledby': 'fruit-heading' }, <span id="fruit-heading">果物の選択</span>);
+
+        expect(getCombobox()).toHaveAttribute('aria-labelledby', 'fruit-heading');
+        expect(screen.getByRole('combobox', { name: '果物の選択' })).toBe(getCombobox());
+      });
+
+      it('未指定のときは id / aria-label / aria-labelledby を付けない（従来どおり）', () => {
+        renderCombobox(isMultiple, {});
+
+        expect(getCombobox()).not.toHaveAttribute('id');
+        expect(getCombobox()).not.toHaveAttribute('aria-label');
+        expect(getCombobox()).not.toHaveAttribute('aria-labelledby');
+      });
+    });
+
+    it('id を指定しても aria-activedescendant / aria-controls は内部の id のまま', async () => {
+      const user = userEvent.setup();
+      renderCombobox(false, { id: 'fruit-input' });
+
+      await user.click(getCombobox());
+
+      expect(getCombobox().getAttribute('aria-controls')).toBe(getListbox().id);
+      expect(getCombobox().getAttribute('aria-activedescendant')).toBe(getOption('りんご').id);
+      expect(getOption('りんご').id).not.toBe('fruit-input');
+    });
+  });
+
+  describe('multiple', () => {
+    const getLiveRegion = (container: HTMLElement) => container.querySelector('[aria-live="polite"]');
+
+    describe('追加（add）', () => {
+      it('Item クリックで次の配列と add の meta を渡し、入力を空にし、リストは開いたまま', async () => {
+        const user = userEvent.setup();
+        const onChange = vi.fn();
+        const onOpenChange = vi.fn();
+        const onInputValueChange = vi.fn();
+        render(
+          <ControlledMultipleCombobox
+            initialValue={['orange']}
+            onChange={onChange}
+            onOpenChange={onOpenChange}
+            onInputValueChange={onInputValueChange}
+          />,
+        );
+        await user.click(getCombobox());
+        await user.type(getCombobox(), 'り');
+        onInputValueChange.mockClear();
+        onOpenChange.mockClear();
+
+        await user.click(getOption('りんご'));
+
+        expect(onChange).toHaveBeenCalledTimes(1);
+        expect(onChange).toHaveBeenCalledWith(['orange', 'apple'], { type: 'add', value: 'apple' });
+        expect(onInputValueChange).toHaveBeenCalledWith('');
+        expect(getCombobox()).toHaveValue('');
+        expect(onOpenChange).not.toHaveBeenCalledWith(false);
+        expect(getListbox()).toHaveStyle({ visibility: 'visible' });
+      });
+
+      it('Enter で active な Item を追加し、リストは開いたまま', async () => {
+        const user = userEvent.setup();
+        const onChange = vi.fn();
+        const onOpenChange = vi.fn();
+        render(<ControlledMultipleCombobox onChange={onChange} onOpenChange={onOpenChange} />);
+        await user.click(getCombobox());
+        onOpenChange.mockClear();
+
+        await user.keyboard('{Enter}');
+
+        expect(onChange).toHaveBeenCalledWith(['apple'], { type: 'add', value: 'apple' });
+        expect(onOpenChange).not.toHaveBeenCalledWith(false);
+        expect(getListbox()).toHaveStyle({ visibility: 'visible' });
+      });
+
+      it('入力が空のときは onInputChange を呼ばない', async () => {
+        const user = userEvent.setup();
+        const onInputValueChange = vi.fn();
+        render(<ControlledMultipleCombobox onInputValueChange={onInputValueChange} />);
+        await user.click(getCombobox());
+
+        await user.click(getOption('りんご'));
+
+        expect(onInputValueChange).not.toHaveBeenCalled();
+      });
+
+      it('選択値と一致しない先頭の有効 Item が open 時の active になる', async () => {
+        const user = userEvent.setup();
+        render(<ControlledMultipleCombobox initialValue={['peach']} />);
+
+        await user.click(getCombobox());
+
+        expect(getCombobox().getAttribute('aria-activedescendant')).toContain('apple');
+      });
+    });
+
+    describe('選択済みの再選択（toggle）', () => {
+      it('選択済みの Item をクリックすると remove の meta で外し、入力を空にする', async () => {
+        const user = userEvent.setup();
+        const onChange = vi.fn();
+        const onInputValueChange = vi.fn();
+        render(
+          <ControlledMultipleCombobox
+            initialValue={['apple', 'orange']}
+            onChange={onChange}
+            onInputValueChange={onInputValueChange}
+          />,
+        );
+        await user.click(getCombobox());
+        await user.type(getCombobox(), 'り');
+
+        await user.click(getOption('りんご'));
+
+        expect(onChange).toHaveBeenCalledWith(['orange'], { type: 'remove', value: 'apple' });
+        expect(onInputValueChange).toHaveBeenLastCalledWith('');
+        expect(getListbox()).toHaveStyle({ visibility: 'visible' });
+      });
+
+      it('選択済みの Item を Enter で選ぶと remove になる', async () => {
+        const user = userEvent.setup();
+        const onChange = vi.fn();
+        render(<ControlledMultipleCombobox initialValue={['apple']} onChange={onChange} />);
+        await user.click(getCombobox());
+
+        await user.keyboard('{Enter}');
+
+        expect(onChange).toHaveBeenCalledWith([], { type: 'remove', value: 'apple' });
+      });
+    });
+
+    describe('Backspace', () => {
+      it('入力が空のとき value の末尾を削除する', async () => {
+        const user = userEvent.setup();
+        const onChange = vi.fn();
+        render(<ControlledMultipleCombobox initialValue={['peach', 'apple', 'orange']} onChange={onChange} />);
+        await user.click(getCombobox());
+
+        await user.keyboard('{Backspace}');
+        expect(onChange).toHaveBeenLastCalledWith(['peach', 'apple'], { type: 'remove', value: 'orange' });
+
+        await user.keyboard('{Backspace}');
+        expect(onChange).toHaveBeenLastCalledWith(['peach'], { type: 'remove', value: 'apple' });
+      });
+
+      it('入力が空でなければ文字の削除だけ行い、value は変えない', async () => {
+        const user = userEvent.setup();
+        const onChange = vi.fn();
+        render(<ControlledMultipleCombobox initialValue={['apple']} onChange={onChange} />);
+        await user.click(getCombobox());
+        await user.type(getCombobox(), 'み');
+
+        await user.keyboard('{Backspace}');
+
+        expect(getCombobox()).toHaveValue('');
+        expect(onChange).not.toHaveBeenCalled();
+      });
+
+      it('value が 0 件のときは何もしない', async () => {
+        const user = userEvent.setup();
+        const onChange = vi.fn();
+        render(<ControlledMultipleCombobox onChange={onChange} />);
+        await user.click(getCombobox());
+
+        await user.keyboard('{Backspace}');
+
+        expect(onChange).not.toHaveBeenCalled();
+      });
+
+      it.each([
+        { name: 'isComposing=true', init: { isComposing: true } },
+        { name: 'keyCode=229', init: { keyCode: 229 } },
+      ])('IME 変換中（$name）は削除しない', async ({ init }) => {
+        const user = userEvent.setup();
+        const onChange = vi.fn();
+        render(<ControlledMultipleCombobox initialValue={['apple']} onChange={onChange} />);
+        await user.click(getCombobox());
+
+        fireEvent.keyDown(getCombobox(), { key: 'Backspace', ...init });
+
+        expect(onChange).not.toHaveBeenCalled();
+      });
+
+      it('isDisabled のときは削除しない', () => {
+        const onChange = vi.fn();
+        render(<ControlledMultipleCombobox initialValue={['apple']} onChange={onChange} isDisabled />);
+
+        fireEvent.keyDown(getCombobox(), { key: 'Backspace' });
+
+        expect(onChange).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('未確定入力の取り消し (revert)', () => {
+      it('blur で入力が空に戻り、value は変わらない', async () => {
+        const user = userEvent.setup();
+        const onChange = vi.fn();
+        const onOpenChange = vi.fn();
+        render(<ControlledMultipleCombobox initialValue={['apple']} onChange={onChange} onOpenChange={onOpenChange} />);
+        await user.click(getCombobox());
+        await user.type(getCombobox(), 'み');
+
+        await user.tab();
+
+        expect(getCombobox()).toHaveValue('');
+        expect(onOpenChange).toHaveBeenLastCalledWith(false);
+        expect(onChange).not.toHaveBeenCalled();
+      });
+
+      it('Escape でリストが閉じ、入力が空に戻り、value は変わらない', async () => {
+        const user = userEvent.setup();
+        const onChange = vi.fn();
+        render(<ControlledMultipleCombobox initialValue={['apple']} onChange={onChange} />);
+        await user.click(getCombobox());
+        await user.type(getCombobox(), 'み');
+
+        await user.keyboard('{Escape}');
+
+        expect(getCombobox()).toHaveValue('');
+        expect(getListbox()).toHaveStyle({ visibility: 'hidden' });
+        expect(onChange).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('active の維持', () => {
+      it('すべての選択を外しても、開いているリストの active は維持される', async () => {
+        const user = userEvent.setup();
+        render(<ControlledMultipleCombobox initialValue={['apple']} />);
+        await user.click(getCombobox());
+        await user.keyboard('{ArrowDown}');
+        const activeId = getCombobox().getAttribute('aria-activedescendant');
+        expect(activeId).toContain('orange');
+
+        await user.keyboard('{Backspace}');
+
+        expect(getCombobox()).toHaveAttribute('aria-activedescendant', activeId);
+      });
+    });
+
+    describe('aria 属性', () => {
+      it('listbox に aria-multiselectable="true" が付く', () => {
+        render(<ControlledMultipleCombobox />);
+
+        expect(getListbox()).toHaveAttribute('aria-multiselectable', 'true');
+      });
+
+      it('単一選択では aria-multiselectable が付かない', () => {
+        render(<ControlledCombobox />);
+
+        expect(getListbox()).not.toHaveAttribute('aria-multiselectable');
+      });
+
+      it('aria-selected が value 配列を反映する', async () => {
+        const user = userEvent.setup();
+        render(<ControlledMultipleCombobox initialValue={['apple', 'peach']} />);
+        await user.click(getCombobox());
+
+        expect(getOption('りんご')).toHaveAttribute('aria-selected', 'true');
+        expect(getOption('もも')).toHaveAttribute('aria-selected', 'true');
+        expect(getOption('みかん')).toHaveAttribute('aria-selected', 'false');
+
+        await user.click(getOption('みかん'));
+
+        expect(getOption('みかん')).toHaveAttribute('aria-selected', 'true');
+      });
+    });
+
+    describe('aria-live 通知', () => {
+      it('mount 時は空', () => {
+        const { container } = render(<ControlledMultipleCombobox initialValue={['apple']} />);
+
+        expect(getLiveRegion(container)).toHaveTextContent('');
+      });
+
+      it('単一選択では aria-live 領域を描画しない', () => {
+        const { container } = render(<ControlledCombobox />);
+
+        expect(getLiveRegion(container)).toBeNull();
+      });
+
+      it('value に無い値の Chip を描画している間は、ほかの選択が変わっても label を保ち、後から追加したとき label で通知する', () => {
+        const noop = vi.fn();
+        const renderWithValue = (value: string[]) => (
+          <Combobox isMultiple value={value} onChange={noop} inputValue="" onInputChange={noop}>
+            <Combobox.Input aria-label="果物">
+              <Combobox.Chip value="apple" label="りんご" />
+              <Combobox.Chip value="orange" label="みかん" />
+              <Combobox.Chip value="peach" label="もも" />
+            </Combobox.Input>
+            <Combobox.List>
+              <Combobox.Item value="apple" label="りんご" />
+            </Combobox.List>
+          </Combobox>
+        );
+        const { container, rerender } = render(renderWithValue(['apple']));
+
+        // peach を含まない value の変更（このとき value に無い label の掃除が走る）
+        rerender(renderWithValue(['apple', 'orange']));
+        expect(getLiveRegion(container)).toHaveTextContent('「みかん」を追加しました');
+
+        rerender(renderWithValue(['apple', 'orange', 'peach']));
+        expect(getLiveRegion(container)).toHaveTextContent('「もも」を追加しました');
+      });
+
+      it('追加は Item の label で、削除は登録済みの label で通知する', async () => {
+        const user = userEvent.setup();
+        const { container } = render(<ControlledMultipleCombobox />);
+        await user.click(getCombobox());
+
+        await user.click(getOption('りんご'));
+        expect(getLiveRegion(container)).toHaveTextContent('「りんご」を追加しました');
+
+        await user.keyboard('{Backspace}');
+        expect(getLiveRegion(container)).toHaveTextContent('「りんご」を削除しました');
+      });
+
+      it('label が登録されていない値は value 文字列で通知する', async () => {
+        const user = userEvent.setup();
+        const { container } = render(<ControlledMultipleCombobox initialValue={['apple']} />);
+        await user.click(getCombobox());
+
+        await user.keyboard('{Backspace}');
+
+        expect(getLiveRegion(container)).toHaveTextContent('「apple」を削除しました');
+      });
+
+      it('利用側が value を差し替えた場合も差分を通知する（複数は「、」で連結）', () => {
+        const noop = vi.fn();
+        const renderMultiple = (value: string[]) => (
+          <Combobox isMultiple value={value} onChange={noop} inputValue="" onInputChange={noop}>
+            <Combobox.Input />
+            <Combobox.List>
+              <Combobox.Item value="apple" label="りんご" />
+            </Combobox.List>
+          </Combobox>
+        );
+        const { container, rerender } = render(renderMultiple(['apple']));
+        expect(getLiveRegion(container)).toHaveTextContent('');
+
+        rerender(renderMultiple(['orange', 'peach']));
+
+        expect(getLiveRegion(container)).toHaveTextContent(
+          '「apple」を削除しました、「orange」、「peach」を追加しました',
+        );
+      });
+
+      describe('同じ label の別の値を続けて追加・削除しても、毎回新しい通知として描画し直す', () => {
+        const noop = vi.fn();
+        const renderSameLabel = (value: string[]) => (
+          <Combobox isMultiple value={value} onChange={noop} inputValue="" onInputChange={noop}>
+            <Combobox.Input>
+              {value.map((chipValue) => (
+                <Combobox.Chip key={chipValue} value={chipValue} label="同名" />
+              ))}
+            </Combobox.Input>
+            <Combobox.List>
+              <Combobox.Item value="a" label="同名" />
+              <Combobox.Item value="b" label="同名" />
+            </Combobox.List>
+          </Combobox>
+        );
+
+        it('連続追加', () => {
+          const { container, rerender } = render(renderSameLabel([]));
+          const liveRegion = getLiveRegion(container);
+
+          rerender(renderSameLabel(['a']));
+          const firstMessage = liveRegion?.firstChild;
+          expect(liveRegion).toHaveTextContent('「同名」を追加しました');
+
+          rerender(renderSameLabel(['a', 'b']));
+          // live 領域そのものは入れ替えず、中身のノードだけが入れ替わる
+          expect(getLiveRegion(container)).toBe(liveRegion);
+          expect(liveRegion).toHaveTextContent('「同名」を追加しました');
+          expect(liveRegion?.firstChild).not.toBeNull();
+          expect(liveRegion?.firstChild).not.toBe(firstMessage);
+        });
+
+        it('連続削除', () => {
+          const { container, rerender } = render(renderSameLabel(['a', 'b']));
+          const liveRegion = getLiveRegion(container);
+
+          rerender(renderSameLabel(['a']));
+          const firstMessage = liveRegion?.firstChild;
+          expect(liveRegion).toHaveTextContent('「同名」を削除しました');
+
+          rerender(renderSameLabel([]));
+          expect(getLiveRegion(container)).toBe(liveRegion);
+          expect(liveRegion).toHaveTextContent('「同名」を削除しました');
+          expect(liveRegion?.firstChild).not.toBeNull();
+          expect(liveRegion?.firstChild).not.toBe(firstMessage);
+        });
+      });
+    });
+
+    describe('Combobox.Chip の描画', () => {
+      it('Chip が children の順に、label と gray の Tag で描画される', () => {
+        render(<MultipleComboboxWithChips initialValue={['peach', 'apple']} />);
+
+        const peach = screen.getByText('もも', { selector: 'span[title]' });
+        const apple = screen.getByText('りんご', { selector: 'span[title]' });
+        expect(peach.compareDocumentPosition(apple) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+        expect(peach.parentElement).toHaveClass('bg-gray-gray10');
+        expect(getDeleteButton('もも')).toBeInTheDocument();
+        expect(getDeleteButton('りんご')).toBeInTheDocument();
+      });
+
+      it('Chip は input と同じ枠の中（input の前）に描画される', () => {
+        render(<MultipleComboboxWithChips initialValue={['apple']} />);
+
+        const chip = getDeleteButton('りんご');
+        const input = getCombobox();
+        expect(input.parentElement?.contains(chip)).toBe(true);
+        expect(chip.compareDocumentPosition(input) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+      });
+
+      it('value が 1 件以上あるとき placeholder を出さず、0 件のときは出す', async () => {
+        const user = userEvent.setup();
+        render(<MultipleComboboxWithChips initialValue={['apple']} placeholder="果物を検索" />);
+        expect(getCombobox()).not.toHaveAttribute('placeholder');
+
+        await user.click(getDeleteButton('りんご'));
+
+        expect(getCombobox()).toHaveAttribute('placeholder', '果物を検索');
+      });
+
+      it('value に Chip が描画されていなくても、value があれば placeholder を出さない', () => {
+        render(<MultipleComboboxWithChips initialValue={['apple']} chipValues={[]} placeholder="果物を検索" />);
+
+        expect(getCombobox()).not.toHaveAttribute('placeholder');
+      });
+
+      it('チップの折り返し領域の余白を押すと input にフォーカスする', () => {
+        render(<MultipleComboboxWithChips initialValue={['apple']} />);
+        const chipArea = getCombobox().parentElement;
+        expect(chipArea).not.toBeNull();
+
+        if (chipArea != null) {
+          fireEvent.mouseDown(chipArea);
+        }
+
+        expect(document.activeElement).toBe(getCombobox());
+      });
+
+      it('HelperMessage の表示・非表示で枠が入れ替わっても、余白を押すと input にフォーカスし、古い枠の listener は外れる', () => {
+        // 枠 = チップの折り返し領域（input の親）のさらに親
+        const getFrame = () => getCombobox().parentElement?.parentElement ?? null;
+        const { rerender } = render(<MultipleComboboxWithChips initialValue={['apple']} />);
+        const initialFrame = getFrame();
+        expect(initialFrame).not.toBeNull();
+        const removeSpy = initialFrame != null ? vi.spyOn(initialFrame, 'removeEventListener') : null;
+
+        rerender(
+          <MultipleComboboxWithChips
+            initialValue={['apple']}
+            inputChildren={<Combobox.HelperMessage>補足</Combobox.HelperMessage>}
+          />,
+        );
+        const frameWithMessage = getFrame();
+        expect(frameWithMessage).not.toBe(initialFrame);
+        expect(removeSpy).toHaveBeenCalledWith('mousedown', expect.any(Function));
+
+        rerender(<MultipleComboboxWithChips initialValue={['apple']} />);
+        const frameWithoutMessage = getFrame();
+        expect(frameWithoutMessage).not.toBe(frameWithMessage);
+
+        const chipArea = getCombobox().parentElement;
+        if (chipArea != null) {
+          fireEvent.mouseDown(chipArea);
+        }
+
+        expect(document.activeElement).toBe(getCombobox());
+      });
+
+      it('単一選択では枠の余白を押しても input にフォーカスしない（従来どおり）', () => {
+        render(<ControlledCombobox />);
+        const frame = getCombobox().parentElement;
+
+        if (frame != null) {
+          fireEvent.mouseDown(frame);
+        }
+
+        expect(document.activeElement).not.toBe(getCombobox());
+      });
+
+      describe('クリアボタン', () => {
+        const queryClearInputButton = () => screen.queryByRole('button', { name: '入力をクリア' });
+        const queryClearSelectionButton = () => screen.queryByRole('button', { name: '選択をすべて削除' });
+        const getButton = (button: HTMLElement | null) => {
+          if (button == null) {
+            throw new Error('クリアボタンが描画されていない');
+          }
+
+          return button;
+        };
+
+        it('onClickClearButton 未指定のときは、入力や選択があっても描画しない', async () => {
+          const user = userEvent.setup();
+          render(<MultipleComboboxWithChips initialValue={['apple']} />);
+
+          expect(queryClearSelectionButton()).toBeNull();
+
+          await user.type(getCombobox(), 'み');
+
+          expect(queryClearInputButton()).toBeNull();
+        });
+
+        it('入力も選択もないときは描画しない', () => {
+          render(<MultipleComboboxWithChips clearMode="all" />);
+
+          expect(queryClearInputButton()).toBeNull();
+          expect(queryClearSelectionButton()).toBeNull();
+        });
+
+        it('入力があるときは「入力をクリア」として描画する（選択が無くても）', async () => {
+          const user = userEvent.setup();
+          render(<MultipleComboboxWithChips clearMode="all" />);
+          await user.type(getCombobox(), 'み');
+
+          expect(queryClearInputButton()).toBeInTheDocument();
+          expect(queryClearSelectionButton()).toBeNull();
+        });
+
+        it('入力が空で外せる選択があるときは「選択をすべて削除」として描画する', () => {
+          render(<MultipleComboboxWithChips clearMode="all" initialValue={['apple']} />);
+
+          expect(queryClearSelectionButton()).toBeInTheDocument();
+          expect(queryClearInputButton()).toBeNull();
+        });
+
+        it('外せないチップだけが選択されているときは、入力が空なら描画しない', () => {
+          render(<MultipleComboboxWithChips clearMode="all" initialValue={['apple']} fixedValues={['apple']} />);
+
+          expect(queryClearSelectionButton()).toBeNull();
+        });
+
+        it('外せない値の Chip が描画されなくなると、外せる選択として描画する', () => {
+          const { rerender } = render(
+            <MultipleComboboxWithChips clearMode="all" initialValue={['apple']} fixedValues={['apple']} />,
+          );
+
+          expect(queryClearSelectionButton()).toBeNull();
+
+          // value は apple のまま、Chip だけを描画しない（外せるかは描画中の Chip の宣言だけで決まる）
+          rerender(
+            <MultipleComboboxWithChips
+              clearMode="all"
+              initialValue={['apple']}
+              fixedValues={['apple']}
+              chipValues={[]}
+            />,
+          );
+
+          expect(queryClearSelectionButton()).toBeInTheDocument();
+        });
+
+        it('描画中の Chip が外せないに変わると描画しなくなる', () => {
+          const { rerender } = render(<MultipleComboboxWithChips clearMode="all" initialValue={['apple']} />);
+
+          expect(queryClearSelectionButton()).toBeInTheDocument();
+
+          rerender(<MultipleComboboxWithChips clearMode="all" initialValue={['apple']} fixedValues={['apple']} />);
+
+          expect(queryClearSelectionButton()).toBeNull();
+        });
+
+        it('基本の使い方（入力中だけハンドラを渡す）では、未入力のとき選択があっても描画せず、押すと入力だけが消える', async () => {
+          const user = userEvent.setup();
+          render(<MultipleComboboxWithChips clearMode="input" initialValue={['apple', 'orange']} />);
+
+          expect(queryClearSelectionButton()).toBeNull();
+          expect(queryClearInputButton()).toBeNull();
+
+          await user.type(getCombobox(), 'み');
+          await user.click(getButton(queryClearInputButton()));
+
+          expect(getCombobox()).toHaveValue('');
+          expect(getDeleteButton('りんご')).toBeInTheDocument();
+          expect(getDeleteButton('みかん')).toBeInTheDocument();
+          expect(queryClearInputButton()).toBeNull();
+          expect(queryClearSelectionButton()).toBeNull();
+        });
+
+        it('isDisabled のときは描画しない', () => {
+          render(<MultipleComboboxWithChips clearMode="all" initialValue={['apple']} isDisabled />);
+
+          expect(queryClearSelectionButton()).toBeNull();
+        });
+
+        it('入力中に押すと入力だけが消え、続けて押すと外せる選択だけが外れてボタンが消える', async () => {
+          const user = userEvent.setup();
+          const handleChange = vi.fn();
+          render(
+            <MultipleComboboxWithChips
+              clearMode="all"
+              initialValue={['apple', 'orange']}
+              fixedValues={['apple']}
+              onChange={handleChange}
+            />,
+          );
+          await user.type(getCombobox(), 'み');
+          await user.click(getButton(queryClearInputButton()));
+
+          expect(getCombobox()).toHaveValue('');
+          expect(getDeleteButton('みかん')).toBeInTheDocument();
+
+          await user.click(getButton(queryClearSelectionButton()));
+
+          expect(queryDeleteButton('みかん')).toBeNull();
+          // 外せない値は選択に残り、外せる値だけが外れる
+          expect(getOption('りんご')).toHaveAttribute('aria-selected', 'true');
+          expect(getOption('みかん')).toHaveAttribute('aria-selected', 'false');
+          expect(queryClearSelectionButton()).toBeNull();
+          // クリアは利用側が value を差し替えるだけで、onChange は呼ばれない
+          expect(handleChange).not.toHaveBeenCalled();
+        });
+
+        it('選択をまとめて外すと、外した値をまとめて読み上げる', async () => {
+          const user = userEvent.setup();
+          const { container } = render(
+            <MultipleComboboxWithChips clearMode="all" initialValue={['apple', 'orange']} />,
+          );
+          await user.click(getButton(queryClearSelectionButton()));
+
+          expect(getLiveRegion(container)).toHaveTextContent('「りんご」、「みかん」を削除しました');
+        });
+
+        it('押しても input のフォーカスとリストの開閉は変わらない', async () => {
+          const user = userEvent.setup();
+          render(<MultipleComboboxWithChips clearMode="all" initialValue={['apple']} />);
+          await user.click(getCombobox());
+
+          expect(getCombobox()).toHaveAttribute('aria-expanded', 'true');
+
+          await user.click(getButton(queryClearSelectionButton()));
+
+          expect(document.activeElement).toBe(getCombobox());
+          expect(getCombobox()).toHaveAttribute('aria-expanded', 'true');
+        });
+      });
+
+      it('単一選択では Chip を描画せず、DOM は Chip を置かない場合と同じ', () => {
+        const noop = vi.fn();
+        const renderSingle = (withChip: boolean) => (
+          <Combobox value="apple" onChange={noop} inputValue="りんご" onInputChange={noop} placeholder="果物を検索">
+            <Combobox.Input>{withChip && <Combobox.Chip value="apple" label="りんご" />}</Combobox.Input>
+            <Combobox.List>
+              <Combobox.Item value="apple" label="りんご" />
+            </Combobox.List>
+          </Combobox>
+        );
+        // useId の採番差を除いて比較する
+        const normalize = (html: string) => html.replace(/(«|:)r[0-9a-z]+(»|:)/g, 'ID');
+
+        const { container, unmount } = render(renderSingle(false));
+        const htmlWithoutChip = normalize(container.innerHTML);
+        unmount();
+        const { container: containerWithChip } = render(renderSingle(true));
+
+        expect(queryDeleteButton('りんご')).toBeNull();
+        expect(normalize(containerWithChip.innerHTML)).toBe(htmlWithoutChip);
+      });
+
+      it('HelperMessage / ErrorMessage を Chip と併記しても aria-describedby が従来どおり配線される', () => {
+        render(
+          <MultipleComboboxWithChips
+            initialValue={['apple']}
+            isError
+            inputChildren={[
+              <Combobox.HelperMessage key="helper">補足</Combobox.HelperMessage>,
+              <Combobox.ErrorMessage key="error">エラー</Combobox.ErrorMessage>,
+            ]}
+          />,
+        );
+
+        const describedBy = getCombobox().getAttribute('aria-describedby') ?? '';
+        const describedTexts = describedBy.split(' ').map((id) => document.getElementById(id)?.textContent);
+        expect(describedTexts).toEqual(['補足', 'エラー']);
+        expect(getDeleteButton('りんご')).toBeInTheDocument();
+      });
+    });
+
+    describe('Combobox.Chip の長いラベル', () => {
+      const longLabel = 'シャインマスカット（長い名前の表示確認用・とても長いラベル）';
+
+      it('文字を省略用の span に入れて title に全文を出し、Tag と Chip の外側に幅の制限クラスを付ける', () => {
+        render(<MultipleComboboxWithChips initialValue={['apple']} chipLabels={{ apple: longLabel }} />);
+
+        const text = screen.getByText(longLabel, { selector: 'span[title]' });
+        expect(text).toHaveClass('truncate');
+        expect(text).toHaveAttribute('title', longLabel);
+
+        const tag = text.parentElement;
+        expect(tag).toHaveClass('min-w-0', 'max-w-full');
+        expect(tag?.parentElement).toHaveClass('flex', 'min-w-0', 'max-w-full');
+      });
+
+      it('✗ の accessible name は全文の「{label}を削除」になり、✗ は縮まない', () => {
+        render(<MultipleComboboxWithChips initialValue={['apple']} chipLabels={{ apple: longLabel }} />);
+
+        const deleteButton = getDeleteButton(longLabel);
+        expect(deleteButton).toBeInTheDocument();
+        expect(deleteButton).toHaveClass('shrink-0');
+      });
+
+      it('✗ で削除したときの aria-live 通知も全文で行う', async () => {
+        const user = userEvent.setup();
+        const { container } = render(
+          <MultipleComboboxWithChips initialValue={['apple']} chipLabels={{ apple: longLabel }} />,
+        );
+
+        await user.click(getDeleteButton(longLabel));
+
+        expect(getLiveRegion(container)).toHaveTextContent(`「${longLabel}」を削除しました`);
+      });
+
+      it('短いラベルでも同じ構造で描画する（省略されないだけ）', () => {
+        render(<MultipleComboboxWithChips initialValue={['apple']} />);
+
+        const text = screen.getByText('りんご', { selector: 'span[title]' });
+        expect(text).toHaveClass('truncate');
+        expect(text).toHaveAttribute('title', 'りんご');
+        expect(text.parentElement?.parentElement).toHaveClass('flex', 'min-w-0', 'max-w-full');
+        expect(getDeleteButton('りんご')).toHaveClass('shrink-0');
+      });
+    });
+
+    describe('Combobox.Chip の ✗ で削除', () => {
+      it('✗ クリックでその値だけを外し、input のフォーカスを保ち、リストの開閉は変えない', async () => {
+        const user = userEvent.setup();
+        const onChange = vi.fn();
+        const onOpenChange = vi.fn();
+        render(
+          <MultipleComboboxWithChips
+            initialValue={['apple', 'orange', 'peach']}
+            onChange={onChange}
+            onOpenChange={onOpenChange}
+          />,
+        );
+        await user.click(getCombobox());
+        await user.keyboard('{Escape}');
+        onOpenChange.mockClear();
+
+        await user.click(getDeleteButton('みかん'));
+
+        expect(onChange).toHaveBeenCalledTimes(1);
+        expect(onChange).toHaveBeenCalledWith(['apple', 'peach'], { type: 'remove', value: 'orange' });
+        expect(document.activeElement).toBe(getCombobox());
+        expect(onOpenChange).not.toHaveBeenCalled();
+        expect(getListbox()).toHaveStyle({ visibility: 'hidden' });
+      });
+
+      it('input が未フォーカスのときの ✗ クリックはフォーカスを移さず、リストも開かない', async () => {
+        const user = userEvent.setup();
+        const onChange = vi.fn();
+        const onOpenChange = vi.fn();
+        render(<MultipleComboboxWithChips initialValue={['apple']} onChange={onChange} onOpenChange={onOpenChange} />);
+
+        await user.click(getDeleteButton('りんご'));
+
+        expect(onChange).toHaveBeenCalledWith([], { type: 'remove', value: 'apple' });
+        expect(document.activeElement).not.toBe(getCombobox());
+        expect(onOpenChange).not.toHaveBeenCalled();
+      });
+
+      it('value に無い値の Chip の ✗ は onChange を呼ばない', async () => {
+        const user = userEvent.setup();
+        const onChange = vi.fn();
+        render(
+          <MultipleComboboxWithChips initialValue={['apple']} chipValues={['apple', 'peach']} onChange={onChange} />,
+        );
+
+        await user.click(getDeleteButton('もも'));
+
+        expect(onChange).not.toHaveBeenCalled();
+      });
+
+      it('同じ value の Chip が 2 つあっても、どちらの ✗ でもその値が 1 回削除される', async () => {
+        const user = userEvent.setup();
+        const onChange = vi.fn();
+        const noop = vi.fn();
+        render(
+          <Combobox isMultiple value={['apple', 'peach']} onChange={onChange} inputValue="" onInputChange={noop}>
+            <Combobox.Input aria-label="果物">
+              <Combobox.Chip key="first" value="apple" label="りんご" />
+              <Combobox.Chip key="second" value="apple" label="りんご" />
+            </Combobox.Input>
+            <Combobox.List>
+              <Combobox.Item value="apple" label="りんご" />
+            </Combobox.List>
+          </Combobox>,
+        );
+        const [, secondButton] = screen.getAllByRole('button', { name: 'りんごを削除' });
+        expect(secondButton).toBeDefined();
+
+        if (secondButton != null) {
+          await user.click(secondButton);
+        }
+
+        expect(onChange).toHaveBeenCalledTimes(1);
+        expect(onChange).toHaveBeenCalledWith(['peach'], { type: 'remove', value: 'apple' });
+      });
+
+      it('同じ value の外せない Chip が 2 つあり片方が外れても、残りの Chip があれば外せないまま', async () => {
+        const user = userEvent.setup();
+        const onChange = vi.fn();
+        const noop = vi.fn();
+        const renderWithFixedChips = (chipKeys: string[]) => (
+          <Combobox
+            isMultiple
+            value={['apple']}
+            onChange={onChange}
+            inputValue=""
+            onInputChange={noop}
+            onClickClearButton={noop}
+          >
+            <Combobox.Input aria-label="果物">
+              {chipKeys.map((chipKey) => (
+                <Combobox.Chip key={chipKey} value="apple" label="りんご" isRemovable={false} />
+              ))}
+            </Combobox.Input>
+            <Combobox.List>
+              <Combobox.Item value="apple" label="りんご" />
+            </Combobox.List>
+          </Combobox>
+        );
+        const { rerender } = render(renderWithFixedChips(['first', 'second']));
+
+        rerender(renderWithFixedChips(['second']));
+
+        // Backspace・候補の再選択でも外れず、クリアボタンも表示されない
+        await user.click(getCombobox());
+        await user.keyboard('{Backspace}');
+        await user.click(getOption('りんご'));
+
+        expect(onChange).not.toHaveBeenCalled();
+        expect(screen.queryByRole('button', { name: '選択をすべて削除' })).toBeNull();
+      });
+
+      it.each([
+        { key: '{Enter}', name: 'Enter' },
+        { key: ' ', name: 'Space' },
+      ])(
+        'キーボード（Shift+Tab → $name）で任意のチップを削除でき、削除後は input にフォーカスが戻る',
+        async ({ key }) => {
+          const user = userEvent.setup();
+          const onChange = vi.fn();
+          const onOpenChange = vi.fn();
+          render(
+            <MultipleComboboxWithChips
+              initialValue={['apple', 'orange', 'peach']}
+              onChange={onChange}
+              onOpenChange={onOpenChange}
+            />,
+          );
+          await user.click(getCombobox());
+
+          await user.tab({ shift: true });
+          await user.tab({ shift: true });
+          expect(document.activeElement).toBe(getDeleteButton('みかん'));
+          // ✗ に移った時点でリストは閉じている
+          expect(onOpenChange).toHaveBeenLastCalledWith(false);
+
+          await user.keyboard(key);
+
+          expect(onChange).toHaveBeenCalledTimes(1);
+          expect(onChange).toHaveBeenCalledWith(['apple', 'peach'], { type: 'remove', value: 'orange' });
+          expect(getDeleteButton('りんご')).toBeInTheDocument();
+          expect(getDeleteButton('もも')).toBeInTheDocument();
+          expect(document.activeElement).toBe(getCombobox());
+          // input に戻ると、Tab で input に入ったときと同じくリストが開く（マウスでの削除は開閉を変えない）
+          expect(onOpenChange).toHaveBeenLastCalledWith(true);
+        },
+      );
+
+      it('リストを開いた状態で ✗ にフォーカスを移すと、リストが閉じ入力が空に戻る', async () => {
+        const user = userEvent.setup();
+        const onChange = vi.fn();
+        const onOpenChange = vi.fn();
+        render(<MultipleComboboxWithChips initialValue={['apple']} onChange={onChange} onOpenChange={onOpenChange} />);
+        await user.click(getCombobox());
+        await user.type(getCombobox(), 'み');
+        expect(getListbox()).toHaveStyle({ visibility: 'visible' });
+
+        await user.tab({ shift: true });
+
+        expect(document.activeElement).toBe(getDeleteButton('りんご'));
+        expect(onOpenChange).toHaveBeenLastCalledWith(false);
+        expect(getListbox()).toHaveStyle({ visibility: 'hidden' });
+        expect(getCombobox()).toHaveValue('');
+        expect(onChange).not.toHaveBeenCalled();
+      });
+
+      it('Popover 内で ✗ にフォーカスがあるときの Escape は、リストを閉じた状態で親に伝搬する', async () => {
+        const user = userEvent.setup();
+        const onClose = vi.fn();
+        const onChange = vi.fn();
+        const onOpenChange = vi.fn();
+        render(
+          <Popover isOpen onClose={onClose}>
+            <Popover.Trigger>
+              <button type="button">trigger</button>
+            </Popover.Trigger>
+            <Popover.Content>
+              <div>
+                <MultipleComboboxWithChips initialValue={['apple']} onChange={onChange} onOpenChange={onOpenChange} />
+              </div>
+            </Popover.Content>
+          </Popover>,
+        );
+        await user.click(getCombobox());
+        expect(getListbox()).toHaveStyle({ visibility: 'visible' });
+
+        await user.tab({ shift: true });
+        expect(getListbox()).toHaveStyle({ visibility: 'hidden' });
+        onOpenChange.mockClear();
+
+        await user.keyboard('{Escape}');
+
+        expect(onClose).toHaveBeenCalledWith({ reason: 'escape-key-down' });
+        expect(onOpenChange).not.toHaveBeenCalled();
+        expect(onChange).not.toHaveBeenCalled();
+      });
+
+      it('isDisabled のときは ✗ を描画せず、Tab 順にも出ない', async () => {
+        const user = userEvent.setup();
+        render(
+          <>
+            <button type="button">前</button>
+            <MultipleComboboxWithChips initialValue={['apple', 'orange']} isDisabled />
+          </>,
+        );
+        expect(screen.getByText('りんご', { selector: 'span[title]' })).toBeInTheDocument();
+
+        expect(queryDeleteButton('りんご')).toBeNull();
+        expect(queryDeleteButton('みかん')).toBeNull();
+        await user.tab();
+        await user.tab();
+        expect(document.body).toBe(document.activeElement);
+      });
+    });
+
+    describe('入力欄の同一性とフォーカス（0 ↔ 1 件）', () => {
+      it('最初の追加（クリック / Enter）で input が同じ DOM ノードのままフォーカスを保つ', async () => {
+        const user = userEvent.setup();
+        render(<MultipleComboboxWithChips />);
+        await user.click(getCombobox());
+        const input = getCombobox();
+
+        await user.click(getOption('りんご'));
+        expect(getCombobox()).toBe(input);
+        expect(document.activeElement).toBe(input);
+
+        await user.keyboard('{Backspace}');
+        await user.keyboard('{Enter}');
+        expect(getDeleteButton('りんご')).toBeInTheDocument();
+        expect(getCombobox()).toBe(input);
+        expect(document.activeElement).toBe(input);
+      });
+
+      it('最後の削除（✗ クリック）で input が同じ DOM ノードのままフォーカスを保つ', async () => {
+        const user = userEvent.setup();
+        render(<MultipleComboboxWithChips initialValue={['apple']} />);
+        await user.click(getCombobox());
+        const input = getCombobox();
+
+        await user.click(getDeleteButton('りんご'));
+
+        expect(getCombobox()).toBe(input);
+        expect(document.activeElement).toBe(input);
+      });
+
+      it('最後の削除（✗ をキーボード）で input が同じ DOM ノードのままフォーカスが戻る', async () => {
+        const user = userEvent.setup();
+        render(<MultipleComboboxWithChips initialValue={['apple']} />);
+        await user.click(getCombobox());
+        const input = getCombobox();
+
+        await user.tab({ shift: true });
+        await user.keyboard('{Enter}');
+
+        expect(queryDeleteButton('りんご')).toBeNull();
+        expect(getCombobox()).toBe(input);
+        expect(document.activeElement).toBe(input);
+      });
+
+      it('最後の削除（Backspace）で input が同じ DOM ノードのままフォーカスを保つ', async () => {
+        const user = userEvent.setup();
+        render(<MultipleComboboxWithChips initialValue={['apple']} />);
+        await user.click(getCombobox());
+        const input = getCombobox();
+
+        await user.keyboard('{Backspace}');
+
+        expect(queryDeleteButton('りんご')).toBeNull();
+        expect(getCombobox()).toBe(input);
+        expect(document.activeElement).toBe(input);
+      });
+    });
+
+    describe('外せないチップ（isRemovable={false}）', () => {
+      it('✗ を描画せず、Tab 順にも出ない', async () => {
+        const user = userEvent.setup();
+        render(<MultipleComboboxWithChips initialValue={['apple', 'orange']} fixedValues={['orange']} />);
+        expect(screen.getByText('みかん', { selector: 'span[title]' })).toBeInTheDocument();
+        expect(queryDeleteButton('みかん')).toBeNull();
+        await user.click(getCombobox());
+
+        await user.tab({ shift: true });
+
+        expect(document.activeElement).toBe(getDeleteButton('りんご'));
+      });
+
+      it('Backspace は末尾から外せる値を探して削除する（[A(固定), B, C(固定)] → B）', async () => {
+        const user = userEvent.setup();
+        const onChange = vi.fn();
+        render(
+          <MultipleComboboxWithChips
+            initialValue={['apple', 'orange', 'peach']}
+            fixedValues={['apple', 'peach']}
+            onChange={onChange}
+          />,
+        );
+        await user.click(getCombobox());
+
+        await user.keyboard('{Backspace}');
+
+        expect(onChange).toHaveBeenCalledWith(['apple', 'peach'], { type: 'remove', value: 'orange' });
+      });
+
+      it('すべて外せないときの Backspace は何もしない', async () => {
+        const user = userEvent.setup();
+        const onChange = vi.fn();
+        render(
+          <MultipleComboboxWithChips
+            initialValue={['apple', 'orange']}
+            fixedValues={['apple', 'orange']}
+            onChange={onChange}
+          />,
+        );
+        await user.click(getCombobox());
+
+        await user.keyboard('{Backspace}');
+
+        expect(onChange).not.toHaveBeenCalled();
+      });
+
+      it('外せない値の候補を再選択しても外れない', async () => {
+        const user = userEvent.setup();
+        const onChange = vi.fn();
+        render(<MultipleComboboxWithChips initialValue={['apple']} fixedValues={['apple']} onChange={onChange} />);
+        await user.click(getCombobox());
+
+        await user.click(getOption('りんご'));
+
+        expect(onChange).not.toHaveBeenCalled();
+        expect(getOption('りんご')).toHaveAttribute('aria-selected', 'true');
+      });
+
+      it('Chip を unmount すると固定が解除され、Backspace の対象に戻る', async () => {
+        const user = userEvent.setup();
+        const onChange = vi.fn();
+        const noop = vi.fn();
+        const renderWithChip = (hasChip: boolean) => (
+          <Combobox isMultiple value={['apple']} onChange={onChange} inputValue="" onInputChange={noop}>
+            <Combobox.Input aria-label="果物">
+              {hasChip && <Combobox.Chip value="apple" label="りんご" isRemovable={false} />}
+            </Combobox.Input>
+            <Combobox.List>
+              <Combobox.Item value="apple" label="りんご" />
+            </Combobox.List>
+          </Combobox>
+        );
+        const { rerender } = render(renderWithChip(true));
+        await user.click(getCombobox());
+        await user.keyboard('{Backspace}');
+        expect(onChange).not.toHaveBeenCalled();
+
+        rerender(renderWithChip(false));
+        await user.keyboard('{Backspace}');
+
+        expect(onChange).toHaveBeenCalledWith([], { type: 'remove', value: 'apple' });
+      });
+    });
+
+    describe('Combobox.Chip と aria-live 通知', () => {
+      it('削除通知に Chip の label を使う', async () => {
+        const user = userEvent.setup();
+        const { container } = render(
+          <MultipleComboboxWithChips initialValue={['apple']} chipLabels={{ apple: '青森のりんご' }} />,
+        );
+
+        await user.click(getDeleteButton('青森のりんご'));
+
+        expect(getLiveRegion(container)).toHaveTextContent('「青森のりんご」を削除しました');
+      });
+
+      it('Chip の label を変更した後に削除すると、新しい label で通知する', () => {
+        const noop = vi.fn();
+        const renderWithLabel = (value: string[], label: string) => (
+          <Combobox isMultiple value={value} onChange={noop} inputValue="" onInputChange={noop}>
+            <Combobox.Input aria-label="果物">
+              {value.map((chipValue) => (
+                <Combobox.Chip key={chipValue} value={chipValue} label={label} />
+              ))}
+            </Combobox.Input>
+            <Combobox.List>
+              <Combobox.Item value="apple" label="りんご" />
+            </Combobox.List>
+          </Combobox>
+        );
+        const { container, rerender } = render(renderWithLabel(['apple'], '旧名称'));
+        rerender(renderWithLabel(['apple'], '新名称'));
+        expect(getDeleteButton('新名称')).toBeInTheDocument();
+
+        rerender(renderWithLabel([], '新名称'));
+
+        expect(getLiveRegion(container)).toHaveTextContent('「新名称」を削除しました');
+      });
+    });
+
+    describe('型', () => {
+      it('isMultiple 無しの配列 value は型エラーになり、multiple でも onClickClearButton は指定できる', () => {
+        const noop = vi.fn();
+        const common = { inputValue: '', onInputChange: noop, onChange: noop };
+        // @ts-expect-error isMultiple を指定しない場合、value に配列は渡せない
+        const singleWithArray: ComboboxProps = { ...common, value: ['apple'] };
+        const multipleWithClear: ComboboxProps = { ...common, isMultiple: true, value: [], onClickClearButton: noop };
+        const multiple: ComboboxProps = { ...common, isMultiple: true, value: ['apple'] };
+
+        expect([singleWithArray, multipleWithClear, multiple]).toHaveLength(3);
+      });
+    });
+  });
+
+  describe('Combobox.LoadMore', () => {
+    const allFruits = [...defaultFruits, ...moreFruits];
+    const toggleButton = () => screen.getByRole('button', { name: '候補を表示' });
+    // 候補行の末尾（メロン）まで進める
+    const moveToLastOption = async (user: ReturnType<typeof userEvent.setup>) => {
+      await user.click(getCombobox());
+      await user.keyboard('{ArrowDown}{ArrowDown}{ArrowDown}');
+      expect(getActiveId()).toContain('melon');
+    };
+    // 「x」を入力して作成行を出し、作成行（最下部）まで進める
+    const moveToCreateOption = async (user: ReturnType<typeof userEvent.setup>) => {
+      await user.click(getCombobox());
+      await user.type(getCombobox(), 'x');
+      await user.keyboard('{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}');
+      expect(getActiveId()).toMatch(/-create-option$/);
+    };
+
+    describe('読み込み中の行', () => {
+      it('isLoading のとき role="presentation" の行に「読み込み中...」を描画する', () => {
+        render(<LoadMoreCombobox isLoading />);
+
+        const row = screen.getByText('読み込み中...').closest('li');
+        expect(row).toHaveAttribute('role', 'presentation');
+        expect(row).not.toHaveAttribute('id');
+        expect(queryOptions()).toHaveLength(defaultFruits.length);
+      });
+
+      it('children を渡すと、既定文言の代わりにその内容を描画する', () => {
+        render(<LoadMoreCombobox isLoading loadMoreChildren="続きを取得しています" />);
+
+        expect(screen.getByText('続きを取得しています').closest('li')).toHaveAttribute('role', 'presentation');
+        expect(screen.queryByText('読み込み中...')).toBeNull();
+      });
+
+      it.each([
+        ['false', false],
+        ['null', null],
+        ['空文字', ''],
+      ])('children が %s のときは既定文言を描画する', (_name, children) => {
+        render(<LoadMoreCombobox isLoading loadMoreChildren={children} />);
+
+        expect(screen.getByText('読み込み中...')).toBeInTheDocument();
+      });
+
+      it('isLoading が false のときは何も描画しない', () => {
+        render(<LoadMoreCombobox loadMoreChildren="続きを取得しています" />);
+
+        expect(screen.queryByText('読み込み中...')).toBeNull();
+        expect(screen.queryByText('続きを取得しています')).toBeNull();
+        expect(getListbox().querySelectorAll('li')).toHaveLength(defaultFruits.length);
+      });
+
+      it('Combobox.LoadMore だけでは popup が開かない（toggle ボタンは disabled）', async () => {
+        const user = userEvent.setup();
+        render(<LoadMoreCombobox items={[]} isLoading />);
+
+        expect(toggleButton()).toBeDisabled();
+        await user.click(getCombobox());
+        expect(getListbox()).toHaveStyle({ visibility: 'hidden' });
+        expect(getCombobox()).not.toHaveAttribute('aria-controls');
+      });
+
+      it('isLoading 中も作成行は消えない', async () => {
+        const user = userEvent.setup();
+        render(<LoadMoreCombobox isLoading hasCreateItem />);
+        await user.click(getCombobox());
+        await user.type(getCombobox(), 'x');
+
+        expect(screen.getByText('読み込み中...')).toBeInTheDocument();
+        expect(getCreateOption('x')).toBeInTheDocument();
+      });
+    });
+
+    describe('↑↓ の端停止と onLoadMore', () => {
+      it('末尾の候補でさらに ↓ を押すと active は動かず、onLoadMore が 1 回呼ばれる', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        await moveToLastOption(user);
+        expect(onLoadMore).not.toHaveBeenCalled();
+
+        await user.keyboard('{ArrowDown}');
+
+        expect(getActiveId()).toContain('melon');
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+      });
+
+      it('isLoading 中は末尾の ↓ で onLoadMore が呼ばれない', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        render(<LoadMoreCombobox isLoading onLoadMore={onLoadMore} />);
+        await moveToLastOption(user);
+
+        await user.keyboard('{ArrowDown}');
+
+        expect(getActiveId()).toContain('melon');
+        expect(onLoadMore).not.toHaveBeenCalled();
+      });
+
+      it('先頭の候補で ↑ を押しても active は動かない（末尾へループしない）', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        await user.click(getCombobox());
+        expect(getActiveId()).toContain('apple');
+
+        await user.keyboard('{ArrowUp}');
+
+        expect(getActiveId()).toContain('apple');
+        expect(onLoadMore).not.toHaveBeenCalled();
+      });
+
+      it('Combobox.LoadMore を外すと、端でループする挙動に戻る', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        const { rerender } = render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        await moveToLastOption(user);
+
+        rerender(<LoadMoreCombobox hasLoadMore={false} onLoadMore={onLoadMore} />);
+
+        await user.keyboard('{ArrowDown}');
+        expect(getActiveId()).toContain('apple');
+        await user.keyboard('{ArrowUp}');
+        expect(getActiveId()).toContain('melon');
+        expect(onLoadMore).not.toHaveBeenCalled();
+      });
+
+      it('作成行が最下部にあるとき、作成行が末尾の項目として扱われる', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        render(<LoadMoreCombobox hasCreateItem onLoadMore={onLoadMore} />);
+        await user.click(getCombobox());
+        await user.type(getCombobox(), 'x');
+
+        // 最後の候補行（メロン）からは作成行へ進むだけで、取得は要求しない
+        await user.keyboard('{ArrowDown}{ArrowDown}{ArrowDown}');
+        expect(getActiveId()).toContain('melon');
+        await user.keyboard('{ArrowDown}');
+        expect(getActiveId()).toMatch(/-create-option$/);
+        expect(onLoadMore).not.toHaveBeenCalled();
+
+        await user.keyboard('{ArrowDown}');
+        expect(getActiveId()).toMatch(/-create-option$/);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+      });
+
+      it('表示中の候補がすべて disabled でも ↓ で onLoadMore が呼ばれ、有効な候補が届くとその先頭が active になる', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        const disabledFruits = defaultFruits.map((item) => ({ ...item, isDisabled: true }));
+        const { rerender } = render(<LoadMoreCombobox items={disabledFruits} onLoadMore={onLoadMore} />);
+        await user.click(getCombobox());
+        expect(getActiveId()).toBe('');
+
+        // ↑ では取得を要求しない
+        await user.keyboard('{ArrowUp}');
+        expect(onLoadMore).not.toHaveBeenCalled();
+
+        await user.keyboard('{ArrowDown}');
+        expect(getActiveId()).toBe('');
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+
+        // 次ページ: 先頭は disabled、その次が有効
+        rerender(
+          <LoadMoreCombobox
+            items={[...disabledFruits, { value: 'grape', label: 'ぶどう', isDisabled: true }, moreFruits[1] as Fruit]}
+            onLoadMore={onLoadMore}
+          />,
+        );
+
+        expect(getActiveId()).toContain('banana');
+        expectHighlightToMatchActiveDescendant();
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+      });
+
+      it('Combobox.LoadMore が無いときは、候補がすべて disabled なら ↓ を押しても何も起きない', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        const disabledFruits = defaultFruits.map((item) => ({ ...item, isDisabled: true }));
+        render(<LoadMoreCombobox hasLoadMore={false} items={disabledFruits} onLoadMore={onLoadMore} />);
+        await user.click(getCombobox());
+
+        await user.keyboard('{ArrowDown}');
+
+        expect(getActiveId()).toBe('');
+        expect(onLoadMore).not.toHaveBeenCalled();
+      });
+
+      it('StrictMode でも末尾の ↓ 1 回につき onLoadMore は 1 回だけ呼ばれる', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        render(
+          <StrictMode>
+            <LoadMoreCombobox onLoadMore={onLoadMore} />
+          </StrictMode>,
+        );
+        await moveToLastOption(user);
+
+        await user.keyboard('{ArrowDown}');
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+        await user.keyboard('{ArrowDown}');
+        expect(onLoadMore).toHaveBeenCalledTimes(2);
+      });
+    });
+
+    describe('取得後の active の遷移', () => {
+      it('末尾の ↓ で取得した候補が追加されると、active が追加分の先頭へ移る', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        const { rerender } = render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        await moveToLastOption(user);
+        await user.keyboard('{ArrowDown}');
+        const spy = Element.prototype.scrollIntoView as ReturnType<typeof vi.fn>;
+        spy.mockClear();
+
+        rerender(<LoadMoreCombobox items={allFruits} onLoadMore={onLoadMore} />);
+
+        expect(getActiveId()).toContain('grape');
+        expectHighlightToMatchActiveDescendant();
+        // active の項目が変わったので、追加分の先頭へスクロールする
+        expect(spy).toHaveBeenCalled();
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+      });
+
+      it('作成行が最下部にあるとき、作成行での ↓ で取得した候補が追加されると追加分の先頭へ移り、取得だけを繰り返さない', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        const { rerender } = render(<LoadMoreCombobox hasCreateItem onLoadMore={onLoadMore} />);
+        await moveToCreateOption(user);
+        await user.keyboard('{ArrowDown}');
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+
+        // 追加候補は作成行の前に入る
+        rerender(<LoadMoreCombobox hasCreateItem items={allFruits} onLoadMore={onLoadMore} />);
+        expect(getActiveId()).toContain('grape');
+        expectHighlightToMatchActiveDescendant();
+
+        // 続く ↓ は追加分を順に進むだけで、作成行に戻るまで取得を要求しない
+        await user.keyboard('{ArrowDown}');
+        expect(getActiveId()).toContain('banana');
+        await user.keyboard('{ArrowDown}');
+        expect(getActiveId()).toMatch(/-create-option$/);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+      });
+
+      it('取得中（isLoading）に作成行で ↓ を押すと onLoadMore は呼ばれないが、取得完了で追加分の先頭へ移る', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        // 先読みで取得が始まっている状態
+        const { rerender } = render(<LoadMoreCombobox hasCreateItem isLoading onLoadMore={onLoadMore} />);
+        await moveToCreateOption(user);
+
+        await user.keyboard('{ArrowDown}');
+        expect(onLoadMore).not.toHaveBeenCalled();
+        expect(getActiveId()).toMatch(/-create-option$/);
+
+        rerender(<LoadMoreCombobox hasCreateItem items={allFruits} onLoadMore={onLoadMore} />);
+
+        expect(getActiveId()).toContain('grape');
+        expectHighlightToMatchActiveDescendant();
+        // 次の ↓ は次ページの取得ではなく、追加分の 2 件目への移動になる
+        await user.keyboard('{ArrowDown}');
+        expect(getActiveId()).toContain('banana');
+        expect(onLoadMore).not.toHaveBeenCalled();
+      });
+
+      it('候補行が無く作成行だけのとき、作成行での ↓ で取得した候補が届くと最初の有効な候補へ移る', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        const { rerender } = render(<LoadMoreCombobox hasCreateItem items={[]} onLoadMore={onLoadMore} />);
+        await user.click(getCombobox());
+        await user.type(getCombobox(), 'x');
+        expect(getActiveId()).toMatch(/-create-option$/);
+
+        await user.keyboard('{ArrowDown}');
+        expect(getActiveId()).toMatch(/-create-option$/);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+
+        rerender(
+          <LoadMoreCombobox
+            hasCreateItem
+            items={[{ value: 'grape', label: 'ぶどう', isDisabled: true }, moreFruits[1] as Fruit]}
+            onLoadMore={onLoadMore}
+          />,
+        );
+        expect(getActiveId()).toContain('banana');
+        expectHighlightToMatchActiveDescendant();
+
+        // 続く ↓ は作成行へ進むだけで、取得は要求しない
+        await user.keyboard('{ArrowDown}');
+        expect(getActiveId()).toMatch(/-create-option$/);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+      });
+
+      it('追加分の先頭が disabled のときは、その次の有効な候補へ移る', async () => {
+        const user = userEvent.setup();
+        const { rerender } = render(<LoadMoreCombobox />);
+        await moveToLastOption(user);
+        await user.keyboard('{ArrowDown}');
+
+        rerender(
+          <LoadMoreCombobox
+            items={[...defaultFruits, { value: 'grape', label: 'ぶどう', isDisabled: true }, moreFruits[1] as Fruit]}
+          />,
+        );
+
+        expect(getActiveId()).toContain('banana');
+      });
+
+      it('末尾の ↓ を伴わずに候補が追加されたとき（スクロールによる取得）は active が動かない', async () => {
+        const user = userEvent.setup();
+        const { rerender } = render(<LoadMoreCombobox />);
+        await moveToLastOption(user);
+
+        rerender(<LoadMoreCombobox items={allFruits} />);
+
+        expect(getActiveId()).toContain('melon');
+        expectHighlightToMatchActiveDescendant();
+      });
+
+      it('取得に失敗して候補が増えなかった後、もう一度 ↓ を押すと再び onLoadMore が呼ばれる', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        const { rerender } = render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        await moveToLastOption(user);
+        await user.keyboard('{ArrowDown}');
+
+        // 取得中 → 失敗（候補は変わらない）
+        rerender(<LoadMoreCombobox isLoading onLoadMore={onLoadMore} />);
+        rerender(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        expect(getActiveId()).toContain('melon');
+
+        await user.keyboard('{ArrowDown}');
+        expect(onLoadMore).toHaveBeenCalledTimes(2);
+
+        rerender(<LoadMoreCombobox items={allFruits} onLoadMore={onLoadMore} />);
+        expect(getActiveId()).toContain('grape');
+      });
+
+      describe('最終ページの追加と同時に Combobox.LoadMore が外れるとき', () => {
+        it.each([
+          ['通常', false],
+          ['StrictMode', true],
+        ])(
+          '末尾の候補での ↓ で取得した最終ページが届くと、active が追加分の先頭へ移る（%s）',
+          async (_name, isStrict) => {
+            const user = userEvent.setup();
+            const renderTree = (props: ComponentProps<typeof LoadMoreCombobox>) =>
+              isStrict ? (
+                <StrictMode>
+                  <LoadMoreCombobox {...props} />
+                </StrictMode>
+              ) : (
+                <LoadMoreCombobox {...props} />
+              );
+            const { rerender } = render(renderTree({}));
+            await moveToLastOption(user);
+            await user.keyboard('{ArrowDown}');
+
+            rerender(renderTree({ hasLoadMore: false, items: allFruits }));
+
+            expect(getActiveId()).toContain('grape');
+            expectHighlightToMatchActiveDescendant();
+            // LoadMore が外れたので、端でループする挙動に戻る
+            await user.keyboard('{ArrowDown}{ArrowDown}');
+            expect(getActiveId()).toContain('apple');
+          },
+        );
+
+        it('作成行が最下部にあるとき、作成行での ↓ で取得した最終ページが届くと、active が追加分の先頭へ移る', async () => {
+          const user = userEvent.setup();
+          const { rerender } = render(<LoadMoreCombobox hasCreateItem />);
+          await moveToCreateOption(user);
+          await user.keyboard('{ArrowDown}');
+
+          rerender(<LoadMoreCombobox hasCreateItem hasLoadMore={false} items={allFruits} />);
+
+          expect(getActiveId()).toContain('grape');
+          expectHighlightToMatchActiveDescendant();
+          // 続く ↓ は追加分を飛ばさずに順に進み、作成行の次で先頭へループする
+          await user.keyboard('{ArrowDown}');
+          expect(getActiveId()).toContain('banana');
+          await user.keyboard('{ArrowDown}');
+          expect(getActiveId()).toMatch(/-create-option$/);
+          await user.keyboard('{ArrowDown}');
+          expect(getActiveId()).toContain('apple');
+        });
+
+        it('候補が増えずに Combobox.LoadMore だけが外れたときは active が動かず、予約も残らない', async () => {
+          const user = userEvent.setup();
+          const { rerender } = render(
+            <StrictMode>
+              <LoadMoreCombobox />
+            </StrictMode>,
+          );
+          await moveToLastOption(user);
+          await user.keyboard('{ArrowDown}');
+
+          rerender(
+            <StrictMode>
+              <LoadMoreCombobox hasLoadMore={false} />
+            </StrictMode>,
+          );
+          expect(getActiveId()).toContain('melon');
+          rerender(
+            <StrictMode>
+              <LoadMoreCombobox hasLoadMore={false} items={allFruits} />
+            </StrictMode>,
+          );
+
+          expect(getActiveId()).toContain('melon');
+        });
+        it('Combobox.LoadMore が外れると同時に候補が変わっても追加が無ければ、後から候補が増えても active は動かない', async () => {
+          const user = userEvent.setup();
+          const { rerender } = render(<LoadMoreCombobox />);
+          await moveToLastOption(user);
+          await user.keyboard('{ArrowDown}');
+          const relabeledFruits = defaultFruits.map((item) => ({ ...item, label: `${item.label}（旬）` }));
+
+          rerender(<LoadMoreCombobox hasLoadMore={false} items={relabeledFruits} />);
+          expect(getActiveId()).toContain('melon');
+          rerender(<LoadMoreCombobox hasLoadMore={false} items={[...relabeledFruits, ...moreFruits]} />);
+
+          expect(getActiveId()).toContain('melon');
+        });
+      });
+
+      describe('移動の予約が取り消されるとき（その後に候補が増えても active は動かない）', () => {
+        it.each([
+          ['Combobox.LoadMore が残っている', true],
+          ['Combobox.LoadMore も同時に外れた', false],
+        ])('候補がいったん空になった（%s）', async (_, hasLoadMore) => {
+          const user = userEvent.setup();
+          const { rerender } = render(<LoadMoreCombobox />);
+          await moveToLastOption(user);
+          await user.keyboard('{ArrowDown}');
+
+          rerender(<LoadMoreCombobox hasLoadMore={hasLoadMore} items={[]} />);
+          rerender(<LoadMoreCombobox hasLoadMore={hasLoadMore} items={allFruits} />);
+
+          // 予約が残っていると、以前の末尾（melon）の直後へ移って先頭側の候補を飛ばす
+          expect(getActiveId()).toContain('apple');
+        });
+
+        it('↑ で active を移した', async () => {
+          const user = userEvent.setup();
+          const { rerender } = render(<LoadMoreCombobox />);
+          await moveToLastOption(user);
+          await user.keyboard('{ArrowDown}');
+
+          await user.keyboard('{ArrowUp}');
+          rerender(<LoadMoreCombobox items={allFruits} />);
+
+          expect(getActiveId()).toContain('peach');
+        });
+
+        it('hover で active を移した', async () => {
+          const user = userEvent.setup();
+          const { rerender } = render(<LoadMoreCombobox />);
+          await moveToLastOption(user);
+          await user.keyboard('{ArrowDown}');
+
+          await user.hover(getOption('みかん'));
+          rerender(<LoadMoreCombobox items={allFruits} />);
+
+          expect(getActiveId()).toContain('orange');
+        });
+
+        it('入力文字を変えた', async () => {
+          const user = userEvent.setup();
+          const { rerender } = render(<LoadMoreCombobox />);
+          await moveToLastOption(user);
+          await user.keyboard('{ArrowDown}');
+
+          await user.keyboard('x');
+          rerender(<LoadMoreCombobox items={allFruits} />);
+
+          expect(getActiveId()).toContain('melon');
+        });
+
+        it('リストを閉じて開き直した', async () => {
+          const user = userEvent.setup();
+          const { rerender } = render(<LoadMoreCombobox />);
+          await moveToLastOption(user);
+          await user.keyboard('{ArrowDown}');
+
+          await user.keyboard('{Escape}');
+          await user.keyboard('{ArrowDown}');
+          expect(getActiveId()).toContain('apple');
+          rerender(<LoadMoreCombobox items={allFruits} />);
+
+          expect(getActiveId()).toContain('apple');
+        });
+
+        it('Combobox.LoadMore が外れた', async () => {
+          const user = userEvent.setup();
+          const { rerender } = render(<LoadMoreCombobox />);
+          await moveToLastOption(user);
+          await user.keyboard('{ArrowDown}');
+
+          rerender(<LoadMoreCombobox hasLoadMore={false} />);
+          rerender(<LoadMoreCombobox items={allFruits} />);
+
+          expect(getActiveId()).toContain('melon');
+        });
+
+        it('複数選択で候補を選んだ', async () => {
+          function MultipleLoadMoreCombobox({ items }: { items: Fruit[] }) {
+            const [value, setValue] = useState<string[]>([]);
+            const [inputValue, setInputValue] = useState('');
+
+            return (
+              <Combobox
+                isMultiple
+                value={value}
+                onChange={setValue}
+                inputValue={inputValue}
+                onInputChange={setInputValue}
+              >
+                <Combobox.Input />
+                <Combobox.List>
+                  {items.map((item) => (
+                    <Combobox.Item key={item.value} value={item.value} label={item.label} />
+                  ))}
+                  <Combobox.LoadMore onLoadMore={() => {}} />
+                </Combobox.List>
+              </Combobox>
+            );
+          }
+          const user = userEvent.setup();
+          const { rerender } = render(<MultipleLoadMoreCombobox items={defaultFruits} />);
+          await moveToLastOption(user);
+          await user.keyboard('{ArrowDown}');
+
+          // 選択済みも候補に残す構成なので、選んだ後も active はメロンのまま
+          await user.keyboard('{Enter}');
+          expect(getOption('メロン')).toHaveAttribute('aria-selected', 'true');
+          rerender(<MultipleLoadMoreCombobox items={allFruits} />);
+
+          expect(getActiveId()).toContain('melon');
+        });
+      });
+    });
+
+    describe('ハイライトと aria-activedescendant', () => {
+      it('候補の挿入・フィルタ・追加分への移動の後も、ハイライトされている行と aria-activedescendant が一致する', async () => {
+        const user = userEvent.setup();
+        const { rerender } = render(<LoadMoreCombobox shouldFilter />);
+
+        await user.click(getCombobox());
+        expectHighlightToMatchActiveDescendant();
+
+        await user.keyboard('{ArrowDown}{ArrowDown}');
+        expect(getActiveId()).toContain('peach');
+        expectHighlightToMatchActiveDescendant();
+
+        // active より前に候補を挿入する
+        rerender(<LoadMoreCombobox shouldFilter items={[...moreFruits, ...defaultFruits]} />);
+        expect(getActiveId()).toContain('peach');
+        expectHighlightToMatchActiveDescendant();
+
+        // フィルタで active が先頭になる（「も」を含むのは「もも」だけ）
+        await user.keyboard('も');
+        expect(queryOptions()).toHaveLength(1);
+        expect(getActiveId()).toContain('peach');
+        expectHighlightToMatchActiveDescendant();
+
+        // 末尾の ↓ → 追加分の先頭へ移る
+        await user.keyboard('{ArrowDown}');
+        rerender(
+          <LoadMoreCombobox
+            shouldFilter
+            items={[...moreFruits, ...defaultFruits, { value: 'plum', label: 'すもも' }]}
+          />,
+        );
+        expect(getActiveId()).toContain('plum');
+        expectHighlightToMatchActiveDescendant();
+      });
+    });
+
+    describe('スクロールによる onLoadMore', () => {
+      // jsdom はレイアウトを計算しないため、内側 ul のスクロール寸法を差し替える。
+      // scrollTop は Combobox.List が open 時に 0 を代入するので書き込み可能にしておく。
+      const setScrollMetrics = (metrics: { scrollHeight?: number; clientHeight?: number; scrollTop?: number }) => {
+        const ul = getListbox();
+        Object.entries(metrics).forEach(([key, value]) => {
+          Object.defineProperty(ul, key, { configurable: true, writable: true, value });
+        });
+
+        return ul;
+      };
+      const scrollListTo = (scrollTop: number) => {
+        fireEvent.scroll(setScrollMetrics({ scrollTop }));
+      };
+      // 全体 1000 / 表示 200。下端付近（残り 200 以下）になるのは scrollTop が 600 以上のとき
+      const longList = { scrollHeight: 1000, clientHeight: 200 };
+      // 全体が 1 画面分に満たない（開いた時点で下端付近）
+      const shortList = { scrollHeight: 100, clientHeight: 200 };
+
+      it('下端付近に入る scroll で 1 回だけ呼ばれ、同じ位置で scroll が続いても呼ばれない', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        setScrollMetrics(longList);
+        await user.click(getCombobox());
+
+        scrollListTo(599);
+        expect(onLoadMore).not.toHaveBeenCalled();
+
+        scrollListTo(600);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+
+        scrollListTo(600);
+        scrollListTo(700);
+        scrollListTo(800);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+      });
+
+      it('下端付近から離れて戻ると、再び呼ばれる', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        setScrollMetrics(longList);
+        await user.click(getCombobox());
+        scrollListTo(700);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+
+        scrollListTo(100);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+        scrollListTo(700);
+
+        expect(onLoadMore).toHaveBeenCalledTimes(2);
+      });
+
+      it('onLoadMore の実行中に scroll イベントが起きても、重ねて呼ばれない', async () => {
+        const user = userEvent.setup();
+        // 呼ばれている最中に、同じ位置で scroll イベントを起こす
+        const onLoadMore = vi.fn(() => {
+          if (onLoadMore.mock.calls.length < 5) {
+            fireEvent.scroll(getListbox());
+          }
+        });
+        render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        setScrollMetrics(longList);
+        await user.click(getCombobox());
+
+        scrollListTo(700);
+
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+      });
+
+      it('isLoading のあいだは scroll で呼ばれない', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        render(<LoadMoreCombobox isLoading onLoadMore={onLoadMore} />);
+        setScrollMetrics(longList);
+        await user.click(getCombobox());
+
+        scrollListTo(700);
+        scrollListTo(100);
+        scrollListTo(700);
+
+        expect(onLoadMore).not.toHaveBeenCalled();
+      });
+
+      it('取得に失敗して候補が増えなかったときは、isLoading が戻っても・親が再レンダーしても呼ばれない', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        const { rerender } = render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        setScrollMetrics(longList);
+        await user.click(getCombobox());
+        scrollListTo(700);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+
+        // 取得中 → 失敗（候補は変わらない）
+        rerender(<LoadMoreCombobox isLoading onLoadMore={onLoadMore} />);
+        rerender(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+
+        // 中身が同じ候補を新しい配列で渡し直す
+        rerender(<LoadMoreCombobox items={defaultFruits.map((item) => ({ ...item }))} onLoadMore={onLoadMore} />);
+        scrollListTo(700);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+      });
+
+      it('キーボード（末尾の ↓）からの取得に失敗したときも、isLoading が戻っただけでは呼ばれない', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        const { rerender } = render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        setScrollMetrics(longList);
+        await user.click(getCombobox());
+        // 下端付近で 1 回呼ばれた後、上へ戻して再び武装した状態にする
+        scrollListTo(700);
+        scrollListTo(100);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+
+        // キーボードで末尾まで進め、さらに ↓ で取得を要求する
+        await user.keyboard('{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}');
+        expect(getActiveId()).toContain('melon');
+        expect(onLoadMore).toHaveBeenCalledTimes(2);
+
+        // 取得中に下端付近へスクロールし（末尾の項目の表示）、候補が増えないまま取得が終わる
+        rerender(<LoadMoreCombobox isLoading onLoadMore={onLoadMore} />);
+        scrollListTo(700);
+        rerender(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+
+        expect(onLoadMore).toHaveBeenCalledTimes(2);
+      });
+
+      it('候補の value の並びが同じなら、label が変わっても再び呼ばれない', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        const { rerender } = render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        setScrollMetrics(longList);
+        await user.click(getCombobox());
+        scrollListTo(700);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+
+        rerender(
+          <LoadMoreCombobox
+            items={defaultFruits.map((item) => ({ ...item, label: `${item.label}（旬）` }))}
+            onLoadMore={onLoadMore}
+          />,
+        );
+        expect(getOption('りんご（旬）')).toBeInTheDocument();
+
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+      });
+
+      it('作成行の文字が変わっただけでは、再び呼ばれない', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        render(<LoadMoreCombobox hasCreateItem onLoadMore={onLoadMore} />);
+        setScrollMetrics(longList);
+        await user.click(getCombobox());
+        scrollListTo(700);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+
+        await user.type(getCombobox(), 'x');
+        expect(getCreateOption('x')).toBeInTheDocument();
+        await user.type(getCombobox(), 'y');
+        expect(getCreateOption('xy')).toBeInTheDocument();
+
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+      });
+
+      describe('開いているリストに Combobox.LoadMore が mount したとき、下端付近なら 1 回だけ呼ばれる', () => {
+        function SelfLoadingCombobox({
+          hasLoadMore,
+          shouldSetLoading,
+          onLoadMore,
+        }: {
+          hasLoadMore: boolean;
+          shouldSetLoading: boolean;
+          onLoadMore: () => void;
+        }) {
+          const [isLoading, setIsLoading] = useState(false);
+
+          return (
+            <LoadMoreCombobox
+              hasLoadMore={hasLoadMore}
+              isLoading={isLoading}
+              onLoadMore={() => {
+                onLoadMore();
+                if (shouldSetLoading) {
+                  setIsLoading(true);
+                }
+              }}
+            />
+          );
+        }
+
+        it.each([
+          ['onLoadMore の中で isLoading を true にする利用側', true, false],
+          ['isLoading を使わない利用側', false, false],
+          ['StrictMode', true, true],
+        ])('%s', async (_name, shouldSetLoading, isStrict) => {
+          const user = userEvent.setup();
+          const onLoadMore = vi.fn();
+          const renderTree = (hasLoadMore: boolean) => {
+            const tree = (
+              <SelfLoadingCombobox
+                hasLoadMore={hasLoadMore}
+                shouldSetLoading={shouldSetLoading}
+                onLoadMore={onLoadMore}
+              />
+            );
+
+            return isStrict ? <StrictMode>{tree}</StrictMode> : tree;
+          };
+          const { rerender } = render(renderTree(false));
+          setScrollMetrics(shortList);
+          await user.click(getCombobox());
+
+          rerender(renderTree(true));
+
+          expect(onLoadMore).toHaveBeenCalledTimes(1);
+        });
+      });
+
+      it('候補が増えた後も下端付近（1 画面分に満たない）なら続けて呼ばれ、active は動かない', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        const { rerender } = render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        setScrollMetrics(shortList);
+        await user.click(getCombobox());
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+        expect(getActiveId()).toContain('apple');
+        const spy = Element.prototype.scrollIntoView as ReturnType<typeof vi.fn>;
+        spy.mockClear();
+
+        rerender(<LoadMoreCombobox items={allFruits} onLoadMore={onLoadMore} />);
+
+        expect(onLoadMore).toHaveBeenCalledTimes(2);
+        expect(getActiveId()).toContain('apple');
+        expectHighlightToMatchActiveDescendant();
+        expect(spy).not.toHaveBeenCalled();
+      });
+
+      it('候補が増えて下端付近でなくなったら、呼ばれない', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        const { rerender } = render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        setScrollMetrics(shortList);
+        await user.click(getCombobox());
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+
+        setScrollMetrics(longList);
+        rerender(<LoadMoreCombobox items={allFruits} onLoadMore={onLoadMore} />);
+
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+      });
+
+      it('開いた直後に下端付近（候補が少ない）なら呼ばれる', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        setScrollMetrics(shortList);
+        expect(onLoadMore).not.toHaveBeenCalled();
+
+        await user.click(getCombobox());
+
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+      });
+
+      it('閉じて開き直したとき、下端付近ならもう一度呼ばれる', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        setScrollMetrics(shortList);
+        await user.click(getCombobox());
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+
+        await user.keyboard('{Escape}');
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+        await user.keyboard('{ArrowDown}');
+
+        expect(onLoadMore).toHaveBeenCalledTimes(2);
+      });
+
+      it('開き直したときは scrollTop が先頭に戻ってから判定する', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        setScrollMetrics(longList);
+        await user.click(getCombobox());
+        scrollListTo(700);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+
+        await user.keyboard('{Escape}');
+        await user.keyboard('{ArrowDown}');
+
+        expect(getListbox().scrollTop).toBe(0);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+      });
+
+      it('閉じているときは呼ばれない', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        setScrollMetrics(longList);
+
+        scrollListTo(700);
+        expect(onLoadMore).not.toHaveBeenCalled();
+
+        // 開いて閉じた後も同じ
+        await user.click(getCombobox());
+        await user.keyboard('{Escape}');
+        scrollListTo(100);
+        scrollListTo(700);
+        expect(onLoadMore).not.toHaveBeenCalled();
+      });
+
+      it('clientHeight が 0 のときは呼ばれない', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        setScrollMetrics({ scrollHeight: 0, clientHeight: 0 });
+        await user.click(getCombobox());
+
+        scrollListTo(0);
+
+        expect(onLoadMore).not.toHaveBeenCalled();
+      });
+
+      it('Combobox.LoadMore を外した後は、scroll しても呼ばれない', async () => {
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        const { rerender } = render(<LoadMoreCombobox onLoadMore={onLoadMore} />);
+        setScrollMetrics(longList);
+        await user.click(getCombobox());
+
+        rerender(<LoadMoreCombobox hasLoadMore={false} onLoadMore={onLoadMore} />);
+        scrollListTo(700);
+
+        expect(onLoadMore).not.toHaveBeenCalled();
+      });
+
+      it('作成行を active にしたまま操作を止めると、先読みで候補が増えても続きを読み進めない', async () => {
+        const rowHeight = 32;
+        const pageSize = 20;
+        const createPages = (count: number): Fruit[] =>
+          Array.from({ length: count * pageSize }, (_, i) => ({ value: `item-${i}`, label: `候補${i}` }));
+        const user = userEvent.setup();
+        const onLoadMore = vi.fn();
+        const { rerender } = render(<LoadMoreCombobox hasCreateItem items={createPages(1)} onLoadMore={onLoadMore} />);
+
+        // 行数に応じて伸びるリスト（3 行ぶんが見える）と、対象の行が見える位置まで scrollTop を進める scrollIntoView を模擬する
+        const ul = setScrollMetrics({ clientHeight: rowHeight * 3, scrollTop: 0 });
+        Object.defineProperty(ul, 'scrollHeight', { configurable: true, get: () => ul.children.length * rowHeight });
+        Element.prototype.scrollIntoView = vi.fn(function scrollIntoView(this: Element) {
+          const rowBottom = (Array.from(ul.children).indexOf(this) + 1) * rowHeight;
+          if (rowBottom - ul.clientHeight > ul.scrollTop) {
+            ul.scrollTop = rowBottom - ul.clientHeight;
+            fireEvent.scroll(ul);
+          }
+        });
+
+        await user.click(getCombobox());
+        await user.type(getCombobox(), 'x');
+        expect(onLoadMore).not.toHaveBeenCalled();
+
+        // ↓ で作成行（最下部）まで進む。途中で下端付近に入り、先読みが 1 回だけ始まる
+        await user.keyboard('{ArrowDown}'.repeat(pageSize));
+        expect(getActiveId()).toMatch(/-create-option$/);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+
+        // 以降は操作しない。取得が要求されるたびに次のページを足す
+        let loadedPages = 1;
+        for (let i = 0; i < 5 && onLoadMore.mock.calls.length >= loadedPages; i += 1) {
+          loadedPages += 1;
+          rerender(<LoadMoreCombobox hasCreateItem items={createPages(loadedPages)} onLoadMore={onLoadMore} />);
+        }
+
+        expect(loadedPages).toBe(2);
+        expect(onLoadMore).toHaveBeenCalledTimes(1);
+        expect(getActiveId()).toMatch(/-create-option$/);
+        expectHighlightToMatchActiveDescendant();
+      });
+    });
+
+    it('Combobox.List の外に置くと throw する', () => {
+      // React が出すエラーログを抑える
+      vi.spyOn(console, 'error').mockImplementation(() => {});
+
+      expect(() =>
+        render(
+          <Combobox value={null} onChange={() => {}} inputValue="" onInputChange={() => {}}>
+            <Combobox.Input />
+            <Combobox.LoadMore onLoadMore={() => {}} />
+          </Combobox>,
+        ),
+      ).toThrow('<Combobox.LoadMore> must be used inside <Combobox.List>');
+    });
+  });
+
+  describe('Combobox.CreateItem', () => {
+    const typeText = async (user: ReturnType<typeof userEvent.setup>, text: string) => {
+      await user.click(getCombobox());
+      await user.type(getCombobox(), text);
+    };
+
+    describe('表示条件', () => {
+      it('入力が空のときは表示しない', async () => {
+        const user = userEvent.setup();
+        render(<CreatableMultipleCombobox />);
+        await user.click(getCombobox());
+
+        expect(queryCreateOption()).toBeNull();
+      });
+
+      it('入力が空白のみのときは表示しない', async () => {
+        const user = userEvent.setup();
+        render(<CreatableMultipleCombobox />);
+        await typeText(user, '   ');
+
+        expect(queryCreateOption()).toBeNull();
+      });
+
+      it('候補 Item の label と完全一致するときは表示しない', async () => {
+        const user = userEvent.setup();
+        render(<CreatableMultipleCombobox />);
+        await typeText(user, 'りんご');
+
+        expect(getOption('りんご')).toBeInTheDocument();
+        expect(queryCreateOption()).toBeNull();
+      });
+
+      it('選択中の Chip の label と完全一致するときは表示しない（候補からは除外済み）', async () => {
+        const user = userEvent.setup();
+        render(<CreatableMultipleCombobox initialValue={['apple']} />);
+        await typeText(user, 'りんご');
+
+        expect(screen.queryByRole('option', { name: 'りんご', hidden: true })).toBeNull();
+        expect(queryCreateOption()).toBeNull();
+      });
+
+      it('部分一致のみのときは表示し、文言は trim した入力を使う', async () => {
+        const user = userEvent.setup();
+        render(<CreatableMultipleCombobox />);
+        await typeText(user, ' りん ');
+
+        expect(getOption('りんご')).toBeInTheDocument();
+        expect(getCreateOption('りん')).toBeInTheDocument();
+      });
+
+      it('compositionstart 〜 compositionend の間は表示せず、compositionend 後に表示する', async () => {
+        const user = userEvent.setup();
+        render(<CreatableMultipleCombobox />);
+        await typeText(user, 'ぶどう');
+        expect(getCreateOption('ぶどう')).toBeInTheDocument();
+
+        fireEvent.compositionStart(getCombobox());
+        expect(queryCreateOption()).toBeNull();
+
+        fireEvent.compositionEnd(getCombobox());
+        expect(getCreateOption('ぶどう')).toBeInTheDocument();
+      });
+
+      it('Combobox.Loading の描画中は表示しない', async () => {
+        const user = userEvent.setup();
+        render(<CreatableMultipleCombobox isLoading />);
+        await typeText(user, 'ぶどう');
+
+        expect(screen.getByText('読み込み中...')).toBeInTheDocument();
+        expect(queryCreateOption()).toBeNull();
+      });
+
+      it('checkDuplicate を渡すと既定の判定を置き換える（候補と一致しても false なら表示する）', async () => {
+        const user = userEvent.setup();
+        const checkDuplicate = vi.fn(() => false);
+        render(<CreatableMultipleCombobox checkDuplicate={checkDuplicate} />);
+        await typeText(user, ' りんご ');
+
+        expect(getCreateOption('りんご')).toBeInTheDocument();
+        expect(checkDuplicate).toHaveBeenLastCalledWith('りんご');
+      });
+
+      it('checkDuplicate が true を返すと表示しない', async () => {
+        const user = userEvent.setup();
+        render(<CreatableMultipleCombobox checkDuplicate={(text) => text === 'ぶどう'} />);
+        await typeText(user, 'ぶどう');
+
+        expect(queryCreateOption()).toBeNull();
+      });
+
+      it('非表示のときは区切り線も描画せず、hasOpenableContent にも数えない', async () => {
+        const user = userEvent.setup();
+        const noop = vi.fn();
+        const renderWithInput = (inputValue: string) => (
+          <Combobox isMultiple value={[]} onChange={noop} inputValue={inputValue} onInputChange={noop}>
+            <Combobox.Input aria-label="果物" />
+            <Combobox.List>
+              <Combobox.CreateItem onCreate={noop} />
+            </Combobox.List>
+          </Combobox>
+        );
+        const { rerender } = render(renderWithInput(''));
+        await user.click(getCombobox());
+
+        expect(getListbox().querySelector('li')).toBeNull();
+        expect(getListbox()).toHaveStyle({ visibility: 'hidden' });
+        expect(getCombobox()).toHaveAttribute('aria-expanded', 'false');
+        expect(screen.getByRole('button', { name: '候補を閉じる' })).toBeDisabled();
+
+        rerender(renderWithInput('ぶどう'));
+
+        expect(getCreateOption('ぶどう')).toBeInTheDocument();
+        expect(getListbox()).toHaveStyle({ visibility: 'visible' });
+        expect(getCombobox()).toHaveAttribute('aria-expanded', 'true');
+      });
+    });
+
+    describe('Chip の label との重複判定', () => {
+      const noop = () => {};
+      const renderWithChip = ({
+        value,
+        chipLabel,
+        onCreate = noop,
+      }: {
+        value: string[];
+        chipLabel: string | null;
+        onCreate?: (text: string) => void;
+      }) => (
+        <Combobox isMultiple value={value} onChange={noop} inputValue="新名称" onInputChange={noop} isOpen>
+          <Combobox.Input aria-label="タグ">
+            {chipLabel !== null && <Combobox.Chip value="t1" label={chipLabel} />}
+          </Combobox.Input>
+          <Combobox.List>
+            <Combobox.CreateItem onCreate={onCreate} />
+          </Combobox.List>
+        </Combobox>
+      );
+
+      it('入力・選択 ID を変えずに Chip の label だけを入力と同じに更新すると作成行が消え、Enter でも作成しない', () => {
+        const onCreate = vi.fn();
+        const { rerender } = render(renderWithChip({ value: ['t1'], chipLabel: '旧名称', onCreate }));
+        expect(getCreateOption('新名称')).toBeInTheDocument();
+
+        rerender(renderWithChip({ value: ['t1'], chipLabel: '新名称', onCreate }));
+
+        expect(queryCreateOption()).toBeNull();
+        fireEvent.keyDown(getCombobox(), { key: 'Enter' });
+        expect(onCreate).not.toHaveBeenCalled();
+      });
+
+      it('Chip を unmount すると、その label との重複判定も解除される', () => {
+        const { rerender } = render(renderWithChip({ value: ['t1'], chipLabel: '新名称' }));
+        expect(queryCreateOption()).toBeNull();
+
+        rerender(renderWithChip({ value: ['t1'], chipLabel: null }));
+
+        expect(getCreateOption('新名称')).toBeInTheDocument();
+      });
+
+      it('value に含まれない値の Chip の label とは重複とみなさない', () => {
+        const { rerender } = render(renderWithChip({ value: ['t1'], chipLabel: '新名称' }));
+        expect(queryCreateOption()).toBeNull();
+
+        rerender(renderWithChip({ value: [], chipLabel: '新名称' }));
+
+        expect(getCreateOption('新名称')).toBeInTheDocument();
+      });
+    });
+
+    describe('作成', () => {
+      it('クリックで trim 済みの文字列を onCreate に渡し、onChange / onInputChange は呼ばず、リストは開いたまま', async () => {
+        const user = userEvent.setup();
+        const onCreate = vi.fn();
+        const onChange = vi.fn();
+        const onOpenChange = vi.fn();
+        const onInputValueChange = vi.fn();
+        render(
+          <CreatableMultipleCombobox
+            onCreate={onCreate}
+            onChange={onChange}
+            onOpenChange={onOpenChange}
+            onInputValueChange={onInputValueChange}
+          />,
+        );
+        await typeText(user, ' ぶどう ');
+        onInputValueChange.mockClear();
+        onOpenChange.mockClear();
+
+        await user.click(getCreateOption('ぶどう'));
+
+        expect(onCreate).toHaveBeenCalledTimes(1);
+        expect(onCreate).toHaveBeenCalledWith('ぶどう');
+        expect(onChange).not.toHaveBeenCalled();
+        expect(onInputValueChange).not.toHaveBeenCalled();
+        expect(getCombobox()).toHaveValue(' ぶどう ');
+        expect(onOpenChange).not.toHaveBeenCalledWith(false);
+        expect(getListbox()).toHaveStyle({ visibility: 'visible' });
+      });
+
+      it('Empty と作成行だけのときは作成行が active になり、Enter で onCreate が呼ばれる', async () => {
+        const user = userEvent.setup();
+        const onCreate = vi.fn();
+        render(<CreatableMultipleCombobox onCreate={onCreate} />);
+        await typeText(user, 'ぶどう');
+
+        expect(screen.getByText('一致する情報が見つかりません')).toBeInTheDocument();
+        expect(getCombobox().getAttribute('aria-activedescendant')).toMatch(/-create-option$/);
+        expect(getCreateOption('ぶどう')).toHaveAttribute('id', getCombobox().getAttribute('aria-activedescendant'));
+
+        await user.keyboard('{Enter}');
+
+        expect(onCreate).toHaveBeenCalledWith('ぶどう');
+      });
+
+      it('onCreate 内で value への追加と入力クリアを行うと、Chip が描画され入力が空になる', async () => {
+        const user = userEvent.setup();
+        render(<CreatableMultipleCombobox shouldAddOnCreate shouldClearOnCreate />);
+        await typeText(user, 'ぶどう');
+
+        await user.keyboard('{Enter}');
+
+        expect(getDeleteButton('ぶどう')).toBeInTheDocument();
+        expect(getCombobox()).toHaveValue('');
+        expect(queryCreateOption()).toBeNull();
+      });
+
+      it('入力をクリアしなくても、Chip が追加されると作成行は消える（既定の重複判定）', async () => {
+        const user = userEvent.setup();
+        const onCreate = vi.fn();
+        render(<CreatableMultipleCombobox shouldAddOnCreate onCreate={onCreate} />);
+        await typeText(user, 'ぶどう');
+
+        await user.keyboard('{Enter}');
+
+        expect(getCombobox()).toHaveValue('ぶどう');
+        expect(getDeleteButton('ぶどう')).toBeInTheDocument();
+        expect(queryCreateOption()).toBeNull();
+        await user.keyboard('{Enter}');
+        expect(onCreate).toHaveBeenCalledTimes(1);
+      });
+
+      it('作成中に Combobox.Loading を描画すると作成行が消え、連打しても onCreate は 1 回', async () => {
+        const user = userEvent.setup();
+        const onCreate = vi.fn();
+        render(<CreatableMultipleCombobox shouldShowLoadingOnCreate onCreate={onCreate} />);
+        await typeText(user, 'ぶどう');
+
+        await user.keyboard('{Enter}{Enter}{Enter}');
+
+        expect(onCreate).toHaveBeenCalledTimes(1);
+        expect(screen.getByText('読み込み中...')).toBeInTheDocument();
+        expect(queryCreateOption()).toBeNull();
+      });
+
+      it('作成直前に表示条件を再検証する（再描画前に変換が始まった作成行をクリックしても作成しない）', async () => {
+        const user = userEvent.setup();
+        const onCreate = vi.fn();
+        render(<CreatableMultipleCombobox onCreate={onCreate} />);
+        await typeText(user, 'ぶどう');
+        const createOption = getCreateOption('ぶどう');
+
+        // 1 つの act にまとめ、compositionstart の再描画より先にクリックが届く状況を作る
+        act(() => {
+          fireEvent.compositionStart(getCombobox());
+          fireEvent.click(createOption);
+        });
+
+        expect(onCreate).not.toHaveBeenCalled();
+      });
+
+      it('IME 変換中の Enter では onCreate が呼ばれない', async () => {
+        const user = userEvent.setup();
+        const onCreate = vi.fn();
+        render(<CreatableMultipleCombobox onCreate={onCreate} />);
+        await typeText(user, 'ぶどう');
+
+        fireEvent.compositionStart(getCombobox());
+        fireEvent.keyDown(getCombobox(), { key: 'Enter', isComposing: true });
+
+        expect(onCreate).not.toHaveBeenCalled();
+      });
+
+      it('作成後に利用側が value に追加すると、aria-live に Chip の label で追加通知が出る', async () => {
+        const user = userEvent.setup();
+        const { container } = render(<CreatableMultipleCombobox shouldAddOnCreate shouldClearOnCreate />);
+        await typeText(user, 'ぶどう');
+
+        await user.keyboard('{Enter}');
+
+        expect(container.querySelector('[aria-live="polite"]')).toHaveTextContent('「ぶどう」を追加しました');
+      });
+
+      it('単一選択モードでは onCreate 後にリストを閉じる', async () => {
+        const user = userEvent.setup();
+        const onCreate = vi.fn();
+        const onOpenChange = vi.fn();
+        const SingleCreatable = () => {
+          const [inputValue, setInputValue] = useState('');
+
+          return (
+            <Combobox
+              value={null}
+              onChange={vi.fn()}
+              inputValue={inputValue}
+              onInputChange={setInputValue}
+              onOpenChange={onOpenChange}
+            >
+              <Combobox.Input aria-label="果物" />
+              <Combobox.List>
+                <Combobox.Item value="apple" label="りんご" />
+                <Combobox.CreateItem onCreate={onCreate} />
+              </Combobox.List>
+            </Combobox>
+          );
+        };
+        render(<SingleCreatable />);
+        await typeText(user, 'ぶどう');
+        onOpenChange.mockClear();
+
+        await user.click(getCreateOption('ぶどう'));
+
+        expect(onCreate).toHaveBeenCalledWith('ぶどう');
+        expect(onOpenChange).toHaveBeenCalledWith(false);
+        expect(getListbox()).toHaveStyle({ visibility: 'hidden' });
+      });
+
+      it('複数置いた場合は最初の 1 件のみ有効', async () => {
+        const user = userEvent.setup();
+        const onFirstCreate = vi.fn();
+        const onSecondCreate = vi.fn();
+        const noop = vi.fn();
+        render(
+          <Combobox isMultiple value={[]} onChange={noop} inputValue="ぶどう" onInputChange={noop}>
+            <Combobox.Input aria-label="果物" />
+            <Combobox.List>
+              <Combobox.CreateItem onCreate={onFirstCreate} />
+              <Combobox.CreateItem onCreate={onSecondCreate} />
+            </Combobox.List>
+          </Combobox>,
+        );
+        await user.click(getCombobox());
+
+        expect(screen.getAllByRole('option', { name: '「ぶどう」を作成', hidden: true })).toHaveLength(1);
+        await user.keyboard('{Enter}');
+        expect(onFirstCreate).toHaveBeenCalledWith('ぶどう');
+        expect(onSecondCreate).not.toHaveBeenCalled();
+      });
+
+      it('Fragment で包んだ CreateItem は直接の子の CreateItem と混在しても無効', async () => {
+        const user = userEvent.setup();
+        const onDirectCreate = vi.fn();
+        const onWrappedCreate = vi.fn();
+        const checkDirectDuplicate = vi.fn((text: string) => text === 'ばなな');
+        const checkWrappedDuplicate = vi.fn(() => false);
+        const noop = vi.fn();
+        const renderCombobox = (inputValue: string) => (
+          <Combobox isMultiple value={[]} onChange={noop} inputValue={inputValue} onInputChange={noop}>
+            <Combobox.Input aria-label="果物" />
+            <Combobox.List>
+              <Combobox.Item value="apple" label="りんご" />
+              <Combobox.CreateItem onCreate={onDirectCreate} checkDuplicate={checkDirectDuplicate} />
+              <>
+                <Combobox.CreateItem onCreate={onWrappedCreate} checkDuplicate={checkWrappedDuplicate} />
+              </>
+            </Combobox.List>
+          </Combobox>
+        );
+        const { rerender } = render(renderCombobox('ぶどう'));
+        await user.click(getCombobox());
+
+        expect(screen.getAllByRole('option', { name: '「ぶどう」を作成', hidden: true })).toHaveLength(1);
+        // 作成行の id は DOM 上で一意（aria-activedescendant の参照先が重複しない）
+        expect(document.querySelectorAll('[id$="-create-option"]')).toHaveLength(1);
+        await user.keyboard('{ArrowDown}');
+        await user.keyboard('{Enter}');
+        expect(onDirectCreate).toHaveBeenCalledWith('ぶどう');
+        expect(onWrappedCreate).not.toHaveBeenCalled();
+
+        // 重複判定には直接の子の checkDuplicate が使われる
+        rerender(renderCombobox('ばなな'));
+        expect(checkDirectDuplicate).toHaveBeenCalledWith('ばなな');
+        expect(checkWrappedDuplicate).not.toHaveBeenCalled();
+        expect(screen.queryByRole('option', { name: '「ばなな」を作成', hidden: true })).not.toBeInTheDocument();
+      });
+
+      it('Fragment で包んだ CreateItem だけを置いた場合は作成行を描画せず、候補にも含めない', async () => {
+        const user = userEvent.setup();
+        const onCreate = vi.fn();
+        const noop = vi.fn();
+        render(
+          <Combobox isMultiple value={[]} onChange={noop} inputValue="ぶどう" onInputChange={noop}>
+            <Combobox.Input aria-label="果物" />
+            <Combobox.List>
+              <Combobox.Item value="apple" label="りんご" />
+              <>
+                <Combobox.CreateItem onCreate={onCreate} />
+              </>
+            </Combobox.List>
+          </Combobox>,
+        );
+        await user.click(getCombobox());
+
+        expect(screen.queryByRole('option', { name: '「ぶどう」を作成', hidden: true })).not.toBeInTheDocument();
+        expect(document.querySelectorAll('[id$="-create-option"]')).toHaveLength(0);
+        // ↓ で巡回しても作成行に移らない（items に入っていない）
+        await user.keyboard('{ArrowDown}');
+        expect(getCombobox().getAttribute('aria-activedescendant') ?? '').not.toMatch(/-create-option$/);
+        await user.keyboard('{Enter}');
+        expect(onCreate).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('キーボードとアクセシビリティ', () => {
+      it('↑↓ の巡回に作成行が含まれる', async () => {
+        const user = userEvent.setup();
+        render(<CreatableMultipleCombobox />);
+        // 「ん」を含む候補はりんご・みかん（メロンはカタカナ）
+        await typeText(user, 'ん');
+        const activeId = () => getCombobox().getAttribute('aria-activedescendant') ?? '';
+
+        expect(activeId()).toContain('apple');
+        await user.keyboard('{ArrowDown}');
+        expect(activeId()).toContain('orange');
+        await user.keyboard('{ArrowDown}');
+        expect(activeId()).toMatch(/-create-option$/);
+        await user.keyboard('{ArrowDown}');
+        expect(activeId()).toContain('apple');
+        await user.keyboard('{ArrowUp}');
+        expect(activeId()).toMatch(/-create-option$/);
+      });
+
+      it('区切り線は aria-hidden で、作成行は plus の Icon と「「入力」を作成」を描画する', async () => {
+        const user = userEvent.setup();
+        render(<CreatableMultipleCombobox />);
+        await typeText(user, 'ぶどう');
+        const createOption = getCreateOption('ぶどう');
+
+        const separator = createOption.previousElementSibling;
+        expect(separator).toHaveAttribute('role', 'presentation');
+        expect(separator).toHaveAttribute('aria-hidden', 'true');
+        expect(createOption.querySelector('svg')).not.toBeNull();
+        expect(createOption).toHaveTextContent('「ぶどう」を作成');
+        expect(createOption).toHaveAttribute('aria-selected', 'false');
+      });
     });
   });
 });

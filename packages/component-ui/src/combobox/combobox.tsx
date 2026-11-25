@@ -6,10 +6,13 @@ import { useOutsideClick } from '../hooks/use-outside-click';
 import { TextInputErrorMessage } from '../text-input/text-input-error-message';
 import { TextInputHelperMessage } from '../text-input/text-input-helper-message';
 import type { ComboboxProps } from './combobox.types';
+import { ComboboxChip } from './combobox-chip';
 import { ComboboxContextProvider } from './combobox-context';
+import { ComboboxCreateItem } from './combobox-create-item';
 import { ComboboxInput } from './combobox-input';
 import { ComboboxItem } from './combobox-item';
 import { ComboboxList } from './combobox-list';
+import { ComboboxLoadMore } from './combobox-load-more';
 import { ComboboxEmpty, ComboboxLoading } from './combobox-status';
 import { useCombobox } from './use-combobox';
 
@@ -28,28 +31,33 @@ function parseListMaxHeight(value: string | number | undefined): number | null {
   return Number.isFinite(numeric) ? numeric : null;
 }
 
-function ComboboxBase({
-  children,
-  value,
-  onChange,
-  inputValue,
-  onInputChange,
-  onClickClearButton,
-  isOpen: isOpenProp,
-  onOpenChange,
-  size = 'medium',
-  variant = 'outline',
-  placeholder,
-  isError = false,
-  isDisabled = false,
-  width,
-  maxWidth,
-  listMaxHeight,
-  matchListToTrigger = false,
-}: ComboboxProps) {
+function ComboboxBase(props: ComboboxProps) {
+  const {
+    children,
+    inputValue,
+    onInputChange,
+    isOpen: isOpenProp,
+    onOpenChange,
+    size = 'medium',
+    variant = 'outline',
+    placeholder,
+    isError = false,
+    isDisabled = false,
+    width,
+    maxWidth,
+    listMaxHeight,
+    matchListToTrigger: shouldMatchListToTrigger = false,
+    onClickClearButton,
+  } = props;
+  // value / onChange は isMultiple と型が連動するため、分割代入せずユニオンのまま扱う。
+  const isMultiple = props.isMultiple === true;
+  const selection =
+    props.isMultiple === true
+      ? { isMultiple: true as const, value: props.value, onChange: props.onChange }
+      : { isMultiple: false as const, value: props.value, onChange: props.onChange };
+
   const combobox = useCombobox({
-    value,
-    onChange,
+    ...selection,
     inputValue,
     onInputChange,
     isOpen: isOpenProp,
@@ -58,6 +66,8 @@ function ComboboxBase({
   });
 
   const wrapperRef = useRef<HTMLDivElement>(null);
+  // 複数選択: Combobox.Input が描画する Chip 群のコンテナ（blur 先が ✗ かの判定に使う）
+  const chipsRef = useRef<HTMLDivElement>(null);
 
   // Combobox.List 直下の openable content (Item / Loading / Empty) の有無。
   // List から setHasOpenableContent を経由して同期される。
@@ -69,8 +79,8 @@ function ComboboxBase({
   // ref に最新値を保持して apply からは ref を参照することで、props 変更にも追従する。
   const listMaxHeightRef = useRef(listMaxHeight);
   listMaxHeightRef.current = listMaxHeight;
-  const matchListToTriggerRef = useRef(matchListToTrigger);
-  matchListToTriggerRef.current = matchListToTrigger;
+  const matchListToTriggerRef = useRef(shouldMatchListToTrigger);
+  matchListToTriggerRef.current = shouldMatchListToTrigger;
 
   // middleware 配列は stable に保ち、不要な useFloating 内の再構築を避ける。
   const middleware = useMemo(
@@ -110,7 +120,7 @@ function ComboboxBase({
   // (autoUpdate は要素サイズ変更しか検知しないため、props 変更には別途 update() が必要)
   useEffect(() => {
     update();
-  }, [listMaxHeight, matchListToTrigger, update]);
+  }, [listMaxHeight, shouldMatchListToTrigger, update]);
 
   // refs.setReference / setFloating は再レンダリングで identity が変わる可能性があるため、
   // ref に保持して ref callback の identity を完全に stable にする。
@@ -119,18 +129,21 @@ function ComboboxBase({
   const refsRef = useRef(refs);
   refsRef.current = refs;
 
-  // Floating UI の reference は input の親 (TextInput 内部の inner wrap div) にする。
+  const setInputElementRef = useCallback(
+    (node: HTMLInputElement | null) => {
+      combobox.inputRef.current = node;
+    },
+    [combobox.inputRef],
+  );
+
+  // Floating UI の reference は TextInput 内部の枠 div（frameRef）にする。
   // - 位置基準: input の枠（HelperMessage / ErrorMessage を含まない）
   // - 幅基準: input の枠（IconButton も含む全幅）
   // input 自身を reference にすると IconButton の分だけ list 幅が狭くなる。
   // wrapper を reference にすると HelperMessage を含む高さ分 list が下にずれる。
-  const setInputElementRef = useCallback(
-    (node: HTMLInputElement | null) => {
-      combobox.inputRef.current = node;
-      refsRef.current.setReference(node?.parentElement ?? null);
-    },
-    [combobox.inputRef],
-  );
+  const setFrameRef = useCallback((node: HTMLDivElement | null) => {
+    refsRef.current.setReference(node);
+  }, []);
 
   // floating element（候補リスト wrapper）を outside-click 判定で参照するため自前 ref にも保持する。
   const listElementRef = useRef<HTMLDivElement | null>(null);
@@ -161,11 +174,20 @@ function ComboboxBase({
   // - option / IconButton は preventBlur（onMouseDown.preventDefault）でフォーカスを奪わないため通常は到達しない。
   // - relatedTarget=null（タッチ / 一部ブラウザ）は「外」とみなす。
   // - setIsOpen は idempotent のため、outside-click と重なっても onOpenChange(false) は 1 回に収まる。
+  // - 複数選択で Chip の ✗ へ移った場合は wrapper 内でも close + revert する。開いたまま残すと、✗ 上の Escape が
+  //   input の keydown（stopPropagation 付き）を通らず親（Popover / Modal）まで閉じてしまうため。
+  //   これで ✗ にフォーカスがある間はリストが常に閉じており、Escape の伝搬は「閉じた input で Escape」と同じになる。
   const { revertInputToCommitted } = combobox;
   const handleInputBlur = useCallback(
     (event: FocusEvent<HTMLInputElement>) => {
       const next = event.relatedTarget;
       if (next instanceof Node) {
+        if (chipsRef.current?.contains(next) === true) {
+          setIsOpen(false);
+          revertInputToCommitted();
+
+          return;
+        }
         if (wrapperRef.current?.contains(next) === true) {
           return;
         }
@@ -178,6 +200,17 @@ function ComboboxBase({
     },
     [setIsOpen, revertInputToCommitted],
   );
+
+  // Item の isSelected 判定を単一 / 複数で一本化するため、選択値を配列に正規化する。
+  // 単一選択の value は string | null（参照が安定）なので、値が変わったときだけ再生成される。
+  const selectedValue = props.value;
+  const selectedValues = useMemo(() => {
+    if (Array.isArray(selectedValue)) {
+      return selectedValue;
+    }
+
+    return selectedValue === null ? [] : [selectedValue];
+  }, [selectedValue]);
 
   // context value は useMemo で安定化する。毎レンダー新規だと全 consumer（Input / 全 Item）が
   // 無条件で再レンダーするため、依存が実際に変化したときのみ再生成する。
@@ -194,11 +227,24 @@ function ComboboxBase({
       onInputChange,
       isOpen: combobox.isOpen,
       setIsOpen,
-      selectedValue: value,
+      isMultiple,
+      selectedValues,
       selectValue: combobox.selectValue,
+      removeSelected: combobox.removeSelected,
+      registerChipLabel: combobox.registerChipLabel,
+      chipLabels: combobox.chipLabels,
+      isComposing: combobox.isComposing,
+      setIsComposing: combobox.setIsComposing,
+      registerCreateJudge: combobox.registerCreateJudge,
+      registerCreateOnCreate: combobox.registerCreateOnCreate,
+      selectCreate: combobox.selectCreate,
+      registerFixedValue: combobox.registerFixedValue,
+      hasRemovableSelection: combobox.hasRemovableSelection,
+      registerLoadMore: combobox.registerLoadMore,
       onClickClearButton,
       activeIndex: combobox.activeIndex,
       setActiveIndex: combobox.setActiveIndex,
+      activeItemKey: combobox.activeItemKey,
       inputMode: combobox.inputMode,
       setInputMode: combobox.setInputMode,
       items: combobox.items,
@@ -207,6 +253,8 @@ function ComboboxBase({
       setHasOpenableContent,
       inputRef: combobox.inputRef,
       setInputElementRef,
+      chipsRef,
+      setFrameRef,
       setListRef,
       floatingStyles,
       listMaxHeight,
@@ -225,11 +273,24 @@ function ComboboxBase({
       onInputChange,
       combobox.isOpen,
       setIsOpen,
-      value,
+      isMultiple,
+      selectedValues,
       combobox.selectValue,
+      combobox.removeSelected,
+      combobox.registerChipLabel,
+      combobox.chipLabels,
+      combobox.isComposing,
+      combobox.setIsComposing,
+      combobox.registerCreateJudge,
+      combobox.registerCreateOnCreate,
+      combobox.selectCreate,
+      combobox.registerFixedValue,
+      combobox.hasRemovableSelection,
+      combobox.registerLoadMore,
       onClickClearButton,
       combobox.activeIndex,
       combobox.setActiveIndex,
+      combobox.activeItemKey,
       combobox.inputMode,
       combobox.setInputMode,
       combobox.items,
@@ -238,6 +299,8 @@ function ComboboxBase({
       setHasOpenableContent,
       combobox.inputRef,
       setInputElementRef,
+      chipsRef,
+      setFrameRef,
       setListRef,
       floatingStyles,
       listMaxHeight,
@@ -250,6 +313,13 @@ function ComboboxBase({
     <ComboboxContextProvider value={contextValue}>
       <div ref={wrapperRef} style={{ width, maxWidth }}>
         {children}
+        {/* 複数選択の追加・削除を読み上げる領域。更新前から存在させるため multiple のとき常時描画する */}
+        {isMultiple && (
+          <div className="sr-only" aria-live="polite">
+            {/* 中身だけを通知ごとの key で入れ替える。同じ文言が続いても DOM が変わり、新しい通知として伝わる */}
+            {combobox.liveMessage.text !== '' && <span key={combobox.liveMessage.id}>{combobox.liveMessage.text}</span>}
+          </div>
+        )}
       </div>
     </ComboboxContextProvider>
   );
@@ -259,6 +329,9 @@ export const Combobox = Object.assign(ComboboxBase, {
   Input: ComboboxInput,
   List: ComboboxList,
   Item: ComboboxItem,
+  Chip: ComboboxChip,
+  CreateItem: ComboboxCreateItem,
+  LoadMore: ComboboxLoadMore,
   Loading: ComboboxLoading,
   Empty: ComboboxEmpty,
   HelperMessage: TextInputHelperMessage,

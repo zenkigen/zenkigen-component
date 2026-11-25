@@ -6,6 +6,7 @@ import { action } from 'storybook/actions';
 
 import { Button } from '../button';
 import { Modal } from '../modal';
+import { Select } from '../select';
 import { DatePicker } from '.';
 import type { DatePickerProps } from './date-picker';
 
@@ -282,6 +283,7 @@ export const LayoutExamplesWithError: Story = {
 /**
  * Modal 内で DatePicker のカレンダーを開いた状態
  * VRT 用: z-index の重なり順が正しいことを確認
+ * 手動確認用: 開いたカレンダーが、Modal 内の別の DatePicker・Select・本文のクリックで閉じること
  */
 export const OpenInModal: Story = {
   decorators: [withMockedDate],
@@ -336,6 +338,12 @@ export const OpenInModal: Story = {
                 />
               </div>
             </div>
+            <div className="w-[200px]">
+              <Select placeholder="種別を選択" size="large" onChange={action('onChange')}>
+                <Select.Option option={{ id: '1', value: 'interview', label: '面接' }} />
+                <Select.Option option={{ id: '2', value: 'meeting', label: '打ち合わせ' }} />
+              </Select>
+            </div>
           </div>
         </Modal.Body>
         <Modal.Footer>
@@ -355,7 +363,7 @@ export const OpenInModal: Story = {
     docs: {
       description: {
         story:
-          'Modal内でDatePickerのカレンダーを開いた状態。z-indexの重なり順が正しいことを確認するためのVRT用ストーリー。',
+          'Modal 内で DatePicker のカレンダーを開いた状態。z-index の重なり順が正しいことを確認するための VRT 用ストーリー。開いたカレンダーが、Modal 内の別の DatePicker・Select・本文のクリックで閉じることの手動確認にも使う。',
       },
     },
   },
