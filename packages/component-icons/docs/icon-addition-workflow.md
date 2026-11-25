@@ -18,13 +18,13 @@
 アイコンの追加は以下の3つのステップで構成されます：
 
 1. **手動作業**: SVGファイルを指定ディレクトリに配置
-2. **ビルド実行**: `yarn build:all` コマンドを実行
+2. **ビルド実行**: `pnpm build:all` コマンドを実行
 3. **自動生成**: `codegen.cjs` がTSXファイルと型定義を自動生成
 
 ```mermaid
 graph TD
     A[1. SVGファイルを準備] --> B[2. src/svg/ に配置]
-    B --> C[3. yarn build:all を実行]
+    B --> C[3. pnpm build:all を実行]
     C --> D[4. component-icons の build スクリプトが実行]
     D --> E[5. codegen.cjs が実行]
     E --> F[6. 各SVGに対して個別コンポーネント生成<br/>src/icons/*.tsx]
@@ -108,7 +108,7 @@ packages/component-icons/
 プロジェクトルートで以下のコマンドを実行します：
 
 ```bash
-yarn build:all
+pnpm build:all
 ```
 
 このコマンドは、ルートの `package.json` に定義されています：
@@ -116,7 +116,7 @@ yarn build:all
 ```json
 {
   "scripts": {
-    "build:all": "yarn workspaces foreach --all -pt --exclude zenkigen-component run build"
+    "build:all": "pnpm -r run build"
   }
 }
 ```
@@ -130,7 +130,7 @@ yarn build:all
 {
   "scripts": {
     "generate": "node ./codegen.cjs",
-    "build": "rimraf dist && yarn generate && tsup"
+    "build": "rimraf dist && pnpm generate && tsup"
   }
 }
 ```
@@ -138,7 +138,7 @@ yarn build:all
 **ビルドステップ**:
 
 1. `rimraf dist` - 既存の `dist` ディレクトリを削除
-2. `yarn generate` - `codegen.cjs` を実行（コード生成）
+2. `pnpm generate` - `codegen.cjs` を実行（コード生成）
 3. `tsup` - TypeScriptファイルをビルドして `dist` に出力
 
 ---
@@ -153,8 +153,8 @@ yarn build:all
 {
   "scripts": {
     "generate": "node ./codegen.cjs",
-    "build": "rimraf dist && yarn generate && tsup",
-    "build-lib": "rimraf dist && yarn generate && tsup"
+    "build": "rimraf dist && pnpm generate && tsup",
+    "build-lib": "rimraf dist && pnpm generate && tsup"
   }
 }
 ```
@@ -164,12 +164,12 @@ yarn build:all
 ```mermaid
 sequenceDiagram
     participant User
-    participant Build as yarn build:all
+    participant Build as pnpm build:all
     participant Icons as component-icons
     participant Codegen as codegen.cjs
     participant Tsup as tsup
 
-    User->>Build: yarn build:all 実行
+    User->>Build: pnpm build:all 実行
     Build->>Icons: build スクリプト実行
     Icons->>Icons: rimraf dist (distディレクトリ削除)
     Icons->>Codegen: node ./codegen.cjs 実行
@@ -409,7 +409,7 @@ packages/component-icons/
 └── tsconfig.json
 ```
 
-### コード生成後（yarn generate 実行後）
+### コード生成後（pnpm generate 実行後）
 
 ```
 packages/component-icons/
@@ -426,7 +426,7 @@ packages/component-icons/
 │   └── index.ts
 ```
 
-### ビルド完了後（yarn build 実行後）
+### ビルド完了後（pnpm build 実行後）
 
 ```
 packages/component-icons/
@@ -508,11 +508,11 @@ import { iconElements } from '@zenkigen-inc/component-icons';
 ```bash
 # component-icons パッケージのみ再ビルド
 cd packages/component-icons
-yarn build
+pnpm build
 
 # または、すべてのパッケージを再ビルド
 cd ../../
-yarn build:all
+pnpm build:all
 ```
 
 ### 型定義が更新されない
@@ -527,7 +527,7 @@ yarn build:all
 
 2. ビルドを再実行:
    ```bash
-   yarn build:all
+   pnpm build:all
    ```
 
 ### SVGファイルが認識されない
@@ -547,7 +547,7 @@ yarn build:all
 ls packages/component-icons/src/svg/
 
 # ファイルが存在する場合は再ビルド
-yarn build:all
+pnpm build:all
 ```
 
 ### アクセントカラーが適用されない
@@ -572,7 +572,7 @@ yarn build:all
 修正後、再ビルド：
 
 ```bash
-yarn build:all
+pnpm build:all
 ```
 
 ### メモリ不足エラー
@@ -585,7 +585,7 @@ yarn build:all
 
 ```bash
 # Node.jsのメモリ制限を増やして実行
-NODE_OPTIONS="--max-old-space-size=4096" yarn build:all
+NODE_OPTIONS="--max-old-space-size=4096" pnpm build:all
 ```
 
 ---
@@ -605,7 +605,7 @@ NODE_OPTIONS="--max-old-space-size=4096" yarn build:all
 1. **SVGファイルを `packages/component-icons/src/svg/` に配置**
    - 通常のアイコン、またはアクセントカラー対応アイコン形式で準備
 
-2. **`yarn build:all` を実行**
+2. **`pnpm build:all` を実行**
    - component-icons の build スクリプトが実行される
    - codegen.cjs が自動的にコード生成を行う
 

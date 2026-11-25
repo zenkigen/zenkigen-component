@@ -153,7 +153,7 @@ Typography の変更は `@zenkigen-inc/component-theme` と `@zenkigen-inc/compo
 1. `packages/component-theme/src/typography.ts` のクラス定義を更新する。
 2. 文字サイズや行高を変更する場合は
    `packages/component-config/style-dictionary/tokens.json` を更新する。
-3. `yarn update-tokens` を実行してトークンを反映し、`yarn build:all` でビルドする。
+3. `pnpm update-tokens` を実行してトークンを反映し、`pnpm build:all` でビルドする。
 
 ## 更新履歴
 

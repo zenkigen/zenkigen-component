@@ -6,9 +6,17 @@ import { Modal } from '../modal';
 import { Popover } from '../popover';
 import { Popup } from '../popup';
 import { Combobox } from './combobox';
-import type { ComboboxChangeMeta, ComboboxSize, ComboboxVariant } from './combobox.types';
+import type {
+  ComboboxChangeMeta,
+  ComboboxMultipleChangeMeta,
+  ComboboxMultipleProps,
+  ComboboxSingleProps,
+  ComboboxSize,
+  ComboboxVariant,
+} from './combobox.types';
 
-const meta: Meta<typeof Combobox> = {
+// ComboboxProps は isMultiple で判別するユニオンのため、args（Controls）は単一選択の props で型付けする
+const meta: Meta<ComboboxSingleProps> = {
   title: 'Components/Combobox',
   component: Combobox,
   argTypes: {
@@ -47,7 +55,7 @@ const meta: Meta<typeof Combobox> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof Combobox>;
+type Story = StoryObj<ComboboxSingleProps>;
 
 const noop = () => {
   // intentionally empty
@@ -730,6 +738,62 @@ export const Empty: Story = {
   ),
 };
 
+// Combobox.Loading / Combobox.Empty の children で、状態（入力前 / 検索 0 件 / ローディング）ごとに文言を切り替える例。
+export const CustomStatusMessage: Story = {
+  parameters: {
+    chromatic: { disable: true },
+  },
+  render: function CustomStatusMessageRender() {
+    const [value, setValue] = useState<string | null>(null);
+    const [inputText, setInputText] = useState('');
+    const [results, setResults] = useState<typeof fruits>([]);
+    const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+      if (inputText.length === 0) {
+        setResults([]);
+        setIsLoading(false);
+
+        return;
+      }
+      setIsLoading(true);
+      const timer = setTimeout(() => {
+        setResults(fruits.filter((f) => f.label.toLowerCase().includes(inputText.toLowerCase())));
+        setIsLoading(false);
+      }, 600);
+
+      return () => clearTimeout(timer);
+    }, [inputText]);
+
+    return (
+      <div style={{ width: 300 }}>
+        <Combobox
+          value={value}
+          onChange={(next, meta) => {
+            setValue(next);
+            setInputText(meta?.label ?? '');
+          }}
+          inputValue={inputText}
+          onInputChange={setInputText}
+          placeholder="果物を検索..."
+        >
+          <Combobox.Input>
+            <Combobox.HelperMessage>状態に応じて文言を切り替える例（疑似 API）</Combobox.HelperMessage>
+          </Combobox.Input>
+          <Combobox.List>
+            {isLoading && <Combobox.Loading>果物を検索中...</Combobox.Loading>}
+            {!isLoading && inputText.length === 0 && <Combobox.Empty>果物の名前を入力してください</Combobox.Empty>}
+            {!isLoading && inputText.length > 0 && results.length === 0 && (
+              <Combobox.Empty>一致する果物が見つかりません</Combobox.Empty>
+            )}
+            {!isLoading && results.map((opt) => <Combobox.Item key={opt.value} value={opt.value} label={opt.label} />)}
+          </Combobox.List>
+        </Combobox>
+      </div>
+    );
+  },
+};
+
 export const MatchListToTrigger: Story = {
   decorators: [
     (StoryFn) => (
@@ -796,6 +860,67 @@ export const MatchListToTrigger: Story = {
             </Combobox>
           </div>
         </div>
+      </div>
+    );
+  },
+};
+
+const fruitOrigins = [
+  { value: 'apple', label: 'りんご', origin: '青森県' },
+  { value: 'green-apple', label: '青りんご', origin: '長野県' },
+  { value: 'banana', label: 'バナナ', origin: 'フィリピン' },
+  { value: 'strawberry', label: 'いちご', origin: '栃木県' },
+  { value: 'fig', label: 'いちじく', origin: '愛知県' },
+  { value: 'shine-muscat', label: 'シャインマスカット（長い名前の表示確認用）', origin: '山梨県' },
+];
+
+export const ItemWithCustomLayout: Story = {
+  decorators: [
+    (StoryFn) => (
+      <div style={{ paddingBottom: 240 }}>
+        <StoryFn />
+      </div>
+    ),
+  ],
+  render: function ItemWithCustomLayoutRender() {
+    const [value, setValue] = useState<string | null>(null);
+    const [inputText, setInputText] = useState('');
+    const [isOpen, setIsOpen] = useState(true);
+
+    const filtered = useMemo(() => fruitOrigins.filter((fruit) => fruit.label.includes(inputText)), [inputText]);
+
+    return (
+      <div style={{ width: 320 }}>
+        <Combobox
+          value={value}
+          onChange={(next, meta) => {
+            setValue(next);
+            setInputText(meta?.label ?? '');
+          }}
+          inputValue={inputText}
+          onInputChange={setInputText}
+          isOpen={isOpen}
+          onOpenChange={setIsOpen}
+          placeholder="果物を検索..."
+          matchListToTrigger
+        >
+          <Combobox.Input>
+            <Combobox.HelperMessage>
+              children は見た目のみ。選択時の入力値には label が入る（選択値: {value ?? '未選択'}）
+            </Combobox.HelperMessage>
+          </Combobox.Input>
+          <Combobox.List>
+            {filtered.length === 0 && <Combobox.Empty />}
+            {filtered.map((fruit) => (
+              <Combobox.Item key={fruit.value} value={fruit.value} label={fruit.label}>
+                <span className="flex w-full min-w-0 items-center justify-between gap-4">
+                  <span className="truncate">{fruit.label}</span>
+                  <span className="typography-label12regular shrink-0">{fruit.origin}</span>
+                </span>
+              </Combobox.Item>
+            ))}
+          </Combobox.List>
+        </Combobox>
       </div>
     );
   },
@@ -897,6 +1022,80 @@ export const Asynchronous: Story = {
             {isLoading && <Combobox.Loading />}
             {!isLoading && inputText.length > 0 && results.length === 0 && <Combobox.Empty />}
             {!isLoading && results.map((opt) => <Combobox.Item key={opt.value} value={opt.value} label={opt.label} />)}
+          </Combobox.List>
+        </Combobox>
+      </div>
+    );
+  },
+};
+
+// ---- 候補の追加読み込み（Combobox.LoadMore） ----
+
+const LOAD_MORE_PAGE_SIZE = 100;
+
+const loadMoreCandidates = Array.from({ length: 1000 }, (_, i) => ({
+  value: `candidate-${String(i + 1)}`,
+  label: `候補 ${String(i + 1)}`,
+}));
+
+// 全件（1,000 件）を手元に持ち、表示件数を 100 件ずつ増やす例。取得を伴わないので isLoading は使わない。
+// 確認観点:
+// - 候補リストを下へスクロールすると、下端に近づくたびに 100 件ずつ増える
+// - ↓ で末尾まで進み、さらに ↓ を押すと続きが追加され、追加分の先頭へ移る（端でループしない）
+// - 入力で絞り込むと表示件数が初期値（100 件）に戻る。全件を表示し終えると ↑↓ が端でループする
+export const LoadMore: Story = {
+  parameters: {
+    // スクロール・キーボード操作が前提のためスナップショットは撮らない
+    chromatic: { disable: true },
+  },
+  decorators: [
+    (StoryFn) => (
+      <div style={{ paddingBottom: 280 }}>
+        <StoryFn />
+      </div>
+    ),
+  ],
+  render: function LoadMoreRender() {
+    const [value, setValue] = useState<string | null>(null);
+    const [inputText, setInputText] = useState('');
+    const [visibleCount, setVisibleCount] = useState(LOAD_MORE_PAGE_SIZE);
+
+    const filtered = useMemo(() => loadMoreCandidates.filter((item) => item.label.includes(inputText)), [inputText]);
+    const visibleItems = filtered.slice(0, visibleCount);
+
+    // 入力が変わったら表示件数を初期値に戻す
+    const updateInputText = (next: string) => {
+      setInputText(next);
+      setVisibleCount(LOAD_MORE_PAGE_SIZE);
+    };
+
+    return (
+      <div style={{ width: 320 }}>
+        <Combobox
+          value={value}
+          onChange={(next, meta) => {
+            setValue(next);
+            updateInputText(meta?.label ?? '');
+          }}
+          inputValue={inputText}
+          onInputChange={updateInputText}
+          placeholder="候補を検索..."
+          listMaxHeight={240}
+        >
+          <Combobox.Input aria-label="候補">
+            <Combobox.HelperMessage>
+              表示中 {visibleItems.length} 件 / 該当 {filtered.length} 件。下端に近づくと 100 件ずつ追加する
+            </Combobox.HelperMessage>
+          </Combobox.Input>
+          <Combobox.List>
+            {filtered.length === 0 && <Combobox.Empty />}
+            {visibleItems.map((item) => (
+              <Combobox.Item key={item.value} value={item.value} label={item.label} />
+            ))}
+            {/* これ以上の候補が無くなったら描画しない（終端） */}
+            {visibleCount < filtered.length && (
+              <Combobox.LoadMore onLoadMore={() => setVisibleCount((count) => count + LOAD_MORE_PAGE_SIZE)} />
+            )}
           </Combobox.List>
         </Combobox>
       </div>
@@ -1147,6 +1346,632 @@ export const WithinPopover: Story = {
             </Popup>
           </Popover.Content>
         </Popover>
+      </div>
+    );
+  },
+};
+
+// ---- 複数選択（isMultiple） ----
+
+type MultipleStory = StoryObj<ComboboxMultipleProps>;
+
+type MultipleFruitComboboxProps = {
+  initialValue?: string[];
+  /** 外せないチップにする値 */
+  fixedValues?: string[];
+  size?: ComboboxSize;
+  isDisabled?: boolean;
+  isOpenInitially?: boolean;
+  helperMessage?: string;
+  /** 候補と Chip の label の元データ（未指定時は fruits） */
+  items?: { value: string; label: string }[];
+  /**
+   * クリアボタンの使い方。
+   * - input: 入力中だけハンドラを渡し、入力だけを消す（基本。未入力ではボタンを出さない）
+   * - all: 常にハンドラを渡し、入力中は入力だけ、未入力なら外せる選択をすべて外す
+   */
+  clearMode?: 'input' | 'all';
+};
+
+// 利用側のデータ（fruits）から value と Combobox.Chip を導出する。候補は選択済みを除外して入力で絞り込む（利用側の責務）。
+function MultipleFruitCombobox({
+  initialValue = [],
+  fixedValues = [],
+  size,
+  isDisabled,
+  isOpenInitially = false,
+  helperMessage,
+  items = fruits,
+  clearMode,
+}: MultipleFruitComboboxProps) {
+  const [selectedValues, setSelectedValues] = useState<string[]>(initialValue);
+  const [inputText, setInputText] = useState('');
+  const [isOpen, setIsOpen] = useState(isOpenInitially);
+
+  const selectedFruits = selectedValues.flatMap((value) => {
+    const fruit = items.find((item) => item.value === value);
+
+    return fruit != null ? [fruit] : [];
+  });
+  const candidates = items.filter((fruit) => !selectedValues.includes(fruit.value) && fruit.label.includes(inputText));
+
+  const handleClearInput = () => setInputText('');
+  const handleClearAll = () => {
+    if (inputText !== '') {
+      setInputText('');
+
+      return;
+    }
+    setSelectedValues((prev) => prev.filter((value) => fixedValues.includes(value)));
+  };
+  // 基本（input）は入力があるときだけハンドラを渡す。渡さなければクリアボタンは表示されない
+  const clearButtonProps =
+    clearMode === 'all'
+      ? { onClickClearButton: handleClearAll }
+      : clearMode === 'input' && inputText !== ''
+        ? { onClickClearButton: handleClearInput }
+        : {};
+
+  return (
+    <Combobox
+      isMultiple
+      {...clearButtonProps}
+      value={selectedValues}
+      onChange={(next) => setSelectedValues(next)}
+      inputValue={inputText}
+      onInputChange={setInputText}
+      isOpen={isOpen}
+      onOpenChange={setIsOpen}
+      size={size}
+      isDisabled={isDisabled}
+      placeholder="果物を検索..."
+      width="100%"
+    >
+      <Combobox.Input aria-label="果物">
+        {selectedFruits.map((fruit) => (
+          <Combobox.Chip
+            key={fruit.value}
+            value={fruit.value}
+            label={fruit.label}
+            isRemovable={!fixedValues.includes(fruit.value)}
+          />
+        ))}
+        {helperMessage != null && <Combobox.HelperMessage>{helperMessage}</Combobox.HelperMessage>}
+      </Combobox.Input>
+      <Combobox.List>
+        {candidates.length === 0 && <Combobox.Empty />}
+        {candidates.map((fruit) => (
+          <Combobox.Item key={fruit.value} value={fruit.value} label={fruit.label} />
+        ))}
+      </Combobox.List>
+    </Combobox>
+  );
+}
+
+export const Multiple: MultipleStory = {
+  decorators: [
+    (StoryFn) => (
+      <div style={{ paddingBottom: 280 }}>
+        <StoryFn />
+      </div>
+    ),
+  ],
+  render: function MultipleRender() {
+    return (
+      <div style={{ width: 360 }}>
+        <MultipleFruitCombobox
+          initialValue={['apple', 'banana']}
+          isOpenInitially
+          helperMessage="候補を選ぶとチップが追加され、リストは開いたまま。入力が空のときの Backspace で末尾のチップを削除"
+        />
+      </div>
+    );
+  },
+};
+
+export const MultipleWithFixedChip: MultipleStory = {
+  render: function MultipleWithFixedChipRender() {
+    return (
+      <div style={{ width: 360 }}>
+        <MultipleFruitCombobox
+          initialValue={['apple', 'banana', 'strawberry']}
+          fixedValues={['apple']}
+          helperMessage="「りんご」は外せないチップ（✗ が無く、Backspace・候補の再選択でも外れない）"
+        />
+      </div>
+    );
+  },
+};
+
+export const MultipleWithClearButton: MultipleStory = {
+  render: function MultipleWithClearButtonRender() {
+    return (
+      <div className="flex flex-col gap-4" style={{ width: 360 }}>
+        <MultipleFruitCombobox
+          initialValue={['apple', 'banana', 'strawberry']}
+          clearMode="input"
+          helperMessage="基本の使い方。入力中だけ × を表示し、押すと入力だけを消す（未入力では × を表示しない）"
+        />
+        <MultipleFruitCombobox
+          initialValue={['apple', 'banana', 'strawberry']}
+          fixedValues={['apple']}
+          clearMode="all"
+          helperMessage="選択をまとめて外せる使い方。入力中の × は入力だけを消し、未入力の × は外せる選択をすべて外す（「りんご」は外せないので残る）"
+        />
+        <MultipleFruitCombobox
+          initialValue={['apple', 'banana', 'strawberry', 'grape', 'melon', 'peach', 'orange']}
+          clearMode="all"
+          helperMessage="チップが折り返しても × と開閉ボタンが並ぶ"
+        />
+        <MultipleFruitCombobox
+          size="large"
+          initialValue={['apple', 'banana', 'strawberry', 'grape', 'melon', 'peach', 'orange']}
+          clearMode="all"
+        />
+      </div>
+    );
+  },
+};
+
+export const MultipleDisabled: MultipleStory = {
+  render: function MultipleDisabledRender() {
+    return (
+      <div className="flex flex-col gap-4" style={{ width: 360 }}>
+        <MultipleFruitCombobox initialValue={['apple', 'banana']} isDisabled />
+        <MultipleFruitCombobox isDisabled />
+      </div>
+    );
+  },
+};
+
+export const MultipleLarge: MultipleStory = {
+  render: function MultipleLargeRender() {
+    return (
+      <div className="flex flex-col gap-4" style={{ width: 360 }}>
+        <MultipleFruitCombobox size="medium" initialValue={['apple', 'banana']} />
+        <MultipleFruitCombobox
+          size="large"
+          initialValue={['apple', 'banana']}
+          helperMessage="large でもチップは medium"
+        />
+        <MultipleFruitCombobox size="large" />
+      </div>
+    );
+  },
+};
+
+// 入力欄の幅より長いラベルのチップの確認用
+const fruitsWithLongLabel = [
+  ...fruits,
+  { value: 'shine-muscat', label: 'シャインマスカット（長い名前の表示確認用・とても長いラベル）' },
+];
+
+export const MultipleWrapping: MultipleStory = {
+  render: function MultipleWrappingRender() {
+    return (
+      <div style={{ width: 280 }}>
+        <MultipleFruitCombobox
+          items={fruitsWithLongLabel}
+          initialValue={[
+            'apple',
+            'green-apple',
+            'banana',
+            'strawberry',
+            'shine-muscat',
+            'blueberry',
+            'raspberry',
+            'dragonfruit',
+          ]}
+          helperMessage="チップが入りきらないと折り返し、入力欄が縦に伸びる。長いラベルは 1 行で末尾を省略する"
+        />
+      </div>
+    );
+  },
+};
+
+export const MultipleWithCustomItem: MultipleStory = {
+  decorators: [
+    (StoryFn) => (
+      <div style={{ paddingBottom: 240 }}>
+        <StoryFn />
+      </div>
+    ),
+  ],
+  render: function MultipleWithCustomItemRender() {
+    const [selectedValues, setSelectedValues] = useState<string[]>(['apple']);
+    const [inputText, setInputText] = useState('');
+    const [isOpen, setIsOpen] = useState(true);
+
+    const selectedFruits = selectedValues.flatMap((value) => {
+      const fruit = fruitOrigins.find((item) => item.value === value);
+
+      return fruit != null ? [fruit] : [];
+    });
+    const candidates = fruitOrigins.filter(
+      (fruit) => !selectedValues.includes(fruit.value) && fruit.label.includes(inputText),
+    );
+
+    return (
+      <div style={{ width: 360 }}>
+        <Combobox
+          isMultiple
+          value={selectedValues}
+          onChange={(next) => setSelectedValues(next)}
+          inputValue={inputText}
+          onInputChange={setInputText}
+          isOpen={isOpen}
+          onOpenChange={setIsOpen}
+          placeholder="果物を検索..."
+          matchListToTrigger
+        >
+          <Combobox.Input aria-label="果物">
+            {selectedFruits.map((fruit) => (
+              <Combobox.Chip key={fruit.value} value={fruit.value} label={fruit.label} />
+            ))}
+          </Combobox.Input>
+          <Combobox.List>
+            {candidates.length === 0 && <Combobox.Empty />}
+            {candidates.map((fruit) => (
+              <Combobox.Item key={fruit.value} value={fruit.value} label={fruit.label}>
+                <span className="flex w-full min-w-0 items-center justify-between gap-4">
+                  <span className="truncate">{fruit.label}</span>
+                  <span className="typography-label12regular shrink-0">{fruit.origin}</span>
+                </span>
+              </Combobox.Item>
+            ))}
+          </Combobox.List>
+        </Combobox>
+      </div>
+    );
+  },
+};
+
+export const MultipleWithCreateItem: MultipleStory = {
+  decorators: [
+    (StoryFn) => (
+      <div style={{ paddingBottom: 280 }}>
+        <StoryFn />
+      </div>
+    ),
+  ],
+  render: function MultipleWithCreateItemRender() {
+    // 果物のマスタ（作成で増える）。選択状態は value（ID の配列）1 つで持ち、チップの表示はマスタから導出する
+    const [fruitMaster, setFruitMaster] = useState(fruits);
+    const [selectedValues, setSelectedValues] = useState<string[]>(['apple']);
+    const [inputText, setInputText] = useState('ベリー');
+    const [isOpen, setIsOpen] = useState(true);
+    const createdCountRef = useRef(0);
+
+    const selectedFruits = selectedValues.flatMap((value) => {
+      const fruit = fruitMaster.find((item) => item.value === value);
+
+      return fruit != null ? [fruit] : [];
+    });
+    const keyword = inputText.trim();
+    const candidates = fruitMaster.filter(
+      (fruit) => !selectedValues.includes(fruit.value) && fruit.label.includes(keyword),
+    );
+
+    // 作成行を出すかどうか（空・変換中・重複）はライブラリが判定する。利用側は作成処理だけを書く
+    const handleCreate = (text: string) => {
+      createdCountRef.current += 1;
+      const created = { value: `created-${createdCountRef.current}`, label: text };
+      setFruitMaster((prev) => [...prev, created]);
+      setSelectedValues((prev) => [...prev, created.value]);
+      // 作成に成功したら利用側で入力を空にする（ライブラリは作成後の入力を触らない）
+      setInputText('');
+    };
+
+    return (
+      <div style={{ width: 360 }}>
+        <Combobox
+          isMultiple
+          value={selectedValues}
+          onChange={(next) => setSelectedValues(next)}
+          inputValue={inputText}
+          onInputChange={setInputText}
+          isOpen={isOpen}
+          onOpenChange={setIsOpen}
+          placeholder="果物を検索・追加"
+          width="100%"
+        >
+          <Combobox.Input aria-label="果物">
+            {selectedFruits.map((fruit) => (
+              <Combobox.Chip key={fruit.value} value={fruit.value} label={fruit.label} />
+            ))}
+            <Combobox.HelperMessage>
+              候補に無い名前を入力すると末尾に作成行が出る。候補・選択中のチップと完全一致するときは出ない
+            </Combobox.HelperMessage>
+          </Combobox.Input>
+          <Combobox.List>
+            {candidates.length === 0 && <Combobox.Empty />}
+            {candidates.map((fruit) => (
+              <Combobox.Item key={fruit.value} value={fruit.value} label={fruit.label} />
+            ))}
+            <Combobox.CreateItem onCreate={handleCreate} />
+          </Combobox.List>
+        </Combobox>
+      </div>
+    );
+  },
+};
+
+type FruitItem = (typeof fruits)[number];
+
+const SEARCH_DELAY_MS = 600;
+const CREATE_DELAY_MS = 800;
+
+export const MultipleAsyncSearch: MultipleStory = {
+  parameters: {
+    // 擬似 API の待ち時間に依存するためスナップショットは撮らない
+    chromatic: { disable: true },
+  },
+  decorators: [
+    (StoryFn) => (
+      <div style={{ paddingBottom: 280 }}>
+        <StoryFn />
+      </div>
+    ),
+  ],
+  render: function MultipleAsyncSearchRender() {
+    // 擬似サーバーのデータ（作成で増える）
+    const serverFruitsRef = useRef<FruitItem[]>([...fruits]);
+    const [selectedValues, setSelectedValues] = useState<string[]>([]);
+    // 検索語が変わると選択済みの label が検索結果から消えるため、選択時に表示情報をキャッシュする
+    const [selectedCache, setSelectedCache] = useState<Map<string, FruitItem>>(new Map());
+    const [inputText, setInputText] = useState('');
+    // 検索結果は、どの検索語に対する結果かと組で持つ
+    const [searchResult, setSearchResult] = useState<{ keyword: string; items: FruitItem[] }>({
+      keyword: '',
+      items: [],
+    });
+    const [isCreating, setIsCreating] = useState(false);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+    const keyword = inputText.trim();
+    // 入力に対する結果がまだ届いていない間は検索中とみなす（古い結果で作成行が一瞬出るのを防ぐ）
+    const isSearching = keyword !== '' && searchResult.keyword !== keyword;
+    const results = isSearching ? [] : searchResult.items;
+
+    // 擬似的な非同期検索
+    useEffect(() => {
+      if (keyword === '') {
+        setSearchResult({ keyword: '', items: [] });
+
+        return;
+      }
+      const timer = setTimeout(() => {
+        setSearchResult({
+          keyword,
+          items: serverFruitsRef.current.filter((fruit) => fruit.label.includes(keyword)),
+        });
+      }, SEARCH_DELAY_MS);
+
+      return () => clearTimeout(timer);
+    }, [keyword]);
+
+    const handleChange = (next: string[], meta: ComboboxMultipleChangeMeta) => {
+      if (meta.type === 'add') {
+        const fruit = results.find((result) => result.value === meta.value);
+        if (fruit != null) {
+          setSelectedCache((prev) => new Map(prev).set(fruit.value, fruit));
+        }
+      }
+      setSelectedValues(next);
+    };
+
+    // 擬似的な非同期作成。名前に「失敗」を含むと失敗する
+    const handleCreate = (text: string) => {
+      setIsCreating(true);
+      setErrorMessage(null);
+      setTimeout(() => {
+        if (text.includes('失敗')) {
+          // 失敗時は入力を残し、そのまま再試行できるようにする
+          setErrorMessage(`「${text}」を作成できませんでした`);
+          setIsCreating(false);
+
+          return;
+        }
+        const created = { value: `created-${serverFruitsRef.current.length}`, label: text };
+        serverFruitsRef.current = [...serverFruitsRef.current, created];
+        setSelectedCache((prev) => new Map(prev).set(created.value, created));
+        setSelectedValues((prev) => [...prev, created.value]);
+        setInputText('');
+        setIsCreating(false);
+      }, CREATE_DELAY_MS);
+    };
+
+    const selectedFruits = selectedValues.flatMap((value) => {
+      const fruit = selectedCache.get(value);
+
+      return fruit != null ? [fruit] : [];
+    });
+    const candidates = results.filter((fruit) => !selectedValues.includes(fruit.value));
+
+    return (
+      <div style={{ width: 360 }}>
+        <Combobox
+          isMultiple
+          value={selectedValues}
+          onChange={handleChange}
+          inputValue={inputText}
+          onInputChange={setInputText}
+          isError={errorMessage !== null}
+          placeholder="入力すると 600ms 後に検索"
+          width="100%"
+        >
+          <Combobox.Input aria-label="果物">
+            {selectedFruits.map((fruit) => (
+              <Combobox.Chip key={fruit.value} value={fruit.value} label={fruit.label} />
+            ))}
+            {errorMessage !== null ? (
+              <Combobox.ErrorMessage>{errorMessage}</Combobox.ErrorMessage>
+            ) : (
+              <Combobox.HelperMessage>
+                検索中・作成中は Loading を出す（作成行が消え、二重作成を防ぐ）。名前に「失敗」を含むと作成に失敗する
+              </Combobox.HelperMessage>
+            )}
+          </Combobox.Input>
+          <Combobox.List>
+            {(isSearching || isCreating) && <Combobox.Loading />}
+            {!isSearching && keyword !== '' && candidates.length === 0 && <Combobox.Empty />}
+            {!isSearching &&
+              candidates.map((fruit) => <Combobox.Item key={fruit.value} value={fruit.value} label={fruit.label} />)}
+            {/* 画面に出ていない既存データとの重複はライブラリが検出できないため、選択済みを除外する前の検索結果で判定する */}
+            <Combobox.CreateItem
+              onCreate={handleCreate}
+              checkDuplicate={(text) => results.some((fruit) => fruit.label === text)}
+            />
+          </Combobox.List>
+        </Combobox>
+      </div>
+    );
+  },
+};
+
+type CandidateItem = (typeof loadMoreCandidates)[number];
+
+const LOAD_MORE_SERVER_TOTAL = 500;
+const LOAD_MORE_DELAY_MS = 600;
+
+// 擬似 API: 検索語に一致する候補を offset から 100 件返す
+function searchCandidatePage(source: CandidateItem[], keyword: string, offset: number) {
+  const matched = source.filter((item) => item.label.includes(keyword));
+
+  return {
+    items: matched.slice(offset, offset + LOAD_MORE_PAGE_SIZE),
+    hasNextPage: offset + LOAD_MORE_PAGE_SIZE < matched.length,
+  };
+}
+
+// サーバーから 100 件ずつ取得する例（擬似 API・全 500 件）。複数選択 + 作成行との併用。
+// 確認観点:
+// - 初回・検索語の変更時は Combobox.Loading、続きの取得中は Combobox.LoadMore の読み込み中の行が出る
+// - Combobox.LoadMore を Combobox.CreateItem の前に置いているため、作成行が区切り線付きで最下部に残る
+// - 続きの取得中も作成行は消えない。500 件を読み込み終えると Combobox.LoadMore が外れ、↑↓ が端でループする
+export const LoadMoreAsync: MultipleStory = {
+  parameters: {
+    // 擬似 API の待ち時間・スクロール操作に依存するためスナップショットは撮らない
+    chromatic: { disable: true },
+  },
+  decorators: [
+    (StoryFn) => (
+      <div style={{ paddingBottom: 280 }}>
+        <StoryFn />
+      </div>
+    ),
+  ],
+  render: function LoadMoreAsyncRender() {
+    // 擬似サーバーのデータ（作成で増える）
+    const serverCandidatesRef = useRef<CandidateItem[]>(loadMoreCandidates.slice(0, LOAD_MORE_SERVER_TOTAL));
+    const [selectedValues, setSelectedValues] = useState<string[]>([]);
+    const [selectedCache, setSelectedCache] = useState<Map<string, CandidateItem>>(new Map());
+    const [inputText, setInputText] = useState('');
+    // 取得結果は、どの検索語に対する結果かと組で持つ
+    const [searchResult, setSearchResult] = useState<{
+      keyword: string;
+      items: CandidateItem[];
+      hasNextPage: boolean;
+    } | null>(null);
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
+    const loadMoreTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    const keyword = inputText.trim();
+    const currentResult = searchResult !== null && searchResult.keyword === keyword ? searchResult : null;
+    // 入力に対する 1 ページ目がまだ届いていない間は検索中とみなす
+    const isSearching = currentResult === null;
+    const results = currentResult?.items ?? [];
+    const hasNextPage = currentResult?.hasNextPage ?? false;
+
+    // 擬似的な 1 ページ目の取得。検索語が変わったら、進行中の続きの取得は捨てる
+    useEffect(() => {
+      setIsLoadingMore(false);
+      const timer = setTimeout(() => {
+        setSearchResult({ keyword, ...searchCandidatePage(serverCandidatesRef.current, keyword, 0) });
+      }, LOAD_MORE_DELAY_MS);
+
+      return () => {
+        clearTimeout(timer);
+        if (loadMoreTimerRef.current !== null) {
+          clearTimeout(loadMoreTimerRef.current);
+        }
+      };
+    }, [keyword]);
+
+    // 擬似的な続きの取得。連打の防止は不要（isLoading のあいだ onLoadMore は呼ばれない）
+    const handleLoadMore = () => {
+      setIsLoadingMore(true);
+      loadMoreTimerRef.current = setTimeout(() => {
+        setSearchResult((prev) => {
+          if (prev === null || prev.keyword !== keyword) {
+            return prev;
+          }
+          const page = searchCandidatePage(serverCandidatesRef.current, keyword, prev.items.length);
+
+          return { ...prev, items: [...prev.items, ...page.items], hasNextPage: page.hasNextPage };
+        });
+        setIsLoadingMore(false);
+      }, LOAD_MORE_DELAY_MS);
+    };
+
+    const handleChange = (next: string[], meta: ComboboxMultipleChangeMeta) => {
+      if (meta.type === 'add') {
+        const candidate = results.find((result) => result.value === meta.value);
+        if (candidate != null) {
+          setSelectedCache((prev) => new Map(prev).set(candidate.value, candidate));
+        }
+      }
+      setSelectedValues(next);
+    };
+
+    const handleCreate = (text: string) => {
+      const created = { value: `created-${serverCandidatesRef.current.length}`, label: text };
+      serverCandidatesRef.current = [...serverCandidatesRef.current, created];
+      setSelectedCache((prev) => new Map(prev).set(created.value, created));
+      setSelectedValues((prev) => [...prev, created.value]);
+      setInputText('');
+    };
+
+    const selectedCandidates = selectedValues.flatMap((value) => {
+      const candidate = selectedCache.get(value);
+
+      return candidate != null ? [candidate] : [];
+    });
+    const candidates = results.filter((candidate) => !selectedValues.includes(candidate.value));
+
+    return (
+      <div style={{ width: 360 }}>
+        <Combobox
+          isMultiple
+          value={selectedValues}
+          onChange={handleChange}
+          inputValue={inputText}
+          onInputChange={setInputText}
+          placeholder="候補を検索・追加"
+          width="100%"
+          listMaxHeight={240}
+        >
+          <Combobox.Input aria-label="候補">
+            {selectedCandidates.map((candidate) => (
+              <Combobox.Chip key={candidate.value} value={candidate.value} label={candidate.label} />
+            ))}
+            <Combobox.HelperMessage>
+              読み込み済み {results.length} 件{!isSearching && !hasNextPage ? '（すべて読み込み済み）' : ''}
+              。下端に近づくと 600ms 後に 100 件ずつ追加する
+            </Combobox.HelperMessage>
+          </Combobox.Input>
+          <Combobox.List>
+            {/* 初回・検索語の変更時はリスト全体の読み込み（Combobox.LoadMore だけでは候補リストは開かない） */}
+            {isSearching && <Combobox.Loading />}
+            {!isSearching && candidates.length === 0 && <Combobox.Empty />}
+            {candidates.map((candidate) => (
+              <Combobox.Item key={candidate.value} value={candidate.value} label={candidate.label} />
+            ))}
+            {/* 続きがあるあいだだけ描画する。作成行の前に置くと、作成行が最下部に残る */}
+            {hasNextPage && <Combobox.LoadMore isLoading={isLoadingMore} onLoadMore={handleLoadMore} />}
+            <Combobox.CreateItem onCreate={handleCreate} />
+          </Combobox.List>
+        </Combobox>
       </div>
     );
   },

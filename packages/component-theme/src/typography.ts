@@ -7,8 +7,8 @@ export const typography = {
     h5: 'font-bold leading-4 text-3 tracking-normal no-underline',
   },
   body: {
-    body16bold: 'font-bold leading-5 text-4 tracking-normal no-underline',
-    body16regular: 'font-normal leading-5 text-4 tracking-normal no-underline',
+    body16bold: 'font-bold leading-7 text-4 tracking-normal no-underline',
+    body16regular: 'font-normal leading-7 text-4 tracking-normal no-underline',
     body14bold: 'font-bold leading-4 text-3 tracking-normal no-underline',
     body14regular: 'font-normal leading-4 text-3 tracking-normal no-underline',
     body13bold: 'font-bold leading-5 text-2 tracking-normal no-underline',

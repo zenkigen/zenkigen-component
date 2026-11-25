@@ -30,6 +30,8 @@ function TextInputInner(
     disabled = false,
     onClickClearButton,
     after,
+    before,
+    frameRef,
     children,
     ...props
   }: TextInputInternalProps,
@@ -132,31 +134,83 @@ function TextInputInner(
     'pr-3': !isBorderless && (size === 'large' || size === 'x-large') && hasTrailingElement,
   });
 
-  const inputClasses = clsx('flex-1 bg-transparent outline-none', {
+  // input の文字まわり（typography・文字色・placeholder 色・disabled 色）。
+  // before 有無の 2 つの input で共有し、見た目がモードで食い違わないようにする。
+  const inputTextClassMap = {
     'disabled:text-textPlaceholder': !isBorderless,
     'disabled:text-disabled01': isBorderless,
-    // outline: 従来の padding
-    'typography-label14regular min-h-8 px-2': !isBorderless && size === 'medium',
-    'typography-label16regular min-h-10 px-3': !isBorderless && size === 'large',
-    'typography-label16regular min-h-12 px-3': !isBorderless && size === 'x-large',
-    // text: padding なし
-    'typography-label14regular min-h-8': isBorderless && size === 'medium',
-    'typography-label16regular min-h-10': isBorderless && size === 'large',
-    'typography-label16regular min-h-12': isBorderless && size === 'x-large',
+    'typography-label14regular': size === 'medium',
+    'typography-label16regular': size === 'large' || size === 'x-large',
     // テキスト色
     'text-text01': !isError,
     'text-supportError': isError,
     // placeholder 色（text variant エラー時のみ上書き）
     'placeholder:text-textPlaceholder': !(isBorderless && isError && !disabled),
     'placeholder:text-supportErrorLight': isBorderless && isError && !disabled,
+  };
+
+  const inputClasses = clsx('flex-1 bg-transparent outline-none', inputTextClassMap, {
+    // 高さ
+    'min-h-8': size === 'medium',
+    'min-h-10': size === 'large',
+    'min-h-12': size === 'x-large',
+    // outline: 従来の padding / text: padding なし
+    'px-2': !isBorderless && size === 'medium',
+    'px-3': !isBorderless && (size === 'large' || size === 'x-large'),
     'pr-0': hasTrailingElement,
   });
 
+  // before 指定時のみ使う: 折り返しコンテナに min-h / padding を移し、input は残り幅を埋める。
+  const hasBefore = before != null;
+
+  // 上下の padding は、1 行のとき（min-h の中で items-center により中央揃え）と同じ値にする。
+  // 共通の値（例: py-1）にすると、折り返して min-h を超えたときに先頭の行の上の隙間だけが狭くなるため。
+  // 例: medium は (32px - 行の高さ 20px) / 2 = 6px（py-1.5）
+  const beforeContainerClasses = clsx('flex min-w-0 flex-1 flex-wrap items-center gap-1', {
+    'min-h-8 py-1.5': size === 'medium',
+    'min-h-10 py-2.5': size === 'large',
+    'min-h-12 py-3.5': size === 'x-large',
+    'px-2': !isBorderless && size === 'medium',
+    'px-3': !isBorderless && (size === 'large' || size === 'x-large'),
+    'pr-0': hasTrailingElement,
+  });
+
+  // 高さは before に並ぶ要素（Combobox のチップ: h-5）と同じ 20px に揃える。
+  // input だけが最後の行に回ったときも行の高さが変わらず、各行の隙間と末尾の要素の位置が揃うようにするため。
+  const inputInBeforeContainerClasses = clsx('h-5 min-w-20 flex-1 bg-transparent outline-none', inputTextClassMap);
+
+  // before 指定時のみ使う: 末尾の要素（after・クリアボタン）を 1 行の高さの箱に入れて枠の下端に揃える。
+  // 1 行のときは従来どおり縦中央、折り返して複数行になったときは input のある最後の行の横に並ぶ
+  // （最後の行の中心は下から「上下 padding + 行の高さ / 2」＝ 1 行の高さ / 2 の位置にあるため）。
+  const beforeTrailingClasses = clsx('flex shrink-0 items-center gap-2 self-end', {
+    'min-h-8': size === 'medium',
+    'min-h-10': size === 'large',
+    'min-h-12': size === 'x-large',
+  });
+
   const inputElement = (
-    <div className={inputWrapClasses}>
-      <input ref={ref} size={1} className={inputClasses} {...mergedInputProps} />
-      {after}
-      {isShowClearButton && <IconButton variant="text" icon="close" size="small" onClick={onClickClearButton} />}
+    <div ref={frameRef} className={inputWrapClasses}>
+      {hasBefore ? (
+        <div className={beforeContainerClasses}>
+          {before}
+          <input ref={ref} size={1} className={inputInBeforeContainerClasses} {...mergedInputProps} />
+        </div>
+      ) : (
+        <input ref={ref} size={1} className={inputClasses} {...mergedInputProps} />
+      )}
+      {hasBefore ? (
+        hasTrailingElement && (
+          <div className={beforeTrailingClasses}>
+            {after}
+            {isShowClearButton && <IconButton variant="text" icon="close" size="small" onClick={onClickClearButton} />}
+          </div>
+        )
+      ) : (
+        <>
+          {after}
+          {isShowClearButton && <IconButton variant="text" icon="close" size="small" onClick={onClickClearButton} />}
+        </>
+      )}
     </div>
   );
 
