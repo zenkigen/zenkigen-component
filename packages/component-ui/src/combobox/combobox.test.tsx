@@ -837,6 +837,116 @@ describe('Combobox', () => {
     });
   });
 
+  describe('スクロール連動', () => {
+    const renderInScrollArea = (combobox: ReactNode) =>
+      render(
+        <div>
+          <div data-testid="scroll-container">{combobox}</div>
+          <div data-testid="unrelated-scroll-area">無関係な領域</div>
+        </div>,
+      );
+
+    it.each([
+      ['ページ（window）', () => window],
+      ['入力欄を含む領域', () => screen.getByTestId('scroll-container')],
+    ])('%sがスクロールされると候補リストが閉じる', async (_, getTarget) => {
+      const user = userEvent.setup();
+      renderInScrollArea(<ControlledCombobox />);
+
+      await user.click(getCombobox());
+      expect(getListbox()).toHaveStyle({ visibility: 'visible' });
+      fireEvent.scroll(getTarget());
+      expect(getListbox()).toHaveStyle({ visibility: 'hidden' });
+    });
+
+    it.each([
+      ['候補リスト自身', () => getListbox()],
+      ['入力欄の中', () => getCombobox()],
+      ['入力欄を含まない別の領域', () => screen.getByTestId('unrelated-scroll-area')],
+    ])('%sがスクロールされても閉じない', async (_, getTarget) => {
+      const user = userEvent.setup();
+      renderInScrollArea(<ControlledCombobox />);
+
+      await user.click(getCombobox());
+      fireEvent.scroll(getTarget());
+      expect(getListbox()).toHaveStyle({ visibility: 'visible' });
+    });
+
+    it('スクロールで閉じても入力中の文字は残り、フォーカスが外れたときに選択値へ戻る', async () => {
+      const user = userEvent.setup();
+      const onSelect = vi.fn();
+      render(<ControlledCombobox initialValue="apple" initialInputValue="りんご" onSelectionChange={onSelect} />);
+      const input = getCombobox();
+
+      await user.click(input);
+      await user.clear(input);
+      await user.type(input, 'にん');
+      fireEvent.scroll(window);
+      expect(getListbox()).toHaveStyle({ visibility: 'hidden' });
+      expect(input).toHaveValue('にん');
+      expect(input).toHaveFocus();
+      expect(onSelect).not.toHaveBeenCalled();
+
+      await user.tab();
+      expect(input).toHaveValue('りんご');
+    });
+
+    it('スクロールで閉じたあと、続けて入力すると開く', async () => {
+      const user = userEvent.setup();
+      render(<ControlledCombobox />);
+
+      await user.click(getCombobox());
+      fireEvent.scroll(window);
+      expect(getListbox()).toHaveStyle({ visibility: 'hidden' });
+      await user.type(getCombobox(), 'り');
+      expect(getListbox()).toHaveStyle({ visibility: 'visible' });
+    });
+
+    it('スクロールで閉じると onOpenChange(false) が 1 回だけ呼ばれる', async () => {
+      const user = userEvent.setup();
+      const onOpenChange = vi.fn();
+      render(<ControlledCombobox onOpenChange={onOpenChange} />);
+
+      await user.click(getCombobox());
+      onOpenChange.mockClear();
+      fireEvent.scroll(window);
+      fireEvent.scroll(window);
+      expect(onOpenChange).toHaveBeenCalledTimes(1);
+      expect(onOpenChange).toHaveBeenCalledWith(false);
+    });
+
+    it('isOpen を true に固定した制御の Combobox では onOpenChange(false) が呼ばれ、リストは開いたまま', () => {
+      const onOpenChange = vi.fn();
+      const noop = vi.fn();
+      render(
+        <Combobox value={null} onChange={noop} inputValue="" onInputChange={noop} isOpen onOpenChange={onOpenChange}>
+          <Combobox.Input />
+          <Combobox.List>
+            <Combobox.Item value="apple" label="りんご" />
+          </Combobox.List>
+        </Combobox>,
+      );
+      fireEvent.scroll(window);
+      expect(onOpenChange).toHaveBeenCalledTimes(1);
+      expect(onOpenChange).toHaveBeenCalledWith(false);
+      expect(getListbox()).toHaveStyle({ visibility: 'visible' });
+    });
+
+    it('複数選択: スクロールで閉じてもチップ（value）は変わらず、入力中の文字が残る', async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      render(<MultipleComboboxWithChips initialValue={['apple', 'orange']} onChange={onChange} />);
+
+      await user.click(getCombobox());
+      await user.type(getCombobox(), 'も');
+      fireEvent.scroll(window);
+      expect(getListbox()).toHaveStyle({ visibility: 'hidden' });
+      expect(getCombobox()).toHaveValue('も');
+      expect(getDeleteButton('りんご')).toBeInTheDocument();
+      expect(onChange).not.toHaveBeenCalled();
+    });
+  });
+
   describe('キーボード操作', () => {
     it('ArrowDown で次の enabled item が active になる', async () => {
       const user = userEvent.setup();
