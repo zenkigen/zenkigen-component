@@ -21,6 +21,8 @@
 7. [アクセシビリティ](#アクセシビリティ)
 8. [技術的な詳細](#技術的な詳細)
    - [実装について](#実装について)
+   - [吹き出しが消える条件](#吹き出しが消える条件)
+   - [スクロールの直後のホバー](#スクロールの直後のホバー)
    - [型安全性](#型安全性)
 9. [注意事項](#注意事項)
 10. [スタイルのカスタマイズ](#スタイルのカスタマイズ)
@@ -41,14 +43,11 @@ import { Tooltip } from '@zenkigen-inc/component-ui';
 ## 基本的な使用方法
 
 ```typescript
-import { Tooltip, IconButton } from '@zenkigen-inc/component-ui';
-import { InformationCircleIcon } from '@zenkigen-inc/component-icons';
+import { IconButton, Tooltip } from '@zenkigen-inc/component-ui';
 
 const TooltipExample = () => (
   <Tooltip content="補足説明がここに入ります">
-    <IconButton aria-label="ヘルプ">
-      <InformationCircleIcon />
-    </IconButton>
+    <IconButton icon="help" variant="text" aria-label="ヘルプ" />
   </Tooltip>
 );
 ```
@@ -64,25 +63,25 @@ const TooltipExample = () => (
 
 ### オプションプロパティ
 
-| プロパティ         | 型                                    | デフォルト値 | 説明                                                                                                           |
-| ------------------ | ------------------------------------- | ------------ | -------------------------------------------------------------------------------------------------------------- |
-| `size`             | `TooltipSize` (`'small' \| 'medium'`) | `'small'`    | 表示されるテキストのタイポグラフィとパディングを切り替える。                                                   |
-| `maxWidth`         | `CSSProperties['maxWidth']`           | `undefined`  | Tooltip本体の最大幅。未指定時はコンテンツ幅に追従して`w-max`スタイルで描画される。                             |
-| `verticalPosition` | `'top' \| 'bottom'`                   | `'bottom'`   | トリガーに対してTooltipを上下どちらに配置するか。`'top'`はトリガーの上側に表示し、`'bottom'`は下側に表示する。 |
-| `horizontalAlign`  | `'left' \| 'center' \| 'right'`       | `'center'`   | Tooltipの水平位置を制御する。左揃えはトリガー左端から、右揃えは右端からオフセットを付与して配置される。        |
-| `isDisabledHover`  | `boolean`                             | `false`      | `true` の間は hover してもTooltipを表示しない。操作ガイドを一時的に止めたいケースで使用する。                  |
-| `portalTarget`     | `HTMLElement`                         | `undefined`  | Tooltipを指定要素配下にポータル描画する。`overflow: hidden` を回避したいときは `document.body` を渡す。        |
+| プロパティ         | 型                                    | デフォルト値 | 説明                                                                                                                                                                                                                                                           |
+| ------------------ | ------------------------------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `size`             | `TooltipSize` (`'small' \| 'medium'`) | `'small'`    | 表示されるテキストのタイポグラフィとパディングを切り替える。                                                                                                                                                                                                   |
+| `maxWidth`         | `CSSProperties['maxWidth']`           | `undefined`  | Tooltip本体の最大幅。未指定時はコンテンツ幅に追従して`w-max`スタイルで描画される。                                                                                                                                                                             |
+| `verticalPosition` | `'top' \| 'bottom'`                   | `'bottom'`   | トリガーに対してTooltipを上下どちらに配置するか。`'top'`はトリガーの上側に表示し、`'bottom'`は下側に表示する。                                                                                                                                                 |
+| `horizontalAlign`  | `'left' \| 'center' \| 'right'`       | `'center'`   | 吹き出しの水平方向の揃え方。どの値でも、吹き出しの矢印（`TailIcon`）がトリガーの水平方向の中央を指すように置く。`'center'` は矢印を吹き出しの中央に、`'left'` は左端寄りに、`'right'` は右端寄りに置く（吹き出しは `'left'` で右へ、`'right'` で左へ伸びる）。 |
+| `isDisabledHover`  | `boolean`                             | `false`      | `true` の間は hover してもTooltipを表示しない。操作ガイドを一時的に止めたいケースで使用する。                                                                                                                                                                  |
+| `portalTarget`     | `HTMLElement`                         | `undefined`  | Tooltipを指定要素配下にポータル描画する。`overflow: hidden` を回避したいときは `document.body` を渡す。                                                                                                                                                        |
 
 ### 特殊機能の詳細
 
 #### ポータル描画
 
 - `portalTarget` に `HTMLElement` を渡すと `createPortal` で Tooltip がそのノード直下に描画される。
-- `TooltipContent` は `translate(X/Y)` を用いて絶対座標に配置されるため、ポータル先がスクロールコンテナでも視覚位置は維持される。
+- ポータル描画時の `TooltipContent` は `position: absolute` で、`left` / `top` に `calculatePosition` の算出値を使う。算出値は文書の左上を基準にした座標のため、`document.body` のように、`position` を持たず、ページと一緒にスクロールする要素を渡すことを前提にしている。
 
 #### ホバー抑止
 
-- `isDisabledHover` が `true` の間は `mouseenter` イベントが無視され、内部状態 `isVisible` が `false` のまま維持される。
+- `isDisabledHover` が `true` の間は、マウスを乗せても（`mouseover`）表示を開始しない。判定するのは表示を始めるときだけのため、表示中に `true` へ切り替えても、表示中の吹き出しはそのまま残る（マウスが外へ出たとき、またはスクロールで消える）。
 - 対象要素を `disabled` にした場合など、Tooltipの説明が不要/不正確になる時に使用する。
 
 ### 継承プロパティ
@@ -93,14 +92,16 @@ const TooltipExample = () => (
 
 ### サイズバリエーション
 
-| サイズ   | タイポグラフィ             | パディング         | Tailwindクラス                                    |
-| -------- | -------------------------- | ------------------ | ------------------------------------------------- |
-| `small`  | `typography-body12regular` | `px-2 pb-1 pt-1.5` | `w-[24px]` のターゲット幅 / TailIconは `8x4px`。  |
-| `medium` | `typography-body13regular` | `px-4 py-3`        | `w-[46px]` のターゲット幅 / TailIconは `14x8px`。 |
+| サイズ   | タイポグラフィ             | パディング         | Tailwindクラス                                                |
+| -------- | -------------------------- | ------------------ | ------------------------------------------------------------- |
+| `small`  | `typography-body12regular` | `px-2 pb-1 pt-1.5` | 吹き出しを包む外側の要素に `w-[24px]` / TailIconは `8x4px`。  |
+| `medium` | `typography-body13regular` | `px-4 py-3`        | 吹き出しを包む外側の要素に `w-[46px]` / TailIconは `14x8px`。 |
+
+外側の要素の幅（`w-[24px]` / `w-[46px]`）は、ポータルを使わない場合に、矢印をトリガーの中央へ合わせるために使う。ポータル描画時は `style` の `width: auto` が優先される。
 
 ### 状態に応じたスタイル
 
-- **通常状態**: `bg-uiBackgroundTooltip` と `text-textOnColor` を使用し、`rounded`・`shadow`無しのシンプルなラベルとして描画する。
+- **通常状態**: `bg-uiBackgroundTooltip` と `text-textOnColor` を使用し、角丸（`rounded`）付き・影なしのシンプルなラベルとして描画する。
 - **表示状態**: `isVisible` が `true` になると `TooltipContent` が描画され、`TailIcon` が現在の `verticalPosition`・`horizontalAlign` に応じた位置へ絶対配置される。
 - **非表示状態**: DOM上から `TooltipContent` が除去される。フェードアニメーションは付与していない。
 
@@ -109,18 +110,19 @@ const TooltipExample = () => (
 - ラッパーは `relative flex items-center justify-center` で構成され、ターゲット要素を中央に保持したままサイズを測定する。
 - 本体は常に `absolute z-tooltip inline-block w-max rounded bg-uiBackgroundTooltip text-textOnColor` を使用し、`maxWidth` 指定値を `style` で適用する。
 - `TailIcon` は `fill-uiBackgroundTooltip` を用いた二等辺三角形で、上下位置に応じて `rotate-180` を切り替える。
-- ポータル使用時は `style={{ transform: translate(...) }}` でスクロール位置を補正し、`left/top/bottom` を `calculatePosition` が算出した値へ反映する。
+- ポータル使用時は、`calculatePosition` が算出した `left` / `top` / `bottom` を `style` に反映する。ページの縦スクロール分は、`top` に `window.scrollY` を加えて補正する。`transform: translate(...)` はスクロールの補正ではない。この `transform` を付ける外側の要素は、中身がすべて `absolute` のため幅も高さも 0 になる。そのため、割合で指定している値（`horizontalAlign="center"` の `-50%` と、`verticalPosition="top"` の `-100%`）は 0px の移動になり、実際に効くのは px で指定している `horizontalAlign="left"` / `"right"` の水平方向のずらしだけである。`verticalPosition="top"` のときに吹き出しをトリガーの上へ配置しているのは、吹き出し本体の `bottom-2` / `bottom-3` で、`horizontalAlign="center"` の中央揃えは、外側の要素の `justify-center` で行っている。
+- ポータルを使わない場合は、算出した座標を使わず、ラッパーの内側に置いた吹き出しを CSS（`top-0` / `bottom-0` と flex の揃え）で配置する。
 
 ## 使用例
 
 ### 基本的な使用例
 
 ```typescript
-import { Tooltip, Button } from '@zenkigen-inc/component-ui';
+import { Button, Tooltip } from '@zenkigen-inc/component-ui';
 
 const BasicTooltip = () => (
   <Tooltip content="保存内容の説明テキストです" size="small">
-    <Button variant="ghost">保存</Button>
+    <Button variant="text">保存</Button>
   </Tooltip>
 );
 ```
@@ -168,18 +170,49 @@ const PortalTooltip = () => (
 
 - Tooltip自身は `role` や `aria` 属性を付与しない。スクリーンリーダーはトリガーにフォーカスしてもTooltipを読み上げないため、必須情報は `Popover` や `HelperText` を用いる。
 - 表示はマウスホバーイベントのみで制御しており、キーボードフォーカスやタッチ操作時には自動で表示されない。キーボード利用者に同等の情報を提供する別導線を用意すること。
-- `TailIcon` などの装飾は `aria-hidden` の役割を持つSVGで構成されているため、追加の読み上げは行われない。
+- `TailIcon` は装飾用の SVG で、`role` や `aria` 属性は付けていない。
 
 ## 技術的な詳細
 
 ### 実装について
 
-- `Tooltip` は内部で `useState` により `isVisible` を保持し、`onMouseOver`/`onMouseLeave` で開閉を切り替える。制御用のAPIは提供していない。
+- `Tooltip` は内部で `useState` により `isVisible` を保持し、`onMouseOver` で表示し、`onMouseLeave` で非表示にする。加えて、表示中にトリガーを内側に含む領域がスクロールされると非表示にする（[吹き出しが消える条件](#吹き出しが消える条件)を参照）。制御用のAPIは提供していない。
 - 表示座標は `useTooltip` フックの `calculatePosition` で算出する。`DOMRect` からターゲットの中心/端を求め、`horizontalAlign` と `verticalPosition` に応じて `left/top/bottom/translate` を定義する。
-- `window.scrollY` を参照してページスクロール分を補正し、ポータル描画時にも正しいY座標を確保する。
-- 位置計算は (1) props (`maxWidth` / `size` / `verticalPosition` / `horizontalAlign`) 変更時、(2) ホバー開始時、(3) 表示中の `scroll` / `resize` イベント発火時の3つのタイミングで実行する。表示中は `window` に `scroll` (`capture: true, passive: true`) と `resize` のリスナーを登録し、ドロワー開閉・内部スクロール・ウィンドウリサイズなどで target の位置が変わっても Tooltip が追従するようにしている。非表示時はリスナーを解除する。
+- `window.scrollY` を参照してページの縦スクロール分を補正し、ポータル描画時にも正しいY座標を確保する。横方向のスクロール（`window.scrollX`）は補正しない。
+- 位置計算は (1) マウント時と props（`maxWidth` / `size` / `verticalPosition` / `horizontalAlign`）の変更時、(2) ホバー開始時、(3) 表示中の `resize` の3つのタイミングで実行する。表示中は `window` に `resize` のリスナーを登録し、非表示時に解除する。表示中のスクロールでは位置を再計算しない。
+- スクロールで消す処理は、表示中だけ `window` に `scroll` のリスナーを capture で登録し、スクロールされた要素がトリガーを包む `div` を内側に含むかどうかで判定する。
+- スクロールの直後のホバーを判定するため、Tooltip がマウントされている間は、スクロールされた領域ごとの時刻を記録する。そのための `window` の `scroll` のリスナー（capture）は、画面にある Tooltip の数によらず 1 つで、すべての Tooltip がアンマウントされると解除する。解除しても、記録した時刻は消さない（一覧の行がまとめて入れ替わって Tooltip がいったんすべてアンマウントされた場合でも、スクロールの直後のホバーを無視できるようにするため）。（[スクロールの直後のホバー](#スクロールの直後のホバー)を参照）。
 - `TooltipContent` は `isPortal` フラグで分岐し、ポータル時のみ `style` に `transform: translate(...)` と算出済み座標をマージする。
 - `TailIcon` はサイズ別のSVGを返し、`clsx` で上下左右のオフセットを切り替えることで常に吹き出しの端点とトリガーが繋がるように実装している。
+
+### 吹き出しが消える条件
+
+吹き出しは、次のどちらかが起きると消える（DOM から取り除かれる）。
+
+| きっかけ                                   | 補足                                                                                                                                                                                                          |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| マウスがトリガーの外へ出る                 | トリガーは、`children` を包む `div`（ラッパー）を指す。                                                                                                                                                       |
+| トリガーを内側に含む領域がスクロールされる | ページ全体、またはトリガーを内側に含むスクロール領域（Modal の本文、表を包むスクロール枠など）。マウスホイール・キー操作・プログラムによるスクロールのどれでも消える。`portalTarget` の指定の有無によらない。 |
+
+次のスクロールでは消えない。
+
+- トリガーを含まない、別の領域のスクロール（例: 画面の別の場所にある、自動でスクロールし続ける一覧）
+- トリガーの内側にある要素のスクロール（例: トリガーにしたテキストエリアの中）
+- 吹き出しの中身のスクロール
+
+スクロールで消えたあとの再表示:
+
+- スクロールで消えたあとは、マウスをいったんトリガーの外へ出して、乗せ直すと表示される。
+- 外へ出さずに、同じトリガーの中で子要素をまたいでも（例: アイコンと文字を並べたボタンの上で、アイコンから文字へ動かしても）再表示しない。`mouseover` は子要素をまたぐたびに届くため、これを表示のきっかけにすると、スクロール中に吹き出しが出たり消えたりするためである。
+
+### スクロールの直後のホバー
+
+トリガーを内側に含む領域（ラッパー自身とその祖先の要素、ページ全体）がスクロールされてから 200ms 以内に届いたホバーは無視し、吹き出しを表示しない。マウスを動かさずに、Tooltip 付きの行が並ぶ一覧をスクロールしたときに、行がマウスの下を通るたびに吹き出しが出て、次のスクロールで消える（ちらつく）のを防ぐためである。
+
+- 表示を 200ms 遅らせる仕組みではない。止まっている画面でのホバーは、すぐに表示する。
+- 無視したホバーを、あとから表示に変えることはしない。スクロールが止まったあとにマウスの下にあるトリガーの吹き出しを出すには、もう一度マウスを乗せる（いったん外へ出して乗せ直す、など）。
+- トリガーを含まない領域のスクロールでは、ホバーを無視しない。画面の別の場所で一覧が自動でスクロールし続けていても、ほかの Tooltip はいつもどおり表示する。
+- これまでに表示していたかどうかによらず、すべての Tooltip に同じ判定を行う。
 
 ### 型安全性
 
@@ -189,19 +222,26 @@ const PortalTooltip = () => (
 ## 注意事項
 
 - Tooltipはホバー中のみ一時的に表示されるため、ユーザーが情報を保持できない。入力必須項目や警告など、恒常表示が必要な情報を配置してはならない。
-- 位置計算は props 変更時に加え、ホバー開始時と表示中の `scroll` / `resize` で自動的に再計算される。レイアウト変化後や表示中のスクロールにも追従するため、呼び出し側で明示的に再計算をトリガーする必要はない。
-- 位置計算はグローバルの `window.scrollY` / `window.scrollX` に依存する。ページ全体とは別の document を持つ iframe 内など、独自の document を portal 先に指定するケースは想定していない。
+- 位置はホバー開始時に毎回計算し直す。表示中はウィンドウの `resize` で再計算する。表示中のスクロールでは再計算せず、トリガーを含む領域がスクロールされたら吹き出しを消す。
+- 画面に固定した要素（固定ヘッダーや、スクロール枠の中で `sticky` にした見出し）の中に置いた Tooltip も、ページやその枠がスクロールされると消える。トリガー自体が画面上で動いていなくても消える。
+- トリガーの内側にある要素のスクロールが端に達して、スクロールがページへ伝わった場合は、ページのスクロールとして扱われ、消える。
+- `portalTarget` を指定した場合、表示中にスクロールと `resize` 以外の理由でトリガーが動いても（親の幅の変化、上に要素が差し込まれる、アニメーション、トリガーを含まない領域のスクロールに連動して動く配置など）、吹き出しは消えず、位置も追従しない。次のホバーで位置を計算し直す。`portalTarget` を指定しない場合は、吹き出しがラッパーの内側に描かれるため、トリガーと一緒に動く。
+- スクロールの刻みの間隔が 200ms より長い、ゆっくりしたスクロールでは、刻みと刻みの間にブラウザがホバーの判定を更新すると、マウスの下にあるトリガーの吹き出しが表示され、次の刻みで消える（Chromium で確認）。
+- トリガーを Shadow DOM の中に置いた場合、その外側（shadow host の祖先やページ全体）がスクロールされても、吹き出しは消えない。「トリガーを含む領域か」の判定が Shadow DOM の境界を越えないため。表示中のスクロールでは位置も計算し直さないので、`portalTarget` を指定していると、吹き出しはスクロール前の位置に残る。Shadow DOM の中での利用は想定していない。
+- 位置計算はグローバルの `window.scrollY` に依存する（`window.scrollX` は参照しない）。ページが横にスクロールしている状態では、ポータル描画時の水平位置をスクロール分だけ補正しない。ページ全体とは別の document を持つ iframe 内など、独自の document を portal 先に指定するケースは想定していない。
 - `portalTarget` 未指定で `overflow: hidden` な親要素内に配置した場合、Tooltipが切り取られる。必要に応じてポータル先を指定する。
 
 ## スタイルのカスタマイズ
 
-- 色とタイポグラフィは `@zenkigen-inc/component-config` に定義された `uiBackgroundTooltip`, `textOnColor`, `typography-body12regular/13regular` トークンを使用している。テーマトークンを変更することで一括調整できる。
-- `maxWidth` でコンテンツ幅を制限し、`content` に独自のTypograpy/レイアウトを渡すことで詳細な整形が可能。
+- 色は `@zenkigen-inc/component-config` のデザイントークン `uiBackgroundTooltip`, `textOnColor` を使用している。タイポグラフィの `typography-body12regular` / `typography-body13regular` は、`@zenkigen-inc/component-theme` の `typography` で定義し、`@zenkigen-inc/component-config` の Tailwind 設定がクラスとして登録している。テーマトークンを変更することで一括調整できる。
+- `maxWidth` でコンテンツ幅を制限し、`content` に独自のタイポグラフィ/レイアウトを渡すことで詳細な整形が可能。
 - Tailwindクラスを直接上書きするpropsは提供しないため、背景色や余白調整が必要な場合はデザイントークンを更新する方針とする。
 
 ## 更新履歴
 
-| 日付                 | 内容                                                                                             | 担当者 |
-| -------------------- | ------------------------------------------------------------------------------------------------ | ------ |
-| 2025-12-03 09:23 JST | Tooltip仕様書を新規作成し、Props/使用例/注意事項を整理。                                         | -      |
-| 2026-04-14 15:30 JST | ホバー開始時と表示中の `scroll` / `resize` で位置を再計算する挙動を追加し、実装/注意事項に反映。 | -      |
+| 日付                 | 内容                                                                                                                                                                                                                                                      | 担当者 |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| 2025-12-03 09:23 JST | Tooltip仕様書を新規作成し、Props/使用例/注意事項を整理。                                                                                                                                                                                                  | -      |
+| 2026-04-14 15:30 JST | ホバー開始時と表示中の `scroll` / `resize` で位置を再計算する挙動を追加し、実装/注意事項に反映。                                                                                                                                                          | -      |
+| 2026-11-25 10:53 JST | 表示中にトリガーを含む領域がスクロールされたら吹き出しを消す挙動と、スクロールの直後（200ms）のホバーを無視する挙動を追加。表示中のスクロールでは位置を再計算しないように変更。「吹き出しが消える条件」「スクロールの直後のホバー」の節と注意事項を追加。 | -      |
+| 2026-11-25 10:53 JST | 既存の記述を実装に合わせて修正（使用例のコード、`horizontalAlign` と `isDisabledHover` の説明、ポータル描画時の座標と `transform` の説明、`window.scrollX` を参照しないこと、`TailIcon` の属性、サイズ表の幅の説明、タイポグラフィの定義元）。            | -      |
