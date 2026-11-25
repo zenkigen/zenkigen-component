@@ -292,6 +292,92 @@ describe('Select', () => {
     });
   });
 
+  describe('スクロール連動', () => {
+    it('ページ（window）がスクロールされるとオプションリストが閉じること', () => {
+      render(<SelectTestComponent placeholder="選択" />);
+
+      fireEvent.click(screen.getByRole('button'));
+      expect(screen.getByRole('list')).toBeInTheDocument();
+
+      fireEvent.scroll(window);
+
+      expect(screen.queryByRole('list')).not.toBeInTheDocument();
+    });
+
+    it('トリガーを含むスクロール領域がスクロールされるとオプションリストが閉じること', () => {
+      render(<SelectTestComponent placeholder="選択" data-testid="scroll-container" />);
+
+      fireEvent.click(screen.getByRole('button'));
+      expect(screen.getByRole('list')).toBeInTheDocument();
+
+      fireEvent.scroll(screen.getByTestId('scroll-container'));
+
+      expect(screen.queryByRole('list')).not.toBeInTheDocument();
+    });
+
+    it('オプションリスト自身がスクロールされても閉じないこと', () => {
+      render(<SelectTestComponent placeholder="選択" />);
+
+      fireEvent.click(screen.getByRole('button'));
+      const list = screen.getByRole('list');
+
+      fireEvent.scroll(list);
+
+      expect(screen.getByRole('list')).toBeInTheDocument();
+    });
+
+    it('トリガーを含まない領域がスクロールされても閉じないこと', () => {
+      render(
+        <div>
+          <SelectTestComponent placeholder="選択" />
+          <div data-testid="unrelated-scroll-area">無関係な領域</div>
+        </div>,
+      );
+
+      fireEvent.click(screen.getByRole('button'));
+      expect(screen.getByRole('list')).toBeInTheDocument();
+
+      fireEvent.scroll(screen.getByTestId('unrelated-scroll-area'));
+
+      expect(screen.getByRole('list')).toBeInTheDocument();
+    });
+
+    it('スクロールで閉じてもonChangeが呼ばれないこと', () => {
+      const handleChange = vi.fn();
+      render(<SelectTestComponent placeholder="選択" initialOption={testOptions[0]} onChange={handleChange} />);
+
+      fireEvent.click(screen.getByRole('button'));
+      expect(screen.getByRole('list')).toBeInTheDocument();
+
+      fireEvent.scroll(window);
+
+      expect(screen.queryByRole('list')).not.toBeInTheDocument();
+      expect(handleChange).not.toHaveBeenCalled();
+    });
+
+    it('スクロールで閉じたあと、もう一度開けること', () => {
+      render(<SelectTestComponent placeholder="選択" />);
+
+      const selectButton = screen.getByRole('button');
+      fireEvent.click(selectButton);
+      fireEvent.scroll(window);
+      expect(screen.queryByRole('list')).not.toBeInTheDocument();
+
+      fireEvent.click(selectButton);
+
+      expect(screen.getByRole('list')).toBeInTheDocument();
+    });
+
+    it('閉じている間にスクロールされてもオプションリストが表示されないこと', () => {
+      render(<SelectTestComponent placeholder="選択" />);
+
+      fireEvent.scroll(window);
+
+      expect(screen.queryByRole('list')).not.toBeInTheDocument();
+      expect(screen.getByRole('button')).toBeInTheDocument();
+    });
+  });
+
   describe('サイズバリエーション', () => {
     it('x-smallサイズのスタイルが適用されること', () => {
       render(<SelectTestComponent size="x-small" data-testid="select" />);

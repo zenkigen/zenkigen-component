@@ -6,6 +6,7 @@ import type { AriaAttributes, CSSProperties, PropsWithChildren, RefObject } from
 import { useRef, useState } from 'react';
 
 import { useDismissOnModalOpen } from '../hooks/use-dismiss-on-modal-open';
+import { useDismissOnScroll } from '../hooks/use-dismiss-on-scroll';
 import { useOutsideClick } from '../hooks/use-outside-click';
 import { Icon } from '../icon';
 import { resolveListMaxHeight } from './resolve-list-max-height';
@@ -97,6 +98,10 @@ export function Select({
       setIsOptionListOpen(false);
     }
   });
+  // トリガーを内側に含む領域（ページ全体・Modal の本文など）がスクロールされたら閉じる。
+  // オプションリスト自身のスクロールと、トリガーを含まない無関係な領域のスクロールでは閉じない。
+  // 閉じたときにフォーカスをトリガーへ戻す処理はしない（項目の選択・外側クリックなど、ほかの閉じ方と同じ）
+  useDismissOnScroll(targetRef, () => setIsOptionListOpen(false), isOptionListOpen);
 
   // Floating UI の設定
   const { refs, floatingStyles } = useFloating({
