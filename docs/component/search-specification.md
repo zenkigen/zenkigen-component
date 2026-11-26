@@ -97,7 +97,38 @@ const SearchExample = () => {
 
 ### 継承プロパティ
 
-公開APIで継承される属性は存在しない。
+`InputHTMLAttributes<HTMLInputElement>` のプロパティは、内部の `input` 要素にそのまま渡される（例: `autoComplete` / `name` / `id` / `aria-label` / `aria-describedby` / `onKeyDown` / `onFocus` / `onBlur`）。ただし以下は型で除外する（受け取らない）。
+
+| 除外するプロパティ            | 理由                                                                                           |
+| ----------------------------- | ---------------------------------------------------------------------------------------------- |
+| `size` / `width` / `onSubmit` | Search のプロパティとして別の意味で使う（`width` は外枠の幅、`onSubmit` は内部 `form` の送信） |
+| `className` / `style`         | 見た目はコンポーネント側で固定する                                                             |
+| `type`                        | 常に `text` として描画する                                                                     |
+| `disabled`                    | 無効時のスタイルとクリアボタンの扱いを持たないため提供しない（[注意事項](#注意事項)を参照）    |
+
+`ref` は従来どおり外側の `div` を指す（内部の `input` ではない）。
+
+除外は型によるもので、実行時には取り除かない。型を介さずに渡された場合（オブジェクトを展開して渡す等）、`className` / `type` は上書きされるが、`style` / `disabled` は `input` に付く。
+
+TextInput と同じく、以下は受け取るが Search 側で特別な扱いをしない。
+
+- `readOnly`: 入力はできなくなるが、クリアボタンは表示され、押すと `onClickClearButton` が呼ばれる
+- `defaultValue`: `value` が必須のため、渡すと React が制御／非制御の併用として警告を出す（表示は `value` が優先される）
+
+#### ブラウザの自動入力を止める
+
+プレースホルダーやラベルに「メールアドレス」などの語が含まれると、ブラウザが入力欄の種類を推測して保存済みの値を候補に出すことがある。検索欄で不要な場合は `autoComplete` で指定する。Search 自体は `autocomplete` 属性の既定値を持たない（指定しなければ属性を付けない）。
+
+ただし、どの値で止まるかはブラウザとその版によって異なる。Chrome は `autoComplete="off"` を無視することがあるため、止まらない場合は別の値（例: `autoComplete="new-password"`。ブラウザによってはパスワードの提案が出る点に注意）も試すこと。
+
+```tsx
+<Search
+  value={keyword}
+  placeholder="名前・メールアドレスで検索"
+  autoComplete="off"
+  onChange={(event) => setKeyword(event.target.value)}
+/>
+```
 
 ## 状態とスタイル
 
@@ -156,7 +187,7 @@ const BasicSearch = () => {
 ## アクセシビリティ
 
 - 入力欄自体は標準の `input type="text"` であり、スクリーンリーダーから利用できる。
-- アイコン類は装飾目的であり、テキストラベルは親要素や `aria-label` ではなく `<label>` を組み合わせて提供すること。
+- アイコン類は装飾目的であり、入力欄の名前は別途与えること。画面にラベルを表示する場合は `<label htmlFor>` と `id` で関連付け、表示しない場合は `aria-label` を指定する。
 - クリアボタンは `button` 要素として描画され、キーボード操作とフォーカスリング（`focus-visible`）に対応する `IconButton` を利用する。
 - フォーカス可視化は `focus-within` によるボーダーの色変化で行う。
 
@@ -165,6 +196,7 @@ const BasicSearch = () => {
 ### 実装について
 
 - `forwardRef<HTMLDivElement>` を用いてルート `div` への参照を転送する。
+- Search 固有の props（`size` / `width` / `value` / `onChange` / `onSubmit` / `onClickClearButton`）を取り除いた残りを内部の `input` に展開する。`type` / `size` / `value` / `className` / `onChange` は展開の後に指定するため、実行時に渡されても上書きされる。
 - `clsx` でサイズや状態に応じたクラスを合成する。
 - 内部で `form` 要素を用いており、`onSubmit` に渡したハンドラに `FormEvent<HTMLFormElement>` を渡す。
 - 検索アイコンは `Icon`、クリアボタンは `IconButton` を使用し、テーマのトークン（`icon01`, `text-text01`, `uiBorder02` など）を参照する。
@@ -172,8 +204,8 @@ const BasicSearch = () => {
 ## 注意事項
 
 1. `value` は必須であり、`onChange` を指定せずに利用するとReactから制御/非制御の警告が出るため、常に状態更新ロジックと併せて利用すること。
-2. 無効状態やエラー表示用のAPIは提供していない。必要な場合は親レベルで `Search` を包むか、TextInputを利用すること。
-3. ラベルや説明文は自動で提供されないため、`<label>` や `aria-describedby` を組み合わせて意味付けを行うこと。
+2. 無効状態やエラー表示用のAPIは提供していない（`disabled` も受け取らない）。必要な場合は親レベルで `Search` を包むか、TextInputを利用すること。
+3. ラベルや説明文は自動で提供されないため、`id` と `<label htmlFor>`、または `aria-label` / `aria-describedby` を指定して意味付けを行うこと。
 4. `width` は文字列で渡す必要があるため、テーマトークンやTailwindクラスではなくインラインスタイルで制御する点に注意すること。
 
 ## スタイルのカスタマイズ
@@ -182,6 +214,7 @@ Tailwind CSSのユーティリティ（`rounded-full`, `border-uiBorder02`, `typ
 
 ## 更新履歴
 
-| 日付                 | 内容     | 担当者 |
-| -------------------- | -------- | ------ |
-| 2025-12-03 09:14 JST | 新規作成 | -      |
+| 日付                 | 内容                                                                                                       | 担当者 |
+| -------------------- | ---------------------------------------------------------------------------------------------------------- | ------ |
+| 2026-11-25 16:24 JST | `InputHTMLAttributes` を内部の `input` に渡すよう変更（`autoComplete` / `aria-*` / `name` 等が指定可能に） | -      |
+| 2025-12-03 09:14 JST | 新規作成                                                                                                   | -      |
