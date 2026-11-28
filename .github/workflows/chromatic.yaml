@@ -24,7 +24,7 @@ jobs:
     if: github.event.pull_request.draft == false && contains(github.event.pull_request.labels.*.name, 'renovate') == false && contains(github.event.pull_request.labels.*.name, 'dependencies') == false
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
 
@@ -36,7 +36,7 @@ jobs:
 
       - name: Publish to Chromatic
         id: chromatic
-        uses: chromaui/action@v18
+        uses: chromaui/action@0a7067e5ffc663a631b14db505d8a94b26e1bf2f # v18
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           onlyChanged: true
@@ -48,7 +48,7 @@ jobs:
           IS_CHROMATIC: 'true'
 
       - name: Find Comment
-        uses: peter-evans/find-comment@v3
+        uses: peter-evans/find-comment@3eae4d37986fb5a8592848f6a574fdf654e61f9e # v3
         if: success() && github.event.number
         id: fc
         with:
@@ -57,7 +57,7 @@ jobs:
           body-includes: Chromatic results
 
       - name: Create or update comment
-        uses: peter-evans/create-or-update-comment@v4
+        uses: peter-evans/create-or-update-comment@71345be0265236311c031f5c7866368bd1eff043 # v4
         if: success() && github.event.number
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
